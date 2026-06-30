@@ -50,21 +50,22 @@ function ProjectCard({ title }: { title: string }) {
   );
 }
 
-const BOX_W  = 500;
 const DZ_H   = 64;
 const PHYS_H = 340;
 const BOX_H  = PHYS_H + DZ_H;
-const PILL_W = 170;
+const PILL_W = 140;
 const PILL_H = 42;
 
 export default function SkillDrop() {
-  const sceneRef   = useRef<HTMLDivElement>(null);
-  const engineRef  = useRef<MatterTypes.Engine | null>(null);
-  const runnerRef  = useRef<MatterTypes.Runner | null>(null);
-  const renderRef  = useRef<MatterTypes.Render | null>(null);
-  const pillsRef   = useRef<{ body: MatterTypes.Body; id: string }[]>([]);
-  const draggedRef = useRef<string | null>(null);
-  const rafRef     = useRef<number>(0);
+  const sceneRef     = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const engineRef    = useRef<MatterTypes.Engine | null>(null);
+  const runnerRef    = useRef<MatterTypes.Runner | null>(null);
+  const renderRef    = useRef<MatterTypes.Render | null>(null);
+  const pillsRef     = useRef<{ body: MatterTypes.Body; id: string }[]>([]);
+  const draggedRef   = useRef<string | null>(null);
+  const rafRef       = useRef<number>(0);
+  const boxWRef      = useRef<number>(500);
 
   const [pillPos, setPillPos]     = useState<{ id:string; x:number; y:number; angle:number }[]>([]);
   const [dropped, setDropped]     = useState<string | null>(null);
@@ -86,7 +87,7 @@ export default function SkillDrop() {
   const droppedSkill = skills.find(s => s.id === dropped);
   const draggedSkill = skills.find(s => s.id === draggedId);
 
-  const startPhysics = useCallback(async (activeIds: string[]) => {
+  const startPhysics = useCallback(async (activeIds: string[], boxW: number) => {
     const Matter = await import("matter-js");
     const { Engine, Render, Runner, Bodies, Body, Composite, Mouse, MouseConstraint, Events } = Matter;
 
@@ -101,22 +102,22 @@ export default function SkillDrop() {
     const render = Render.create({
       element: sceneRef.current!,
       engine,
-      options: { width: BOX_W, height: BOX_H, wireframes: false, background: "transparent" },
+      options: { width: boxW, height: BOX_H, wireframes: false, background: "transparent" },
     });
     renderRef.current = render;
 
-    // Walls: left, right, top only — no floor, pills drop through via position clamping
     const wo = { isStatic:true, render:{ fillStyle:"transparent", strokeStyle:"transparent", lineWidth:0 } };
     Composite.add(engine.world, [
-      Bodies.rectangle(-25,      BOX_H/2, 50, BOX_H*2, wo),
-      Bodies.rectangle(BOX_W+25, BOX_H/2, 50, BOX_H*2, wo),
-      Bodies.rectangle(BOX_W/2,  -25,     BOX_W*2, 50, wo),
-      Bodies.rectangle(BOX_W/2,  BOX_H+25,BOX_W*2, 50, wo),
+      Bodies.rectangle(-25,       BOX_H/2,  50,      BOX_H*2,  wo),
+      Bodies.rectangle(boxW+25,   BOX_H/2,  50,      BOX_H*2,  wo),
+      Bodies.rectangle(boxW/2,    -25,      boxW*2,  50,       wo),
+      Bodies.rectangle(boxW/2,    BOX_H+25, boxW*2,  50,       wo),
     ]);
 
     const activePills = skills.filter(s => activeIds.includes(s.id));
+    const colW = boxW / 3;
     const pillBodies = activePills.map((skill, i) => {
-      const x = 80 + (i % 3) * 190;
+      const x = colW * (i % 3) + colW / 2;
       const y = 60 + Math.floor(i / 3) * 150;
       const body = Bodies.rectangle(x, y, PILL_W, PILL_H, {
         restitution: 0.4, friction: 0, frictionAir: 0.012,
@@ -156,12 +157,10 @@ export default function SkillDrop() {
 
     Events.on(engine, "afterUpdate", () => {
       for (const { body } of pillsRef.current) {
-        // Clamp non-dragged pills above the drop zone
         if (body.label !== draggedRef.current && body.position.y > CLAMP_Y) {
           Body.setPosition(body, { x: body.position.x, y: CLAMP_Y });
           Body.setVelocity(body, { x: body.velocity.x, y: Math.min(0, body.velocity.y) });
         }
-        // Speed cap
         const v = body.velocity;
         const speed = Math.sqrt(v.x * v.x + v.y * v.y);
         if (speed > MAX_SPEED) {
@@ -182,7 +181,6 @@ export default function SkillDrop() {
       if (!id) return;
       const pill = pillsRef.current.find(p => p.id === id);
       if (!pill) return;
-      // Drop if pill center is in the drop zone
       if (pill.body.position.y > PHYS_H - PILL_H / 2) {
         Composite.remove(engine.world, pill.body);
         pillsRef.current = pillsRef.current.filter(p => p.id !== id);
@@ -190,16 +188,10 @@ export default function SkillDrop() {
       }
     };
 
-    const onMouseMove = (e: MouseEvent) => {
+    const onMouseMove = () => {
       if (!draggedRef.current) { setIsOver(false); return; }
-      // Check if dragged pill center is in drop zone using canvas coords
       const pill = pillsRef.current.find(p => p.id === draggedRef.current);
-      if (pill) {
-        setIsOver(pill.body.position.y > PHYS_H - PILL_H / 2);
-      } else {
-        setIsOver(false);
-      }
-      void e;
+      setIsOver(pill ? pill.body.position.y > PHYS_H - PILL_H / 2 : false);
     };
 
     window.addEventListener("mouseup", onMouseUp);
@@ -224,10 +216,27 @@ export default function SkillDrop() {
     };
   }, []);
 
+  // Init physics once container is measured
   useEffect(() => {
+    if (!containerRef.current) return;
     let cleanup: (() => void) | undefined;
-    startPhysics(skills.map(s => s.id)).then(fn => { cleanup = fn; });
-    return () => { cleanup?.(); cancelAnimationFrame(rafRef.current); };
+
+    const init = (w: number) => {
+      boxWRef.current = w;
+      startPhysics(skills.map(s => s.id), w).then(fn => { cleanup = fn; });
+    };
+
+    const ro = new ResizeObserver(entries => {
+      const w = Math.floor(entries[0].contentRect.width);
+      if (w > 0 && w !== boxWRef.current) {
+        cleanup?.();
+        init(w);
+      }
+    });
+    ro.observe(containerRef.current);
+    init(containerRef.current.offsetWidth || 500);
+
+    return () => { ro.disconnect(); cleanup?.(); cancelAnimationFrame(rafRef.current); };
   }, [startPhysics]);
 
   const handleReset = async () => {
@@ -242,7 +251,8 @@ export default function SkillDrop() {
     if (!engine) return;
 
     const skill = skills.find(s => s.id === id)!;
-    const x = BOX_W / 2 + (Math.random() - 0.5) * 100;
+    const boxW = boxWRef.current;
+    const x = boxW / 2 + (Math.random() - 0.5) * 100;
     const body = Bodies.rectangle(x, PILL_H / 2 + 4, PILL_W, PILL_H, {
       restitution: 0.4, friction: 0, frictionAir: 0.012,
       chamfer: { radius: PILL_H / 2 },
@@ -258,21 +268,28 @@ export default function SkillDrop() {
   };
 
   return (
-    <div style={{ padding:"0px 100px" }}>
-      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"24px", alignItems:"start" }}>
+    <div style={{ display:"flex", flexDirection:"column", alignItems:"center", padding:"0 24px" }}>
+      <div className="skill-grid">
 
-        {/* Left: big box — canvas covers everything */}
-        <div style={{
-          width: `${BOX_W}px`, height: `${BOX_H}px`,
-          border: "1px solid var(--foreground)",
-          borderRadius: "16px",
-          overflow: "hidden",
-          position: "relative",
+        {/* "Próximamente" — first in DOM → top on mobile */}
+        <div className="box-soon" style={{
+          height:`${BOX_H}px`,
+          border:"1px dashed var(--border)", borderRadius:"16px",
+          display:"flex", alignItems:"center", justifyContent:"center",
         }}>
-          {/* Canvas */}
+          <span style={{ fontSize:"12px", color:"var(--border)" }}>próximamente</span>
+        </div>
+
+        {/* Skills box — shown first (left) on desktop */}
+        <div className="box-skills" ref={containerRef} style={{
+          height:`${BOX_H}px`,
+          border:"1px solid var(--foreground)",
+          borderRadius:"16px",
+          overflow:"hidden",
+          position:"relative",
+        }}>
           <div ref={sceneRef} style={{ position:"absolute", inset:0 }} />
 
-          {/* Pill labels */}
           {pillPos.map(({ id, x, y, angle }) => {
             const skill = skills.find(s => s.id === id);
             if (!skill) return null;
@@ -288,24 +305,22 @@ export default function SkillDrop() {
                 display:"flex", alignItems:"center", justifyContent:"center",
                 fontSize:"13px", color:"var(--foreground)",
                 pointerEvents:"none", userSelect:"none", whiteSpace:"nowrap",
-                transition: "background 0.15s, border-color 0.15s",
+                transition:"background 0.15s, border-color 0.15s",
               }}>
                 {getLabel(skill)}
               </div>
             );
           })}
 
-          {/* Drop zone visual overlay — pointer-events none so canvas gets mouse events */}
+          {/* Drop zone overlay */}
           <div style={{
             position:"absolute", bottom:0, left:0, right:0, height:`${DZ_H}px`,
-            borderTop: `1px dashed ${dropped ? droppedSkill!.border : isOver && draggedSkill ? draggedSkill.border : "var(--muted)"}`,
+            borderTop:`1px dashed ${dropped ? droppedSkill!.border : isOver && draggedSkill ? draggedSkill.border : "var(--muted)"}`,
             display:"flex", alignItems:"center", justifyContent:"center",
             transition:"background 0.2s",
-            background: dropped
-              ? droppedSkill!.color
-              : isOver && draggedSkill ? draggedSkill.color : "transparent",
+            background: dropped ? droppedSkill!.color : isOver && draggedSkill ? draggedSkill.color : "transparent",
             pointerEvents:"none",
-            zIndex: 1,
+            zIndex:1,
           }}>
             {dropped ? (
               <div style={{ display:"flex", alignItems:"center", gap:"10px", pointerEvents:"all" }}>
@@ -317,20 +332,15 @@ export default function SkillDrop() {
                   background: droppedSkill!.color,
                   display:"flex", alignItems:"center", justifyContent:"center",
                   animation: falling ? "dropExit 0.45s ease-in forwards" : "none",
-                  flexShrink: 0,
+                  flexShrink:0,
                 }}>
                   {droppedSkill ? getLabel(droppedSkill) : ""}
                 </div>
                 {!falling && (
-                  <button
-                    onClick={handleReset}
-                    style={{ background:"none", border:"none", cursor:"pointer", color:"var(--muted)", fontSize:"20px", lineHeight:1, padding:0 }}
-                    aria-label="Quitar"
-                  >×</button>
+                  <button onClick={handleReset} style={{ background:"none", border:"none", cursor:"pointer", color:"var(--muted)", fontSize:"20px", lineHeight:1, padding:0 }} aria-label="Quitar">×</button>
                 )}
               </div>
             ) : (
-              // Pill-shaped placeholder
               <div style={{
                 width:`${PILL_W}px`, height:`${PILL_H}px`,
                 borderRadius:"999px",
@@ -339,32 +349,36 @@ export default function SkillDrop() {
                 transition:"border-color 0.15s",
               }}>
                 <span style={{ fontSize:"12px", color: isOver && draggedSkill ? draggedSkill.border : "var(--muted)" }}>
-                  {isOver
-                    ? (lang === "en" ? "Drop here" : "Suelta aquí")
-                    : (lang === "en" ? "Drag here" : "Arrastra aquí")}
+                  {isOver ? (lang==="en"?"Drop here":"Suelta aquí") : (lang==="en"?"Drag here":"Arrastra aquí")}
                 </span>
               </div>
             )}
           </div>
         </div>
-
-        {/* Right */}
-        <div style={{
-          height:`${BOX_H}px`,
-          border:"1px dashed var(--border)", borderRadius:"16px",
-          display:"flex", alignItems:"center", justifyContent:"center",
-        }}>
-          <span style={{ fontSize:"12px", color:"var(--border)" }}>próximamente</span>
-        </div>
       </div>
 
       {dropped && (
-        <div style={{ marginTop:"48px", display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"24px" }}>
+        <div style={{ marginTop:"48px", width:"100%", maxWidth:"1024px", display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"24px" }}>
           {projects[dropped].map(p => <ProjectCard key={p.id} title={p.title} />)}
         </div>
       )}
 
       <style>{`
+        .skill-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 24px;
+          width: 100%;
+          max-width: 1024px;
+          align-items: start;
+        }
+        .box-skills { order: 1; }
+        .box-soon   { order: 2; }
+        @media (max-width: 768px) {
+          .skill-grid { grid-template-columns: 1fr; }
+          .box-skills { order: 2; }
+          .box-soon   { order: 1; }
+        }
         @keyframes dropExit {
           0%   { transform: translateY(0) scale(1);    opacity: 1; }
           60%  { transform: translateY(12px) scale(0.95); opacity: 0.6; }
