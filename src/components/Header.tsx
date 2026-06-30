@@ -93,7 +93,7 @@ export default function Header() {
       <div style={{
         width: "36px", height: "36px", borderRadius: "50%", overflow: "hidden",
         display: "flex", alignItems: "center", justifyContent: "center",
-        background: "transparent", border: "1px solid var(--foreground)", flexShrink: 0,
+        background: "transparent", flexShrink: 0,
       }}>
         <img
           src={theme === "dark" ? "/sharkastic-logo-light.svg" : "/sharkastic-logo-dark.svg"}
