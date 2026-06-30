@@ -51,8 +51,6 @@ function ProjectCard({ title }: { title: string }) {
 }
 
 const DZ_H   = 64;
-const PHYS_H = 340;
-const BOX_H  = PHYS_H + DZ_H;
 const PILL_W = 140;
 const PILL_H = 42;
 
@@ -66,7 +64,9 @@ export default function SkillDrop() {
   const draggedRef   = useRef<string | null>(null);
   const rafRef       = useRef<number>(0);
   const boxWRef      = useRef<number>(500);
+  const boxHRef      = useRef<number>(500);
 
+  const [boxH, setBoxH]           = useState<number>(500);
   const [pillPos, setPillPos]     = useState<{ id:string; x:number; y:number; angle:number }[]>([]);
   const [dropped, setDropped]     = useState<string | null>(null);
   const [draggedId, setDraggedId] = useState<string | null>(null);
@@ -87,7 +87,7 @@ export default function SkillDrop() {
   const droppedSkill = skills.find(s => s.id === dropped);
   const draggedSkill = skills.find(s => s.id === draggedId);
 
-  const startPhysics = useCallback(async (activeIds: string[], boxW: number) => {
+  const startPhysics = useCallback(async (activeIds: string[], boxW: number, boxH: number) => {
     const Matter = await import("matter-js");
     const { Engine, Render, Runner, Bodies, Body, Composite, Mouse, MouseConstraint, Events } = Matter;
 
@@ -102,16 +102,16 @@ export default function SkillDrop() {
     const render = Render.create({
       element: sceneRef.current!,
       engine,
-      options: { width: boxW, height: BOX_H, wireframes: false, background: "transparent" },
+      options: { width: boxW, height: boxH, wireframes: false, background: "transparent" },
     });
     renderRef.current = render;
 
     const wo = { isStatic:true, render:{ fillStyle:"transparent", strokeStyle:"transparent", lineWidth:0 } };
     Composite.add(engine.world, [
-      Bodies.rectangle(-25,       BOX_H/2,  50,      BOX_H*2,  wo),
-      Bodies.rectangle(boxW+25,   BOX_H/2,  50,      BOX_H*2,  wo),
-      Bodies.rectangle(boxW/2,    -25,      boxW*2,  50,       wo),
-      Bodies.rectangle(boxW/2,    BOX_H+25, boxW*2,  50,       wo),
+      Bodies.rectangle(-25,       boxH/2,  50,      boxH*2,  wo),
+      Bodies.rectangle(boxW+25,   boxH/2,  50,      boxH*2,  wo),
+      Bodies.rectangle(boxW/2,    -25,     boxW*2,  50,      wo),
+      Bodies.rectangle(boxW/2,    boxH+25, boxW*2,  50,      wo),
     ]);
 
     const activePills = skills.filter(s => activeIds.includes(s.id));
@@ -153,7 +153,8 @@ export default function SkillDrop() {
     });
 
     const MAX_SPEED = 3;
-    const CLAMP_Y   = PHYS_H - PILL_H / 2 - 2;
+    const physH   = boxH - DZ_H;
+    const CLAMP_Y = physH - PILL_H / 2 - 2;
 
     Events.on(engine, "afterUpdate", () => {
       for (const { body } of pillsRef.current) {
@@ -181,7 +182,7 @@ export default function SkillDrop() {
       if (!id) return;
       const pill = pillsRef.current.find(p => p.id === id);
       if (!pill) return;
-      if (pill.body.position.y > PHYS_H - PILL_H / 2) {
+      if (pill.body.position.y > physH - PILL_H / 2) {
         Composite.remove(engine.world, pill.body);
         pillsRef.current = pillsRef.current.filter(p => p.id !== id);
         setDropped(id);
@@ -191,7 +192,7 @@ export default function SkillDrop() {
     const onMouseMove = () => {
       if (!draggedRef.current) { setIsOver(false); return; }
       const pill = pillsRef.current.find(p => p.id === draggedRef.current);
-      setIsOver(pill ? pill.body.position.y > PHYS_H - PILL_H / 2 : false);
+      setIsOver(pill ? pill.body.position.y > physH - PILL_H / 2 : false);
     };
 
     window.addEventListener("mouseup", onMouseUp);
@@ -222,8 +223,11 @@ export default function SkillDrop() {
     let cleanup: (() => void) | undefined;
 
     const init = (w: number) => {
+      const h = w; // 1:1 ratio
       boxWRef.current = w;
-      startPhysics(skills.map(s => s.id), w).then(fn => { cleanup = fn; });
+      boxHRef.current = h;
+      setBoxH(h);
+      startPhysics(skills.map(s => s.id), w, h).then(fn => { cleanup = fn; });
     };
 
     const ro = new ResizeObserver(entries => {
@@ -252,6 +256,7 @@ export default function SkillDrop() {
 
     const skill = skills.find(s => s.id === id)!;
     const boxW = boxWRef.current;
+    void boxHRef.current;
     const x = boxW / 2 + (Math.random() - 0.5) * 100;
     const body = Bodies.rectangle(x, PILL_H / 2 + 4, PILL_W, PILL_H, {
       restitution: 0.4, friction: 0, frictionAir: 0.012,
@@ -273,7 +278,7 @@ export default function SkillDrop() {
 
         {/* "Próximamente" — first in DOM → top on mobile */}
         <div className="box-soon" style={{
-          height:`${BOX_H}px`,
+          height:`${boxH}px`,
           border:"1px dashed var(--border)", borderRadius:"16px",
           display:"flex", alignItems:"center", justifyContent:"center",
         }}>
@@ -282,7 +287,7 @@ export default function SkillDrop() {
 
         {/* Skills box — shown first (left) on desktop */}
         <div className="box-skills" ref={containerRef} style={{
-          height:`${BOX_H}px`,
+          height:`${boxH}px`,
           border:"1px solid var(--foreground)",
           borderRadius:"16px",
           overflow:"hidden",

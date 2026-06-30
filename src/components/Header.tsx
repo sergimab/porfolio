@@ -135,7 +135,7 @@ export default function Header() {
           <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--foreground)", fontVariantNumeric: "tabular-nums" }}>
             {timeStr}
           </span>
-          <span className="header-date" style={{ fontSize: "13px", color: "var(--muted)" }}>
+          <span style={{ fontSize: "13px", color: "var(--muted)" }}>
             {dateStr}
           </span>
         </div>
@@ -250,7 +250,6 @@ export default function Header() {
           .header-avatar-mobile  { display: flex; padding: 12px 0; }
           .header-right   { flex: 1; justify-content: space-between; gap: 12px; }
           .header-divider { display: none; }
-          .header-date    { display: none; }
         }
       `}</style>
     </header>
