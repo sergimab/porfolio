@@ -1,4 +1,7 @@
 import Header from "@/components/Header";
+import dynamic from "next/dynamic";
+
+const SkillDrop = dynamic(() => import("@/components/SkillDrop"), { ssr: false });
 
 export default function Home() {
   return (
@@ -6,8 +9,8 @@ export default function Home() {
       <div style={{ padding: "0px 100px 0px" }}>
         <Header />
       </div>
-      <main className="px-6 py-12">
-        {/* contenido de la home aquí */}
+      <main style={{ paddingTop: "48px", paddingBottom: "48px" }}>
+        <SkillDrop />
       </main>
     </div>
   );
