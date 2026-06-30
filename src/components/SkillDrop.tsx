@@ -89,7 +89,7 @@ export default function SkillDrop() {
 
   const startPhysics = useCallback(async (activeIds: string[], boxW: number, boxH: number) => {
     const Matter = await import("matter-js");
-    const { Engine, Render, Runner, Bodies, Body, Composite, Mouse, MouseConstraint, Events } = Matter;
+    const { Engine, Render, Runner, Bodies, Body, Composite, Mouse, MouseConstraint, Events, Query } = Matter;
 
     if (renderRef.current) { Matter.Render.stop(renderRef.current); renderRef.current.canvas.remove(); }
     if (runnerRef.current) Matter.Runner.stop(runnerRef.current);
@@ -195,15 +195,50 @@ export default function SkillDrop() {
       setIsOver(pill ? pill.body.position.y > physH - PILL_H / 2 : false);
     };
 
-    // Forward touch events to canvas so matter-js MouseConstraint works on mobile
+    // Custom touch drag — directly moves matter-js bodies (bypasses MouseConstraint for touch)
     const canvas = render.canvas;
-    const toMouse = (e: TouchEvent, type: string) => {
-      const t = e.touches[0] ?? e.changedTouches[0];
-      canvas.dispatchEvent(new MouseEvent(type, { clientX: t.clientX, clientY: t.clientY, bubbles: true }));
+    let touchBody: MatterTypes.Body | null = null;
+    let touchOffsetX = 0;
+    let touchOffsetY = 0;
+
+    const canvasPos = (clientX: number, clientY: number) => {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = boxW / rect.width;
+      const scaleY = boxH / rect.height;
+      return { x: (clientX - rect.left) * scaleX, y: (clientY - rect.top) * scaleY };
     };
-    const onTouchStart = (e: TouchEvent) => { e.preventDefault(); toMouse(e, "mousedown"); };
-    const onTouchMove  = (e: TouchEvent) => { e.preventDefault(); toMouse(e, "mousemove"); checkOver(); };
-    const onTouchEnd   = (e: TouchEvent) => { e.preventDefault(); toMouse(e, "mouseup"); checkDrop(); };
+
+    const onTouchStart = (e: TouchEvent) => {
+      e.preventDefault();
+      const t = e.touches[0];
+      const pos = canvasPos(t.clientX, t.clientY);
+      const found = Query.point(pillsRef.current.map(p => p.body), pos);
+      const hit = found[0] ?? null;
+      if (!hit) return;
+      touchBody = hit;
+      touchOffsetX = pos.x - hit.position.x;
+      touchOffsetY = pos.y - hit.position.y;
+      Body.setVelocity(hit, { x: 0, y: 0 });
+      Body.setAngularVelocity(hit, 0);
+      draggedRef.current = hit.label;
+      setDraggedId(hit.label);
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      e.preventDefault();
+      if (!touchBody) return;
+      const t = e.touches[0];
+      const pos = canvasPos(t.clientX, t.clientY);
+      Body.setPosition(touchBody, { x: pos.x - touchOffsetX, y: pos.y - touchOffsetY });
+      Body.setVelocity(touchBody, { x: 0, y: 0 });
+      checkOver();
+    };
+
+    const onTouchEnd = (e: TouchEvent) => {
+      e.preventDefault();
+      touchBody = null;
+      checkDrop();
+    };
 
     canvas.addEventListener("touchstart", onTouchStart, { passive: false });
     canvas.addEventListener("touchmove",  onTouchMove,  { passive: false });
