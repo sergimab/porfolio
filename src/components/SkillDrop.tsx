@@ -174,7 +174,7 @@ export default function SkillDrop() {
       }
     });
 
-    const onMouseUp = () => {
+    const checkDrop = () => {
       const id = draggedRef.current;
       draggedRef.current = null;
       setDraggedId(null);
@@ -189,14 +189,28 @@ export default function SkillDrop() {
       }
     };
 
-    const onMouseMove = () => {
+    const checkOver = () => {
       if (!draggedRef.current) { setIsOver(false); return; }
       const pill = pillsRef.current.find(p => p.id === draggedRef.current);
       setIsOver(pill ? pill.body.position.y > physH - PILL_H / 2 : false);
     };
 
-    window.addEventListener("mouseup", onMouseUp);
-    window.addEventListener("mousemove", onMouseMove);
+    // Forward touch events to canvas so matter-js MouseConstraint works on mobile
+    const canvas = render.canvas;
+    const toMouse = (e: TouchEvent, type: string) => {
+      const t = e.touches[0] ?? e.changedTouches[0];
+      canvas.dispatchEvent(new MouseEvent(type, { clientX: t.clientX, clientY: t.clientY, bubbles: true }));
+    };
+    const onTouchStart = (e: TouchEvent) => { e.preventDefault(); toMouse(e, "mousedown"); };
+    const onTouchMove  = (e: TouchEvent) => { e.preventDefault(); toMouse(e, "mousemove"); checkOver(); };
+    const onTouchEnd   = (e: TouchEvent) => { e.preventDefault(); toMouse(e, "mouseup"); checkDrop(); };
+
+    canvas.addEventListener("touchstart", onTouchStart, { passive: false });
+    canvas.addEventListener("touchmove",  onTouchMove,  { passive: false });
+    canvas.addEventListener("touchend",   onTouchEnd,   { passive: false });
+
+    window.addEventListener("mouseup",   checkDrop);
+    window.addEventListener("mousemove", checkOver);
 
     Render.run(render);
     const runner = Runner.create();
@@ -212,8 +226,11 @@ export default function SkillDrop() {
     tick();
 
     return () => {
-      window.removeEventListener("mouseup", onMouseUp);
-      window.removeEventListener("mousemove", onMouseMove);
+      canvas.removeEventListener("touchstart", onTouchStart);
+      canvas.removeEventListener("touchmove",  onTouchMove);
+      canvas.removeEventListener("touchend",   onTouchEnd);
+      window.removeEventListener("mouseup",   checkDrop);
+      window.removeEventListener("mousemove", checkOver);
     };
   }, []);
 
