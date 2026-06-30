@@ -7,7 +7,7 @@ export default function Home() {
       <div className="header-wrap">
         <Header />
       </div>
-      <main style={{ paddingTop: "48px", paddingBottom: "48px" }}>
+      <main style={{ paddingTop: "24px", paddingBottom: "48px" }}>
         <SkillDropClient />
       </main>
       <style>{`
