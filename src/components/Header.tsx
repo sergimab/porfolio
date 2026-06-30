@@ -95,7 +95,11 @@ export default function Header() {
         display: "flex", alignItems: "center", justifyContent: "center",
         background: "transparent", border: "1px solid var(--foreground)", flexShrink: 0,
       }}>
-        <img src="/sharkastic-logo.svg" alt="logo" style={{ width: "34px", height: "34px", filter: theme === "dark" ? "invert(1)" : "invert(0)" }} />
+        <img
+          src={theme === "dark" ? "/sharkastic-logo-light.svg" : "/sharkastic-logo-dark.svg"}
+          alt="logo"
+          style={{ width: "34px", height: "34px" }}
+        />
       </div>
       <span style={{ fontSize: "14px", color: "var(--foreground)" }}>
         {lang === "es" ? "Hola, soy " : "Hi, it's "}
