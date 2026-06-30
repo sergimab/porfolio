@@ -4,11 +4,11 @@ import SkillDropClient from "@/components/SkillDropClient";
 
 export default function Home() {
   return (
-    <div className="min-h-screen" style={{ background: "var(--background)" }}>
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", background: "var(--background)" }}>
       <div className="header-wrap">
         <Header />
       </div>
-      <main style={{ paddingTop: "24px", paddingBottom: "48px" }}>
+      <main style={{ paddingTop: "24px", paddingBottom: "48px", flex: 1 }}>
         <SkillDropClient />
       </main>
       <div className="header-wrap">
