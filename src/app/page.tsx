@@ -1,7 +1,5 @@
 import Header from "@/components/Header";
-import dynamic from "next/dynamic";
-
-const SkillDrop = dynamic(() => import("@/components/SkillDrop"), { ssr: false });
+import SkillDropClient from "@/components/SkillDropClient";
 
 export default function Home() {
   return (
@@ -10,7 +8,7 @@ export default function Home() {
         <Header />
       </div>
       <main style={{ paddingTop: "48px", paddingBottom: "48px" }}>
-        <SkillDrop />
+        <SkillDropClient />
       </main>
     </div>
   );
