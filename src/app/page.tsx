@@ -8,7 +8,7 @@ export default function Home() {
       <div className="header-wrap">
         <Header />
       </div>
-      <main style={{ paddingTop: "24px", paddingBottom: "48px", flex: 1 }}>
+      <main className="main-content" style={{ paddingTop: "24px", paddingBottom: "48px", flex: 1 }}>
         <SkillDropClient />
       </main>
       <div className="header-wrap">
@@ -21,6 +21,9 @@ export default function Home() {
         @media (max-width: 768px) {
           .header-wrap {
             padding: 0 16px;
+          }
+          .main-content {
+            padding-top: 20px;
           }
         }
       `}</style>

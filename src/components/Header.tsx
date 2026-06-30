@@ -252,7 +252,7 @@ export default function Header() {
         .header-toggles  { display: flex; align-items: center; gap: 20px; }
         @media (max-width: 768px) {
           .header-avatar-desktop { display: none; }
-          .header-avatar-mobile  { display: flex; padding: 8px 0; }
+          .header-avatar-mobile  { display: flex; padding: 20px 0; }
           .header-right    { flex: 1; justify-content: space-between; gap: 12px; }
           .header-divider  { display: none; }
           .header-toggles  { gap: 8px; }
