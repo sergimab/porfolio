@@ -77,6 +77,7 @@ export default function Header() {
 
   useEffect(() => {
     localStorage.setItem("lang", lang);
+    window.dispatchEvent(new CustomEvent("langchange", { detail: lang }));
   }, [lang]);
 
   useEffect(() => {
@@ -94,7 +95,9 @@ export default function Header() {
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
-      border: "1px solid var(--border)",
+      borderLeft: "1.5px solid var(--foreground)",
+      borderRight: "1.5px solid var(--foreground)",
+      borderBottom: "1.5px solid var(--foreground)",
       borderRadius: "0 0 16px 16px",
     }}>
 
