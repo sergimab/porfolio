@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import SkillDropClient from "@/components/SkillDropClient";
 
 export default function Home() {
@@ -10,6 +11,9 @@ export default function Home() {
       <main style={{ paddingTop: "24px", paddingBottom: "48px" }}>
         <SkillDropClient />
       </main>
+      <div className="header-wrap">
+        <Footer />
+      </div>
       <style>{`
         .header-wrap {
           padding: 0 100px;
