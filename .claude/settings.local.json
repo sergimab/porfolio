@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.mitchellhou.com)",
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --yes)",
+      "PowerShell(node --version)",
+      "PowerShell(npm --version)",
+      "PowerShell(Get-Command node -ErrorAction SilentlyContinue; \\(Get-ChildItem \"C:\\\\Program Files\\\\nodejs\\\\node.exe\" -ErrorAction SilentlyContinue\\).FullName; \\(Get-ChildItem \"$env:APPDATA\\\\nvm\" -ErrorAction SilentlyContinue | Select-Object -First 3\\))",
+      "mcp__visualize__read_me",
+      "mcp__visualize__show_widget"
+    ]
+  }
+}
