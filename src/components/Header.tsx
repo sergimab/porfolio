@@ -88,7 +88,28 @@ export default function Header() {
   const { timeStr, dateStr } = formatDateTime(now, lang);
   const t = labels[lang];
 
+  const avatarNode = (
+    <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+      <div style={{
+        width: "36px", height: "36px", borderRadius: "50%", overflow: "hidden",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        background: "transparent", border: "1px solid var(--foreground)", flexShrink: 0,
+      }}>
+        <img src="/sharkastic-logo.svg" alt="logo" style={{ width: "34px", height: "34px", filter: theme === "dark" ? "invert(1)" : "invert(0)" }} />
+      </div>
+      <span style={{ fontSize: "14px", color: "var(--foreground)" }}>
+        {lang === "es" ? "Hola, soy " : "Hi, it's "}
+        <span style={{ fontWeight: 500 }}>
+          S{typedName}
+          <span style={{ display:"inline-block", width:"1.5px", height:"0.9em", background:"var(--foreground)", marginLeft:"1px", verticalAlign:"text-bottom", animation:"blink 1s step-end infinite" }} aria-hidden="true" />
+        </span>{" "}
+        👋
+      </span>
+    </div>
+  );
+
   return (
+    <>
     <header style={{
       width: "100%",
       padding: "16px 24px",
@@ -101,64 +122,26 @@ export default function Header() {
       borderRadius: "0 0 16px 16px",
     }}>
 
-      {/* Left: avatar + greeting */}
-      <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-        <div style={{
-          width: "36px",
-          height: "36px",
-          borderRadius: "50%",
-          overflow: "hidden",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "transparent",
-          border: "1px solid var(--foreground)",
-          flexShrink: 0,
-        }}>
-          <img
-            src="/sharkastic-logo.svg"
-            alt="logo"
-            style={{
-              width: "34px",
-              height: "34px",
-              filter: theme === "dark" ? "invert(1)" : "invert(0)",
-            }}
-          />
-        </div>
-
-        <span style={{ fontSize: "14px", color: "var(--foreground)" }}>
-          {lang === "es" ? "Hola, soy " : "Hi, it's "}
-          <span style={{ fontWeight: 500 }}>
-            S{typedName}
-            <span style={{
-              display: "inline-block",
-              width: "1.5px",
-              height: "0.9em",
-              background: "var(--foreground)",
-              marginLeft: "1px",
-              verticalAlign: "text-bottom",
-              animation: "blink 1s step-end infinite",
-            }} aria-hidden="true" />
-          </span>{" "}
-          👋
-        </span>
+      {/* Avatar — visible only on desktop */}
+      <div className="header-avatar-desktop">
+        {avatarNode}
       </div>
 
-      {/* Right: time + date + toggles */}
-      <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+      {/* Right: time + date + toggles — on mobile splits into left (time) and right (toggles) */}
+      <div className="header-right">
 
         {/* Time + date */}
         <div style={{ display: "flex", alignItems: "baseline", gap: "6px" }}>
           <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--foreground)", fontVariantNumeric: "tabular-nums" }}>
             {timeStr}
           </span>
-          <span style={{ fontSize: "13px", color: "var(--muted)" }}>
+          <span className="header-date" style={{ fontSize: "13px", color: "var(--muted)" }}>
             {dateStr}
           </span>
         </div>
 
-        {/* Divider */}
-        <div style={{ width: "1px", height: "16px", background: "var(--border)" }} aria-hidden="true" />
+        {/* Divider — hidden on mobile */}
+        <div className="header-divider" style={{ width: "1px", height: "16px", background: "var(--border)" }} aria-hidden="true" />
 
         {/* Theme toggle */}
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -258,7 +241,24 @@ export default function Header() {
           0%, 100% { opacity: 1; }
           50% { opacity: 0; }
         }
+        .header-avatar-desktop { display: flex; }
+        .header-avatar-mobile  { display: none; }
+        .header-right   { display: flex; align-items: center; gap: 20px; }
+        .header-divider { display: block; }
+        @media (max-width: 768px) {
+          .header-avatar-desktop { display: none; }
+          .header-avatar-mobile  { display: flex; padding: 12px 0; }
+          .header-right   { flex: 1; justify-content: space-between; gap: 12px; }
+          .header-divider { display: none; }
+          .header-date    { display: none; }
+        }
       `}</style>
     </header>
+
+    {/* Avatar — visible only on mobile, sits below header */}
+    <div className="header-avatar-mobile" style={{ paddingLeft: "24px" }}>
+      {avatarNode}
+    </div>
+    </>
   );
 }
