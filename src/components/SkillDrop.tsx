@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import type MatterTypes from "matter-js";
 
 const skills = [
   { id: "motion",     label: "Motion Graphics", labelEn: "Motion Graphics", color: "rgba(217,119,6,0.15)",   border: "rgba(217,119,6,0.7)"   },
@@ -58,10 +59,10 @@ const PILL_H = 42;
 
 export default function SkillDrop() {
   const sceneRef   = useRef<HTMLDivElement>(null);
-  const engineRef  = useRef<Matter.Engine | null>(null);
-  const runnerRef  = useRef<Matter.Runner | null>(null);
-  const renderRef  = useRef<Matter.Render | null>(null);
-  const pillsRef   = useRef<{ body: Matter.Body; id: string }[]>([]);
+  const engineRef  = useRef<MatterTypes.Engine | null>(null);
+  const runnerRef  = useRef<MatterTypes.Runner | null>(null);
+  const renderRef  = useRef<MatterTypes.Render | null>(null);
+  const pillsRef   = useRef<{ body: MatterTypes.Body; id: string }[]>([]);
   const draggedRef = useRef<string | null>(null);
   const rafRef     = useRef<number>(0);
 
