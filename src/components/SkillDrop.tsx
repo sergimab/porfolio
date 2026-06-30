@@ -223,7 +223,7 @@ export default function SkillDrop() {
     let cleanup: (() => void) | undefined;
 
     const init = (w: number) => {
-      const h = w; // 1:1 ratio
+      const h = window.innerWidth <= 768 ? w : Math.round(w * 0.65);
       boxWRef.current = w;
       boxHRef.current = h;
       setBoxH(h);

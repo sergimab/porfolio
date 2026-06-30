@@ -143,8 +143,8 @@ export default function Header() {
         {/* Divider — hidden on mobile */}
         <div className="header-divider" style={{ width: "1px", height: "16px", background: "var(--border)" }} aria-hidden="true" />
 
-        {/* Theme toggle */}
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        {/* Theme + language toggles grouped */}
+        <div className="header-toggles">
           <button
             onClick={() => setTheme(theme === "light" ? "dark" : "light")}
             aria-label="Cambiar tema"
@@ -195,7 +195,6 @@ export default function Header() {
               }} />
             </div>
           </button>
-        </div>
 
         {/* Language toggle */}
         <div style={{
@@ -234,6 +233,7 @@ export default function Header() {
           </button>
         </div>
 
+        </div> {/* end header-toggles */}
       </div>
 
       <style>{`
@@ -243,13 +243,15 @@ export default function Header() {
         }
         .header-avatar-desktop { display: flex; }
         .header-avatar-mobile  { display: none; }
-        .header-right   { display: flex; align-items: center; gap: 20px; }
-        .header-divider { display: block; }
+        .header-right    { display: flex; align-items: center; gap: 20px; }
+        .header-divider  { display: block; }
+        .header-toggles  { display: flex; align-items: center; gap: 20px; }
         @media (max-width: 768px) {
           .header-avatar-desktop { display: none; }
           .header-avatar-mobile  { display: flex; padding: 12px 0; }
-          .header-right   { flex: 1; justify-content: space-between; gap: 12px; }
-          .header-divider { display: none; }
+          .header-right    { flex: 1; justify-content: space-between; gap: 12px; }
+          .header-divider  { display: none; }
+          .header-toggles  { gap: 8px; }
         }
       `}</style>
     </header>
