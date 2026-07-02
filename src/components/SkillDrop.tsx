@@ -73,6 +73,44 @@ export default function SkillDrop() {
   const [isOver, setIsOver]       = useState(false);
   const [falling, setFalling]     = useState(false);
   const [lang, setLang]           = useState<"es"|"en">("es");
+  const [selectedPanel, setSelectedPanel] = useState<string>("contacto");
+  const cvIframeRef = useRef<HTMLIFrameElement>(null);
+  const [cvHeight, setCvHeight] = useState(900);
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  const [contactForm, setContactForm] = useState({ name: "", email: "", message: "" });
+  const [contactStatus, setContactStatus] = useState<"idle"|"sending"|"success"|"error">("idle");
+
+  const handleContactSubmit = useCallback(async (e: React.FormEvent) => {
+    e.preventDefault();
+    setContactStatus("sending");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(contactForm),
+      });
+      if (!res.ok) throw new Error();
+      setContactStatus("success");
+      setContactForm({ name: "", email: "", message: "" });
+    } catch {
+      setContactStatus("error");
+    }
+  }, [contactForm]);
+
+  useEffect(() => {
+    if (dropped) setSelectedPanel(dropped);
+  }, [dropped]);
+
+  const handleCvLoad = useCallback(() => {
+    const doc = cvIframeRef.current?.contentWindow?.document;
+    if (doc) setCvHeight(doc.documentElement.scrollHeight);
+  }, []);
+
+  useEffect(() => {
+    const onScroll = () => setShowBackToTop(window.scrollY > 400);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     const stored = localStorage.getItem("lang") as "es"|"en"|null;
@@ -328,13 +366,48 @@ export default function SkillDrop() {
     <div style={{ display:"flex", flexDirection:"column", alignItems:"center", padding:"0 24px" }}>
       <div className="skill-grid">
 
-        {/* "Próximamente" — first in DOM → top on mobile */}
+        {/* "Sobre mí / Redes / CV" — first in DOM → top on mobile */}
         <div className="box-soon" style={{
           height:`${boxH}px`,
-          border:"1px dashed var(--border)", borderRadius:"16px",
-          display:"flex", alignItems:"center", justifyContent:"center",
+          border:"1px solid var(--foreground)", borderRadius:"16px",
+          position:"relative", overflow:"hidden",
+          background:"var(--background)",
+          display:"grid", gridTemplateColumns:"repeat(3, 1fr)", gap:"12px",
+          padding:"12px",
         }}>
-          <span style={{ fontSize:"12px", color:"var(--border)" }}>próximamente</span>
+          {/* Sobre mí — selects the "about" panel below */}
+          <a
+            href="#"
+            className="panel-btn panel-btn-tile"
+            data-active={selectedPanel === "about"}
+            onClick={(e) => { e.preventDefault(); setSelectedPanel("about"); }}
+          >
+            <span className="panel-btn-label">
+              {lang==="en" ? "About me" : "Sobre mí"}
+            </span>
+          </a>
+
+          {/* CV — selects the "cv" panel below */}
+          <a
+            href="#"
+            className="panel-btn panel-btn-tile"
+            data-active={selectedPanel === "cv"}
+            onClick={(e) => { e.preventDefault(); setSelectedPanel("cv"); }}
+          >
+            <span className="panel-btn-label">CV</span>
+          </a>
+
+          {/* Contacto — selected by default */}
+          <a
+            href="#"
+            className="panel-btn panel-btn-tile"
+            data-active={selectedPanel === "contacto"}
+            onClick={(e) => { e.preventDefault(); setSelectedPanel("contacto"); }}
+          >
+            <span className="panel-btn-label">
+              {lang==="en" ? "Contact" : "Contacto"}
+            </span>
+          </a>
         </div>
 
         {/* Skills box — shown first (left) on desktop */}
@@ -342,6 +415,7 @@ export default function SkillDrop() {
           height:`${boxH}px`,
           border:"1px solid var(--foreground)",
           borderRadius:"16px",
+          background:"var(--background)",
           overflow:"hidden",
           position:"relative",
         }}>
@@ -414,11 +488,128 @@ export default function SkillDrop() {
         </div>
       </div>
 
-      {dropped && (
+      {selectedPanel in projects && (
         <div style={{ marginTop:"48px", width:"100%", maxWidth:"1024px", display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"24px" }}>
-          {projects[dropped].map(p => <ProjectCard key={p.id} title={p.title} />)}
+          {projects[selectedPanel].map(p => <ProjectCard key={p.id} title={p.title} />)}
         </div>
       )}
+
+      {selectedPanel === "about" && (
+        <div style={{
+          marginTop:"48px", width:"100%", maxWidth:"1024px",
+          border:"1px dashed var(--border)", borderRadius:"16px",
+          padding:"48px 24px", display:"flex", alignItems:"center", justifyContent:"center",
+          background:"var(--background)",
+        }}>
+          <span style={{ fontSize:"13px", color:"var(--muted)" }}>
+            {lang==="en" ? "About me — coming soon" : "Sobre mí — en construcción"}
+          </span>
+        </div>
+      )}
+
+      {selectedPanel === "cv" && (
+        <div style={{
+          marginTop:"48px", width:"100%", maxWidth:"1024px",
+          border:"1px solid var(--foreground)", borderRadius:"16px",
+          overflow:"hidden", background:"var(--background)",
+        }}>
+          <iframe
+            key={lang}
+            ref={cvIframeRef}
+            src={lang === "en" ? "/cv-en/index.html" : "/cv/index.html"}
+            title="CV"
+            scrolling="no"
+            onLoad={handleCvLoad}
+            style={{ width:"100%", height:`${cvHeight}px`, border:"none", display:"block" }}
+          />
+        </div>
+      )}
+
+      {selectedPanel === "contacto" && (
+        <div style={{
+          marginTop:"48px", width:"100%", maxWidth:"560px",
+          border:"1px solid var(--foreground)", borderRadius:"16px",
+          padding:"40px 32px", background:"var(--background)",
+        }}>
+          <span style={{ fontSize:"14px", color:"var(--foreground)", display:"block", marginBottom:"24px" }}>
+            {lang==="en" ? "Let's talk" : "Hablemos"}
+          </span>
+
+          <form onSubmit={handleContactSubmit} style={{ display:"flex", flexDirection:"column", gap:"14px" }}>
+            <input
+              type="text"
+              required
+              placeholder={lang==="en" ? "Name" : "Nombre"}
+              value={contactForm.name}
+              onChange={(e) => setContactForm(f => ({ ...f, name: e.target.value }))}
+              className="contact-input"
+            />
+            <input
+              type="email"
+              required
+              placeholder="Email"
+              value={contactForm.email}
+              onChange={(e) => setContactForm(f => ({ ...f, email: e.target.value }))}
+              className="contact-input"
+            />
+            <textarea
+              required
+              rows={5}
+              placeholder={lang==="en" ? "Message" : "Mensaje"}
+              value={contactForm.message}
+              onChange={(e) => setContactForm(f => ({ ...f, message: e.target.value }))}
+              className="contact-input"
+              style={{ resize:"vertical" }}
+            />
+            <button
+              type="submit"
+              disabled={contactStatus === "sending"}
+              className="panel-btn panel-btn-pill"
+              style={{ borderRadius:"999px", padding:"10px 24px", width:"auto", alignSelf:"flex-start", cursor: contactStatus === "sending" ? "default" : "pointer" }}
+            >
+              <span className="panel-btn-label">
+                {contactStatus === "sending"
+                  ? (lang==="en" ? "Sending..." : "Enviando...")
+                  : (lang==="en" ? "Send" : "Enviar")}
+              </span>
+            </button>
+
+            {contactStatus === "success" && (
+              <span style={{ fontSize:"12px", color:"var(--muted)" }}>
+                {lang==="en" ? "Message sent — thanks!" : "Mensaje enviado — ¡gracias!"}
+              </span>
+            )}
+            {contactStatus === "error" && (
+              <span style={{ fontSize:"12px", color:"#dc2626" }}>
+                {lang==="en" ? "Something went wrong. Try again." : "Algo ha fallado. Inténtalo de nuevo."}
+              </span>
+            )}
+          </form>
+        </div>
+      )}
+
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        aria-label={lang==="en" ? "Back to top" : "Volver arriba"}
+        style={{
+          position:"fixed", bottom:"24px", right:"24px", zIndex:10,
+          width:"44px", height:"44px", borderRadius:"50%",
+          border:"1px solid var(--foreground)",
+          background:"var(--background)",
+          display:"flex", alignItems:"center", justifyContent:"center",
+          cursor:"pointer",
+          opacity: showBackToTop ? 1 : 0,
+          pointerEvents: showBackToTop ? "auto" : "none",
+          transform: showBackToTop ? "translateY(0)" : "translateY(12px)",
+          transition:"opacity 0.2s, transform 0.2s, background 0.15s",
+        }}
+        className="back-to-top-btn"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color:"var(--foreground)" }}>
+          <line x1="12" y1="19" x2="12" y2="5" />
+          <polyline points="5 12 12 5 19 12" />
+        </svg>
+      </button>
 
       <style>{`
         .skill-grid {
@@ -440,6 +631,54 @@ export default function SkillDrop() {
           0%   { transform: translateY(0) scale(1);    opacity: 1; }
           60%  { transform: translateY(12px) scale(0.95); opacity: 0.6; }
           100% { transform: translateY(40px) scale(0.9); opacity: 0; }
+        }
+        .panel-btn {
+          display: flex; align-items: center; justify-content: center;
+          width: 100%; height: 100%;
+          background: var(--background);
+          text-decoration: none;
+          transition: background 0.15s;
+        }
+        .panel-btn-pill {
+          border: 1px solid var(--foreground);
+        }
+        .panel-btn-tile {
+          border: 1px solid var(--foreground);
+          border-radius: 10px;
+        }
+        .contact-input {
+          font-family: inherit;
+          font-size: 13px;
+          color: var(--foreground);
+          background: var(--background);
+          border: 1px solid var(--border);
+          border-radius: 8px;
+          padding: 10px 12px;
+          outline: none;
+          transition: border-color 0.15s;
+        }
+        .contact-input::placeholder { color: var(--muted); }
+        .contact-input:focus { border-color: var(--foreground); }
+        .panel-btn-label {
+          font-size: 13px; font-weight: 500;
+          color: var(--foreground);
+          transition: color 0.15s;
+        }
+        .panel-btn:hover,
+        .panel-btn:active,
+        .panel-btn[data-active="true"] {
+          background: var(--foreground);
+        }
+        .panel-btn:hover .panel-btn-label,
+        .panel-btn:active .panel-btn-label,
+        .panel-btn[data-active="true"] .panel-btn-label {
+          color: var(--background);
+        }
+        .back-to-top-btn:hover, .back-to-top-btn:active {
+          background: var(--foreground);
+        }
+        .back-to-top-btn:hover svg, .back-to-top-btn:active svg {
+          color: var(--background);
         }
       `}</style>
     </div>

@@ -155,7 +155,7 @@ export default function Header() {
             style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center" }}
           >
             <div style={{
-              width: "52px", height: "30px",
+              width: "60px", height: "30px",
               borderRadius: "999px",
               border: "1px solid var(--foreground)",
               position: "relative",
@@ -189,7 +189,7 @@ export default function Header() {
               <div style={{
                 position: "absolute",
                 top: "4px",
-                left: theme === "dark" ? "24px" : "4px",
+                left: theme === "dark" ? "32px" : "4px",
                 width: "20px", height: "20px",
                 borderRadius: "50%",
                 border: "1px solid var(--foreground)",
@@ -202,9 +202,9 @@ export default function Header() {
 
         {/* Language toggle */}
         <div style={{
-          display: "flex", alignItems: "center", gap: "2px",
+          display: "flex", alignItems: "center", justifyContent: "center", gap: "2px",
           border: "1px solid var(--foreground)", borderRadius: "999px",
-          padding: "4px 8px",
+          width: "60px", height: "30px",
         }}>
           <button
             onClick={() => setLang("es")}
