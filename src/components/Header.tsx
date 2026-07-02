@@ -186,7 +186,7 @@ export default function Header() {
                 </svg>
               </span>
               {/* sliding dot */}
-              <div style={{
+              <div className="theme-toggle-dot" style={{
                 position: "absolute",
                 top: "4px",
                 left: theme === "dark" ? "32px" : "4px",

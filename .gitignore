@@ -3,3 +3,4 @@
 .pnpm-store
 .env
 .env*.local
+*.tsbuildinfo

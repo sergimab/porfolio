@@ -4,11 +4,11 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import type MatterTypes from "matter-js";
 
 const skills = [
-  { id: "motion",     label: "Motion Graphics", labelEn: "Motion Graphics", color: "rgba(217,119,6,0.15)",   border: "rgba(217,119,6,0.7)"   },
-  { id: "branding",   label: "Branding",         labelEn: "Branding",        color: "rgba(219,39,119,0.12)", border: "rgba(219,39,119,0.6)"  },
-  { id: "fotografia", label: "Fotografía",        labelEn: "Photography",     color: "rgba(37,99,235,0.12)",  border: "rgba(37,99,235,0.6)"   },
-  { id: "iberdrola",  label: "Iberdrola",         labelEn: "Iberdrola",       color: "rgba(22,163,74,0.12)",  border: "rgba(22,163,74,0.6)"   },
-  { id: "uiux",       label: "UI / UX",           labelEn: "UI / UX",         color: "rgba(124,58,237,0.12)", border: "rgba(124,58,237,0.6)"  },
+  { id: "motion",     label: "Motion Graphics", labelEn: "Motion Graphics", color: "rgba(217,119,6,0.15)",   border: "rgba(217,119,6,0.7)",   hue: 32  },
+  { id: "branding",   label: "Branding",         labelEn: "Branding",        color: "rgba(219,39,119,0.12)", border: "rgba(219,39,119,0.6)",  hue: 330 },
+  { id: "fotografia", label: "Fotografía",        labelEn: "Photography",     color: "rgba(37,99,235,0.12)",  border: "rgba(37,99,235,0.6)",   hue: 217 },
+  { id: "iberdrola",  label: "Iberdrola",         labelEn: "Iberdrola",       color: "rgba(22,163,74,0.12)",  border: "rgba(22,163,74,0.6)",   hue: 142 },
+  { id: "uiux",       label: "UI / UX",           labelEn: "UI / UX",         color: "rgba(124,58,237,0.12)", border: "rgba(124,58,237,0.6)",  hue: 262 },
 ];
 
 const projects: Record<string, { id: string; title: string }[]> = {
@@ -24,6 +24,7 @@ function ProjectCard({ title }: { title: string }) {
   return (
     <div style={{ display:"flex", flexDirection:"column", gap:"8px", cursor:"pointer" }}>
       <div
+        className="hover-trail-target"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         style={{
@@ -34,14 +35,14 @@ function ProjectCard({ title }: { title: string }) {
           background: hovered ? "var(--surface)" : "transparent",
         }}
       >
-        <svg viewBox="0 0 200 200" style={{ position:"absolute", inset:0, width:"100%", height:"100%", opacity:hovered?0:1, transition:"opacity 0.3s" }}>
+        <svg viewBox="0 0 200 200" style={{ position:"absolute", inset:0, width:"100%", height:"100%", opacity:hovered?0:1, transition:"opacity 0.3s", zIndex:6 }}>
           <rect x="30" y="30" width="140" height="100" rx="4" fill="none" stroke="var(--foreground)" strokeWidth="1"/>
           <circle cx="60" cy="55" r="12" fill="none" stroke="var(--foreground)" strokeWidth="1"/>
           <line x1="30" y1="110" x2="80" y2="75" stroke="var(--foreground)" strokeWidth="1"/>
           <line x1="80" y1="75" x2="120" y2="95" stroke="var(--foreground)" strokeWidth="1"/>
           <line x1="120" y1="95" x2="170" y2="60" stroke="var(--foreground)" strokeWidth="1"/>
         </svg>
-        <div style={{ position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center", opacity:hovered?1:0, transition:"opacity 0.3s" }}>
+        <div style={{ position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center", opacity:hovered?1:0, transition:"opacity 0.3s", zIndex:6 }}>
           <span style={{ fontSize:"12px", color:"var(--muted)" }}>Ver proyecto</span>
         </div>
       </div>
@@ -54,14 +55,21 @@ const DZ_H   = 64;
 const PILL_W = 140;
 const PILL_H = 42;
 
+type TrailPoint = { x: number; y: number; alpha: number; hue: number };
+
 export default function SkillDrop() {
   const sceneRef     = useRef<HTMLDivElement>(null);
+  const trailCanvasRef = useRef<HTMLCanvasElement>(null);
+  const trailPtsRef  = useRef<TrailPoint[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const engineRef    = useRef<MatterTypes.Engine | null>(null);
   const runnerRef    = useRef<MatterTypes.Runner | null>(null);
   const renderRef    = useRef<MatterTypes.Render | null>(null);
   const pillsRef     = useRef<{ body: MatterTypes.Body; id: string }[]>([]);
   const draggedRef   = useRef<string | null>(null);
+  const droppedRef   = useRef<string | null>(null);
+  const resettingRef = useRef<boolean>(false);
+  const genRef       = useRef<number>(0);
   const rafRef       = useRef<number>(0);
   const boxWRef      = useRef<number>(500);
   const boxHRef      = useRef<number>(500);
@@ -126,8 +134,13 @@ export default function SkillDrop() {
   const draggedSkill = skills.find(s => s.id === draggedId);
 
   const startPhysics = useCallback(async (activeIds: string[], boxW: number, boxH: number) => {
+    const myGen = ++genRef.current;
     const Matter = await import("matter-js");
     const { Engine, Render, Runner, Bodies, Body, Composite, Mouse, MouseConstraint, Events, Query } = Matter;
+
+    // Bail out if a newer init started while we were awaiting the import
+    // (e.g. rapid resize events) — avoids stacking multiple physics worlds.
+    if (myGen !== genRef.current) return () => {};
 
     if (renderRef.current) { Matter.Render.stop(renderRef.current); renderRef.current.canvas.remove(); }
     if (runnerRef.current) Matter.Runner.stop(runnerRef.current);
@@ -143,6 +156,18 @@ export default function SkillDrop() {
       options: { width: boxW, height: boxH, wireframes: false, background: "transparent" },
     });
     renderRef.current = render;
+
+    const trailCanvas = trailCanvasRef.current;
+    const tctx = trailCanvas?.getContext("2d") ?? null;
+    if (trailCanvas && tctx) {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      trailCanvas.width = boxW * dpr;
+      trailCanvas.height = boxH * dpr;
+      trailCanvas.style.width = `${boxW}px`;
+      trailCanvas.style.height = `${boxH}px`;
+      tctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    trailPtsRef.current = [];
 
     const wo = { isStatic:true, render:{ fillStyle:"transparent", strokeStyle:"transparent", lineWidth:0 } };
     Composite.add(engine.world, [
@@ -212,6 +237,21 @@ export default function SkillDrop() {
       }
     });
 
+    const releasePill = (id: string) => {
+      const skill = skills.find(s => s.id === id);
+      if (!skill) return;
+      const x = boxW / 2 + (Math.random() - 0.5) * 100;
+      const body = Bodies.rectangle(x, PILL_H / 2 + 4, PILL_W, PILL_H, {
+        restitution: 0.4, friction: 0, frictionAir: 0.012,
+        chamfer: { radius: PILL_H / 2 },
+        render: { fillStyle:"transparent", strokeStyle:"transparent", lineWidth:0 },
+        label: skill.id,
+      });
+      Body.setVelocity(body, { x: (Math.random()-0.5)*1.5, y: 1.5 });
+      Composite.add(engine.world, body);
+      pillsRef.current = [...pillsRef.current, { body, id: skill.id }];
+    };
+
     const checkDrop = () => {
       const id = draggedRef.current;
       draggedRef.current = null;
@@ -223,6 +263,10 @@ export default function SkillDrop() {
       if (pill.body.position.y > physH - PILL_H / 2) {
         Composite.remove(engine.world, pill.body);
         pillsRef.current = pillsRef.current.filter(p => p.id !== id);
+        if (droppedRef.current && droppedRef.current !== id) {
+          releasePill(droppedRef.current);
+        }
+        droppedRef.current = id;
         setDropped(id);
       }
     };
@@ -285,6 +329,23 @@ export default function SkillDrop() {
     window.addEventListener("mouseup",   checkDrop);
     window.addEventListener("mousemove", checkOver);
 
+    // Color trail on hover: paint a hue matching whichever capsule is under the cursor
+    const onCanvasHoverMove = (e: MouseEvent) => {
+      const pos = canvasPos(e.clientX, e.clientY);
+      for (const { body, id } of pillsRef.current) {
+        const dx = pos.x - body.position.x, dy = pos.y - body.position.y;
+        if (Math.abs(dx) < PILL_W / 2 + 4 && Math.abs(dy) < PILL_H / 2 + 4) {
+          const skill = skills.find(s => s.id === id);
+          if (skill) {
+            trailPtsRef.current.push({ x: pos.x, y: pos.y, alpha: 0.34, hue: skill.hue });
+            if (trailPtsRef.current.length > 200) trailPtsRef.current.shift();
+          }
+          break;
+        }
+      }
+    };
+    canvas.addEventListener("mousemove", onCanvasHoverMove);
+
     Render.run(render);
     const runner = Runner.create();
     runnerRef.current = runner;
@@ -294,6 +355,25 @@ export default function SkillDrop() {
       setPillPos(pillsRef.current.map(({ body, id }) => ({
         id, x: body.position.x, y: body.position.y, angle: body.angle,
       })));
+
+      if (tctx) {
+        tctx.clearRect(0, 0, boxW, boxH);
+        tctx.globalCompositeOperation = "lighter";
+        const pts = trailPtsRef.current;
+        for (let i = pts.length - 1; i >= 0; i--) {
+          const p = pts[i];
+          p.alpha *= 0.978;
+          if (p.alpha < 0.006) { pts.splice(i, 1); continue; }
+          const g = tctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 30);
+          g.addColorStop(0, `hsla(${p.hue}, 85%, 62%, ${p.alpha})`);
+          g.addColorStop(0.6, `hsla(${p.hue}, 85%, 55%, ${p.alpha * 0.45})`);
+          g.addColorStop(1, `hsla(${p.hue}, 85%, 55%, 0)`);
+          tctx.fillStyle = g;
+          tctx.fillRect(p.x - 32, p.y - 32, 64, 64);
+        }
+        tctx.globalCompositeOperation = "source-over";
+      }
+
       rafRef.current = requestAnimationFrame(tick);
     };
     tick();
@@ -302,6 +382,7 @@ export default function SkillDrop() {
       canvas.removeEventListener("touchstart", onTouchStart);
       canvas.removeEventListener("touchmove",  onTouchMove);
       canvas.removeEventListener("touchend",   onTouchEnd);
+      canvas.removeEventListener("mousemove", onCanvasHoverMove);
       window.removeEventListener("mouseup",   checkDrop);
       window.removeEventListener("mousemove", checkOver);
     };
@@ -317,7 +398,8 @@ export default function SkillDrop() {
       boxWRef.current = w;
       boxHRef.current = h;
       setBoxH(h);
-      startPhysics(skills.map(s => s.id), w, h).then(fn => { cleanup = fn; });
+      const activeIds = skills.map(s => s.id).filter(id => id !== droppedRef.current);
+      startPhysics(activeIds, w, h).then(fn => { cleanup = fn; });
     };
 
     const ro = new ResizeObserver(entries => {
@@ -335,14 +417,16 @@ export default function SkillDrop() {
 
   const handleReset = async () => {
     const id = dropped;
-    if (!id) return;
+    if (!id || resettingRef.current) return;
+    resettingRef.current = true;
+    droppedRef.current = null;
     setFalling(true);
     await new Promise(r => setTimeout(r, 480));
 
     const Matter = await import("matter-js");
     const { Bodies, Body, Composite } = Matter;
     const engine = engineRef.current;
-    if (!engine) return;
+    if (!engine) { resettingRef.current = false; return; }
 
     const skill = skills.find(s => s.id === id)!;
     const boxW = boxWRef.current;
@@ -359,8 +443,18 @@ export default function SkillDrop() {
     pillsRef.current = [...pillsRef.current, { body, id: skill.id }];
 
     setFalling(false);
-    setDropped(null);
+    setDropped(prev => (prev === id ? null : prev));
+    resettingRef.current = false;
   };
+
+  // If the user navigates to another panel (About/CV/Contact) while a skill
+  // capsule is still docked in the drop zone, release it back into the box.
+  useEffect(() => {
+    if (dropped && selectedPanel !== dropped) {
+      handleReset();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedPanel]);
 
   return (
     <div style={{ display:"flex", flexDirection:"column", alignItems:"center", padding:"0 24px" }}>
@@ -420,6 +514,7 @@ export default function SkillDrop() {
           position:"relative",
         }}>
           <div ref={sceneRef} style={{ position:"absolute", inset:0 }} />
+          <canvas ref={trailCanvasRef} style={{ position:"absolute", inset:0, pointerEvents:"none" }} />
 
           {pillPos.map(({ id, x, y, angle }) => {
             const skill = skills.find(s => s.id === id);
@@ -527,7 +622,7 @@ export default function SkillDrop() {
 
       {selectedPanel === "contacto" && (
         <div style={{
-          marginTop:"48px", width:"100%", maxWidth:"560px",
+          marginTop:"48px", width:"100%", maxWidth:"1024px",
           border:"1px solid var(--foreground)", borderRadius:"16px",
           padding:"40px 32px", background:"var(--background)",
         }}>
@@ -605,7 +700,7 @@ export default function SkillDrop() {
         }}
         className="back-to-top-btn"
       >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color:"var(--foreground)" }}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color:"var(--foreground)", position:"relative", zIndex:6 }}>
           <line x1="12" y1="19" x2="12" y2="5" />
           <polyline points="5 12 12 5 19 12" />
         </svg>
@@ -660,6 +755,7 @@ export default function SkillDrop() {
         .contact-input::placeholder { color: var(--muted); }
         .contact-input:focus { border-color: var(--foreground); }
         .panel-btn-label {
+          position: relative; z-index: 6;
           font-size: 13px; font-weight: 500;
           color: var(--foreground);
           transition: color 0.15s;

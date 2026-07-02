@@ -1,10 +1,12 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SkillDropClient from "@/components/SkillDropClient";
+import HoverTrail from "@/components/HoverTrail";
 
 export default function Home() {
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", background: "var(--background)" }}>
+      <HoverTrail />
       <div className="header-wrap">
         <Header />
       </div>
