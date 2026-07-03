@@ -106,7 +106,7 @@ export default function Header() {
   );
 
   const textNode = (
-    <span style={{ fontSize: "14px", color: "var(--foreground)" }}>
+    <span className="header-greeting" style={{ fontSize: "14px", color: "var(--foreground)" }}>
       {lang === "es" ? "Hola, soy " : "Hi, it's "}
       <span style={{ fontWeight: 500 }}>
         S{typedName}

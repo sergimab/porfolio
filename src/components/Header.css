@@ -11,4 +11,5 @@
   .header-time     { display: none; }
   .header-divider  { display: none; }
   .header-toggles  { gap: 8px; }
+  .header-greeting { display: none; }
 }
