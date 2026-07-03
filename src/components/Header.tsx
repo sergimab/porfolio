@@ -91,27 +91,35 @@ export default function Header() {
   const { timeStr, dateStr } = formatDateTime(now, lang);
   const t = labels[lang];
 
+  const iconNode = (
+    <Link href="/" aria-label={lang === "es" ? "Volver al inicio" : "Back to home"} style={{
+      width: "36px", height: "36px", borderRadius: "50%", overflow: "hidden",
+      display: "flex", alignItems: "center", justifyContent: "center",
+      background: "transparent", flexShrink: 0,
+    }}>
+      <img
+        src={theme === "dark" ? "/sharkastic-logo-light.svg" : "/sharkastic-logo-dark.svg"}
+        alt="logo"
+        style={{ width: "34px", height: "34px" }}
+      />
+    </Link>
+  );
+
+  const textNode = (
+    <span style={{ fontSize: "14px", color: "var(--foreground)" }}>
+      {lang === "es" ? "Hola, soy " : "Hi, it's "}
+      <span style={{ fontWeight: 500 }}>
+        S{typedName}
+        <span style={{ display:"inline-block", width:"1.5px", height:"0.9em", background:"var(--foreground)", marginLeft:"1px", verticalAlign:"text-bottom", animation:"blink 1s step-end infinite" }} aria-hidden="true" />
+      </span>{" "}
+      👋
+    </span>
+  );
+
   const avatarNode = (
     <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-      <Link href="/" aria-label={lang === "es" ? "Volver al inicio" : "Back to home"} style={{
-        width: "36px", height: "36px", borderRadius: "50%", overflow: "hidden",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        background: "transparent", flexShrink: 0,
-      }}>
-        <img
-          src={theme === "dark" ? "/sharkastic-logo-light.svg" : "/sharkastic-logo-dark.svg"}
-          alt="logo"
-          style={{ width: "34px", height: "34px" }}
-        />
-      </Link>
-      <span style={{ fontSize: "14px", color: "var(--foreground)" }}>
-        {lang === "es" ? "Hola, soy " : "Hi, it's "}
-        <span style={{ fontWeight: 500 }}>
-          S{typedName}
-          <span style={{ display:"inline-block", width:"1.5px", height:"0.9em", background:"var(--foreground)", marginLeft:"1px", verticalAlign:"text-bottom", animation:"blink 1s step-end infinite" }} aria-hidden="true" />
-        </span>{" "}
-        👋
-      </span>
+      {iconNode}
+      {textNode}
     </div>
   );
 
@@ -134,6 +142,11 @@ export default function Header() {
       {/* Avatar — visible only on desktop */}
       <div className="header-avatar-desktop">
         {avatarNode}
+      </div>
+
+      {/* Icon only — visible only on mobile, stays pinned in the sticky header */}
+      <div className="header-icon-mobile">
+        {iconNode}
       </div>
 
       {/* Right: time + date + toggles — on mobile splits into left (time) and right (toggles) */}
@@ -248,10 +261,10 @@ export default function Header() {
     </header>
     </div>
 
-    {/* Avatar — visible only on mobile, sits below header (not sticky, scrolls under it) */}
+    {/* Greeting text — visible only on mobile, sits below header (not sticky, scrolls under it) */}
     <div className="header-wrap">
       <div className="header-avatar-mobile">
-        {avatarNode}
+        {textNode}
       </div>
     </div>
     </>
