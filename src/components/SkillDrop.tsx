@@ -704,7 +704,7 @@ export default function SkillDrop() {
             margin: 0 auto;
           }
           .panel-btn-tile { height: 56px; border-radius: 999px; }
-          .panel-btn { padding: 0 16px; }
+          .panel-btn { padding: 8px 16px; }
         }
         @keyframes dropExit {
           0%   { transform: translateY(0) scale(1);    opacity: 1; }
