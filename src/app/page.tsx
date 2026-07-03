@@ -13,12 +13,19 @@ export default function Home() {
       <main className="main-content" style={{ paddingTop: "24px", paddingBottom: "48px", flex: 1 }}>
         <SkillDropClient />
       </main>
+      <div style={{ display: "flex", justifyContent: "center", padding: "0 24px 24px" }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/tagline-text.svg" alt="" className="tagline-img" style={{ maxWidth: "349px", width: "100%", height: "auto" }} />
+      </div>
       <div className="header-wrap">
         <Footer />
       </div>
       <style>{`
         .header-wrap {
           padding: 0 100px;
+        }
+        [data-theme="dark"] .tagline-img {
+          filter: invert(1);
         }
         @media (max-width: 768px) {
           .header-wrap {
