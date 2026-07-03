@@ -700,7 +700,7 @@ export default function SkillDrop() {
           .box-soon   {
             order: 1;
             height: auto !important;
-            max-width: 260px;
+            width: 100%;
             margin: 0 auto;
           }
           .panel-btn-tile { height: 56px; }

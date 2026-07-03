@@ -15,7 +15,7 @@ export default function Home() {
       </main>
       <div style={{ display: "flex", justifyContent: "center", padding: "0 24px 24px" }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/tagline-text.svg" alt="" className="tagline-img" style={{ maxWidth: "349px", width: "100%", height: "auto" }} />
+        <img src="/tagline-text.svg" alt="" className="tagline-img" style={{ maxWidth: "190px", width: "100%", height: "auto" }} />
       </div>
       <div className="header-wrap">
         <Footer />
