@@ -10,44 +10,60 @@ const skills = [
   { id: "fotografia", label: "Fotografía",        labelEn: "Photography",     color: "rgba(37,99,235,0.12)",  border: "rgba(37,99,235,0.6)",   hue: 217 },
   { id: "iberdrola",  label: "Iberdrola",         labelEn: "Iberdrola",       color: "rgba(22,163,74,0.12)",  border: "rgba(22,163,74,0.6)",   hue: 142 },
   { id: "uiux",       label: "UI / UX",           labelEn: "UI / UX",         color: "rgba(124,58,237,0.12)", border: "rgba(124,58,237,0.6)",  hue: 262 },
+  { id: "3d",         label: "3D",                labelEn: "3D",              color: "rgba(13,148,136,0.12)", border: "rgba(13,148,136,0.6)",  hue: 175 },
 ];
 
 const projects: Record<string, { id: string; title: string }[]> = {
   motion:     [{ id:"m1",title:"Proyecto Motion 01"},{id:"m2",title:"Proyecto Motion 02"},{id:"m3",title:"Proyecto Motion 03"}],
   branding:   [{ id:"b1",title:"Proyecto Branding 01"},{id:"b2",title:"Proyecto Branding 02"},{id:"b3",title:"Proyecto Branding 03"}],
   fotografia: [{ id:"f1",title:"Proyecto Foto 01"},{id:"f2",title:"Proyecto Foto 02"},{id:"f3",title:"Proyecto Foto 03"}],
-  iberdrola:  [{ id:"i1",title:"Proyecto Iberdrola 01"},{id:"i2",title:"Proyecto Iberdrola 02"},{id:"i3",title:"Proyecto Iberdrola 03"}],
+  iberdrola:  [{ id:"i1",title:"Infografías"},{id:"i2",title:"Sistema de diseño"},{id:"i3",title:"Newsletters"},{id:"i4",title:"Iconografía"}],
   uiux:       [{ id:"u1",title:"Proyecto UI/UX 01"},{id:"u2",title:"Proyecto UI/UX 02"},{id:"u3",title:"Proyecto UI/UX 03"}],
+  "3d":       [{ id:"d1",title:"Proyecto 3D 01"},{id:"d2",title:"Proyecto 3D 02"},{id:"d3",title:"Proyecto 3D 03"}],
 };
 
-function ProjectCard({ title }: { title: string }) {
+function ProjectCard({ title, id, hue }: { title: string; id: string; hue: number }) {
   const [hovered, setHovered] = useState(false);
   return (
-    <div style={{ display:"flex", flexDirection:"column", gap:"8px", cursor:"pointer" }}>
+    <a
+      href={`/proyecto/${id}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{ display:"flex", flexDirection:"column", gap:"8px", cursor:"pointer", textDecoration:"none" }}
+    >
       <div
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         style={{
           width:"100%", aspectRatio:"1",
-          border:"1px solid var(--foreground)", borderRadius:"8px",
-          position:"relative", overflow:"hidden",
-          transition:"background 0.3s",
-          background: hovered ? "var(--surface)" : "transparent",
+          borderRadius:"8px",
+          padding:"2px",
+          background: `linear-gradient(120deg, hsl(${hue},70%,68%), hsl(${hue},70%,48%), hsl(${hue+20},70%,58%), hsl(${hue},70%,68%))`,
+          backgroundSize:"300% 300%",
+          animation:"capsuleGradient 3.2s ease-in-out infinite",
         }}
       >
-        <svg viewBox="0 0 200 200" style={{ position:"absolute", inset:0, width:"100%", height:"100%", opacity:hovered?0:1, transition:"opacity 0.3s", zIndex:6 }}>
-          <rect x="30" y="30" width="140" height="100" rx="4" fill="none" stroke="var(--foreground)" strokeWidth="1"/>
-          <circle cx="60" cy="55" r="12" fill="none" stroke="var(--foreground)" strokeWidth="1"/>
-          <line x1="30" y1="110" x2="80" y2="75" stroke="var(--foreground)" strokeWidth="1"/>
-          <line x1="80" y1="75" x2="120" y2="95" stroke="var(--foreground)" strokeWidth="1"/>
-          <line x1="120" y1="95" x2="170" y2="60" stroke="var(--foreground)" strokeWidth="1"/>
-        </svg>
-        <div style={{ position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center", opacity:hovered?1:0, transition:"opacity 0.3s", zIndex:6 }}>
-          <span style={{ fontSize:"12px", color:"var(--muted)" }}>Ver proyecto</span>
+        <div style={{
+          width:"100%", height:"100%",
+          borderRadius:"7px",
+          position:"relative", overflow:"hidden",
+          transition:"background 0.3s",
+          background: hovered ? "var(--surface)" : "var(--background)",
+        }}>
+          <svg viewBox="0 0 200 200" style={{ position:"absolute", inset:0, width:"100%", height:"100%", opacity:hovered?0:1, transition:"opacity 0.3s", zIndex:6 }}>
+            <rect x="30" y="30" width="140" height="100" rx="4" fill="none" stroke="var(--foreground)" strokeWidth="1"/>
+            <circle cx="60" cy="55" r="12" fill="none" stroke="var(--foreground)" strokeWidth="1"/>
+            <line x1="30" y1="110" x2="80" y2="75" stroke="var(--foreground)" strokeWidth="1"/>
+            <line x1="80" y1="75" x2="120" y2="95" stroke="var(--foreground)" strokeWidth="1"/>
+            <line x1="120" y1="95" x2="170" y2="60" stroke="var(--foreground)" strokeWidth="1"/>
+          </svg>
+          <div style={{ position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center", opacity:hovered?1:0, transition:"opacity 0.3s", zIndex:6 }}>
+            <span style={{ fontSize:"12px", color:"var(--muted)" }}>Ver proyecto</span>
+          </div>
         </div>
       </div>
       <span style={{ fontSize:"13px", color:"var(--foreground)", textAlign:"center" }}>{title}</span>
-    </div>
+    </a>
   );
 }
 
@@ -571,7 +587,9 @@ export default function SkillDrop() {
       <div ref={panelRef} style={{ width:"100%", display:"flex", flexDirection:"column", alignItems:"center", scrollMarginTop:"24px" }}>
       {selectedPanel in projects && (
         <div style={{ marginTop:"48px", width:"100%", maxWidth:"1024px", display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"24px" }}>
-          {projects[selectedPanel].map(p => <ProjectCard key={p.id} title={p.title} />)}
+          {projects[selectedPanel].map(p => (
+            <ProjectCard key={p.id} id={p.id} title={p.title} hue={skills.find(s => s.id === selectedPanel)?.hue ?? 0} />
+          ))}
         </div>
       )}
 
