@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import "./Header.css";
 
 const names = ["ergio", "harkastic"];
@@ -92,7 +93,7 @@ export default function Header() {
 
   const avatarNode = (
     <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-      <div style={{
+      <Link href="/" aria-label={lang === "es" ? "Volver al inicio" : "Back to home"} style={{
         width: "36px", height: "36px", borderRadius: "50%", overflow: "hidden",
         display: "flex", alignItems: "center", justifyContent: "center",
         background: "transparent", flexShrink: 0,
@@ -102,7 +103,7 @@ export default function Header() {
           alt="logo"
           style={{ width: "34px", height: "34px" }}
         />
-      </div>
+      </Link>
       <span style={{ fontSize: "14px", color: "var(--foreground)" }}>
         {lang === "es" ? "Hola, soy " : "Hi, it's "}
         <span style={{ fontWeight: 500 }}>

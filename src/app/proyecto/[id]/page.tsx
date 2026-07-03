@@ -1,4 +1,6 @@
-import Link from "next/link";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import "../../page.css";
 
 const titles: Record<string, string> = {
   m1: "Proyecto Motion 01", m2: "Proyecto Motion 02", m3: "Proyecto Motion 03",
@@ -14,20 +16,20 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
   const title = titles[id] ?? "Proyecto";
 
   return (
-    <div style={{
-      minHeight: "100vh", display: "flex", flexDirection: "column",
-      alignItems: "center", justifyContent: "center", gap: "16px",
-      background: "var(--background)", color: "var(--foreground)",
-      fontFamily: "var(--font-geist-sans), sans-serif", padding: "24px", textAlign: "center",
-    }}>
-      <span style={{ fontSize: "13px", color: "var(--muted)" }}>Próximamente</span>
-      <h1 style={{ fontSize: "22px", fontWeight: 500 }}>{title}</h1>
-      <p style={{ fontSize: "13px", color: "var(--muted)", maxWidth: "360px" }}>
-        Esta página está en construcción. Aquí se mostrará el proyecto completo.
-      </p>
-      <Link href="/" style={{ fontSize: "13px", color: "var(--foreground)", marginTop: "12px" }}>
-        ← Volver al inicio
-      </Link>
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", background: "var(--background)" }}>
+      <Header />
+      <main style={{
+        flex: 1, display: "flex", flexDirection: "column",
+        alignItems: "center", justifyContent: "center", gap: "16px",
+        color: "var(--foreground)", padding: "24px", textAlign: "center",
+      }}>
+        <span style={{ fontSize: "13px", color: "var(--muted)" }}>Próximamente</span>
+        <h1 style={{ fontSize: "22px", fontWeight: 500 }}>{title}</h1>
+        <p style={{ fontSize: "13px", color: "var(--muted)", maxWidth: "360px" }}>
+          Esta página está en construcción. Aquí se mostrará el proyecto completo.
+        </p>
+      </main>
+      <Footer />
     </div>
   );
 }
