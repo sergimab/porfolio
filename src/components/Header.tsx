@@ -116,6 +116,7 @@ export default function Header() {
 
   return (
     <>
+    <div className="header-wrap" style={{ position: "sticky", top: 0, zIndex: 50, background: "var(--background)" }}>
     <header style={{
       width: "100%",
       padding: "16px 24px",
@@ -244,10 +245,13 @@ export default function Header() {
       </div>
 
     </header>
+    </div>
 
-    {/* Avatar — visible only on mobile, sits below header */}
-    <div className="header-avatar-mobile" style={{ paddingLeft: "24px" }}>
-      {avatarNode}
+    {/* Avatar — visible only on mobile, sits below header (not sticky, scrolls under it) */}
+    <div className="header-wrap">
+      <div className="header-avatar-mobile">
+        {avatarNode}
+      </div>
     </div>
     </>
   );

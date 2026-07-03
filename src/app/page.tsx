@@ -8,9 +8,7 @@ export default function Home() {
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", background: "var(--background)" }}>
       <HoverTrail />
-      <div className="header-wrap" style={{ position: "sticky", top: 0, zIndex: 50, background: "var(--background)" }}>
-        <Header />
-      </div>
+      <Header />
       <main className="main-content" style={{ paddingTop: "24px", paddingBottom: "48px", flex: 1 }}>
         <SkillDropClient />
       </main>
