@@ -703,7 +703,8 @@ export default function SkillDrop() {
             width: 100%;
             margin: 0 auto;
           }
-          .panel-btn-tile { height: 56px; }
+          .panel-btn-tile { height: 56px; border-radius: 999px; }
+          .panel-btn { padding: 0 16px; }
         }
         @keyframes dropExit {
           0%   { transform: translateY(0) scale(1);    opacity: 1; }
@@ -718,7 +719,6 @@ export default function SkillDrop() {
         .panel-btn {
           display: flex; align-items: center; justify-content: center;
           width: 100%; height: 100%;
-          padding: 0 16px;
           background: var(--background);
           text-decoration: none;
           transition: background 0.15s;
@@ -728,7 +728,7 @@ export default function SkillDrop() {
         }
         .panel-btn-tile {
           border: 1px solid var(--foreground);
-          border-radius: 999px;
+          border-radius: 10px;
         }
         .contact-input {
           font-family: inherit;
