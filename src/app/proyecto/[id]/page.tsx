@@ -29,7 +29,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
           Esta página está en construcción. Aquí se mostrará el proyecto completo.
         </p>
       </main>
-      <Footer />
+      <div className="header-wrap">
+        <Footer />
+      </div>
     </div>
   );
 }

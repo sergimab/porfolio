@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import type MatterTypes from "matter-js";
+import Link from "next/link";
 import "./SkillDrop.css";
 
 const skills = [
@@ -25,10 +26,8 @@ const projects: Record<string, { id: string; title: string }[]> = {
 function ProjectCard({ title, id, hue }: { title: string; id: string; hue: number }) {
   const [hovered, setHovered] = useState(false);
   return (
-    <a
+    <Link
       href={`/proyecto/${id}`}
-      target="_blank"
-      rel="noopener noreferrer"
       style={{ display:"flex", flexDirection:"column", gap:"8px", cursor:"pointer", textDecoration:"none" }}
     >
       <div
@@ -63,7 +62,7 @@ function ProjectCard({ title, id, hue }: { title: string; id: string; hue: numbe
         </div>
       </div>
       <span style={{ fontSize:"13px", color:"var(--foreground)", textAlign:"center" }}>{title}</span>
-    </a>
+    </Link>
   );
 }
 
