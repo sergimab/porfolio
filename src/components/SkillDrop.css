@@ -1,0 +1,81 @@
+.skill-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  width: 100%;
+  max-width: 1024px;
+  align-items: start;
+}
+.box-skills { order: 1; }
+.box-soon   { order: 2; }
+@media (max-width: 768px) {
+  .skill-grid { grid-template-columns: 1fr; }
+  .box-skills { order: 2; }
+  .box-soon   {
+    order: 1;
+    height: auto !important;
+    width: 100%;
+    margin: 0 auto;
+  }
+  .panel-btn-tile { height: 56px; border-radius: 999px; }
+  .panel-btn { padding: 8px 16px; }
+}
+@keyframes dropExit {
+  0%   { transform: translateY(0) scale(1);    opacity: 1; }
+  60%  { transform: translateY(12px) scale(0.95); opacity: 0.6; }
+  100% { transform: translateY(40px) scale(0.9); opacity: 0; }
+}
+@keyframes capsuleGradient {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.panel-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; height: 100%;
+  background: var(--background);
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.panel-btn-pill {
+  border: 1px solid var(--foreground);
+}
+.panel-btn-tile {
+  border: 1px solid var(--foreground);
+  border-radius: 10px;
+}
+.contact-input {
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--foreground);
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.contact-input::placeholder { color: var(--muted); }
+.contact-input:focus { border-color: var(--foreground); }
+.panel-btn-label {
+  position: relative; z-index: 6;
+  font-size: 13px; font-weight: 500;
+  color: var(--foreground);
+  transition: color 0.15s;
+}
+.panel-btn:hover,
+.panel-btn:active,
+.panel-btn[data-active="true"] {
+  background: var(--foreground);
+}
+.panel-btn:hover .panel-btn-label,
+.panel-btn:active .panel-btn-label,
+.panel-btn[data-active="true"] .panel-btn-label {
+  color: var(--background);
+}
+.back-to-top-btn:hover, .back-to-top-btn:active {
+  background: var(--foreground);
+}
+.back-to-top-btn:hover svg, .back-to-top-btn:active svg {
+  color: var(--background);
+}

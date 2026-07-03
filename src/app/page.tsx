@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SkillDropClient from "@/components/SkillDropClient";
 import HoverTrail from "@/components/HoverTrail";
+import "./page.css";
 
 export default function Home() {
   return (
@@ -20,22 +21,6 @@ export default function Home() {
       <div className="header-wrap">
         <Footer />
       </div>
-      <style>{`
-        .header-wrap {
-          padding: 0 100px;
-        }
-        [data-theme="dark"] .tagline-img {
-          filter: invert(1);
-        }
-        @media (max-width: 768px) {
-          .header-wrap {
-            padding: 0 16px;
-          }
-          .main-content {
-            padding-top: 20px;
-          }
-        }
-      `}</style>
     </div>
   );
 }

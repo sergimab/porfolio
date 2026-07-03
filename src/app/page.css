@@ -1,0 +1,14 @@
+.header-wrap {
+  padding: 0 100px;
+}
+[data-theme="dark"] .tagline-img {
+  filter: invert(1);
+}
+@media (max-width: 768px) {
+  .header-wrap {
+    padding: 0 16px;
+  }
+  .main-content {
+    padding-top: 20px;
+  }
+}

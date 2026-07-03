@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import "./Header.css";
 
 const names = ["ergio", "harkastic"];
 
@@ -240,24 +241,6 @@ export default function Header() {
         </div> {/* end header-toggles */}
       </div>
 
-      <style>{`
-        @keyframes blink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0; }
-        }
-        .header-avatar-desktop { display: flex; }
-        .header-avatar-mobile  { display: none; }
-        .header-right    { display: flex; align-items: center; gap: 20px; }
-        .header-divider  { display: block; }
-        .header-toggles  { display: flex; align-items: center; gap: 20px; }
-        @media (max-width: 768px) {
-          .header-avatar-desktop { display: none; }
-          .header-avatar-mobile  { display: flex; padding: 20px 0; }
-          .header-right    { flex: 1; justify-content: space-between; gap: 12px; }
-          .header-divider  { display: none; }
-          .header-toggles  { gap: 8px; }
-        }
-      `}</style>
     </header>
 
     {/* Avatar — visible only on mobile, sits below header */}
