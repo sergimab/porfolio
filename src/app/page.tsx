@@ -10,6 +10,11 @@ export default function Home() {
       <HoverTrail />
       <div className="header-wrap" style={{ position: "sticky", top: 0, zIndex: 50, background: "var(--background)" }}>
         <Header />
+        <div style={{
+          height: "28px", marginBottom: "-28px",
+          background: "linear-gradient(to bottom, var(--background) 0%, var(--background) 30%, transparent 100%)",
+          pointerEvents: "none",
+        }} />
       </div>
       <main className="main-content" style={{ paddingTop: "24px", paddingBottom: "48px", flex: 1 }}>
         <SkillDropClient />
