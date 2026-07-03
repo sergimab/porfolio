@@ -6,24 +6,28 @@
   <title>Sergio Martín Barahona — CV</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400&family=Inter:wght@400;600;700&family=Kapakana&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/cv/styles.css" />
   <style>
     .section-title-text {
       display: flex;
       align-items: baseline;
-      gap: 1px;
       margin-bottom: 8px;
       align-self: flex-start;
       height: 24px;
     }
     .section-title-text .cap {
-      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-family: 'Kapakana', 'Cormorant Garamond', Georgia, serif;
       font-style: italic;
       font-weight: 400;
       font-size: 30px;
       line-height: 1;
+      margin-right: -1px;
+      position: relative;
+      z-index: 2;
       color: var(--ink);
+      -webkit-text-stroke: 4px var(--bg);
+      paint-order: stroke fill;
     }
     .section-title-text .rest {
       font-family: 'Inter', system-ui, sans-serif;

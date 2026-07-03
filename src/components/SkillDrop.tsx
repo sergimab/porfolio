@@ -603,8 +603,10 @@ export default function SkillDrop() {
           border:"1px solid var(--foreground)", borderRadius:"16px",
           padding:"40px 32px", background:"var(--background)",
         }}>
-          <span style={{ fontSize:"14px", color:"var(--foreground)", display:"block", marginBottom:"24px" }}>
-            {lang==="en" ? "Let's talk" : "Hablemos"}
+          <span className="dropcap-title" style={{ marginBottom:"24px" }}>
+            {lang==="en"
+              ? <><span className="dropcap-letter">L</span><span className="dropcap-rest">et&apos;s talk</span></>
+              : <><span className="dropcap-letter">H</span><span className="dropcap-rest">ablemos</span></>}
           </span>
 
           <form onSubmit={handleContactSubmit} style={{ display:"flex", flexDirection:"column", gap:"14px" }}>

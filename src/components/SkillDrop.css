@@ -1,3 +1,25 @@
+.dropcap-title {
+  display: flex;
+  align-items: baseline;
+  font-size: 14px;
+  color: var(--foreground);
+}
+.dropcap-letter {
+  font-family: 'Kapakana', 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 40px;
+  line-height: 1;
+  margin-right: -2px;
+  position: relative;
+  z-index: 2;
+  -webkit-text-stroke: 5px var(--background);
+  paint-order: stroke fill;
+}
+.dropcap-rest {
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
 .skill-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
