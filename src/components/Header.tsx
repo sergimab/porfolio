@@ -139,21 +139,16 @@ export default function Header() {
       background: "var(--background)",
     }}>
 
-      {/* Avatar — visible only on desktop */}
+      {/* Avatar — icon + animated greeting, shown on both desktop and mobile */}
       <div className="header-avatar-desktop">
         {avatarNode}
       </div>
 
-      {/* Icon only — visible only on mobile, stays pinned in the sticky header */}
-      <div className="header-icon-mobile">
-        {iconNode}
-      </div>
-
-      {/* Right: time + date + toggles — on mobile splits into left (time) and right (toggles) */}
+      {/* Right: time + date + toggles — time/date hidden on mobile */}
       <div className="header-right">
 
-        {/* Time + date */}
-        <div style={{ display: "flex", alignItems: "baseline", gap: "6px" }}>
+        {/* Time + date — hidden on mobile */}
+        <div className="header-time" style={{ alignItems: "baseline", gap: "6px" }}>
           <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--foreground)", fontVariantNumeric: "tabular-nums" }}>
             {timeStr}
           </span>
@@ -259,13 +254,6 @@ export default function Header() {
       </div>
 
     </header>
-    </div>
-
-    {/* Greeting text — visible only on mobile, sits below header (not sticky, scrolls under it) */}
-    <div className="header-wrap">
-      <div className="header-avatar-mobile">
-        {textNode}
-      </div>
     </div>
     </>
   );
