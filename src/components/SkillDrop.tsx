@@ -718,6 +718,7 @@ export default function SkillDrop() {
         .panel-btn {
           display: flex; align-items: center; justify-content: center;
           width: 100%; height: 100%;
+          padding: 0 16px;
           background: var(--background);
           text-decoration: none;
           transition: background 0.15s;
@@ -727,7 +728,7 @@ export default function SkillDrop() {
         }
         .panel-btn-tile {
           border: 1px solid var(--foreground);
-          border-radius: 10px;
+          border-radius: 999px;
         }
         .contact-input {
           font-family: inherit;
