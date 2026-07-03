@@ -192,6 +192,7 @@ body {
   pointer-events: none;
 }
 .skill-label-italic { font-style: italic; }
+.skill-label-small  { font-size: 5.6px; letter-spacing: -0.01em; }
 
 
 /* Animation: nodes start above SVG viewport and fall into position */

@@ -126,6 +126,7 @@ export default function Header() {
       borderRight: "1.5px solid var(--foreground)",
       borderBottom: "1.5px solid var(--foreground)",
       borderRadius: "0 0 16px 16px",
+      background: "var(--background)",
     }}>
 
       {/* Avatar — visible only on desktop */}
