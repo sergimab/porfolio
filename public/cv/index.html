@@ -6,8 +6,16 @@
   <title>Sergio Martín Barahona — CV</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400&family=Inter:wght@400;600;700&family=Kapakana&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <script>
+    (function () {
+      var params = new URLSearchParams(location.search);
+      if (params.get('theme') === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
 </head>
 <body>
 <div class="page">
@@ -60,7 +68,7 @@
 
     <!-- LEFT: EXPERIENCIA -->
     <div class="exp-col">
-      <img src="assets/svg/experiencia-title.svg" class="section-title-img" alt="Experiencia" />
+      <span class="section-title-text"><span class="cap">E</span><span class="rest">xperiencia</span></span>
 
       <div class="exp-entry">
         <p class="exp-date">JUN 2024 — JUN 2026</p>
@@ -88,7 +96,7 @@
 
     <!-- RIGHT: HABILIDADES -->
     <div class="skills-col">
-      <img src="assets/svg/habilidades-title.svg" class="section-title-img" alt="Habilidades" />
+      <span class="section-title-text"><span class="cap">H</span><span class="rest">abilidades</span></span>
 
       <div class="skills-funnel-wrap">
       <svg id="skills-funnel" class="skills-funnel-svg" viewBox="0 0 266 284"
@@ -160,7 +168,7 @@
 
         <!-- Top mask: circles pass behind the funnel rim
         <path d="M0 0 L266 0 L266 29.9375 C264.5 40.7071 206.178 49.4375 133 49.4375 C59.8223 49.4375 0.5 40.7071 0 29.9375 Z" class="funnel-mask-bg"/>-->
-        <path d="M264.5 29.9375C264.5 40.7071 206.178 49.4375 133 49.4375C59.8223 49.4375 0.5 40.7071 0.5 29.9375" stroke="#1C1A16" stroke-width="0.5" fill="none"/>
+        <path d="M264.5 29.9375C264.5 40.7071 206.178 49.4375 133 49.4375C59.8223 49.4375 0.5 40.7071 0.5 29.9375" class="funnel-rim" stroke-width="0.5" fill="none"/>
 
       </svg>
       </div><!-- end skills-funnel-wrap -->
@@ -173,7 +181,7 @@
 
     <!-- LEFT: HERRAMIENTAS -->
     <div class="tools-col">
-      <img src="assets/svg/herramientas-title.svg" class="section-title-img" alt="Herramientas" />
+      <span class="section-title-text"><span class="cap">H</span><span class="rest">erramientas</span></span>
 
       <svg class="tools-svg" viewBox="0 0 460 130" xmlns="http://www.w3.org/2000/svg" overflow="hidden">
 
@@ -211,7 +219,7 @@
 
     <!-- RIGHT: SOFT SKILLS -->
     <div class="soft-col">
-      <img src="assets/svg/soft-skills-title.svg" class="section-title-img" alt="Soft Skills" />
+      <span class="section-title-text"><span class="cap">S</span><span class="rest">oft skills</span></span>
 
       <div class="soft-pills">
         <div class="soft-row">
@@ -234,7 +242,7 @@
 
     <!-- LEFT: IDIOMAS -->
     <div class="lang-col">
-      <img src="assets/svg/idiomas-title.svg" class="section-title-img" alt="Idiomas" />
+      <span class="section-title-text"><span class="cap">I</span><span class="rest">diomas</span></span>
       <div class="lang-row">
         <span class="lang-label">Español</span>
         <span class="lang-value">Nativo</span>
@@ -247,7 +255,7 @@
 
     <!-- RIGHT: CONTACTO -->
     <div class="contact-col">
-      <img src="assets/svg/contacto-title.svg" class="section-title-img" alt="Contacto" />
+      <span class="section-title-text"><span class="cap">C</span><span class="rest">ontacto</span></span>
       <div class="contact-row">
         <span class="contact-label">Teléfono</span>
         <a href="tel:+34626173661" class="contact-value contact-link">626 17 36 61</a>

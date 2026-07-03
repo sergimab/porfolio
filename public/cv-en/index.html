@@ -8,36 +8,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400&family=Inter:wght@400;600;700&family=Kapakana&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/cv/styles.css" />
-  <style>
-    .section-title-text {
-      display: flex;
-      align-items: baseline;
-      margin-bottom: 8px;
-      align-self: flex-start;
-      height: 24px;
-    }
-    .section-title-text .cap {
-      font-family: 'Kapakana', 'Cormorant Garamond', Georgia, serif;
-      font-style: italic;
-      font-weight: 400;
-      font-size: 30px;
-      line-height: 1;
-      margin-right: -1px;
-      position: relative;
-      z-index: 2;
-      color: var(--ink);
-      -webkit-text-stroke: 4px var(--bg);
-      paint-order: stroke fill;
-    }
-    .section-title-text .rest {
-      font-family: 'Inter', system-ui, sans-serif;
-      font-weight: 700;
-      font-size: 13px;
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
-      color: var(--ink);
-    }
-  </style>
+  <script>
+    (function () {
+      var params = new URLSearchParams(location.search);
+      if (params.get('theme') === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
 </head>
 <body>
 <div class="page">
@@ -188,7 +166,7 @@
         <!-- Bottom mask: covers sistemas circle overflow below viewBox -->
         <rect x="-10" y="284" width="286" height="100" class="funnel-mask-bg"/>
 
-        <path d="M264.5 29.9375C264.5 40.7071 206.178 49.4375 133 49.4375C59.8223 49.4375 0.5 40.7071 0.5 29.9375" stroke="#1C1A16" stroke-width="0.5" fill="none"/>
+        <path d="M264.5 29.9375C264.5 40.7071 206.178 49.4375 133 49.4375C59.8223 49.4375 0.5 40.7071 0.5 29.9375" class="funnel-rim" stroke-width="0.5" fill="none"/>
 
       </svg>
       </div><!-- end skills-funnel-wrap -->

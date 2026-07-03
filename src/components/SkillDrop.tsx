@@ -78,6 +78,7 @@ export default function SkillDrop() {
   const [isOver, setIsOver]       = useState(false);
   const [falling, setFalling]     = useState(false);
   const [lang, setLang]           = useState<"es"|"en">("es");
+  const [theme, setTheme]         = useState<"light"|"dark">("light");
   const [selectedPanel, setSelectedPanel] = useState<string>("contacto");
   const cvIframeRef = useRef<HTMLIFrameElement>(null);
   const [cvHeight, setCvHeight] = useState(900);
@@ -123,6 +124,14 @@ export default function SkillDrop() {
     const onLang = (e: Event) => { const l = (e as CustomEvent).detail; if (l === "es" || l === "en") setLang(l); };
     window.addEventListener("langchange", onLang);
     return () => window.removeEventListener("langchange", onLang);
+  }, []);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("theme") as "light"|"dark"|null;
+    if (stored) setTheme(stored);
+    const onTheme = (e: Event) => { const t = (e as CustomEvent).detail; if (t === "light" || t === "dark") setTheme(t); };
+    window.addEventListener("themechange", onTheme);
+    return () => window.removeEventListener("themechange", onTheme);
   }, []);
 
   const getLabel = (skill: typeof skills[0]) => lang === "en" ? skill.labelEn : skill.label;
@@ -586,9 +595,9 @@ export default function SkillDrop() {
           overflow:"hidden", background:"var(--background)",
         }}>
           <iframe
-            key={lang}
+            key={`${lang}-${theme}`}
             ref={cvIframeRef}
-            src={lang === "en" ? "/cv-en/index.html" : "/cv/index.html"}
+            src={`${lang === "en" ? "/cv-en/index.html" : "/cv/index.html"}${theme === "dark" ? "?theme=dark" : ""}`}
             title="CV"
             scrolling="no"
             onLoad={handleCvLoad}
