@@ -67,8 +67,7 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={s.id}
-            className="hover-trail-target"
-            style={{ color: "var(--muted)", display: "flex", transition: "color 0.15s", position: "relative", zIndex: 6 }}
+            style={{ color: "var(--muted)", display: "flex", transition: "color 0.15s" }}
             onMouseEnter={(e) => (e.currentTarget.style.color = "var(--foreground)")}
             onMouseLeave={(e) => (e.currentTarget.style.color = "var(--muted)")}
           >

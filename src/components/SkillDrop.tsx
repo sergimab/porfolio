@@ -24,7 +24,6 @@ function ProjectCard({ title }: { title: string }) {
   return (
     <div style={{ display:"flex", flexDirection:"column", gap:"8px", cursor:"pointer" }}>
       <div
-        className="hover-trail-target"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         style={{
@@ -55,13 +54,10 @@ const DZ_H   = 64;
 const PILL_W = 140;
 const PILL_H = 42;
 
-type TrailPoint = { x: number; y: number; alpha: number; hue: number };
-
 export default function SkillDrop() {
   const sceneRef     = useRef<HTMLDivElement>(null);
-  const trailCanvasRef = useRef<HTMLCanvasElement>(null);
-  const trailPtsRef  = useRef<TrailPoint[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
+  const panelRef     = useRef<HTMLDivElement>(null);
   const engineRef    = useRef<MatterTypes.Engine | null>(null);
   const runnerRef    = useRef<MatterTypes.Runner | null>(null);
   const renderRef    = useRef<MatterTypes.Render | null>(null);
@@ -157,18 +153,6 @@ export default function SkillDrop() {
     });
     renderRef.current = render;
 
-    const trailCanvas = trailCanvasRef.current;
-    const tctx = trailCanvas?.getContext("2d") ?? null;
-    if (trailCanvas && tctx) {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      trailCanvas.width = boxW * dpr;
-      trailCanvas.height = boxH * dpr;
-      trailCanvas.style.width = `${boxW}px`;
-      trailCanvas.style.height = `${boxH}px`;
-      tctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-    trailPtsRef.current = [];
-
     const wo = { isStatic:true, render:{ fillStyle:"transparent", strokeStyle:"transparent", lineWidth:0 } };
     Composite.add(engine.world, [
       Bodies.rectangle(-25,       boxH/2,  50,      boxH*2,  wo),
@@ -263,7 +247,9 @@ export default function SkillDrop() {
       if (pill.body.position.y > physH - PILL_H / 2) {
         Composite.remove(engine.world, pill.body);
         pillsRef.current = pillsRef.current.filter(p => p.id !== id);
-        if (droppedRef.current && droppedRef.current !== id) {
+        // If another capsule is mid-release (X button / panel switch), its own
+        // handleReset already owns returning it — don't release it a second time.
+        if (droppedRef.current && droppedRef.current !== id && !resettingRef.current) {
           releasePill(droppedRef.current);
         }
         droppedRef.current = id;
@@ -329,23 +315,6 @@ export default function SkillDrop() {
     window.addEventListener("mouseup",   checkDrop);
     window.addEventListener("mousemove", checkOver);
 
-    // Color trail on hover: paint a hue matching whichever capsule is under the cursor
-    const onCanvasHoverMove = (e: MouseEvent) => {
-      const pos = canvasPos(e.clientX, e.clientY);
-      for (const { body, id } of pillsRef.current) {
-        const dx = pos.x - body.position.x, dy = pos.y - body.position.y;
-        if (Math.abs(dx) < PILL_W / 2 + 4 && Math.abs(dy) < PILL_H / 2 + 4) {
-          const skill = skills.find(s => s.id === id);
-          if (skill) {
-            trailPtsRef.current.push({ x: pos.x, y: pos.y, alpha: 0.34, hue: skill.hue });
-            if (trailPtsRef.current.length > 200) trailPtsRef.current.shift();
-          }
-          break;
-        }
-      }
-    };
-    canvas.addEventListener("mousemove", onCanvasHoverMove);
-
     Render.run(render);
     const runner = Runner.create();
     runnerRef.current = runner;
@@ -355,25 +324,6 @@ export default function SkillDrop() {
       setPillPos(pillsRef.current.map(({ body, id }) => ({
         id, x: body.position.x, y: body.position.y, angle: body.angle,
       })));
-
-      if (tctx) {
-        tctx.clearRect(0, 0, boxW, boxH);
-        tctx.globalCompositeOperation = "lighter";
-        const pts = trailPtsRef.current;
-        for (let i = pts.length - 1; i >= 0; i--) {
-          const p = pts[i];
-          p.alpha *= 0.978;
-          if (p.alpha < 0.006) { pts.splice(i, 1); continue; }
-          const g = tctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 30);
-          g.addColorStop(0, `hsla(${p.hue}, 85%, 62%, ${p.alpha})`);
-          g.addColorStop(0.6, `hsla(${p.hue}, 85%, 55%, ${p.alpha * 0.45})`);
-          g.addColorStop(1, `hsla(${p.hue}, 85%, 55%, 0)`);
-          tctx.fillStyle = g;
-          tctx.fillRect(p.x - 32, p.y - 32, 64, 64);
-        }
-        tctx.globalCompositeOperation = "source-over";
-      }
-
       rafRef.current = requestAnimationFrame(tick);
     };
     tick();
@@ -382,7 +332,6 @@ export default function SkillDrop() {
       canvas.removeEventListener("touchstart", onTouchStart);
       canvas.removeEventListener("touchmove",  onTouchMove);
       canvas.removeEventListener("touchend",   onTouchEnd);
-      canvas.removeEventListener("mousemove", onCanvasHoverMove);
       window.removeEventListener("mouseup",   checkDrop);
       window.removeEventListener("mousemove", checkOver);
     };
@@ -419,7 +368,9 @@ export default function SkillDrop() {
     const id = dropped;
     if (!id || resettingRef.current) return;
     resettingRef.current = true;
-    droppedRef.current = null;
+    // Keep droppedRef pointing at this id for the whole animation, so a
+    // resize-triggered physics re-init still excludes it (it isn't back
+    // in the floating set yet) — only clear it once the pill actually returns.
     setFalling(true);
     await new Promise(r => setTimeout(r, 480));
 
@@ -443,6 +394,7 @@ export default function SkillDrop() {
     pillsRef.current = [...pillsRef.current, { body, id: skill.id }];
 
     setFalling(false);
+    if (droppedRef.current === id) droppedRef.current = null;
     setDropped(prev => (prev === id ? null : prev));
     resettingRef.current = false;
   };
@@ -455,6 +407,16 @@ export default function SkillDrop() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedPanel]);
+
+  // On mobile, jump down to the panel content when a tile is tapped —
+  // it lives below the fold otherwise.
+  const scrollToPanel = () => {
+    if (window.innerWidth <= 768) {
+      requestAnimationFrame(() => {
+        panelRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
+  };
 
   return (
     <div style={{ display:"flex", flexDirection:"column", alignItems:"center", padding:"0 24px" }}>
@@ -474,7 +436,7 @@ export default function SkillDrop() {
             href="#"
             className="panel-btn panel-btn-tile"
             data-active={selectedPanel === "about"}
-            onClick={(e) => { e.preventDefault(); setSelectedPanel("about"); }}
+            onClick={(e) => { e.preventDefault(); setSelectedPanel("about"); scrollToPanel(); }}
           >
             <span className="panel-btn-label">
               {lang==="en" ? "About me" : "Sobre mí"}
@@ -486,7 +448,7 @@ export default function SkillDrop() {
             href="#"
             className="panel-btn panel-btn-tile"
             data-active={selectedPanel === "cv"}
-            onClick={(e) => { e.preventDefault(); setSelectedPanel("cv"); }}
+            onClick={(e) => { e.preventDefault(); setSelectedPanel("cv"); scrollToPanel(); }}
           >
             <span className="panel-btn-label">CV</span>
           </a>
@@ -496,7 +458,7 @@ export default function SkillDrop() {
             href="#"
             className="panel-btn panel-btn-tile"
             data-active={selectedPanel === "contacto"}
-            onClick={(e) => { e.preventDefault(); setSelectedPanel("contacto"); }}
+            onClick={(e) => { e.preventDefault(); setSelectedPanel("contacto"); scrollToPanel(); }}
           >
             <span className="panel-btn-label">
               {lang==="en" ? "Contact" : "Contacto"}
@@ -514,7 +476,6 @@ export default function SkillDrop() {
           position:"relative",
         }}>
           <div ref={sceneRef} style={{ position:"absolute", inset:0 }} />
-          <canvas ref={trailCanvasRef} style={{ position:"absolute", inset:0, pointerEvents:"none" }} />
 
           {pillPos.map(({ id, x, y, angle }) => {
             const skill = skills.find(s => s.id === id);
@@ -526,12 +487,17 @@ export default function SkillDrop() {
                 transform:`translate(-50%,-50%) rotate(${angle}rad)`,
                 width:`${PILL_W}px`, height:`${PILL_H}px`,
                 borderRadius:"999px",
-                border: isDragged ? `1px solid ${skill.border}` : "1px solid var(--foreground)",
-                background: isDragged ? skill.color : "var(--background)",
+                border: isDragged ? "none" : "1px solid var(--foreground)",
+                background: isDragged
+                  ? `linear-gradient(120deg, hsl(${skill.hue},85%,72%), hsl(${skill.hue},85%,42%), hsl(${skill.hue+25},85%,60%), hsl(${skill.hue},85%,72%))`
+                  : "var(--background)",
+                backgroundSize: isDragged ? "300% 300%" : undefined,
+                animation: isDragged ? "capsuleGradient 1.8s ease-in-out infinite" : undefined,
                 display:"flex", alignItems:"center", justifyContent:"center",
-                fontSize:"13px", color:"var(--foreground)",
+                fontSize:"13px", fontWeight: isDragged ? 500 : 400,
+                color: isDragged ? "#fff" : "var(--foreground)",
                 pointerEvents:"none", userSelect:"none", whiteSpace:"nowrap",
-                transition:"background 0.15s, border-color 0.15s",
+                transition:"background 0.15s, color 0.15s",
               }}>
                 {getLabel(skill)}
               </div>
@@ -549,21 +515,30 @@ export default function SkillDrop() {
             zIndex:1,
           }}>
             {dropped ? (
-              <div style={{ display:"flex", alignItems:"center", gap:"10px", pointerEvents:"all" }}>
+              <div style={{
+                display:"flex", alignItems:"center", gap:"10px", pointerEvents:"all",
+                animation: falling ? "dropExit 0.45s ease-in forwards" : "none",
+              }}>
                 <div style={{
                   width:`${PILL_W}px`, height:`${PILL_H}px`,
-                  border:`1px solid ${droppedSkill!.border}`,
                   borderRadius:"999px",
-                  fontSize:"13px", fontWeight:500, color:"var(--foreground)",
-                  background: droppedSkill!.color,
-                  display:"flex", alignItems:"center", justifyContent:"center",
-                  animation: falling ? "dropExit 0.45s ease-in forwards" : "none",
+                  padding:"2px",
+                  background: `linear-gradient(120deg, hsl(${droppedSkill!.hue},70%,68%), hsl(${droppedSkill!.hue},70%,48%), hsl(${droppedSkill!.hue+20},70%,58%), hsl(${droppedSkill!.hue},70%,68%))`,
+                  backgroundSize:"300% 300%",
+                  animation:"capsuleGradient 3.2s ease-in-out infinite",
                   flexShrink:0,
                 }}>
-                  {droppedSkill ? getLabel(droppedSkill) : ""}
+                  <div style={{
+                    width:"100%", height:"100%", borderRadius:"999px",
+                    fontSize:"13px", fontWeight:500, color:"var(--foreground)",
+                    background: "var(--background)",
+                    display:"flex", alignItems:"center", justifyContent:"center",
+                  }}>
+                    {droppedSkill ? getLabel(droppedSkill) : ""}
+                  </div>
                 </div>
                 {!falling && (
-                  <button onClick={handleReset} style={{ background:"none", border:"none", cursor:"pointer", color:"var(--muted)", fontSize:"20px", lineHeight:1, padding:0 }} aria-label="Quitar">×</button>
+                  <button onClick={() => { setSelectedPanel("contacto"); handleReset(); }} style={{ background:"none", border:"none", cursor:"pointer", color:"var(--muted)", fontSize:"20px", lineHeight:1, padding:0 }} aria-label="Quitar">×</button>
                 )}
               </div>
             ) : (
@@ -583,6 +558,7 @@ export default function SkillDrop() {
         </div>
       </div>
 
+      <div ref={panelRef} style={{ width:"100%", display:"flex", flexDirection:"column", alignItems:"center", scrollMarginTop:"24px" }}>
       {selectedPanel in projects && (
         <div style={{ marginTop:"48px", width:"100%", maxWidth:"1024px", display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"24px" }}>
           {projects[selectedPanel].map(p => <ProjectCard key={p.id} title={p.title} />)}
@@ -682,6 +658,7 @@ export default function SkillDrop() {
           </form>
         </div>
       )}
+      </div>
 
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
@@ -720,12 +697,23 @@ export default function SkillDrop() {
         @media (max-width: 768px) {
           .skill-grid { grid-template-columns: 1fr; }
           .box-skills { order: 2; }
-          .box-soon   { order: 1; }
+          .box-soon   {
+            order: 1;
+            height: auto !important;
+            max-width: 260px;
+            margin: 0 auto;
+          }
+          .panel-btn-tile { height: 56px; }
         }
         @keyframes dropExit {
           0%   { transform: translateY(0) scale(1);    opacity: 1; }
           60%  { transform: translateY(12px) scale(0.95); opacity: 0.6; }
           100% { transform: translateY(40px) scale(0.9); opacity: 0; }
+        }
+        @keyframes capsuleGradient {
+          0%   { background-position: 0% 50%; }
+          50%  { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
         }
         .panel-btn {
           display: flex; align-items: center; justify-content: center;

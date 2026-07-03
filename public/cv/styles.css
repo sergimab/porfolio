@@ -181,9 +181,6 @@ body {
 }
 .skill-label-italic { font-style: italic; }
 
-.skill-node { cursor: pointer; }
-.skill-node:hover .skill-circle-shape { fill: var(--ink); stroke: var(--bg); }
-.skill-node:hover .skill-label        { fill: var(--bg); }
 
 /* Animation: nodes start above SVG viewport and fall into position */
 .skill-node {
@@ -272,18 +269,12 @@ body {
   display: block;
   position: relative;
   z-index: 2;
-  cursor: pointer;
 }
 
 .nav-star-path {
   fill: var(--bg);
   stroke: var(--ink);
   stroke-width: 0.5;
-  transition: fill 0.25s, stroke 0.25s;
-}
-
-.nav-star:hover .nav-star-path {
-  fill: var(--ink);
 }
 
 /* ══ HERRAMIENTAS + SOFT SKILLS ══ */
@@ -328,9 +319,6 @@ body {
   pointer-events: none;
 }
 
-.tool-node { cursor: default; }
-.tool-node:hover .tool-shape { fill: var(--ink); stroke: var(--bg); }
-.tool-node:hover .tool-label  { fill: var(--bg); }
 
 .soft-pills {
   display: flex;
@@ -355,14 +343,7 @@ body {
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  cursor: default;
   background: var(--bg);
-  transition: background 0.25s, color 0.25s;
-}
-
-.soft-pill:hover {
-  background: var(--ink);
-  color: var(--bg);
 }
 
 /* ══ IDIOMAS + CONTACTO ══ */
