@@ -48,3 +48,14 @@
   .project-hero-cap  { font-size: 56px; }
   .project-hero-rest { font-size: 20px; }
 }
+
+.style-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+@media (max-width: 768px) {
+  .style-columns {
+    grid-template-columns: 1fr;
+  }
+}
