@@ -18,7 +18,7 @@ const projects: Record<string, { id: string; title: string }[]> = {
   motion:     [{ id:"m1",title:"Proyecto Motion 01"},{id:"m2",title:"Proyecto Motion 02"},{id:"m3",title:"Proyecto Motion 03"}],
   branding:   [{ id:"b1",title:"Proyecto Branding 01"},{id:"b2",title:"Proyecto Branding 02"},{id:"b3",title:"Proyecto Branding 03"}],
   fotografia: [{ id:"f1",title:"Proyecto Foto 01"},{id:"f2",title:"Proyecto Foto 02"},{id:"f3",title:"Proyecto Foto 03"}],
-  iberdrola:  [{ id:"i1",title:"Infografías"},{id:"i2",title:"Sistema de diseño"},{id:"i3",title:"Newsletters"},{id:"i4",title:"Iconografía"},{id:"i5",title:"Sistema de ilustraciones"}],
+  iberdrola:  [{ id:"i2",title:"Sistema de diseño"},{id:"i5",title:"Sistema de ilustraciones"},{id:"i1",title:"Infografías"},{id:"i3",title:"Newsletters"},{id:"i4",title:"Iconografía"}],
   uiux:       [{ id:"u1",title:"Proyecto UI/UX 01"},{id:"u2",title:"Proyecto UI/UX 02"},{id:"u3",title:"Proyecto UI/UX 03"}],
   "3d":       [{ id:"d1",title:"Proyecto 3D 01"},{id:"d2",title:"Proyecto 3D 02"},{id:"d3",title:"Proyecto 3D 03"}],
 };
