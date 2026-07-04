@@ -19,3 +19,32 @@
     padding-top: 20px;
   }
 }
+
+.project-hero-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  color: var(--foreground);
+}
+.project-hero-cap {
+  font-family: 'Kapakana', 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 90px;
+  line-height: 1;
+  margin-right: -6px;
+  position: relative;
+  z-index: 2;
+  -webkit-text-stroke: 10px var(--background);
+  paint-order: stroke fill;
+}
+.project-hero-rest {
+  font-size: 32px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 1.15;
+}
+@media (max-width: 600px) {
+  .project-hero-cap  { font-size: 56px; }
+  .project-hero-rest { font-size: 20px; }
+}
