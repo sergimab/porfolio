@@ -14,6 +14,14 @@ const skills = [
   { id: "3d",         label: "3D",                labelEn: "3D",              color: "rgba(13,148,136,0.12)", border: "rgba(13,148,136,0.6)",  hue: 175 },
 ];
 
+// Deterministic pseudo-random 0..1 from a string, so each capsule gets a
+// stable (but different) animation timing that doesn't reset every frame.
+function seeded(id: string, salt: number): number {
+  let h = salt;
+  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) % 100003;
+  return h / 100003;
+}
+
 const projects: Record<string, { id: string; title: string }[]> = {
   motion:     [{ id:"m1",title:"Proyecto Motion 01"},{id:"m2",title:"Proyecto Motion 02"},{id:"m3",title:"Proyecto Motion 03"}],
   branding:   [{ id:"b1",title:"Proyecto Branding 01"},{id:"b2",title:"Proyecto Branding 02"},{id:"b3",title:"Proyecto Branding 03"}],
@@ -506,25 +514,58 @@ export default function SkillDrop() {
             const skill = skills.find(s => s.id === id);
             if (!skill) return null;
             const isDragged = id === draggedId;
+
+            const levitateDur   = 3 + seeded(id, 7) * 2.2;
+            const levitateDelay = -(seeded(id, 13) * levitateDur);
+            const trimDur       = 9 + seeded(id, 29) * 7;
+            const trimDelay     = -(seeded(id, 41) * trimDur);
+
             return (
               <div key={id} style={{
                 position:"absolute", left:x, top:y,
                 transform:`translate(-50%,-50%) rotate(${angle}rad)`,
                 width:`${PILL_W}px`, height:`${PILL_H}px`,
-                borderRadius:"999px",
-                border: isDragged ? "none" : "1px solid var(--foreground)",
-                background: isDragged
-                  ? `linear-gradient(120deg, hsl(${skill.hue},85%,72%), hsl(${skill.hue},85%,42%), hsl(${skill.hue+25},85%,60%), hsl(${skill.hue},85%,72%))`
-                  : "var(--background)",
-                backgroundSize: isDragged ? "300% 300%" : undefined,
-                animation: isDragged ? "capsuleGradient 1.8s ease-in-out infinite" : undefined,
-                display:"flex", alignItems:"center", justifyContent:"center",
-                fontSize:"13px", fontWeight: isDragged ? 500 : 400,
-                color: isDragged ? "#fff" : "var(--foreground)",
-                pointerEvents:"none", userSelect:"none", whiteSpace:"nowrap",
-                transition:"background 0.15s, color 0.15s",
+                pointerEvents:"none", userSelect:"none",
               }}>
-                {getLabel(skill)}
+                <div style={{
+                  position:"relative", width:"100%", height:"100%",
+                  animation: isDragged ? undefined : `capsuleLevitate ${levitateDur}s ease-in-out ${levitateDelay}s infinite`,
+                }}>
+                  <div style={{
+                    width:"100%", height:"100%",
+                    borderRadius:"999px",
+                    border: isDragged ? "none" : "1px solid var(--foreground)",
+                    background: isDragged
+                      ? `linear-gradient(120deg, hsl(${skill.hue},85%,72%), hsl(${skill.hue},85%,42%), hsl(${skill.hue+25},85%,60%), hsl(${skill.hue},85%,72%))`
+                      : "var(--background)",
+                    backgroundSize: isDragged ? "300% 300%" : undefined,
+                    animation: isDragged ? "capsuleGradient 1.8s ease-in-out infinite" : undefined,
+                    display:"flex", alignItems:"center", justifyContent:"center",
+                    fontSize:"13px", fontWeight: isDragged ? 500 : 400,
+                    color: isDragged ? "#fff" : "var(--foreground)",
+                    whiteSpace:"nowrap",
+                    transition:"background 0.15s, color 0.15s",
+                  }}>
+                    {getLabel(skill)}
+                  </div>
+
+                  {!isDragged && (
+                    <svg
+                      width={PILL_W} height={PILL_H}
+                      viewBox={`0 0 ${PILL_W} ${PILL_H}`}
+                      style={{ position:"absolute", inset:0, overflow:"visible" }}
+                    >
+                      <rect
+                        x="1" y="1" width={PILL_W - 2} height={PILL_H - 2} rx={(PILL_H - 2) / 2}
+                        fill="none"
+                        stroke={`hsl(${skill.hue}, 85%, 55%)`}
+                        strokeWidth="2"
+                        strokeDasharray="46 300"
+                        style={{ animation: `capsuleTrim ${trimDur}s linear ${trimDelay}s infinite` }}
+                      />
+                    </svg>
+                  )}
+                </div>
               </div>
             );
           })}

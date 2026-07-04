@@ -1,3 +1,14 @@
+@keyframes capsuleLevitate {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+@keyframes capsuleTrim {
+  0%, 87% { opacity: 0; stroke-dashoffset: 0; }
+  90%     { opacity: 1; stroke-dashoffset: 0; }
+  99%     { opacity: 1; stroke-dashoffset: -330; }
+  100%    { opacity: 0; stroke-dashoffset: -330; }
+}
+
 .dropcap-title {
   display: flex;
   align-items: baseline;
