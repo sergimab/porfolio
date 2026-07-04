@@ -3,8 +3,10 @@
   50%      { transform: translateY(-4px); }
 }
 @keyframes capsuleTrim {
-  0%   { stroke-dashoffset: 0; }
-  100% { stroke-dashoffset: -322; }
+  0%, 75% { stroke-dasharray: 0 9999; stroke-dashoffset: 0; }
+  76%     { stroke-dasharray: 150 210; stroke-dashoffset: 0; }
+  99%     { stroke-dasharray: 150 210; stroke-dashoffset: -322; }
+  100%    { stroke-dasharray: 0 9999; stroke-dashoffset: -322; }
 }
 
 .dropcap-title {

@@ -517,7 +517,7 @@ export default function SkillDrop() {
 
             const levitateDur   = 3 + seeded(id, 7) * 2.2;
             const levitateDelay = -(seeded(id, 13) * levitateDur);
-            const trimDur       = 4 + seeded(id, 29) * 3;
+            const trimDur       = 7 + seeded(id, 29) * 5;
             const trimDelay     = -(seeded(id, 41) * trimDur);
 
             return (
@@ -560,7 +560,7 @@ export default function SkillDrop() {
                         fill="none"
                         stroke={`hsl(${skill.hue}, 85%, 55%)`}
                         strokeWidth="2"
-                        strokeDasharray="150 210"
+                        strokeDasharray="0 9999"
                         style={{ animation: `capsuleTrim ${trimDur}s ease-in-out ${trimDelay}s infinite` }}
                       />
                     </svg>
