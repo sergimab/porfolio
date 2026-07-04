@@ -2,11 +2,10 @@
   0%, 100% { transform: translateY(0); }
   50%      { transform: translateY(-4px); }
 }
-@keyframes capsuleTrim {
-  0%, 75% { stroke-dasharray: 0 9999; stroke-dashoffset: 0; }
-  76%     { stroke-dasharray: 150 210; stroke-dashoffset: 0; }
-  99%     { stroke-dasharray: 150 210; stroke-dashoffset: -322; }
-  100%    { stroke-dasharray: 0 9999; stroke-dashoffset: -322; }
+@keyframes capsuleGlow {
+  0%, 70% { opacity: 0; }
+  85%     { opacity: 1; }
+  100%    { opacity: 0; }
 }
 
 .dropcap-title {

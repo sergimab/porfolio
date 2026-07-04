@@ -550,20 +550,13 @@ export default function SkillDrop() {
                   </div>
 
                   {!isDragged && (
-                    <svg
-                      width={PILL_W} height={PILL_H}
-                      viewBox={`0 0 ${PILL_W} ${PILL_H}`}
-                      style={{ position:"absolute", inset:0, overflow:"visible" }}
-                    >
-                      <rect
-                        x="1" y="1" width={PILL_W - 2} height={PILL_H - 2} rx={(PILL_H - 2) / 2}
-                        fill="none"
-                        stroke={`hsl(${skill.hue}, 85%, 55%)`}
-                        strokeWidth="2"
-                        strokeDasharray="0 9999"
-                        style={{ animation: `capsuleTrim ${trimDur}s ease-in-out ${trimDelay}s infinite` }}
-                      />
-                    </svg>
+                    <div style={{
+                      position:"absolute", inset:0,
+                      borderRadius:"999px",
+                      border: `2px solid hsl(${skill.hue}, 85%, 55%)`,
+                      opacity: 0,
+                      animation: `capsuleGlow ${trimDur}s ease-in-out ${trimDelay}s infinite`,
+                    }} />
                   )}
                 </div>
               </div>
