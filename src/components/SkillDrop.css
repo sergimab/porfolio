@@ -4,9 +4,9 @@
 }
 @keyframes capsuleTrim {
   0%, 78% { opacity: 0; stroke-dashoffset: 0; }
-  83%     { opacity: 1; }
-  97%     { opacity: 1; stroke-dashoffset: -330; }
-  100%    { opacity: 0; stroke-dashoffset: -330; }
+  80%     { opacity: 1; stroke-dashoffset: 0; }
+  98%     { opacity: 1; stroke-dashoffset: -322; }
+  100%    { opacity: 0; stroke-dashoffset: -322; }
 }
 
 .dropcap-title {
