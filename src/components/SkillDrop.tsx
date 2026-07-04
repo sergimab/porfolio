@@ -517,7 +517,7 @@ export default function SkillDrop() {
 
             const levitateDur   = 3 + seeded(id, 7) * 2.2;
             const levitateDelay = -(seeded(id, 13) * levitateDur);
-            const trimDur       = 9 + seeded(id, 29) * 7;
+            const trimDur       = 4 + seeded(id, 29) * 3;
             const trimDelay     = -(seeded(id, 41) * trimDur);
 
             return (
