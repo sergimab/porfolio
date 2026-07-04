@@ -3,9 +3,9 @@
   50%      { transform: translateY(-4px); }
 }
 @keyframes capsuleTrim {
-  0%, 87% { opacity: 0; stroke-dashoffset: 0; }
-  90%     { opacity: 1; stroke-dashoffset: 0; }
-  99%     { opacity: 1; stroke-dashoffset: -330; }
+  0%, 78% { opacity: 0; stroke-dashoffset: 0; }
+  83%     { opacity: 1; }
+  97%     { opacity: 1; stroke-dashoffset: -330; }
   100%    { opacity: 0; stroke-dashoffset: -330; }
 }
 

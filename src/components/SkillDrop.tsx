@@ -560,8 +560,8 @@ export default function SkillDrop() {
                         fill="none"
                         stroke={`hsl(${skill.hue}, 85%, 55%)`}
                         strokeWidth="2"
-                        strokeDasharray="46 300"
-                        style={{ animation: `capsuleTrim ${trimDur}s linear ${trimDelay}s infinite` }}
+                        strokeDasharray="150 210"
+                        style={{ animation: `capsuleTrim ${trimDur}s ease-in-out ${trimDelay}s infinite` }}
                       />
                     </svg>
                   )}
