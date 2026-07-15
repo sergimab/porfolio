@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import IsoHouse from "./IsoHouse";
 import "./IlustracionesSistema.css";
 
 type Block = {
@@ -9,6 +10,7 @@ type Block = {
   hero: "tech" | "info";
   heroCount: number;
   tiles: string[];
+  iso?: boolean;
 };
 
 const CONTENT: Record<"holding" | "subholding", Block[]> = {
@@ -18,6 +20,7 @@ const CONTENT: Record<"holding" | "subholding", Block[]> = {
       style: "Estilo isométrico",
       hero: "tech",
       heroCount: 3,
+      iso: true,
       tiles: ["Personas", "Vehículos", "Energías", "Tecnología", "Edificios", "Naturaleza"],
     },
     {
@@ -68,11 +71,25 @@ export default function IlustracionesSistema() {
           </h3>
           <div className="ilu-divider" />
 
-          <div className={`ilu-hero ilu-hero-${b.hero}`}>
-            {Array.from({ length: b.heroCount }).map((_, j) => (
-              <div className="ilu-frame" key={j} />
-            ))}
-          </div>
+          {b.iso ? (
+            <div className="ilu-hero ilu-hero-tech">
+              <div className="ilu-frame iso-scene">
+                <img src="/images/isometric-escenas/Group%2050179.svg" alt="" />
+              </div>
+              <div className="ilu-frame iso-scene">
+                <img src="/images/isometric-escenas/4.svg" alt="" />
+              </div>
+              <div className="iso-house-frame">
+                <IsoHouse />
+              </div>
+            </div>
+          ) : (
+            <div className={`ilu-hero ilu-hero-${b.hero}`}>
+              {Array.from({ length: b.heroCount }).map((_, j) => (
+                <div className="ilu-frame" key={j} />
+              ))}
+            </div>
+          )}
 
           <div className="ilu-tiles">
             {b.tiles.map((name) => (

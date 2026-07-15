@@ -97,6 +97,22 @@
 .ilu-hero-tech .ilu-frame:nth-child(2) { grid-column: 1; grid-row: 2; }
 .ilu-hero-tech .ilu-frame:nth-child(3) { grid-column: 2; grid-row: 1 / span 2; }
 
+/* ── Hero isométrico (escenas reales + casa animada) ── */
+.ilu-hero-tech:has(.iso-house-frame) { grid-template-rows: 220px 220px; }
+.iso-house-frame { grid-column: 2; grid-row: 1 / span 2; position: relative; }
+
+.iso-scene {
+  overflow: visible;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.iso-scene img {
+  width: 116%;
+  height: auto;
+  object-fit: contain;
+}
+
 .ilu-hero-info {
   display: grid;
   grid-template-columns: 1fr 1fr;

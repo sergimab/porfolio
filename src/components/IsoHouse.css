@@ -1,0 +1,32 @@
+.iso-house {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.iso-layer {
+  position: absolute;
+  display: block;
+  /* base transition; each layer overrides delay for a staggered deploy */
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+/* ── Posición desplegada (deployed): cada capa en su sitio ── */
+.iso-top  { width: 62%; left: 8%;  top: 2%; z-index: 5; }
+.iso-mid  { width: 55%; left: 14%; top: 24%; z-index: 4; }
+.iso-add  { width: 3.3%; left: 33%; top: 40%; z-index: 6; }
+.iso-bot  { width: 56%; left: 12%; top: 46%; z-index: 3; }
+.iso-down { width: 37%; left: 40%; top: 70%; z-index: 2; }
+
+/* ── Estado cerrado (default): capas colapsadas formando la casa compacta.
+   translateY acerca cada capa a la pila; se anima a 0 al hacer scroll. ── */
+.iso-house[data-deployed="false"] .iso-top  { transform: translate(20%, 150%); }
+.iso-house[data-deployed="false"] .iso-mid  { transform: translate(6%, 92%); }
+.iso-house[data-deployed="false"] .iso-add  { transform: translate(6%, 92%); }
+.iso-house[data-deployed="false"] .iso-bot  { transform: translate(4%, 24%); }
+.iso-house[data-deployed="false"] .iso-down { transform: translate(-38%, 0); }
+
+/* Deploy escalonado */
+.iso-house[data-deployed="true"] .iso-top  { transition-delay: 0.15s; }
+.iso-house[data-deployed="true"] .iso-mid  { transition-delay: 0.08s; }
