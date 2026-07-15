@@ -99,7 +99,14 @@
 
 /* ── Hero isométrico (escenas reales + casa animada) ── */
 .ilu-hero-tech:has(.iso-house-frame) { grid-template-rows: 220px 220px; }
-.iso-house-frame { grid-column: 2; grid-row: 1 / span 2; position: relative; }
+.iso-house-frame {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .iso-scene {
   overflow: visible;
@@ -108,8 +115,9 @@
   justify-content: center;
 }
 .iso-scene img {
-  width: 116%;
-  height: auto;
+  height: 116%;
+  width: auto;
+  max-width: 130%;
   object-fit: contain;
 }
 
@@ -136,10 +144,25 @@
   gap: 8px;
 }
 .ilu-tile-box {
+  position: relative;
   width: 100%;
   aspect-ratio: 1;
   background: #f4f1e8;
   border-radius: 12px;
+  overflow: hidden;
+}
+.ilu-tile-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 12%;
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+.ilu-tile-img[data-active="true"] {
+  opacity: 1;
 }
 .ilu-tile-name {
   font-size: 12px;

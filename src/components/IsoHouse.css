@@ -1,32 +1,49 @@
 .iso-house {
   position: relative;
-  width: 100%;
-  height: 100%;
+  width: 340px;
+  height: 289px;
+  max-width: 100%;
+  overflow: visible;
 }
+
+/* Fachada cerrada (Group.svg): visible por defecto, se desvanece al desplegar */
+.iso-facade {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 340px;
+  z-index: 10;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+.iso-house[data-deployed="true"] .iso-facade { opacity: 0; }
 
 .iso-layer {
   position: absolute;
   display: block;
-  /* base transition; each layer overrides delay for a staggered deploy */
-  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  opacity: 0;
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.6s ease;
   will-change: transform;
 }
+.iso-house[data-deployed="true"] .iso-layer { opacity: 1; }
 
-/* ── Posición desplegada (deployed): cada capa en su sitio ── */
-.iso-top  { width: 62%; left: 8%;  top: 2%; z-index: 5; }
-.iso-mid  { width: 55%; left: 14%; top: 24%; z-index: 4; }
-.iso-add  { width: 3.3%; left: 33%; top: 40%; z-index: 6; }
-.iso-bot  { width: 56%; left: 12%; top: 46%; z-index: 3; }
-.iso-down { width: 37%; left: 40%; top: 70%; z-index: 2; }
+/* Cerrado: piezas recogidas hacia el centro del recuadro (arranque de la animación) */
+.iso-house[data-deployed="false"] .iso-top  { transform: translateY(57px); }
+.iso-house[data-deployed="false"] .iso-mid  { transform: translateY(15px); }
+.iso-house[data-deployed="false"] .iso-add  { transform: translateY(-40px); }
+.iso-house[data-deployed="false"] .iso-bot  { transform: translateY(-25px); }
+.iso-house[data-deployed="false"] .iso-down { transform: translateY(-56px); }
 
-/* ── Estado cerrado (default): capas colapsadas formando la casa compacta.
-   translateY acerca cada capa a la pila; se anima a 0 al hacer scroll. ── */
-.iso-house[data-deployed="false"] .iso-top  { transform: translate(20%, 150%); }
-.iso-house[data-deployed="false"] .iso-mid  { transform: translate(6%, 92%); }
-.iso-house[data-deployed="false"] .iso-add  { transform: translate(6%, 92%); }
-.iso-house[data-deployed="false"] .iso-bot  { transform: translate(4%, 24%); }
-.iso-house[data-deployed="false"] .iso-down { transform: translate(-38%, 0); }
+/* Desplegado: se separan desde el centro, hacia arriba y hacia abajo */
+.iso-house[data-deployed="true"] .iso-top  { transform: translateY(-66px); }
+.iso-house[data-deployed="true"] .iso-mid  { transform: translateY(-20px); }
+.iso-house[data-deployed="true"] .iso-add  { transform: translateY(78px); }
+.iso-house[data-deployed="true"] .iso-bot  { transform: translateY(10px); }
+.iso-house[data-deployed="true"] .iso-down { transform: translateY(78px); }
 
-/* Deploy escalonado */
-.iso-house[data-deployed="true"] .iso-top  { transition-delay: 0.15s; }
-.iso-house[data-deployed="true"] .iso-mid  { transition-delay: 0.08s; }
+/* Posición cerrada (Group): px en el lienzo 340×289. z = painter's (tejado detrás → entrada delante) */
+.iso-top  { left: 0px;      top: 0px;      width: 340px; z-index: 5; }
+.iso-mid  { left: 18.27px;  top: 30px;     width: 303px; z-index: 4; }
+.iso-bot  { left: 13.34px;  top: 56.13px;  width: 306px; z-index: 3; }
+.iso-down { left: 119.04px; top: 119.41px; width: 200px; z-index: 2; }
+.iso-add  { left: 116.55px; top: 248.1px;  width: 18px;  z-index: 6; }

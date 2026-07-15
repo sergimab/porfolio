@@ -29,6 +29,7 @@ export default function IsoHouse() {
 
   return (
     <div className="iso-house" ref={ref} data-deployed={deployed}>
+      <img className="iso-facade" src={`${B}/Group.svg`} alt="Casa cerrada" />
       <img className="iso-layer iso-top"  src={`${B}/top.svg`}  alt="" />
       <img className="iso-layer iso-mid"  src={`${B}/mid.svg`}  alt="" />
       <img className="iso-layer iso-add"  src={`${B}/add.svg`}  alt="" />
