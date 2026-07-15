@@ -1,0 +1,37 @@
+.back-capsule {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1.5px solid hsl(var(--cap-hue), 55%, 45%);
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.back-capsule-chev {
+  transition: transform 0.2s;
+}
+
+.back-capsule:hover {
+  border-color: transparent;
+  color: #fff;
+  background: linear-gradient(
+    120deg,
+    hsl(var(--cap-hue), 70%, 68%),
+    hsl(var(--cap-hue), 70%, 48%),
+    hsl(calc(var(--cap-hue) + 20), 70%, 58%),
+    hsl(var(--cap-hue), 70%, 68%)
+  );
+  background-size: 300% 300%;
+  animation: capsuleGradient 3.2s ease-in-out infinite;
+}
+
+.back-capsule:hover .back-capsule-chev {
+  transform: translateX(-3px);
+}

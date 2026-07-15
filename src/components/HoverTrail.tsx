@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 
 const SELECTOR = ".hover-trail-target, .panel-btn-tile, .back-to-top-btn, .theme-toggle-dot";
 
-type Point = { x: number; y: number; alpha: number; hue: number; rect: DOMRect; radius: number };
+type Point = { x: number; y: number; alpha: number; hue: number; spread: number; rect: DOMRect; radius: number };
 
 function parseRadius(computed: string, w: number, h: number): number {
   const val = computed.split(" ")[0]; // uniform corners only (our shapes)
@@ -58,8 +58,18 @@ export default function HoverTrail() {
       if (!target) return;
       const rect = target.getBoundingClientRect();
       const radius = parseRadius(getComputedStyle(target).borderRadius, rect.width, rect.height);
-      hueRef.current = (hueRef.current + 2.2) % 360;
-      pointsRef.current.push({ x: e.clientX, y: e.clientY, alpha: 0.32, hue: hueRef.current, rect, radius });
+      const fixedHue = target.getAttribute("data-trail-hue");
+      let hue: number;
+      let spread: number;
+      if (fixedHue) {
+        hue = Number(fixedHue);
+        spread = 10; // keep it monochrome-green, no drift toward cyan
+      } else {
+        hueRef.current = (hueRef.current + 2.2) % 360;
+        hue = hueRef.current;
+        spread = 40;
+      }
+      pointsRef.current.push({ x: e.clientX, y: e.clientY, alpha: 0.32, hue, spread, rect, radius });
       if (pointsRef.current.length > 260) pointsRef.current.shift();
     };
     window.addEventListener("pointermove", onMove);
@@ -76,7 +86,7 @@ export default function HoverTrail() {
         clipToShape(ctx, p.rect, p.radius);
         const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 46);
         g.addColorStop(0, `hsla(${p.hue}, 80%, 65%, ${p.alpha})`);
-        g.addColorStop(0.55, `hsla(${(p.hue + 40) % 360}, 80%, 60%, ${p.alpha * 0.45})`);
+        g.addColorStop(0.55, `hsla(${(p.hue + p.spread) % 360}, 80%, 60%, ${p.alpha * 0.45})`);
         g.addColorStop(1, `hsla(${p.hue}, 80%, 60%, 0)`);
         ctx.fillStyle = g;
         ctx.fillRect(p.x - 48, p.y - 48, 96, 96);

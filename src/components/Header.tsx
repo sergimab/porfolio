@@ -125,7 +125,7 @@ export default function Header() {
 
   return (
     <>
-    <div className="header-wrap" style={{ position: "sticky", top: 0, zIndex: 50, background: "var(--background)" }}>
+    <div className="header-wrap" style={{ position: "sticky", top: 0, zIndex: 50 }}>
     <header style={{
       width: "100%",
       padding: "16px 24px",

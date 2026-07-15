@@ -130,6 +130,18 @@ export default function SkillDrop() {
     if (dropped) setSelectedPanel(dropped);
   }, [dropped]);
 
+  // Arriving from a project page (e.g. /?cat=iberdrola): open that category's
+  // projects and scroll them into view.
+  useEffect(() => {
+    const cat = new URLSearchParams(window.location.search).get("cat");
+    if (cat && cat in projects) {
+      setSelectedPanel(cat);
+      setTimeout(() => {
+        panelRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 150);
+    }
+  }, []);
+
   const handleCvLoad = useCallback(() => {
     const doc = cvIframeRef.current?.contentWindow?.document;
     if (doc) setCvHeight(doc.documentElement.scrollHeight);

@@ -1,0 +1,141 @@
+.ilu-sys {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Pestañas Holding / Subholding (a todo el ancho) ── */
+.ilu-tabs {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  position: relative;
+  z-index: 2;
+}
+.ilu-tab {
+  flex: 1;
+  padding: 18px;
+  border: 1px solid var(--foreground);
+  border-radius: 12px;
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+/* Hover en la inactiva: se rellena con el color de contraste del tema
+   (claro → oscuro; oscuro → claro). */
+.ilu-tab[data-active="false"]:hover {
+  background: var(--foreground);
+  color: var(--background);
+}
+/* La activa se une con la caja: sin borde inferior, esquinas solo arriba y
+   padding inferior extra que la funde con el borde superior de la caja. */
+.ilu-tab[data-active="true"] {
+  background: var(--foreground);
+  color: var(--background);
+  border-color: var(--foreground);
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+  padding-bottom: 34px;
+  margin-bottom: -1px;
+}
+
+/* ── Caja ── */
+.ilu-box {
+  border: 1px solid var(--foreground);
+  border-radius: 16px;
+  padding: 24px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+/* La esquina superior del lado de la pestaña activa va a 0 para unirse con ella. */
+.ilu-box[data-tab="holding"]    { border-top-left-radius: 0; }
+.ilu-box[data-tab="subholding"] { border-top-right-radius: 0; }
+
+/* ── Bloque ── */
+.ilu-block {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.ilu-block-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--foreground);
+}
+.ilu-block-style {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 17px;
+  color: var(--muted);
+}
+.ilu-divider {
+  height: 1px;
+  background: var(--border);
+  margin-top: -8px;
+}
+
+/* ── Ilustraciones grandes (placeholder) ── */
+.ilu-frame {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--background);
+  min-height: 168px;
+}
+
+.ilu-hero-tech {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 16px;
+}
+.ilu-hero-tech .ilu-frame:nth-child(1) { grid-column: 1; grid-row: 1; }
+.ilu-hero-tech .ilu-frame:nth-child(2) { grid-column: 1; grid-row: 2; }
+.ilu-hero-tech .ilu-frame:nth-child(3) { grid-column: 2; grid-row: 1 / span 2; }
+
+.ilu-hero-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.ilu-hero-info .ilu-frame { min-height: 220px; }
+
+/* ── Fila de 6 cajas ── */
+.ilu-tiles {
+  background: #111814;
+  border-radius: 16px;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+}
+.ilu-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.ilu-tile-box {
+  width: 100%;
+  aspect-ratio: 1;
+  background: #f4f1e8;
+  border-radius: 12px;
+}
+.ilu-tile-name {
+  font-size: 12px;
+  color: #eafff0;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .ilu-tiles { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 600px) {
+  .ilu-hero-tech,
+  .ilu-hero-info { grid-template-columns: 1fr; }
+  .ilu-hero-tech .ilu-frame:nth-child(3) { grid-column: 1; grid-row: auto; }
+}
