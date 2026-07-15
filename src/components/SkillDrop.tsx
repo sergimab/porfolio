@@ -45,7 +45,7 @@ function ProjectCard({ title, id, hue }: { title: string; id: string; hue: numbe
           width:"100%", aspectRatio:"1",
           borderRadius:"8px",
           padding:"2px",
-          background: `linear-gradient(120deg, hsl(${hue},70%,68%), hsl(${hue},70%,48%), hsl(${hue+20},70%,58%), hsl(${hue},70%,68%))`,
+          backgroundImage: `linear-gradient(120deg, hsl(${hue},70%,68%), hsl(${hue},70%,48%), hsl(${hue+20},70%,58%), hsl(${hue},70%,68%))`,
           backgroundSize:"300% 300%",
           animation:"capsuleGradient 3.2s ease-in-out infinite",
         }}
@@ -130,16 +130,32 @@ export default function SkillDrop() {
     if (dropped) setSelectedPanel(dropped);
   }, [dropped]);
 
-  // Arriving from a project page (e.g. /?cat=iberdrola): open that category's
-  // projects and scroll them into view.
+  // Arriving from a project page (e.g. /?cat=iberdrola): dock that category's
+  // capsule in the drop zone (as if dropped), open its projects and scroll to them.
   useEffect(() => {
     const cat = new URLSearchParams(window.location.search).get("cat");
-    if (cat && cat in projects) {
-      setSelectedPanel(cat);
-      setTimeout(() => {
-        panelRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 150);
-    }
+    if (!cat || !(cat in projects)) return;
+    let cancelled = false;
+    setSelectedPanel(cat);
+
+    (async () => {
+      // Wait until the physics pill for this category has been created.
+      for (let i = 0; i < 60 && !cancelled; i++) {
+        const pill = pillsRef.current.find(p => p.id === cat);
+        if (pill && engineRef.current) {
+          const { Composite } = await import("matter-js");
+          Composite.remove(engineRef.current.world, pill.body);
+          pillsRef.current = pillsRef.current.filter(p => p.id !== cat);
+          droppedRef.current = cat;
+          setDropped(cat);
+          panelRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+          return;
+        }
+        await new Promise(r => setTimeout(r, 50));
+      }
+    })();
+
+    return () => { cancelled = true; };
   }, []);
 
   const handleCvLoad = useCallback(() => {
@@ -547,9 +563,10 @@ export default function SkillDrop() {
                     width:"100%", height:"100%",
                     borderRadius:"999px",
                     border: isDragged ? "none" : "1px solid var(--foreground)",
-                    background: isDragged
+                    backgroundColor: isDragged ? undefined : "var(--background)",
+                    backgroundImage: isDragged
                       ? `linear-gradient(120deg, hsl(${skill.hue},85%,72%), hsl(${skill.hue},85%,42%), hsl(${skill.hue+25},85%,60%), hsl(${skill.hue},85%,72%))`
-                      : "var(--background)",
+                      : undefined,
                     backgroundSize: isDragged ? "300% 300%" : undefined,
                     animation: isDragged ? "capsuleGradient 1.8s ease-in-out infinite" : undefined,
                     display:"flex", alignItems:"center", justifyContent:"center",
@@ -594,7 +611,7 @@ export default function SkillDrop() {
                   width:`${PILL_W}px`, height:`${PILL_H}px`,
                   borderRadius:"999px",
                   padding:"2px",
-                  background: `linear-gradient(120deg, hsl(${droppedSkill!.hue},70%,68%), hsl(${droppedSkill!.hue},70%,48%), hsl(${droppedSkill!.hue+20},70%,58%), hsl(${droppedSkill!.hue},70%,68%))`,
+                  backgroundImage: `linear-gradient(120deg, hsl(${droppedSkill!.hue},70%,68%), hsl(${droppedSkill!.hue},70%,48%), hsl(${droppedSkill!.hue+20},70%,58%), hsl(${droppedSkill!.hue},70%,68%))`,
                   backgroundSize:"300% 300%",
                   animation:"capsuleGradient 3.2s ease-in-out infinite",
                   flexShrink:0,
