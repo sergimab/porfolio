@@ -52,11 +52,28 @@
   .panel-btn-tile { height: 56px; border-radius: 999px; }
   .panel-btn { padding: 8px 16px; }
 }
+/* Rejilla de cards de proyecto: 3 columnas en desk, 2 en móvil */
+.project-grid {
+  margin-top: 48px;
+  width: 100%;
+  max-width: 1024px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+@media (max-width: 768px) {
+  .project-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
 /* Flecha horizontal que señala la caja "Arrastra aquí": empuja un par de
    veces hacia la derecha y descansa el resto del ciclo */
 .dz-arrow {
+  position: absolute;
+  right: calc(100% + 10px); /* pegada a la izquierda de la caja, sin descentrarla */
   color: var(--muted);
-  flex-shrink: 0;
   animation: dzArrowNudge 2.8s ease-in-out infinite;
 }
 @keyframes dzArrowNudge {

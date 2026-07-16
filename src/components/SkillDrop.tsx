@@ -562,7 +562,7 @@ export default function SkillDrop() {
           }}>
             {dropped ? (
               <div style={{
-                display:"flex", alignItems:"center", gap:"10px", pointerEvents:"all",
+                position:"relative", display:"flex", alignItems:"center", pointerEvents:"all",
                 animation: falling ? "dropExit 0.45s ease-in forwards" : "none",
               }}>
                 <div style={{
@@ -584,12 +584,14 @@ export default function SkillDrop() {
                   </div>
                 </div>
                 {!falling && (
-                  <button onClick={() => { setSelectedPanel("contacto"); handleReset(); }} style={{ background:"none", border:"none", cursor:"pointer", color:"var(--muted)", fontSize:"20px", lineHeight:1, padding:0 }} aria-label="Quitar">×</button>
+                  // En absoluto para no desplazar la cápsula del centro
+                  <button onClick={() => { setSelectedPanel("contacto"); handleReset(); }} style={{ position:"absolute", left:"calc(100% + 10px)", background:"none", border:"none", cursor:"pointer", color:"var(--muted)", fontSize:"20px", lineHeight:1, padding:0 }} aria-label="Quitar">×</button>
                 )}
               </div>
             ) : (
-              <div style={{ display:"flex", alignItems:"center", gap:"10px" }}>
-                {/* Flecha animada que señala la zona de soltar */}
+              <div style={{ position:"relative", display:"flex", alignItems:"center" }}>
+                {/* Flecha animada que señala la zona de soltar (en absoluto
+                    para no desplazar la caja del centro) */}
                 <svg className="dz-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <line x1="4" y1="12" x2="19" y2="12" />
                   <polyline points="13 6 19 12 13 18" />
@@ -613,7 +615,7 @@ export default function SkillDrop() {
 
       <div ref={panelRef} style={{ width:"100%", display:"flex", flexDirection:"column", alignItems:"center", scrollMarginTop:"24px" }}>
       {selectedPanel in projects && (
-        <div style={{ marginTop:"48px", width:"100%", maxWidth:"1024px", display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"24px" }}>
+        <div className="project-grid">
           {projects[selectedPanel].map(p => (
             <ProjectCard key={p.id} id={p.id} title={lang === "en" ? p.titleEn : p.title} cover={p.cover} lang={lang} hue={skills.find(s => s.id === selectedPanel)?.hue ?? 0} />
           ))}
