@@ -42,6 +42,40 @@ function flatTileSrcs(name: string): string[] {
 // Escenas planas para los 2 recuadros del hero del bloque plano.
 const FLAT_SCENES = ["1.svg", "2.svg"].map((f) => `/images/flat-escenas/${f}`);
 
+// Codifica cada segmento de la ruta (respeta espacios y subcarpetas, p. ej. "… - copia").
+function catPath(folder: string, file: string): string {
+  return "/" + `images/${folder}/${file}`.split("/").map(encodeURIComponent).join("/");
+}
+function catSrcs(map: Record<string, { folder: string; files: string[] }>, name: string): string[] {
+  const cat = map[name];
+  if (!cat) return [];
+  return cat.files.map((f) => catPath(cat.folder, f));
+}
+
+// Subholding · monocromático (carpetas base, sin "copia").
+const MONO_TILES: Record<string, { folder: string; files: string[] }> = {
+  "Personas":   { folder: "subholding/monocromatic-personas",   files: ["Group 50184.svg", "Group 65.svg", "Grupo 115.svg"] },
+  "Vehículos":  { folder: "subholding/monocromatic-vehiculos",  files: ["Group.svg", "Group-1.svg", "fondo.svg"] },
+  "Energías":   { folder: "subholding/monocromatic-energia",    files: ["Group 50185.svg", "presa.svg", "red.svg"] },
+  "Tecnología": { folder: "subholding/monocromatic-tecnologia", files: ["Group 15.svg", "Group 7.svg", "contador.svg"] },
+  "Edificios":  { folder: "subholding/monocromatic-edificios",  files: ["Group 49988.svg", "Group 50187.svg", "Group.svg"] },
+  "Naturaleza": { folder: "subholding/monocromatic-naturaleza", files: ["Group 50186.svg", "Grupo 337.svg", "mundo.svg"] },
+};
+
+// Subholding · plano monocromático (carpetas "- copia").
+const MONO_COPIA_TILES: Record<string, { folder: string; files: string[] }> = {
+  "Personas":   { folder: "subholding/monocromatic-personas - copia",   files: ["Character.svg", "Group 50057.svg", "Group 50182.svg"] },
+  "Vehículos":  { folder: "subholding/monocromatic-vehiculos - copia",  files: ["Group 50063.svg", "Group 50064.svg", "coche 5.svg"] },
+  "Energías":   { folder: "subholding/monocromatic-energia - copia",    files: ["Group 5.svg", "Group 50058.svg", "Group 50183.svg"] },
+  "Tecnología": { folder: "subholding/monocromatic-tecnologia - copia", files: ["Group 6.svg", "Group 612.svg", "Group 7.svg"] },
+  "Edificios":  { folder: "subholding/monocromatic-edificios - copia",  files: ["Group 50062.svg", "Grupo 22.svg", "factory.svg"] },
+  "Naturaleza": { folder: "subholding/monocromatic-naturaleza - copia", files: ["Group 50065.svg", "Group 50067.svg", "Group 50188.svg"] },
+};
+
+// Parejas de escenas de ejemplo (2 recuadros) de cada bloque subholding.
+const EJEMPLOS_1 = ["Frame 48524.svg", "Frame.svg"].map((f) => catPath("subholding/ejemplos-1", f));
+const EJEMPLOS_2 = ["12.svg", "Frame 32.svg"].map((f) => catPath("subholding/ejemplos-2", f));
+
 type Block = {
   title: string;
   style: string;
@@ -50,7 +84,19 @@ type Block = {
   tiles: string[];
   iso?: boolean;
   flat?: boolean;
+  heroImages?: string[];              // hero de 2 escenas lado a lado (carrusel en móvil)
+  tileSet?: "mono" | "monoCopia";     // origen de los SVG de los tiles
+  blueprint?: boolean;                // tiles con fondo fijo #00402A
+  heroNoBorder?: boolean;             // escenas del hero sin borde
 };
+
+function tileSrcsFor(b: Block, name: string): string[] {
+  if (b.iso) return isoTileSrcs(name);
+  if (b.flat) return flatTileSrcs(name);
+  if (b.tileSet === "mono") return catSrcs(MONO_TILES, name);
+  if (b.tileSet === "monoCopia") return catSrcs(MONO_COPIA_TILES, name);
+  return [];
+}
 
 const CONTENT: Record<"holding" | "subholding", Block[]> = {
   holding: [
@@ -75,8 +121,11 @@ const CONTENT: Record<"holding" | "subholding", Block[]> = {
     {
       title: "Para infografías técnicas",
       style: "Estilo blueprint",
-      hero: "tech",
-      heroCount: 3,
+      hero: "info",
+      heroCount: 2,
+      heroImages: EJEMPLOS_1,
+      tileSet: "mono",
+      blueprint: true,
       tiles: ["Personas", "Vehículos", "Energías", "Tecnología", "Edificios", "Naturaleza"],
     },
     {
@@ -84,6 +133,9 @@ const CONTENT: Record<"holding" | "subholding", Block[]> = {
       style: "Estilo plano monocromático",
       hero: "info",
       heroCount: 2,
+      heroImages: EJEMPLOS_2,
+      tileSet: "monoCopia",
+      heroNoBorder: true,
       tiles: ["Personas", "Vehículos", "Energías", "Naturaleza", "Tecnología", "Edificios"],
     },
   ],
@@ -137,6 +189,14 @@ export default function IlustracionesSistema() {
                 </div>
               ))}
             </div>
+          ) : b.heroImages ? (
+            <div className={`ilu-hero hero-pair${b.heroNoBorder ? " hero-pair-noborder" : ""}`}>
+              {b.heroImages.map((src, j) => (
+                <div className="ilu-frame flat-scene" key={j}>
+                  <img src={src} alt="" />
+                </div>
+              ))}
+            </div>
           ) : (
             <div className={`ilu-hero ilu-hero-${b.hero}`}>
               {Array.from({ length: b.heroCount }).map((_, j) => (
@@ -145,11 +205,11 @@ export default function IlustracionesSistema() {
             </div>
           )}
 
-          <div className="ilu-tiles">
+          <div className={`ilu-tiles${b.blueprint ? " ilu-tiles-blueprint" : ""}`}>
             {b.tiles.map((name) => (
               <div className="ilu-tile" key={name}>
                 <div className="ilu-tile-box">
-                  {(b.iso ? isoTileSrcs(name) : b.flat ? flatTileSrcs(name) : []).map((src, k) => (
+                  {tileSrcsFor(b, name).map((src, k) => (
                     <img
                       key={k}
                       className="ilu-tile-img"

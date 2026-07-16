@@ -22,16 +22,16 @@ function seeded(id: string, salt: number): number {
   return h / 100003;
 }
 
-const projects: Record<string, { id: string; title: string }[]> = {
+const projects: Record<string, { id: string; title: string; cover?: string }[]> = {
   motion:     [{ id:"m1",title:"Proyecto Motion 01"},{id:"m2",title:"Proyecto Motion 02"},{id:"m3",title:"Proyecto Motion 03"}],
   branding:   [{ id:"b1",title:"Proyecto Branding 01"},{id:"b2",title:"Proyecto Branding 02"},{id:"b3",title:"Proyecto Branding 03"}],
   fotografia: [{ id:"f1",title:"Proyecto Foto 01"},{id:"f2",title:"Proyecto Foto 02"},{id:"f3",title:"Proyecto Foto 03"}],
-  iberdrola:  [{ id:"i2",title:"Sistema de diseño"},{id:"i5",title:"Sistema de ilustraciones"},{id:"i1",title:"Infografías"},{id:"i3",title:"Newsletters"},{id:"i4",title:"Iconografía"}],
+  iberdrola:  [{ id:"i2",title:"Sistema de diseño"},{id:"i5",title:"Sistema de ilustraciones",cover:"/images/covers/sistema-ilustraciones.svg"},{id:"i1",title:"Infografías"},{id:"i3",title:"Newsletters"},{id:"i4",title:"Iconografía"}],
   uiux:       [{ id:"u1",title:"Proyecto UI/UX 01"},{id:"u2",title:"Proyecto UI/UX 02"},{id:"u3",title:"Proyecto UI/UX 03"}],
   "3d":       [{ id:"d1",title:"Proyecto 3D 01"},{id:"d2",title:"Proyecto 3D 02"},{id:"d3",title:"Proyecto 3D 03"}],
 };
 
-function ProjectCard({ title, id, hue }: { title: string; id: string; hue: number }) {
+function ProjectCard({ title, id, hue, cover }: { title: string; id: string; hue: number; cover?: string }) {
   const [hovered, setHovered] = useState(false);
   return (
     <Link
@@ -57,6 +57,10 @@ function ProjectCard({ title, id, hue }: { title: string; id: string; hue: numbe
           transition:"background 0.3s",
           background: hovered ? "var(--surface)" : "var(--background)",
         }}>
+          {cover ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={cover} alt="" style={{ position:"absolute", inset:0, width:"100%", height:"100%", objectFit:"cover", opacity:hovered?0:1, transition:"opacity 0.3s", zIndex:6 }} />
+          ) : (
           <svg viewBox="0 0 200 200" style={{ position:"absolute", inset:0, width:"100%", height:"100%", opacity:hovered?0:1, transition:"opacity 0.3s", zIndex:6 }}>
             <rect x="30" y="30" width="140" height="100" rx="4" fill="none" stroke="var(--foreground)" strokeWidth="1"/>
             <circle cx="60" cy="55" r="12" fill="none" stroke="var(--foreground)" strokeWidth="1"/>
@@ -64,6 +68,7 @@ function ProjectCard({ title, id, hue }: { title: string; id: string; hue: numbe
             <line x1="80" y1="75" x2="120" y2="95" stroke="var(--foreground)" strokeWidth="1"/>
             <line x1="120" y1="95" x2="170" y2="60" stroke="var(--foreground)" strokeWidth="1"/>
           </svg>
+          )}
           <div style={{ position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center", opacity:hovered?1:0, transition:"opacity 0.3s", zIndex:6 }}>
             <span style={{ fontSize:"12px", color:"var(--muted)" }}>Ver proyecto</span>
           </div>
@@ -650,7 +655,7 @@ export default function SkillDrop() {
       {selectedPanel in projects && (
         <div style={{ marginTop:"48px", width:"100%", maxWidth:"1024px", display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"24px" }}>
           {projects[selectedPanel].map(p => (
-            <ProjectCard key={p.id} id={p.id} title={p.title} hue={skills.find(s => s.id === selectedPanel)?.hue ?? 0} />
+            <ProjectCard key={p.id} id={p.id} title={p.title} cover={p.cover} hue={skills.find(s => s.id === selectedPanel)?.hue ?? 0} />
           ))}
         </div>
       )}

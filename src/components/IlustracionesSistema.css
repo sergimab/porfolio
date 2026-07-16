@@ -141,6 +141,16 @@
   border-radius: inherit;
 }
 
+/* ── Hero de pareja (subholding): 2 escenas lado a lado ── */
+.hero-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.hero-pair .ilu-frame { min-height: 220px; }
+/* Plano monocromático: escenas de ejemplo sin borde. */
+.hero-pair-noborder .ilu-frame { border: none; }
+
 /* ── Fila de 6 cajas ── */
 .ilu-tiles {
   background: #1C1A16;
@@ -164,12 +174,16 @@
   position: relative;
   width: 100%;
   aspect-ratio: 1;
-  /* Sigue el fondo de la página: claro en modo claro, oscuro en modo oscuro.
-     El borde claro delimita el recuadro sobre el fondo oscuro del contenedor. */
+  /* Sigue el fondo de la página (claro en claro, oscuro en oscuro).
+     Excepción: el bloque blueprint las fija en verde (#00402A) más abajo. */
   background: var(--background);
   border: 1px solid rgba(242, 238, 226, 0.4);
   border-radius: 12px;
   overflow: hidden;
+}
+/* Blueprint: las ilustraciones pequeñas siempre sobre fondo verde oscuro. */
+.ilu-tiles-blueprint .ilu-tile-box {
+  background: #00402A;
 }
 .ilu-tile-img {
   position: absolute;
@@ -219,4 +233,35 @@
   .ilu-hero-tech .iso-house-frame {
     padding: 80px 0;
   }
+
+  /* Hero de pareja en móvil: carrusel automático que desliza de una a otra.
+     Las dos escenas se apilan en la misma celda y se animan en sincronía. */
+  .hero-pair {
+    grid-template-columns: 1fr;
+    gap: 0;
+    overflow: hidden;
+  }
+  .hero-pair .ilu-frame {
+    grid-area: 1 / 1;
+    animation: pairSlideA 9s ease-in-out infinite;
+  }
+  .hero-pair .ilu-frame:nth-child(2) {
+    animation-name: pairSlideB;
+  }
+}
+
+/* Carrusel continuo: cada transición desplaza siempre hacia la derecha
+   (la escena sale por la derecha y la siguiente entra por la izquierda).
+   El salto de reposicionamiento ocurre fuera de pantalla, es imperceptible. */
+@keyframes pairSlideA {
+  0%, 40%   { transform: translateX(0); }        /* visible */
+  50%       { transform: translateX(100%); }     /* sale por la derecha */
+  50.001%   { transform: translateX(-100%); }    /* reaparece por la izquierda (oculta) */
+  90%       { transform: translateX(-100%); }    /* espera fuera, a la izquierda */
+  100%      { transform: translateX(0); }        /* entra hasta el centro */
+}
+@keyframes pairSlideB {
+  0%, 40%   { transform: translateX(-100%); }    /* fuera, a la izquierda */
+  50%, 90%  { transform: translateX(0); }        /* entra y permanece visible */
+  100%      { transform: translateX(100%); }     /* sale por la derecha */
 }
