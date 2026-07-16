@@ -108,9 +108,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2px;
   padding: 8px 12px;
   text-align: center;
+}
+/* Capitular y resto como texto inline: nunca se separan al partir línea */
+.pcard-band-line {
+  display: inline;
+  line-height: 1.25;
+}
+.pcard-band-cap,
+.pcard-band-rest {
+  display: inline;
 }
 .pcard-band-cap {
   font-family: 'Kapakana', 'Cormorant Garamond', serif;

@@ -84,8 +84,12 @@ export default function ProjectCard({
           />
         </svg>
         <div className="pcard-band-text">
-          <span className="pcard-band-cap">{title.charAt(0)}</span>
-          <span className="pcard-band-rest">{title.slice(1)}</span>
+          {/* Capitular y resto en el mismo flujo inline: al partir la línea,
+              la letra queda unida a la primera palabra */}
+          <span className="pcard-band-line">
+            <span className="pcard-band-cap">{title.charAt(0)}</span>
+            <span className="pcard-band-rest">{title.slice(1)}</span>
+          </span>
         </div>
       </div>
     </Link>
