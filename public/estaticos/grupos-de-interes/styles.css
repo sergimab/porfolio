@@ -443,33 +443,33 @@
   }
 
   #enguniverse .enguniverse_hotspots .enguniverse_button-1 {
-    top: -22px;
-    left: 108px;  
+    top: -5.4%;
+    left: 22.8%;
   }
 
   #enguniverse .enguniverse_hotspots .enguniverse_button-2 {
-    top: 8px;
-    left: 190px;  
+    top: 4.3%;
+    left: 40%;
   }
 
   #enguniverse .enguniverse_hotspots .enguniverse_button-3 {
-    top: -31px;
-    left: 270px;  
+    top: -9%;
+    left: 56.8%;
   }
 
   #enguniverse .enguniverse_hotspots .enguniverse_button-4 {
-    top: 22px;
-    left: 35px;  
+    top: 9%;
+    left: 7.7%;
   }
 
   #enguniverse .enguniverse_hotspots .enguniverse_button-5 {
-    top: 124px;
-    left: 145px;  
+    top: 40%;
+    left: 30.6%;
   }
 
   #enguniverse .enguniverse_hotspots .enguniverse_button-6 {
-    top: 23px;
-    right: 73px;  
+    top: 7.5%;
+    right: 16.2%;
   }
 
   #enguniverse .enguniverse_hotspots .enguniverse_button span {
@@ -546,6 +546,7 @@
 
   #enguniverse .enguniverse_nav .enguniverse_button:hover {
     border-color: var(--enguniverse-green-1);
+    font-family: "IberPangea Medium", sans-serif !important;
   }
 
   #enguniverse .enguniverse_nav .enguniverse_button:after {
@@ -666,32 +667,6 @@
     gap: 4px;
   }
 
-  #enguniverse .enguniverse_hotspots .enguniverse_button-1 {
-    left: 102px;
-  }
-
-  #enguniverse .enguniverse_hotspots .enguniverse_button-2 {
-    top: 5px;
-    left: 182px;
-  }
-
-  #enguniverse .enguniverse_hotspots .enguniverse_button-3 {
-    left: 261px;
-  }
-
-  #enguniverse .enguniverse_hotspots .enguniverse_button-4 {
-    top: 21px;
-    left: 32px;
-  }
-
-  #enguniverse .enguniverse_hotspots .enguniverse_button-5 {
-    left: 139px;
-  }
-
-  #enguniverse .enguniverse_hotspots .enguniverse_button-6 {
-    right: 70px;
-  }
-
   #enguniverse .enguniverse_modal {
     width: 47.36%;
     left: auto;
@@ -707,4 +682,58 @@
 }
 @media (min-width: 700px) {
   #enguniverse { padding: 36px; }
+}
+
+/* La caja clarita ocupa todo el ancho del módulo y, en desktop, la
+   ilustración y la caja de botones son columnas gemelas (mismo ancho y alto;
+   la ilustración escala con su columna). */
+#enguniverse { max-width: 100%; }
+
+@media (min-width: 1000px) {
+  #enguniverse .enguniverse_media {
+    flex: 0 0 auto;
+    width: calc(50% - 8px);
+    max-width: none;
+    min-width: 0;
+  }
+  #enguniverse .enguniverse_groups {
+    flex: 0 0 auto;
+    width: calc(50% - 8px);
+    min-width: 0;
+    box-sizing: border-box;
+  }
+}
+
+/* Modal a toda la caja madre y caja de botones que rellena su columna:
+   título mayor, más aire lateral y botones en cuadrícula que estira. */
+@media (min-width: 1000px) {
+  #enguniverse .enguniverse_modal {
+    top: 0;
+    bottom: 0;
+    left: auto;
+    right: 0;
+    width: calc(50% - 8px);
+    height: 100%;
+  }
+
+  #enguniverse .enguniverse_groups {
+    display: flex;
+    flex-direction: column;
+    padding: 24px 32px;
+  }
+  #enguniverse .enguniverse_groups_title {
+    font-size: 24px;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+  #enguniverse .enguniverse_nav {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 1fr;
+    gap: 20px;
+  }
+  #enguniverse .enguniverse_nav .enguniverse_button {
+    width: auto;
+  }
 }

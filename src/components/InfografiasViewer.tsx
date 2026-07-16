@@ -33,9 +33,9 @@ const SIZES: { key: "565" | "980" | "1256"; label: string; mods: Mod[] }[] = [
     key: "1256",
     label: "1256px",
     mods: [
-      { slug: "mapa-clientes",   es: "Mapa de clientes",            en: "Customer map" },
-      { slug: "home-mapa-2025",  es: "Animación de mapa en la home", en: "Home map animation" },
-      { slug: "grupos-de-interes", es: "Grupos de interés",          en: "Stakeholders" },
+      { slug: "grupos-de-interes", es: "Grupos de interés",     en: "Stakeholders" },
+      { slug: "mapa-clientes",     es: "Mapa de clientes",      en: "Customer map" },
+      { slug: "home-mapa-2025",    es: "Mapa home Iberdrola",   en: "Iberdrola home map" },
     ],
   },
 ];
@@ -84,14 +84,17 @@ function ModuleFrame({ slug, lang, size }: { slug: string; lang: "es" | "en"; si
 export default function InfografiasViewer() {
   const lang = useLang();
   const [sizeKey, setSizeKey] = useState<"565" | "980" | "1256">("565");
+  const [menuOpen, setMenuOpen] = useState(false);
   const group = SIZES.find((s) => s.key === sizeKey) ?? SIZES[0];
   const [active, setActive] = useState(group.mods[0].slug);
   const current = group.mods.find((m) => m.slug === active) ?? group.mods[0];
+  const label = (m: Mod) => (lang === "en" ? m.en : m.es);
 
   const changeSize = (key: "565" | "980" | "1256") => {
     setSizeKey(key);
     const g = SIZES.find((s) => s.key === key)!;
     setActive(g.mods[0].slug);
+    setMenuOpen(false);
   };
 
   return (
@@ -111,6 +114,32 @@ export default function InfografiasViewer() {
 
       <div className="igv-box" data-tab={sizeKey}>
         <div className="igv">
+          {/* Móvil: desplegable con la infografía activa; la lista se abre
+              POR ENCIMA del contenido inferior, sin desplazarlo. */}
+          <div className="igv-dd" data-open={menuOpen}>
+            <button className="igv-dd-toggle" onClick={() => setMenuOpen(!menuOpen)}>
+              <span>{label(current)}</span>
+              <svg className="igv-dd-chevron" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+                <path d="M2 5l5 5 5-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+            {menuOpen && (
+              <div className="igv-dd-list">
+                {group.mods
+                  .filter((m) => m.slug !== current.slug)
+                  .map((m) => (
+                    <button
+                      key={m.slug}
+                      className="igv-dd-item"
+                      onClick={() => { setActive(m.slug); setMenuOpen(false); }}
+                    >
+                      {label(m)}
+                    </button>
+                  ))}
+              </div>
+            )}
+          </div>
+
           <nav className="igv-nav">
             {group.mods.map((m) => (
               <button
@@ -119,7 +148,7 @@ export default function InfografiasViewer() {
                 data-active={m.slug === current.slug}
                 onClick={() => setActive(m.slug)}
               >
-                {lang === "en" ? m.en : m.es}
+                {label(m)}
               </button>
             ))}
           </nav>

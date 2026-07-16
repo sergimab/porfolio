@@ -86,16 +86,86 @@
   color: var(--background);
 }
 
-/* Ancho completo (980): botones en fila arriba, infografía debajo */
-.igv-box[data-tab="980"] .igv {
+/* Ancho completo (980) y 1256: botones en fila arriba, infografía debajo */
+.igv-box[data-tab="980"] .igv,
+.igv-box[data-tab="1256"] .igv {
   grid-template-columns: 1fr;
 }
-.igv-box[data-tab="980"] .igv-nav {
+.igv-box[data-tab="980"] .igv-nav,
+.igv-box[data-tab="1256"] .igv-nav {
   flex-direction: row;
 }
-.igv-box[data-tab="980"] .igv-btn {
+.igv-box[data-tab="980"] .igv-btn,
+.igv-box[data-tab="1256"] .igv-btn {
   flex: 1;
   width: auto;
+}
+
+/* ── Desplegable móvil (oculto en escritorio) ──
+   El botón oscuro muestra la infografía activa; la lista se abre en
+   posición absoluta POR ENCIMA del contenido, sin desplazarlo. */
+.igv-dd {
+  display: none;
+  position: relative;
+  z-index: 20;
+}
+.igv-dd-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 20px;
+  border: 1px solid var(--foreground);
+  border-radius: 16px;
+  background: var(--foreground);
+  color: var(--background);
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+}
+.igv-dd[data-open="true"] .igv-dd-toggle {
+  border-radius: 16px 16px 0 0;
+}
+.igv-dd-chevron {
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+.igv-dd[data-open="true"] .igv-dd-chevron {
+  transform: rotate(180deg);
+}
+.igv-dd-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--background);
+  border: 1px solid var(--foreground);
+  border-top: none;
+  border-radius: 0 0 16px 16px;
+  overflow: hidden;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+.igv-dd-item {
+  display: block;
+  width: 100%;
+  padding: 14px 20px;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+}
+.igv-dd-item:last-child {
+  border-bottom: none;
+}
+.igv-dd-item:hover {
+  background: var(--foreground);
+  color: var(--background);
 }
 
 /* Módulo desplegado */
@@ -137,7 +207,17 @@
   }
   .igv-frame-1256 {
     width: 1256px;
-    max-width: calc(50vw + 130px);
+    max-width: 100%;
+    justify-self: center;
+  }
+
+  /* La caja del 1256 se ensancha para contener el estático (centrada y con
+     tope de ventana). Al ser más ancha que la fila de pestañas, sus esquinas
+     superiores vuelven a ser redondeadas. */
+  .igv-box[data-tab="1256"] {
+    width: min(1296px, calc(100vw - 48px));
+    margin-left: calc((100% - min(1296px, 100vw - 48px)) / 2);
+    border-top-right-radius: 16px;
   }
 }
 
@@ -145,10 +225,19 @@
   .igv {
     grid-template-columns: 1fr;
   }
-  .igv-box[data-tab="980"] .igv-nav {
+  /* En móvil la lista de botones se sustituye por el desplegable */
+  .igv-nav {
+    display: none;
+  }
+  .igv-dd {
+    display: block;
+  }
+  .igv-box[data-tab="980"] .igv-nav,
+  .igv-box[data-tab="1256"] .igv-nav {
     flex-direction: column;
   }
-  .igv-box[data-tab="980"] .igv-btn {
+  .igv-box[data-tab="980"] .igv-btn,
+  .igv-box[data-tab="1256"] .igv-btn {
     width: 100%;
   }
   .igv-tab {
