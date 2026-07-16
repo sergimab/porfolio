@@ -193,7 +193,10 @@
     grid-column: 1;
     grid-row: auto;
   }
+  /* Al desplegarse, la casa pinta ~66px por encima y ~72px por debajo de su
+     lienzo. Reservamos ese espacio con padding vertical para que el tejado no
+     tape la escena de arriba ni la base invada las cajas de abajo. */
   .ilu-hero-tech .iso-house-frame {
-    min-height: 260px;
+    padding: 80px 0;
   }
 }
