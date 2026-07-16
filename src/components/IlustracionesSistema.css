@@ -250,18 +250,18 @@
   }
 }
 
-/* Carrusel continuo: cada transición desplaza siempre hacia la derecha
-   (la escena sale por la derecha y la siguiente entra por la izquierda).
+/* Carrusel continuo: cada transición desplaza siempre hacia la izquierda
+   (la escena sale por la izquierda y la siguiente entra por la derecha).
    El salto de reposicionamiento ocurre fuera de pantalla, es imperceptible. */
 @keyframes pairSlideA {
   0%, 40%   { transform: translateX(0); }        /* visible */
-  50%       { transform: translateX(100%); }     /* sale por la derecha */
-  50.001%   { transform: translateX(-100%); }    /* reaparece por la izquierda (oculta) */
-  90%       { transform: translateX(-100%); }    /* espera fuera, a la izquierda */
+  50%       { transform: translateX(-100%); }    /* sale por la izquierda */
+  50.001%   { transform: translateX(100%); }     /* reaparece por la derecha (oculta) */
+  90%       { transform: translateX(100%); }     /* espera fuera, a la derecha */
   100%      { transform: translateX(0); }        /* entra hasta el centro */
 }
 @keyframes pairSlideB {
-  0%, 40%   { transform: translateX(-100%); }    /* fuera, a la izquierda */
+  0%, 40%   { transform: translateX(100%); }     /* fuera, a la derecha */
   50%, 90%  { transform: translateX(0); }        /* entra y permanece visible */
-  100%      { transform: translateX(100%); }     /* sale por la derecha */
+  100%      { transform: translateX(-100%); }    /* sale por la izquierda */
 }

@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import BackCapsule from "@/components/BackCapsule";
 import IlustracionesSistema from "@/components/IlustracionesSistema";
 import ProjectHeroTitle from "@/components/ProjectHeroTitle";
+import LangText from "@/components/LangText";
 import "../../page.css";
 import "@/components/SkillDrop.css";
 
@@ -54,12 +55,12 @@ function IlustracionesLanding() {
             display: "flex", flexDirection: "column", gap: "6px",
           }}>
             <div style={{ display: "flex", gap: "24px", fontSize: "13px" }}>
-              <span style={{ fontWeight: 700, minWidth: "64px" }}>Agencia</span>
+              <span style={{ fontWeight: 700, minWidth: "64px" }}><LangText es="Agencia" en="Agency" /></span>
               <span>Prodigioso Volcán</span>
             </div>
             <div style={{ display: "flex", gap: "24px", fontSize: "13px" }}>
-              <span style={{ fontWeight: 700, minWidth: "64px" }}>Equipo</span>
-              <span>Cuatro diseñadores</span>
+              <span style={{ fontWeight: 700, minWidth: "64px" }}><LangText es="Equipo" en="Team" /></span>
+              <span><LangText es="Cuatro diseñadores" en="Four designers" /></span>
             </div>
           </div>
         </div>
@@ -67,14 +68,14 @@ function IlustracionesLanding() {
         <ProjectHeroTitle es="Sistema de ilustraciones" en="Illustration system" />
 
         <p style={{ fontSize: "14px", color: "var(--foreground)", maxWidth: "520px", lineHeight: 1.6, marginTop: "20px" }}>
-          Diseñamos en equipo un sistema visual para Iberdrola que pusiera orden en el caos:
-          qué estilo, qué piezas, para qué contexto. Infografías, banners, web. Y dentro de eso,
-          una distinción clara entre la identidad corporativa de Iberdrola y la de su subholding
-          Iberdrola España.
+          <LangText
+            es="Diseñamos en equipo un sistema visual para Iberdrola que pusiera orden en el caos: qué estilo, qué piezas, para qué contexto. Infografías, banners, web. Y dentro de eso, una distinción clara entre la identidad corporativa de Iberdrola y la de su subholding Iberdrola España."
+            en="As a team, we designed a visual system for Iberdrola to bring order to the chaos: which style, which pieces, for which context. Infographics, banners, web. And within that, a clear distinction between Iberdrola's corporate identity and that of its subholding Iberdrola España."
+          />
         </p>
 
         <p style={{ fontSize: "14px", color: "var(--muted)", maxWidth: "520px", marginTop: "20px", fontStyle: "italic" }}>
-          ｡ ₊°  No solo ilustraciones — un lenguaje  °₊ ｡
+          <LangText es="｡ ₊°  No solo ilustraciones — un lenguaje  °₊ ｡" en="｡ ₊°  Not just illustrations — a language  °₊ ｡" />
         </p>
 
         <div style={{ marginTop: "48px" }}>

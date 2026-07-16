@@ -2,7 +2,19 @@
 
 import { useEffect, useState } from "react";
 import IsoHouse from "./IsoHouse";
+import { useLang } from "./useLang";
 import "./IlustracionesSistema.css";
+
+// Nombres de categoría en inglés (las claves en español siguen siendo las de
+// los mapas de tiles; esto solo afecta a lo que se muestra).
+const TILE_NAMES_EN: Record<string, string> = {
+  "Personas": "People",
+  "Vehículos": "Vehicles",
+  "Energías": "Energy",
+  "Tecnología": "Technology",
+  "Edificios": "Buildings",
+  "Naturaleza": "Nature",
+};
 
 // 3 SVG isométricos por categoría (de 4 disponibles en cada carpeta).
 const ISO_TILES: Record<string, { folder: string; files: string[] }> = {
@@ -78,7 +90,9 @@ const EJEMPLOS_2 = ["12.svg", "Frame 32.svg"].map((f) => catPath("subholding/eje
 
 type Block = {
   title: string;
+  titleEn: string;
   style: string;
+  styleEn: string;
   hero: "tech" | "info";
   heroCount: number;
   tiles: string[];
@@ -102,7 +116,9 @@ const CONTENT: Record<"holding" | "subholding", Block[]> = {
   holding: [
     {
       title: "Para infografías técnicas",
+      titleEn: "For technical infographics",
       style: "Estilo isométrico",
+      styleEn: "Isometric style",
       hero: "tech",
       heroCount: 3,
       iso: true,
@@ -110,7 +126,9 @@ const CONTENT: Record<"holding" | "subholding", Block[]> = {
     },
     {
       title: "Para infografías informativas",
+      titleEn: "For informative infographics",
       style: "Estilo plano",
+      styleEn: "Flat style",
       hero: "info",
       heroCount: 2,
       flat: true,
@@ -120,7 +138,9 @@ const CONTENT: Record<"holding" | "subholding", Block[]> = {
   subholding: [
     {
       title: "Para infografías técnicas",
+      titleEn: "For technical infographics",
       style: "Estilo blueprint",
+      styleEn: "Blueprint style",
       hero: "info",
       heroCount: 2,
       heroImages: EJEMPLOS_1,
@@ -130,7 +150,9 @@ const CONTENT: Record<"holding" | "subholding", Block[]> = {
     },
     {
       title: "Para infografías informativas",
+      titleEn: "For informative infographics",
       style: "Estilo plano monocromático",
+      styleEn: "Monochrome flat style",
       hero: "info",
       heroCount: 2,
       heroImages: EJEMPLOS_2,
@@ -144,6 +166,7 @@ const CONTENT: Record<"holding" | "subholding", Block[]> = {
 export default function IlustracionesSistema() {
   const [tab, setTab] = useState<"holding" | "subholding">("holding");
   const [activeIndex, setActiveIndex] = useState(0);
+  const lang = useLang();
 
   useEffect(() => {
     const id = setInterval(() => setActiveIndex((i) => (i + 1) % 3), 2600);
@@ -165,7 +188,8 @@ export default function IlustracionesSistema() {
       {CONTENT[tab].map((b, i) => (
         <section className="ilu-block" key={`${tab}-${i}`}>
           <h3 className="ilu-block-title">
-            {b.title} <span className="ilu-block-style">- {b.style}</span>
+            {lang === "en" ? b.titleEn : b.title}{" "}
+            <span className="ilu-block-style">- {lang === "en" ? b.styleEn : b.style}</span>
           </h3>
           <div className="ilu-divider" />
 
@@ -219,7 +243,7 @@ export default function IlustracionesSistema() {
                     />
                   ))}
                 </div>
-                <span className="ilu-tile-name">{name}</span>
+                <span className="ilu-tile-name">{lang === "en" ? TILE_NAMES_EN[name] ?? name : name}</span>
               </div>
             ))}
           </div>
