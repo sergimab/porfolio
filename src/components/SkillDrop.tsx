@@ -22,16 +22,16 @@ function seeded(id: string, salt: number): number {
   return h / 100003;
 }
 
-const projects: Record<string, { id: string; title: string; cover?: string }[]> = {
-  motion:     [{ id:"m1",title:"Proyecto Motion 01"},{id:"m2",title:"Proyecto Motion 02"},{id:"m3",title:"Proyecto Motion 03"}],
-  branding:   [{ id:"b1",title:"Proyecto Branding 01"},{id:"b2",title:"Proyecto Branding 02"},{id:"b3",title:"Proyecto Branding 03"}],
-  fotografia: [{ id:"f1",title:"Proyecto Foto 01"},{id:"f2",title:"Proyecto Foto 02"},{id:"f3",title:"Proyecto Foto 03"}],
-  iberdrola:  [{ id:"i2",title:"Sistema de diseño"},{id:"i5",title:"Sistema de ilustraciones",cover:"/images/covers/sistema-ilustraciones.svg"},{id:"i1",title:"Infografías"},{id:"i3",title:"Newsletters"},{id:"i4",title:"Iconografía"}],
-  uiux:       [{ id:"u1",title:"Proyecto UI/UX 01"},{id:"u2",title:"Proyecto UI/UX 02"},{id:"u3",title:"Proyecto UI/UX 03"}],
-  "3d":       [{ id:"d1",title:"Proyecto 3D 01"},{id:"d2",title:"Proyecto 3D 02"},{id:"d3",title:"Proyecto 3D 03"}],
+const projects: Record<string, { id: string; title: string; titleEn: string; cover?: string }[]> = {
+  motion:     [{ id:"m1",title:"Proyecto Motion 01",titleEn:"Motion Project 01"},{id:"m2",title:"Proyecto Motion 02",titleEn:"Motion Project 02"},{id:"m3",title:"Proyecto Motion 03",titleEn:"Motion Project 03"}],
+  branding:   [{ id:"b1",title:"Proyecto Branding 01",titleEn:"Branding Project 01"},{id:"b2",title:"Proyecto Branding 02",titleEn:"Branding Project 02"},{id:"b3",title:"Proyecto Branding 03",titleEn:"Branding Project 03"}],
+  fotografia: [{ id:"f1",title:"Proyecto Foto 01",titleEn:"Photo Project 01"},{id:"f2",title:"Proyecto Foto 02",titleEn:"Photo Project 02"},{id:"f3",title:"Proyecto Foto 03",titleEn:"Photo Project 03"}],
+  iberdrola:  [{ id:"i2",title:"Sistema de diseño",titleEn:"Design system"},{id:"i5",title:"Sistema de ilustraciones",titleEn:"Illustration system",cover:"/images/covers/sistema-ilustraciones.svg"},{id:"i1",title:"Infografías",titleEn:"Infographics"},{id:"i3",title:"Newsletters",titleEn:"Newsletters"},{id:"i4",title:"Iconografía",titleEn:"Iconography"}],
+  uiux:       [{ id:"u1",title:"Proyecto UI/UX 01",titleEn:"UI/UX Project 01"},{id:"u2",title:"Proyecto UI/UX 02",titleEn:"UI/UX Project 02"},{id:"u3",title:"Proyecto UI/UX 03",titleEn:"UI/UX Project 03"}],
+  "3d":       [{ id:"d1",title:"Proyecto 3D 01",titleEn:"3D Project 01"},{id:"d2",title:"Proyecto 3D 02",titleEn:"3D Project 02"},{id:"d3",title:"Proyecto 3D 03",titleEn:"3D Project 03"}],
 };
 
-function ProjectCard({ title, id, hue, cover }: { title: string; id: string; hue: number; cover?: string }) {
+function ProjectCard({ title, id, hue, cover, lang }: { title: string; id: string; hue: number; cover?: string; lang: "es" | "en" }) {
   const [hovered, setHovered] = useState(false);
   return (
     <Link
@@ -70,7 +70,7 @@ function ProjectCard({ title, id, hue, cover }: { title: string; id: string; hue
           </svg>
           )}
           <div style={{ position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center", opacity:hovered?1:0, transition:"opacity 0.3s", zIndex:6 }}>
-            <span style={{ fontSize:"12px", color:"var(--muted)" }}>Ver proyecto</span>
+            <span style={{ fontSize:"12px", color:"var(--muted)" }}>{lang === "en" ? "View project" : "Ver proyecto"}</span>
           </div>
         </div>
       </div>
@@ -655,7 +655,7 @@ export default function SkillDrop() {
       {selectedPanel in projects && (
         <div style={{ marginTop:"48px", width:"100%", maxWidth:"1024px", display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"24px" }}>
           {projects[selectedPanel].map(p => (
-            <ProjectCard key={p.id} id={p.id} title={p.title} cover={p.cover} hue={skills.find(s => s.id === selectedPanel)?.hue ?? 0} />
+            <ProjectCard key={p.id} id={p.id} title={lang === "en" ? p.titleEn : p.title} cover={p.cover} lang={lang} hue={skills.find(s => s.id === selectedPanel)?.hue ?? 0} />
           ))}
         </div>
       )}

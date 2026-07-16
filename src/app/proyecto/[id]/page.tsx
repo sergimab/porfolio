@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import BackCapsule from "@/components/BackCapsule";
 import IlustracionesSistema from "@/components/IlustracionesSistema";
+import ProjectHeroTitle from "@/components/ProjectHeroTitle";
 import "../../page.css";
 import "@/components/SkillDrop.css";
 
@@ -63,10 +64,7 @@ function IlustracionesLanding() {
           </div>
         </div>
 
-        <h1 className="project-hero-title" style={{ marginTop: "24px" }}>
-          <span className="project-hero-cap">S</span>
-          <span className="project-hero-rest">istema de ilustraciones</span>
-        </h1>
+        <ProjectHeroTitle es="Sistema de ilustraciones" en="Illustration system" />
 
         <p style={{ fontSize: "14px", color: "var(--foreground)", maxWidth: "520px", lineHeight: 1.6, marginTop: "20px" }}>
           Diseñamos en equipo un sistema visual para Iberdrola que pusiera orden en el caos:
