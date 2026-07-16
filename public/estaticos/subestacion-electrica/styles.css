@@ -1,0 +1,447 @@
+@font-face {
+  font-family: 'IberPangea';
+  src: url('/estaticos/fonts/IberPangea-Bold.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'IberPangea';
+  src: url('/estaticos/fonts/IberPangea-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'IberPangea';
+  src: url('/estaticos/fonts/IberPangea-SmBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+}
+
+:root {
+  --subelectric-white: #FFFEFF;
+  --subelectric-green: #00A443;
+  --subelectric-green-1: #007F33;
+  --subelectric-dark: #00402A;
+  --subelectric-forest: #00402A;
+  --subelectric-sand-3: #D8CFC7;
+  --subelectric-orange-light: #FFF5EC;
+}
+
+#subelectric {
+  /*width: calc(100% - 32px);*/
+  max-width: 980px;
+  text-align: left;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 15px;
+  background: var(--subelectric-white);
+  margin: 0 auto;
+  padding: 16px;
+  border: none;
+}
+
+#subelectric * {
+  font-family: 'IberPangea' !important;
+  font-style: normal;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#subelectric img {
+  display: block;
+  width: 100%;
+}
+
+#subelectric .subelectric_title {
+  color: var(--subelectric-green-1) !important;
+  font-size: 31px;
+  line-height: 1.12;
+  font-family: 'IberPangea' !important;
+  font-weight: normal;
+  font-style: normal;
+  text-align: left;
+  text-wrap: balance;
+  margin-bottom: 16px;
+}
+
+#subelectric .subelectric_title strong {
+  font-family: 'IberPangea Bold' !important;
+  font-weight: normal;
+  font-style: normal;
+}
+
+#subelectric .subelectric_text {
+  display: block;
+  color: var(--subelectric-forest) !important;
+  font-size: 18px;
+  line-height: 1.33;
+  font-family: 'IberPangeaText' !important;
+  font-weight: normal;
+  font-style: normal;
+  text-align: left;
+  margin-bottom: 24px;
+}
+
+#subelectric .subelectric_text strong {
+  font-family: 'IberPangeaText Bold' !important;
+  font-weight: normal;
+  font-style: normal;
+}
+
+#subelectric .subelectric_media {
+  position: relative;
+  width: 258px;
+  max-width: 100%;
+  height: 392px;
+  margin: 0 auto;
+  overflow: visible;
+}
+
+#subelectric .subelectric_media::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: url('/estaticos/subestacion-electrica/images/mobile-lines.svg') center / 100% 100% no-repeat;
+}
+
+#subelectric .subelectric_media_art {
+  position: absolute;
+  left: 0;
+  top: 86px;
+  width: 258px;
+  height: 258px;
+  max-width: 100%;
+  pointer-events: none;
+}
+
+#subelectric .subelectric_media_base,
+#subelectric .subelectric_media_state {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
+
+#subelectric .subelectric_media_base {
+  opacity: 1;
+  transition: opacity 160ms ease;
+}
+
+#subelectric .subelectric_media_art.active .subelectric_media_base {
+  opacity: 0;
+}
+
+#subelectric .subelectric_media_state {
+  opacity: 0;
+  transition: opacity 160ms ease;
+}
+
+#subelectric .subelectric_media_state.active {
+  opacity: 1;
+}
+
+#subelectric .subelectric_media_lines {
+  display: none;
+}
+
+#subelectric .subelectric_media_link {
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  background: var(--subelectric-green-1);
+  color: var(--subelectric-white) !important;
+  text-align: center;
+  text-decoration: none;
+  position: absolute;
+  z-index: 3;
+}
+
+#subelectric .subelectric_media_number {
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--subelectric-green-1);
+  color: var(--subelectric-white) !important;
+  font-size: 20px;
+  line-height: 1;
+  font-weight: bold;
+}
+
+#subelectric .subelectric_media_label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+#subelectric .subelectric_media_link:focus-visible {
+  outline: 3px solid var(--subelectric-dark);
+  outline-offset: 3px;
+}
+
+#subelectric .subelectric_media_link:nth-of-type(1) {
+  left: 6px;
+  top: 86px;
+}
+
+#subelectric .subelectric_media_link:nth-of-type(2) {
+  left: 60px;
+  top: 344px;
+}
+
+#subelectric .subelectric_media_link:nth-of-type(3) {
+  left: 106px;
+  top: 302px;
+}
+
+#subelectric .subelectric_media_link:nth-of-type(4) {
+  left: 41px;
+  top: 41px;
+}
+
+#subelectric .subelectric_media_link:nth-of-type(5) {
+  left: 148px;
+  top: 302px;
+}
+
+#subelectric .subelectric_media_link:nth-of-type(6) {
+  left: 190px;
+  top: 302px;
+}
+
+#subelectric .subelectric_media_link:nth-of-type(7) {
+  left: 14px;
+  top: 265px;
+}
+
+#subelectric .subelectric_media_link:nth-of-type(8) {
+  left: 91px;
+  top: 64px;
+}
+
+#subelectric .subelectric_media_link:nth-of-type(9) {
+  left: 154px;
+  top: 0;
+}
+
+#subelectric .subelectric_media_link:nth-of-type(10) {
+  left: 226px;
+  top: 233px;
+}
+
+#subelectric .subelectric_media_link:nth-of-type(11) {
+  left: 226px;
+  top: 140px;
+}
+
+#subelectric .subelectric_media_link:nth-of-type(12) {
+  left: 193px;
+  top: 12px;
+}
+
+.lista-subestacion > li[id^="subestacion-electrica-"] {
+  scroll-margin-top: 140px;
+}
+
+@media (min-width: 700px) {
+  #subelectric {
+  }
+
+  #subelectric .subelectric_media {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 525 / 577;
+  }
+
+  #subelectric .subelectric_media::before {
+    content: none;
+  }
+
+  #subelectric .subelectric_media_art {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 525 / 577;
+  }
+
+  #subelectric .subelectric_media_base,
+  #subelectric .subelectric_media_state {
+    position: absolute;
+    left: 0.19%;
+    top: 9.36%;
+    width: 99.43%;
+    height: 90.47%;
+  }
+
+  #subelectric .subelectric_media_lines {
+    display: block;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  #subelectric .subelectric_media_link {
+    width: auto;
+    min-width: auto;
+    height: auto;
+    min-height: 51px;
+    gap: 10px;
+    justify-content: flex-start;
+    border: 1px solid var(--subelectric-sand-3);
+    border-radius: 15px;
+    background: var(--subelectric-white);
+    color: var(--subelectric-forest) !important;
+    padding: 10px;
+    font-size: 14px;
+    line-height: 1.1;
+    font-family: 'IberPangea Medium' !important;
+    font-weight: normal;
+    font-style: normal;
+    text-align: left;
+  }
+
+  #subelectric .subelectric_media_number {
+    width: 31px;
+    min-width: 31px;
+    height: 31px;
+    border: 1px solid var(--subelectric-green);
+    background: var(--subelectric-white);
+    color: var(--subelectric-dark) !important;
+    font-size: 16px;
+    padding-top: 3px;
+  }
+
+  #subelectric .subelectric_media_label {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+    display: block;
+  }
+
+  #subelectric .subelectric_media_link:hover,
+  #subelectric .subelectric_media_link:focus-visible,
+  #subelectric .subelectric_media_link.active {
+    border-color: var(--subelectric-green-1);
+    background: var(--subelectric-orange-light);
+    color: var(--subelectric-dark) !important;
+  }
+
+  #subelectric .subelectric_media_link:hover .subelectric_media_number,
+  #subelectric .subelectric_media_link:focus-visible .subelectric_media_number,
+  #subelectric .subelectric_media_link.active .subelectric_media_number {
+    background: var(--subelectric-green);
+    color: var(--subelectric-white) !important;
+  }
+
+  #subelectric .subelectric_media_link:nth-of-type(1) {
+    top: 0;
+    left: 0.29%;
+    width: 33.33%;
+  }
+
+  #subelectric .subelectric_media_link:nth-of-type(2) {
+    top: 85.18%;
+    left: 0.1%;
+    width: 29.52%;
+  }
+
+  #subelectric .subelectric_media_link:nth-of-type(3) {
+    top: calc(94.02% - 53px);
+    left: 31.71%;
+    width: 39.62%;
+  }
+
+  #subelectric .subelectric_media_link:nth-of-type(4) {
+    top: 10.83%;
+    left: 11.12%;
+    width: 34.29%;
+  }
+
+  #subelectric .subelectric_media_link:nth-of-type(5) {
+    top: 85.18%;
+    right: 0.1%;
+    left: auto;
+    width: 26.48%;
+  }
+
+  #subelectric .subelectric_media_link:nth-of-type(6) {
+    top: calc(75.86% - 53px);
+    right: auto;
+    left: 60%;
+    width: 30.28%;
+  }
+
+  #subelectric .subelectric_media_link:nth-of-type(7) {
+    top: calc(77.61% - 53px);
+    left: 0.1%;
+    width: 22.86%;
+  }
+
+  #subelectric .subelectric_media_link:nth-of-type(8) {
+    top: 21.4%;
+    left: 25.81%;
+    width: 29.52%;
+  }
+
+  #subelectric .subelectric_media_link:nth-of-type(9) {
+    top: 0;
+    left: 69.9%;
+    width: 29.9%;
+  }
+
+  #subelectric .subelectric_media_link:nth-of-type(10) {
+    top: 0;
+    left: 41.3%;
+    width: 26.48%;
+  }
+
+  #subelectric .subelectric_media_link:nth-of-type(11) {
+    top: 28.68%;
+    right: 0.1%;
+    left: auto;
+    width: 30.67%;
+  }
+
+  #subelectric .subelectric_media_link:nth-of-type(12) {
+    top: 58.32%;
+    right: 0.1%;
+    left: auto;
+    width: 25.71%;
+  }
+}
+
+/* ── Padding estandarizado del módulo: 16 móvil / 24 tablet / 36 desk ── */
+@media (min-width: 500px) {
+  #subelectric { padding: 24px; }
+}
+@media (min-width: 700px) {
+  #subelectric { padding: 36px; }
+}

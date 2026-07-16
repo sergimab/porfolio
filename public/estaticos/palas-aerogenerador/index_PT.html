@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title></title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- INICIO DE MODULO -->
+  <link rel="stylesheet" href="/estaticos/fonts/fonts.css">
+    <link rel="stylesheet" href="/estaticos/palas-aerogenerador/styles.css?t=1039">
+  <section id="aeroblades" class="aeroblades">
+    <h3 class="aeroblades_title">Sabe como as <strong>pás de um aerogerador</strong> são construídas?</h3>
+    <div id="aerobladesSwiper" class="aeroblades_swiper swiper">
+      <div class="swiper-wrapper">
+        <div class="aeroblades_item swiper-slide">
+            <img class="aeroblades_item_image" src="/estaticos/palas-aerogenerador/images/animacion-1.gif" alt="Ilustração">
+            <div class="aeroblades_item_content">
+                <div class="aeroblades_item_header">
+                    <span class="aeroblades_item_number">1</span>
+                    <h4 class="aeroblades_item_title">Fabricação da viga</h4>
+                </div>
+                <div class="aeroblades_item_text_wrapper">
+                    <p class="aeroblades_item_text"><strong>É a parte interior da pá</strong>, sendo composta por materiais formados por fibra de vidro e carbono pré-impregnados com resina epóxi, um polímero termoestável que se endurece ao 
+                        ser misturado com um agente catalisador.</p>
+                </div>
+            </div>
+        </div>
+        <div class="aeroblades_item swiper-slide">
+            <img class="aeroblades_item_image" src="/estaticos/palas-aerogenerador/images/animacion-2.gif" alt="Ilustração">
+            <div class="aeroblades_item_content">
+                <div class="aeroblades_item_header">
+                    <span class="aeroblades_item_number">2</span>
+                    <h4 class="aeroblades_item_title">Fabricação das conchas</h4>
+                </div>
+                <div class="aeroblades_item_text_wrapper">
+                    <p class="aeroblades_item_text"><strong>Revestem as vigas</strong> e são feitas de fibra de vidro. Além disso, são cobertas por uma camada de tinta, que funciona como proteção.</p>
+                </div>
+            </div>
+        </div>
+        <div class="aeroblades_item swiper-slide">
+            <img class="aeroblades_item_image" src="/estaticos/palas-aerogenerador/images/animacion-3.gif" alt="Ilustração">
+            <div class="aeroblades_item_content">
+                <div class="aeroblades_item_header">
+                    <span class="aeroblades_item_number">3</span>
+                    <h4 class="aeroblades_item_title">Montagem e cura</h4>
+                </div>
+                <div class="aeroblades_item_text_wrapper">
+                    <p class="aeroblades_item_text">Depois de obtidas as duas conchas, <strong>o passo seguinte consiste em colar a viga entre as duas conchas, e passá-las por um forno</strong>, para assim formarem uma única estrutura firme e resistente.</p>
+                </div>
+            </div>
+        </div>
+        <div class="aeroblades_item swiper-slide">
+            <img class="aeroblades_item_image" src="/estaticos/palas-aerogenerador/images/animacion-4.gif" alt="Ilustração">
+            <div class="aeroblades_item_content">
+                <div class="aeroblades_item_header">
+                    <span class="aeroblades_item_number">4</span>
+                    <h4 class="aeroblades_item_title">Acabamento</h4>
+                </div>
+                <div class="aeroblades_item_text_wrapper">
+                    <p class="aeroblades_item_text">Depois de terminadas as bordas de ataque e saída da pá, <strong>a estrutura passa por uma nova revisão</strong> antes de a pá ser transferida para o parque eólico de destino.</p>
+                </div>
+            </div>
+        </div>
+        <div class="aeroblades_item swiper-slide">
+            <img class="aeroblades_item_image" src="/estaticos/palas-aerogenerador/images/animacion-5.gif" alt="Ilustração">
+            <div class="aeroblades_item_content">
+                <div class="aeroblades_item_header">
+                    <span class="aeroblades_item_number">5</span>
+                    <h4 class="aeroblades_item_title">Transporte e montajem</h4>
+                </div>
+                <div class="aeroblades_item_text_wrapper">
+                    <p class="aeroblades_item_text">As pás de um aerogerador são estruturas muito pesadas e volumosas. As pás do parque eólico marinho de <strong>Saint Brieuc</strong>, por exemplo, têm um comprimento de 82 m. Para seu transporte são necessários <strong>meios especializados</strong> capazes de carregar essas estruturas e levá-las ao seu destino. A partir daí, uma <strong>experiente equipe humana</strong> efetua a montagem das pás e do rotor sobre a nacele.</p>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="aeroblades_navigation swiper-controls">
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+      </div>
+    </div>
+  </section>
+  <script src="/estaticos/palas-aerogenerador/swiper.min.js"></script>
+  <script>
+    const swiperAeroBlades = {
+        autoHeight: true,
+        spaceBetween: 20,
+        effect: 'fade',
+        navigation: {
+            nextEl: '#aerobladesSwiper .swiper-button-next',
+            prevEl: '#aerobladesSwiper .swiper-button-prev',
+        },
+        pagination: {
+            el: '#aerobladesSwiper .swiper-pagination',
+            type: 'fraction',
+            renderFraction: function (currentClass, totalClass) {
+                return '<span class="' + currentClass + '"></span> de <span class="' + totalClass + '"></span>';
+            },
+        },
+    };
+    swiper = new Swiper('#aerobladesSwiper', swiperAeroBlades);
+  </script>
+  <!-- FIN DE MODULO -->
+
+</body>
+</html>

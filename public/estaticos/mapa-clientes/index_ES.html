@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iberdrola</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- INICIO DE MODULO -->
+    <link rel="stylesheet" href="/estaticos/fonts/fonts.css">
+    <link rel="stylesheet" href="/estaticos/mapa-clientes/styles.css?t=1329">
+    <section id="cmap" class="cmap cmap-es">
+      <div class="cmap_dropdown">
+        <button class="cmap_dropdown_toggle" type="button" aria-expanded="false" aria-controls="cmap-dropdown-list">
+          <span class="cmap_dropdown_label">Países</span>
+          <span class="cmap_dropdown_icon" aria-hidden="true"></span>
+        </button>
+      
+        <div class="cmap_dropdown_panel" id="cmap-dropdown-list">
+          <ul class="cmap_dropdown_list">
+            <li class="cmap_dropdown_item" data-area="espana">España</li>
+            <li class="cmap_dropdown_item" data-area="portugal">Portugal</li>
+            <li class="cmap_dropdown_item" data-area="francia">Francia</li>
+            <li class="cmap_dropdown_item" data-area="reino-unido">Reino Unido</li>
+            <li class="cmap_dropdown_item" data-area="alemania">Alemania</li>
+            <li class="cmap_dropdown_item" data-area="italia">Italia</li>
+            <li class="cmap_dropdown_item" data-area="norte-america">Norteamérica</li>
+            <!--<li class="cmap_dropdown_item" data-area="mexico">México</li>-->
+            <li class="cmap_dropdown_item" data-area="brasil">Brasil</li>
+          </ul>
+        </div>
+      </div>
+      <div class="cmap_map">
+        <svg viewBox="0 0 1280 652" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <g stroke="none" fill="none" fill-rule="evenodd" stroke-width="1">
+            <g transform="translate(0, 100.426)">
+              <path class="cmap_area" data-area="norte-america" d="M92.4812,66.867 L118.91,77.956 L131.7,94.177 L121.048,90.898 L107.275,79.654 L92.0766,72.113 L51.586,67.426 L2.5427,99.866 L28.5476,77.667 L1.27135,63.588 L17.4714,40.116 L0,32.864 L10.6524,28.602 L2.11892,13.23 L33.6523,2.84217094e-14 L92.4812,10.241 L92.4812,66.867 Z M150.154,125.768 L153.429,166.019 L176.448,198.46 L216.515,203.146 L246.777,223.204 L257.853,209.974 L296.206,207.833 L304.739,225.75 L308.996,226.599 L306.01,205.268 L323.058,187.35 L336.272,164.303 L343.091,160.041 L344.363,153.637 L357.153,145.537 L367.382,147.253 L352.029,134.447 L343.072,144.688 L331.418,144.264 L301.021,160.195 L298.748,139.712 L255.85,125.768 L150.135,125.768 L150.154,125.768 Z" stroke="#FFFFFF" stroke-width="0.663755" fill="#00A443" fill-rule="nonzero"></path>
+              <!--<polygon class="cmap_area" data-area="mexico" stroke="#FFFFFF" stroke-width="0.663755" fill="#00A443" fill-rule="nonzero" points="203.859 234.737 201.028 234.448 176.448 198.459 216.515 203.146 246.777 223.204 249.05 244.111 257.006 254.082 271.78 250.379 280.025 241.565 286.266 241.276 281.45 254.352 278.31 255.779 271.491 256.628 271.78 261.758 266.945 268.296 258.431 262.317 249.339 263.745 220.059 247.814 219.771 239 190.799 203.146 186.253 203.146 192.494 214.236"></polygon>-->
+              <path class="cmap_area" data-area="italia" d="M642.745,142.972 L643.284,148.835 L647.021,151.708 L650.103,157.475 L656.498,159.288 L655.535,160.561 L664.589,166.328 L664.473,167.813 L659.349,166.328 L658.386,168.565 L660.197,171.014 L657.115,175.913 L654.88,175.585 L656.479,172.596 L655.516,169.606 L652.954,166.077 L642.822,160.098 L635.04,149.741 L629.916,147.928 L625.755,150.378 L623.405,146 L623.906,140.522 L626.525,140.175 L628.413,138.323 L630.513,139.789 L631.861,137.803 L634.385,138.478 L635.772,137.475 L635.733,135.797 L641.762,135.16 L647.734,137.648 L647.349,141.274 L642.687,142.914 L642.745,142.972 Z M649.352,175.971 L644.17,175.682 L643.535,177.321 L652.627,181.448 L652.761,178.459 L654.476,175.257 L649.352,175.971 Z M628.606,169.433 L629.53,172.056 L633.152,170.783 L633.441,165.305 L632.304,162.528 L628.394,163.801 L628.606,169.414 L628.606,169.433 Z" stroke="#FFFFFF" stroke-width="0.663755" fill="#00A443" fill-rule="nonzero"></path>
+              <path class="cmap_area" data-area="francia" d="M632.228,154.216 L632.786,158.054 L631.149,161.333 L629.222,156.993 L632.208,154.216 L632.228,154.216 Z M609.786,156.839 L612.271,151.786 L620.304,153.637 L625.813,150.436 L623.463,146.058 L623.964,140.58 L622.615,138.382 L621.402,138.169 L620.728,139.192 L620.015,139.018 L621.652,135.932 L625.986,132.441 L627.123,125.035 L621.729,122.894 L619.418,122.528 L614.082,120.349 L607.59,114.428 L604.47,115.508 L603.198,120.194 L597.593,123.82 L591.775,121.834 L592.989,126.52 L581.123,127.523 L582.837,131.284 L589.233,132.923 L594.126,138.748 L593.991,146.424 L592.276,152.403 L609.825,156.82 L609.786,156.839 Z" stroke="#FFFFFF" stroke-width="0.663755" fill="#00A443" fill-rule="nonzero"></path>
+              <polygon class="cmap_area" data-area="portugal" stroke="#FFFFFF" stroke-width="0.663755" fill="#00A443" fill-rule="nonzero" points="566.021 178.536 565.462 171.285 566.31 158.478 574.689 159.327 571.838 178.961"></polygon>
+              <path class="cmap_area" data-area="espana" d="M571.838,178.961 L574.689,159.327 L566.31,158.478 L567.022,152.924 L571.434,151.362 L592.257,152.422 L609.805,156.839 L607.956,160.6 L598.151,167.717 L597.015,173.541 L590.33,180.947 L577.964,184.072 L574.689,180.523 L571.838,178.961 Z M608.11,169.857 L609.921,170.07 L610.884,168.835 L609.497,167.871 L607.359,169.144 L608.11,169.838 L608.11,169.857 Z" stroke="#FFFFFF" stroke-width="0.663755" fill="#00A443" fill-rule="nonzero"></path>
+              <path class="cmap_area" data-area="reino-unido" d="M603.256,113.965 L579.254,118.806 L586.208,112.538 L581.084,110.686 L587.904,100.02 L585.053,96.028 L581.219,96.317 L578.811,90.204 L578.677,78.824 L587.48,76.973 L584.918,82.103 L591.024,82.392 L588.327,89.509 L593.721,95.488 L598.98,102.605 L604.104,105.884 L603.256,113.984 L603.256,113.965 Z M573.842,94.042 L569.584,98.034 L576.404,99.461 L578.253,96.896 L576.538,93.907 L573.842,94.042 Z" stroke="#FFFFFF" stroke-width="0.663755" fill="#00A443" fill-rule="nonzero"></path>
+              <path class="cmap_area" data-area="alemania" d="M625.986,132.441 L627.123,125.035 L621.729,122.894 L621.729,121.756 L620.458,119.191 L619.899,115.912 L622.307,109.644 L623.868,102.952 L630.398,99.403 L629.82,95.7 L633.094,96.279 L636.928,98.554 L643.882,97.706 L649.988,100.117 L651.702,114.909 L642.321,119.461 L649.718,127.427 L645.172,129.702 L644.171,132.402 L632.94,132.827 L625.986,132.402 L625.986,132.441 Z M646.328,96.433 L646.078,98.149 L647.002,98.149 L647.811,98.014 L647.561,97.301 L647.445,96.452 L646.309,96.452 L646.328,96.433 Z" stroke="#FFFFFF" stroke-width="0.663755" fill="#00A443" fill-rule="nonzero"></path>
+              <polygon class="cmap_area" data-area="brasil" stroke="#FFFFFF" stroke-width="0.663755" fill="#00A443" fill-rule="nonzero" points="407.622 447.238 391.98 433.853 405.907 420.488 402.498 416.495 403.5 410.671 399.223 408.684 397.952 404.132 390.709 403.265 390.131 394.451 391.268 385.347 383.601 379.793 380.48 372.117 365.417 364.575 362.855 357.459 348.08 361.027 333.44 350.631 338.141 339.252 347.367 336.552 347.656 315.356 356.883 314.642 363.433 318.345 369.385 313.504 366.977 306.677 373.372 306.542 380.769 302.55 383.062 303.205 383.274 309.705 385.527 316.532 395.101 314.102 402.363 312.907 409.394 313.119 413.324 306.175 420.046 319.85 470.13 340.12 472.692 350.786 458.611 370.844 447.958 404.981 424.939 414.798 422.82 426.736"></polygon>
+              <circle class="cmap_dot" data-area="norte-america" fill="#FF9C1A" fill-rule="nonzero" cx="250.5" cy="173.074" r="7.5"></circle>
+              <!--<circle class="cmap_dot" data-area="mexico" fill="#FF9C1A" fill-rule="nonzero" cx="238.5" cy="241.074" r="7.5"></circle>-->
+              <circle class="cmap_dot" data-area="brasil" fill="#FF9C1A" fill-rule="nonzero" cx="431.5" cy="354.074" r="7.5"></circle>
+              <circle class="cmap_dot" data-area="portugal" fill="#FF9C1A" fill-rule="nonzero" cx="561.5" cy="167.074" r="7.5"></circle>
+              <circle class="cmap_dot" data-area="espana" fill="#FF9C1A" fill-rule="nonzero" cx="596.5" cy="174.074" r="6.83624"></circle>
+              <circle class="cmap_dot" data-area="italia" fill="#FF9C1A" fill-rule="nonzero" cx="648.5" cy="157.074" r="7.5"></circle>
+              <circle class="cmap_dot" data-area="francia" fill="#FF9C1A" fill-rule="nonzero" cx="602.5" cy="140.074" r="7.5"></circle>
+              <circle class="cmap_dot" data-area="reino-unido" fill="#FF9C1A" fill-rule="nonzero" cx="592.5" cy="105.074" r="7.5"></circle>
+              <circle class="cmap_dot" data-area="alemania" fill="#FF9C1A" fill-rule="nonzero" cx="636.5" cy="111.074" r="7.5"></circle>
+            </g>
+          </g>
+        </svg> 
+      </div>
+      <div class="cmap_modal" data-area="norte-america">
+        <img class="cmap_logo" src="/estaticos/mapa-clientes/images/avangrid.png" alt="Logo Avangrid">
+        <a class="cmap_close" href="#"><span>Cerrar</span></a>
+        <div class="cmap_content">
+          <p class="cmap_text"><strong>Contacta con tu comercializadora</strong> para nuevos contratos, tarifas, ofertas y servicios.</p>
+          <div class="cmap_info">
+            <div class="cmap_data">
+              <ul class="cmap_list">
+                <li class="cmap_list-subtitle">United Iluminating (UI)</li>
+                <li class="cmap_list-link"><a href="https://www.uinet.com/" target="_blank">www.uinet.com</a></li>
+                <li class="cmap_list-subtitle">New York State Electric & Gas (NYSEG)</li>
+                <li class="cmap_list-link"><a href="https://www.nyseg.com/" target="_blank">www.nyseg.com</a></li>
+                <li class="cmap_list-subtitle">Rochester Gas and Electric (RG&E)</li>
+                <li class="cmap_list-link"><a href="https://www.rge.com/" target="_blank">www.rge.com</a></li>
+                <li class="cmap_list-subtitle">Connecticut Natural Gas (CNG)</li>
+                <li class="cmap_list-link"><a href="https://www.cngcorp.com/" target="_blank">www.cngcorp.com</a></li>
+              </ul>
+              <ul class="cmap_list">
+                <li class="cmap_list-subtitle">Southern Connecticut (SCG)</li>
+                <li class="cmap_list-link"><a href="https://www.soconngas.com/"target="_blank">www.soconngas.com</a></li>
+                <li class="cmap_list-subtitle">Berkshire Gas</li>
+                <li class="cmap_list-link"><a href="https://www.berkshiregas.com/" target="_blank">www.berkshiregas.com</a></li>
+                <li class="cmap_list-subtitle">Maine Natural Gas (MNG)</li>
+                <li class="cmap_list-link"><a href="https://www.mainenaturalgas.com/" target="_blank">www.mainenaturalgas.com</a></li>
+                <li class="cmap_list-subtitle">Central Maine Power (CMP)</li>
+                <li class="cmap_list-link"><a href="https://www.cmpco.com/" target="_blank">www.cmpco.com</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div><!-- norte-america -->
+		<!--
+      <div class="cmap_modal" data-area="mexico">
+        <img class="cmap_logo" src="/estaticos/mapa-clientes/images/iberdrola-mexico.png" alt="Logo Iberdrola México">
+        <a class="cmap_close" href="#"><span>Cerrar</span></a>
+        <div class="cmap_content">
+          <p class="cmap_text"><strong>Contacta con tu comercializadora</strong> para nuevos contratos, tarifas, ofertas y servicios.</p>
+          <div class="cmap_info">
+            <p class="cmap_text"><strong>Iberdrola México</strong></p>
+            <nav class="cmap_social">
+              <a class="cmap_social-logo" href="https://www.iberdrolamexico.com/clientes/" target="_blank">www.iberdrolamexico.com/clientes</a>
+            </nav>
+          </div>
+        </div>
+      </div><!-- mexico -->
+      <div class="cmap_modal" data-area="brasil">
+        <img class="cmap_logo" src="/estaticos/mapa-clientes/images/neoenergia.png" alt="Logo Neoenergia">
+        <a class="cmap_close" href="#"><span>Cerrar</span></a>
+        <div class="cmap_content">
+          <p class="cmap_text"><strong>Contacta con tu comercializadora y distribuidora</strong> para nuevos contratos, tarifas, ofertas y servicios.</p>
+          <div class="cmap_info">
+            <p class="cmap_text"><strong>Distribuidora</strong></p>
+            <p class="cmap_text">Neoenergia cuenta con distintas distribuidoras en Brasil según la región donde operan:</p>
+            <div class="cmap_data">
+              <ul class="cmap_list">
+                <li class="cmap_list-subtitle">Neoenergia Coelba (BA)</li>
+                <li class="cmap_list-link"><a href="https://www.neoenergia.com/web/bahia" target="_blank">www.neoenergia.com/web/bahia</a></li>
+                <li class="cmap_list-subtitle">Neoenergia Pernambuco (PE)</li>
+                <li class="cmap_list-link"><a href="https://www.neoenergia.com/pernambuco" target="_blank">www.neoenergia.com/pernambuco</a></li>
+                <li class="cmap_list-subtitle">Neoenergia Elektro (SP y MS)</li>
+                <li class="cmap_list-link"><a href="https://www.neoenergia.com/sp" target="_blank">www.neoenergia.com/sp</a></li>
+              </ul>
+              <ul class="cmap_list">
+                <li class="cmap_list-subtitle">Neoenergia Cosern (RN)</li>
+                <li class="cmap_list-link"><a href="https://www.neoenergia.com/rn" target="_blank">www.neoenergia.com/rn</a></li>
+                <li class="cmap_list-subtitle">Neoenergia Brasilia (DF)</li>
+                <li class="cmap_list-link"><a href="hhttps://www.neoenergia.com/brasilia" target="_blank">www.neoenergia.com/brasilia</a></li>
+              </ul>
+            </div>
+            <p class="cmap_text"><strong>Comercializadora</strong></p>
+            <p class="cmap_text">Contacta con Neoenergia para nuevos servicios que quieras dar de alta o para dudas relacionadas con servicios contratados.</p>
+            <p class="cmap_link"><a href="https://www.neoenergia.com/produtos-e-solucoes" target="_blank">www.neoenergia.com/produtos-e-solucoes</a></p>
+          </div>
+        </div>
+      </div><!-- brasil -->
+      <div class="cmap_modal" data-area="portugal">
+        <img class="cmap_logo" src="/estaticos/mapa-clientes/images/iberdrola.png" alt="Logo Iberdrola">
+        <a class="cmap_close" href="#"><span>Cerrar</span></a>
+        <div class="cmap_content">
+          <p class="cmap_text"><strong>Contacta con nosotros</strong> para nuevos contratos, tarifas, productos y servicios.</p>
+          <div class="cmap_info">
+            <p class="cmap_text"><strong>Iberdrola Portugal</strong></p>
+            <nav class="cmap_social">
+              <a class="cmap_social-logo" href="https://www.iberdrola.pt/" target="_blank">www.iberdrola.pt</a>
+            </nav>
+          </div>
+        </div>
+      </div><!-- portugal -->
+      <div class="cmap_modal" data-area="espana">
+        <img class="cmap_logo" src="/estaticos/mapa-clientes/images/iberdrola-espana.png" alt="Logo Iberdrola España">
+        <a class="cmap_close" href="#"><span>Cerrar</span></a>
+        <div class="cmap_content">
+          <p class="cmap_text"><strong>Contacta con nosotros estés donde estés</strong> para ayudarte con tus dudas sobre facturas, averías, consumos, contratos y todo aquello que necesites relacionadas con la red de suministro o cualquier producto que tengas contratado.</p>
+          <p class="cmap_text">Si tienes contratada la luz, el gas u otro servicio con <strong>Iberdrola Clientes</strong>, podrás resolver cualquier duda sobre tus contratos y consumo.</p>
+          <div class="cmap_info">
+            <p class="cmap_text"><strong>Iberdrola Clientes</strong></p>
+            <p class="cmap_text">Iberdrola Clientes, nuestra comercializadora de luz, gas, productos y servicios en el mercado libre en España.</p>
+            <div class="cmap_data">
+              <ul class="cmap_list">
+                <li class="cmap_list-title"><img src="/estaticos/mapa-clientes/images/ico-telefono.svg" alt="Icono de un teléfono"> Atención al cliente</li>
+                <li class="cmap_list-item"><a href="tel:+34900225235">+34 900 225 235</a></li>
+                <li class="cmap_list-item"><a href="tel:+34946460125">+34 94 646 01 25</a></li>
+                <li class="cmap_list-item"><a href="tel:+34919195273">+34 91 919 52 73</a></li>
+                <li class="cmap_list-item"><img src="/estaticos/mapa-clientes/images/ico-whatsapp.svg" alt="Icono de un WhatsApp"><a href="tel:+34900225235">+34 900 225 235</a></li>
+                <li class="cmap_list-item"><img src="/estaticos/mapa-clientes/images/ico-email.svg" alt="Icono de un email"><a href="mailto:clientes@tuiberdrola.es target="_blank"">clientes@tuiberdrola.es</a></li>
+              </ul>
+              <ul class="cmap_list">
+                <li class="cmap_list-title"><img src="/estaticos/mapa-clientes/images/ico-telefono.svg" alt="Icono de un teléfono"> Asistencia técnica</li>
+                <li class="cmap_list-item"><a href="tel:+34900225235">+34 900 225 235</a></li>
+                <li class="cmap_list-item"><a href="tel:+34946460125">+34 94 646 01 25</a></li>
+                <li class="cmap_list-item"><a href="tel:+34919195273">+34 91 919 52 73</a></li>
+                <li class="cmap_list-item cmap_list-item-location"><img src="/estaticos/mapa-clientes/images/ico-direccion.svg" alt="Icono de un Mapa"> <span>Puntos de atención: encuentra tu punto más cercano en <a href="https://oficinas.iberdrola.es/" target="_blank">oficinas.iberdrola.es</a></span></li>
+              </ul>
+            </div>
+            <nav class="cmap_social">
+              <a class="cmap_social-logo" href="https://www.iberdrola.es/">www.iberdrola.es</a>
+              <a class="cmap_social-item" href="https://x.com/tuiberdrola" target="_blank"><img src="/estaticos/mapa-clientes/images/ico-x.svg" alt="Icono de X"></a>
+              <a class="cmap_social-item" href="https://www.facebook.com/IberdrolaClientes" target="_blank"><img src="/estaticos/mapa-clientes/images/ico-fb.svg" alt="Icono de Facebook"></a>
+              <a class="cmap_social-item" href="https://www.youtube.com/channel/UC8mtKiGt4-YsPyjXcC3BKzw" target="_blank"><img src="/estaticos/mapa-clientes/images/ico-yt.svg" alt="Icono de Youtube"></a>
+              <a class="cmap_social-item" href="https://wa.me/34601225235" target="_blank"><img src="/estaticos/mapa-clientes/images/ico-wa.svg" alt="Icono de WhatsApp"></a>
+              <a class="cmap_social-item" href="https://www.instagram.com/iberdrolaclientes" target="_blank"><img src="/estaticos/mapa-clientes/images/ico-in.svg" alt="Icono de Instagram"></a>
+            </nav>
+          </div>
+          <p class="cmap_text"><strong>Si eres cliente de Curenergía</strong> podrás consultar tu contrato, tus facturas y realizar trámites y gestiones sobre tu tarifa regulada de luz (PVPC), exclusiva para particulares y microempresas</p>
+          <div class="cmap_info">
+            <p class="cmap_text"><strong>Curenergía</strong></p>
+            <p class="cmap_text">Curenergía es la Comercializadora de Último Recurso de luz y gas, en el mercado regulado, de Iberdrola en España.</p>
+            <div class="cmap_data">
+              <ul class="cmap_list">
+                <li class="cmap_list-title"><img src="/estaticos/mapa-clientes/images/ico-telefono.svg" alt="Icono de un teléfono"> Atención al cliente</li>
+                <li class="cmap_list-item"><a href="tel:+34800760719">+34 800 760 719</a></li>
+                <li class="cmap_list-item"><a href="tel:+34911253657">+34 911 253 657</a></li>
+                <li class="cmap_list-item"><a href="tel:+34946460196">+34 946 460 196</a></li>
+                <li class="cmap_list-item"><img src="/estaticos/mapa-clientes/images/ico-email.svg" alt="Icono de un email"><a href="mailto:clientes@tucurenergia.es">clientes@tucurenergia.es</a></li>
+              </ul>
+            </div>
+            <nav class="cmap_social">
+              <a class="cmap_social-logo" href="https://www.curenergia.es/" target="_blank">www.curenergia.es</a>
+            </nav>
+          </div>
+          <p class="cmap_text"><strong>Si tu distribuidora es i-DE</strong> aquí puedes contactar con nosotros (nueva instalación, incidencias en la red, consultas acerca del contador).</p>
+          <div class="cmap_info">
+            <p class="cmap_text"><strong>i-DE</strong></p>
+            <p class="cmap_text">i-DE Redes Eléctricas Inteligentes es la filial de Iberdrola encargada de la distribución de electricidad en España.</p>
+            <div class="cmap_data">
+              <ul class="cmap_list cmap_list-expand">
+                <li class="cmap_list-title"><img src="/estaticos/mapa-clientes/images/ico-telefono.svg" alt="Icono de un teléfono"> Atención al cliente <a href="tel:+34900171171">+34 900 171 171</a></li>
+                <li class="cmap_list-item"><img src="/estaticos/mapa-clientes/images/ico-email.svg" alt="Icono de un email"><a href="mailto:contacto@i-de.es">contacto@i-de.es</a></li>
+              </ul>
+              <p class="cmap_text-info">Si estás en España, puedes <a href="https://www.i-de.es/averias-cortes-luz/mapa-averias" target="_blank">consultar nuestro mapa de averías, trabajos en curso o programados</a> en la red que te afecten o vayan a afectar.<br>
+                Además, trabajamos de manera continua para mejorar la calidad del servicio y evitar interrupciones de suministro imprevistas. En España puedes consultar los <a href="https://www.i-de.es/averias-cortes-luz/cortes-luz-programados" target="_blank">cortes de luz programados</a> semanalmente en la web de i-DE Redes Eléctricas Inteligentes.</p>
+            </div>
+            <nav class="cmap_social">
+              <a class="cmap_social-logo" href="https://www.i-de.es/" target="_blank">www.i-de.es</a>
+            </nav>
+          </div>
+          <p class="cmap_text"><strong>Si niba es tu comercializadora</strong> podrás realizar consultas y gestiones relacionadas con tu contrato de luz o gas</p>
+          <div class="cmap_info">
+            <p class="cmap_text"><strong>niba</strong></p>
+            <p class="cmap_text">niba es la sprimera neoenergética del mercado español, 100% digital centrada en la agilidad, la inteligencia artificial y la orientación al cliente.</p>
+            <div class="cmap_data">
+              <ul class="cmap_list cmap_list-expand">
+                <li class="cmap_list-title"><img src="/estaticos/mapa-clientes/images/ico-telefono.svg" alt="Icono de un teléfono"> Atención al cliente <a href="tel:+34900926161">+34 900 92 61 61</a> <em> (de lunes a viernes, de 09:00h a 18:00h)</em></li>
+                <li class="cmap_list-item"><img src="/estaticos/mapa-clientes/images/ico-email.svg" alt="Icono de un email"><a href="mailto:hola@niba.es">hola@niba.es</a></li>
+              </ul>
+            </div>
+            <nav class="cmap_social">
+              <a class="cmap_social-logo" href="https://www.niba.es/" target="_blank">www.niba.es</a>
+            </nav>
+          </div>
+          <p class="cmap_text"><strong>Si tienes contratada una solución de climatización con ATuAire</strong> puedes resolver tus dudas en nuestros canales.</p>
+          <div class="cmap_info">
+            <p class="cmap_text"><strong>ATuAire</strong></p>
+            <p class="cmap_text">ATuAire, soluciones de aerotermia adaptadas a las necesidades de cada cliente para mejorar el confort y la eficiencia energética.</p>
+            <div class="cmap_data">
+              <ul class="cmap_list cmap_list-expand">
+                <li class="cmap_list-title"><img src="/estaticos/mapa-clientes/images/ico-telefono.svg" alt="Icono de un teléfono"> Atención al cliente <a href="tel:+34639102020">+34 639 10 20 20</a></li>
+                <li class="cmap_list-item"><img src="/estaticos/mapa-clientes/images/ico-email.svg" alt="Icono de un email"><a href="mailto:info@atuaireclima.es">info@atuaireclima.es</a></li>
+              </ul>
+            </div>
+            <nav class="cmap_social">
+              <a class="cmap_social-logo" href="https://atuaireclima.es/" target="_blank">atuaireclima.es</a>
+            </nav>
+          </div>
+        </div>
+      </div><!-- espana -->
+      <div class="cmap_modal" data-area="italia">
+        <img class="cmap_logo" src="/estaticos/mapa-clientes/images/iberdrola.png" alt="Logo Iberdrola">
+        <a class="cmap_close" href="#"><span>Cerrar</span></a>
+        <div class="cmap_content">
+          <p class="cmap_text"><strong>Contacta con nosotros</strong> para nuevos contratos, tarifas, productos y servicios.</p>
+          <div class="cmap_info">
+            <p class="cmap_text"><strong>Iberdrola Italia</strong></p>
+            <nav class="cmap_social">
+              <a class="cmap_social-logo" href="https://www.iberdrola.it/" target="_blank">www.iberdrola.it</a>
+            </nav>
+          </div>
+        </div>
+      </div><!-- italia -->
+      <div class="cmap_modal" data-area="francia">
+        <img class="cmap_logo" src="/estaticos/mapa-clientes/images/iberdrola.png" alt="Logo Iberdrola">
+        <a class="cmap_close" href="#"><span>Cerrar</span></a>
+        <div class="cmap_content">
+          <p class="cmap_text"><strong>Contacta con nosotros</strong> para nuevos contratos, tarifas, productos y servicios.</p>
+          <div class="cmap_info">
+            <p class="cmap_text"><strong>Iberdrola Francia</strong></p>
+            <nav class="cmap_social">
+              <a class="cmap_social-logo" href="https://www.iberdrola.fr/" target="_blank">www.iberdrola.fr</a>
+            </nav>
+          </div>
+        </div>
+      </div><!-- francia -->
+      <div class="cmap_modal" data-area="reino-unido">
+        <img class="cmap_logo" src="/estaticos/mapa-clientes/images/scottishpower.png" alt="Logo ScottishPower">
+        <a class="cmap_close" href="#"><span>Cerrar</span></a>
+        <div class="cmap_content">
+          <p class="cmap_text"><strong>Contacta con tu comercializadora</strong> para nuevos contratos, tarifas, ofertas y servicios.</p>
+          <div class="cmap_info">
+            <div class="cmap_data">
+              <ul class="cmap_list">
+                <li class="cmap_list-subtitle">ScottishPower</li>
+                <li class="cmap_list-link"><a href="https://www.scottishpower.co.uk/" target="_blank">www.scottishpower.co.uk</a></li>
+              </ul>
+            </div>
+          </div>
+          <p class="cmap_text">Si tu distribuidora es <strong>SP Energy Networks</strong> o <strong>SP Electricity North West</strong> aquí puedes contactar con nosotros (nueva instalación, incidencias en la red y otras consultas).</p>
+          <div class="cmap_info">
+            <div class="cmap_data">
+              <ul class="cmap_list">
+                <li class="cmap_list-subtitle">SP Energy Networks</li>
+                <li class="cmap_list-link"><a href="https://www.spenergynetworks.co.uk/" target="_blank">www.spenergynetworks.co.uk</a></li>
+              </ul>
+              <ul class="cmap_list">
+                <li class="cmap_list-subtitle">SP Energy North West</li>
+                <li class="cmap_list-link"><a href="http://www.enwl.co.uk/" target="_blank">www.enwl.co.uk</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div><!-- reino-unido -->
+      <div class="cmap_modal" data-area="alemania">
+        <img class="cmap_logo" src="/estaticos/mapa-clientes/images/iberdrola.png" alt="Logo Iberdrola">
+        <a class="cmap_close" href="#"><span>Cerrar</span></a>
+        <div class="cmap_content">
+          <p class="cmap_text"><strong>Contacta con nosotros</strong> para nuevos contratos, tarifas, productos y servicios.</p>
+          <div class="cmap_info">
+            <p class="cmap_text"><strong>Iberdrola Alemania</strong></p>
+            <nav class="cmap_social">
+              <a class="cmap_social-logo" href="https://www.iberdrola.de/" target="_blank">www.iberdrola.de</a>
+            </nav>
+          </div>
+        </div>
+      </div><!-- alemania -->
+    </section>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const cmap = document.querySelector('#cmap');
+        if (!cmap) return;
+      
+        const areas = cmap.querySelectorAll('.cmap_area');
+        const dots = cmap.querySelectorAll('.cmap_dot');
+        const modals = cmap.querySelectorAll('.cmap_modal');
+        const closeButtons = cmap.querySelectorAll('.cmap_close');
+      
+        const dropdown = cmap.querySelector('.cmap_dropdown');
+        const dropdownToggle = cmap.querySelector('.cmap_dropdown_toggle');
+        const dropdownLabel = cmap.querySelector('.cmap_dropdown_label');
+        const dropdownItems = cmap.querySelectorAll('.cmap_dropdown_item');
+      
+        const defaultDropdownLabel = 'Países';
+      
+        const getPairElements = (areaName) => {
+          return {
+            area: cmap.querySelector(`.cmap_area[data-area="${areaName}"]`),
+            dot: cmap.querySelector(`.cmap_dot[data-area="${areaName}"]`),
+            modal: cmap.querySelector(`.cmap_modal[data-area="${areaName}"]`),
+            dropdownItem: cmap.querySelector(`.cmap_dropdown_item[data-area="${areaName}"]`)
+          };
+        };
+      
+        const openDropdown = () => {
+          if (!dropdown || !dropdownToggle) return;
+          dropdown.classList.add('is-open');
+          dropdownToggle.setAttribute('aria-expanded', 'true');
+        };
+      
+        const closeDropdown = () => {
+          if (!dropdown || !dropdownToggle) return;
+          dropdown.classList.remove('is-open');
+          dropdownToggle.setAttribute('aria-expanded', 'false');
+        };
+      
+        const clearHover = () => {
+          areas.forEach(el => el.classList.remove('is-hover'));
+          dots.forEach(el => el.classList.remove('is-hover'));
+        };
+      
+        const clearActive = () => {
+          areas.forEach(el => el.classList.remove('is-active'));
+          dots.forEach(el => el.classList.remove('is-active'));
+          modals.forEach(el => el.classList.remove('is-active'));
+          dropdownItems.forEach(el => el.classList.remove('is-active'));
+      
+          cmap.classList.remove('has-active-modal');
+          cmap.removeAttribute('data-area');
+      
+          if (dropdownLabel) {
+            dropdownLabel.textContent = defaultDropdownLabel;
+          }
+        };
+      
+        const setHover = (areaName) => {
+          clearHover();
+      
+          const { area, dot } = getPairElements(areaName);
+      
+          if (area) area.classList.add('is-hover');
+          if (dot) dot.classList.add('is-hover');
+        };
+      
+        const setActive = (areaName) => {
+          clearActive();
+          clearHover();
+      
+          const { area, dot, modal, dropdownItem } = getPairElements(areaName);
+      
+          if (area) area.classList.add('is-active');
+          if (dot) dot.classList.add('is-active');
+          if (modal) modal.classList.add('is-active');
+          if (dropdownItem) {
+            dropdownItem.classList.add('is-active');
+            if (dropdownLabel) {
+              dropdownLabel.textContent = dropdownItem.textContent.trim();
+            }
+          }
+      
+          cmap.classList.add('has-active-modal');
+          cmap.setAttribute('data-area', areaName);
+      
+          closeDropdown();
+        };
+      
+        const bindMapItem = (el) => {
+          const areaName = el.dataset.area;
+          if (!areaName) return;
+      
+          el.addEventListener('mouseenter', () => {
+            setHover(areaName);
+          });
+      
+          el.addEventListener('mouseleave', () => {
+            clearHover();
+          });
+      
+          el.addEventListener('click', (e) => {
+            e.preventDefault();
+            setActive(areaName);
+          });
+        };
+      
+        areas.forEach(bindMapItem);
+        dots.forEach(bindMapItem);
+      
+        dropdownItems.forEach(item => {
+          item.addEventListener('click', () => {
+            const areaName = item.dataset.area;
+            if (!areaName) return;
+            setActive(areaName);
+          });
+        });
+      
+        closeButtons.forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            clearActive();
+            clearHover();
+            closeDropdown();
+          });
+        });
+      
+        if (dropdownToggle) {
+          dropdownToggle.addEventListener('click', () => {
+            dropdown.classList.contains('is-open') ? closeDropdown() : openDropdown();
+          });
+        }
+      
+        document.addEventListener('click', (e) => {
+          if (!dropdown) return;
+          if (!dropdown.contains(e.target)) {
+            closeDropdown();
+          }
+        });
+      
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            closeDropdown();
+          }
+        });
+      });
+    </script>
+    <!-- FIN DE MODULO -->
+  </body>
+</html>

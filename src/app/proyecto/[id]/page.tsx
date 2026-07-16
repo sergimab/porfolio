@@ -4,6 +4,7 @@ import BackCapsule from "@/components/BackCapsule";
 import IlustracionesSistema from "@/components/IlustracionesSistema";
 import ProjectHeroTitle from "@/components/ProjectHeroTitle";
 import LangText from "@/components/LangText";
+import InfografiasViewer from "@/components/InfografiasViewer";
 import "../../page.css";
 import "@/components/SkillDrop.css";
 
@@ -26,6 +27,64 @@ const titles: Record<string, string> = {
   u1: "Proyecto UI/UX 01", u2: "Proyecto UI/UX 02", u3: "Proyecto UI/UX 03",
   d1: "Proyecto 3D 01", d2: "Proyecto 3D 02", d3: "Proyecto 3D 03",
 };
+
+// Infografías: módulos HTML interactivos de la web corporativa de Iberdrola.
+function InfografiasLanding() {
+  return (
+    <main style={{ flex: 1, paddingBottom: "64px" }}>
+      <div className="project-content-wrap">
+        <div
+          className="hover-trail-target"
+          data-trail-hue="142"
+          style={{
+            height: "220px",
+            marginTop: "-24px",
+            borderRadius: "0 0 16px 16px",
+            border: "1.5px solid rgba(22,163,74,0.6)",
+            borderTop: "none",
+            display: "flex", alignItems: "flex-end", justifyContent: "space-between",
+            gap: "16px", padding: "20px", boxSizing: "border-box",
+          }}
+        >
+          <span style={{ position: "relative", zIndex: 6 }}>
+            <BackCapsule category="iberdrola" />
+          </span>
+
+          <div style={{
+            position: "relative", zIndex: 6,
+            border: "1px solid var(--foreground)", borderRadius: "12px",
+            padding: "14px 20px", background: "var(--background)",
+            display: "flex", flexDirection: "column", gap: "6px",
+          }}>
+            <div style={{ display: "flex", gap: "24px", fontSize: "13px" }}>
+              <span style={{ fontWeight: 700, minWidth: "64px" }}><LangText es="Agencia" en="Agency" /></span>
+              <span>Prodigioso Volcán</span>
+            </div>
+            <div style={{ display: "flex", gap: "24px", fontSize: "13px" }}>
+              <span style={{ fontWeight: 700, minWidth: "64px" }}><LangText es="Equipo" en="Team" /></span>
+              <span><LangText es="Cuatro diseñadores" en="Four designers" /></span>
+            </div>
+          </div>
+        </div>
+
+        <ProjectHeroTitle es="Infografías" en="Infographics" />
+
+        <p style={{ fontSize: "14px", color: "var(--foreground)", maxWidth: "520px", lineHeight: 1.6, marginTop: "20px" }}>
+          <LangText
+            es="Infografías interactivas hechas en HTML, CSS y JavaScript para la web corporativa de Iberdrola: piezas que explican procesos, instalaciones y tecnología de forma visual y responden al usuario."
+            en="Interactive infographics built with HTML, CSS and JavaScript for Iberdrola's corporate site: pieces that explain processes, facilities and technology visually — and respond to the user."
+          />
+        </p>
+
+        <p style={{ fontSize: "14px", color: "var(--muted)", maxWidth: "520px", marginTop: "20px", fontStyle: "italic" }}>
+          <LangText es="｡ ₊°  No solo se miran — se tocan  °₊ ｡" en="｡ ₊°  Not just for looking — for touching  °₊ ｡" />
+        </p>
+
+        <InfografiasViewer />
+      </div>
+    </main>
+  );
+}
 
 function IlustracionesLanding() {
   return (
@@ -96,6 +155,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
 
       {id === "i5" ? (
         <IlustracionesLanding />
+      ) : id === "i1" ? (
+        <InfografiasLanding />
       ) : (
         <main style={{
           flex: 1, display: "flex", flexDirection: "column",

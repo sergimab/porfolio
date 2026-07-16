@@ -1,0 +1,1035 @@
+:root {
+  --mpumped-white: #fff;
+  --mpumped-green: #00a443;
+  --mpumped-green-1: #007f33;
+  --mpumped-green-4: #5BD38C;
+  --mpumped-sand: #fff5ec;
+  --mpumped-sand-1: #fffeff;
+  --mpumped-sand-3: #D8CFC7;
+  --mpumped-sand-7: #3A3735;
+  --mpumped-forest: #00402a;
+  --mpumped-forest-1: #DCEBE1;
+  --mpumped-forest-2: #A2BCB1;
+  --mpumped-forest-4: #2F6852;
+  --mpumped-sky: #0DA9FF;
+  --mpumped-sunset: #FF9C1A;
+}
+
+#mpumped {
+  width: 100%;
+  max-width: 980px;
+  text-align: left;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 15px;
+  background: var(--mpumped-white);
+  margin: 0 auto;
+  padding: 16px;
+  border: none;
+}
+
+#mpumped * {
+  font-family: "IberPangeaText" !important;
+  font-style: normal;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#mpumped strong {
+  font-family: "IberPangeaText Bold" !important;
+  font-weight: normal;
+}
+
+#mpumped h2 {
+  margin-top: 0 !important;
+}
+
+#mpumped ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#mpumped ul li:before {
+  content: none !important;
+  display: none !important;
+}
+
+#mpumped img,
+#mpumped svg {
+  display: block;
+  width: 100%;
+}
+
+#mpumped .mpumped_wrapper {
+  width: 100%;
+  position: relative;
+  width: 256px;
+  max-width: 256px;
+  margin: 0 auto;
+  padding-top: 57px;
+  padding-bottom: 21px;
+  border-radius: 0px;
+  overflow: hidden;
+  transition: all 1s;
+}
+
+#mpumped[data-place="1"] .mpumped_wrapper,
+#mpumped[data-place="2"] .mpumped_wrapper,
+#mpumped[data-place="3"] .mpumped_wrapper,
+#mpumped[data-place="4"] .mpumped_wrapper,
+#mpumped[data-place="5"] .mpumped_wrapper {
+  border-radius: 16px;
+}
+
+#mpumped .mpumped_mapbg {
+  position: absolute;
+  z-index: 2;
+  transform: scale(1.2) translate(-10px, 0);
+  transition: all 1s;
+}
+
+#mpumped .mpumped_map {
+  position: relative;
+  z-index: 1;
+  transform: scale(1.2) translate(-10px, 0);
+  transition: all 1s;
+}
+
+#mpumped .mpumped_button {
+  position: absolute;
+  border-radius: 8px;
+  border: 1px solid var(--mpumped-forest);
+  background: var(--mpumped-white);
+  padding: 8px 8px 8px 10px;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--mpumped-forest) !important;
+  font-family: "IberPangea Medium" !important;
+  font-size: 14px;
+  line-height: 1.57;
+  font-style: normal;
+  font-weight: normal;
+  text-align: left;
+  text-decoration: none;
+  background-image: url('/estaticos/mapa-visual-bombeo/images/ico-mas.svg');
+  background-position: calc(100% - 8px) center;
+  background-size: 32px auto;
+  background-repeat: no-repeat;
+  min-width: 124px;
+  z-index: 3;
+  opacity: 1;
+  transition: all 0.3s;
+}
+
+#mpumped .mpumped_button:after {
+  content: '';
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 100%;
+  background-color: var(--mpumped-forest);
+  position: absolute;
+  bottom: calc(100% + 43px);
+  left: calc(50% - 38px);
+}
+
+#mpumped .mpumped_button:before {
+  content: '';
+  display: block;
+  width: 36px;
+  height: 45px;
+  border-right: 1px solid var(--mpumped-forest);
+  border-top: 1px solid var(--mpumped-forest);
+  position: absolute;
+  right: 50%;
+  bottom: 100%;
+}
+
+#mpumped .mpumped_button-1 {
+  bottom: 0;
+  right: 0;
+}
+
+#mpumped .mpumped_button-2 {
+ top: 81px;
+ right: 0; 
+}
+
+#mpumped .mpumped_button-2:after {
+  bottom: calc(50% - 17px);
+  right: calc(100% + 75px);
+  left: auto;
+}
+
+#mpumped .mpumped_button-2:before {
+  width: 77px;
+  height: 14px;
+  bottom: auto;
+  top: 50%;
+  right: 100%;
+  border-right: 0;
+  border-left: 1px solid var(--mpumped-forest);
+}
+
+#mpumped .mpumped_button-3:after {
+  content: none;
+  display: none;
+}
+
+#mpumped .mpumped_button-3:before {
+  background-image: url('/estaticos/mapa-visual-bombeo/images/linea-conso-m.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  width: 156px;
+  height: 51px;
+  border: none;
+  top: 100%;
+  bottom: auto;
+  left: auto;
+  right: 50%;
+}
+
+#mpumped .mpumped_button-3 {
+  top: 0;
+  right: 0;
+}
+
+#mpumped .mpumped_button-4 {
+  top: 0;
+  left: 0;
+}
+
+#mpumped .mpumped_button-4:after {
+  bottom: auto;
+  top: calc(100% + 67px);
+  right: auto;
+  left: calc(29px);
+}
+
+#mpumped .mpumped_button-4:before {
+  width: 19px;
+  height: 69px;
+  bottom: auto;
+  top: 100%;
+  right: auto;
+  left: 10px;
+  border-right: none;
+  border-top: none;
+  border-left: 1px solid var(--mpumped-forest);
+  border-bottom: 1px solid var(--mpumped-forest);
+}
+
+#mpumped .mpumped_button-5 {
+  bottom: 0;
+  left: 0;
+}
+
+#mpumped .mpumped_button-5:after {
+  bottom: calc(100% + 87px);
+  right: calc(50% + 9px);
+  left: auto;
+}
+
+#mpumped .mpumped_button-5:before {
+  width: 1px;
+  height: 89px;
+  right: calc(50% + 10px);
+  border-right: none;
+  border-top: none;
+  border-left: 1px solid var(--mpumped-forest);
+  border-bottom: 1px solid var(--mpumped-forest);
+}
+
+#mpumped[data-place="1"] .mpumped_mapbg,
+#mpumped[data-place="1"] .mpumped_map {
+  transform: scale(5.5) translate(-42.6px, -18.2px);
+}
+
+#mpumped[data-place="2"] .mpumped_mapbg,
+#mpumped[data-place="2"] .mpumped_map {
+  transform: scale(4) translate(57px, 23px);
+}
+
+#mpumped[data-place="3"] .mpumped_mapbg,
+#mpumped[data-place="3"] .mpumped_map {
+  transform: scale(5) translate(69px, 47px);
+}
+
+#mpumped[data-place="4"] .mpumped_mapbg,
+#mpumped[data-place="4"] .mpumped_map {
+  transform: scale(4.2) translate(65.5px, 22.3px);
+}
+
+#mpumped[data-place="5"] .mpumped_mapbg,
+#mpumped[data-place="5"] .mpumped_map {
+  transform: scale(4.9) translate(52.5px, 20px);
+}
+
+#mpumped .mpumped_wrapper:before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 48px;
+  right: 94px;
+  width: 132px;
+  height: 151px;
+  background-image: url('/estaticos/mapa-visual-bombeo/images/valencia-m.svg');
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: opacity 0.25s;
+  transition-delay: 0s;
+  z-index: 3;
+}
+
+#mpumped[data-place="1"] .mpumped_wrapper:before,
+#mpumped[data-place="2"] .mpumped_wrapper:before,
+#mpumped[data-place="3"] .mpumped_wrapper:before,
+#mpumped[data-place="4"] .mpumped_wrapper:before,
+#mpumped[data-place="5"] .mpumped_wrapper:before {
+  opacity: 1;
+  transition-delay: 0.75s;
+  transition-duration: 0.5s;
+}
+
+#mpumped[data-place="2"] .mpumped_wrapper:before {
+  background-image: url('/estaticos/mapa-visual-bombeo/images/villarino-m.svg');
+  top: 88px;
+  right: 26px;
+  width: 115px;
+  height: 142px;
+}
+
+#mpumped[data-place="3"] .mpumped_wrapper:before {
+  background-image: url('/estaticos/mapa-visual-bombeo/images/conso-m.svg');
+  top: 110px;
+  right: 65px;
+  width: 135px;
+  height: 90px;
+}
+
+#mpumped[data-place="4"] .mpumped_wrapper:before {
+  background-image: url('/estaticos/mapa-visual-bombeo/images/tamega-m.svg');
+  top: 52px;
+  right: auto;
+  left: -21px;
+  width: 224px;
+  height: 451px;
+}
+
+#mpumped[data-place="5"] .mpumped_wrapper:before {
+  background-image: url('/estaticos/mapa-visual-bombeo/images/aldea-m.svg');
+  top: 73px;
+  right: 24px;
+  width: 143px;
+  height: 161px;
+}
+
+#mpumped #valencia {
+  transition: all 1s;
+}
+
+#mpumped[data-place="1"] #valencia,
+#mpumped[data-place="2"] #castilla-leon,
+#mpumped[data-place="3"] #galicia,
+#mpumped[data-place="4"] #portugal,
+#mpumped[data-place="5"] #castilla-leon {
+  fill: var(--mpumped-forest-2);
+}
+
+#mpumped[data-place="1"] .mpumped_button,
+#mpumped[data-place="2"] .mpumped_button,
+#mpumped[data-place="3"] .mpumped_button,
+#mpumped[data-place="4"] .mpumped_button,
+#mpumped[data-place="5"] .mpumped_button {
+  opacity: 0;
+  visibility: hidden;
+}
+
+#mpumped .mpumped_modal {
+  margin-top: 16px;
+  width: 100%;
+  display: none;
+}
+
+#mpumped .mpumped_modal.active {
+  display: block;
+}
+
+#mpumped .mpumped_modal_header {
+  background: var(--mpumped-green-1);
+  border-radius: 15px 15px 0 0;
+  padding: 8px 8px 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#mpumped .mpumped_modal_title {
+  color: var(--mpumped-sand-1) !important;
+  font-family: "IberPangea Bold" !important;
+  font-size: 20px;
+  line-height: 1.07;
+  font-style: normal;
+  font-weight: normal;
+  text-align: left;
+}
+
+#mpumped .mpumped_modal_close {
+  display: block;
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  text-align: left;
+  text-indent: -9999px;
+  overflow: hidden;
+  background-image: url('/estaticos/mapa-visual-bombeo/images/ico-cerrar.svg');
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+#mpumped .mpumped_modal_content {
+  border-radius: 0 0 15px 15px;
+  border: 1px solid var(--mpumped-sand-3);
+  background: var(--mpumped-sand-1);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+#mpumped .mpumped_modal_content p {
+  color: var(--mpumped-forest) !important;
+  font-family: "IberPangeaText" !important;
+  font-size: 16px;
+  line-height: 1.25;
+  font-style: normal;
+  font-weight: normal;
+  text-align: left;
+  margin-bottom: 8px;
+}
+
+#mpumped .mpumped_modal_content p strong {
+  font-family: "IberPangeaText Bold" !important;
+  font-size: 16px;
+  line-height: 1.25;
+  font-style: normal;
+  font-weight: normal;
+}
+
+#mpumped .mpumped_modal_content p a {
+  color: var(--mpumped-green-1) !important;
+  font-family: "IberPangeaText Bold" !important;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: underline;
+}
+
+#mpumped .mpumped_modal_info {
+  border-top: 1px solid var(--mpumped-sand-3);
+  border-bottom: 1px solid var(--mpumped-sand-3);
+  padding: 6px 0;
+  margin-bottom: 16px;
+}
+
+#mpumped .mpumped_modal_info_text {
+  padding-right: 10px;
+  max-height: 342px;
+  overflow-y: auto;
+}
+
+#mpumped .mpumped_modal_info_text::-webkit-scrollbar {
+  width: 6px;
+}
+
+#mpumped .mpumped_modal_info_text::-webkit-scrollbar-track {
+  background: var(--mpumped-sand-3);
+  border-radius: 6px;
+}
+
+#mpumped .mpumped_modal_info_text::-webkit-scrollbar-thumb {
+  background-color: var(--mpumped-green);
+  border-radius: 6px;
+}
+
+#mpumped .mpumped_modal_info_text::-webkit-scrollbar-thumb:hover {
+  background-color: #178c3f;
+}
+
+#mpumped .mpumped_modal_content .mpumped_modal_capacity {
+  border-radius: 8px;
+  border: 1px solid var(--mpumped-forest);
+  padding: 8px 8px 8px 48px;
+  background-image: url('/estaticos/mapa-visual-bombeo/images/ico-capacidad.svg');
+  background-size: 40px auto;
+  background-repeat: no-repeat;
+  background-position: 4px center;
+  color: var(--mpumped-forest) !important;
+  font-family: "IberPangeaText" !important;
+  font-size: 16px;
+  line-height: 1.25;
+  font-style: normal;
+  font-weight: normal;
+  text-align: left;
+  margin-bottom: 16px;
+}
+
+#mpumped .mpumped_modal_content .mpumped_modal_capacity strong {
+  font-family: "IberPangeaText Bold" !important;
+  font-size: 16px;
+  line-height: 1.25;
+  font-style: normal;
+  font-weight: normal;
+  display: block;
+}
+
+#mpumped .mpumped_modal_pic {
+  display: block;
+  border-radius: 15px;
+  overflow: hidden;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+#mpumped .mpumped_modal_video {
+  position: relative;
+  display: block;
+  border-radius: 15px;
+  overflow: hidden;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+#mpumped .mpumped_modal_video:before {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 40px;
+  background-image: url('/estaticos/mapa-visual-bombeo/images/ico-play.svg');
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%) scale(1);
+  transition: all 0.5s;
+}
+
+#mpumped .mpumped_modal_video:hover:before {
+  transform: translate(-50%,-50%) scale(1.2);
+}
+
+#mpumped .mpumped_modal_video img {
+  
+}
+
+#mpumped .mpumped_modal_note,
+#mpumped .mpumped_modal_content p.mpumped_modal_note {
+  color: var(--mpumped-forest) !important;
+  font-family: "IberPangeaText" !important;
+  font-size: 12px;
+  line-height: 1.33;
+  font-style: italic;
+  font-weight: 400;
+  text-align: left;
+  margin-bottom: 0;
+}
+
+#mpumped .mpumped_modal_button {
+  border-radius: 24px;
+  background: var(--mpumped-green-1);
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  color: var(--mpumped-sand-1) !important;
+  font-family: "IberPangea Medium" !important;
+  font-size: 16px;
+  line-height: 1.25;
+  font-style: normal;
+  font-weight: normal;
+  text-align: center;
+  text-decoration: none;
+  gap: 16px;
+}
+
+#mpumped .mpumped_modal_button:after {
+  content: '';
+  display: block;
+  width: 24px;
+  min-width: 24px;
+  height: 24px;
+  background-image: url('/estaticos/mapa-visual-bombeo/images/ico-flecha.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+
+@media (min-width: 700px) {
+
+  #mpumped {
+  }
+
+  #mpumped .mpumped_map,
+  #mpumped .mpumped_mapbg {
+    transform: none;
+  }
+
+  #mpumped .mpumped_wrapper {
+    width: 517px;
+    max-width: 517px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  #mpumped .mpumped_button {
+    padding: 8px 35px 8px 8px;
+    min-height: 34px;
+    font-size: 18px;
+    line-height: 1.07;
+    background-size: 18.5px auto;
+    min-width: 98px;
+  }
+  
+  #mpumped .mpumped_button:hover {
+    border-color: var(--mpumped-green-1);
+    background-image: url('/estaticos/mapa-visual-bombeo/images/ico-mas-alt.svg');
+  }
+
+  #mpumped .mpumped_button-1 {
+    bottom: auto;
+    top: 162px;
+    right: 54px;
+  }
+
+  #mpumped .mpumped_button-2 {
+    top: 90px;
+    right: 197px;
+  }
+
+  #mpumped .mpumped_button-3 {
+    top: 48px;
+    left: 152px;
+    right: auto;
+  }
+
+  #mpumped .mpumped_button-4 {
+    top: 190px;
+    left: 12px;
+  }
+
+  #mpumped .mpumped_button-5 {
+    bottom: 105px;
+    left: 150px;
+  }
+
+  #mpumped .mpumped_button-1:after {
+    bottom: auto;
+    top: calc(100% + 17px);
+    left: auto;
+    right: calc(50% + 68px);
+  }
+  
+  #mpumped .mpumped_button-1:before {
+    width: 68px;
+    height: 19px;
+    bottom: auto;
+    top: 100%;
+    right: 50%;
+    border-right: 1px solid var(--mpumped-forest);
+    border-left: none;
+    border-top: none;
+    border-bottom: 1px solid var(--mpumped-forest);
+  }
+
+  #mpumped .mpumped_button-2:after {
+    bottom: calc(50% - 29px);
+    right: calc(100% + 58px);
+    left: auto;
+  }
+  
+  #mpumped .mpumped_button-2:before {
+    width: 60px;
+    height: 27px;
+  }
+
+  #mpumped .mpumped_button-3:after {
+    content: '';
+    display: block;
+    bottom: calc(50% - 30px);
+    right: calc(100% + 22px);
+    left: auto;
+  }
+  
+  #mpumped .mpumped_button-3:before {
+    width: 24px;
+    height: 28px;
+    background-image: none;
+    border-top: 1px solid var(--mpumped-forest);
+    border-left: 1px solid var(--mpumped-forest);
+    top: 50%;
+    right: 100%;
+  }
+  
+  #mpumped .mpumped_button-4:after {
+    top: auto;
+    bottom: calc(100% + 56px);
+    right: auto;
+    left: calc(50% + 35px);
+  }
+  
+  #mpumped .mpumped_button-4:before {
+    width: 35px;
+    height: 58px;
+    border-bottom: none;
+    border-top: 1px solid var(--mpumped-forest);
+    top: auto;
+    bottom: 100%;
+    left: 50%;
+  }
+  
+  #mpumped .mpumped_button-5:after {
+    bottom: calc(100% + 89px);
+    right: calc(50% + 54px);
+    left: auto;
+  }
+  
+  #mpumped .mpumped_button-5:before {
+    width: 56px;
+    height: 91px;
+    border-top: 1px solid var(--mpumped-forest);
+    border-bottom: none;
+    border-left: none;
+    border-right: 1px solid var(--mpumped-forest);
+    left: auto;
+    right: 50%;
+  }
+
+  #mpumped[data-place="1"] .mpumped_mapbg,
+  #mpumped[data-place="1"] .mpumped_map {
+    transform: scale(2.75) translate(-78px, -29px);
+  }
+
+  #mpumped[data-place="2"] .mpumped_mapbg,
+  #mpumped[data-place="2"] .mpumped_map {
+    transform: scale(2.5) translate(87px, 33px);
+  }
+
+  #mpumped[data-place="1"] .mpumped_wrapper:before {
+    top: 108px;
+    right: 204px;
+  }
+
+  #mpumped[data-place="2"] .mpumped_wrapper:before {
+    top: 108px;
+    right: 204px;
+  }
+
+  #mpumped[data-place="2"] .mpumped_wrapper:before {
+    top: 83px;
+    right: 196px;
+    width: 155px;
+    height: 162px;
+  }
+
+  #mpumped[data-place="3"] .mpumped_mapbg,
+  #mpumped[data-place="3"] .mpumped_map {
+    transform: scale(3.5) translate(130px, 101px);
+  }
+
+  #mpumped[data-place="3"] .mpumped_wrapper:before {
+    top: 148px;
+    right: 207px;
+    width: 179px;
+    height: 130px;
+  }
+
+  #mpumped[data-place="4"] .mpumped_mapbg, #mpumped[data-place="4"] .mpumped_map {
+    transform: scale(3) translate(124px, 55px);
+  }
+  
+  #mpumped[data-place="4"] .mpumped_wrapper:before {
+    top: 77px;
+    left: 7px;
+    width: 342px;
+    height: 645px;
+  }
+
+  #mpumped[data-place="5"] .mpumped_mapbg, #mpumped[data-place="5"] .mpumped_map {
+    transform: scale(4) translate(90px, 40px);
+  }
+
+  #mpumped[data-place="5"] .mpumped_wrapper:before {
+    top: 75px;
+    right: 138px;
+    width: 261px;
+    height: 233px;
+  }
+
+  #mpumped .mpumped_modal_info_text {
+    max-height: 142px;
+  }
+
+}
+
+
+@media (min-width: 960px) {
+
+  #mpumped {
+  }
+
+  #mpumped .mpumped_wrapper {
+    width: 980px;
+    max-width: 980px;
+  }
+
+  #mpumped .mpumped_button {
+    padding: 14px 64px 16px 24px;
+    font-size: 28px;
+    line-height: 1.07;
+    background-size: 32px auto;
+    background-position: calc(100% - 16px) center;
+  }
+
+  
+  #mpumped .mpumped_button-1 {
+    top: 304px;
+    right: 119px;
+  }
+
+  #mpumped .mpumped_button-2 {
+    top: 178px;
+    right: 386px;
+  }
+
+  #mpumped .mpumped_button-3 {
+    top: 85px;
+    left: 290px;
+  }
+
+  #mpumped .mpumped_button-4 {
+    top: 350px;
+    left: 36px;
+  }
+
+  #mpumped .mpumped_button-5 {
+    bottom: 198px;
+    left: 280px;
+  }
+
+  #mpumped .mpumped_button-1:after {
+    top: calc(100% + 46px);
+    right: calc(50% + 120px);
+  }
+  
+  #mpumped .mpumped_button-1:before {
+    width: 120px;
+    height: 48px;
+  }
+
+  #mpumped .mpumped_button-2:after {
+    bottom: calc(50% - 48px);
+    right: calc(100% + 115px);
+  }
+  
+  #mpumped .mpumped_button-2:before {
+    width: 117px;
+    height: 45px;
+  }
+
+  #mpumped .mpumped_button-3:after {
+    bottom: calc(50% - 65px);
+    right: calc(100% + 44px);
+  }
+  
+  #mpumped .mpumped_button-3:before {
+    width: 46px;
+    height: 63px;
+  }
+  
+  #mpumped .mpumped_button-4:after {
+    bottom: calc(100% + 102px);
+    left: calc(50% + 61px);
+  }
+  
+  #mpumped .mpumped_button-4:before {
+    width: 63px;
+    height: 104px;
+  }
+  
+  #mpumped .mpumped_button-5:after {
+    bottom: calc(100% + 182px);
+    right: calc(50% + 92px);
+  }
+  
+  #mpumped .mpumped_button-5:before {
+    width: 94px;
+    height: 184px;
+  }
+
+  #mpumped .mpumped_modal {
+    position: absolute;
+    top: 0;
+    right: -110%;
+    z-index: 5;
+    width: 59%;
+    margin: 0;
+    height: 100%;
+    display: block;
+    transition: all 1s;
+  }
+
+  #mpumped .mpumped_modal.active {
+    right: 0%;
+    display: block;
+  }
+
+  #mpumped .mpumped_modal_info_text {
+    max-height: 135px;
+    height: 135px;
+  }
+
+  #mpumped .mpumped_modal_video,
+  #mpumped .mpumped_modal_pic {
+    max-height: 220px;
+    margin-bottom: 16px;
+  }
+
+  #mpumped .mpumped_modal_video img,
+  #mpumped .mpumped_modal_pic img {
+    height: 100%;
+    object-fit: cover;
+  }
+
+  #mpumped .mpumped_modal_button {
+    display: none;
+  }
+
+  #mpumped .mpumped_modal_content {
+    height: calc(100% - 64px);
+    padding: 24px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #mpumped .mpumped_modal_info {
+    margin-top: auto;
+  }
+
+  #mpumped .mpumped_modal_header {
+    padding: 16px 16px 16px 24px;
+  }
+
+  #mpumped .mpumped_modal_title {
+    font-size: 28px;
+    line-height: 1.07;
+  }
+
+  #mpumped .mpumped_modal_content > p {
+    font-size: 18px;
+  }
+
+  #mpumped .mpumped_modal_content > p:nth-of-type(3) {
+    margin-bottom: 16px;
+  }
+
+  #mpumped .mpumped_modal_content .mpumped_modal_capacity {
+    padding: 8px 16px 8px 160px;
+    background-position: 121px center;
+    background-size: 32px;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  #mpumped .mpumped_modal_content .mpumped_modal_capacity strong {
+    display: inline;
+  }
+
+  #mpumped .mpumped_modal_note,
+  #mpumped .mpumped_modal_content p.mpumped_modal_note {
+    font-size: 18px;
+  }
+
+  #mpumped[data-place="1"] .mpumped_mapbg, #mpumped[data-place="1"] .mpumped_map {
+    transform: scale(2.75) translate(-258px, -51px);
+  }
+
+  #mpumped[data-place="1"] .mpumped_wrapper:before {
+    top: 211px;
+    right: 676px;
+    width: 274px;
+    height: 289px;
+  }
+
+  #mpumped[data-place="2"] .mpumped_mapbg, #mpumped[data-place="2"] .mpumped_map {
+    transform: scale(2) translate(5px, 113px);
+  }
+
+  #mpumped[data-place="2"] .mpumped_wrapper:before {
+    top: 294px;
+    right: 719px;
+    width: 227px;
+    height: 252px;
+  }
+
+  #mpumped[data-place="3"] .mpumped_mapbg, #mpumped[data-place="3"] .mpumped_map {
+    transform: scale(2.5) translate(150px, 151px);
+  }
+
+  #mpumped[data-place="3"] .mpumped_wrapper:before {
+    top: 204px;
+    right: 660px;
+    width: 245px;
+    height: 170px;
+  }
+
+  #mpumped[data-place="4"] .mpumped_mapbg, #mpumped[data-place="4"] .mpumped_map {
+    transform: scale(1.6) translate(94px, 25px);
+  }
+
+  #mpumped[data-place="4"] .mpumped_wrapper:before {
+    top: 114px;
+    left: 3px;
+    width: 360px;
+    height: 655px;
+  }
+
+  #mpumped[data-place="5"] .mpumped_mapbg, #mpumped[data-place="5"] .mpumped_map {
+    transform: scale(2) translate(10px, 108px);
+  }
+
+  #mpumped[data-place="5"] .mpumped_wrapper:before {
+    top: 316px;
+    right: 711px;
+    width: 222px;
+    height: 215px;
+  }
+
+}
+
+/* ── Padding estandarizado del módulo: 16 móvil / 24 tablet / 36 desk ── */
+@media (min-width: 500px) {
+  #mpumped { padding: 24px; }
+}
+@media (min-width: 700px) {
+  #mpumped { padding: 36px; }
+}
+
+/* El lienzo del mapa está calibrado a 980px: a ese ancho el módulo va a sangre. */
+@media (min-width: 960px) {
+  #mpumped { padding: 36px 0; }
+}

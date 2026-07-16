@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- INICIO DE MODULO -->
+    <link rel="stylesheet" href="/estaticos/fonts/fonts.css">
+    <link rel="stylesheet" href="/estaticos/turismo-espacial/styles.css?t=1331">
+    <section id="spacet" class="spacet" data-position="0">
+        <h3 class="spacet_title">The three visionaries of <strong>space tourism</strong></h3>
+        <p class="spacet_description">Although <strong>space tourism</strong> is a luxury within the reach of very few, it is starting to take off thanks to the efforts of <strong>three entrepreneurs with a proven track record in business</strong>.</p>
+        <div class="spacet_media">
+            <p class="spacet_media_title">100 KM above sea level</p>
+            <div class="spacet_media_content">
+                <img class="spacet_media_tag" src="/estaticos/turismo-espacial/images/earth.svg" alt="Earth">
+            </div>
+        </div>
+        <div id="spacetSwiper" class="spacet_swiper swiper">
+            <div class="swiper-wrapper">
+                <div class="spacet_item swiper-slide">
+                    <p class="spacet_item_title">Suborbital flights</p>
+                    <p class="spacet_item_text">The <strong>craft tbriefly touches the Kárman</strong> line before returning to Earth.</p>
+                </div>
+                <div class="spacet_item swiper-slide">
+                    <p class="spacet_item_title">The Kármán line</p>
+                    <p class="spacet_item_text">According to the International Astronautical Federation (IAF), <strong>this is the boundary between Earth's atmosphere and outer space</strong>.</p>
+                </div>
+                <div class="spacet_item swiper-slide">
+                    <p class="spacet_item_title">Orbital flight</p>
+                    <p class="spacet_item_text">The spacecraft is placed on a trajectory <strong>to go around the Earth in a stable orbit</strong>.</p>
+                </div>
+            </div>
+            <div class="spacet_navigation swiper-controls">
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+            </div>
+        </div>
+        <div class="spacet_accordion">
+            <a class="spacet_accordion_header" href="#">
+                <img class="spacet_accordion_header_icon" src="/estaticos/turismo-espacial/images/icono-1.svg" alt="Icon">
+                <span class="spacet_accordion_header_title">Richard Branson</span>
+            </a>
+            <div class="spacet_accordion_content">
+                <dl>
+                    <dt>Company</dt><dd>Virgin Galactic </dd>
+                    <dt>Mission</dt><dd>Unity 22 <em>(11 July 2021)</em> </dd>
+                    <dt>Flight type</dt><dd>Suborbital with pilot </dd>
+                    <dt>Flight time</dt><dd>90 minutes</dd>
+                    <dt>Altitude</dt><dd>86 km</dd>
+                    <dt>Speed</dt><dd>3,675 km/h</dd>
+                    <dt>Crew</dt><dd>Six people <em> (Richard Branson, Sirisha Brandla, Colin Bennet, Beth Moses, Dave Mackay and Michael Masucci)</em></dd>
+                    <dt>Price per flight</dt><dd>$250,000</dd>
+                </dl>
+            </div>
+        </div>
+        <div class="spacet_accordion">
+            <a class="spacet_accordion_header" href="#">
+                <img class="spacet_accordion_header_icon" src="/estaticos/turismo-espacial/images/icono-2.svg" alt="Icon">
+                <span class="spacet_accordion_header_title">Jeff Bezos</span>
+            </a>
+            <div class="spacet_accordion_content">
+                <dl>
+                    <dt>Company</dt><dd>Blue Origin</dd>
+                    <dt>Mission</dt><dd>NS-16 <em>(20 July 2021)</em></dd>
+                    <dt>Flight type</dt><dd>Autonomous suborbital  </dd>
+                    <dt>Flight time</dt><dd>10 minutes</dd>
+                    <dt>Altitude</dt><dd>106 km</dd>
+                    <dt>Speed</dt><dd>3,595 km/h</dd>
+                    <dt>Crew</dt><dd>4 people <em>(Jeff Bezos, Mark Bezos, Wally Funk y Oliver Daemen)</em></dd>
+                    <dt>Price per flight</dt><dd>$28 M by auction</dd>
+                </dl>
+            </div>
+        </div>
+        <div class="spacet_accordion">
+            <a class="spacet_accordion_header" href="#">
+                <img class="spacet_accordion_header_icon" src="/estaticos/turismo-espacial/images/icono-3.svg" alt="Icon">
+                <span class="spacet_accordion_header_title">Elon Musk</span>
+            </a>
+            <div class="spacet_accordion_content">
+                <dl>
+                    <dt>Company</dt><dd>SpaceX</dd>
+                    <dt>Mission</dt><dd>Polaris Dawn <em>(10 Sept. 2021)</em></dd>
+                    <dt>Flight time</dt><dd>Orbital</dd>
+                    <dt>Tiempo de vuelo</dt><dd>5 days</dd>
+                    <dt>Altitude</dt><dd>Between 190 and 740 km </dd>
+                    <dt>Speed</dt><dd>27,358 km/h</dd>
+                    <dt>Crew</dt><dd>4 people <em>(Jared Isaacman, Scott Poteet, Sarah Gillis y Ana Menon)</em></dd>
+                    <dt>Price per flight</dt><dd><em>Not disclosed</em></dd>
+                </dl>
+            </div>
+        </div>
+        <div class="spacet_illustration">
+            <picture>
+                <source srcset="/estaticos/turismo-espacial/images/ilustracion-d.svg?v=123456789" media="(min-width: 700px)" />
+                <img src="/estaticos/turismo-espacial/images/ilustracion.svg?v=123456789" alt="Illustration" />
+            </picture>
+        </div>
+        <p class="spacet_note"><span>Source:</span> Blue Origin, SpaceX, Virgin Galactic, CNBC, Yahoo, CNN.</p>
+    </section>
+    <script src="/estaticos/turismo-espacial/swiper.min.js"></script>
+    <script>
+        let swiperspacet = new Swiper('#spacet .spacet_swiper', {
+            autoHeight: true,
+            spaceBetween: 20,
+            navigation: {
+                nextEl: '#spacet .swiper-button-next',
+                prevEl: '#spacet .swiper-button-prev',
+            },
+        });
+        swiperspacet.on('slideChange', function (slider) {
+            let current = slider.activeIndex;
+            document.getElementById('spacet').setAttribute('data-position', current);
+        });
+        document.querySelectorAll('#spacet .spacet_accordion_header').forEach((item) => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.currentTarget.parentNode.classList.toggle('active');
+            });
+        });
+    </script>
+    <!-- FIN DE MODULO -->
+
+</body>
+</html>

@@ -1,0 +1,370 @@
+:root {
+  --aeroblades-white: #fffeff;
+  --aeroblades-green: #007F33;
+  --aeroblades-forest: #00402a;
+  --aeroblades-border: #d8cfc7;
+  --aeroblades-border-dark: #89837e;
+  --aeroblades-sand: #fff5ec;
+  --aeroblades-brown: #615d5a;
+  --aeroblades-sunset: #ff9c1a;
+  --aeroblades-black: #3A3735;
+}
+
+#aeroblades {
+  width: 100%;
+  max-width: 980px;
+  text-align: left;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 15px;
+  background-color: var(--aeroblades-white);
+  margin: 0 auto;
+  padding: 16px;
+  border: none;
+}
+
+#aeroblades * {
+  font-family: "IberPangea" !important;
+  font-style: normal;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#aeroblades h2,
+#aeroblades h3,
+#aeroblades h4 {
+  margin-top: 0 !important;
+}
+
+#aeroblades ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#aeroblades ul li:before {
+  content: none !important;
+  display: none !important;
+}
+
+#aeroblades img {
+  display: block;
+  width: 100%;
+}
+
+#aeroblades .aeroblades_title {
+  color: var(--aeroblades-green) !important;
+  font-size: 32px;
+  line-height: 1.125;
+  font-style: normal;
+  font-weight: 400;
+  text-align: left;
+  text-wrap: balance;
+  margin-bottom: 20px;
+}
+
+#aeroblades .aeroblades_title strong {
+  font-weight: 600;
+}
+
+#aeroblades .swiper-autoheight,
+.swiper-autoheight .swiper-slide {
+  height: auto;
+}
+
+#aeroblades .swiper-autoheight .swiper-wrapper {
+  align-items: flex-start;
+  transition-property: transform, height;
+}
+
+#aeroblades .swiper-fade.swiper-free-mode .swiper-slide {
+  transition-timing-function: ease-out;
+}
+
+#aeroblades .swiper-fade .swiper-slide {
+  pointer-events: none;
+  transition-property: opacity;
+  opacity: 0 !important;
+}
+
+#aeroblades .swiper-fade .swiper-slide-active {
+    opacity: 1 !important;
+}
+
+#aeroblades .swiper-fade .swiper-slide .swiper-slide {
+  pointer-events: none;
+}
+
+#aeroblades .swiper-fade .swiper-slide-active,
+.swiper-fade .swiper-slide-active .swiper-slide-active {
+  pointer-events: auto;
+}
+
+#aeroblades .swiper-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: flex;
+  transition-property: transform;
+  box-sizing: content-box;
+}
+
+#aeroblades .swiper-android .swiper-slide,
+#aeroblades .swiper-wrapper {
+  transform: translate3d(0px, 0, 0);
+}
+
+#aeroblades .swiper-pointer-events {
+  touch-action: pan-y;
+}
+
+#aeroblades .swiper-slide {
+  flex-shrink: 0;
+  width: 100%;
+  position: relative;
+  transition-property: transform;
+}
+
+#aeroblades .swiper-slide-invisible-blank {
+  visibility: hidden;
+}
+
+#aeroblades .swiper-css-mode > .swiper-wrapper {
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+#aeroblades .swiper-css-mode > .swiper-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+#aeroblades .swiper-horizontal.swiper-css-mode > .swiper-wrapper {
+  scroll-snap-type: x mandatory;
+}
+
+#aeroblades .swiper-button-lock {
+  display: none;
+}
+
+#aeroblades .swiper-slide {
+  overflow: hidden;
+}
+
+#aeroblades .aeroblades_swiper {
+  position: relative;
+  /*overflow: hidden;*/
+  list-style: none;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+#aeroblades .swiper-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 16px 0 0;
+  position: static;
+  z-index: 5;
+}
+
+#aeroblades .swiper-button-prev,
+#aeroblades .swiper-button-next {
+  width: 32px;
+  height: 32px;
+  display: block;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  text-align: left;
+  text-indent: -9999px;
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+  margin: 0 7px;
+}
+
+#aeroblades .swiper-button-prev {
+  background-image: url("/estaticos/palas-aerogenerador/images/ico-prev.svg");
+}
+
+#aeroblades .swiper-button-next {
+  background-image: url("/estaticos/palas-aerogenerador/images/ico-next.svg");
+  margin-right: 0;
+}
+
+#aeroblades .swiper-button-prev.swiper-button-disabled,
+#aeroblades .swiper-button-next.swiper-button-disabled {
+  opacity: 0.5;
+  cursor: default;
+  pointer-events: none;
+}
+
+#aeroblades .swiper-pagination {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 16px;
+  border: 1px solid var(--aeroblades-border);
+  border-radius: 999px;
+  color: var(--aeroblades-black);
+  font-size: 14px;
+  line-height: 1;
+  margin-right: auto;
+}
+
+#aeroblades .swiper-pagination,
+#aeroblades .swiper-pagination span {
+  font-style: italic !important;
+}
+
+#aeroblades .swiper-pagination-current {
+  color: var(--aeroblades-green);
+}
+
+#aeroblades .aeroblades_item_image {
+  width: 100%;
+  height: 360px;
+  object-fit: contain;
+  background: var(--aeroblades-sand);
+  border-radius: 15px;
+  padding: 20px;
+  margin: 0 auto 24px;
+}
+
+#aeroblades .aeroblades_item_header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  margin-bottom: 14px;
+  gap: 16px;
+  min-height: 44px;
+}
+
+#aeroblades .aeroblades_item_number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  min-width: 32px;
+  max-width: 32px;
+  height: 32px;
+  max-height: 32px;
+  padding-top: 3px;
+  background-color: var(--aeroblades-green);
+  border-radius: 100%;
+  color: var(--aeroblades-white) !important;
+  font-size: 18px;
+  line-height: 1;
+  font-style: normal;
+  font-weight: 600;
+  text-align: center;
+}
+
+#aeroblades .aeroblades_item_title {
+  color: var(--aeroblades-green) !important;
+  font-size: 18px;
+  line-height: 1.22;
+  font-style: normal;
+  font-weight: 500;
+  text-align: left;
+}
+
+#aeroblades .aeroblades_item_content {
+  border-radius: 15px;
+  border: 1px solid var(--aeroblades-border);
+  background-color: var(--aeroblades-white);
+  padding: 20px;
+}
+
+#aeroblades .aeroblades_item_text {
+  color: var(--aeroblades-black) !important;
+  font-size: 16px;
+  line-height: 1.25;
+  font-style: normal;
+  font-weight: 400;
+  text-align: left;
+}
+
+#aeroblades .aeroblades_item_text strong {
+  font-weight: 600;
+}
+
+#aeroblades .aeroblades_item_text_wrapper {
+  /*height: 120px;*/
+  overflow-y: auto;
+  padding-right: 12px;
+}
+
+#aeroblades .aeroblades_item_text_wrapper::-webkit-scrollbar-track {
+  width: 4px;
+  border-radius: 2px;
+  border: none;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+#aeroblades .aeroblades_item_text_wrapper::-webkit-scrollbar {
+  width: 4px;
+  box-shadow: none;
+  border: none;
+  background-color: transparent;
+}
+
+#aeroblades .aeroblades_item_text_wrapper::-webkit-scrollbar-thumb {
+  width: 4px;
+  border-radius: 2px;
+  box-shadow: none;
+  border: none;
+  background-color: var(--aeroblades-border);
+}
+
+@media (min-width: 700px) {
+  #aeroblades {
+  }
+
+  #aeroblades .aeroblades_title {
+    margin-bottom: 24px;
+  }
+
+  #aeroblades .swiper-button-prev:hover {
+    background-image: url("/estaticos/palas-aerogenerador/images/ico-prev-hover.svg");
+  }
+
+  #aeroblades .swiper-button-next:hover {
+    background-image: url("/estaticos/palas-aerogenerador/images/ico-next-hover.svg");
+  }
+
+  #aeroblades .aeroblades_item_image {
+    height: 360px;
+    margin-bottom: 24px;
+  }
+
+  #aeroblades .aeroblades_item_header {
+    min-height: 32px;
+  }
+
+
+
+  #aeroblades .aeroblades_item_text_wrapper {
+    padding-right: 12px;
+  }
+
+
+}
+
+/* ── Padding estandarizado del módulo: 16 móvil / 24 tablet / 36 desk ── */
+@media (min-width: 500px) {
+  #aeroblades { padding: 24px; }
+}
+@media (min-width: 700px) {
+  #aeroblades { padding: 36px; }
+}

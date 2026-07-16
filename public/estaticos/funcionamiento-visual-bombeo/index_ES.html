@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title></title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- INICIO DE MODULO -->
+  <link rel="stylesheet" href="/estaticos/fonts/fonts.css">
+    <link rel="stylesheet" href="/estaticos/funcionamiento-visual-bombeo/styles.css?t=2158">
+  <section id="hpumped" class="hpumped hpumped-es" data-accordion="1">
+    <div class="hpumped_media">
+      <img class="hpumped_media_bg" src="/estaticos/funcionamiento-visual-bombeo/images/bombeo-cielo.gif" alt="Ilustración de nubes desplazándose lentamente">
+      <div class="hpumped_media_item hpumped_media_item-1">
+        <img class="hpumped_media_image" src="/estaticos/funcionamiento-visual-bombeo/images/bombeo-1.gif" alt="Ilustración sobre el exceso de energía renovable">
+      </div>
+      <div class="hpumped_media_item hpumped_media_item-2">
+        <img class="hpumped_media_image" src="/estaticos/funcionamiento-visual-bombeo/images/bombeo-2.gif" alt="Ilustración sobre el bombeo del agua">
+      </div>
+      <div class="hpumped_media_item hpumped_media_item-3">
+        <img class="hpumped_media_image" src="/estaticos/funcionamiento-visual-bombeo/images/bombeo-3.gif" alt="Ilustración sobre la regulación del sistema hidráulico">
+      </div>
+      <div class="hpumped_media_item hpumped_media_item-4">
+        <img class="hpumped_media_image" src="/estaticos/funcionamiento-visual-bombeo/images/bombeo-4.gif" alt="Ilustración sobre el almacenamiento en el embalse superior">
+      </div>
+      <div class="hpumped_media_item hpumped_media_item-5">
+        <img class="hpumped_media_image" src="/estaticos/funcionamiento-visual-bombeo/images/bombeo-5.gif" alt="Ilustración con el proceso completo para generar energía">
+      </div>
+    </div>
+    <div class="hpumped_content">
+      <article class="hpumped_accordion active" data-accordion="1">
+        <h3 class="hpumped_accordion_title">Exceso de energía renovable</h3>
+        <div class="hpumped_accordion_content">
+          <p class="hpumped_accordion_text">Cuando la generación de energía renovable no gestionable (fotovoltaica o eólica, que tiene que consumirse cuando se genera) es superior a la demanda eléctrica, <strong>la central de bombeo se pone en marcha para aprovechar esa energía sobrante.</strong></p>
+        </div>
+      </article>
+      <article class="hpumped_accordion" data-accordion="2">
+        <h3 class="hpumped_accordion_title">Bombeo del agua</h3>
+        <div class="hpumped_accordion_content">
+          <p class="hpumped_accordion_text"><strong>Mediante bombas hidráulicas, se impulsa el agua almacenada en el embalse inferior hasta el embalse superior</strong>, a través de una tubería forzada y una galería de conducción.</p>
+        </div>
+      </article>
+      <article class="hpumped_accordion" data-accordion="3">
+        <h3 class="hpumped_accordion_title">Regulación del sistema hidráulico</h3>
+        <div class="hpumped_accordion_content">
+          <p class="hpumped_accordion_text">Para controlar la presión del agua durante el bombeo y evitar sobrepresiones, <strong>algunas centrales cuentan con una chimenea de equilibrio</strong> o sistemas de válvulas reguladoras.</p>
+        </div>
+      </article>
+      <article class="hpumped_accordion" data-accordion="4">
+        <h3 class="hpumped_accordion_title">Almacenamiento en el embalse superior</h3>
+        <div class="hpumped_accordion_content">
+          <p class="hpumped_accordion_text"><strong>El agua bombeada se acumula en el embalse superior</strong>, que actúa como un “gran depósito de energía potencial” <strong>listo para ser utilizado cuando se necesite generar electricidad</strong>.</p>
+        </div>
+      </article>
+      <article class="hpumped_accordion" data-accordion="5">
+        <h3 class="hpumped_accordion_title">Listo para el generar energía</h3>
+        <div class="hpumped_accordion_content">
+          <p class="hpumped_accordion_text">Una vez que el agua está almacenada, la central puede permanecer parada hasta que el sistema eléctrico requiera más energía. <strong>En ese momento, el flujo se invierte y la instalación actúa como una <a href="https://www.iberdrola.com/sostenibilidad/que-es-energia-hidroelectrica">central hidroeléctrica convencional</a></strong>.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+  <script>
+    document.querySelectorAll('.hpumped_accordion_title').forEach((item) => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        let container = document.getElementById('hpumped');
+        let current = e.currentTarget.parentNode;
+        let currentValue = current.getAttribute('data-accordion');
+        document.querySelectorAll('.hpumped_accordion').forEach((accordion) => {
+          if (accordion == current) {
+            accordion.classList.add('active');
+            container.setAttribute('data-accordion', currentValue);
+          } else {
+            accordion.classList.remove('active');
+          }
+        });
+      });
+    });
+  </script>
+  <!-- FIN DE MODULO -->
+
+</body>
+
+</html>

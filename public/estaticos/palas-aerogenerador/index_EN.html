@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title></title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- INICIO DE MODULO -->
+  <link rel="stylesheet" href="/estaticos/fonts/fonts.css">
+    <link rel="stylesheet" href="/estaticos/palas-aerogenerador/styles.css?t=1039">
+  <section id="aeroblades" class="aeroblades">
+    <h3 class="aeroblades_title">Do you know how <strong>the blades of a wind turbine</strong> are made?</h3>
+    <div id="aerobladesSwiper" class="aeroblades_swiper swiper">
+      <div class="swiper-wrapper">
+        <div class="aeroblades_item swiper-slide">
+            <img class="aeroblades_item_image" src="/estaticos/palas-aerogenerador/images/animacion-1.gif" alt="Illustration">
+            <div class="aeroblades_item_content">
+                <div class="aeroblades_item_header">
+                    <span class="aeroblades_item_number">1</span>
+                    <h4 class="aeroblades_item_title">Manufacturing of the beam</h4>
+                </div>
+                <div class="aeroblades_item_text_wrapper">
+                    <p class="aeroblades_item_text"><strong>This is the inner part of the blade</strong> and is composed of materials formed of fibreglass and carbon pre-coated with epoxy resin - a thermostable polymer that hardens when mixed with a catalyst agent.</p>
+                </div>
+            </div>
+        </div>
+        <div class="aeroblades_item swiper-slide">
+            <img class="aeroblades_item_image" src="/estaticos/palas-aerogenerador/images/animacion-2.gif" alt="Illustration">
+            <div class="aeroblades_item_content">
+                <div class="aeroblades_item_header">
+                    <span class="aeroblades_item_number">2</span>
+                    <h4 class="aeroblades_item_title">Manufacturing of the shells</h4>
+                </div>
+                <div class="aeroblades_item_text_wrapper">
+                    <p class="aeroblades_item_text"><strong>They cover the girders</strong> and are made of fibreglass. In addition, they are covered by a layer of paint, which provides protection.</p>
+                </div>
+            </div>
+        </div>
+        <div class="aeroblades_item swiper-slide">
+            <img class="aeroblades_item_image" src="/estaticos/palas-aerogenerador/images/animacion-3.gif" alt="Illustration">
+            <div class="aeroblades_item_content">
+                <div class="aeroblades_item_header">
+                    <span class="aeroblades_item_number">3</span>
+                    <h4 class="aeroblades_item_title">Assembly and curing</h4>
+                </div>
+                <div class="aeroblades_item_text_wrapper">
+                    <p class="aeroblades_item_text">After obtaining the two shells, <strong>the next step is to bond the girder</strong> between the two shells and have them pass through an oven to form a single firm and strong structure.</p>
+                </div>
+            </div>
+        </div>
+        <div class="aeroblades_item swiper-slide">
+            <img class="aeroblades_item_image" src="/estaticos/palas-aerogenerador/images/animacion-4.gif" alt="Illustration">
+            <div class="aeroblades_item_content">
+                <div class="aeroblades_item_header">
+                    <span class="aeroblades_item_number">4</span>
+                    <h4 class="aeroblades_item_title">Finishing</h4>
+                </div>
+                <div class="aeroblades_item_text_wrapper">
+                    <p class="aeroblades_item_text">Once the leading and trailing edges of the blade are finished, <strong>the structure undergoes a new inspection</strong> prior to the blade being moved to its destination wind farm.</p>
+                </div>
+            </div>
+        </div>
+        <div class="aeroblades_item swiper-slide">
+            <img class="aeroblades_item_image" src="/estaticos/palas-aerogenerador/images/animacion-5.gif" alt="Illustration">
+            <div class="aeroblades_item_content">
+                <div class="aeroblades_item_header">
+                    <span class="aeroblades_item_number">5</span>
+                    <h4 class="aeroblades_item_title">Transportation and installation</h4>
+                </div>
+                <div class="aeroblades_item_text_wrapper">
+                    <p class="aeroblades_item_text">The blades of a wind turbine are very heavy, massive structures. The blades of the <strong>Saint Brieuc</strong> offshore wind farm, for example, have a length of 82 meters. <strong>The require specialised</strong> forms of transport that are capable of loading these structures and carrying them to their destination. At the destination, <strong>an experienced team of people</strong> assembles the blades and the rotor on the nacelle.</p>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="aeroblades_navigation swiper-controls">
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+      </div>
+    </div>
+  </section>
+  <script src="/estaticos/palas-aerogenerador/swiper.min.js"></script>
+  <script>
+    const swiperAeroBlades = {
+        autoHeight: true,
+        spaceBetween: 20,
+        effect: 'fade',
+        navigation: {
+            nextEl: '#aerobladesSwiper .swiper-button-next',
+            prevEl: '#aerobladesSwiper .swiper-button-prev',
+        },
+        pagination: {
+            el: '#aerobladesSwiper .swiper-pagination',
+            type: 'fraction',
+            renderFraction: function (currentClass, totalClass) {
+                return '<span class="' + currentClass + '"></span> of <span class="' + totalClass + '"></span>';
+            },
+        },
+    };
+    swiper = new Swiper('#aerobladesSwiper', swiperAeroBlades);
+  </script>
+  <!-- FIN DE MODULO -->
+
+</body>
+</html>

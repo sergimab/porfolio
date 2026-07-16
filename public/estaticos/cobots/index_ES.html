@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- INICIO DE MODULO -->
+    <link rel="stylesheet" href="/estaticos/fonts/fonts.css">
+    <link rel="stylesheet" href="/estaticos/cobots/styles.css?t=0853">
+    <section id="cobots" class="cobots">
+        <h3 class="cobots_title">Los puntos fuertes de los <strong><em>cobots</em></strong></h3>
+        <div class="cobots_media">
+            <video id="videoPrev" class="cobots_media_video" playsinline muted>
+                <source src="/estaticos/cobots/videos/cobot-izquierda.webm" type="video/webm" />
+            </video>
+            <video id="videoNext" class="cobots_media_video cobots_hidden" playsinline muted>
+                <source src="/estaticos/cobots/videos/cobot-derecha.webm" type="video/webm" />
+            </video>
+        </div>
+        <div id="cobotsSwiper" class="cobots_swiper swiper">
+            <div class="swiper-wrapper">
+                <div class="cobots_item swiper-slide">
+                    <span class="cobots_item_number">1</span>
+                    <p class="cobots_item_title">Colaboran en equipo hombre-máquina</p>
+                    <p class="cobots_item_text">No sustituyen a <strong>la mano de obra humana</strong>, sino que trabajan al lado de los operarios.</p>
+                </div>
+                <div class="cobots_item swiper-slide">
+                    <span class="cobots_item_number">2</span>
+                    <p class="cobots_item_title">Se encargan de las tareas más peligrosas</p>
+                    <p class="cobots_item_text">Al asumir este tipo de trabajos <strong>se reducen las bajas y las enfermedades laborales</strong>.</p>
+                </div>
+                <div class="cobots_item swiper-slide">
+                    <span class="cobots_item_number">3</span>
+                    <p class="cobots_item_title">Nunca dañan a un operario </p>
+                    <p class="cobots_item_text"><strong>Cuentan con sensores</strong> que les permiten, por ejemplo, ralentizar su velocidad si hay riesgo para un humano.</p>
+                </div>
+                <div class="cobots_item swiper-slide">
+                    <span class="cobots_item_number">4</span>
+                    <p class="cobots_item_title">Disminuyen los costes</p>
+                    <p class="cobots_item_text"><strong>Son más baratos</strong> y se amortizan más rápidamente que los robots industriales tradicionales. </p>
+                </div>
+                <div class="cobots_item swiper-slide">
+                    <span class="cobots_item_number">5</span>
+                    <p class="cobots_item_title">Aprenden nuevas tareas fácilmente</p>
+                    <p class="cobots_item_text">Gracias a tecnologías como la <strong>Inteligencia Artificial y el Machine Learning</strong> nunca dejan de aprender.</p>
+                </div>
+                <div class="cobots_item swiper-slide">
+                    <span class="cobots_item_number">6</span>
+                    <p class="cobots_item_title">Pueden trasladarse de forma sencilla </p>
+                    <p class="cobots_item_text">Su <strong>tamaño y su peso reducido</strong> facilitan su traslado a cualquier punto de la cadena productiva.</p>
+                </div>
+                <div class="cobots_item swiper-slide">
+                    <span class="cobots_item_number">7</span>
+                    <p class="cobots_item_title">Mejoran la productividad </p>
+                    <p class="cobots_item_text">Se complementan con el operario y ayudan a <strong>optimizar y modernizar el proceso de producción</strong>.</p>
+                </div>
+            </div>
+            <div class="cobots_navigation swiper-controls">
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+            </div>
+        </div>
+    </section>
+    <script src="/estaticos/cobots/swiper.min.js"></script>
+    <script>
+        let swipercobots = new Swiper('#cobots .cobots_swiper', {
+            autoHeight: false,
+            spaceBetween: 20,
+            navigation: {
+                nextEl: '#cobots .swiper-button-next',
+                prevEl: '#cobots .swiper-button-prev',
+            },
+            pagination: {
+                el: '#cobots .swiper-pagination',
+                type: 'fraction',
+                renderFraction: function (currentClass, totalClass) {
+                    return '<span class="' + currentClass + '"></span> de <span class="' + totalClass + '"></span>';
+                },
+            },
+        });
+        swipercobots.on('slideChange', function (slider) {
+            let current = slider.activeIndex + 1;
+            if (slider.activeIndex > slider.previousIndex) {
+                if (!document.getElementById('videoPrev').classList.contains('cobots_hidden')){
+                    document.getElementById('videoPrev').classList.add('cobots_hidden');
+                }
+                if (document.getElementById('videoNext').classList.contains('cobots_hidden')){
+                    document.getElementById('videoNext').classList.remove('cobots_hidden');
+                }
+                document.getElementById('videoNext').play();
+            } else {
+                if (!document.getElementById('videoNext').classList.contains('cobots_hidden')){
+                    document.getElementById('videoNext').classList.add('cobots_hidden');
+                }
+                if (document.getElementById('videoPrev').classList.contains('cobots_hidden')){
+                    document.getElementById('videoPrev').classList.remove('cobots_hidden');
+                }
+                document.getElementById('videoPrev').play();
+            }
+        });
+    </script>
+    <!-- FIN DE MODULO -->
+
+</body>
+</html>

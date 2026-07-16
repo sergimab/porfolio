@@ -1,0 +1,710 @@
+:root {
+  --enguniverse-white: #fff;
+  --enguniverse-green: #00a443;
+  --enguniverse-green-1: #007f33;
+  --enguniverse-green-2: #008C39;
+  --enguniverse-green-4: #5BD38C;
+  --enguniverse-sand: #fff5ec;
+  --enguniverse-sand-1: #fffeff;
+  --enguniverse-sand-3: #D8CFC7;
+  --enguniverse-sand-7: #3A3735;
+  --enguniverse-forest: #00402a;
+  --enguniverse-forest-1: #DCEBE1;
+  --enguniverse-forest-2: #A2BCB1;
+  --enguniverse-forest-4: #2F6852;
+  --enguniverse-sky: #0DA9FF;
+  --enguniverse-sky-320: #D8F3FF;
+  --enguniverse-sunset: #FF9C1A;
+}
+
+#enguniverse {
+  width: 100%;
+  max-width: 980px;
+  text-align: left;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 15px;
+  background: var(--enguniverse-sand);
+  margin: 0 auto;
+  padding: 16px;
+  border: none;
+}
+
+#enguniverse * {
+  font-family: "IberPangeaText" !important;
+  font-style: normal;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#enguniverse strong {
+  font-family: "IberPangeaText Bold" !important;
+  font-weight: normal;
+}
+
+#enguniverse h2 {
+  margin-top: 0 !important;
+}
+
+#enguniverse ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#enguniverse ul li:before {
+  content: none !important;
+  display: none !important;
+}
+
+#enguniverse img {
+  display: block;
+  width: 100%;
+}
+
+#enguniverse .enguniverse_title {
+  color: var(--enguniverse-green-1) !important;
+  font-family: "IberPangea" !important;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 30px;
+  line-height: 1.13;
+  text-align: left;
+  margin-bottom: 24px;
+}
+
+#enguniverse .enguniverse_title strong {
+  font-family: "IberPangea Bold" !important;
+  font-style: normal;
+  font-weight: normal;
+}
+
+#enguniverse .enguniverse_content {
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+#enguniverse .enguniverse_media {
+  width: 100%;
+  max-width: 272px;
+  margin: 0 auto;
+}
+
+#enguniverse .enguniverse_hotspots {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 256px;
+  margin: 0 auto;
+}
+
+#enguniverse .enguniverse_hotspots .enguniverse_button {
+  color: var(--enguniverse-green-1) !important;
+  font-family: "IberPangeaText Bold" !important;
+  font-size: 12px;
+  line-height: 1.16;
+  font-style: normal;
+  font-weight: normal;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.5s;
+  display: block;
+  width: 100%;
+  max-width: 77px;
+  position: relative;
+}
+
+#enguniverse .enguniverse_hotspots--bottom .enguniverse_button {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+#enguniverse .enguniverse_hotspots--bottom .enguniverse_button:before {
+  bottom: auto;
+  top: -10px;
+}
+
+#enguniverse .enguniverse_hotspots .enguniverse_button:before {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 40px;
+  margin: 8px auto 0;
+  transition: all 0.5s;
+  border-radius: 100%;
+  background-color: var(--enguniverse-white);
+  border: 1px solid var(--enguniverse-forest);
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 0;
+}
+
+#enguniverse .enguniverse_hotspots .enguniverse_button:after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 40px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  margin: 8px auto 0;
+  transition: all 0.5s;
+  border-radius: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+#enguniverse .enguniverse_hotspots--bottom .enguniverse_button:after {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+#enguniverse .enguniverse_hotspots .enguniverse_button-1:after {
+  background-image: url('/estaticos/grupos-de-interes/images/ico-1.svg');
+}
+
+#enguniverse .enguniverse_hotspots .enguniverse_button-2:after {
+  background-image: url('/estaticos/grupos-de-interes/images/ico-2.svg');
+}
+
+#enguniverse .enguniverse_hotspots .enguniverse_button-3:after {
+  background-image: url('/estaticos/grupos-de-interes/images/ico-3.svg');
+}
+
+#enguniverse .enguniverse_hotspots .enguniverse_button-4:after {
+  background-image: url('/estaticos/grupos-de-interes/images/ico-4.svg');
+}
+
+#enguniverse .enguniverse_hotspots .enguniverse_button-5:after {
+  background-image: url('/estaticos/grupos-de-interes/images/ico-5.svg');
+}
+
+#enguniverse .enguniverse_hotspots .enguniverse_button-6:after {
+  background-image: url('/estaticos/grupos-de-interes/images/ico-6.svg');
+}
+
+#enguniverse .enguniverse_hotspots .enguniverse_button:hover,
+#enguniverse .enguniverse_hotspots .enguniverse_button.is-active {
+  color: var(--enguniverse-forest) !important;
+}
+
+#enguniverse .enguniverse_hotspots .enguniverse_button:hover:before,
+#enguniverse .enguniverse_hotspots .enguniverse_button.is-active:before {
+  background-color: var(--enguniverse-green);
+  border-color: var(--enguniverse-green);
+}
+
+#enguniverse .enguniverse_hotspots .enguniverse_button:hover:after,
+#enguniverse .enguniverse_hotspots .enguniverse_button.is-active:after {
+  filter: brightness(0) invert(1);
+}
+
+#enguniverse .enguniverse_media_image {
+  display: block;
+  width: 100%;
+  position: relative;
+}
+
+#enguniverse .enguniverse_media_image:before {
+  content: '';
+  display: block;
+  width: calc(100% - 14px);
+  left: 50%;
+  transform: translateX(-50%);
+  height: calc(100% - 48px);
+  top: 24px;
+  background-color: var(--enguniverse-white);
+  border-radius: 15px;
+  position: absolute;
+}
+
+#enguniverse .enguniverse_media_image_tag {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transition: opacity .35s ease;
+}
+
+#enguniverse .enguniverse_media_image_tag.base {
+  position: relative;
+  top: auto;
+  left: auto;
+}
+
+#enguniverse .enguniverse_modal {
+  border-radius: 15px;
+  margin-top: 16px;
+  display: none;
+}
+
+#enguniverse .enguniverse_modal.active {
+  display: block;
+}
+
+#enguniverse .enguniverse_modal_header {
+  border-radius: 15px 15px 0 0;
+  background: var(--enguniverse-white);
+  padding: 16px 16px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+#enguniverse .enguniverse_modal_title {
+  color: var(--enguniverse-green-1) !important;
+  font-family: "IberPangea" !important;
+  font-size: 18px;
+  line-height: 1.22;
+  font-style: normal;
+  font-weight: normal;
+  text-align: left;
+}
+
+#enguniverse .enguniverse_modal_close {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  text-indent: -9999px;
+  overflow: hidden;
+  text-decoration: none;
+  background-image: url('/estaticos/grupos-de-interes/images/ico-cerrar.svg');
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-left: auto;
+}
+
+#enguniverse .enguniverse_modal_content {
+  border-radius: 0 0 15px 15px;
+  background: var(--enguniverse-white);
+  padding: 0 16px 16px;
+}
+
+#enguniverse .enguniverse_modal_subtitle {
+  color: var(--enguniverse-forest) !important;
+  font-family: "IberPangeaText" !important;
+  font-size: 16px;
+  line-height: 1.25;
+  font-style: normal;
+  font-weight: normal;
+  text-align: center;
+  border-radius: 8px;
+  background: var(--enguniverse-sand);
+  padding: 8px 4px;
+  margin-bottom: 8px;
+}
+
+#enguniverse .enguniverse_modal_subtitle strong {
+  font-family: "IberPangeaText Bold" !important;
+  font-style: normal;
+  font-weight: normal;
+}
+
+#enguniverse .enguniverse_modal_text p {
+  color: var(--enguniverse-sand-7) !important;
+  font-family: "IberPangeaText" !important;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 1.25;
+  text-align: left;
+  margin-bottom: 8px;
+}
+
+#enguniverse .enguniverse_modal_text p strong {
+  font-family: "IberPangeaText Bold" !important;
+  font-style: normal;
+  font-weight: normal;
+}
+
+#enguniverse .enguniverse_modal_text li {
+  color: var(--enguniverse-sand-7) !important;
+  font-family: "IberPangeaText" !important;
+  font-size: 14px;
+  line-height: 1.25;
+  font-style: normal;
+  font-weight: normal;
+  text-align: left;
+  padding-left: 20px;
+  position: relative;
+}
+
+#enguniverse .enguniverse_modal_text li:after {
+  content: '';
+  display: block;
+  width: 3px;
+  height: 3px;
+  background-color: var(--enguniverse-green-1);
+  border-radius: 100%;
+  position: absolute;
+  top: 6px;
+  left: 8px;
+}
+
+#enguniverse .enguniverse_modal_text li strong {
+  color: var(--enguniverse-green-1) !important;
+  font-family: "IberPangeaText Bold" !important;
+  font-style: normal;
+  font-weight: normal;
+}
+
+#enguniverse .enguniverse_modal_back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  margin-top: 24px;
+  border-radius: 24px;
+  background: var(--enguniverse-green-1);
+  color: var(--enguniverse-sand-1) !important;
+  font-family: "IberPangea Medium" !important;
+  font-size: 16px;
+  line-height: 1.25;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: none;
+  gap: 16px;
+}
+
+#enguniverse .enguniverse_modal_back:after {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 24px;
+  background-image: url('/estaticos/grupos-de-interes/images/ico-subir.svg');
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+#enguniverse .enguniverse_source {
+  color: var(--enguniverse-sand-7) !important;
+  font-family: "IberPangeaText" !important;
+  font-size: 14px;
+  line-height: 1.28;
+  font-style: italic;
+  font-weight: normal;
+  text-align: left;
+}
+
+#enguniverse .enguniverse_groups {
+  display: none;
+}
+
+#enguniverse .enguniverse_visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (min-width: 700px) {
+
+  #enguniverse {
+  }
+    
+  #enguniverse .enguniverse_title {
+    font-size: 32px;
+    line-height: 1.125;
+    margin-bottom: 34px;
+  }
+
+  #enguniverse .enguniverse_media {
+    max-width: 480px;
+    position: relative;
+    margin-bottom: 16px;
+  }
+
+  #enguniverse .enguniverse_hotspots {
+    position: initial;
+  }
+
+  #enguniverse .enguniverse_hotspots .enguniverse_button {
+    position: absolute;
+    display: block;
+    width: 35px;
+    height: 35px;
+    z-index: 10;
+  }
+
+  #enguniverse .enguniverse_hotspots .enguniverse_button-1 {
+    top: -22px;
+    left: 108px;  
+  }
+
+  #enguniverse .enguniverse_hotspots .enguniverse_button-2 {
+    top: 8px;
+    left: 190px;  
+  }
+
+  #enguniverse .enguniverse_hotspots .enguniverse_button-3 {
+    top: -31px;
+    left: 270px;  
+  }
+
+  #enguniverse .enguniverse_hotspots .enguniverse_button-4 {
+    top: 22px;
+    left: 35px;  
+  }
+
+  #enguniverse .enguniverse_hotspots .enguniverse_button-5 {
+    top: 124px;
+    left: 145px;  
+  }
+
+  #enguniverse .enguniverse_hotspots .enguniverse_button-6 {
+    top: 23px;
+    right: 73px;  
+  }
+
+  #enguniverse .enguniverse_hotspots .enguniverse_button span {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  #enguniverse .enguniverse_hotspots .enguniverse_button:after,
+  #enguniverse .enguniverse_hotspots--bottom .enguniverse_button:after,
+  #enguniverse .enguniverse_hotspots .enguniverse_button:before,
+  #enguniverse .enguniverse_hotspots--bottom .enguniverse_button:before {
+    width: 35px;
+    height: 35px;
+    top: 0;
+    bottom: auto;
+    margin: 0;
+  }
+
+  #enguniverse .enguniverse_groups {
+    display: block;
+    border-radius: 16px;
+    background: var(--enguniverse-white);
+    padding: 16px;
+  }
+
+  #enguniverse .enguniverse_groups_title {
+    color: var(--enguniverse-green-1) !important;
+    font-family: "IberPangea Bold" !important;
+    font-size: 18px;
+    line-height: 1.22;
+    font-style: normal;
+    font-weight: normal;
+    text-align: center;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 13px;
+  }
+
+  #enguniverse .enguniverse_nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  #enguniverse .enguniverse_nav .enguniverse_button {
+    border-radius: 8px;
+    background: var(--enguniverse-sand);
+    border: 1px solid var(--enguniverse-sand);
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    color: var(--enguniverse-forest) !important;
+    font-family: "IberPangea Bold" !important;
+    font-size: 16px;
+    line-height: 1.22;
+    font-style: normal;
+    font-weight: normal;
+    text-align: left;
+    text-decoration: none;
+    gap: 8px;
+    width: calc(50% - 8px);
+    transition: all 0.3s;
+  }
+
+  #enguniverse .enguniverse_nav .enguniverse_button:hover {
+    border-color: var(--enguniverse-green-1);
+  }
+
+  #enguniverse .enguniverse_nav .enguniverse_button:after {
+    content: '';
+    display: block;
+    width: 32px;
+    min-width: 32px;
+    height: 32px;
+    background-image: url('/estaticos/grupos-de-interes/images/ico-mas.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    margin-left: auto;
+  }
+
+  #enguniverse .enguniverse_modal_back {
+    display: none;
+  }
+
+  #enguniverse .enguniverse_content {
+    position: relative;
+  }
+
+  #enguniverse .enguniverse_modal {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 301px;
+  }
+
+  #enguniverse .enguniverse_modal_inner {
+    height: calc(100% - 56px);
+  }
+
+  #enguniverse .enguniverse_modal_content {
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  #enguniverse .enguniverse_modal_content::-webkit-scrollbar-track {
+    height: 8px;
+    width: 8px;
+    border-radius: 10px;
+    border: none;
+    background-color: var(--enguniverse-sand-3);
+    box-shadow: none;
+  }
+
+  #enguniverse .enguniverse_modal_content::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+    box-shadow: none;
+    border: none;
+    background-color: transparent;
+  }
+
+  #enguniverse .enguniverse_modal_content::-webkit-scrollbar-thumb {
+    height: 8px;
+    width: 8px;
+    border-radius: 10px;
+    box-shadow: none;
+    border: none;
+    background-color: var(--enguniverse-green);
+  }
+
+  #enguniverse .enguniverse_modal_header {
+    justify-content: center;
+  }
+
+  #enguniverse .enguniverse_modal_title {
+    width: calc(100% - 32px);
+    text-align: center;
+  }
+
+}
+
+@media (min-width: 1000px) {
+
+  #enguniverse {
+  }
+    
+  #enguniverse .enguniverse_title {
+    margin-bottom: 40px;
+  }
+
+  #enguniverse .enguniverse_content {
+    margin-bottom: 40px;
+    display: flex;
+    gap: 16px;
+  }
+
+  #enguniverse .enguniverse_media {
+    width: calc(100% - 47.36% - 16px);
+    margin-bottom: 0;
+  }
+
+  #enguniverse .enguniverse_media_image:before {
+    height: 100%;
+    top: 0;
+  }
+
+  #enguniverse .enguniverse_groups {
+    width: 47.36%;
+  }
+
+  #enguniverse .enguniverse_groups_title {
+    margin-bottom: 8px;
+  }
+
+  #enguniverse .enguniverse_nav .enguniverse_button {
+    padding: 7px 15px;
+    min-height: 76px;
+  }
+
+  #enguniverse.enguniverse-en .enguniverse_nav .enguniverse_button,
+  #enguniverse.enguniverse-pt .enguniverse_nav .enguniverse_button {
+    gap: 4px;
+  }
+
+  #enguniverse .enguniverse_hotspots .enguniverse_button-1 {
+    left: 102px;
+  }
+
+  #enguniverse .enguniverse_hotspots .enguniverse_button-2 {
+    top: 5px;
+    left: 182px;
+  }
+
+  #enguniverse .enguniverse_hotspots .enguniverse_button-3 {
+    left: 261px;
+  }
+
+  #enguniverse .enguniverse_hotspots .enguniverse_button-4 {
+    top: 21px;
+    left: 32px;
+  }
+
+  #enguniverse .enguniverse_hotspots .enguniverse_button-5 {
+    left: 139px;
+  }
+
+  #enguniverse .enguniverse_hotspots .enguniverse_button-6 {
+    right: 70px;
+  }
+
+  #enguniverse .enguniverse_modal {
+    width: 47.36%;
+    left: auto;
+    right: 0;
+    height: 332px;
+  }
+
+}
+
+/* ── Padding estandarizado del módulo: 16 móvil / 24 tablet / 36 desk ── */
+@media (min-width: 500px) {
+  #enguniverse { padding: 24px; }
+}
+@media (min-width: 700px) {
+  #enguniverse { padding: 36px; }
+}

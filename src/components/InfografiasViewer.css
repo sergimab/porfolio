@@ -1,0 +1,163 @@
+/* ── Visor de infografías: pestañas por tamaño + botones + módulo ── */
+.igv-sys {
+  display: flex;
+  flex-direction: column;
+  margin-top: 48px;
+}
+
+/* Pestañas 565 / 980 / 1256 (mismo lenguaje que Holding/Subholding) */
+.igv-tabs {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  position: relative;
+  z-index: 2;
+}
+.igv-tab {
+  flex: 1;
+  padding: 18px;
+  border: 1px solid var(--foreground);
+  border-radius: 12px;
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.igv-tab[data-active="false"]:hover {
+  background: var(--foreground);
+  color: var(--background);
+}
+/* La activa se funde con la caja de abajo */
+.igv-tab[data-active="true"] {
+  background: var(--foreground);
+  color: var(--background);
+  border-color: var(--foreground);
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+  padding-bottom: 34px;
+  margin-bottom: -1px;
+}
+
+/* Caja contenedora */
+.igv-box {
+  border: 1px solid var(--foreground);
+  border-radius: 16px;
+  padding: 24px 20px 20px;
+}
+.igv-box[data-tab="565"]  { border-top-left-radius: 0; }
+.igv-box[data-tab="1256"] { border-top-right-radius: 0; }
+
+/* Dos columnas: botones + módulo */
+.igv {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+/* Columna de botones */
+.igv-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.igv-btn {
+  width: 100%;
+  padding: 14px 20px;
+  border: 1px solid var(--foreground);
+  border-radius: 16px;
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.igv-btn:hover {
+  background: var(--foreground);
+  color: var(--background);
+}
+.igv-btn[data-active="true"] {
+  background: var(--foreground);
+  color: var(--background);
+}
+
+/* Ancho completo (980): botones en fila arriba, infografía debajo */
+.igv-box[data-tab="980"] .igv {
+  grid-template-columns: 1fr;
+}
+.igv-box[data-tab="980"] .igv-nav {
+  flex-direction: row;
+}
+.igv-box[data-tab="980"] .igv-btn {
+  flex: 1;
+  width: auto;
+}
+
+/* Módulo desplegado */
+.igv-frame {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+  display: block;
+  overflow: hidden;
+}
+
+/* ── Anchos por grupo ──
+   565: dentro de la caja. 980/1256: en escritorio van a su ancho de diseño,
+   sobresaliendo por la derecha de los límites del contenido (con tope para
+   no desbordar la ventana); en tablet, 565px. */
+.igv-frame-565 {
+  width: 746px;
+  max-width: 100%;
+}
+/* Contenido interior: el módulo queda fijo a 746px a la derecha y los
+   botones se estiran ocupando el resto del ancho. */
+@media (min-width: 1100px) {
+  .igv-box[data-tab="565"] .igv {
+    grid-template-columns: 1fr 746px;
+  }
+}
+.igv-frame-980,
+.igv-frame-1256 {
+  width: 565px;
+  max-width: 100%;
+}
+@media (min-width: 1100px) {
+  /* Ancho completo: las infografías están diseñadas a 980px y van centradas */
+  .igv-frame-980 {
+    width: 980px;
+    max-width: 100%;
+    justify-self: center;
+  }
+  .igv-frame-1256 {
+    width: 1256px;
+    max-width: calc(50vw + 130px);
+  }
+}
+
+@media (max-width: 768px) {
+  .igv {
+    grid-template-columns: 1fr;
+  }
+  .igv-box[data-tab="980"] .igv-nav {
+    flex-direction: column;
+  }
+  .igv-box[data-tab="980"] .igv-btn {
+    width: 100%;
+  }
+  .igv-tab {
+    padding: 14px 8px;
+    font-size: 13px;
+  }
+  .igv-frame-565,
+  .igv-frame-980,
+  .igv-frame-1256 {
+    width: 100%;
+  }
+}

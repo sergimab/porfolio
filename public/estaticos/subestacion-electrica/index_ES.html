@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title></title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- INICIO DE MODULO -->
+  <link rel="stylesheet" href="/estaticos/fonts/fonts.css">
+    <link rel="stylesheet" href="/estaticos/subestacion-electrica/styles.css?t=1319">
+  <section id="subelectric" class="subelectric">
+    <h2 class="subelectric_title">Elementos de una <strong>subestación eléctrica</strong></h2>
+    <p class="subelectric_text">Una subestación transformadora está compuesta por distintos equipos y elementos que trabajan en conjunto para <strong>distribuir la energía eléctrica de forma segura</strong>. A continuación, presentamos sus principales componentes.</p>
+    <div class="subelectric_media">
+      <a class="subelectric_media_link" href="#subestacion-electrica-01" data-anchor="subestacion-electrica-01">
+        <span class="subelectric_media_number">1</span>
+        <span class="subelectric_media_label">Pórtico de entrada de línea de alta tensión</span>
+      </a>
+      <a class="subelectric_media_link" href="#subestacion-electrica-02" data-anchor="subestacion-electrica-02">
+        <span class="subelectric_media_number">2</span>
+        <span class="subelectric_media_label">Transformador de tensión de línea</span>
+      </a>
+      <a class="subelectric_media_link" href="#subestacion-electrica-03" data-anchor="subestacion-electrica-03">
+        <span class="subelectric_media_number">3</span>
+        <span class="subelectric_media_label">Seccionador de aislamiento y puesta a tierra de línea.</span>
+      </a>
+      <a class="subelectric_media_link" href="#subestacion-electrica-04" data-anchor="subestacion-electrica-04">
+        <span class="subelectric_media_number">4</span>
+        <span class="subelectric_media_label">Interruptor automático</span>
+      </a>
+      <a class="subelectric_media_link" href="#subestacion-electrica-05" data-anchor="subestacion-electrica-05">
+        <span class="subelectric_media_number">5</span>
+        <span class="subelectric_media_label">Transformador de intensidad</span>
+      </a>
+      <a class="subelectric_media_link" href="#subestacion-electrica-06" data-anchor="subestacion-electrica-06">
+        <span class="subelectric_media_number">6</span>
+        <span class="subelectric_media_label">Seccionador de aislamiento de barras</span>
+      </a>
+      <a class="subelectric_media_link" href="#subestacion-electrica-07" data-anchor="subestacion-electrica-07">
+        <span class="subelectric_media_number">7</span>
+        <span class="subelectric_media_label">Embarrado principal</span>
+      </a>
+      <a class="subelectric_media_link" href="#subestacion-electrica-08" data-anchor="subestacion-electrica-08">
+        <span class="subelectric_media_number">8</span>
+        <span class="subelectric_media_label">Transformador de tensión de barras.</span>
+      </a>
+      <a class="subelectric_media_link" href="#subestacion-electrica-09" data-anchor="subestacion-electrica-09" data-content="12">
+        <span class="subelectric_media_number">9</span>
+        <span class="subelectric_media_label">Edificio de control y celdas</span>
+      </a>
+      <a class="subelectric_media_link" href="#subestacion-electrica-10" data-anchor="subestacion-electrica-10" data-content="9">
+        <span class="subelectric_media_number">10</span>
+        <span class="subelectric_media_label">Transformador de potencia</span>
+      </a>
+      <a class="subelectric_media_link" href="#subestacion-electrica-11" data-anchor="subestacion-electrica-11">
+        <span class="subelectric_media_number">11</span>
+        <span class="subelectric_media_label">Transformador de servicios auxiliares</span>
+      </a>
+      <a class="subelectric_media_link" href="#subestacion-electrica-12" data-anchor="subestacion-electrica-12" data-content="10">
+        <span class="subelectric_media_number">12</span>
+        <span class="subelectric_media_label">Conexión a media tensión</span>
+      </a>
+      <div class="subelectric_media_art" aria-hidden="true">
+        <img class="subelectric_media_base" src="/estaticos/subestacion-electrica/images/content.png" alt="">
+        <img class="subelectric_media_state" src="/estaticos/subestacion-electrica/images/content-1.png" alt="">
+        <img class="subelectric_media_lines" src="/estaticos/subestacion-electrica/images/lines.svg" alt="">
+      </div>
+    </div>
+  </section>
+  <script>
+    const subelectricAnchorPrefix = 'subestacion-electrica-';
+    const subelectricLinks = document.querySelectorAll('#subelectric .subelectric_media_link[href^="#"]');
+    const subelectricStateImage = document.querySelector('#subelectric .subelectric_media_state');
+    const subelectricMediaArt = document.querySelector('#subelectric .subelectric_media_art');
+    const subelectricImagePath = '/estaticos/subestacion-electrica/images/';
+
+    function setupSubelectricCwbAnchors() {
+      document.querySelectorAll('.lista-subestacion > li').forEach((item, index) => {
+        const id = subelectricAnchorPrefix + String(index + 1).padStart(2, '0');
+        if (!item.id) item.id = id;
+      });
+    }
+
+    function setSubelectricActive(link) {
+      const activeIndex = parseInt(link.dataset.content || '', 10) || (Array.prototype.indexOf.call(subelectricLinks, link) + 1);
+
+      subelectricLinks.forEach((item) => {
+        item.classList.toggle('active', item === link);
+      });
+
+      if (!subelectricStateImage || activeIndex < 1) return;
+
+      subelectricStateImage.src = subelectricImagePath + 'content-' + activeIndex + '.png';
+      subelectricStateImage.classList.add('active');
+      if (subelectricMediaArt) subelectricMediaArt.classList.add('active');
+    }
+
+    function clearSubelectricActive() {
+      subelectricLinks.forEach((item) => {
+        item.classList.remove('active');
+      });
+
+      if (subelectricStateImage) {
+        subelectricStateImage.classList.remove('active');
+        if (subelectricMediaArt) subelectricMediaArt.classList.remove('active');
+      }
+    }
+
+    setupSubelectricCwbAnchors();
+
+    subelectricLinks.forEach((link) => {
+      link.addEventListener('mouseenter', () => setSubelectricActive(link));
+      link.addEventListener('focus', () => setSubelectricActive(link));
+      link.addEventListener('mouseleave', clearSubelectricActive);
+      link.addEventListener('blur', clearSubelectricActive);
+
+      link.addEventListener('click', (event) => {
+        setupSubelectricCwbAnchors();
+        setSubelectricActive(link);
+
+        const targetId = link.getAttribute('href').slice(1);
+        const target = document.getElementById(targetId);
+
+        if (!target) return;
+
+        event.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        history.pushState(null, '', '#' + targetId);
+      });
+    });
+  </script>
+  <!-- FIN DE MODULO -->
+
+</body>
+</html>

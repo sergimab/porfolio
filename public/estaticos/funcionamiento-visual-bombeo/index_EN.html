@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title></title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- INICIO DE MODULO -->
+  <link rel="stylesheet" href="/estaticos/fonts/fonts.css">
+    <link rel="stylesheet" href="/estaticos/funcionamiento-visual-bombeo/styles.css?t=2158">
+  <section id="hpumped" class="hpumped hpumped-en" data-accordion="1">
+    <div class="hpumped_media">
+      <img class="hpumped_media_bg" src="/estaticos/funcionamiento-visual-bombeo/images/bombeo-cielo.gif" alt="Illustration of clouds moving slowly">
+      <div class="hpumped_media_item hpumped_media_item-1">
+        <img class="hpumped_media_image" src="/estaticos/funcionamiento-visual-bombeo/images/bombeo-1.gif" alt="Illustration on excess renewable energy">
+      </div>
+      <div class="hpumped_media_item hpumped_media_item-2">
+        <img class="hpumped_media_image" src="/estaticos/funcionamiento-visual-bombeo/images/bombeo-2.gif" alt="Illustration of water pumping">
+      </div>
+      <div class="hpumped_media_item hpumped_media_item-3">
+        <img class="hpumped_media_image" src="/estaticos/funcionamiento-visual-bombeo/images/bombeo-3.gif" alt="Illustration of the hydraulic system regulation">
+      </div>
+      <div class="hpumped_media_item hpumped_media_item-4">
+        <img class="hpumped_media_image" src="/estaticos/funcionamiento-visual-bombeo/images/bombeo-4.gif" alt="Illustration of storage in the upper reservoir">
+      </div>
+      <div class="hpumped_media_item hpumped_media_item-5">
+        <img class="hpumped_media_image" src="/estaticos/funcionamiento-visual-bombeo/images/bombeo-5.gif" alt="Illustration showing the complete process for generating energy">
+      </div>
+    </div>
+    <div class="hpumped_content">
+      <article class="hpumped_accordion active" data-accordion="1">
+        <h3 class="hpumped_accordion_title">Excess renewable energy</h3>
+        <div class="hpumped_accordion_content">
+          <p class="hpumped_accordion_text">When non-dispatchable renewable generation (photovoltaic or wind, which must be consumed when generated) exceeds electrical demand, <strong>the pumped-storage plant begins operating to make use of that surplus energy.</strong></p>
+        </div>
+      </article>
+      <article class="hpumped_accordion" data-accordion="2">
+        <h3 class="hpumped_accordion_title">Pumping the water</h3>
+        <div class="hpumped_accordion_content">
+          <p class="hpumped_accordion_text"><strong>Hydraulic pumps drive water from the lower reservoir up to the upper reservoir</strong> through a pressurised pipe and a conveyance tunnel.</p>
+        </div>
+      </article>
+      <article class="hpumped_accordion" data-accordion="3">
+        <h3 class="hpumped_accordion_title">Hydraulic system regulation</h3>
+        <div class="hpumped_accordion_content">
+          <p class="hpumped_accordion_text">To control water pressure during pumping and avoid overpressure, <strong>some plants feature a surge shaft or pressure-relief valve systems.</strong></p>
+        </div>
+      </article>
+      <article class="hpumped_accordion" data-accordion="4">
+        <h3 class="hpumped_accordion_title">Storage in the upper reservoir</h3>
+        <div class="hpumped_accordion_content">
+          <p class="hpumped_accordion_text"><strong>The pumped water accumulates in the upper reservoir,</strong> which acts as a large store of potential energy ready to be used when electricity generation is required.</p>
+        </div>
+      </article>
+      <article class="hpumped_accordion" data-accordion="5">
+        <h3 class="hpumped_accordion_title">Ready to generate power</h3>
+        <div class="hpumped_accordion_content">
+          <p class="hpumped_accordion_text">Once the water is stored, the plant can remain idle until the power system needs more energy. <strong>At that point, the flow is reversed and the facility operates like a conventional <a href="https://www.iberdrola.com/sustainability/what-is-hydroelectric-energy">hydroelectric power plant</a>.</strong></p>
+        </div>
+      </article>
+    </div>
+  </section>
+  <script>
+    document.querySelectorAll('.hpumped_accordion_title').forEach((item) => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        let container = document.getElementById('hpumped');
+        let current = e.currentTarget.parentNode;
+        let currentValue = current.getAttribute('data-accordion');
+        document.querySelectorAll('.hpumped_accordion').forEach((accordion) => {
+          if (accordion == current) {
+            accordion.classList.add('active');
+            container.setAttribute('data-accordion', currentValue);
+          } else {
+            accordion.classList.remove('active');
+          }
+        });
+      });
+    });
+  </script>
+  <!-- FIN DE MODULO -->
+
+</body>
+
+</html>

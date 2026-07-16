@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- INICIO DE MODULO -->
+    <link rel="stylesheet" href="/estaticos/fonts/fonts.css">
+    <link rel="stylesheet" href="/estaticos/energias-limpias/styles.css">
+    <section id="cenergies" class="cenergies">
+        <h3 class="cenergies_title">Las ventajas de las <strong>energías limpias</strong></h3>
+        <div id="cenergiesSwiper" class="cenergies_swiper swiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="cenergies_media">
+                        <img class="cenergies_media_image" src="/estaticos/energias-limpias/images/ilustracion-1.gif" alt="Ilustración">
+                    </div>
+                    <div class="cenergies_item">
+                        <h4 class="cenergies_item_title">Respetuoso con el medio ambiente</h4>
+                        <p class="cenergies_item_text">A diferencia de los combustibles fósiles, <strong>las fuentes de energía limpia como la <a href="https://www.iberdrola.com/conocenos/nuestra-actividad/energia-solar-fotovoltaica">solar</a>, la eólica (<a href="https://www.iberdrola.com/conocenos/nuestra-actividad/energia-eolica-terrestre">onshore</a> y <a href="https://www.iberdrola.com/conocenos/nuestra-actividad/energia-eolica-offshore">offshore</a>), la <a href="https://www.iberdrola.com/conocenos/nuestra-actividad/energia-hidroelectrica">hidroeléctrica</a> y la geotérmica</strong> apenas producen CO<sub>2</sub>, contribuyendo así a la lucha contra el cambio climático.</p>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="cenergies_media">
+                        <img class="cenergies_media_image" src="/estaticos/energias-limpias/images/ilustracion-2.gif" alt="Ilustración">
+                    </div>
+                    <div class="cenergies_item">
+                        <h4 class="cenergies_item_title">Inagotable</h4>
+                        <p class="cenergies_item_text"><strong>La mayoría de las fuentes de energía limpia proceden de fuentes que no se agotan</strong>, lo que permite su uso continuo e ilimitado.</p>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="cenergies_media">
+                        <img class="cenergies_media_image" src="/estaticos/energias-limpias/images/ilustracion-3.gif" alt="Ilustración">
+                    </div>
+                    <div class="cenergies_item">
+                        <h4 class="cenergies_item_title">Independencia energética</h4>
+                        <p class="cenergies_item_text">Al generarse a partir de recursos naturales distribuidos por todo el planeta, <strong>permiten a los países y regiones desarrollar sus propias tecnologías y reducir la dependencia de fuentes extranjeras.</strong></p>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="cenergies_media">
+                        <img class="cenergies_media_image" src="/estaticos/energias-limpias/images/ilustracion-4.gif" alt="Ilustración">
+                    </div>
+                    <div class="cenergies_item">
+                        <h4 class="cenergies_item_title">Creación de empleo</h4>
+                        <p class="cenergies_item_text">Las instalaciones de energía limpia, en su mayor parte, requieren una mano de obra considerable para su construcción, mantenimiento y funcionamiento, lo que <strong>crea puestos de trabajo e impulsa las economías locales</strong>.</p>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="cenergies_media">
+                        <img class="cenergies_media_image" src="/estaticos/energias-limpias/images/ilustracion-5.gif" alt="Ilustración">
+                    </div>
+                    <div class="cenergies_item">
+                        <h4 class="cenergies_item_title">Precios estables</h4>
+                        <p class="cenergies_item_text">Las fuentes de energía limpias <strong>tienen menores costes de mantenimiento y funcionamiento</strong> que las centrales que utilizan combustibles fósiles, y también <strong>tienen precios más estables para el consumidor</strong>, ya que no están sujetas a la volatilidad del mercado mundial.</p>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="cenergies_media">
+                        <img class="cenergies_media_image" src="/estaticos/energias-limpias/images/ilustracion-6.gif" alt="Ilustración">
+                    </div>
+                    <div class="cenergies_item">
+                        <h4 class="cenergies_item_title">Salud pública</h4>
+                        <p class="cenergies_item_text"><strong>Los combustibles fósiles no solo contaminan el aire, sino también el agua y el suelo</strong>. El uso de energías limpias evita estos problemas, haciendo que el aire sea más seguro para respirar y reduciendo los contaminantes en mares, ríos y tierras agrícolas.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-controls">
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+            </div>
+        </div>
+    </section>
+    <script src="/estaticos/energias-limpias/swiper.min.js"></script>
+    <script>
+        swipercenergies1 = new Swiper('#cenergiesSwiper', {
+            effect: 'fade',
+            autoHeight: true,
+            spaceBetween: 20,
+            navigation: {
+                nextEl: '#cenergiesSwiper .swiper-button-next',
+                prevEl: '#cenergiesSwiper .swiper-button-prev',
+            },
+            pagination: {
+                el: '#cenergiesSwiper .swiper-pagination',
+                type: 'fraction',
+                renderFraction: function (currentClass, totalClass) {
+                    return '<span class="' + currentClass + '"></span> de <span class="' + totalClass + '"></span>';
+                },
+            },
+        });
+    </script>
+    <!-- FIN DE MODULO -->
+
+</body>
+</html>

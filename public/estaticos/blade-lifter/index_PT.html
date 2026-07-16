@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title></title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+
+    <!-- INICIO DE MODULO -->
+    <link rel="stylesheet" href="/estaticos/blade-lifter/styles.css">
+    <section id="bladel" class="bladel">
+        <h3 class="bladel_title">Blade Lifter</h3>
+        <p class="bladel_description"><strong>Este sistema de inclinação</strong> das pás durante o transporte <strong>reduz o impacto ambiental</strong>, evitando modificações no caminho das estradas.</p>
+        <div id="bladelSwiper" class="bladel_swiper swiper">
+            <div class="swiper-wrapper">
+                <div class="bladel_item swiper-slide">
+                    <div class="bladel_item_video">
+                        <video muted playsinline id="bladelVideo1">
+                            <source src="/estaticos/blade-lifter/videos/video-blade-lifter-1.webm" type="video/webm">
+                        </video>
+                    </div>
+                    <div class="bladel_item_content">
+                        <p class="bladel_item_title"><span>1</span> Inclinação</p>
+                        <p class="bladel_item_text">A pá é inclinada até 60° acima do eixo horizontal, encurtando o conjunto.</p>
+                        <p class="bladel_item_claim">O reboque traseiro é acoplado ao conjunto para uma maior manobrabilidade.</p>
+                    </div>
+                </div> 
+                <div class="bladel_item swiper-slide">
+                    <div class="bladel_item_video">
+                        <video muted playsinline id="bladelVideo2">
+                            <source src="/estaticos/blade-lifter/videos/video-blade-lifter-2.webm" type="video/webm">
+                        </video>
+                    </div>
+                    <div class="bladel_item_content">
+                        <p class="bladel_item_title"><span>2</span> Mega pás</p>
+                        <p class="bladel_item_text">O sistema permite o transporte de pás de até 80 metros em estradas com curvas acentuadas.</p>
+                        <p class="bladel_item_claim">10 m/s velocidade máxima do vento para transportar a pá levantada.</p>
+                    </div>
+                </div> 
+                <div class="bladel_item swiper-slide">
+                    <div class="bladel_item_video">
+                        <video muted playsinline id="bladelVideo3">
+                            <source src="/estaticos/blade-lifter/videos/video-blade-lifter-3.webm" type="video/webm">
+                        </video>
+                    </div>
+                    <div class="bladel_item_content">
+                        <p class="bladel_item_title"><span>3</span> Rotação lateral</p>
+                        <p class="bladel_item_text">As pás podem ser giradas 360° durante a condução (para evitar o vento, por exemplo). Um terceiro eixo de giro vertical permite realizar um ângulo lateral de 20°. Uma opção muito útil para áreas muito edificadas.</p>
+                        <p class="bladel_item_claim">Um operador acompanha o Blade Lifter a pé, com um controle para ir ajustando a posição da pá.</p>
+                    </div>
+                </div>            
+            </div>
+            <div class="bladel_navigation swiper-controls">
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+            </div>
+        </div>
+    </section>
+    <script src="/estaticos/blade-lifter/swiper.min.js"></script>
+    <script>
+        swiperbladel = new Swiper('.bladel_swiper', {
+        autoHeight: false,
+        spaceBetween: 0,
+        effect: 'fade',
+        pagination: {
+            el: '.bladel_swiper .swiper-pagination',
+            type: 'fraction',
+            renderFraction: function (currentClass, totalClass) {
+                return '<span class="' + currentClass + '"></span> de <span class="' + totalClass + '"></span>';
+            },
+        },
+        navigation: {
+            nextEl: '.bladel_swiper .swiper-button-next',
+            prevEl: '.bladel_swiper .swiper-button-prev',
+        },
+        on: {
+            init: function () {
+                document.getElementById('bladelVideo1').play();
+            },
+        },
+        });
+        swiperbladel.on('slideChange', function (slider) {
+            let current = slider.activeIndex + 1;
+            if (current == 2) {
+                document.getElementById('bladelVideo2').play();
+            }
+            if (current == 3) {
+                document.getElementById('bladelVideo3').play();
+            }
+        });
+    </script>
+    <!-- FIN DE MODULO -->
+
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title></title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+
+    <!-- INICIO DE MODULO -->
+    <link rel="stylesheet" href="/estaticos/blade-lifter/styles.css">
+    <section id="bladel" class="bladel">
+        <h3 class="bladel_title">Blade Lifter</h3>
+        <p class="bladel_description"><strong>This system of tilting the blades</strong> during transport <strong>reduces the environmental impact</strong>, avoiding changes in road layout.</p>
+        <div id="bladelSwiper" class="bladel_swiper swiper">
+            <div class="swiper-wrapper">
+                <div class="bladel_item swiper-slide">
+                    <div class="bladel_item_video">
+                        <video muted playsinline id="bladelVideo1">
+                            <source src="/estaticos/blade-lifter/videos/video-blade-lifter-1.webm" type="video/webm">
+                        </video>
+                    </div>
+                    <div class="bladel_item_content">
+                        <p class="bladel_item_title"><span>1</span> Inclination</p>
+                        <p class="bladel_item_text">The blade is tilted up to 60º above the horizontal axis, shortening the assembly.</p>
+                        <p class="bladel_item_claim">The rear trailer is coupled to the assembly for improved manoeuvrability.</p>
+                    </div>
+                </div> 
+                <div class="bladel_item swiper-slide">
+                    <div class="bladel_item_video">
+                        <video muted playsinline id="bladelVideo2">
+                            <source src="/estaticos/blade-lifter/videos/video-blade-lifter-2.webm" type="video/webm">
+                        </video>
+                    </div>
+                    <div class="bladel_item_content">
+                        <p class="bladel_item_title"><span>2</span> Mega blades</p>
+                        <p class="bladel_item_text">The system makes it possible to transport blades up to 80 metres long on roads with sharp bends.</p>
+                        <p class="bladel_item_claim">10 m/s maximum wind speed for transporting the lifted blade.</p>
+                    </div>
+                </div> 
+                <div class="bladel_item swiper-slide">
+                    <div class="bladel_item_video">
+                        <video muted playsinline id="bladelVideo3">
+                            <source src="/estaticos/blade-lifter/videos/video-blade-lifter-3.webm" type="video/webm">
+                        </video>
+                    </div>
+                    <div class="bladel_item_content">
+                        <p class="bladel_item_title"><span>3</span> Lateral rotation</p>
+                        <p class="bladel_item_text">The blades can be rotated 360° while driving (e.g. to avoid the wind). A third vertical rotation axis allows a lateral angle of 20°. A very useful option in heavily built-up areas.</p>
+                        <p class="bladel_item_claim">An operator accompanies the Blade Lifter on foot, with a remote control to adjust the position of the blade.</p>
+                    </div>
+                </div>            
+            </div>
+            <div class="bladel_navigation swiper-controls">
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+            </div>
+        </div>
+    </section>
+    <script src="/estaticos/blade-lifter/swiper.min.js"></script>
+    <script>
+        swiperbladel = new Swiper('.bladel_swiper', {
+        autoHeight: false,
+        spaceBetween: 0,
+        effect: 'fade',
+        pagination: {
+            el: '.bladel_swiper .swiper-pagination',
+            type: 'fraction',
+            renderFraction: function (currentClass, totalClass) {
+                return '<span class="' + currentClass + '"></span> of <span class="' + totalClass + '"></span>';
+            },
+        },
+        navigation: {
+            nextEl: '.bladel_swiper .swiper-button-next',
+            prevEl: '.bladel_swiper .swiper-button-prev',
+        },
+        on: {
+            init: function () {
+                document.getElementById('bladelVideo1').play();
+            },
+        },
+        });
+        swiperbladel.on('slideChange', function (slider) {
+            let current = slider.activeIndex + 1;
+            if (current == 2) {
+                document.getElementById('bladelVideo2').play();
+            }
+            if (current == 3) {
+                document.getElementById('bladelVideo3').play();
+            }
+        });
+    </script>
+    <!-- FIN DE MODULO -->
+
+</body>
+</html>

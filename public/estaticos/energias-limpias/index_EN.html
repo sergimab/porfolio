@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- INICIO DE MODULO -->
+    <link rel="stylesheet" href="/estaticos/fonts/fonts.css">
+    <link rel="stylesheet" href="/estaticos/energias-limpias/styles.css">
+    <section id="cenergies" class="cenergies">
+        <h3 class="cenergies_title">The advantages of <strong>clean energies</strong></h3>
+        <div id="cenergiesSwiper" class="cenergies_swiper swiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="cenergies_media">
+                        <img class="cenergies_media_image" src="/estaticos/energias-limpias/images/ilustracion-1.gif" alt="Illustration">
+                    </div>
+                    <div class="cenergies_item">
+                        <h4 class="cenergies_item_title">Environmentally friendly</h4>
+                        <p class="cenergies_item_text">Unlike fossil fuels, <strong>clean-energy sources such as <a href="https://www.iberdrola.com/about-us/what-we-do/solar-photovoltaic-energy">solar</a>,wind (<a href="https://www.iberdrola.com/about-us/what-we-do/onshore-wind-energy">onshore</a> and <a href="https://www.iberdrola.com/about-us/what-we-do/offshore-wind-energy">offshore</a>), <a href="https://www.iberdrola.com/about-us/what-we-do/hydroelectric-power">hydro</a> and geothermal</strong> produce little to no CO<sub>2</sub>, thus contributing to the fight against climate change.</p>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="cenergies_media">
+                        <img class="cenergies_media_image" src="/estaticos/energias-limpias/images/ilustracion-2.gif" alt="Illustration">
+                    </div>
+                    <div class="cenergies_item">
+                        <h4 class="cenergies_item_title">Inexhaustible</h4>
+                        <p class="cenergies_item_text"><strong>Most clean-energy sources are derived from supplies that won’t run out</strong>, allowing for their continuous and unlimited use.</p>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="cenergies_media">
+                        <img class="cenergies_media_image" src="/estaticos/energias-limpias/images/ilustracion-3.gif" alt="Illustration">
+                    </div>
+                    <div class="cenergies_item">
+                        <h4 class="cenergies_item_title">Energy independent</h4>
+                        <p class="cenergies_item_text">Since they are generated from natural resources distributed across the planet, <strong>they enable countries and regions to develop their own technologies and reduce reliance on foreign sources</strong>.</p>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="cenergies_media">
+                        <img class="cenergies_media_image" src="/estaticos/energias-limpias/images/ilustracion-4.gif" alt="Illustration">
+                    </div>
+                    <div class="cenergies_item">
+                        <h4 class="cenergies_item_title">Job creation</h4>
+                        <p class="cenergies_item_text">Clean-energy facilities, for the most part, require significant labour for their construction, maintenance and operation, <strong>creating jobs and boosting local economies</strong>.</p>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="cenergies_media">
+                        <img class="cenergies_media_image" src="/estaticos/energias-limpias/images/ilustracion-5.gif" alt="Illustration">
+                    </div>
+                    <div class="cenergies_item">
+                        <h4 class="cenergies_item_title">Stable prices</h4>
+                        <p class="cenergies_item_text"><strong>Clean energy sources have lower maintenance and operating costs than plants using fossil fuels, and also have more stable prices for the consumer</strong> given that they are not subject to global market volatility.</p>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="cenergies_media">
+                        <img class="cenergies_media_image" src="/estaticos/energias-limpias/images/ilustracion-6.gif" alt="Illustration">
+                    </div>
+                    <div class="cenergies_item">
+                        <h4 class="cenergies_item_title">Public health</h4>
+                        <p class="cenergies_item_text"><strong>Not only do fossil fuels cause air pollution but they can also contaminate water and soil</strong>. Using clean energies prevents these problems, making the air safer to breathe and reducing contaminants in seas, rivers and agricultural lands.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-controls">
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+            </div>
+        </div>
+    </section>
+    <script src="/estaticos/energias-limpias/swiper.min.js"></script>
+    <script>
+        swipercenergies1 = new Swiper('#cenergiesSwiper', {
+            effect: 'fade',
+            autoHeight: true,
+            spaceBetween: 20,
+            navigation: {
+                nextEl: '#cenergiesSwiper .swiper-button-next',
+                prevEl: '#cenergiesSwiper .swiper-button-prev',
+            },
+            pagination: {
+                el: '#cenergiesSwiper .swiper-pagination',
+                type: 'fraction',
+                renderFraction: function (currentClass, totalClass) {
+                    return '<span class="' + currentClass + '"></span> of <span class="' + totalClass + '"></span>';
+                },
+            },
+        });
+    </script>
+    <!-- FIN DE MODULO -->
+
+</body>
+</html>

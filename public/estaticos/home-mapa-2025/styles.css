@@ -1,0 +1,220 @@
+/* Estilo general */
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: IberPangea, sans-serif;
+  color: #00a443 !important;
+}
+
+.contenedor-mapa {
+  /*max-width: calc(100% - 400px); /* 200px a cada lado */
+  max-width: 1265px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: 16px;
+  border: none;
+}
+
+.fuente-h2-mapa {
+  font-family: "IberPangea Medium",sans-serif !important;
+  font-size: 40px;
+  line-height: 40px;
+  text-align: left;
+  margin-bottom: 40px;
+  color: #00a443;
+  
+}
+
+.cuerpo-mapa {
+  display: flex;
+  align-items: stretch; /* Asegura misma altura */
+  justify-content: space-between;
+  gap: 40px;
+  font-size: 16px;
+  width: 100%;
+  margin-bottom: 60px;
+}
+
+
+.caja-texto-video {
+  flex: 1;
+  max-width: 700px;
+}
+
+.fuente-parrafo-mapa {
+  font-size: 18px;
+  margin-bottom: 20px !important;
+  color: #615d5a;
+}
+
+.video-mapa {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 20px;
+}
+
+.caja-iconos-boton {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+
+.grupo-iconos {
+  flex: 1; /* ocupa todo el alto disponible excepto el botón */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* distribuye filas verticalmente */
+  margin-bottom: 20px;
+  gap: 20px;
+}
+
+.fila-iconos {
+  display: flex;
+  gap: 20px;
+  flex: 1; /* cada fila ocupa el mismo alto */
+  justify-content: center;
+}
+
+.icono-box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative; 
+  margin-bottom: 20px;
+  max-width: 50%;
+}
+
+.icono-box a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.icono {
+  display: block;
+  width: 100%;
+  min-height: 70px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* ESPAÑA */
+.icono-espana {
+  background-image: url("/estaticos/home-mapa-2025/images/iberdrola-espana.svg?t=1147");
+}
+.icono-espana:hover {
+  background-image: url("/estaticos/home-mapa-2025/images/iberdrola-espana-hover.svg?t=1147");
+}
+
+/* SCOTTISHPOWER */
+.icono-scottishpower {
+  background-image: url("/estaticos/home-mapa-2025/images/scottishpower.svg?t=1147");
+}
+.icono-scottishpower:hover {
+  background-image: url("/estaticos/home-mapa-2025/images/scottishpower-hover.svg?t=1147");
+}
+
+/* AVANGRID */
+.icono-avangrid {
+  background-image: url("/estaticos/home-mapa-2025/images/avangrid.svg?t=1147");
+}
+.icono-avangrid:hover {
+  background-image: url("/estaticos/home-mapa-2025/images/avangrid-hover.svg?t=1147");
+}
+
+/* NEOENERGIA */
+.icono-neoenergia {
+  background-image: url("/estaticos/home-mapa-2025/images/neoenergia.svg?t=1147");
+}
+.icono-neoenergia:hover {
+  background-image: url("/estaticos/home-mapa-2025/images/neoenergia-hover.svg?t=1147");
+}
+
+/* MÉXICO */
+.icono-mexico {
+  background-image: url("/estaticos/home-mapa-2025/images/iberdrola-mexico.svg?t=1147");
+}
+.icono-mexico:hover {
+  background-image: url("/estaticos/home-mapa-2025/images/iberdrola-mexico-hover.svg?t=1147");
+}
+
+/* INTERNACIONAL */
+.icono-iberdrola-internacional {
+  background-image: url("/estaticos/home-mapa-2025/images/iberdrola-internacional.svg?t=1147");
+}
+.icono-iberdrola-internacional:hover {
+  background-image: url("/estaticos/home-mapa-2025/images/iberdrola-internacional-hover.svg?t=1147");
+}
+
+.icono-box:not(:last-child) {
+  border-right: 1px solid #D8CFC7;
+}
+
+.img {
+  border-right: 1px solid #D8CFC7;
+}
+
+.fila-iconos:not(:last-child) {
+  border-bottom: 1px solid #D8CFC7;
+}
+
+.boton-sociedades {
+  display: inline-block; /* Para que tome padding y centrado */
+  align-self: center;
+  text-align: center;
+  text-decoration: none; /* Quita subrayado de <a> */
+  padding: 14px 30px;
+  background-color: #007f33;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-family: IberPangea, sans-serif !important;
+  font-size: 18px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  margin-right: 15px;
+}
+
+.boton-sociedades:hover {
+  text-decoration: none;
+  border: 1px solid #007f33;
+  background-color: white;
+  color: #007f33;
+  transition: filter 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .contenedor-mapa {
+  }
+  .cuerpo-mapa {
+    flex-direction: column;
+  }
+
+  .caja-texto-video,
+  .caja-iconos-boton {
+    width: 100%;
+    max-width: 100%;
+  }
+  .icono-box img{
+    width: 100%;
+	height: 100%;
+	}
+}
+
+/* ── Padding estandarizado del módulo: 16 móvil / 24 tablet / 36 desk ── */
+@media (min-width: 500px) {
+  .contenedor-mapa { padding: 24px; }
+}
+@media (min-width: 700px) {
+  .contenedor-mapa { padding: 36px; }
+}

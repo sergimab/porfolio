@@ -72,16 +72,25 @@ export default function Header() {
     if (storedLang) setLang(storedLang);
   }, []);
 
+  // El atributo del tema se aplica en cada cambio de estado (incluida la
+  // lectura inicial), pero SOLO se persiste/emite al pulsar el toggle: si se
+  // persistiera aquí, el montaje inicial (p. ej. al volver atrás) escribiría
+  // los valores por defecto y machacaría la elección guardada del usuario.
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("theme", theme);
-    window.dispatchEvent(new CustomEvent("themechange", { detail: theme }));
   }, [theme]);
 
-  useEffect(() => {
-    localStorage.setItem("lang", lang);
-    window.dispatchEvent(new CustomEvent("langchange", { detail: lang }));
-  }, [lang]);
+  const changeTheme = (t: "light" | "dark") => {
+    setTheme(t);
+    localStorage.setItem("theme", t);
+    window.dispatchEvent(new CustomEvent("themechange", { detail: t }));
+  };
+
+  const changeLang = (l: Lang) => {
+    setLang(l);
+    localStorage.setItem("lang", l);
+    window.dispatchEvent(new CustomEvent("langchange", { detail: l }));
+  };
 
   useEffect(() => {
     const timer = setInterval(() => setNow(new Date()), 1000);
@@ -163,7 +172,7 @@ export default function Header() {
         {/* Theme + language toggles grouped */}
         <div className="header-toggles">
           <button
-            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+            onClick={() => changeTheme(theme === "light" ? "dark" : "light")}
             aria-label="Cambiar tema"
             style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center" }}
           >
@@ -220,7 +229,7 @@ export default function Header() {
           width: "60px", height: "30px",
         }}>
           <button
-            onClick={() => setLang("es")}
+            onClick={() => changeLang("es")}
             aria-label="Español"
             style={{
               background: "none", border: "none", cursor: "pointer",
@@ -235,7 +244,7 @@ export default function Header() {
           </button>
           <span style={{ color: "var(--border)", fontSize: "12px" }}>/</span>
           <button
-            onClick={() => setLang("en")}
+            onClick={() => changeLang("en")}
             aria-label="English"
             style={{
               background: "none", border: "none", cursor: "pointer",

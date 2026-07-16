@@ -1,0 +1,341 @@
+:root {
+  --cobots-white: #ffffff;
+  --cobots-green: #00a443;
+  --cobots-green-1: #007f33;
+  --cobots-forest: #00402a;
+  --cobots-black: #3a3735;
+  --cobots-sand: #fff5ec;
+  --cobots-sand-1: #fffeff;
+  --cobots-sunset: #ff9c1a;
+  --cobots-border: #89837e;
+}
+
+#cobots {
+  width: 100%;
+  max-width: 980px;
+  text-align: left;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 15px;
+  background-color: var(--cobots-sand);
+  margin: 0 auto;
+  padding: 16px;
+  border: none;
+}
+
+#cobots * {
+  font-family: "IberPangea" !important;
+  font-style: normal;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#cobots h2 {
+  margin-top: 0 !important;
+}
+
+#cobots ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#cobots ul li:before {
+  content: none !important;
+  display: none !important;
+}
+
+#cobots img,
+#cobots svg,
+#cobots video {
+  display: block;
+  width: 100%;
+}
+
+#cobots .swiper-autoheight,
+#cobots .swiper-autoheight .swiper-slide {
+  height: auto;
+}
+
+#cobots .swiper-autoheight .swiper-wrapper {
+  align-items: flex-start;
+  transition-property: transform, height;
+}
+
+#cobots .swiper-fade.swiper-free-mode .swiper-slide {
+  transition-timing-function: ease-out;
+}
+
+#cobots .swiper-fade .swiper-slide {
+  pointer-events: none;
+  transition-property: opacity;
+}
+
+#cobots .swiper-fade .swiper-slide .swiper-slide {
+  pointer-events: none;
+}
+
+#cobots .swiper-fade .swiper-slide-active,
+#cobots .swiper-fade .swiper-slide-active .swiper-slide-active {
+  pointer-events: auto;
+}
+
+#cobots .swiper-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: flex;
+  transition-property: transform;
+  box-sizing: content-box;
+}
+
+#cobots .swiper-android .swiper-slide,
+#cobots .swiper-wrapper {
+  transform: translate3d(0px, 0, 0);
+}
+
+#cobots .swiper-pointer-events {
+  touch-action: pan-y;
+}
+
+#cobots .swiper-slide {
+  flex-shrink: 0;
+  width: 100%;
+  position: relative;
+  transition-property: transform;
+}
+
+#cobots .swiper-slide-invisible-blank {
+  visibility: hidden;
+}
+
+#cobots .swiper-css-mode > .swiper-wrapper {
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+#cobots .swiper-css-mode > .swiper-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+#cobots .swiper-horizontal.swiper-css-mode > .swiper-wrapper {
+  scroll-snap-type: x mandatory;
+}
+
+#cobots .swiper-button-lock {
+  display: none;
+}
+
+#cobots .swiper-slide {
+  overflow: hidden;
+}
+
+#cobots .swiper-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+  margin: 16px auto 0;
+  width: 100%;
+}
+
+#cobots .swiper-button-prev,
+#cobots .swiper-button-next {
+  width: 32px;
+  height: 32px;
+  display: block;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  text-align: left;
+  text-indent: -9999px;
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
+
+#cobots .swiper-button-prev {
+  background-image: url("/estaticos/cobots/images/ico-prev.svg");
+}
+
+#cobots .swiper-button-next {
+  background-image: url("/estaticos/cobots/images/ico-next.svg");
+}
+
+#cobots .swiper-button-prev.swiper-button-disabled,
+#cobots .swiper-button-next.swiper-button-disabled {
+  opacity: 0.5;
+  cursor: default;
+  pointer-events: none;
+}
+
+#cobots .swiper-pagination {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 16px;
+  border: 1px solid #d8cfc7;
+  border-radius: 999px;
+  color: var(--cobots-black);
+  font-size: 14px;
+  line-height: 1;
+  margin-right: auto;
+}
+
+#cobots .swiper-pagination,
+#cobots .swiper-pagination span {
+  font-style: italic !important;
+}
+
+#cobots .swiper-pagination-current {
+  color: var(--cobots-green-1);
+}
+
+#cobots .cobots_swiper {
+  position: relative;
+  overflow: hidden;
+  list-style: none;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0 auto;
+}
+
+#cobots .cobots_title {
+  color: var(--cobots-green-1) !important;
+  font-size: 32px;
+  line-height: 1.125;
+  font-style: normal;
+  font-weight: 400;
+  text-align: left;
+  text-wrap: balance;
+  margin-right: auto;
+  margin-bottom: 24px;
+}
+
+#cobots .cobots_title strong {
+  font-weight: 700;
+}
+
+#cobots .cobots_title em {
+  font-style: italic;
+}
+
+#cobots .cobots_media {
+  width: 100%;
+  border-radius: 15px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+#cobots .cobots_media_video {
+  width: 100%;
+  height: 270px;
+  object-fit: cover;
+  object-position: left center;
+}
+
+#cobots .cobots_hidden {
+  display: none !important;
+}
+
+#cobots .cobots_item {
+  padding: 24px 16px 24px 64px;
+  position: relative;
+  border-radius: 15px;
+  background-color: var(--cobots-white);
+}
+
+#cobots .cobots_item_title {
+  color: var(--cobots-green-1) !important;
+  font-size: 18px;
+  line-height: 1.22;
+  font-style: normal;
+  font-weight: 500;
+  text-align: left;
+  margin-bottom: 8px;
+}
+
+#cobots .cobots_item_number {
+  position: absolute;
+  z-index: 2;
+  top: 31px;
+  left: 16px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 100%;
+  background-color: var(--cobots-green-1);
+  color: var(--cobots-white) !important;
+  font-size: 18px;
+  line-height: 1;
+  font-style: normal;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+}
+
+#cobots .cobots_item_text {
+  color: var(--cobots-black) !important;
+  font-size: 16px;
+  line-height: 1.25;
+  font-style: normal;
+  font-weight: 400;
+  text-align: left;
+  max-width: 500px;
+  /*text-wrap: balance;*/
+}
+
+#cobots .cobots_item_text strong {
+  font-weight: 600;
+}
+
+@media (min-width: 700px) {
+  #cobots {
+  }
+
+  #cobots .swiper-button-prev:hover {
+    background-image: url("/estaticos/cobots/images/ico-prev-hover.svg");
+  }
+
+  #cobots .swiper-button-next:hover {
+    background-image: url("/estaticos/cobots/images/ico-next-hover.svg");
+  }
+
+  #cobots .swiper-pagination {
+    display: flex;
+  }
+
+  #cobots .cobots_item_number {
+    top: 24px;
+  }
+
+  #cobots .swiper-controls {
+    width: 100%;
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+
+  #cobots .cobots_item {
+    min-height: 118px;
+  }
+}
+
+/* ── Padding estandarizado del módulo: 16 móvil / 24 tablet / 36 desk ── */
+@media (min-width: 500px) {
+  #cobots { padding: 24px; }
+}
+@media (min-width: 700px) {
+  #cobots { padding: 36px; }
+}

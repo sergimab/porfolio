@@ -1,0 +1,30 @@
+/* IberPangea — fuentes compartidas para los módulos estáticos.
+   Incluye la familia base con pesos y alias con los nombres literales
+   que usan algunos módulos ("IberPangea Bold", "IberPangeaText"…). */
+
+/* ── IberPangea (familia base, por pesos) ── */
+@font-face { font-family: 'IberPangea'; src: url('/estaticos/fonts/IberPangea-Regular.woff2') format('woff2'); font-weight: normal; font-style: normal; }
+@font-face { font-family: 'IberPangea'; src: url('/estaticos/fonts/IberPangea-Italic.woff2') format('woff2'); font-weight: normal; font-style: italic; }
+@font-face { font-family: 'IberPangea'; src: url('/estaticos/fonts/IberPangea-Light.woff2') format('woff2'); font-weight: 300; font-style: normal; }
+@font-face { font-family: 'IberPangea'; src: url('/estaticos/fonts/IberPangea-LightItalic.woff2') format('woff2'); font-weight: 300; font-style: italic; }
+@font-face { font-family: 'IberPangea'; src: url('/estaticos/fonts/IberPangea-Medium.woff2') format('woff2'); font-weight: 500; font-style: normal; }
+@font-face { font-family: 'IberPangea'; src: url('/estaticos/fonts/IberPangea-MediumItalic.woff2') format('woff2'); font-weight: 500; font-style: italic; }
+@font-face { font-family: 'IberPangea'; src: url('/estaticos/fonts/IberPangea-SmBold.woff2') format('woff2'); font-weight: 600; font-style: normal; }
+@font-face { font-family: 'IberPangea'; src: url('/estaticos/fonts/IberPangea-SmBoldItalic.woff2') format('woff2'); font-weight: 600; font-style: italic; }
+@font-face { font-family: 'IberPangea'; src: url('/estaticos/fonts/IberPangea-Bold.woff2') format('woff2'); font-weight: bold; font-style: normal; }
+@font-face { font-family: 'IberPangea'; src: url('/estaticos/fonts/IberPangea-BoldItalic.woff2') format('woff2'); font-weight: bold; font-style: italic; }
+
+/* ── IberPangeaText (familia de texto, por pesos) ── */
+@font-face { font-family: 'IberPangeaText'; src: url('/estaticos/fonts/IberPangeaText-Regular.woff2') format('woff2'); font-weight: normal; font-style: normal; }
+@font-face { font-family: 'IberPangeaText'; src: url('/estaticos/fonts/IberPangeaText-Italic.woff2') format('woff2'); font-weight: normal; font-style: italic; }
+@font-face { font-family: 'IberPangeaText'; src: url('/estaticos/fonts/IberPangeaText-Light.woff2') format('woff2'); font-weight: 300; font-style: normal; }
+@font-face { font-family: 'IberPangeaText'; src: url('/estaticos/fonts/IberPangeaText-Medium.woff2') format('woff2'); font-weight: 500; font-style: normal; }
+@font-face { font-family: 'IberPangeaText'; src: url('/estaticos/fonts/IberPangeaText-SmBold.woff2') format('woff2'); font-weight: 600; font-style: normal; }
+@font-face { font-family: 'IberPangeaText'; src: url('/estaticos/fonts/IberPangeaText-Bold.woff2') format('woff2'); font-weight: bold; font-style: normal; }
+@font-face { font-family: 'IberPangeaText'; src: url('/estaticos/fonts/IberPangeaText-BoldItalic.woff2') format('woff2'); font-weight: bold; font-style: italic; }
+
+/* ── Alias con nombre literal (así los referencian algunos módulos) ── */
+@font-face { font-family: 'IberPangea Bold'; src: url('/estaticos/fonts/IberPangea-Bold.woff2') format('woff2'); }
+@font-face { font-family: 'IberPangea Medium'; src: url('/estaticos/fonts/IberPangea-Medium.woff2') format('woff2'); }
+@font-face { font-family: 'IberPangeaText Bold'; src: url('/estaticos/fonts/IberPangeaText-Bold.woff2') format('woff2'); }
+@font-face { font-family: 'IberPangeaText Medium'; src: url('/estaticos/fonts/IberPangeaText-Medium.woff2') format('woff2'); }

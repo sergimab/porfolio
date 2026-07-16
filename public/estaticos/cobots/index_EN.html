@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- INICIO DE MODULO -->
+    <link rel="stylesheet" href="/estaticos/fonts/fonts.css">
+    <link rel="stylesheet" href="/estaticos/cobots/styles.css?t=0853">
+    <section id="cobots" class="cobots">
+        <h3 class="cobots_title">The strong points of <strong>cobots</strong></h3>
+        <div class="cobots_media">
+            <video id="videoPrev" class="cobots_media_video" playsinline muted>
+                <source src="/estaticos/cobots/videos/cobot-izquierda.webm" type="video/webm" />
+            </video>
+            <video id="videoNext" class="cobots_media_video cobots_hidden" playsinline muted>
+                <source src="/estaticos/cobots/videos/cobot-derecha.webm" type="video/webm" />
+            </video>
+        </div>
+        <div id="cobotsSwiper" class="cobots_swiper swiper">
+            <div class="swiper-wrapper">
+                <div class="cobots_item swiper-slide">
+                    <span class="cobots_item_number">1</span>
+                    <p class="cobots_item_title">They become part of the human-machine team</p>
+                    <p class="cobots_item_text"><strong>They do not replace human labour</strong>, but work alongside operators.</p>
+                </div>
+                <div class="cobots_item swiper-slide">
+                    <span class="cobots_item_number">2</span>
+                    <p class="cobots_item_title">They take over dangerous tasks</p>
+                    <p class="cobots_item_text">Releasing workers from this type of work <strong>reduces sick leave and occupational illness</strong>.</p>
+                </div>
+                <div class="cobots_item swiper-slide">
+                    <span class="cobots_item_number">3</span>
+                    <p class="cobots_item_title">They never injure operators</p>
+                    <p class="cobots_item_text"><strong>They have sensors</strong> that slow them down in case of risk to humans, among other features.</p>
+                </div>
+                <div class="cobots_item swiper-slide">
+                    <span class="cobots_item_number">4</span>
+                    <p class="cobots_item_title">They reduce costs</p>
+                    <p class="cobots_item_text"><strong>They are less expensive</strong> and pay for themselves more quickly than traditional industrial robots.</p>
+                </div>
+                <div class="cobots_item swiper-slide">
+                    <span class="cobots_item_number">5</span>
+                    <p class="cobots_item_title">They learn new tasks easily</p>
+                    <p class="cobots_item_text">Thanks to technologies like <strong>Artificial Intelligence and Machine Learning</strong>, they never stop learning.</p>
+                </div>
+                <div class="cobots_item swiper-slide">
+                    <span class="cobots_item_number">6</span>
+                    <p class="cobots_item_title">They can be moved about easily</p>
+                    <p class="cobots_item_text"><strong>Their size and weight</strong> make them easy to position at any point in the production chain.</p>
+                </div>
+                <div class="cobots_item swiper-slide">
+                    <span class="cobots_item_number">7</span>
+                    <p class="cobots_item_title">They boost productivity</p>
+                    <p class="cobots_item_text">They are complementary to the operator and help to <strong>optimise and modernise the production process</strong>.</p>
+                </div>
+            </div>
+            <div class="cobots_navigation swiper-controls">
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+            </div>
+        </div>
+    </section>
+    <script src="/estaticos/cobots/swiper.min.js"></script>
+    <script>
+        let swipercobots = new Swiper('#cobots .cobots_swiper', {
+            autoHeight: false,
+            spaceBetween: 20,
+            navigation: {
+                nextEl: '#cobots .swiper-button-next',
+                prevEl: '#cobots .swiper-button-prev',
+            },
+            pagination: {
+                el: '#cobots .swiper-pagination',
+                type: 'fraction',
+                renderFraction: function (currentClass, totalClass) {
+                    return '<span class="' + currentClass + '"></span> of <span class="' + totalClass + '"></span>';
+                },
+            },
+        });
+        swipercobots.on('slideChange', function (slider) {
+            let current = slider.activeIndex + 1;
+            if (slider.activeIndex > slider.previousIndex) {
+                if (!document.getElementById('videoPrev').classList.contains('cobots_hidden')){
+                    document.getElementById('videoPrev').classList.add('cobots_hidden');
+                }
+                if (document.getElementById('videoNext').classList.contains('cobots_hidden')){
+                    document.getElementById('videoNext').classList.remove('cobots_hidden');
+                }
+                document.getElementById('videoNext').play();
+            } else {
+                if (!document.getElementById('videoNext').classList.contains('cobots_hidden')){
+                    document.getElementById('videoNext').classList.add('cobots_hidden');
+                }
+                if (document.getElementById('videoPrev').classList.contains('cobots_hidden')){
+                    document.getElementById('videoPrev').classList.remove('cobots_hidden');
+                }
+                document.getElementById('videoPrev').play();
+            }
+        });
+    </script>
+    <!-- FIN DE MODULO -->
+
+</body>
+</html>

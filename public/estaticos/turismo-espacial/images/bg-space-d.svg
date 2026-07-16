@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="501px" height="184px" viewBox="0 0 501 184" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>bg-space-d</title>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="501" height="184"></rect>
+        <rect id="path-3" x="0" y="0" width="501" height="184"></rect>
+        <rect id="path-5" x="0" y="0" width="501" height="184"></rect>
+        <rect id="path-7" x="0" y="0" width="501" height="184"></rect>
+        <rect id="path-9" x="0" y="0" width="501" height="184"></rect>
+        <rect id="path-11" x="0" y="0" width="501" height="184"></rect>
+        <rect id="path-13" x="0" y="0" width="501" height="184"></rect>
+        <rect id="path-15" x="0" y="0" width="501" height="184"></rect>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="bg-space-d">
+            <g id="Rectangle" fill-rule="nonzero">
+                <rect id="path-1" x="0" y="0" width="501" height="184"></rect>
+            </g>
+            <g id="Path-Clipped">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <g id="path-1"></g>
+                <path d="M65.32,54.79 C65.32,55.774 64.5725,56.58 63.66,56.58 C62.7476,56.58 62,55.774 62,54.79 C62,53.8061 62.7476,53 63.66,53 C64.5725,53 65.32,53.8061 65.32,54.79 Z" id="Path" fill="#FFF5EC" fill-rule="nonzero" mask="url(#mask-2)"></path>
+            </g>
+            <g id="Path-Clipped">
+                <mask id="mask-4" fill="white">
+                    <use xlink:href="#path-3"></use>
+                </mask>
+                <g id="path-1"></g>
+                <path d="M141.095,19.79 C141.095,20.7739 140.347,21.5801 139.435,21.5801 C138.522,21.5801 137.775,20.7739 137.775,19.79 C137.775,18.8061 138.522,18 139.435,18 C140.347,18 141.095,18.8061 141.095,19.79 Z" id="Path" fill="#FFF5EC" fill-rule="nonzero" mask="url(#mask-4)"></path>
+            </g>
+            <g id="Path-Clipped">
+                <mask id="mask-6" fill="white">
+                    <use xlink:href="#path-5"></use>
+                </mask>
+                <g id="path-1"></g>
+                <path d="M123.15,74.901 C123.15,75.3988 122.776,75.8019 122.314,75.8019 C121.852,75.8019 121.479,75.3988 121.479,74.901 C121.479,74.4031 121.852,74 122.314,74 C122.776,74 123.15,74.4031 123.15,74.901 Z" id="Path" fill="#FFF5EC" fill-rule="nonzero" mask="url(#mask-6)"></path>
+            </g>
+            <g id="Path-Clipped">
+                <mask id="mask-8" fill="white">
+                    <use xlink:href="#path-7"></use>
+                </mask>
+                <g id="path-1"></g>
+                <path d="M210.921,56.4915 C210.921,56.7404 210.735,56.942 210.504,56.942 C210.273,56.942 210.086,56.7404 210.086,56.4915 C210.086,56.2425 210.273,56.041 210.504,56.041 C210.735,56.041 210.921,56.2425 210.921,56.4915 Z" id="Path" fill="#FFF5EC" fill-rule="nonzero" mask="url(#mask-8)"></path>
+            </g>
+            <g id="Path-Clipped">
+                <mask id="mask-10" fill="white">
+                    <use xlink:href="#path-9"></use>
+                </mask>
+                <g id="path-1"></g>
+                <path d="M235.835,30.4504 C235.835,30.6994 235.649,30.9009 235.418,30.9009 C235.187,30.9009 235,30.6994 235,30.4504 C235,30.2015 235.187,30 235.418,30 C235.649,30 235.835,30.2015 235.835,30.4504 Z" id="Path" fill="#FFF5EC" fill-rule="nonzero" mask="url(#mask-10)"></path>
+            </g>
+            <g id="Path-Clipped">
+                <mask id="mask-12" fill="white">
+                    <use xlink:href="#path-11"></use>
+                </mask>
+                <g id="path-1"></g>
+                <path d="M208.799,18.4505 C208.799,18.6994 208.612,18.9009 208.382,18.9009 C208.151,18.9009 207.964,18.6994 207.964,18.4505 C207.964,18.2015 208.151,18 208.382,18 C208.612,18 208.799,18.2015 208.799,18.4505 Z" id="Path" fill="#FFF5EC" fill-rule="nonzero" mask="url(#mask-12)"></path>
+            </g>
+            <g id="Path-Clipped">
+                <mask id="mask-14" fill="white">
+                    <use xlink:href="#path-13"></use>
+                </mask>
+                <g id="path-1"></g>
+                <polygon id="Path" fill="#FFF5EC" fill-rule="nonzero" mask="url(#mask-14)" points="22.5 41 23.8339 46.9609 29 48.5 23.8339 50.0391 22.5 56 21.1661 50.0391 16 48.5 21.1661 46.9609"></polygon>
+            </g>
+            <g id="Path-Clipped">
+                <mask id="mask-16" fill="white">
+                    <use xlink:href="#path-15"></use>
+                </mask>
+                <g id="path-1"></g>
+                <path d="M441.924,45.8633 C444.534,43.0936 472,19 472,19 C472,19 449.291,48.14 446.68,50.9097 C444.07,53.6794 440.884,54.7943 439.568,53.3977 C438.251,52.0011 439.302,48.6212 441.913,45.8516 L441.924,45.8633 Z" id="Path" fill="#FF9C1A" fill-rule="nonzero" mask="url(#mask-16)"></path>
+            </g>
+        </g>
+    </g>
+</svg>
