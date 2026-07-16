@@ -28,7 +28,7 @@ const titles: Record<string, string> = {
 function IlustracionesLanding() {
   return (
     <main style={{ flex: 1, paddingBottom: "64px" }}>
-      <div className="header-wrap">
+      <div className="project-content-wrap">
         <div
           className="hover-trail-target"
           data-trail-hue="142"

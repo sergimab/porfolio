@@ -14,6 +14,15 @@
     padding: 0 100px;
   }
 }
+/* Contenido de las páginas de proyecto: mismo ancho que el contenido central
+   de la home (1024px), sin ensancharse como el header/footer en ≥1300px. */
+.project-content-wrap {
+  width: 100%;
+  max-width: 1072px;
+  margin: 0 auto;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
 @media (max-width: 768px) {
   .main-content {
     padding-top: 20px;
