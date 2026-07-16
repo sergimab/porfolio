@@ -174,7 +174,26 @@
   .ilu-tiles { grid-template-columns: repeat(3, 1fr); }
 }
 @media (max-width: 600px) {
+  /* Primera fila de ilustraciones en móvil: una caja debajo de otra.
+     Anulamos la cuadrícula 2×2 de escritorio y la variante con casa. */
   .ilu-hero-tech,
-  .ilu-hero-info { grid-template-columns: 1fr; }
-  .ilu-hero-tech .ilu-frame:nth-child(3) { grid-column: 1; grid-row: auto; }
+  .ilu-hero-tech:has(.iso-house-frame),
+  .ilu-hero-info {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+  /* Las escenas iso desbordan su caja ~21px arriba y abajo; con las cajas
+     apiladas eso las hacía pisarse. Ampliamos la separación vertical. */
+  .ilu-hero-tech {
+    gap: 56px;
+  }
+  /* Todas las cajas (incluida la casa) van a la única columna, en orden. */
+  .ilu-hero-tech .ilu-frame,
+  .ilu-hero-tech .iso-house-frame {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  .ilu-hero-tech .iso-house-frame {
+    min-height: 260px;
+  }
 }
