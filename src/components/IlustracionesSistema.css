@@ -143,12 +143,16 @@
 
 /* ── Fila de 6 cajas ── */
 .ilu-tiles {
-  background: #111814;
+  background: #1C1A16;
   border-radius: 16px;
   padding: 16px;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 12px;
+}
+/* En modo oscuro el contenedor se funde con el fondo: borde para delimitarlo. */
+[data-theme="dark"] .ilu-tiles {
+  border: 1px solid rgba(242, 238, 226, 0.4);
 }
 .ilu-tile {
   display: flex;
@@ -160,7 +164,10 @@
   position: relative;
   width: 100%;
   aspect-ratio: 1;
-  background: #f4f1e8;
+  /* Sigue el fondo de la página: claro en modo claro, oscuro en modo oscuro.
+     El borde claro delimita el recuadro sobre el fondo oscuro del contenedor. */
+  background: var(--background);
+  border: 1px solid rgba(242, 238, 226, 0.4);
   border-radius: 12px;
   overflow: hidden;
 }
@@ -179,7 +186,7 @@
 }
 .ilu-tile-name {
   font-size: 12px;
-  color: #eafff0;
+  color: #F2EEE2;
   text-align: center;
 }
 
