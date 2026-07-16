@@ -1,0 +1,130 @@
+/* ── Card de proyecto ──
+   Base: cuadrado con borde del color de la categoría, fondo del tema y
+   "Ver proyecto" centrado al fondo. Encima va la portada; en hover la
+   portada sube SOBRESALIENDO por arriba de la card (no se recorta).
+   La banda del título queda estática sobre todo. */
+.pcard {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  border: 1px solid; /* color por categoría, inline */
+  border-radius: 16px;
+  background: var(--background);
+  text-decoration: none;
+  cursor: pointer;
+  /* sin overflow:hidden — la portada debe verse por encima */
+}
+
+.pcard-cta {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: var(--foreground);
+  z-index: 1;
+}
+
+/* Portada: cubre el cuadrado y sube en hover, visible por arriba */
+.pcard-media {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--background); /* opaca: no deja ver el CTA en reposo */
+  transition: transform 0.35s ease;
+  z-index: 2;
+}
+.pcard:hover .pcard-media {
+  transform: translateY(-56px);
+}
+
+.pcard-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Provisional para proyectos sin portada */
+.pcard-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+  color: var(--muted);
+}
+.pcard-placeholder svg {
+  width: 60%;
+  height: 60%;
+}
+
+/* Cinta del título (pieza.svg): ESTÁTICA, de lado a lado */
+.pcard-bandwrap {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  aspect-ratio: 230 / 92;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Degradado orgánico recortado con la forma de la pieza: tres manchas
+   que derivan cada una en una dirección sobre la base sólida */
+.pcard-band {
+  position: absolute;
+  inset: 0;
+  background-size: 190% 190%, 200% 210%, 210% 200%, 100% 100%;
+  animation: bandDrift 3.6s ease-in-out infinite;
+  -webkit-mask: url("/images/pieza-band.svg") center / 100% 100% no-repeat;
+  mask: url("/images/pieza-band.svg") center / 100% 100% no-repeat;
+}
+@keyframes bandDrift {
+  0%, 100% { background-position: 0% 0%,   100% 0%,  50% 100%, 0 0; }
+  33%      { background-position: 70% 45%, 30% 65%,  15% 35%,  0 0; }
+  66%      { background-position: 100% 90%, 0% 100%, 85% 0%,   0 0; }
+}
+
+/* Stroke de la pieza (mismo color de categoría que el borde de la card) */
+.pcard-band-stroke {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.pcard-band-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 8px 12px;
+  text-align: center;
+}
+.pcard-band-cap {
+  font-family: 'Kapakana', 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 26px;
+  font-weight: 300;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.94);
+}
+.pcard-band-rest {
+  font-size: 12px;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.94);
+  line-height: 1.2;
+}
