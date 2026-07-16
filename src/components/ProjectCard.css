@@ -40,8 +40,11 @@
   transition: transform 0.35s ease;
   z-index: 2;
 }
-.pcard:hover .pcard-media {
-  transform: translateY(-56px);
+/* Solo en dispositivos con hover real (en táctil/móvil no se mueve) */
+@media (hover: hover) and (pointer: fine) {
+  .pcard:hover .pcard-media {
+    transform: translateY(-56px);
+  }
 }
 
 .pcard-img {

@@ -85,17 +85,23 @@
         },
         on: {
             init: function () {
-                document.getElementById('bladelVideo1').play();
+                var v1 = document.getElementById('bladelVideo1');
+                var io = new IntersectionObserver(function (entries) {
+                    if (entries[0].isIntersecting) {
+                        v1.currentTime = 0;
+                        v1.play();
+                        io.disconnect();
+                    }
+                }, { threshold: 0.4 });
+                io.observe(v1);
             },
         },
         });
         swiperbladel.on('slideChange', function (slider) {
-            let current = slider.activeIndex + 1;
-            if (current == 2) {
-                document.getElementById('bladelVideo2').play();
-            }
-            if (current == 3) {
-                document.getElementById('bladelVideo3').play();
+            var v = document.getElementById('bladelVideo' + (slider.activeIndex + 1));
+            if (v) {
+                v.currentTime = 0;
+                v.play();
             }
         });
     </script>
