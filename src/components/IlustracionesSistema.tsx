@@ -20,6 +20,28 @@ function isoTileSrcs(name: string): string[] {
   return cat.files.map((f) => `/images/${cat.folder}/${encodeURIComponent(f)}`);
 }
 
+// 3 SVG planos por categoría (de las carpetas flat-*).
+const FLAT_TILES: Record<string, { folder: string; files: string[] }> = {
+  "Personas":   { folder: "flat-personas",   files: ["Group 50182.svg", "Group 65.svg", "Grupo 115.svg"] },
+  "Vehículos":  { folder: "flat-vehiculos",  files: ["Group.svg", "Group-1.svg", "ilustraciones/Variant11.svg"] },
+  "Energías":   { folder: "flat-energia",    files: ["Group 50183.svg", "presa.svg", "red.svg"] },
+  "Tecnología": { folder: "flat-tecnologia", files: ["Group 15.svg", "bombilla.svg", "lavadora.svg"] },
+  "Edificios":  { folder: "flat-edificios",  files: ["Group 10.svg", "Group.svg", "Group-1.svg"] },
+  "Naturaleza": { folder: "flat-naturaleza", files: ["Group 50184.svg", "Grupo 337.svg", "mundo.svg"] },
+};
+
+function flatTileSrcs(name: string): string[] {
+  const cat = FLAT_TILES[name];
+  if (!cat) return [];
+  // Codificamos cada segmento por separado para respetar las subcarpetas (p. ej. ilustraciones/…).
+  return cat.files.map(
+    (f) => `/images/${cat.folder}/${f.split("/").map(encodeURIComponent).join("/")}`
+  );
+}
+
+// Escenas planas para los 2 recuadros del hero del bloque plano.
+const FLAT_SCENES = ["1.svg", "2.svg"].map((f) => `/images/flat-escenas/${f}`);
+
 type Block = {
   title: string;
   style: string;
@@ -27,6 +49,7 @@ type Block = {
   heroCount: number;
   tiles: string[];
   iso?: boolean;
+  flat?: boolean;
 };
 
 const CONTENT: Record<"holding" | "subholding", Block[]> = {
@@ -44,6 +67,7 @@ const CONTENT: Record<"holding" | "subholding", Block[]> = {
       style: "Estilo plano",
       hero: "info",
       heroCount: 2,
+      flat: true,
       tiles: ["Personas", "Vehículos", "Energías", "Naturaleza", "Tecnología", "Edificios"],
     },
   ],
@@ -105,6 +129,14 @@ export default function IlustracionesSistema() {
                 <IsoHouse />
               </div>
             </div>
+          ) : b.flat ? (
+            <div className="ilu-hero ilu-hero-info">
+              {FLAT_SCENES.map((src, j) => (
+                <div className="ilu-frame flat-scene" key={j}>
+                  <img src={src} alt="" />
+                </div>
+              ))}
+            </div>
           ) : (
             <div className={`ilu-hero ilu-hero-${b.hero}`}>
               {Array.from({ length: b.heroCount }).map((_, j) => (
@@ -117,7 +149,7 @@ export default function IlustracionesSistema() {
             {b.tiles.map((name) => (
               <div className="ilu-tile" key={name}>
                 <div className="ilu-tile-box">
-                  {b.iso && isoTileSrcs(name).map((src, k) => (
+                  {(b.iso ? isoTileSrcs(name) : b.flat ? flatTileSrcs(name) : []).map((src, k) => (
                     <img
                       key={k}
                       className="ilu-tile-img"

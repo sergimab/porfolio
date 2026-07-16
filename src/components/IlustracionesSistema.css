@@ -128,6 +128,19 @@
 }
 .ilu-hero-info .ilu-frame { min-height: 220px; }
 
+/* ── Escenas planas (SVG dentro del recuadro, sin desbordar) ── */
+.flat-scene {
+  overflow: hidden;
+  padding: 0;
+}
+.flat-scene img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: inherit;
+}
+
 /* ── Fila de 6 cajas ── */
 .ilu-tiles {
   background: #111814;

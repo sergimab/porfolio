@@ -12,6 +12,9 @@ export default function IsoHouse() {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    // Solo se despliega cuando la casa entra de verdad en la vista: recortamos
+    // el 30% inferior del viewport, así en móvil no se dispara mientras todavía
+    // estás mirando la escena de arriba y la casa apenas asoma.
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -21,7 +24,7 @@ export default function IsoHouse() {
           }
         });
       },
-      { threshold: 0.35 }
+      { threshold: 0.2, rootMargin: "0px 0px -30% 0px" }
     );
     io.observe(el);
     return () => io.disconnect();
