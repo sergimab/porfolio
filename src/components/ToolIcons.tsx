@@ -59,13 +59,19 @@ const TOOLS: { name: string; node: React.ReactNode }[] = [
   },
 ];
 
-export default function ToolIcons() {
+// `tools` filtra y ordena qué programas mostrar (por nombre). Si se omite,
+// se muestran todos.
+export default function ToolIcons({ tools }: { tools?: string[] }) {
   const lang = useLang();
+  const list = tools
+    ? tools.map((name) => TOOLS.find((t) => t.name === name)).filter((t): t is (typeof TOOLS)[number] => Boolean(t))
+    : TOOLS;
+
   return (
     <div className="tool-icons">
       <span className="tool-icons-label">{lang === "en" ? "Crafted with" : "Hecho con"}</span>
       <ul className="tool-icons-list">
-        {TOOLS.map((t) => (
+        {list.map((t) => (
           <li key={t.name} className="tool-icon" title={t.name} aria-label={t.name}>
             {t.node}
           </li>

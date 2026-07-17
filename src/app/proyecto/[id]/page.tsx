@@ -54,7 +54,7 @@ function InfografiasLanding() {
 
         <ProjectHeroTitle es="Infografías" en="Infographics" />
 
-        <div className="ig-introrow">
+        <div className="project-introrow">
           <p className="project-intro">
             <LangText
               es="Esto es solo una muestra: unas pocas de las más de 160 infografías que he diseñado para la web corporativa de Iberdrola. En todas he intentado darle una vuelta a los conceptos y transformar lo estático en movimiento, para explicar procesos, instalaciones y tecnología de forma visual e interactiva."
@@ -97,12 +97,15 @@ function IlustracionesLanding() {
 
         <ProjectHeroTitle es="Sistema de ilustraciones" en="Illustration system" />
 
-        <p className="project-intro">
-          <LangText
-            es="Diseñamos en equipo un sistema visual para Iberdrola que pusiera orden en el caos: qué estilo, qué piezas, para qué contexto. Infografías, banners, web. Y dentro de eso, una distinción clara entre la identidad corporativa de Iberdrola y la de su subholding Iberdrola España."
-            en="As a team, we designed a visual system for Iberdrola to bring order to the chaos: which style, which pieces, for which context. Infographics, banners, web. And within that, a clear distinction between Iberdrola's corporate identity and that of its subholding Iberdrola España."
-          />
-        </p>
+        <div className="project-introrow">
+          <p className="project-intro">
+            <LangText
+              es="Diseñamos en equipo un sistema visual para Iberdrola que pusiera orden en el caos: qué estilo, qué piezas, para qué contexto. Infografías, banners, web. Y dentro de eso, una distinción clara entre la identidad corporativa de Iberdrola y la de su subholding Iberdrola España."
+              en="As a team, we designed a visual system for Iberdrola to bring order to the chaos: which style, which pieces, for which context. Infographics, banners, web. And within that, a clear distinction between Iberdrola's corporate identity and that of its subholding Iberdrola España."
+            />
+          </p>
+          <ToolIcons tools={["Figma", "Illustrator"]} />
+        </div>
 
         <p className="project-tagline">
           <LangText es="｡ ₊°  No solo ilustraciones — un lenguaje  °₊ ｡" en="｡ ₊°  Not just illustrations — a language  °₊ ｡" />

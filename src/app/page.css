@@ -119,14 +119,14 @@
 
 /* Fila de intro de Infografías: texto a la izquierda, "Hecho con…" a la
    derecha alineado con la última línea del texto */
-.ig-introrow {
+.project-introrow {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   gap: 24px;
   flex-wrap: wrap;
 }
-.ig-introrow .tool-icons {
+.project-introrow .tool-icons {
   margin-top: 0;
   margin-bottom: 2px;
   flex-direction: column;
@@ -134,7 +134,7 @@
   gap: 8px;
 }
 @media (max-width: 600px) {
-  .ig-introrow .tool-icons {
+  .project-introrow .tool-icons {
     align-items: flex-start;
     margin-top: 8px;
   }
