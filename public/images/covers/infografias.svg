@@ -1192,7 +1192,6 @@
 <path d="M37.1782 46.7916C37.1782 46.7916 37.157 46.815 37.157 46.8266C37.157 46.8383 37.1661 46.8442 37.1782 46.8383C37.1903 46.8325 37.1993 46.815 37.1993 46.8033C37.1993 46.7916 37.1903 46.7858 37.1782 46.7916Z" fill="#FFC904" stroke="#00402A" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M37.1755 46.7997C37.1755 46.7997 37.1611 46.8137 37.1611 46.8221C37.1611 46.8304 37.167 46.8332 37.1755 46.8276C37.1842 46.8221 37.1899 46.8137 37.1899 46.8054C37.1899 46.797 37.1842 46.7942 37.1755 46.7997Z" fill="#686868" stroke="#00402A" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
 </g>
-<rect x="0.5" y="0.5" width="230" height="230" rx="16" stroke="#1C1A16"/>
 <defs>
 <linearGradient id="paint0_linear_143_21137" x1="27.7663" y1="1835.91" x2="3665.36" y2="1835.91" gradientUnits="userSpaceOnUse">
 <stop stop-color="#FFFAF6"/>
