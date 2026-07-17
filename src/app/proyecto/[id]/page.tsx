@@ -5,6 +5,8 @@ import IlustracionesSistema from "@/components/IlustracionesSistema";
 import ProjectHeroTitle from "@/components/ProjectHeroTitle";
 import LangText from "@/components/LangText";
 import InfografiasViewer from "@/components/InfografiasViewer";
+import ToolIcons from "@/components/ToolIcons";
+import BackToTop from "@/components/BackToTop";
 import "../../page.css";
 import "@/components/SkillDrop.css";
 
@@ -69,12 +71,15 @@ function InfografiasLanding() {
 
         <ProjectHeroTitle es="Infografías" en="Infographics" />
 
-        <p style={{ fontSize: "14px", color: "var(--foreground)", maxWidth: "520px", lineHeight: 1.6, marginTop: "20px" }}>
-          <LangText
-            es="Infografías interactivas hechas en HTML, CSS y JavaScript para la web corporativa de Iberdrola: piezas que explican procesos, instalaciones y tecnología de forma visual y responden al usuario."
-            en="Interactive infographics built with HTML, CSS and JavaScript for Iberdrola's corporate site: pieces that explain processes, facilities and technology visually — and respond to the user."
-          />
-        </p>
+        <div className="ig-introrow">
+          <p style={{ fontSize: "14px", color: "var(--foreground)", maxWidth: "520px", lineHeight: 1.6, marginTop: "20px" }}>
+            <LangText
+              es="Esto es solo una muestra: unas pocas de las más de 160 infografías que he diseñado para la web corporativa de Iberdrola. En todas he intentado darle una vuelta a los conceptos y transformar lo estático en movimiento, para explicar procesos, instalaciones y tecnología de forma visual e interactiva."
+              en="This is just a sample: a few of the 160-plus infographics I've designed for Iberdrola's corporate site. In every one I've tried to rethink the concept and turn the static into movement, explaining processes, facilities and technology in a visual, interactive way."
+            />
+          </p>
+          <ToolIcons />
+        </div>
 
         <p style={{ fontSize: "14px", color: "var(--muted)", maxWidth: "520px", marginTop: "20px", fontStyle: "italic" }}>
           <LangText es="｡ ₊°  No solo se miran — se tocan  °₊ ｡" en="｡ ₊°  Not just for looking — for touching  °₊ ｡" />
@@ -175,6 +180,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
       <div className="header-wrap">
         <Footer />
       </div>
+
+      <BackToTop />
     </div>
   );
 }

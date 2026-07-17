@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import type MatterTypes from "matter-js";
 import ProjectCard from "./ProjectCard";
+import BackToTop from "./BackToTop";
 import "./SkillDrop.css";
 
 const skills = [
@@ -21,6 +22,18 @@ function seeded(id: string, salt: number): number {
   for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) % 100003;
   return h / 100003;
 }
+
+// Degradado "orgánico" (varias manchas del hue que derivan) para las cápsulas
+// que se colorean, en lugar del barrido lineal. Va con capsuleDrift + backgroundSize.
+function organicGradient(hue: number, sat: number, base: number): string {
+  return [
+    `radial-gradient(130% 110% at 20% 30%, hsl(${hue},${sat}%,${base + 14}%) 0%, transparent 60%)`,
+    `radial-gradient(110% 130% at 80% 15%, hsl(${hue + 25},${sat - 6}%,${base + 4}%) 0%, transparent 55%)`,
+    `radial-gradient(140% 150% at 65% 85%, hsl(${hue},${sat - 10}%,${base - 14}%) 0%, transparent 62%)`,
+    `linear-gradient(hsl(${hue},${sat}%,${base}%), hsl(${hue},${sat}%,${base}%))`,
+  ].join(", ");
+}
+const CAPSULE_DRIFT_SIZE = "190% 190%, 200% 210%, 210% 200%, 100% 100%";
 
 const projects: Record<string, { id: string; title: string; titleEn: string; cover?: string }[]> = {
   motion:     [{ id:"m1",title:"Proyecto Motion 01",titleEn:"Motion Project 01"},{id:"m2",title:"Proyecto Motion 02",titleEn:"Motion Project 02"},{id:"m3",title:"Proyecto Motion 03",titleEn:"Motion Project 03"}],
@@ -63,7 +76,6 @@ export default function SkillDrop() {
   const [selectedPanel, setSelectedPanel] = useState<string>("contacto");
   const cvIframeRef = useRef<HTMLIFrameElement>(null);
   const [cvHeight, setCvHeight] = useState(900);
-  const [showBackToTop, setShowBackToTop] = useState(false);
   const [contactForm, setContactForm] = useState({ name: "", email: "", message: "" });
   const [contactStatus, setContactStatus] = useState<"idle"|"sending"|"success"|"error">("idle");
 
@@ -121,11 +133,6 @@ export default function SkillDrop() {
     if (doc) setCvHeight(doc.documentElement.scrollHeight);
   }, []);
 
-  useEffect(() => {
-    const onScroll = () => setShowBackToTop(window.scrollY > 400);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     const stored = localStorage.getItem("lang") as "es"|"en"|null;
@@ -522,11 +529,9 @@ export default function SkillDrop() {
                     borderRadius:"999px",
                     border: isDragged ? "none" : "1px solid var(--foreground)",
                     backgroundColor: isDragged ? undefined : "var(--background)",
-                    backgroundImage: isDragged
-                      ? `linear-gradient(120deg, hsl(${skill.hue},85%,72%), hsl(${skill.hue},85%,42%), hsl(${skill.hue+25},85%,60%), hsl(${skill.hue},85%,72%))`
-                      : undefined,
-                    backgroundSize: isDragged ? "300% 300%" : undefined,
-                    animation: isDragged ? "capsuleGradient 1.8s ease-in-out infinite" : undefined,
+                    backgroundImage: isDragged ? organicGradient(skill.hue, 85, 57) : undefined,
+                    backgroundSize: isDragged ? CAPSULE_DRIFT_SIZE : undefined,
+                    animation: isDragged ? "capsuleDrift 2.4s ease-in-out infinite" : undefined,
                     display:"flex", alignItems:"center", justifyContent:"center",
                     fontSize:"13px", fontWeight: isDragged ? 500 : 400,
                     color: isDragged ? "#fff" : "var(--foreground)",
@@ -569,9 +574,9 @@ export default function SkillDrop() {
                   width:`${PILL_W}px`, height:`${PILL_H}px`,
                   borderRadius:"999px",
                   padding:"2px",
-                  backgroundImage: `linear-gradient(120deg, hsl(${droppedSkill!.hue},70%,68%), hsl(${droppedSkill!.hue},70%,48%), hsl(${droppedSkill!.hue+20},70%,58%), hsl(${droppedSkill!.hue},70%,68%))`,
-                  backgroundSize:"300% 300%",
-                  animation:"capsuleGradient 3.2s ease-in-out infinite",
+                  backgroundImage: organicGradient(droppedSkill!.hue, 70, 55),
+                  backgroundSize: CAPSULE_DRIFT_SIZE,
+                  animation:"capsuleDrift 3.6s ease-in-out infinite",
                   flexShrink:0,
                 }}>
                   <div style={{
@@ -719,28 +724,7 @@ export default function SkillDrop() {
       )}
       </div>
 
-      <button
-        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        aria-label={lang==="en" ? "Back to top" : "Volver arriba"}
-        style={{
-          position:"fixed", bottom:"24px", right:"24px", zIndex:10,
-          width:"44px", height:"44px", borderRadius:"50%",
-          border:"1px solid var(--foreground)",
-          background:"var(--background)",
-          display:"flex", alignItems:"center", justifyContent:"center",
-          cursor:"pointer",
-          opacity: showBackToTop ? 1 : 0,
-          pointerEvents: showBackToTop ? "auto" : "none",
-          transform: showBackToTop ? "translateY(0)" : "translateY(12px)",
-          transition:"opacity 0.2s, transform 0.2s, background 0.15s",
-        }}
-        className="back-to-top-btn"
-      >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color:"var(--foreground)", position:"relative", zIndex:6 }}>
-          <line x1="12" y1="19" x2="12" y2="5" />
-          <polyline points="5 12 12 5 19 12" />
-        </svg>
-      </button>
+      <BackToTop />
 
     </div>
   );
