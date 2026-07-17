@@ -28,15 +28,19 @@
   font-size: 13px;
   color: var(--foreground);
   z-index: 1;
+  /* Oculto en reposo (la portada es transparente y no lo tapa); aparece en hover */
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-/* Portada: cubre el cuadrado y sube en hover, visible por arriba */
+/* Portada: transparente (deja ver el fondo de la página) y sube en hover
+   sobresaliendo por arriba. El CTA de abajo se oculta con opacidad, no con
+   un fondo opaco, para que la ilustración transparente asome limpia. */
 .pcard-media {
   position: absolute;
   inset: 0;
   border-radius: 16px;
   overflow: hidden;
-  background: var(--background); /* opaca: no deja ver el CTA en reposo */
   transition: transform 0.35s ease;
   z-index: 2;
 }
@@ -44,6 +48,9 @@
 @media (hover: hover) and (pointer: fine) {
   .pcard:hover .pcard-media {
     transform: translateY(-56px);
+  }
+  .pcard:hover .pcard-cta {
+    opacity: 1;
   }
 }
 
