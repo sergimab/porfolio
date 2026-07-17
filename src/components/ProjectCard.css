@@ -139,3 +139,11 @@
   color: rgba(255, 255, 255, 0.94);
   line-height: 1.2;
 }
+
+/* En móvil el título suele partir en dos líneas: interlineado ceñido y
+   capitular algo menor para que no quede un hueco grande entre líneas */
+@media (max-width: 768px) {
+  .pcard-band-line { line-height: 1.05; }
+  .pcard-band-cap  { font-size: 21px; }
+  .pcard-band-rest { font-size: 11px; }
+}
