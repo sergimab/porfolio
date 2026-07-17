@@ -8,11 +8,20 @@
   100%    { opacity: 0; }
 }
 
+/* Contenedor raíz del bloque de skills/paneles */
+.skill-drop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 24px;
+}
+
 .dropcap-title {
   display: flex;
   align-items: baseline;
   font-size: 14px;
   color: var(--foreground);
+  margin-bottom: 24px;
 }
 .dropcap-letter {
   font-family: 'Kapakana', 'Cormorant Garamond', serif;
@@ -38,8 +47,27 @@
   max-width: 1024px;
   align-items: start;
 }
+/* Las dos cajas superiores comparten marco. La altura (height) se fija inline
+   porque es dinámica: se calcula en JS para igualar ambas cajas. */
+.box-soon,
+.box-skills {
+  border: 1px solid var(--foreground);
+  border-radius: 16px;
+  background: var(--background);
+  position: relative;
+  overflow: hidden;
+}
 .box-skills { order: 1; }
-.box-soon   { order: 2; }
+.box-soon {
+  order: 2;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  padding: 16px;
+}
+/* Lienzo del motor de física (cápsulas) */
+.skill-scene { position: absolute; inset: 0; }
+
 @media (max-width: 768px) {
   .skill-grid { grid-template-columns: 1fr; }
   .box-skills { order: 2; }
@@ -52,6 +80,59 @@
   .panel-btn-tile { height: 56px; border-radius: 999px; }
   .panel-btn { padding: 8px 16px; }
 }
+
+/* ── Paneles inferiores (Sobre mí / CV / Contacto) ── */
+.skill-panels {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  scroll-margin-top: 24px;
+}
+/* Marco común de los tres paneles */
+.home-panel {
+  margin-top: 48px;
+  width: 100%;
+  max-width: 1024px;
+  background: var(--background);
+  border-radius: 16px;
+}
+.panel-about {
+  border: 1px dashed var(--border);
+  padding: 48px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.panel-muted { font-size: 13px; color: var(--muted); }
+.panel-cv {
+  border: 1px solid var(--foreground);
+  overflow: hidden;
+}
+/* El alto del iframe del CV se fija inline (dinámico, según su contenido) */
+.panel-cv iframe { width: 100%; border: none; display: block; }
+.panel-contacto {
+  border: 1px solid var(--foreground);
+  padding: 40px 32px;
+}
+
+/* Formulario de contacto */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.panel-btn.contact-submit {
+  border-radius: 999px;
+  padding: 10px 24px;
+  width: auto;
+  height: auto;
+  align-self: flex-start;
+  cursor: pointer;
+}
+.panel-btn.contact-submit:disabled { cursor: default; }
+.contact-status { font-size: 12px; color: var(--muted); }
+.contact-status-error { font-size: 12px; color: #dc2626; }
 /* Rejilla de cards de proyecto: 3 columnas en desk, 2 en móvil */
 .project-grid {
   margin-top: 48px;
@@ -127,6 +208,7 @@
 }
 .contact-input::placeholder { color: var(--muted); }
 .contact-input:focus { border-color: var(--foreground); }
+textarea.contact-input { resize: vertical; }
 .panel-btn-label {
   position: relative; z-index: 6;
   font-size: 13px; font-weight: 500;

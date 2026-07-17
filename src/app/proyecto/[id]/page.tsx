@@ -33,37 +33,20 @@ const titles: Record<string, string> = {
 // Infografías: módulos HTML interactivos de la web corporativa de Iberdrola.
 function InfografiasLanding() {
   return (
-    <main style={{ flex: 1, paddingBottom: "64px" }}>
+    <main className="project-main">
       <div className="project-content-wrap">
-        <div
-          className="hover-trail-target"
-          data-trail-hue="142"
-          style={{
-            height: "220px",
-            marginTop: "-24px",
-            borderRadius: "0 0 16px 16px",
-            border: "1.5px solid rgba(22,163,74,0.6)",
-            borderTop: "none",
-            display: "flex", alignItems: "flex-end", justifyContent: "space-between",
-            gap: "16px", padding: "20px", boxSizing: "border-box",
-          }}
-        >
-          <span style={{ position: "relative", zIndex: 6 }}>
+        <div className="hover-trail-target project-hero-box" data-trail-hue="142">
+          <span className="project-back">
             <BackCapsule category="iberdrola" />
           </span>
 
-          <div style={{
-            position: "relative", zIndex: 6,
-            border: "1px solid var(--foreground)", borderRadius: "12px",
-            padding: "14px 20px", background: "var(--background)",
-            display: "flex", flexDirection: "column", gap: "6px",
-          }}>
-            <div style={{ display: "flex", gap: "24px", fontSize: "13px" }}>
-              <span style={{ fontWeight: 700, minWidth: "64px" }}><LangText es="Agencia" en="Agency" /></span>
+          <div className="project-meta">
+            <div className="project-meta-row">
+              <span className="project-meta-key"><LangText es="Agencia" en="Agency" /></span>
               <span>Prodigioso Volcán</span>
             </div>
-            <div style={{ display: "flex", gap: "24px", fontSize: "13px" }}>
-              <span style={{ fontWeight: 700, minWidth: "64px" }}><LangText es="Equipo" en="Team" /></span>
+            <div className="project-meta-row">
+              <span className="project-meta-key"><LangText es="Equipo" en="Team" /></span>
               <span><LangText es="Cuatro diseñadores" en="Four designers" /></span>
             </div>
           </div>
@@ -72,7 +55,7 @@ function InfografiasLanding() {
         <ProjectHeroTitle es="Infografías" en="Infographics" />
 
         <div className="ig-introrow">
-          <p style={{ fontSize: "14px", color: "var(--foreground)", maxWidth: "520px", lineHeight: 1.6, marginTop: "20px" }}>
+          <p className="project-intro">
             <LangText
               es="Esto es solo una muestra: unas pocas de las más de 160 infografías que he diseñado para la web corporativa de Iberdrola. En todas he intentado darle una vuelta a los conceptos y transformar lo estático en movimiento, para explicar procesos, instalaciones y tecnología de forma visual e interactiva."
               en="This is just a sample: a few of the 160-plus infographics I've designed for Iberdrola's corporate site. In every one I've tried to rethink the concept and turn the static into movement, explaining processes, facilities and technology in a visual, interactive way."
@@ -81,7 +64,7 @@ function InfografiasLanding() {
           <ToolIcons />
         </div>
 
-        <p style={{ fontSize: "14px", color: "var(--muted)", maxWidth: "520px", marginTop: "20px", fontStyle: "italic" }}>
+        <p className="project-tagline">
           <LangText es="｡ ₊°  No solo se miran — se tocan  °₊ ｡" en="｡ ₊°  Not just for looking — for touching  °₊ ｡" />
         </p>
 
@@ -93,37 +76,20 @@ function InfografiasLanding() {
 
 function IlustracionesLanding() {
   return (
-    <main style={{ flex: 1, paddingBottom: "64px" }}>
+    <main className="project-main">
       <div className="project-content-wrap">
-        <div
-          className="hover-trail-target"
-          data-trail-hue="142"
-          style={{
-            height: "220px",
-            marginTop: "-24px",
-            borderRadius: "0 0 16px 16px",
-            border: "1.5px solid rgba(22,163,74,0.6)",
-            borderTop: "none",
-            display: "flex", alignItems: "flex-end", justifyContent: "space-between",
-            gap: "16px", padding: "20px", boxSizing: "border-box",
-          }}
-        >
-          <span style={{ position: "relative", zIndex: 6 }}>
+        <div className="hover-trail-target project-hero-box" data-trail-hue="142">
+          <span className="project-back">
             <BackCapsule category="iberdrola" />
           </span>
 
-          <div style={{
-            position: "relative", zIndex: 6,
-            border: "1px solid var(--foreground)", borderRadius: "12px",
-            padding: "14px 20px", background: "var(--background)",
-            display: "flex", flexDirection: "column", gap: "6px",
-          }}>
-            <div style={{ display: "flex", gap: "24px", fontSize: "13px" }}>
-              <span style={{ fontWeight: 700, minWidth: "64px" }}><LangText es="Agencia" en="Agency" /></span>
+          <div className="project-meta">
+            <div className="project-meta-row">
+              <span className="project-meta-key"><LangText es="Agencia" en="Agency" /></span>
               <span>Prodigioso Volcán</span>
             </div>
-            <div style={{ display: "flex", gap: "24px", fontSize: "13px" }}>
-              <span style={{ fontWeight: 700, minWidth: "64px" }}><LangText es="Equipo" en="Team" /></span>
+            <div className="project-meta-row">
+              <span className="project-meta-key"><LangText es="Equipo" en="Team" /></span>
               <span><LangText es="Cuatro diseñadores" en="Four designers" /></span>
             </div>
           </div>
@@ -131,14 +97,14 @@ function IlustracionesLanding() {
 
         <ProjectHeroTitle es="Sistema de ilustraciones" en="Illustration system" />
 
-        <p style={{ fontSize: "14px", color: "var(--foreground)", maxWidth: "520px", lineHeight: 1.6, marginTop: "20px" }}>
+        <p className="project-intro">
           <LangText
             es="Diseñamos en equipo un sistema visual para Iberdrola que pusiera orden en el caos: qué estilo, qué piezas, para qué contexto. Infografías, banners, web. Y dentro de eso, una distinción clara entre la identidad corporativa de Iberdrola y la de su subholding Iberdrola España."
             en="As a team, we designed a visual system for Iberdrola to bring order to the chaos: which style, which pieces, for which context. Infographics, banners, web. And within that, a clear distinction between Iberdrola's corporate identity and that of its subholding Iberdrola España."
           />
         </p>
 
-        <p style={{ fontSize: "14px", color: "var(--muted)", maxWidth: "520px", marginTop: "20px", fontStyle: "italic" }}>
+        <p className="project-tagline">
           <LangText es="｡ ₊°  No solo ilustraciones — un lenguaje  °₊ ｡" en="｡ ₊°  Not just illustrations — a language  °₊ ｡" />
         </p>
 
@@ -163,15 +129,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
       ) : id === "i1" ? (
         <InfografiasLanding />
       ) : (
-        <main style={{
-          flex: 1, display: "flex", flexDirection: "column",
-          alignItems: "center", justifyContent: "center", gap: "16px",
-          color: "var(--foreground)", padding: "24px", textAlign: "center",
-        }}>
+        <main className="project-soon">
           <BackCapsule category={catFromId(id)} />
-          <span style={{ fontSize: "13px", color: "var(--muted)" }}>Próximamente</span>
-          <h1 style={{ fontSize: "22px", fontWeight: 500 }}>{title}</h1>
-          <p style={{ fontSize: "13px", color: "var(--muted)", maxWidth: "360px" }}>
+          <span className="project-soon-note">Próximamente</span>
+          <h1 className="project-soon-title">{title}</h1>
+          <p className="project-soon-note">
             Esta página está en construcción. Aquí se mostrará el proyecto completo.
           </p>
         </main>

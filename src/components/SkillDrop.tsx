@@ -445,18 +445,12 @@ export default function SkillDrop() {
   };
 
   return (
-    <div style={{ display:"flex", flexDirection:"column", alignItems:"center", padding:"0 24px" }}>
+    <div className="skill-drop">
       <div className="skill-grid">
 
-        {/* "Sobre mí / Redes / CV" — first in DOM → top on mobile */}
-        <div className="box-soon" style={{
-          height:`${boxH}px`,
-          border:"1px solid var(--foreground)", borderRadius:"16px",
-          position:"relative", overflow:"hidden",
-          background:"var(--background)",
-          display:"grid", gridTemplateColumns:"repeat(3, 1fr)", gap:"12px",
-          padding:"12px",
-        }}>
+        {/* "Sobre mí / Redes / CV" — first in DOM → top on mobile.
+            height es dinámico (JS iguala ambas cajas); el resto en CSS. */}
+        <div className="box-soon" style={{ height:`${boxH}px` }}>
           {/* Sobre mí — selects the "about" panel below */}
           <a
             href="#"
@@ -493,15 +487,8 @@ export default function SkillDrop() {
         </div>
 
         {/* Skills box — shown first (left) on desktop */}
-        <div className="box-skills" ref={containerRef} style={{
-          height:`${boxH}px`,
-          border:"1px solid var(--foreground)",
-          borderRadius:"16px",
-          background:"var(--background)",
-          overflow:"hidden",
-          position:"relative",
-        }}>
-          <div ref={sceneRef} style={{ position:"absolute", inset:0 }} />
+        <div className="box-skills" ref={containerRef} style={{ height:`${boxH}px` }}>
+          <div ref={sceneRef} className="skill-scene" />
 
           {pillPos.map(({ id, x, y, angle }) => {
             const skill = skills.find(s => s.id === id);
@@ -618,7 +605,7 @@ export default function SkillDrop() {
         </div>
       </div>
 
-      <div ref={panelRef} style={{ width:"100%", display:"flex", flexDirection:"column", alignItems:"center", scrollMarginTop:"24px" }}>
+      <div ref={panelRef} className="skill-panels">
       {selectedPanel in projects && (
         <div className="project-grid">
           {projects[selectedPanel].map(p => (
@@ -628,24 +615,15 @@ export default function SkillDrop() {
       )}
 
       {selectedPanel === "about" && (
-        <div style={{
-          marginTop:"48px", width:"100%", maxWidth:"1024px",
-          border:"1px dashed var(--border)", borderRadius:"16px",
-          padding:"48px 24px", display:"flex", alignItems:"center", justifyContent:"center",
-          background:"var(--background)",
-        }}>
-          <span style={{ fontSize:"13px", color:"var(--muted)" }}>
+        <div className="home-panel panel-about">
+          <span className="panel-muted">
             {lang==="en" ? "About me — coming soon" : "Sobre mí — en construcción"}
           </span>
         </div>
       )}
 
       {selectedPanel === "cv" && (
-        <div style={{
-          marginTop:"48px", width:"100%", maxWidth:"1024px",
-          border:"1px solid var(--foreground)", borderRadius:"16px",
-          overflow:"hidden", background:"var(--background)",
-        }}>
+        <div className="home-panel panel-cv">
           <iframe
             key={`${lang}-${theme}`}
             ref={cvIframeRef}
@@ -653,24 +631,20 @@ export default function SkillDrop() {
             title="CV"
             scrolling="no"
             onLoad={handleCvLoad}
-            style={{ width:"100%", height:`${cvHeight}px`, border:"none", display:"block" }}
+            style={{ height:`${cvHeight}px` }}
           />
         </div>
       )}
 
       {selectedPanel === "contacto" && (
-        <div style={{
-          marginTop:"48px", width:"100%", maxWidth:"1024px",
-          border:"1px solid var(--foreground)", borderRadius:"16px",
-          padding:"40px 32px", background:"var(--background)",
-        }}>
-          <span className="dropcap-title" style={{ marginBottom:"24px" }}>
+        <div className="home-panel panel-contacto">
+          <span className="dropcap-title">
             {lang==="en"
               ? <><span className="dropcap-letter">L</span><span className="dropcap-rest">et&apos;s talk</span></>
               : <><span className="dropcap-letter">H</span><span className="dropcap-rest">ablemos</span></>}
           </span>
 
-          <form onSubmit={handleContactSubmit} style={{ display:"flex", flexDirection:"column", gap:"14px" }}>
+          <form onSubmit={handleContactSubmit} className="contact-form">
             <input
               type="text"
               required
@@ -694,13 +668,11 @@ export default function SkillDrop() {
               value={contactForm.message}
               onChange={(e) => setContactForm(f => ({ ...f, message: e.target.value }))}
               className="contact-input"
-              style={{ resize:"vertical" }}
             />
             <button
               type="submit"
               disabled={contactStatus === "sending"}
-              className="panel-btn panel-btn-pill"
-              style={{ borderRadius:"999px", padding:"10px 24px", width:"auto", alignSelf:"flex-start", cursor: contactStatus === "sending" ? "default" : "pointer" }}
+              className="panel-btn panel-btn-pill contact-submit"
             >
               <span className="panel-btn-label">
                 {contactStatus === "sending"
@@ -710,12 +682,12 @@ export default function SkillDrop() {
             </button>
 
             {contactStatus === "success" && (
-              <span style={{ fontSize:"12px", color:"var(--muted)" }}>
+              <span className="contact-status">
                 {lang==="en" ? "Message sent — thanks!" : "Mensaje enviado — ¡gracias!"}
               </span>
             )}
             {contactStatus === "error" && (
-              <span style={{ fontSize:"12px", color:"#dc2626" }}>
+              <span className="contact-status-error">
                 {lang==="en" ? "Something went wrong. Try again." : "Algo ha fallado. Inténtalo de nuevo."}
               </span>
             )}
