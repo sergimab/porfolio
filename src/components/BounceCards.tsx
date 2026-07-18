@@ -11,14 +11,22 @@ import "./BounceCards.css";
 
 type Item = { id: string; title: string; titleEn: string; cover?: string };
 
-// Abanico simétrico centrado: rotación y desplazamiento por posición.
+// Pseudo-aleatorio 0..1 estable por índice (misma rotación entre renders,
+// sin desajuste de hidratación).
+function seeded(i: number): number {
+  const x = Math.sin(i * 127.1 + 11.7) * 43758.5453;
+  return x - Math.floor(x);
+}
+
+// Cards en línea horizontal con rotación aleatoria (no un abanico simétrico).
 function fanTransforms(n: number): string[] {
   const center = (n - 1) / 2;
   const spread = 145; // px horizontales entre cards
-  const angle = 5; // grados por posición
+  const maxAngle = 8; // grados máximos de inclinación aleatoria
   return Array.from({ length: n }, (_, i) => {
     const d = i - center;
-    return `rotate(${(d * angle).toFixed(2)}deg) translate(${(d * spread).toFixed(1)}px)`;
+    const rot = (seeded(i) * 2 - 1) * maxAngle; // -8..8 grados, estable
+    return `rotate(${rot.toFixed(2)}deg) translate(${(d * spread).toFixed(1)}px)`;
   });
 }
 
