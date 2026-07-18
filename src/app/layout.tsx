@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import HoverTrail from "@/components/HoverTrail";
 import PixelFX from "@/components/PixelFX";
+import { EFFECTS } from "@/config/effects";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -33,7 +34,7 @@ export default function RootLayout({
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <PixelFX />
-        <HoverTrail />
+        {EFFECTS.hover === "beam" && <HoverTrail />}
         <div style={{ position: "relative", zIndex: 1 }}>{children}</div>
       </body>
     </html>
