@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import HoverTrail from "@/components/HoverTrail";
+import PixelFX from "@/components/PixelFX";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -31,8 +32,9 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Kapakana&family=Cormorant+Garamond:ital,wght@1,400&display=swap" rel="stylesheet" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <PixelFX />
         <HoverTrail />
-        {children}
+        <div style={{ position: "relative", zIndex: 1 }}>{children}</div>
       </body>
     </html>
   );

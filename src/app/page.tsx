@@ -5,7 +5,7 @@ import "./page.css";
 
 export default function Home() {
   return (
-    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", background: "var(--background)" }}>
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <Header />
       <main className="main-content" style={{ paddingTop: "24px", paddingBottom: "48px", flex: 1 }}>
         <SkillDropClient />

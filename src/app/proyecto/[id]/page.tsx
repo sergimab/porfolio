@@ -124,7 +124,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
   const title = titles[id] ?? "Proyecto";
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", background: "var(--background)" }}>
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <Header />
 
       {id === "i5" ? (
