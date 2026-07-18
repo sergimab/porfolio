@@ -35,6 +35,8 @@ export type PixelBlastProps = {
   transparent?: boolean;
   edgeFade?: number;
   noiseAmount?: number;
+  /** Tope de devicePixelRatio. Bajarlo a 1 aligera mucho en pantallas HiDPI. */
+  maxPixelRatio?: number;
 };
 
 const createTouchTexture = () => {
@@ -352,6 +354,7 @@ const PixelBlast = ({
   transparent = true,
   edgeFade = 0.5,
   noiseAmount = 0,
+  maxPixelRatio = 2,
 }: PixelBlastProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const visibilityRef = useRef({ visible: true });
@@ -397,7 +400,7 @@ const PixelBlast = ({
       });
       renderer.domElement.style.width = "100%";
       renderer.domElement.style.height = "100%";
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, maxPixelRatio));
       container.appendChild(renderer.domElement);
       if (transparent) renderer.setClearAlpha(0);
       else renderer.setClearColor(0x000000, 1);
@@ -589,7 +592,7 @@ const PixelBlast = ({
   }, [
     antialias, liquid, noiseAmount, pixelSize, patternScale, patternDensity, enableRipples,
     rippleIntensityScale, rippleThickness, rippleSpeed, pixelSizeJitter, edgeFade, transparent,
-    liquidStrength, liquidRadius, liquidWobbleSpeed, autoPauseOffscreen, variant, color, speed,
+    liquidStrength, liquidRadius, liquidWobbleSpeed, autoPauseOffscreen, variant, color, speed, maxPixelRatio,
   ]);
 
   return (

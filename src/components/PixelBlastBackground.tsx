@@ -49,6 +49,7 @@ export default function PixelBlastBackground() {
         speed={0.6}
         edgeFade={0}
         transparent
+        maxPixelRatio={1}
         style={{ width: "100%", height: "100%" }}
       />
     </div>
