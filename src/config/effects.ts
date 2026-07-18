@@ -7,5 +7,5 @@ export const EFFECTS = {
   /** Fondo de píxeles animado con blast al pulsar. */
   backgroundPixels: true,
   /** Efecto de hover en botones y cajas: "pixels" o "beam". */
-  hover: "pixels" as "pixels" | "beam",
+  hover: "beam" as "pixels" | "beam",
 };
