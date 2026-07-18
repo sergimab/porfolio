@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
 import "./BounceCards.css";
@@ -11,22 +11,18 @@ import "./BounceCards.css";
 
 type Item = { id: string; title: string; titleEn: string; cover?: string };
 
-// Pseudo-aleatorio 0..1 estable por índice (misma rotación entre renders,
-// sin desajuste de hidratación).
-function seeded(i: number): number {
-  const x = Math.sin(i * 127.1 + 11.7) * 43758.5453;
-  return x - Math.floor(x);
-}
+// Composición de rotaciones "desordenada" pero fija (mismo resultado entre
+// renders). Se recorre el pool por índice para dar un aspecto natural.
+const ANGLE_POOL = [-9, 6, -3, 10, -6, 4, -8, 7, -2];
 
-// Cards en línea horizontal con rotación aleatoria (no un abanico simétrico).
+// Cards en línea horizontal con rotación variada (no un abanico simétrico).
 function fanTransforms(n: number): string[] {
   const center = (n - 1) / 2;
   const spread = 145; // px horizontales entre cards
-  const maxAngle = 8; // grados máximos de inclinación aleatoria
   return Array.from({ length: n }, (_, i) => {
     const d = i - center;
-    const rot = (seeded(i) * 2 - 1) * maxAngle; // -8..8 grados, estable
-    return `rotate(${rot.toFixed(2)}deg) translate(${(d * spread).toFixed(1)}px)`;
+    const rot = ANGLE_POOL[i % ANGLE_POOL.length];
+    return `rotate(${rot}deg) translate(${(d * spread).toFixed(1)}px)`;
   });
 }
 
@@ -49,8 +45,19 @@ export default function BounceCards({
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const transformStyles = fanTransforms(items.length);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // En móvil se muestra un grid normal (2 columnas), no el abanico.
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 768px)");
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
   useEffect(() => {
+    if (isMobile) return; // sin animación/abanico en el grid móvil
     const ctx = gsap.context(() => {
       gsap.fromTo(
         ".bc-card",
@@ -59,7 +66,7 @@ export default function BounceCards({
       );
     }, containerRef);
     return () => ctx.revert();
-  }, [animationStagger, easeType, animationDelay, items.length]);
+  }, [animationStagger, easeType, animationDelay, items.length, isMobile]);
 
   const getNoRotationTransform = (t: string) => {
     if (/rotate\([\s\S]*?\)/.test(t)) return t.replace(/rotate\([\s\S]*?\)/, "rotate(0deg)");
@@ -115,38 +122,63 @@ export default function BounceCards({
     });
   };
 
+  const cardInner = (item: Item) => (
+    <>
+      {item.cover ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img className="bc-img" src={item.cover} alt={lang === "en" ? item.titleEn : item.title} />
+      ) : (
+        <div className="bc-img bc-placeholder" aria-hidden="true">
+          <svg viewBox="0 0 200 200">
+            <rect x="45" y="60" width="110" height="80" rx="6" fill="none" stroke="currentColor" strokeWidth="2" />
+            <circle cx="72" cy="86" r="9" fill="none" stroke="currentColor" strokeWidth="2" />
+            <path d="M45 122 82 92l30 16 40-28" fill="none" stroke="currentColor" strokeWidth="2" />
+          </svg>
+        </div>
+      )}
+      <span className="bc-name">{lang === "en" ? item.titleEn : item.title}</span>
+    </>
+  );
+
+  // Móvil: grid normal de 2 columnas, cards rectas.
+  if (isMobile) {
+    return (
+      <div className="bc-grid">
+        {items.map((item) => (
+          <Link
+            key={item.id}
+            href={`/proyecto/${item.id}`}
+            className="bc-card"
+            style={{ borderColor: `hsl(${hue}, 70%, 55%)` }}
+          >
+            {cardInner(item)}
+          </Link>
+        ))}
+      </div>
+    );
+  }
+
+  // Desktop: abanico horizontal con rotación variada y empuje en hover.
   return (
     <div className="bc-fit">
-    <div
-      className="bounceCardsContainer"
-      ref={containerRef}
-      style={{ ["--bc-count" as string]: items.length }}
-    >
-      {items.map((item, idx) => (
-        <Link
-          key={item.id}
-          href={`/proyecto/${item.id}`}
-          className={`bc-card bc-card-${idx}`}
-          style={{ transform: transformStyles[idx], borderColor: `hsl(${hue}, 70%, 55%)` }}
-          onMouseEnter={() => pushSiblings(idx)}
-          onMouseLeave={resetSiblings}
-        >
-          {item.cover ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img className="bc-img" src={item.cover} alt={lang === "en" ? item.titleEn : item.title} />
-          ) : (
-            <div className="bc-img bc-placeholder" aria-hidden="true">
-              <svg viewBox="0 0 200 200">
-                <rect x="45" y="60" width="110" height="80" rx="6" fill="none" stroke="currentColor" strokeWidth="2" />
-                <circle cx="72" cy="86" r="9" fill="none" stroke="currentColor" strokeWidth="2" />
-                <path d="M45 122 82 92l30 16 40-28" fill="none" stroke="currentColor" strokeWidth="2" />
-              </svg>
-            </div>
-          )}
-          <span className="bc-name">{lang === "en" ? item.titleEn : item.title}</span>
-        </Link>
-      ))}
-    </div>
+      <div
+        className="bounceCardsContainer"
+        ref={containerRef}
+        style={{ ["--bc-count" as string]: items.length }}
+      >
+        {items.map((item, idx) => (
+          <Link
+            key={item.id}
+            href={`/proyecto/${item.id}`}
+            className={`bc-card bc-card-${idx}`}
+            style={{ transform: transformStyles[idx], borderColor: `hsl(${hue}, 70%, 55%)` }}
+            onMouseEnter={() => pushSiblings(idx)}
+            onMouseLeave={resetSiblings}
+          >
+            {cardInner(item)}
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }

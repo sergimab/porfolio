@@ -70,15 +70,17 @@
   background: linear-gradient(to top, var(--background) 55%, transparent);
 }
 
-/* En móvil escalamos todo el abanico (geometría fija) para que quepa sin
-   scroll lateral; el wrapper recorta el espacio sobrante. */
-@media (max-width: 768px) {
-  .bc-fit {
-    overflow: hidden;
-    height: 200px;
-  }
-  .bounceCardsContainer {
-    transform: scale(0.44);
-    transform-origin: top center;
-  }
+/* En móvil: grid normal de 2 columnas con las cards rectas (sin abanico) */
+.bc-grid {
+  margin-top: 48px;
+  width: 100%;
+  max-width: 1024px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.bc-grid .bc-card {
+  position: relative;
+  width: 100%;
+  transform: none;
 }
