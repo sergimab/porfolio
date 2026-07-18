@@ -12,7 +12,7 @@
 
 .bounceCardsContainer {
   --bc-card: 200px;
-  --bc-spread: 64px;
+  --bc-spread: 120px;
   position: relative;
   display: flex;
   justify-content: center;
@@ -32,7 +32,6 @@
   text-decoration: none;
   cursor: pointer;
   will-change: transform;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
 }
 
 .bc-img {
@@ -75,10 +74,10 @@
 @media (max-width: 768px) {
   .bc-fit {
     overflow: hidden;
-    height: 230px;
+    height: 200px;
   }
   .bounceCardsContainer {
-    transform: scale(0.6);
+    transform: scale(0.48);
     transform-origin: top center;
   }
 }
