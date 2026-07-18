@@ -82,5 +82,5 @@
 .bc-grid .bc-card {
   position: relative;
   width: 100%;
-  transform: none;
+  /* la rotación orgánica se aplica inline por card */
 }

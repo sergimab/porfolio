@@ -13,7 +13,10 @@ type Item = { id: string; title: string; titleEn: string; cover?: string };
 
 // Composición de rotaciones "desordenada" pero fija (mismo resultado entre
 // renders). Se recorre el pool por índice para dar un aspecto natural.
-const ANGLE_POOL = [-9, 6, -3, 10, -6, 4, -8, 7, -2];
+// Ángulos suaves: cards casi horizontales, solo ligeramente inclinadas.
+const ANGLE_POOL = [-5, 3, -2, 5, -3, 2, -4, 4, -2];
+// Rotación orgánica (más sutil) para el grid en móvil.
+const MOBILE_ANGLE_POOL = [-3, 2.5, -2, 3, -2.5, 2, -3];
 
 // Cards en línea horizontal con rotación variada (no un abanico simétrico).
 function fanTransforms(n: number): string[] {
@@ -144,12 +147,15 @@ export default function BounceCards({
   if (isMobile) {
     return (
       <div className="bc-grid">
-        {items.map((item) => (
+        {items.map((item, idx) => (
           <Link
             key={item.id}
             href={`/proyecto/${item.id}`}
             className="bc-card"
-            style={{ borderColor: `hsl(${hue}, 70%, 55%)` }}
+            style={{
+              borderColor: `hsl(${hue}, 70%, 55%)`,
+              transform: `rotate(${MOBILE_ANGLE_POOL[idx % MOBILE_ANGLE_POOL.length]}deg)`,
+            }}
           >
             {cardInner(item)}
           </Link>
