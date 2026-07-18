@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import type MatterTypes from "matter-js";
-import ProjectCard from "./ProjectCard";
+// import ProjectCard from "./ProjectCard"; // diseño anterior (rejilla) — guardado por si volvemos
+import BounceCards from "./BounceCards";
 import BackToTop from "./BackToTop";
 import "./SkillDrop.css";
 
@@ -607,11 +608,11 @@ export default function SkillDrop() {
 
       <div ref={panelRef} className="skill-panels">
       {selectedPanel in projects && (
-        <div className="project-grid">
-          {projects[selectedPanel].map(p => (
-            <ProjectCard key={p.id} id={p.id} title={lang === "en" ? p.titleEn : p.title} cover={p.cover} lang={lang} hue={skills.find(s => s.id === selectedPanel)?.hue ?? 0} />
-          ))}
-        </div>
+        <BounceCards
+          items={projects[selectedPanel]}
+          lang={lang}
+          hue={skills.find(s => s.id === selectedPanel)?.hue ?? 0}
+        />
       )}
 
       {selectedPanel === "about" && (
