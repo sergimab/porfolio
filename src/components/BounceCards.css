@@ -8,11 +8,12 @@
   display: flex;
   justify-content: center;
   margin-top: 48px;
+  overflow-x: clip; /* el empuje del hover nunca genera scroll horizontal */
 }
 
 .bounceCardsContainer {
   --bc-card: 200px;
-  --bc-spread: 120px;
+  --bc-spread: 145px;
   position: relative;
   display: flex;
   justify-content: center;
@@ -77,7 +78,7 @@
     height: 200px;
   }
   .bounceCardsContainer {
-    transform: scale(0.48);
+    transform: scale(0.44);
     transform-origin: top center;
   }
 }

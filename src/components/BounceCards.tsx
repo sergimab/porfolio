@@ -14,7 +14,7 @@ type Item = { id: string; title: string; titleEn: string; cover?: string };
 // Abanico simétrico centrado: rotación y desplazamiento por posición.
 function fanTransforms(n: number): string[] {
   const center = (n - 1) / 2;
-  const spread = 120; // px horizontales entre cards
+  const spread = 145; // px horizontales entre cards
   const angle = 5; // grados por posición
   return Array.from({ length: n }, (_, i) => {
     const d = i - center;
@@ -80,7 +80,7 @@ export default function BounceCards({
           overwrite: "auto",
         });
       } else {
-        const offsetX = i < hoveredIdx ? -160 : 160;
+        const offsetX = i < hoveredIdx ? -70 : 70;
         gsap.to(target, {
           transform: getPushedTransform(base, offsetX),
           duration: 0.4,
