@@ -119,6 +119,44 @@ function IlustracionesLanding() {
   );
 }
 
+// Newsletters: piezas de email para Iberdrola (en construcción).
+function NewslettersLanding() {
+  return (
+    <main className="project-main">
+      <div className="project-content-wrap">
+        <div className="hover-trail-target project-hero-box" data-trail-hue="142">
+          <span className="project-back">
+            <BackCapsule category="iberdrola" />
+          </span>
+
+          <div className="project-meta">
+            <div className="project-meta-row">
+              <span className="project-meta-key"><LangText es="Agencia" en="Agency" /></span>
+              <span>Prodigioso Volcán</span>
+            </div>
+            <div className="project-meta-row">
+              <span className="project-meta-key"><LangText es="Equipo" en="Team" /></span>
+              <span><LangText es="Cuatro diseñadores" en="Four designers" /></span>
+            </div>
+          </div>
+        </div>
+
+        <ProjectHeroTitle es="Newsletters" en="Newsletters" />
+
+        <div className="project-introrow">
+          <p className="project-intro">
+            <LangText
+              es="Diseño y maquetación de newsletters para Iberdrola: piezas de email que combinan la identidad de marca con una jerarquía clara, pensadas para leerse bien en cualquier cliente de correo y dispositivo."
+              en="Design and build of newsletters for Iberdrola: email pieces that pair the brand identity with a clear hierarchy, built to read well across any email client and device."
+            />
+          </p>
+          <ToolIcons tools={["Figma", "Illustrator", "After Effects", "Stripo"]} />
+        </div>
+      </div>
+    </main>
+  );
+}
+
 export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const title = titles[id] ?? "Proyecto";
@@ -131,6 +169,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
         <IlustracionesLanding />
       ) : id === "i1" ? (
         <InfografiasLanding />
+      ) : id === "i3" ? (
+        <NewslettersLanding />
       ) : (
         <main className="project-soon">
           <BackCapsule category={catFromId(id)} />
