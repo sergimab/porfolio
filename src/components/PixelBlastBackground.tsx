@@ -51,6 +51,7 @@ export default function PixelBlastBackground() {
         edgeFade={0}
         transparent
         maxPixelRatio={1}
+        maxFps={30}
         tintColor="#22C55E"
         tintSelector=".hover-trail-target"
         style={{ width: "100%", height: "100%" }}

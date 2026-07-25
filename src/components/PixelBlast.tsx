@@ -37,6 +37,8 @@ export type PixelBlastProps = {
   noiseAmount?: number;
   /** Tope de devicePixelRatio. Bajarlo a 1 aligera mucho en pantallas HiDPI. */
   maxPixelRatio?: number;
+  /** Límite de FPS del render (0 = sin límite). Bajarlo aligera la GPU. */
+  maxFps?: number;
   /** Color de las partículas dentro del elemento `tintSelector`. */
   tintColor?: string;
   /** Selector del elemento cuya zona pinta las partículas de `tintColor`. */
@@ -207,7 +209,7 @@ float Bayer2(vec2 a) {
 #define Bayer4(a) (Bayer2(.5*(a))*0.25 + Bayer2(a))
 #define Bayer8(a) (Bayer4(.5*(a))*0.25 + Bayer2(a))
 
-#define FBM_OCTAVES     5
+#define FBM_OCTAVES     3
 #define FBM_LACUNARITY  1.25
 #define FBM_GAIN        1.0
 
@@ -366,6 +368,7 @@ const PixelBlast = ({
   edgeFade = 0.5,
   noiseAmount = 0,
   maxPixelRatio = 2,
+  maxFps = 0,
   tintColor,
   tintSelector,
 }: PixelBlastProps) => {
@@ -543,11 +546,15 @@ const PixelBlast = ({
       window.addEventListener("pointerdown", onPointerDown, { passive: true });
       window.addEventListener("pointermove", onPointerMove, { passive: true });
       let raf = 0;
-      const animate = () => {
-        if (autoPauseOffscreen && !visibilityRef.current.visible) {
-          raf = requestAnimationFrame(animate);
-          return;
-        }
+      let lastFrame = 0;
+      const minDelta = maxFps > 0 ? 1000 / maxFps : 0;
+      const animate = (now?: number) => {
+        raf = requestAnimationFrame(animate);
+        if (autoPauseOffscreen && !visibilityRef.current.visible) return;
+        // Limitador de FPS
+        const ts = now ?? performance.now();
+        if (minDelta && ts - lastFrame < minDelta) return;
+        lastFrame = ts;
         uniforms.uTime.value = timeOffset + clock.getElapsedTime() * speedRef.current;
         // Región de tinte (p.ej. la caja verde de Iberdrola): sus partículas
         // se pintan con uTintColor. Se recalcula por si la página se desplaza.
@@ -576,7 +583,6 @@ const PixelBlast = ({
           });
           composer.render();
         } else renderer.render(scene, camera);
-        raf = requestAnimationFrame(animate);
       };
       raf = requestAnimationFrame(animate);
       threeRef.current = {
@@ -624,7 +630,7 @@ const PixelBlast = ({
     antialias, liquid, noiseAmount, pixelSize, patternScale, patternDensity, enableRipples,
     rippleIntensityScale, rippleThickness, rippleSpeed, pixelSizeJitter, edgeFade, transparent,
     liquidStrength, liquidRadius, liquidWobbleSpeed, autoPauseOffscreen, variant, color, speed, maxPixelRatio,
-    tintColor, tintSelector,
+    maxFps, tintColor, tintSelector,
   ]);
 
   return (
