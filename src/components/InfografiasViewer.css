@@ -46,6 +46,7 @@
   border: 1px solid var(--foreground);
   border-radius: 16px;
   padding: 24px 20px 20px;
+  background: var(--background);
 }
 .igv-box[data-tab="565"]  { border-top-left-radius: 0; }
 .igv-box[data-tab="1256"] { border-top-right-radius: 0; }

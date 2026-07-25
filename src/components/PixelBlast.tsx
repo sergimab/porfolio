@@ -37,6 +37,10 @@ export type PixelBlastProps = {
   noiseAmount?: number;
   /** Tope de devicePixelRatio. Bajarlo a 1 aligera mucho en pantallas HiDPI. */
   maxPixelRatio?: number;
+  /** Color de las partículas dentro del elemento `tintSelector`. */
+  tintColor?: string;
+  /** Selector del elemento cuya zona pinta las partículas de `tintColor`. */
+  tintSelector?: string;
 };
 
 const createTouchTexture = () => {
@@ -179,6 +183,10 @@ uniform float uRippleThickness;
 uniform float uRippleIntensity;
 uniform float uEdgeFade;
 
+uniform vec3  uTintColor;
+uniform vec4  uTintRect;
+uniform int   uHasTint;
+
 uniform int   uShapeType;
 const int SHAPE_SQUARE   = 0;
 const int SHAPE_CIRCLE   = 1;
@@ -317,7 +325,10 @@ void main(){
     M *= fade;
   }
 
-  vec3 color = uColor;
+  bool inTint = uHasTint == 1 &&
+    gl_FragCoord.x >= uTintRect.x && gl_FragCoord.x <= uTintRect.z &&
+    gl_FragCoord.y >= uTintRect.y && gl_FragCoord.y <= uTintRect.w;
+  vec3 color = inTint ? uTintColor : uColor;
 
   vec3 srgbColor = mix(
     color * 12.92,
@@ -355,6 +366,8 @@ const PixelBlast = ({
   edgeFade = 0.5,
   noiseAmount = 0,
   maxPixelRatio = 2,
+  tintColor,
+  tintSelector,
 }: PixelBlastProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const visibilityRef = useRef({ visible: true });
@@ -420,6 +433,9 @@ const PixelBlast = ({
         uRippleThickness: { value: rippleThickness },
         uRippleIntensity: { value: rippleIntensityScale },
         uEdgeFade: { value: edgeFade },
+        uTintColor: { value: new THREE.Color(tintColor || color) },
+        uTintRect: { value: new THREE.Vector4(-1, -1, -1, -1) },
+        uHasTint: { value: 0 },
       };
       const scene = new THREE.Scene();
       const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
@@ -533,6 +549,20 @@ const PixelBlast = ({
           return;
         }
         uniforms.uTime.value = timeOffset + clock.getElapsedTime() * speedRef.current;
+        // Región de tinte (p.ej. la caja verde de Iberdrola): sus partículas
+        // se pintan con uTintColor. Se recalcula por si la página se desplaza.
+        if (tintSelector) {
+          const el = document.querySelector(tintSelector);
+          if (el) {
+            const r = el.getBoundingClientRect();
+            const pr = renderer.getPixelRatio();
+            const vh = window.innerHeight;
+            uniforms.uTintRect.value.set(r.left * pr, (vh - r.bottom) * pr, r.right * pr, (vh - r.top) * pr);
+            uniforms.uHasTint.value = 1;
+          } else {
+            uniforms.uHasTint.value = 0;
+          }
+        }
         if (liquidEffect) liquidEffect.uniforms.get("uTime").value = uniforms.uTime.value;
         if (composer) {
           if (touch) touch.update();
@@ -567,6 +597,7 @@ const PixelBlast = ({
       t.uniforms.uRippleThickness.value = rippleThickness;
       t.uniforms.uRippleSpeed.value = rippleSpeed;
       t.uniforms.uEdgeFade.value = edgeFade;
+      t.uniforms.uTintColor.value.set(tintColor || color);
       if (transparent) t.renderer.setClearAlpha(0);
       else t.renderer.setClearColor(0x000000, 1);
       if (t.touch) t.touch.radiusScale = liquidRadius;
@@ -593,6 +624,7 @@ const PixelBlast = ({
     antialias, liquid, noiseAmount, pixelSize, patternScale, patternDensity, enableRipples,
     rippleIntensityScale, rippleThickness, rippleSpeed, pixelSizeJitter, edgeFade, transparent,
     liquidStrength, liquidRadius, liquidWobbleSpeed, autoPauseOffscreen, variant, color, speed, maxPixelRatio,
+    tintColor, tintSelector,
   ]);
 
   return (

@@ -69,19 +69,30 @@
   min-width: 64px;
 }
 /* Texto de introducción y frase en cursiva */
+/* Textos de introducción: caja con el color de la página (sin borde) para
+   que el texto quede legible y el efecto de píxeles pase por detrás. */
 .project-intro {
   font-size: 14px;
   color: var(--foreground);
   max-width: 520px;
   line-height: 1.6;
   margin-top: 20px;
+  background: var(--background);
+  padding: 14px 18px;
+  border-radius: 12px;
+  box-sizing: border-box;
 }
 .project-tagline {
+  display: inline-block;
   font-size: 14px;
   color: var(--muted);
   max-width: 520px;
   margin-top: 20px;
   font-style: italic;
+  background: var(--background);
+  padding: 10px 16px;
+  border-radius: 12px;
+  box-sizing: border-box;
 }
 /* Página de proyecto en construcción */
 .project-soon {

@@ -79,8 +79,8 @@ export default function PixelBlastBackground() {
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none" }} aria-hidden="true">
       <PixelBlast
-        variant="circle"
-        pixelSize={3}
+        variant="square"
+        pixelSize={6}
         color={color}
         patternScale={2.25}
         patternDensity={0.05}
@@ -94,6 +94,8 @@ export default function PixelBlastBackground() {
         edgeFade={0}
         transparent
         maxPixelRatio={1}
+        tintColor="#22C55E"
+        tintSelector=".hover-trail-target"
         style={{ width: "100%", height: "100%" }}
       />
     </div>
