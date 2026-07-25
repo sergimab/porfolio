@@ -3,11 +3,12 @@
 import { useLang } from "./useLang";
 import "./ToolIcons.css";
 
-// Herramientas con las que se diseñan y montan las infografías. Iconos
-// monocromos (var(--muted)) que se avivan al pasar por encima.
-const TOOLS: { name: string; node: React.ReactNode }[] = [
+// Herramientas usadas. Iconos monocromos (var(--muted)) que al hacer hover
+// se pintan de su color de marca (brand).
+const TOOLS: { name: string; brand: string; node: React.ReactNode }[] = [
   {
     name: "Figma",
+    brand: "#F24E1E",
     node: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path
@@ -19,6 +20,7 @@ const TOOLS: { name: string; node: React.ReactNode }[] = [
   },
   {
     name: "Visual Studio Code",
+    brand: "#007ACC",
     node: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path
@@ -30,6 +32,7 @@ const TOOLS: { name: string; node: React.ReactNode }[] = [
   },
   {
     name: "After Effects",
+    brand: "#9999FF",
     node: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <rect x="1.5" y="1.5" width="21" height="21" rx="4.5" fill="none" stroke="currentColor" strokeWidth="1.4" />
@@ -39,6 +42,7 @@ const TOOLS: { name: string; node: React.ReactNode }[] = [
   },
   {
     name: "Illustrator",
+    brand: "#FF9A00",
     node: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <rect x="1.5" y="1.5" width="21" height="21" rx="4.5" fill="none" stroke="currentColor" strokeWidth="1.4" />
@@ -48,6 +52,7 @@ const TOOLS: { name: string; node: React.ReactNode }[] = [
   },
   {
     name: "Blender",
+    brand: "#F5792A",
     node: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path
@@ -58,12 +63,15 @@ const TOOLS: { name: string; node: React.ReactNode }[] = [
     ),
   },
   {
-    // Stripo (editor de emails): sin logo en simple-icons → badge con "St"
+    // Stripo (editor de emails): logo "S" de dos hojas (aprox. vectorizada).
     name: "Stripo",
+    brand: "#3CB54A",
     node: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
-        <rect x="1.5" y="1.5" width="21" height="21" rx="4.5" fill="none" stroke="currentColor" strokeWidth="1.4" />
-        <text x="12" y="12.4" textAnchor="middle" dominantBaseline="central" fontSize="8.5" fontWeight="600" fill="currentColor">St</text>
+        <g fill="currentColor">
+          <path d="M15 3.2C12.5 4.2 10 6.5 9 9.5 8.3 11.5 9.2 13.2 11.2 13 13.2 12.8 14.8 10.5 15.2 8 15.5 6 15.4 4.4 15 3.2Z" />
+          <path d="M15 3.2C12.5 4.2 10 6.5 9 9.5 8.3 11.5 9.2 13.2 11.2 13 13.2 12.8 14.8 10.5 15.2 8 15.5 6 15.4 4.4 15 3.2Z" transform="rotate(180 12 12)" />
+        </g>
       </svg>
     ),
   },
@@ -82,7 +90,13 @@ export default function ToolIcons({ tools }: { tools?: string[] }) {
       <span className="tool-icons-label">{lang === "en" ? "Crafted with" : "Hecho con"}</span>
       <ul className="tool-icons-list">
         {list.map((t) => (
-          <li key={t.name} className="tool-icon" title={t.name} aria-label={t.name}>
+          <li
+            key={t.name}
+            className="tool-icon"
+            title={t.name}
+            aria-label={t.name}
+            style={{ ["--brand" as string]: t.brand }}
+          >
             {t.node}
           </li>
         ))}

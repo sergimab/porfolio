@@ -37,6 +37,6 @@
   display: block;
 }
 .tool-icon:hover {
-  color: var(--foreground);
+  color: var(--brand, var(--foreground));
   transform: translateY(-2px);
 }
