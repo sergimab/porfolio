@@ -54,6 +54,8 @@ export default function Footer() {
       borderRight: "1.5px solid var(--foreground)",
       borderTop: "1.5px solid var(--foreground)",
       borderRadius: "16px 16px 0 0",
+      background: "var(--background)",
+      boxSizing: "border-box",
     }}>
       <span style={{ fontSize: "11px", color: "var(--muted)" }}>
         © {year} Sharkastic
