@@ -1,10 +1,15 @@
-/* Fila de herramientas usadas: iconos monocromos y sutiles */
+/* Fila de herramientas usadas: iconos monocromos y sutiles.
+   Fondo del color de la página (sin borde) para que el efecto pase por detrás. */
 .tool-icons {
   display: flex;
   align-items: center;
   gap: 14px;
   margin-top: 24px;
   flex-wrap: wrap;
+  background: var(--background);
+  padding: 10px 14px;
+  border-radius: 12px;
+  box-sizing: border-box;
 }
 .tool-icons-label {
   font-size: 12px;
