@@ -50,6 +50,7 @@
   display: flex;
   flex-direction: column;
   gap: 40px;
+  background: var(--background);
 }
 /* La esquina superior del lado de la pestaña activa va a 0 para unirse con ella. */
 .ilu-box[data-tab="holding"]    { border-top-left-radius: 0; }
