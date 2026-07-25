@@ -37,7 +37,7 @@ export default function PixelBlastBackground() {
     <div style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none" }} aria-hidden="true">
       <PixelBlast
         variant="square"
-        pixelSize={3}
+        pixelSize={2}
         color={color}
         patternScale={2.25}
         patternDensity={0.05}

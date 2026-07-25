@@ -6,6 +6,7 @@
 export const EFFECTS = {
   /** Fondo de píxeles animado con blast al pulsar. */
   backgroundPixels: true,
-  /** Efecto de hover en botones y cajas: "pixels" o "beam". */
-  hover: "beam" as "pixels" | "beam",
+  /** Efecto de hover en botones y cajas: "beam" (halo de luz), "pixels" o "none".
+      Ahora "none": el halo queda oculto pero HoverTrail sigue en el código. */
+  hover: "none" as "pixels" | "beam" | "none",
 };
