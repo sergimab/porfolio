@@ -8,38 +8,33 @@
   flex-wrap: wrap;
 }
 
-/* Marco a la proporción del SVG (489 × 802) */
+/* Marco a la proporción del SVG (489 × 802). Borde theme-aware por CSS:
+   oscuro en modo claro y claro en modo oscuro. */
 .phone {
   position: relative;
   width: 320px;
   max-width: 100%;
   aspect-ratio: 489 / 802;
-}
-
-/* Fondo blanco de la pantalla (visible en la barra de estado y los bordes) */
-.phone-bg {
-  position: absolute;
-  inset: 0.3%;
+  border: 1.5px solid var(--foreground);
+  border-radius: 18px;
+  overflow: hidden;
   background: #fff;
-  border-radius: 15px;
-  z-index: 0;
 }
 
-/* Iframe de la newsletter: empieza bajo la barra de estado y ocupa el resto */
+/* Iframe de la newsletter: empieza bajo la barra de estado y ocupa el resto.
+   El borde redondeado del móvil lo recorta (overflow: hidden en .phone). */
 .phone-screen {
   position: absolute;
   top: 4.3%; /* ~34/802: bajo la barra de estado */
-  left: 0.3%;
-  /* iframe = elemento reemplazado: necesita width/height explícitos */
-  width: 99.4%;
-  height: 95.4%;
+  left: 0;
+  width: 100%;
+  height: 95.7%;
   border: none;
-  border-radius: 0 0 14px 14px;
   background: #fff;
   z-index: 1;
 }
 
-/* Marco SVG por encima (borde + barra de estado); no bloquea el scroll */
+/* Marco SVG por encima (barra de estado); no bloquea el scroll */
 .phone-frame {
   position: absolute;
   inset: 0;
