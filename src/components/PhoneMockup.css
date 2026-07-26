@@ -18,7 +18,7 @@
   border: 1.5px solid var(--foreground);
   border-radius: 18px;
   overflow: hidden;
-  background: #fff;
+  background: var(--background);
 }
 
 /* Iframe de la newsletter: empieza bajo la barra de estado y ocupa el resto.
@@ -42,4 +42,8 @@
   height: 100%;
   pointer-events: none;
   z-index: 2;
+}
+/* En modo oscuro los iconos de la barra de estado (oscuros) se invierten a claros */
+:root[data-theme="dark"] .phone-frame {
+  filter: invert(1);
 }

@@ -171,7 +171,7 @@ function NewslettersLanding() {
         {/* Dos newsletters navegables en mockup de móvil */}
         <div className="nwl-phones">
           <PhoneMockup src="/newsletters/nwl-29-12-es.html" title="Newsletter Iberdrola — 12 hitos" />
-          <PhoneMockup src="/newsletters/nwl-29-12-es.html" title="Newsletter Iberdrola — 12 hitos" />
+          <PhoneMockup src="/newsletters/nwl-20-08-es.html" title="Newsletter Iberdrola — verano" />
         </div>
       </div>
     </main>
