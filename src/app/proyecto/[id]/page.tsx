@@ -6,6 +6,7 @@ import ProjectHeroTitle from "@/components/ProjectHeroTitle";
 import LangText from "@/components/LangText";
 import InfografiasViewer from "@/components/InfografiasViewer";
 import ToolIcons from "@/components/ToolIcons";
+import PhoneMockup from "@/components/PhoneMockup";
 import BackToTop from "@/components/BackToTop";
 import "../../page.css";
 import "@/components/SkillDrop.css";
@@ -165,6 +166,12 @@ function NewslettersLanding() {
             preload="metadata"
             controls
           />
+        </div>
+
+        {/* Dos newsletters navegables en mockup de móvil */}
+        <div className="nwl-phones">
+          <PhoneMockup src="/newsletters/nwl-29-12-es.html" title="Newsletter Iberdrola — 12 hitos" />
+          <PhoneMockup src="/newsletters/nwl-29-12-es.html" title="Newsletter Iberdrola — 12 hitos" />
         </div>
       </div>
     </main>
