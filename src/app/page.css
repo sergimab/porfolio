@@ -99,6 +99,7 @@
 .nwl-video {
   margin-top: 32px;
   width: 100%;
+  border: 1.5px solid var(--foreground);
   border-radius: 16px;
   overflow: hidden;
   background: var(--background);
@@ -108,6 +109,7 @@
   width: 100%;
   height: auto;
   display: block;
+  transform: scale(1.01);
 }
 
 /* Página de proyecto en construcción */
