@@ -152,6 +152,20 @@ function NewslettersLanding() {
           </p>
           <ToolIcons tools={["Figma", "Illustrator", "After Effects", "Stripo"]} />
         </div>
+
+        {/* Vídeo de la animación final, justo debajo de la descripción */}
+        <div className="nwl-video">
+          {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+          <video
+            src="/videos/newsletters.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            controls
+          />
+        </div>
       </div>
     </main>
   );

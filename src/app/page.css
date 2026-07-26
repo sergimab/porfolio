@@ -94,6 +94,22 @@
   border-radius: 12px;
   box-sizing: border-box;
 }
+/* Vídeo de la página de Newsletters (bajo la descripción). Fondo opaco para
+   que el efecto de píxeles no pase por detrás. */
+.nwl-video {
+  margin-top: 32px;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--background);
+  line-height: 0;
+}
+.nwl-video video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 /* Página de proyecto en construcción */
 .project-soon {
   flex: 1;
