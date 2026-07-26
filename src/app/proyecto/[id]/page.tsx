@@ -62,7 +62,7 @@ function InfografiasLanding() {
               en="This is just a sample: a few of the 160-plus infographics I've designed for Iberdrola's corporate site. In every one I've tried to rethink the concept and turn the static into movement, explaining processes, facilities and technology in a visual, interactive way."
             />
           </p>
-          <ToolIcons />
+          <ToolIcons tools={["Figma", "Visual Studio Code", "After Effects", "Illustrator", "Blender"]} />
         </div>
 
         <p className="project-tagline">
