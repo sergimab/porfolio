@@ -62,7 +62,9 @@ function useTypewriter(words: string[], typingSpeed = 80, deletingSpeed = 50, pa
 export default function Header() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [lang, setLang] = useState<Lang>("es");
-  const [now, setNow] = useState(new Date());
+  // Inicia en null: así SSR y primer render del cliente coinciden (sin hora);
+  // la hora real se pone tras montar, evitando el mismatch de hidratación.
+  const [now, setNow] = useState<Date | null>(null);
   const typedName = useTypewriter(names);
 
   useEffect(() => {
@@ -93,11 +95,12 @@ export default function Header() {
   };
 
   useEffect(() => {
+    setNow(new Date());
     const timer = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
 
-  const { timeStr, dateStr } = formatDateTime(now, lang);
+  const { timeStr, dateStr } = now ? formatDateTime(now, lang) : { timeStr: "", dateStr: "" };
   const t = labels[lang];
 
   const iconNode = (
