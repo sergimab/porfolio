@@ -20,12 +20,25 @@ export default function PixelBlastBackground() {
     const read = () =>
       setTheme(document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light");
     read();
+    // El atributo data-theme puede aplicarse DESPUÉS de montarse este
+    // componente. Leyéndolo solo al montar, en oscuro se quedaba con el color
+    // del tema claro (#1C1A16) y las partículas resultaban invisibles sobre el
+    // fondo oscuro: solo se veían las tintadas de verde. El observer mantiene
+    // el color sincronizado sin depender de cuándo se aplique el tema.
+    const observer = new MutationObserver(read);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
     const onTheme = (e: Event) => {
       const t = (e as CustomEvent).detail;
       if (t === "light" || t === "dark") setTheme(t);
     };
     window.addEventListener("themechange", onTheme);
-    return () => window.removeEventListener("themechange", onTheme);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("themechange", onTheme);
+    };
   }, []);
 
   if (!enabled) return null;
