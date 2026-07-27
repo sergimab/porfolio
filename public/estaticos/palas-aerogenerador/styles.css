@@ -231,7 +231,7 @@
 
 #aeroblades .aeroblades_item_image {
   width: 100%;
-  height: 360px;
+  height: auto;
   object-fit: contain;
   background: var(--aeroblades-sand);
   border-radius: 15px;

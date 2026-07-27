@@ -16,6 +16,8 @@ body, html {
   margin: 0 auto;
   padding: 16px;
   border: none;
+  border-radius: 15px;
+  background-color: #ffffff;
 }
 
 .fuente-h2-mapa {

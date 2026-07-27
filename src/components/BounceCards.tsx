@@ -11,12 +11,43 @@ import "./BounceCards.css";
 
 type Item = { id: string; title: string; titleEn: string; cover?: string };
 
+// Color de texto accesible (blanco o casi-negro) sobre la banda hsl(hue,70%,55%)
+// de la categoría: se elige el que da más contraste según WCAG en vez de fijar
+// siempre blanco, porque tonos como el verde de Iberdrola son demasiado claros
+// para texto blanco.
+function accessibleTextColor(hue: number, sat = 70, light = 55): string {
+  const s = sat / 100;
+  const l = light / 100;
+  const c = (1 - Math.abs(2 * l - 1)) * s;
+  const x = c * (1 - Math.abs(((hue / 60) % 2) - 1));
+  const m = l - c / 2;
+  let r = 0, g = 0, b = 0;
+  if (hue < 60) [r, g, b] = [c, x, 0];
+  else if (hue < 120) [r, g, b] = [x, c, 0];
+  else if (hue < 180) [r, g, b] = [0, c, x];
+  else if (hue < 240) [r, g, b] = [0, x, c];
+  else if (hue < 300) [r, g, b] = [x, 0, c];
+  else [r, g, b] = [c, 0, x];
+  const [R, G, B] = [r + m, g + m, b + m].map((v) => v * 255);
+  const lin = (v: number) => {
+    const u = v / 255;
+    return u <= 0.03928 ? u / 12.92 : Math.pow((u + 0.055) / 1.055, 2.4);
+  };
+  const L = 0.2126 * lin(R) + 0.7152 * lin(G) + 0.0722 * lin(B);
+  const contrastWhite = 1.05 / (L + 0.05);
+  const contrastBlack = (L + 0.05) / 0.05;
+  return contrastBlack > contrastWhite ? "#1a1712" : "#ffffff";
+}
+
 // Composición de rotaciones "desordenada" pero fija (mismo resultado entre
 // renders). Se recorre el pool por índice para dar un aspecto natural.
 // Ángulos suaves: cards casi horizontales, solo ligeramente inclinadas.
 const ANGLE_POOL = [-5, 3, -2, 5, -3, 2, -4, 4, -2];
-// Rotación orgánica (más sutil) para el grid en móvil.
+// Rotación y desplazamiento vertical orgánicos para el grid en móvil: cada
+// card "flota" a una altura distinta (vía transform, no afecta al flujo de
+// las demás) para romper la simetría de la rejilla de 2 columnas.
 const MOBILE_ANGLE_POOL = [-3, 2.5, -2, 3, -2.5, 2, -3];
+const MOBILE_OFFSET_POOL = [0, 24, -10, 16, -16, 8, -6, 20, -12];
 
 // Cards en línea horizontal con rotación variada (no un abanico simétrico).
 function fanTransforms(n: number): string[] {
@@ -125,23 +156,31 @@ export default function BounceCards({
     });
   };
 
-  const cardInner = (item: Item) => (
-    <>
-      {item.cover ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img className="bc-img" src={item.cover} alt={lang === "en" ? item.titleEn : item.title} />
-      ) : (
-        <div className="bc-img bc-placeholder" aria-hidden="true">
-          <svg viewBox="0 0 200 200">
-            <rect x="45" y="60" width="110" height="80" rx="6" fill="none" stroke="currentColor" strokeWidth="2" />
-            <circle cx="72" cy="86" r="9" fill="none" stroke="currentColor" strokeWidth="2" />
-            <path d="M45 122 82 92l30 16 40-28" fill="none" stroke="currentColor" strokeWidth="2" />
-          </svg>
-        </div>
-      )}
-      <span className="bc-name">{lang === "en" ? item.titleEn : item.title}</span>
-    </>
-  );
+  const textColor = accessibleTextColor(hue);
+  const bandColor = `hsl(${hue}, 70%, 55%)`;
+
+  const cardInner = (item: Item) => {
+    const title = lang === "en" ? item.titleEn : item.title;
+    return (
+      <>
+        {item.cover ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img className="bc-img" src={item.cover} alt={title} />
+        ) : (
+          <div className="bc-img bc-placeholder" aria-hidden="true">
+            <svg viewBox="0 0 200 200">
+              <rect x="45" y="60" width="110" height="80" rx="6" fill="none" stroke="currentColor" strokeWidth="2" />
+              <circle cx="72" cy="86" r="9" fill="none" stroke="currentColor" strokeWidth="2" />
+              <path d="M45 122 82 92l30 16 40-28" fill="none" stroke="currentColor" strokeWidth="2" />
+            </svg>
+          </div>
+        )}
+        <span className="bc-name" style={{ color: textColor, backgroundColor: bandColor }}>
+          {title}
+        </span>
+      </>
+    );
+  };
 
   // Móvil: grid normal de 2 columnas, cards rectas.
   if (isMobile) {
@@ -154,7 +193,7 @@ export default function BounceCards({
             className="bc-card"
             style={{
               borderColor: `hsl(${hue}, 70%, 55%)`,
-              transform: `rotate(${MOBILE_ANGLE_POOL[idx % MOBILE_ANGLE_POOL.length]}deg)`,
+              transform: `rotate(${MOBILE_ANGLE_POOL[idx % MOBILE_ANGLE_POOL.length]}deg) translateY(${MOBILE_OFFSET_POOL[idx % MOBILE_OFFSET_POOL.length]}px)`,
             }}
           >
             {cardInner(item)}

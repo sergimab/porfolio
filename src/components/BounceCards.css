@@ -55,22 +55,24 @@
   height: 55%;
 }
 
-/* Nombre del proyecto, siempre visible al pie de la card (sin cinta) */
+/* Nombre del proyecto, siempre visible al pie de la card: banda sólida del
+   color de categoría (inline via backgroundColor); texto en la tipografía
+   normal del sitio, color elegido por contraste (ver accessibleTextColor). */
 .bc-name {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 22px 12px 10px;
+  z-index: 2;
+  padding: 10px 12px;
   text-align: center;
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.02em;
-  color: var(--foreground);
-  background: linear-gradient(to top, var(--background) 55%, transparent);
 }
 
-/* En móvil: grid normal de 2 columnas con las cards rectas (sin abanico) */
+/* En móvil: grid de 2 columnas, pero cada card flota a una altura distinta
+   (transform, vía JS) para romper la simetría de la rejilla. */
 .bc-grid {
   margin-top: 48px;
   width: 100%;
@@ -78,9 +80,10 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
+  row-gap: 40px;
 }
 .bc-grid .bc-card {
   position: relative;
   width: 100%;
-  /* la rotación orgánica se aplica inline por card */
+  /* la rotación y el desplazamiento orgánicos se aplican inline por card */
 }

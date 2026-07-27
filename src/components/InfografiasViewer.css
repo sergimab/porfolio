@@ -53,9 +53,10 @@
 
 /* Dos columnas: botones + módulo */
 .igv {
+  --igv-gap: 24px; /* lo usa también la línea que une botón e infografía */
   display: grid;
   grid-template-columns: 320px 1fr;
-  gap: 24px;
+  gap: var(--igv-gap);
   align-items: start;
 }
 
@@ -77,6 +78,7 @@
   text-align: center;
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
+  position: relative; /* ancla de la línea conectora (::after) */
 }
 .igv-btn:hover {
   background: var(--foreground);
@@ -85,6 +87,21 @@
 .igv-btn[data-active="true"] {
   background: var(--foreground);
   color: var(--background);
+}
+
+/* Línea que une el botón activo con la infografía, del mismo color que el
+   botón. Cruza justo el hueco del grid (--igv-gap). En "Contenido interior"
+   los botones van a la izquierda, así que la línea es horizontal; en 980 y
+   1256 van arriba y la línea pasa a ser vertical (ver más abajo). */
+.igv-btn[data-active="true"]::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  width: var(--igv-gap);
+  height: 1px;
+  transform: translateY(-50%);
+  background: var(--foreground);
 }
 
 /* Ancho completo (980) y 1256: botones en fila arriba, infografía debajo */
@@ -100,6 +117,15 @@
 .igv-box[data-tab="1256"] .igv-btn {
   flex: 1;
   width: auto;
+}
+/* Botones arriba → la conectora baja desde el centro del botón activo */
+.igv-box[data-tab="980"] .igv-btn[data-active="true"]::after,
+.igv-box[data-tab="1256"] .igv-btn[data-active="true"]::after {
+  top: 100%;
+  left: 50%;
+  width: 1px;
+  height: var(--igv-gap);
+  transform: translateX(-50%);
 }
 
 /* ── Desplegable móvil (oculto en escritorio) ──
@@ -172,9 +198,9 @@
 /* Módulo desplegado */
 .igv-frame {
   width: 100%;
-  border: 1px solid var(--border);
+  border: none;
   border-radius: 12px;
-  background: #fff;
+  background: transparent;
   display: block;
   overflow: hidden;
 }
@@ -196,8 +222,9 @@
 }
 .igv-frame-980,
 .igv-frame-1256 {
-  width: 565px;
-  max-width: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 @media (min-width: 1100px) {
   /* Ancho completo: las infografías están diseñadas a 980px y van centradas */

@@ -62,8 +62,8 @@
   order: 2;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  padding: 16px;
+  gap: 24px;
+  padding: 24px;
 }
 /* Lienzo del motor de física (cápsulas) */
 .skill-scene { position: absolute; inset: 0; }
@@ -113,7 +113,7 @@
 .panel-cv iframe { width: 100%; border: none; display: block; }
 .panel-contacto {
   border: 1px solid var(--foreground);
-  padding: 40px 32px;
+  padding: 24px;
 }
 
 /* Formulario de contacto */

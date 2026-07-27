@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consejos para alargar la vida útil de las baterías de ion de litio</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- INICIO DE MODULO -->
+    <link rel="stylesheet" href="styles.css">
+
+    <section id="cbattery" class="cbattery">
+        <h3 class="cbattery_title">Consejos para alargar la vida útil de <strong>las baterías de ion de litio</strong></h3>
+
+        <div class="cbattery_layout">
+            <div class="cbattery_mobile_menu">
+                <!--<span class="cbattery_mobile_label" id="cbatteryDdLabel">Selecciona un consejo</span>-->
+                <div class="cbattery_dd" id="cbatteryDd" data-open="false">
+                    <button type="button" class="cbattery_dd_toggle" id="cbatteryDdToggle" aria-expanded="false" aria-haspopup="listbox" aria-labelledby="cbatteryDdLabel cbatteryDdCurrent">
+                        <span id="cbatteryDdCurrent">Temperatura</span>
+                        <svg class="cbattery_dd_chevron" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+                            <path d="M2 5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                    <div class="cbattery_dd_list" id="cbatteryDdList" role="listbox" hidden>
+                        <button type="button" class="cbattery_dd_item" role="option" data-key="temperature">Temperatura</button>
+                        <button type="button" class="cbattery_dd_item" role="option" data-key="charge">Estado de carga</button>
+                        <button type="button" class="cbattery_dd_item" role="option" data-key="current">Corriente</button>
+                        <button type="button" class="cbattery_dd_item" role="option" data-key="other">Otros</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cbattery_accordion">
+                <article class="cbattery_item" data-key="temperature" data-image="images/4.gif">
+                    <button class="cbattery_item_button" type="button" aria-expanded="false" aria-controls="cbattery-temperature">
+                        <span>Temperatura</span>
+                        <span class="cbattery_item_symbol" aria-hidden="true"></span>
+                    </button>
+                    <div id="cbattery-temperature" class="cbattery_item_body" hidden>
+                        <p>Minimizar la exposición a altas temperaturas en su uso o almacenamiento.</p>
+                        <p>Minimizar el uso a temperaturas bajas, especialmente durante la carga.</p>
+                    </div>
+                </article>
+
+                <article class="cbattery_item" data-key="charge" data-image="images/1.gif">
+                    <button class="cbattery_item_button" type="button" aria-expanded="false" aria-controls="cbattery-charge">
+                        <span>Estado de carga</span>
+                        <span class="cbattery_item_symbol" aria-hidden="true"></span>
+                    </button>
+                    <div id="cbattery-charge" class="cbattery_item_body" hidden>
+                        <p>Minimizar el tiempo de carga al 100%.</p>
+                        <p>Minimizar el tiempo de carga al 0%.</p>
+                    </div>
+                </article>
+
+                <article class="cbattery_item" data-key="current" data-image="images/2.gif">
+                    <button class="cbattery_item_button" type="button" aria-expanded="false" aria-controls="cbattery-current">
+                        <span>Corriente</span>
+                        <span class="cbattery_item_symbol" aria-hidden="true"></span>
+                    </button>
+                    <div id="cbattery-current" class="cbattery_item_body" hidden>
+                        <p>Evitar el uso de la carga rápida a menos que sea necesario.</p>
+                        <p>Evitar descargar el dispositivo más rápido de lo necesario.</p>
+                    </div>
+                </article>
+
+                <article class="cbattery_item" data-key="other" data-image="images/3.gif">
+                    <button class="cbattery_item_button" type="button" aria-expanded="false" aria-controls="cbattery-other">
+                        <span>Otros</span>
+                        <span class="cbattery_item_symbol" aria-hidden="true"></span>
+                    </button>
+                    <div id="cbattery-other" class="cbattery_item_body" hidden>
+                        <p>Evitar su uso o almacenamiento en entornos húmedos.</p>
+                        <p>Seguir las instrucciones de calibración del fabricante.</p>
+                    </div>
+                </article>
+            </div>
+
+            <div class="cbattery_visual" aria-live="polite">
+                <img
+                    id="cbatteryImage"
+                    class="cbattery_visual_image"
+                    src="images/bateria.png"
+                    alt="Ilustración de una batería de ion de litio"
+                    width="322"
+                    height="687"
+                >
+            </div>
+
+            <div id="cbatteryMobileContent" class="cbattery_mobile_content" aria-live="polite" hidden>
+                <h4 class="cbattery_mobile_content_title"></h4>
+                <div class="cbattery_mobile_content_body"></div>
+            </div>
+
+            <p class="cbattery_source">Fuente: University of Michigan</p>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+    <!-- FIN DE MODULO -->
+
+</body>
+</html>

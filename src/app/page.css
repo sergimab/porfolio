@@ -5,6 +5,13 @@
   padding: 0 24px;
   box-sizing: border-box;
 }
+.tagline-wrap {
+  padding: 8px 16px;
+  background: var(--background);
+  border-radius: 12px;
+  box-sizing: border-box;
+  display: inline-flex;
+}
 [data-theme="dark"] .tagline-img {
   filter: invert(1);
 }

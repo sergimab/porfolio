@@ -18,6 +18,8 @@ const SIZES: { key: "565" | "980" | "1256"; label: string; mods: Mod[] }[] = [
       { slug: "cobots",                     es: "Cobots",                        en: "Cobots" },
       { slug: "energias-limpias",           es: "Energías limpias",              en: "Clean energy" },
       { slug: "turismo-espacial",           es: "Turismo espacial",              en: "Space tourism" },
+      { slug: "realidad-aumentada",         es: "Realidad aumentada",            en: "Augmented reality" },
+      { slug: "baterias-ion-litio",         es: "Baterías de ion de litio",      en: "Lithium-ion batteries" },
     ],
   },
   {
@@ -31,7 +33,7 @@ const SIZES: { key: "565" | "980" | "1256"; label: string; mods: Mod[] }[] = [
   },
   {
     key: "1256",
-    label: "1256px",
+    label: "Ancho extendido",
     mods: [
       { slug: "grupos-de-interes", es: "Grupos de interés",     en: "Stakeholders" },
       { slug: "mapa-clientes",     es: "Mapa de clientes",      en: "Customer map" },
@@ -76,6 +78,7 @@ function ModuleFrame({ slug, lang, size }: { slug: string; lang: "es" | "en"; si
       src={`/estaticos/${slug}/index_${lang === "en" ? "EN" : "ES"}.html`}
       title={slug}
       scrolling="no"
+      allow="autoplay" /* los módulos con vídeo no arrancan en móvil sin esto */
       style={{ height: `${height}px` }}
     />
   );

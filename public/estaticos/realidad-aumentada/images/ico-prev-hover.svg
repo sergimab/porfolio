@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="ico-prev-hover" transform="translate(-0, 0)">
+            <rect id="Rectangle" fill="#007F33" fill-rule="nonzero" transform="translate(16, 16) rotate(180) translate(-16, -16)" x="7.10542736e-15" y="0" width="32" height="32" rx="16"></rect>
+            <path d="M18.4312,10.8573 L23.0595,15.4856 C23.3435,15.7697 23.3435,16.2301 23.0595,16.5142 L18.4312,21.1425 C18.1471,21.4265 17.6867,21.4265 17.4026,21.1425 C17.1186,20.8585 17.1186,20.398 17.4026,20.114 L20.7894,16.7272 L9.45432,16.7272 C9.05266,16.7272 8.72705,16.4016 8.72705,15.9999 C8.72705,15.5982 9.05266,15.2726 9.45432,15.2726 L20.7894,15.2726 L17.4026,11.8858 C17.1186,11.6018 17.1186,11.1413 17.4026,10.8573 C17.6867,10.5733 18.1471,10.5733 18.4312,10.8573 Z" id="Arrow-1-(Stroke)" fill="#FFFEFF" transform="translate(15.9998, 15.9999) rotate(180) translate(-15.9998, -15.9999)"></path>
+        </g>
+    </g>
+</svg>

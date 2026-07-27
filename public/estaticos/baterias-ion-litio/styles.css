@@ -1,0 +1,388 @@
+:root {
+  --cbattery-white: #ffffff;
+  --cbattery-green: #00a443;
+  --cbattery-green-dark: #004f36;
+  --cbattery-black: #3a3735;
+  --cbattery-grey: #746e69;
+  --cbattery-sand: #fff5ec;
+}
+
+#cbattery {
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 16px;
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+  border-radius: 15px;
+  background-color: var(--cbattery-sand);
+  text-align: left;
+}
+
+#cbattery * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "IberPangea", Arial, sans-serif !important;
+  font-style: normal;
+}
+
+#cbattery .cbattery_title {
+  max-width: 760px;
+  margin-bottom: 24px;
+  color: var(--cbattery-green) !important;
+  font-size: clamp(26px, 4vw, 32px);
+  font-weight: 400;
+  line-height: 1.14;
+  text-wrap: balance;
+}
+
+#cbattery .cbattery_title strong {
+  font-family: "IberPangeaText Bold", Arial, sans-serif !important;
+  font-weight: 700;
+}
+
+#cbattery .cbattery_layout {
+  display: grid;
+  grid-template-areas:
+    "menu"
+    "visual"
+    "mobile-content"
+    "source";
+  gap: 16px;
+}
+
+#cbattery .cbattery_mobile_menu {
+  grid-area: menu;
+}
+
+#cbattery .cbattery_mobile_label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--cbattery-green-dark);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+/* Desplegable móvil: mismo lenguaje que el selector de formato del visor
+   (.igv-dd) — caja cerrada con el consejo activo y lista superpuesta que no
+   desplaza el contenido — pero en verde de marca. */
+#cbattery .cbattery_dd {
+  position: relative;
+  z-index: 20;
+}
+
+#cbattery .cbattery_dd_toggle {
+  width: 100%;
+  min-height: 48px;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid var(--cbattery-green);
+  border-radius: 16px;
+  outline: none;
+  background-color: var(--cbattery-green);
+  color: var(--cbattery-white);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: left;
+  cursor: pointer;
+}
+
+#cbattery .cbattery_dd[data-open="true"] .cbattery_dd_toggle {
+  border-radius: 16px 16px 0 0;
+  border-bottom-color: var(--cbattery-white);
+}
+
+#cbattery .cbattery_dd_toggle:focus-visible {
+  outline: 3px solid rgba(0, 164, 67, 0.35);
+  outline-offset: 2px;
+}
+
+#cbattery .cbattery_dd_chevron {
+  flex-shrink: 0;
+  transition: transform 200ms ease;
+}
+
+#cbattery .cbattery_dd[data-open="true"] .cbattery_dd_chevron {
+  transform: rotate(180deg);
+}
+
+#cbattery .cbattery_dd_list {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  overflow: hidden;
+  border: 1px solid var(--cbattery-green);
+  border-top: none;
+  border-radius: 0 0 16px 16px;
+  background-color: var(--cbattery-white);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+
+#cbattery .cbattery_dd_list[hidden] {
+  display: none;
+}
+
+#cbattery .cbattery_dd_item {
+  width: 100%;
+  padding: 14px 20px;
+  display: block;
+  border: none;
+  border-bottom: 1px solid rgba(0, 164, 67, 0.25);
+  background-color: var(--cbattery-white);
+  color: var(--cbattery-green-dark);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.25;
+  text-align: left;
+  cursor: pointer;
+}
+
+#cbattery .cbattery_dd_item:last-child {
+  border-bottom: none;
+}
+
+#cbattery .cbattery_dd_item:hover,
+#cbattery .cbattery_dd_item[aria-selected="true"] {
+  background-color: var(--cbattery-green);
+  color: var(--cbattery-white);
+}
+
+#cbattery .cbattery_accordion {
+  display: none;
+}
+
+#cbattery .cbattery_visual {
+  min-height: 342px;
+  padding: 16px;
+  grid-area: visual;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 15px;
+  background-color: var(--cbattery-white);
+}
+
+#cbattery .cbattery_visual_image {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: 310px;
+  object-fit: contain;
+}
+
+#cbattery .cbattery_mobile_content {
+  padding: 16px;
+  grid-area: mobile-content;
+  border-radius: 15px;
+  background-color: var(--cbattery-white);
+}
+
+#cbattery .cbattery_mobile_content[hidden] {
+  display: none;
+}
+
+#cbattery .cbattery_mobile_content_title {
+  margin-bottom: 12px;
+  color: var(--cbattery-green) !important;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+#cbattery .cbattery_mobile_content_body {
+  color: var(--cbattery-black) !important;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+#cbattery .cbattery_mobile_content_body p + p {
+  margin-top: 14px;
+}
+
+#cbattery .cbattery_source {
+  grid-area: source;
+  color: var(--cbattery-grey) !important;
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.25;
+}
+
+@media (min-width: 500px) {
+  #cbattery {
+    padding: 24px;
+  }
+
+  #cbattery .cbattery_visual {
+    min-height: 370px;
+  }
+
+  #cbattery .cbattery_visual_image {
+    height: 338px;
+  }
+}
+
+@media (min-width: 700px) {
+  #cbattery {
+    padding: 36px;
+  }
+
+  #cbattery .cbattery_layout {
+    grid-template-areas:
+      "accordion visual"
+      "source visual";
+    grid-template-columns: minmax(0, 1.55fr) minmax(220px, 1fr);
+    grid-template-rows: 1fr auto;
+    column-gap: 22px;
+    row-gap: 16px;
+  }
+
+  #cbattery .cbattery_mobile_menu,
+  #cbattery .cbattery_mobile_content {
+    display: none !important;
+  }
+
+  #cbattery .cbattery_accordion {
+    min-height: 344px;
+    position: relative;
+    grid-area: accordion;
+    display: block;
+  }
+
+  #cbattery .cbattery_item {
+    width: 100%;
+    position: absolute;
+    right: 0;
+    left: 0;
+    overflow: hidden;
+    border: 1px solid var(--cbattery-green-dark);
+    border-radius: 15px;
+    background-color: var(--cbattery-white);
+    transition: opacity 180ms ease, visibility 180ms ease;
+  }
+
+  #cbattery .cbattery_item:nth-child(1) {
+    top: 0;
+  }
+
+  #cbattery .cbattery_item:nth-child(2) {
+    top: calc(33.333% - 16px);
+  }
+
+  #cbattery .cbattery_item:nth-child(3) {
+    top: calc(66.666% - 32px);
+  }
+
+  #cbattery .cbattery_item:nth-child(4) {
+    bottom: 0;
+  }
+
+  #cbattery .cbattery_accordion.has-active .cbattery_item:not(.is-active) {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+
+  #cbattery .cbattery_item_button {
+    width: 100%;
+    min-height: 46px;
+    padding: 9px 10px 9px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--cbattery-green) !important;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  #cbattery .cbattery_item_button:focus-visible {
+    outline: 3px solid rgba(0, 164, 67, 0.25);
+    outline-offset: -3px;
+  }
+
+  #cbattery .cbattery_item_symbol {
+    width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
+    background-image: url('/estaticos/baterias-ion-litio/images/ico-mas.svg');
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  #cbattery .cbattery_item_button:hover .cbattery_item_symbol {
+    background-image: url('/estaticos/baterias-ion-litio/images/ico-mas-hover.svg');
+  }
+
+  #cbattery .cbattery_item.is-active .cbattery_item_symbol,
+  #cbattery .cbattery_item.is-active .cbattery_item_button:hover .cbattery_item_symbol {
+    background-image: url('/estaticos/baterias-ion-litio/images/ico-cerrar.svg');
+  }
+
+  #cbattery .cbattery_item_body {
+    padding: 0 14px 14px;
+    color: var(--cbattery-black) !important;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.32;
+  }
+
+  #cbattery .cbattery_item_body p + p {
+    margin-top: 14px;
+  }
+
+  #cbattery .cbattery_visual {
+    min-height: 344px;
+    height: 344px;
+    padding: 12px;
+    align-self: stretch;
+  }
+
+  #cbattery .cbattery_visual_image {
+    height: 314px;
+  }
+
+  #cbattery .cbattery_source {
+    align-self: end;
+  }
+}
+
+@media (min-width: 900px) {
+  #cbattery .cbattery_layout {
+    column-gap: 32px;
+  }
+
+  #cbattery .cbattery_accordion,
+  #cbattery .cbattery_visual {
+    min-height: 382px;
+    height: 382px;
+  }
+
+  #cbattery .cbattery_visual_image {
+    height: 350px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #cbattery .cbattery_item,
+  #cbattery .cbattery_item_symbol::after {
+    transition-duration: 0ms !important;
+  }
+}

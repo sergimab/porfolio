@@ -16,7 +16,7 @@
         <p class="fuente-parrafo-mapa">
           <strong>El Grupo suministra energía a cerca de 100 millones de personas en decenas de países,</strong> somos un motor de progreso, modernización, inversión y compromiso.
         </p>
-        <video class="video-mapa" autoplay loop muted playsinline>
+        <video class="video-mapa" width="900" height="500" autoplay loop muted playsinline webkit-playsinline preload="metadata">
           <source src="/estaticos/home-mapa-2025/images/mapa-home-animacion.mp4?t=1044" type="video/mp4">
           Tu navegador no soporta el video.
         </video>
@@ -26,25 +26,25 @@
         <div class="grupo-iconos">
           <div class="fila-iconos">
             <div class="icono-box">
-              <a href="https://www.iberdrolaespana.com" target="_blank" rel="noopener noreferrer" title="">
+              <a title="">
                 <div class="icono icono-espana"></div>
               </a>
             </div>
             <div class="icono-box">
-              <a href="https://www.scottishpower.com/" target="_blank" rel="noopener noreferrer" title="">
+              <a title="">
 				<div class="icono icono-scottishpower"></div>
               </a>
             </div>
           </div>
           <div class="fila-iconos">
             <div class="icono-box">
-              <a href="https://www.avangrid.com/" target="_blank" rel="noopener noreferrer" title="">
+              <a title="">
 				<div class="icono icono-avangrid"></div>
 				  
               </a>
             </div>
             <div class="icono-box">
-              <a href="https://www.neoenergia.com/es" target="_blank" rel="noopener noreferrer" title="">
+              <a title="">
 				<div class="icono icono-neoenergia"></div>
               </a>
             </div>
@@ -52,21 +52,56 @@
           <div class="fila-iconos">
 			<!--
             <div class="icono-box">
-              <a href="https://www.iberdrolamexico.com/" target="_blank" rel="noopener noreferrer" title="">
+              <a title="">
                 <img src="/estaticos/home-mapa-2025/images/iberdrola-mexico.svg?t=1147" alt="Icono 3">
               </a>
             </div>
 			 -->
             <div class="icono-box">
-              <a href="https://www.iberdrolainternacional.com/inicio" target="_blank" rel="noopener noreferrer" title="">
+              <a title="">
 				<div class="icono icono-iberdrola-internacional"></div>
               </a>
             </div>
           </div>
         </div>
-        <a href="/conocenos/sociedades-grupo" target="_blank" rel="noopener noreferrer" class="boton-sociedades">Sociedades del Grupo</a>
+        <a class="boton-sociedades">Sociedades del Grupo</a>
       </div>
     </div>
   </section>
+
+  <script>
+    // En móvil el atributo autoplay se ignora a menudo (iOS en modo de bajo
+    // consumo, ahorro de datos, o el vídeo embebido en un iframe), así que el
+    // mapa se quedaba congelado en el primer fotograma. Se fuerza el play al
+    // entrar en pantalla y, si aun así lo rechaza, al primer gesto del usuario.
+    (function () {
+      var video = document.querySelector('.video-mapa');
+      if (!video) return;
+
+      function play() {
+        var promise = video.play();
+        if (promise && typeof promise.catch === 'function') promise.catch(function () {});
+      }
+
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          if (entries[0].isIntersecting) {
+            play();
+            io.disconnect();
+          }
+        }, { threshold: 0.25 });
+        io.observe(video);
+      } else {
+        play();
+      }
+
+      ['touchstart', 'click'].forEach(function (evt) {
+        document.addEventListener(evt, function once() {
+          if (video.paused) play();
+          document.removeEventListener(evt, once);
+        }, { passive: true });
+      });
+    })();
+  </script>
 </body>
 </html>

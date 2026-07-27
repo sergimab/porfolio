@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- INICIO DE MODULO -->
+    <link rel="stylesheet" href="styles.css">
+    <section id="carapps" class="carapps">
+        <h3 class="carapps_title">10 uses of <strong>augmented reality</strong></h3>
+
+        <div class="carapps_media">
+            <video class="carapps_media_video" autoplay loop muted playsinline preload="metadata">
+                <source src="videos/ar-animation.mp4" type="video/mp4">
+            </video>
+        </div>
+
+        <div id="carappsSwiper" class="carapps_swiper swiper">
+            <div class="swiper-wrapper">
+                <article class="carapps_item swiper-slide">
+                    <img class="carapps_item_icon" src="images/ico-1.svg" width="60" height="60" alt="" aria-hidden="true">
+                    <h4 class="carapps_item_title">Surgery in detail</h4>
+                    <p class="carapps_item_text">Using tablets or holographic glasses, <strong>surgeons can visualise organs in 3D or check the patient's history</strong> before or during the procedure.</p>
+                </article>
+
+                <article class="carapps_item swiper-slide">
+                    <img class="carapps_item_icon" src="images/ico-2.svg" width="60" height="60" alt="" aria-hidden="true">
+                    <h4 class="carapps_item_title">Cars built to order</h4>
+                    <p class="carapps_item_text">More and more car makers let potential buyers <strong>visualise their future car</strong> and customise it to their taste and needs.</p>
+                </article>
+
+                <article class="carapps_item swiper-slide">
+                    <img class="carapps_item_icon" src="images/ico-3.svg" width="60" height="60" alt="" aria-hidden="true">
+                    <h4 class="carapps_item_title">Lessons come to life</h4>
+                    <p class="carapps_item_text">Many students already use <strong>notebooks with special markers</strong> that, held up to a computer or mobile screen, react by showing 3D images.</p>
+                </article>
+
+                <article class="carapps_item swiper-slide">
+                    <img class="carapps_item_icon" src="images/ico-4.svg" width="60" height="60" alt="" aria-hidden="true">
+                    <h4 class="carapps_item_title">Attention, athletes</h4>
+                    <p class="carapps_item_text">Runners, cyclists, climbers and hikers can now <strong>explore their routes projected onto any surface in 3D</strong>, plan their next adventure and share their activities.</p>
+                </article>
+
+                <article class="carapps_item swiper-slide">
+                    <img class="carapps_item_icon" src="images/ico-5.svg" width="60" height="60" alt="" aria-hidden="true">
+                    <h4 class="carapps_item_title">Instant translation</h4>
+                    <p class="carapps_item_text">Perfect for travellers. Just take a photo of any text in front of you (a report, an ad, a recipe...) and get an <strong>instant translation</strong>.</p>
+                </article>
+
+                <article class="carapps_item swiper-slide">
+                    <img class="carapps_item_icon" src="images/ico-6.svg" width="60" height="60" alt="" aria-hidden="true">
+                    <h4 class="carapps_item_title">Facial scanning</h4>
+                    <p class="carapps_item_text">It sounds like science fiction, but there's already a service that can <strong>recognise a person's face</strong> and, at the same time, <strong>show the social networks they're on</strong>.</p>
+                </article>
+
+                <article class="carapps_item swiper-slide">
+                    <img class="carapps_item_icon" src="images/ico-7.svg" width="60" height="60" alt="" aria-hidden="true">
+                    <h4 class="carapps_item_title">Smart architecture</h4>
+                    <p class="carapps_item_text">Many companies <strong>use AR so clients can see in real time how their home will look</strong> once the works are finished, or <strong>how a new sofa will fit with the rest of the decor</strong>.</p>
+                </article>
+
+                <article class="carapps_item swiper-slide">
+                    <img class="carapps_item_icon" src="images/ico-8.svg" width="60" height="60" alt="" aria-hidden="true">
+                    <h4 class="carapps_item_title">Perfect for advertising</h4>
+                    <p class="carapps_item_text">From <strong>virtually trying on clothes to watching an interactive campaign on a wall in the middle of the street</strong>. The sales and promotional potential AR offers brands is huge.</p>
+                </article>
+
+                <article class="carapps_item swiper-slide">
+                    <img class="carapps_item_icon" src="images/ico-9.svg" width="60" height="60" alt="" aria-hidden="true">
+                    <h4 class="carapps_item_title">The universe up close</h4>
+                    <p class="carapps_item_text">Point your phone's camera at the sky and <strong>identify stars, constellations, planets and other celestial bodies</strong>, along with extra information about them.</p>
+                </article>
+
+                <article class="carapps_item swiper-slide">
+                    <img class="carapps_item_icon" src="images/ico-10.svg" width="60" height="60" alt="" aria-hidden="true">
+                    <h4 class="carapps_item_title">Only &lsquo;fit&rsquo; for NASA</h4>
+                    <p class="carapps_item_text">Using smart glasses, astronauts now have the technology to <strong>receive visual instructions if repairs are needed during their missions</strong>.</p>
+                </article>
+            </div>
+
+            <div class="carapps_navigation swiper-controls">
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+            </div>
+        </div>
+    </section>
+
+    <script src="swiper.min.js"></script>
+    <script>
+        const swiperCarapps = new Swiper('#carappsSwiper', {
+            autoHeight: true,
+            spaceBetween: 20,
+            navigation: {
+                nextEl: '#carappsSwiper .swiper-button-next',
+                prevEl: '#carappsSwiper .swiper-button-prev',
+            },
+            pagination: {
+                el: '#carappsSwiper .swiper-pagination',
+                type: 'fraction',
+                renderFraction: function (currentClass, totalClass) {
+                    return '<span class="' + currentClass + '"></span> of <span class="' + totalClass + '"></span>';
+                },
+            },
+        });
+    </script>
+    <!-- FIN DE MODULO -->
+
+</body>
+</html>
