@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Iconos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #00a443;
+        stroke-linejoin: round;
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <path class="cls-1" d="M30.02,16.5h0c1.66,0,3,1.34,3,3v34.5h-6V19.5c0-1.66,1.34-3,3-3Z"/>
+  <path class="cls-1" d="M24.41,54h11.22c1.04,0,1.89.85,1.89,1.89v4.11h-15v-4.11c0-1.04.85-1.89,1.89-1.89Z"/>
+  <path class="cls-1" d="M37.52,64.86c0-2.68-2.18-4.86-4.86-4.86h-5.28c-2.68,0-4.86,2.18-4.86,4.86v3.78c0,6,4.86,10.86,10.86,10.86h11.25"/>
+  <path class="cls-1" d="M43.52,64.56c5.48.56,9.75,5.18,9.75,10.8v4.14h-9.26c-3.58,0-6.49-2.9-6.49-6.49v-8.51h4.89c.37,0,.74.02,1.11.06"/>
+  <polyline class="cls-1" points="43.58 64.28 42.02 51 72.02 51 69.02 76.5 53.27 76.5"/>
+  <rect class="cls-1" x="40.52" y="44.35" width="33" height="6.65"/>
+  <circle class="cls-1" cx="52.02" cy="25.18" r="3.5"/>
+  <circle class="cls-1" cx="66.02" cy="34.5" r="4.5"/>
+</svg>

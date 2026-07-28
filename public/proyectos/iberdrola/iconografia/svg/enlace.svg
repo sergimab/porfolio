@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Iconos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #00a443;
+        stroke-linejoin: round;
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <circle class="cls-1" cx="48" cy="48" r="31.44"/>
+  <line class="cls-1" x1="42.83" y1="52.54" x2="42.83" y2="52.54"/>
+  <g>
+    <path class="cls-1" d="M47.66,39.13l7.66-7.66c2.54-2.54,6.66-2.54,9.21,0h0c2.54,2.54,2.54,6.66,0,9.21l-10.45,10.45c-2.54,2.54-6.66,2.54-9.21,0h0c-.21-.21-.39-.42-.57-.65"/>
+    <path class="cls-1" d="M48.34,56.87l-7.66,7.66c-2.54,2.54-6.66,2.54-9.21,0h0c-2.54-2.54-2.54-6.66,0-9.21l10.45-10.45c2.54-2.54,6.66-2.54,9.21,0h0c.21.21.39.42.57.65"/>
+  </g>
+</svg>

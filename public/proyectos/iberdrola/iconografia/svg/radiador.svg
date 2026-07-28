@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Iconos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke-width: 3.04px;
+      }
+
+      .cls-1, .cls-2 {
+        fill: none;
+        stroke: #00a443;
+        stroke-linejoin: round;
+      }
+
+      .cls-2 {
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <rect class="cls-2" x="16.52" y="37.76" width="63" height="37.52" rx="2.74" ry="2.74"/>
+  <path id="Shape_532" data-name="Shape 532" class="cls-2" d="M68.57,79.39v-4.11"/>
+  <path id="Shape_533" data-name="Shape 533" class="cls-2" d="M27.48,79.39v-4.1"/>
+  <path id="Shape_534" data-name="Shape 534" class="cls-1" d="M43.52,45.26v22.5"/>
+  <path id="Shape_534-2" data-name="Shape 534" class="cls-1" d="M25.52,45.26v22.5"/>
+  <path id="Shape_534-3" data-name="Shape 534" class="cls-1" d="M34.52,45.26v22.5"/>
+  <path id="Shape_535" data-name="Shape 535" class="cls-1" d="M52.52,45.26v22.5"/>
+  <path id="Shape_536" data-name="Shape 536" class="cls-1" d="M61.52,45.26v22.5"/>
+  <path id="Shape_537" data-name="Shape 537" class="cls-1" d="M70.52,45.26v22.5"/>
+  <g>
+    <path id="Shape_540" data-name="Shape 540" class="cls-2" d="M47.98,16.76c-2.57,6.37,2.74,8.22,0,15.02"/>
+    <path id="Shape_541" data-name="Shape 541" class="cls-2" d="M58.19,16.76c-2.57,6.37,2.74,8.22,0,15.02"/>
+    <path id="Shape_541-2" data-name="Shape 541" class="cls-2" d="M68.39,16.76c-2.57,6.37,2.74,8.22,0,15.02"/>
+    <path id="Shape_541-3" data-name="Shape 541" class="cls-2" d="M27.56,16.76c-2.57,6.37,2.74,8.22,0,15.02"/>
+    <path id="Shape_542" data-name="Shape 542" class="cls-2" d="M37.77,16.76c-2.57,6.37,2.74,8.22,0,15.02"/>
+  </g>
+</svg>

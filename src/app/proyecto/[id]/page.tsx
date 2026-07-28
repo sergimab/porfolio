@@ -1,16 +1,20 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import BackCapsule from "@/components/BackCapsule";
-import IlustracionesSistema from "@/components/IlustracionesSistema";
-import ProjectHeroTitle from "@/components/ProjectHeroTitle";
-import LangText from "@/components/LangText";
-import InfografiasViewer from "@/components/InfografiasViewer";
-import IconoConstruccion from "@/components/IconoConstruccion";
-import ToolIcons from "@/components/ToolIcons";
-import PhoneMockup from "@/components/PhoneMockup";
-import BackToTop from "@/components/BackToTop";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+import BackCapsule from "@/components/shared/BackCapsule";
+import IlustracionesSistema from "@/components/proyectos/iberdrola/IlustracionesSistema";
+import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
+import LangText from "@/components/shared/LangText";
+import InfografiasViewer from "@/components/proyectos/iberdrola/InfografiasViewer";
+import IconoConstruccion from "@/components/proyectos/iberdrola/IconoConstruccion";
+import IconoGifs from "@/components/proyectos/iberdrola/IconoGifs";
+import IconosGaleria from "@/components/proyectos/iberdrola/IconosGaleria";
+import fs from "node:fs";
+import path from "node:path";
+import ToolIcons from "@/components/shared/ToolIcons";
+import PhoneMockup from "@/components/proyectos/iberdrola/PhoneMockup";
+import BackToTop from "@/components/layout/BackToTop";
 import "../../page.css";
-import "@/components/SkillDrop.css";
+import "@/components/home/SkillDrop.css";
 
 function catFromId(id: string): string {
   switch (id[0]) {
@@ -159,7 +163,7 @@ function NewslettersLanding() {
         <div className="nwl-video">
           {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
           <video
-            src="/videos/newsletters.mp4"
+            src="/proyectos/iberdrola/newsletters/newsletters.mp4"
             autoPlay
             muted
             loop
@@ -171,12 +175,26 @@ function NewslettersLanding() {
 
         {/* Dos newsletters navegables en mockup de móvil */}
         <div className="nwl-phones">
-          <PhoneMockup src="/newsletters/nwl-29-12-es.html" title="Newsletter Iberdrola — 12 hitos" />
-          <PhoneMockup src="/newsletters/nwl-20-08-es.html" title="Newsletter Iberdrola — verano" />
+          <PhoneMockup src="/proyectos/iberdrola/newsletters/nwl-29-12-es.html" title="Newsletter Iberdrola — 12 hitos" />
+          <PhoneMockup src="/proyectos/iberdrola/newsletters/nwl-20-08-es.html" title="Newsletter Iberdrola — verano" />
         </div>
       </div>
     </main>
   );
+}
+
+// Las listas de iconos se leen del disco en cada render del servidor, en vez de
+// mantener un listado a mano: al soltar SVG nuevos en la carpeta aparecen solos.
+function listarSvg(carpeta: string): string[] {
+  const dir = path.join(process.cwd(), "public/proyectos/iberdrola/iconografia", carpeta);
+  try {
+    return fs
+      .readdirSync(dir)
+      .filter((f) => f.toLowerCase().endsWith(".svg"))
+      .sort((a, b) => a.localeCompare(b, "es"));
+  } catch {
+    return [];
+  }
 }
 
 // Iconografía: sistema de iconos para la web corporativa de Iberdrola.
@@ -206,11 +224,11 @@ function IconografiaLanding() {
         <div className="project-introrow">
           <p className="project-intro">
             <LangText
-              es="Un sistema de iconos para la web corporativa de Iberdrola: una familia coherente en trazo, peso y rejilla, pensada para funcionar igual de bien a tamaño pequeño dentro de una tabla que ampliada en una infografía."
-              en="An icon system for Iberdrola's corporate site: a family consistent in stroke, weight and grid, built to work just as well small inside a table as blown up in an infographic."
+              es="Un sistema de más de 500 iconos para la web corporativa de Iberdrola: una familia coherente en trazo, peso y rejilla, pensada para funcionar igual de bien a tamaño pequeño dentro de una tabla que ampliada en una infografía."
+              en="An icon system comprising more than 500 icons for Iberdrola’s corporate website: a cohesive family with consistent stroke, weight and grid, designed to work equally well at small sizes within a table and at larger scales in an infographic."
             />
           </p>
-          <ToolIcons tools={["Figma", "Illustrator"]} />
+          <ToolIcons tools={["Figma", "Illustrator", "After Effects"]} />
         </div>
 
         <p className="project-tagline">
@@ -218,6 +236,10 @@ function IconografiaLanding() {
         </p>
 
         <IconoConstruccion />
+        <IconoGifs />
+        {/* svg-oscuro solo contiene los iconos con partes blancas, teñidas del
+            fondo oscuro; la galería elige la variante según el tema activo. */}
+        <IconosGaleria iconos={listarSvg("svg")} conBlanco={listarSvg("svg-oscuro")} />
       </div>
     </main>
   );

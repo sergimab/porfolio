@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Iconos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #00a443;
+      }
+
+      .cls-2 {
+        stroke-linecap: round;
+      }
+
+      .cls-2, .cls-3 {
+        fill: none;
+        stroke: #00a443;
+        stroke-linejoin: round;
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <g>
+    <circle class="cls-2" cx="68.51" cy="61.83" r="6.85"/>
+    <path class="cls-2" d="M79.47,79.63h-21.91c0-6.05,4.9-10.96,10.96-10.96s10.96,4.91,10.96,10.96Z"/>
+  </g>
+  <g>
+    <circle class="cls-2" cx="27.43" cy="61.83" r="6.85"/>
+    <path class="cls-2" d="M38.38,79.63h-21.91c0-6.05,4.9-10.96,10.96-10.96s10.96,4.91,10.96,10.96Z"/>
+  </g>
+  <g>
+    <circle class="cls-2" cx="47.84" cy="57.21" r="4.93"/>
+    <path class="cls-2" d="M55.73,70.04h-15.79c0-4.36,3.53-7.89,7.89-7.89s7.89,3.54,7.89,7.89Z"/>
+  </g>
+  <polygon class="cls-3" points="47.97 16.63 31.53 45.11 64.41 45.11 47.97 16.63"/>
+  <line class="cls-3" x1="47.97" y1="26.73" x2="47.97" y2="36.43"/>
+  <path class="cls-1" d="M47.97,37.76c-.83,0-1.5.67-1.5,1.5s.67,1.5,1.5,1.5,1.5-.67,1.5-1.5-.67-1.5-1.5-1.5h0Z"/>
+</svg>

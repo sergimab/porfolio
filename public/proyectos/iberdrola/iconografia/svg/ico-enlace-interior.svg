@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Iconos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke-linecap: square;
+      }
+
+      .cls-1, .cls-2 {
+        stroke-width: 3.14px;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        fill: none;
+        stroke: #00a443;
+        stroke-linejoin: round;
+      }
+
+      .cls-3 {
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <polyline class="cls-3" points="70.99 33.59 70.99 79.61 16.49 79.61 16.49 25.1 62.7 25.1"/>
+  <g>
+    <line class="cls-2" x1="49" y1="47.29" x2="79.58" y2="16.71"/>
+    <polyline class="cls-1" points="58.71 16.71 79.58 16.71 79.58 37.57"/>
+  </g>
+</svg>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Iconos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #00a443;
+        stroke-linejoin: round;
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <path id="Shape_798" data-name="Shape 798" class="cls-1" d="M80.59,79.25c-7.09,1.35-11.51-5.11-11.51-5.11h0c-2.23,3.23-6.08,5.22-10.27,5.31-4.15-.18-7.96-2.15-10.26-5.31h0c-2.23,3.23-6.08,5.22-10.26,5.31-4.15-.18-7.96-2.16-10.25-5.31h0s-5.67,6.57-12.63,5.22"/>
+  <g>
+    <polyline class="cls-1" points="61.89 78.7 76.45 49.98 48.04 37.93 19.55 49.96 35.74 79.14"/>
+    <polyline class="cls-1" points="31.16 45.06 31.16 29.12 64.9 29.12 64.9 45.06"/>
+    <g>
+      <line class="cls-1" x1="36.15" y1="31.35" x2="36.15" y2="34.79"/>
+      <line class="cls-1" x1="48.03" y1="31.35" x2="48.03" y2="34.79"/>
+      <line class="cls-1" x1="59.91" y1="31.35" x2="59.91" y2="34.79"/>
+    </g>
+    <line class="cls-1" x1="48.04" y1="37.93" x2="48.04" y2="51.54"/>
+    <g>
+      <line class="cls-1" x1="26.46" y1="52.55" x2="48.06" y2="43.26"/>
+      <line class="cls-1" x1="69.61" y1="52.55" x2="48" y2="43.26"/>
+    </g>
+    <rect class="cls-1" x="36.95" y="16.46" width="8.44" height="12.68"/>
+  </g>
+</svg>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Iconos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke-linecap: round;
+      }
+
+      .cls-1, .cls-2 {
+        fill: none;
+        stroke: #00a443;
+        stroke-linejoin: round;
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <path class="cls-2" d="M79.52,43.46v30.13c0,2.27-1.84,4.11-4.11,4.11H20.63c-2.27,0-4.11-1.84-4.11-4.11v-30.13l21.92,15.07h19.17l21.92-15.07Z"/>
+  <polyline class="cls-2" points="71.08 37.59 79.52 43.46 57.61 58.53 38.44 58.53 16.52 43.46 25.6 37.15"/>
+  <line class="cls-2" x1="71.31" y1="68.12" x2="57.61" y2="58.53"/>
+  <line class="cls-2" x1="38.44" y1="58.53" x2="24.74" y2="68.12"/>
+  <polyline class="cls-2" points="25.6 49.63 25.6 18.29 70.6 18.29 70.6 49.63"/>
+  <path class="cls-2" d="M79.52,43.46v30.13c0,2.27-1.84,4.11-4.11,4.11H20.63c-2.27,0-4.11-1.84-4.11-4.11v-30.13l21.92,15.07h19.17l21.92-15.07Z"/>
+  <g>
+    <circle class="cls-1" cx="48.1" cy="31.67" r="5.92"/>
+    <path class="cls-1" d="M58.64,48.13h-21.08c0-5.82,4.72-10.54,10.54-10.54s10.54,4.72,10.54,10.54Z"/>
+  </g>
+</svg>

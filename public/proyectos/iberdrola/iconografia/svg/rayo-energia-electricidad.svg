@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Iconos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #00a443;
+        stroke-linejoin: round;
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <path class="cls-1" d="M48,16.54l-.17-.04-18.88,37.76h19.11s0,25.24,0,25.24c6.38-12.75,12.65-25.3,18.99-37.99h-19.05s0-24.97,0-24.97Z"/>
+</svg>

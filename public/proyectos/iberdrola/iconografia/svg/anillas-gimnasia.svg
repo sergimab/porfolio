@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Iconos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #00a443;
+        stroke-linejoin: round;
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <line class="cls-1" x1="14.99" y1="79.5" x2="80.99" y2="79.5"/>
+  <rect class="cls-1" x="21.74" y="73.52" width="12" height="5.98"/>
+  <rect class="cls-1" x="61.58" y="73.54" width="12" height="5.98"/>
+  <rect class="cls-1" x="24.74" y="16.5" width="6" height="57.04"/>
+  <rect class="cls-1" x="64.49" y="16.46" width="6" height="57.04"/>
+  <line class="cls-1" x1="31.49" y1="25.5" x2="64.58" y2="25.5"/>
+  <line class="cls-1" x1="23.99" y1="25.5" x2="17.99" y2="25.5"/>
+  <line class="cls-1" x1="77.99" y1="25.5" x2="71.99" y2="25.5"/>
+  <g>
+    <line class="cls-1" x1="40.49" y1="25.1" x2="40.49" y2="37.1"/>
+    <circle class="cls-1" cx="40.49" cy="40.1" r="4.38"/>
+  </g>
+  <line class="cls-1" x1="54.87" y1="25.1" x2="54.87" y2="37.1"/>
+  <circle class="cls-1" cx="54.87" cy="40.1" r="4.38"/>
+</svg>

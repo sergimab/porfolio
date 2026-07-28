@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Iconos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #00a443;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <ellipse class="cls-1" cx="23.09" cy="55.74" rx="6.61" ry="8.69"/>
+  <line class="cls-1" x1="23.09" y1="47.05" x2="31.74" y2="47.05"/>
+  <line class="cls-1" x1="23.09" y1="64.43" x2="32.28" y2="64.43"/>
+  <g>
+    <path class="cls-1" d="M35.85,51.16c-2.25-1.39-3.81-4.39-3.81-7.88,0-4.8,2.96-8.69,6.61-8.69s6.61,3.89,6.61,8.69c0,3.34-1.43,6.24-3.53,7.69"/>
+    <path class="cls-1" d="M38.65,34.59h13.82l-3.68-4.84,3.09-2.38,7.42,7.42h11.11s7.8,2.6,3.2,15.82"/>
+    <line class="cls-1" x1="50.81" y1="45.86" x2="56.22" y2="45.86"/>
+    <line class="cls-1" x1="58.33" y1="41.68" x2="68.95" y2="41.68"/>
+  </g>
+  <g>
+    <ellipse class="cls-1" cx="39.05" cy="59.94" rx="6.61" ry="8.69"/>
+    <path class="cls-1" d="M39.05,68.64l36.31-.05c9.25-10.33.02-17.34.02-17.34h-36.33"/>
+    <line class="cls-1" x1="52.69" y1="60.36" x2="56.59" y2="60.36"/>
+    <line class="cls-1" x1="64.22" y1="56.9" x2="70.24" y2="56.9"/>
+    <line class="cls-1" x1="61.26" y1="63.7" x2="69.87" y2="63.7"/>
+  </g>
+  <ellipse class="cls-1" cx="38.31" cy="43.29" rx=".72" ry="1.89"/>
+  <ellipse class="cls-1" cx="38.97" cy="60.27" rx=".72" ry="1.89"/>
+  <ellipse class="cls-1" cx="22.86" cy="55.96" rx=".72" ry="1.89"/>
+</svg>

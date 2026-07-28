@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Iconos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #00a443;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <line class="cls-1" x1="48" y1="24.08" x2="48" y2="34.61"/>
+  <line class="cls-1" x1="61.99" y1="45.22" x2="70.63" y2="40.58"/>
+  <line class="cls-1" x1="56.65" y1="61.31" x2="61.99" y2="67.27"/>
+  <line class="cls-1" x1="39.36" y1="61.31" x2="34.01" y2="67.28"/>
+  <line class="cls-1" x1="25.37" y1="40.58" x2="34.01" y2="44.81"/>
+  <polyline class="cls-1" points="59.92 19 48 24.08 36.09 19"/>
+  <polyline class="cls-1" points="21.39 64.37 34.01 67.28 40.68 78.42"/>
+  <polyline class="cls-1" points="55.34 78.42 61.99 67.27 74.61 64.37"/>
+  <polyline class="cls-1" points="79.14 50.38 70.63 40.58 71.77 27.64"/>
+  <polyline class="cls-1" points="24.22 27.64 25.37 40.58 16.86 50.38"/>
+  <path class="cls-1" d="M47.96,16.55c-17.37,0-31.46,14.09-31.46,31.46s14.09,31.46,31.46,31.46,31.46-14.09,31.46-31.46-14.09-31.46-31.46-31.46h0Z"/>
+  <polygon class="cls-1" points="39.36 61.31 34.01 44.81 48 34.61 61.99 44.81 56.65 61.31 39.36 61.31"/>
+</svg>

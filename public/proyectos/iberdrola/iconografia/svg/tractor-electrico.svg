@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Iconos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        fill: none;
+        stroke: #00a443;
+        stroke-width: 3px;
+      }
+
+      .cls-2, .cls-3 {
+        stroke-linejoin: round;
+      }
+
+      .cls-3 {
+        stroke-linecap: square;
+      }
+    </style>
+  </defs>
+  <path class="cls-3" d="M27.16,22.55l-5.33,7.64h7.31c-1.79,2.57-3.56,5.11-5.36,7.69"/>
+  <g>
+    <path id="Shape_428" data-name="Shape 428" class="cls-2" d="M33.53,69.54h21.73"/>
+    <path class="cls-2" d="M69.46,23.72v1.43c0,.79-.64,1.43-1.43,1.43h-28.64c-.79,0-1.43-.64-1.43-1.43v-1.43c0-1.59,1.28-2.87,2.87-2.87h25.77c1.59,0,2.87,1.28,2.87,2.87Z"/>
+    <path id="Shape_427" data-name="Shape 427" class="cls-2" d="M16.49,62.38v-11.45c4.89-2.79,10.21-4.73,15.75-5.73,2.83-.67,5.7-1.15,8.59-1.43l1.43,14.32h5.73s1.43-12.89,17.18-12.89c5.67-.17,11.05,2.52,14.32,7.16"/>
+    <polyline class="cls-2" points="66.6 26.58 67.45 30.27 71.1 46.08 71.1 46.08 71.11 46.13"/>
+    <polyline class="cls-2" points="36.37 44.41 36.38 44.36 39.91 30.27 40.83 26.58"/>
+    <path id="Shape_432" data-name="Shape 432" class="cls-2" d="M40.83,43.76l4.3-2.86"/>
+    <path id="Shape_433" data-name="Shape 433" class="cls-2" d="M43.69,38.75l2.86,4.3"/>
+    <path id="Shape_434" data-name="Shape 434" class="cls-2" d="M47.99,49.49h4.59"/>
+    <path id="Shape_435" data-name="Shape 435" class="cls-2" d="M57.78,46.37l1.67-8.34"/>
+    <path id="Oval_19" data-name="Oval 19" class="cls-1" d="M65.17,68.1c2.37,0,4.3-1.92,4.3-4.3s-1.92-4.3-4.3-4.3-4.3,1.92-4.3,4.3,1.92,4.3,4.3,4.3Z"/>
+    <path id="Shape_436" data-name="Shape 436" class="cls-2" d="M29.37,55.22h12.6"/>
+    <path class="cls-1" d="M76.62,63.81c0,6.33-5.13,11.45-11.46,11.45-4.24,0-7.94-2.3-9.92-5.72-.98-1.68-1.53-3.64-1.53-5.72,0-6.33,5.12-11.46,11.45-11.46s11.46,5.13,11.46,11.46Z"/>
+    <path class="cls-1" d="M33.67,68.1c0,.49-.05.97-.15,1.43-.66,3.27-3.55,5.72-7.02,5.72-3.95,0-7.16-3.2-7.16-7.16s3.2-7.16,7.16-7.16,7.16,3.2,7.16,7.16Z"/>
+  </g>
+</svg>

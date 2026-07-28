@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Iconos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #00a443;
+        stroke-linejoin: round;
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <path id="Shape_281" data-name="Shape 281" class="cls-1" d="M79.49,58.03c0,11.91-9.66,21.57-21.57,21.57s-21.57-9.66-21.57-21.57c0-9.8,14.6-32.67,19.77-40.48.4-.6,1.08-.97,1.8-.97s1.4.36,1.8.97c5.18,7.81,19.77,30.68,19.77,40.48Z"/>
+  <path id="Shape_281-2" data-name="Shape 281" class="cls-1" d="M39,79.75c-.31.01-.62.02-.93.02-11.91,0-21.57-9.66-21.57-21.57,0-9.8,14.6-32.67,19.77-40.48.4-.6,1.08-.97,1.8-.97s1.4.36,1.8.97c1.26,1.91,3.09,4.71,5.13,8"/>
+</svg>

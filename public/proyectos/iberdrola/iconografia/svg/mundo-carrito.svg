@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Iconos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #00a443;
+        stroke-linejoin: round;
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <path id="Shape_84" data-name="Shape 84" class="cls-1" d="M20.34,62.98h24.68"/>
+  <path id="Shape_85" data-name="Shape 85" class="cls-1" d="M22.03,29.97h52.22"/>
+  <path id="Shape_86" data-name="Shape 86" class="cls-1" d="M38.63,46.47h-22.11"/>
+  <path id="Shape_88" data-name="Shape 88" class="cls-1" d="M46.12,16.52c-16.5,17.82-16.21,41,.3,62.92h0c-16.5-.91-29.52-14.32-29.88-30.78-.36-16.46,12.05-30.43,28.5-32.06,2.06-.2,4.09-.21,6.07-.02"/>
+  <g>
+    <circle class="cls-1" cx="54.03" cy="76.9" r="2.47"/>
+    <polyline class="cls-1" points="41.7 46.47 47.42 46.47 53.95 74.43 73.64 74.43"/>
+    <polyline class="cls-1" points="54.03 74.43 73.64 74.43 79.52 56.34 49.92 56.34"/>
+    <circle class="cls-1" cx="72.07" cy="76.9" r="2.47"/>
+    <line class="cls-1" x1="52.2" y1="66.94" x2="76.08" y2="66.94"/>
+  </g>
+  <path id="Shape_88-2" data-name="Shape 88" class="cls-1" d="M50.9,16.53c15.74,1.56,27.78,14.42,28.47,29.94h0s-23.45,0-23.45,0"/>
+  <path id="Shape_88-3" data-name="Shape 88" class="cls-1" d="M49.82,16.44c8.28,8.94,12.33,19.23,12.23,30.03"/>
+</svg>

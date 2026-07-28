@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Iconos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke-dasharray: 5.79 4.82;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        fill: none;
+        stroke: #00a443;
+        stroke-linejoin: round;
+        stroke-width: 3px;
+      }
+
+      .cls-2 {
+        stroke-dasharray: 5.79 4.83;
+      }
+
+      .cls-4 {
+        stroke-linecap: square;
+      }
+    </style>
+  </defs>
+  <polyline class="cls-3" points="21.33 16.81 21.33 74.69 79.21 74.69"/>
+  <g>
+    <line class="cls-3" x1="76.17" y1="62.48" x2="76.17" y2="59.48"/>
+    <line class="cls-1" x1="76.17" y1="54.66" x2="76.17" y2="25.23"/>
+    <polyline class="cls-3" points="76.17 22.81 76.17 19.81 73.17 19.81"/>
+    <line class="cls-2" x1="68.35" y1="19.81" x2="38.91" y2="19.81"/>
+    <line class="cls-3" x1="36.5" y1="19.81" x2="33.5" y2="19.81"/>
+  </g>
+  <polyline class="cls-4" points="16.79 21.31 21.33 16.77 25.87 21.31"/>
+  <polyline class="cls-4" points="74.67 70.15 79.21 74.69 74.67 79.23"/>
+  <line class="cls-3" x1="26.56" y1="69.42" x2="70.17" y2="25.81"/>
+  <line class="cls-3" x1="70.17" y1="37.31" x2="38.06" y2="69.42"/>
+  <line class="cls-3" x1="70.17" y1="49.17" x2="49.92" y2="69.42"/>
+  <line class="cls-3" x1="70.17" y1="61.12" x2="61.87" y2="69.42"/>
+  <line class="cls-3" x1="26.56" y1="57.92" x2="58.67" y2="25.81"/>
+  <line class="cls-3" x1="26.56" y1="46.07" x2="46.82" y2="25.81"/>
+  <line class="cls-3" x1="26.56" y1="34.11" x2="34.86" y2="25.81"/>
+</svg>

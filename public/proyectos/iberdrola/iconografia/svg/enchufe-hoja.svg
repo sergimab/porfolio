@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Iconos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #00a443;
+        stroke-linejoin: round;
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <path id="Shape_169" data-name="Shape 169" class="cls-1" d="M64.37,78.57c-1.36.66-2.86,1-4.37,1h-7.15c-5.53,0-10.01-5.91-10.01-11.44s4.48-11.44,10.01-11.44h7.15c1.48,0,2.95.33,4.29.96l13.95,9.29c.4.27.64.71.64,1.19s-.24.92-.64,1.19l-13.87,9.25Z"/>
+  <path id="Shape_166" data-name="Shape 166" class="cls-1" d="M62.86,68.13h-30.03c-7.11,0-12.87-5.76-12.87-12.87s5.76-12.87,12.87-12.87h37.18c4.74,0,8.58-3.84,8.58-8.58s-3.84-8.58-8.58-8.58h-28.6"/>
+  <path id="Shape_170" data-name="Shape 170" class="cls-1" d="M51.9,72.42c-1.23-1.09-1.93-2.66-1.92-4.3,0-1.64.72-3.2,1.95-4.28"/>
+  <path id="Shape_171" data-name="Shape 171" class="cls-1" d="M58.58,71.92c-1.92-2.16-1.92-5.42,0-7.58"/>
+  <path id="Shape_165" data-name="Shape 165" class="cls-1" d="M31.4,33.8c5.53,0,10.01-3.05,10.01-8.58s-4.48-8.58-10.01-8.58h-7.15c-.79,0-1.43.64-1.43,1.43v14.3c0,.79.64,1.43,1.43,1.43h7.15Z"/>
+  <path id="Shape_167" data-name="Shape 167" class="cls-1" d="M22.82,22.36h-5.72"/>
+  <path id="Shape_168" data-name="Shape 168" class="cls-1" d="M22.82,28.08h-5.72"/>
+  <path id="Shape_172" data-name="Shape 172" class="cls-1" d="M28.54,16.64v17.16"/>
+</svg>

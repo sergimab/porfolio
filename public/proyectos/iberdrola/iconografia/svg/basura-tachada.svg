@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Iconos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke: #f2eee2;
+        stroke-miterlimit: 10;
+        stroke-width: 12px;
+      }
+
+      .cls-1, .cls-2 {
+        fill: none;
+      }
+
+      .cls-2 {
+        stroke: #00a443;
+        stroke-linejoin: round;
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <polygon class="cls-2" points="25.55 31.37 70.56 31.37 67.56 79.37 28.55 79.37 25.55 31.37"/>
+  <line class="cls-2" x1="19.55" y1="31.37" x2="76.55" y2="31.37"/>
+  <polygon class="cls-2" points="22.55 31.37 27.05 22.37 69.05 22.37 73.55 31.37 22.55 31.37"/>
+  <polyline class="cls-2" points="40.55 22.37 40.55 16.37 55.55 16.37 55.55 22.37"/>
+  <line class="cls-2" x1="37.55" y1="41.87" x2="37.55" y2="68.87"/>
+  <line class="cls-2" x1="48.05" y1="41.87" x2="48.05" y2="68.87"/>
+  <line class="cls-2" x1="58.55" y1="41.87" x2="58.55" y2="68.87"/>
+  <g>
+    <line class="cls-1" x1="79.47" y1="16.37" x2="16.47" y2="79.21"/>
+    <line class="cls-2" x1="79.47" y1="16.37" x2="16.47" y2="79.21"/>
+  </g>
+</svg>

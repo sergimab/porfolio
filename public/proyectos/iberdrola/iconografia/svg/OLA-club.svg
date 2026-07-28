@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Iconos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #00a443;
+        stroke: #00a443;
+        stroke-miterlimit: 10;
+      }
+    </style>
+  </defs>
+  <path id="Shape" class="cls-1" d="M44.89,27.19c-2.79,0-5.06-2.27-5.06-5.06s2.27-5.06,5.06-5.06,5.07,2.27,5.07,5.06-2.27,5.06-5.07,5.06Z"/>
+  <path id="Shape-2" data-name="Shape" class="cls-1" d="M62.07,62.95c-2.79,0-5.06-2.27-5.06-5.06s2.27-5.06,5.06-5.06,5.06,2.27,5.06,5.06-2.27,5.06-5.06,5.06Z"/>
+  <path id="Shape-3" data-name="Shape" class="cls-1" d="M22.63,60.18c-2.79,0-5.06-2.27-5.06-5.06s2.27-5.06,5.06-5.06,5.06,2.27,5.06,5.06-2.27,5.06-5.06,5.06Z"/>
+  <polygon id="Shape-path" class="cls-1" points="18.18 18.75 43.92 42.05 59.47 33.21 56.27 28.04 43.99 34.41 27.39 18.75 18.18 18.75"/>
+  <polygon id="Shape-path-2" data-name="Shape-path" class="cls-1" points="28.97 71.56 33.77 79.55 40.35 45.39 24.8 36.69 22.1 42.09 33.78 49.22 28.97 71.56"/>
+  <polygon id="Shape-path-3" data-name="Shape-path" class="cls-1" points="45.19 46.78 45.05 64.75 51.06 64.51 51.66 50.7 73.69 44.19 78.36 36.2 45.19 46.78"/>
+</svg>

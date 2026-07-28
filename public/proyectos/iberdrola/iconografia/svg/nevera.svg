@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Iconos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #00a443;
+        stroke-linejoin: round;
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <path id="Rectangle-path_31" data-name="Rectangle-path 31" class="cls-1" d="M24.15,21.3c0-3.1,2.51-5.61,5.61-5.61h36.46c3.1,0,5.61,2.51,5.61,5.61v50.48c0,3.1-2.51,5.61-5.61,5.61H29.76c-3.1,0-5.61-2.51-5.61-5.61V21.3Z"/>
+  <path id="Shape_1063" data-name="Shape 1063" class="cls-1" d="M32.56,80.19v-2.8"/>
+  <path id="Shape_1064" data-name="Shape 1064" class="cls-1" d="M63.41,80.19v-2.8"/>
+  <path id="Shape_1065" data-name="Shape 1065" class="cls-1" d="M24.15,38.13h47.67"/>
+  <path id="Shape_1066" data-name="Shape 1066" class="cls-1" d="M32.99,21.69v10.47"/>
+  <path id="Shape_1067" data-name="Shape 1067" class="cls-1" d="M32.99,44.21v16.48"/>
+</svg>

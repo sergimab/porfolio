@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Iconos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke-width: 2.5px;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4, .cls-5 {
+        fill: none;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-5 {
+        stroke: #00a443;
+      }
+
+      .cls-1, .cls-3, .cls-4, .cls-5 {
+        stroke-linejoin: round;
+      }
+
+      .cls-2 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-2, .cls-3 {
+        stroke-width: 3px;
+      }
+
+      .cls-4 {
+        stroke: #00a443;
+      }
+
+      .cls-4, .cls-5 {
+        stroke-width: 2px;
+      }
+    </style>
+  </defs>
+  <g>
+    <polyline class="cls-3" points="26.8 38.23 32.27 38.23 32.27 72.21 16.64 72.21 16.64 38.23 21.32 38.23"/>
+    <rect class="cls-3" x="32.27" y="38.22" width="18.86" height="33.99"/>
+    <polyline class="cls-3" points="66.64 70.79 66.63 72.21 51.13 72.21 51.13 38.23 56.36 38.2"/>
+    <polyline class="cls-3" points="61.86 38.23 66.63 38.23 66.63 68.45"/>
+    <line class="cls-3" x1="28.33" y1="33.99" x2="28.32" y2="37.9"/>
+    <line class="cls-3" x1="19.82" y1="37.92" x2="19.82" y2="34"/>
+    <line class="cls-3" x1="63.37" y1="34" x2="63.37" y2="37.91"/>
+    <line class="cls-3" x1="54.84" y1="37.88" x2="54.84" y2="33.97"/>
+    <g>
+      <line class="cls-1" x1="24.16" y1="36.36" x2="24.16" y2="47.01"/>
+      <polyline class="cls-1" points="27.81 45.06 24.25 47.46 20.39 45.19"/>
+    </g>
+    <g>
+      <line class="cls-1" x1="59.22" y1="36.46" x2="59.22" y2="46.62"/>
+      <polyline class="cls-1" points="62.88 44.76 59.31 47.05 55.45 44.89"/>
+    </g>
+    <path class="cls-5" d="M41.79,49.72h-.04s-4.41,6.84-4.41,6.84h4.47v4.58c1.49-2.31,2.96-4.59,4.44-6.89h-4.45v-4.53Z"/>
+    <polyline class="cls-5" points="71.84 66.74 75.83 63.17 79.97 66.48"/>
+    <path class="cls-2" d="M60.55,72.22l5.61-.03c1.38-.19,10.88,1.91,9.66-7.67"/>
+  </g>
+  <circle class="cls-2" cx="21.85" cy="27.33" r="2.05"/>
+  <circle class="cls-2" cx="26.8" cy="25.5" r="2.34"/>
+  <g>
+    <circle class="cls-2" cx="54.83" cy="27.55" r="1.93"/>
+    <circle class="cls-2" cx="60.83" cy="26.4" r="3.26"/>
+  </g>
+  <path id="Shape_281" data-name="Shape 281" class="cls-4" d="M73.65,56.5c-1.65-.05-2.95-1.44-2.9-3.09.04-1.36,2.17-4.47,2.93-5.53.06-.08.15-.13.25-.13s.19.06.25.14c.37.6,1.1,1.82,1.69,3.03"/>
+  <path id="Shape_281-2" data-name="Shape 281" class="cls-4" d="M79.92,56.1c0,1.66-1.34,3-3,3s-3-1.34-3-3c0-1.36,2.03-4.54,2.75-5.62.05-.08.15-.13.25-.13s.19.05.25.13c.72,1.09,2.75,4.26,2.75,5.62h0Z"/>
+</svg>

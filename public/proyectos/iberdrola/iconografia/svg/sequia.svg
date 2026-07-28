@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Iconos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #00a443;
+        stroke-linejoin: round;
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <path id="Shape_5" data-name="Shape 5" class="cls-1" d="M14.97,79.5h66"/>
+  <path id="Shape_6" data-name="Shape 6" class="cls-1" d="M80.97,55.5H14.97"/>
+  <path id="Shape_7" data-name="Shape 7" class="cls-1" d="M22.63,55.38l13.86,10.51s-11.36,13.77-11,13.77"/>
+  <path id="Shape_8" data-name="Shape 8" class="cls-1" d="M53,54.88l4.9,12.4-8.78,5.83c-1.05.7-2.45.65-3.44-.12l-9.18-7.09,4.3-11.02"/>
+  <path id="Shape_9" data-name="Shape 9" class="cls-1" d="M57.9,67.27l11.6-4.96,9.28,17.38"/>
+  <path id="Shape_10" data-name="Shape 10" class="cls-1" d="M29.68,60.73l-10.72,9.3h-3.98"/>
+  <path id="Shape_11" data-name="Shape 11" class="cls-1" d="M63.76,79.67l5.74-17.35,6.9-6.99"/>
+  <path id="Shape_12" data-name="Shape 12" class="cls-1" d="M64.47,54.88V17.69"/>
+  <path id="Shape_13" data-name="Shape 13" class="cls-1" d="M64.47,34.22l5.74-2.75,2.87-11.02"/>
+  <path id="Shape_14" data-name="Shape 14" class="cls-1" d="M70.21,31.46l8.61-5.51"/>
+  <path id="Shape_15" data-name="Shape 15" class="cls-1" d="M64.47,42.48l-5.74-2.75-2.87-11.02"/>
+  <path id="Shape_16" data-name="Shape 16" class="cls-1" d="M58.74,39.72l-8.61-5.51"/>
+  <circle class="cls-1" cx="30.76" cy="28.71" r="12.36"/>
+</svg>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Iconos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke-width: 2.92px;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4, .cls-5 {
+        fill: none;
+        stroke: #00a443;
+        stroke-linejoin: round;
+      }
+
+      .cls-2 {
+        stroke-width: 2.94px;
+      }
+
+      .cls-3 {
+        stroke-width: 3px;
+      }
+
+      .cls-4 {
+        stroke-width: 3px;
+      }
+
+      .cls-5 {
+        stroke-width: 3.04px;
+      }
+    </style>
+  </defs>
+  <path class="cls-2" d="M19.14,35.02h57.67c1.47,0,2.66,1.15,2.66,2.57v6.42c0,1.42-1.19,2.57-2.66,2.57H19.14c-1.47,0-2.66-1.15-2.66-2.57v-6.42c0-1.42,1.19-2.57,2.66-2.57Z"/>
+  <path class="cls-5" d="M20.97,46.57h54v30.35c0,1.49-1.21,2.7-2.7,2.7H23.69c-1.49,0-2.7-1.21-2.7-2.7v-30.35h-.02Z"/>
+  <rect class="cls-3" x="40.47" y="46.57" width="15.04" height="33.05"/>
+  <rect class="cls-1" x="40.47" y="35.02" width="15.04" height="11.56"/>
+  <path class="cls-4" d="M47.75,35.02s-11.65-1.28-15.91-5.58-3.66-8.44-1.01-11.09c2.64-2.65,7.3-2.51,10.96,1.12,3.66,3.62,5.97,15.55,5.97,15.55Z"/>
+  <path class="cls-4" d="M47.97,35.02s11.65-1.28,15.91-5.58c4.26-4.29,3.66-8.44,1.01-11.09-2.64-2.65-7.29-2.51-10.96,1.12-3.67,3.62-5.97,15.55-5.97,15.55Z"/>
+</svg>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Iconos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #00a443;
+        stroke-miterlimit: 10;
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <circle class="cls-1" cx="48" cy="48" r="23.25"/>
+  <circle class="cls-1" cx="53.47" cy="53.46" r="6.84"/>
+  <circle class="cls-1" cx="52.85" cy="52.85" r="2.12"/>
+  <circle class="cls-1" cx="46.12" cy="31.26" r=".46"/>
+  <circle class="cls-1" cx="64.41" cy="45.55" r=".46"/>
+  <circle class="cls-1" cx="43.98" cy="41.02" r=".46"/>
+  <circle class="cls-1" cx="32.06" cy="49.15" r=".46"/>
+  <circle class="cls-1" cx="39.79" cy="56.04" r=".46"/>
+  <circle class="cls-1" cx="36.15" cy="37.06" r=".46"/>
+  <circle class="cls-1" cx="43.52" cy="63.43" r=".46"/>
+  <circle class="cls-1" cx="58.94" cy="37.06" r=".46"/>
+  <circle class="cls-1" cx="48" cy="48" r="23.25"/>
+  <g>
+    <path class="cls-1" d="M58.07,77.83s-3.99-2.22-8.13-6.66"/>
+    <path class="cls-1" d="M44.74,79.11s-2.66-3.58-4.6-9.23"/>
+    <path class="cls-1" d="M32.06,74.79s-.95-4.34-.41-10.26"/>
+    <path class="cls-1" d="M22.28,65.65s.93-4.39,3.9-9.6"/>
+    <path class="cls-1" d="M17.13,53.29s3.02-3.47,7.68-6.93"/>
+    <path class="cls-1" d="M17.52,39.9s4.16-2.36,10.36-3.55"/>
+    <path class="cls-1" d="M23.38,27.86s4.95-.45,11.26,1.11"/>
+    <path class="cls-1" d="M33.67,19.29s4.73,1.64,9.85,5.68"/>
+    <path class="cls-1" d="M46.57,15.72s3.77,3.56,6.81,9.56"/>
+    <path class="cls-1" d="M59.81,17.77s1.97,4.8,2.28,11.52"/>
+    <path class="cls-1" d="M71.03,25.08s-.17,5.19-2.66,11.43"/>
+    <path class="cls-1" d="M78.25,36.36s-2.29,4.65-7.11,9.31"/>
+    <path class="cls-1" d="M80.19,49.61s-3.88,3.2-10.03,5.46"/>
+    <path class="cls-1" d="M76.51,62.48s-4.69,1.27-11.05.87"/>
+    <path class="cls-1" d="M67.86,72.71s-4.62-.74-10.13-3.59"/>
+  </g>
+</svg>

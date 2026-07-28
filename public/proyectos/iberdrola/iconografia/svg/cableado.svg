@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Iconos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #00a443;
+        stroke-linejoin: round;
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <rect class="cls-1" x="38.74" y="67.7" width="18.45" height="5.28"/>
+  <rect class="cls-1" x="35.64" y="57.38" width="24.65" height="10.31"/>
+  <rect class="cls-1" x="35.64" y="72.97" width="24.65" height="6.62"/>
+  <path class="cls-1" d="M52.61,57.34h-7.03c.71-21.39,7.28-34.68,20.09-40.63l2.95,6.35c-10.19,4.73-15.4,15.8-16.01,34.29Z"/>
+  <line class="cls-1" x1="67.4" y1="20.05" x2="75.26" y2="16.53"/>
+  <path class="cls-1" d="M60.41,57.26l-7.67.08c2.12-8.39,6.45-17.84,21.17-16.46l-.65,6.97c-9.25-.75-11.11,2.9-12.84,9.41Z"/>
+  <line class="cls-1" x1="73.48" y1="44.44" x2="80.39" y2="45.43"/>
+  <path class="cls-1" d="M45.02,57.3l-6.93.02c1.26-22.82-9.77-30.78-18.13-34.5l2.93-6.12c16.01,7.11,23.24,20.39,22.13,40.6Z"/>
+  <line class="cls-1" x1="16.05" y1="16.68" x2="21.5" y2="19.71"/>
+</svg>

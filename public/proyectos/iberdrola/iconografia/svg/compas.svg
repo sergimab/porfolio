@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Iconos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #00a443;
+        stroke-linejoin: round;
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <path class="cls-1" d="M58.26,72.57l-3.9,1.44c-.72.26-1.53-.08-1.8-.77l-14.63-36.5-14.63,36.49c-.13.33-.4.6-.74.74-.34.14-.72.15-1.07.02l-1.95-.72-1.95-.72c-.71-.26-1.07-1.04-.8-1.73l15.59-38.86h0c-.02-.19-.03-.38-.03-.57v-6.69c0-.74.63-1.34,1.4-1.34h8.35c.77,0,1.39.6,1.39,1.34v6.69c0,.18,0,.38-.03.55l15.6,38.89c.28.69-.08,1.46-.8,1.73Z"/>
+  <path id="Shape_285" data-name="Shape 285" class="cls-1" d="M79.7,25.53h-12"/>
+  <path id="Shape_286" data-name="Shape 286" class="cls-1" d="M79.7,34.53h-9"/>
+  <path id="Shape_287" data-name="Shape 287" class="cls-1" d="M79.7,43.53h-12"/>
+  <path id="Shape_288" data-name="Shape 288" class="cls-1" d="M79.7,52.53h-12"/>
+  <path id="Shape_289" data-name="Shape 289" class="cls-1" d="M79.7,61.53h-9"/>
+  <path id="Shape_290" data-name="Shape 290" class="cls-1" d="M79.7,70.53h-12"/>
+  <path class="cls-1" d="M43.49,24.68v6.69c0,.18,0,.38-.03.55-.28,2.69-2.65,4.79-5.54,4.79s-5.24-2.09-5.54-4.78h0c-.02-.19-.03-.38-.03-.57v-6.69c0-.74.63-1.34,1.4-1.34h8.35c.77,0,1.39.6,1.39,1.34Z"/>
+  <path id="Shape_279" data-name="Shape 279" class="cls-1" d="M37.92,23.38v-5.35"/>
+  <polyline class="cls-1" points="17.04 78.77 18.64 74.77 19.54 72.54"/>
+  <polyline class="cls-1" points="58.81 78.77 57.2 74.77 56.31 72.54 56.31 72.54"/>
+  <path id="Shape_284" data-name="Shape 284" class="cls-1" d="M60.2,52.04V19.2c0-1.48,1.25-2.67,2.78-2.67h13.92c1.54,0,2.78,1.2,2.78,2.67v57.65c0,1.48-1.25,2.67-2.78,2.67h-10.72"/>
+</svg>

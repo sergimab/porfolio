@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import HoverTrail from "@/components/HoverTrail";
-import PixelBlastBackground from "@/components/PixelBlastBackground";
+import HoverTrail from "@/components/effects/HoverTrail";
+import PixelBlastBackground from "@/components/effects/PixelBlastBackground";
 import { EFFECTS } from "@/config/effects";
 import "./globals.css";
 

@@ -21,4 +21,14 @@ body {
   color: var(--foreground);
   font-family: var(--font-geist-sans, system-ui, sans-serif);
   transition: background 0.2s, color 0.2s;
+
+  /* Cursor propio. Los números tras la url son el hotspot: la punta de la
+     flecha no está en la esquina del lienzo, sino a (5, 2) en la imagen de
+     32px, así que sin ese desplazamiento el clic caería arriba a la izquierda
+     de donde apunta. Va en body (se hereda) y no en *, para no pisar el
+     cursor de manos de enlaces y botones ni el "grab" de la galería.
+     La segunda regla añade la versión a 2x en los navegadores que la admiten;
+     los que no, ignoran la línea y se quedan con la anterior. */
+  cursor: url("/ui/cursor.png") 5 2, auto;
+  cursor: image-set(url("/ui/cursor@2x.png") 2x, url("/ui/cursor.png") 1x) 5 2, auto;
 }

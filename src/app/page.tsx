@@ -1,6 +1,6 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import SkillDropClient from "@/components/SkillDropClient";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+import SkillDropClient from "@/components/home/SkillDropClient";
 import "./page.css";
 
 export default function Home() {
@@ -13,7 +13,7 @@ export default function Home() {
       <div style={{ display: "flex", justifyContent: "center", padding: "0 24px 24px" }}>
         <div className="tagline-wrap" style={{ maxWidth: "240px", width: "100%" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/tagline-text.svg" alt="" className="tagline-img" style={{ width: "100%", height: "auto" }} />
+          <img src="/marca/tagline-text.svg" alt="" className="tagline-img" style={{ width: "100%", height: "auto" }} />
         </div>
       </div>
       <div className="header-wrap">

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Iconos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #00a443;
+        stroke-linejoin: round;
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <path class="cls-1" d="M39.86,62.79l-2.74,5.47h-13.69l7.53-10.77c.49-.69,1.27-1.13,2.13-1.16.85-.04,1.67.32,2.22.98l4.55,5.48,5.78-11.54c.47-.93,1.41-1.52,2.45-1.52s1.98.58,2.45,1.52l8.49,17.01h-21.92"/>
+  <path class="cls-1" d="M33.02,42.24c0,2.27-1.83,4.11-4.11,4.11s-4.11-1.84-4.11-4.11,1.84-4.11,4.11-4.11,4.11,1.84,4.11,4.11Z"/>
+  <path id="Shape_265" data-name="Shape 265" class="cls-1" d="M65.99,50.94v22.76c0,1.51-1.23,2.74-2.74,2.74H19.23c-1.51,0-2.74-1.23-2.74-2.74v-41.02c0-1.51,1.23-2.74,2.74-2.74h18.26"/>
+  <path id="Shape_266" data-name="Shape 266" class="cls-1" d="M79.49,54.78l-24.47-24.47"/>
+  <path id="Shape_267" data-name="Shape 267" class="cls-1" d="M47.27,22.56l3.88,3.87"/>
+  <path id="Shape_268" data-name="Shape 268" class="cls-1" d="M58.39,19.19l-1.07,5.37"/>
+  <path id="Shape_269" data-name="Shape 269" class="cls-1" d="M67.38,26.56l-5.06,2.1"/>
+  <path id="Shape_270" data-name="Shape 270" class="cls-1" d="M43.89,33.68l5.37-1.07"/>
+  <path id="Shape_271" data-name="Shape 271" class="cls-1" d="M51.27,42.67l2.1-5.06"/>
+</svg>

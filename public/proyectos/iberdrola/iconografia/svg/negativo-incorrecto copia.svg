@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Iconos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke-linejoin: round;
+        stroke-width: 2.5px;
+      }
+
+      .cls-1, .cls-2 {
+        fill: none;
+        stroke: #00a443;
+      }
+
+      .cls-2 {
+        stroke-miterlimit: 10;
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <circle class="cls-2" cx="48.01" cy="48" r="31.5"/>
+  <polygon class="cls-1" points="43.64 63.52 30.31 50.2 34.56 45.95 43.64 55.04 64.01 34.67 68.25 38.91 43.64 63.52"/>
+</svg>

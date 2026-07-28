@@ -1,0 +1,56 @@
+/* ── Iconos en movimiento ──
+   Caja con el fondo del tema activo y el borde en el color contrario. Los GIF
+   ya traen su propio fondo verde, así que aquí solo se ordenan. */
+
+.icg {
+  --icg-tesela: 104px;   /* lado de cada GIF */
+  --icg-hueco: 14px;
+
+  margin-top: 24px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--icg-hueco);
+  border: 1px solid var(--foreground);
+  border-radius: 16px;
+  background: var(--background);
+}
+
+/* Cada fila va centrada y en horizontal: 1–5 arriba, 6–13 debajo. Al fijar el
+   lado de la tesela en lugar de repartir el ancho, las dos filas mantienen los
+   iconos al mismo tamaño aunque tengan distinto número de piezas. */
+.icg-fila {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--icg-hueco);
+}
+
+.icg-gif {
+  width: var(--icg-tesela);
+  height: var(--icg-tesela);
+  display: block;
+  border-radius: 10px;
+}
+
+@media (max-width: 1024px) {
+  .icg {
+    --icg-tesela: 78px;
+    --icg-hueco: 10px;
+    padding: 16px;
+  }
+}
+
+/* En móvil no caben ocho en fila sin quedar diminutos, así que se permite que
+   fluyan; el orden se mantiene. */
+@media (max-width: 640px) {
+  .icg {
+    --icg-tesela: 60px;
+    --icg-hueco: 8px;
+  }
+
+  .icg-fila {
+    flex-wrap: wrap;
+  }
+}

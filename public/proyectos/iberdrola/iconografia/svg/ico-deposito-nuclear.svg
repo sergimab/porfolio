@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Iconos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke-linecap: square;
+      }
+
+      .cls-1, .cls-2 {
+        fill: none;
+        stroke: #00a443;
+        stroke-linejoin: round;
+        stroke-width: 3.14px;
+      }
+    </style>
+  </defs>
+  <g>
+    <rect class="cls-1" x="21.96" y="16.52" width="52.07" height="7.99" rx="3.99" ry="3.99"/>
+    <rect class="cls-1" x="21.96" y="71.5" width="52.07" height="7.99" rx="3.99" ry="3.99"/>
+  </g>
+  <line class="cls-1" x1="25.62" y1="25.08" x2="25.62" y2="71.22"/>
+  <line class="cls-1" x1="70.42" y1="25.08" x2="70.42" y2="71.22"/>
+  <g>
+    <path class="cls-2" d="M41.85,36.03c3.92-2.29,8.13-1.88,12.51,0l-3.26,5.6c-1.93-1.01-4.06-1.03-6.39-.13l-2.87-5.47Z"/>
+    <path class="cls-2" d="M61.84,49.16c.34,4.53-1.88,8.14-5.49,11.24l-3.61-5.39c1.76-1.29,2.71-3.2,2.92-5.68l6.18-.17Z"/>
+    <path class="cls-2" d="M34.16,49.16c-.34,4.53,1.88,8.14,5.49,11.24l3.61-5.39c-1.76-1.29-2.71-3.2-2.92-5.68l-6.18-.17Z"/>
+    <circle class="cls-2" cx="48.11" cy="48.47" r="3.06"/>
+  </g>
+  <line class="cls-2" x1="25.49" y1="29.51" x2="36.7" y2="29.51"/>
+  <line class="cls-2" x1="59.05" y1="66.26" x2="70.26" y2="66.26"/>
+</svg>
