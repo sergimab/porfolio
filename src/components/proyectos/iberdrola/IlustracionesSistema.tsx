@@ -56,7 +56,13 @@ const FLAT_SCENES = ["1.svg", "2.svg"].map((f) => `/proyectos/iberdrola/ilustrac
 
 // Codifica cada segmento de la ruta (respeta espacios y subcarpetas, p. ej. "… - copia").
 function catPath(folder: string, file: string): string {
-  return "/" + `images/${folder}/${file}`.split("/").map(encodeURIComponent).join("/");
+  return (
+    "/" +
+    `proyectos/iberdrola/ilustraciones/${folder}/${file}`
+      .split("/")
+      .map(encodeURIComponent)
+      .join("/")
+  );
 }
 function catSrcs(map: Record<string, { folder: string; files: string[] }>, name: string): string[] {
   const cat = map[name];
