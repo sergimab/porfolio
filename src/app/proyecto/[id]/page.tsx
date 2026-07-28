@@ -5,6 +5,7 @@ import IlustracionesSistema from "@/components/IlustracionesSistema";
 import ProjectHeroTitle from "@/components/ProjectHeroTitle";
 import LangText from "@/components/LangText";
 import InfografiasViewer from "@/components/InfografiasViewer";
+import IconoConstruccion from "@/components/IconoConstruccion";
 import ToolIcons from "@/components/ToolIcons";
 import PhoneMockup from "@/components/PhoneMockup";
 import BackToTop from "@/components/BackToTop";
@@ -178,6 +179,50 @@ function NewslettersLanding() {
   );
 }
 
+// Iconografía: sistema de iconos para la web corporativa de Iberdrola.
+function IconografiaLanding() {
+  return (
+    <main className="project-main">
+      <div className="project-content-wrap">
+        <div className="hover-trail-target project-hero-box" data-trail-hue="142">
+          <span className="project-back">
+            <BackCapsule category="iberdrola" />
+          </span>
+
+          <div className="project-meta">
+            <div className="project-meta-row">
+              <span className="project-meta-key"><LangText es="Agencia" en="Agency" /></span>
+              <span>Prodigioso Volcán</span>
+            </div>
+            <div className="project-meta-row">
+              <span className="project-meta-key"><LangText es="Equipo" en="Team" /></span>
+              <span><LangText es="Cuatro diseñadores" en="Four designers" /></span>
+            </div>
+          </div>
+        </div>
+
+        <ProjectHeroTitle es="Iconografía" en="Iconography" />
+
+        <div className="project-introrow">
+          <p className="project-intro">
+            <LangText
+              es="Un sistema de iconos para la web corporativa de Iberdrola: una familia coherente en trazo, peso y rejilla, pensada para funcionar igual de bien a tamaño pequeño dentro de una tabla que ampliada en una infografía."
+              en="An icon system for Iberdrola's corporate site: a family consistent in stroke, weight and grid, built to work just as well small inside a table as blown up in an infographic."
+            />
+          </p>
+          <ToolIcons tools={["Figma", "Illustrator"]} />
+        </div>
+
+        <p className="project-tagline">
+          <LangText es="｡ ₊°  Mil ideas — un mismo trazo  °₊ ｡" en="｡ ₊°  A thousand ideas — one single stroke  °₊ ｡" />
+        </p>
+
+        <IconoConstruccion />
+      </div>
+    </main>
+  );
+}
+
 export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const title = titles[id] ?? "Proyecto";
@@ -192,6 +237,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
         <InfografiasLanding />
       ) : id === "i3" ? (
         <NewslettersLanding />
+      ) : id === "i4" ? (
+        <IconografiaLanding />
       ) : (
         <main className="project-soon">
           <BackCapsule category={catFromId(id)} />

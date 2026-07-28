@@ -65,6 +65,15 @@
   gap: 24px;
   padding: 24px;
 }
+/* En tablet los tres botones se quedan estrechos dentro de la caja, así que
+   se recupera espacio bajando el respiro de 24 a 16. */
+@media (max-width: 1024px) {
+  .box-soon {
+    gap: 16px;
+    padding: 16px;
+  }
+}
+
 /* Lienzo del motor de física (cápsulas) */
 .skill-scene { position: absolute; inset: 0; }
 
