@@ -28,7 +28,11 @@ body {
      de donde apunta. Va en body (se hereda) y no en *, para no pisar el
      cursor de manos de enlaces y botones ni el "grab" de la galería.
      La segunda regla añade la versión a 2x en los navegadores que la admiten;
-     los que no, ignoran la línea y se quedan con la anterior. */
-  cursor: url("/ui/cursor.png") 5 2, auto;
-  cursor: image-set(url("/ui/cursor@2x.png") 2x, url("/ui/cursor.png") 1x) 5 2, auto;
+     los que no, ignoran la línea y se quedan con la anterior.
+
+     DESACTIVADO: de momento se usa el cursor del sistema. Para recuperarlo,
+     basta con descomentar las dos líneas de abajo (los PNG siguen en
+     /public/ui/). */
+  /* cursor: url("/ui/cursor.png") 5 2, auto; */
+  /* cursor: image-set(url("/ui/cursor@2x.png") 2x, url("/ui/cursor.png") 1x) 5 2, auto; */
 }

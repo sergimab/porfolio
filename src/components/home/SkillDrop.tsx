@@ -12,8 +12,8 @@ const skills = [
   { id: "branding",   label: "Branding",         labelEn: "Branding",        color: "rgba(219,39,119,0.12)", border: "rgba(219,39,119,0.6)",  hue: 330 },
   { id: "fotografia", label: "Fotografía",        labelEn: "Photography",     color: "rgba(37,99,235,0.12)",  border: "rgba(37,99,235,0.6)",   hue: 217 },
   { id: "iberdrola",  label: "Iberdrola",         labelEn: "Iberdrola",       color: "rgba(22,163,74,0.12)",  border: "rgba(22,163,74,0.6)",   hue: 142 },
-  { id: "uiux",       label: "UI / UX",           labelEn: "UI / UX",         color: "rgba(124,58,237,0.12)", border: "rgba(124,58,237,0.6)",  hue: 262 },
-  { id: "3d",         label: "3D",                labelEn: "3D",              color: "rgba(13,148,136,0.12)", border: "rgba(13,148,136,0.6)",  hue: 175 },
+  { id: "uiux",       label: "UI / UX",           labelEn: "UI / UX",         color: "rgba(13,148,136,0.12)", border: "rgba(13,148,136,0.6)",  hue: 175 },
+  { id: "3d",         label: "3D",                labelEn: "3D",              color: "rgba(124,58,237,0.12)", border: "rgba(124,58,237,0.6)",  hue: 262 },
 ];
 
 // Deterministic pseudo-random 0..1 from a string, so each capsule gets a
@@ -42,7 +42,7 @@ const projects: Record<string, { id: string; title: string; titleEn: string; cov
   fotografia: [{ id:"f1",title:"Proyecto Foto 01",titleEn:"Photo Project 01"},{id:"f2",title:"Proyecto Foto 02",titleEn:"Photo Project 02"},{id:"f3",title:"Proyecto Foto 03",titleEn:"Photo Project 03"}],
   iberdrola:  [{ id:"i2",title:"Sistema de diseño",titleEn:"Design system"},{id:"i5",title:"Sistema de ilustraciones",titleEn:"Illustration system",cover:"/covers/sistema-ilustraciones.svg"},{id:"i1",title:"Infografías",titleEn:"Infographics",cover:"/covers/infografias.svg"},{id:"i3",title:"Newsletters",titleEn:"Newsletters",cover:"/covers/newsletters.png"},{id:"i4",title:"Iconografía",titleEn:"Iconography",cover:"/covers/iberdrola-iconografia.svg"}],
   uiux:       [{ id:"u1",title:"Proyecto UI/UX 01",titleEn:"UI/UX Project 01"},{id:"u2",title:"Proyecto UI/UX 02",titleEn:"UI/UX Project 02"},{id:"u3",title:"Proyecto UI/UX 03",titleEn:"UI/UX Project 03"}],
-  "3d":       [{ id:"d1",title:"Proyecto 3D 01",titleEn:"3D Project 01"},{id:"d2",title:"Proyecto 3D 02",titleEn:"3D Project 02"},{id:"d3",title:"Proyecto 3D 03",titleEn:"3D Project 03"}],
+  "3d":       [{ id:"d1",title:"Elysium",titleEn:"Elysium"},{id:"d2",title:"Proyecto 3D 02",titleEn:"3D Project 02"},{id:"d3",title:"Proyecto 3D 03",titleEn:"3D Project 03"}],
 };
 
 

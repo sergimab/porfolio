@@ -548,6 +548,7 @@ const PixelBlast = ({
       let raf = 0;
       let lastFrame = 0;
       const minDelta = maxFps > 0 ? 1000 / maxFps : 0;
+      let lastTint: string | null | undefined;
       const animate = (now?: number) => {
         raf = requestAnimationFrame(animate);
         if (autoPauseOffscreen && !visibilityRef.current.visible) return;
@@ -561,6 +562,13 @@ const PixelBlast = ({
         if (tintSelector) {
           const el = document.querySelector(tintSelector);
           if (el) {
+            // Cada zona puede pedir su propio color con data-tint-color (el de
+            // su categoría); si no lo trae, se queda el color por defecto.
+            const own = el.getAttribute("data-tint-color");
+            if (own !== lastTint) {
+              lastTint = own;
+              uniforms.uTintColor.value.set(own || tintColor || color);
+            }
             const r = el.getBoundingClientRect();
             const pr = renderer.getPixelRatio();
             const vh = window.innerHeight;

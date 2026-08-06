@@ -8,8 +8,8 @@ const CATS: Record<string, { label: string; hue: number }> = {
   branding:   { label: "Branding",        hue: 330 },
   fotografia: { label: "Fotografía",      hue: 217 },
   iberdrola:  { label: "Iberdrola",       hue: 142 },
-  uiux:       { label: "UI / UX",         hue: 262 },
-  "3d":       { label: "3D",              hue: 175 },
+  uiux:       { label: "UI / UX",         hue: 175 },
+  "3d":       { label: "3D",              hue: 262 },
 };
 
 export default function BackCapsule({ category }: { category: string }) {

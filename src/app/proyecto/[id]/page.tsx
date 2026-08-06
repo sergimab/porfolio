@@ -33,7 +33,7 @@ const titles: Record<string, string> = {
   f1: "Proyecto Foto 01", f2: "Proyecto Foto 02", f3: "Proyecto Foto 03",
   i1: "Infografías", i2: "Sistema de diseño", i3: "Newsletters", i4: "Iconografía", i5: "Sistema de ilustraciones",
   u1: "Proyecto UI/UX 01", u2: "Proyecto UI/UX 02", u3: "Proyecto UI/UX 03",
-  d1: "Proyecto 3D 01", d2: "Proyecto 3D 02", d3: "Proyecto 3D 03",
+  d1: "Elysium", d2: "Proyecto 3D 02", d3: "Proyecto 3D 03",
 };
 
 // Infografías: módulos HTML interactivos de la web corporativa de Iberdrola.
@@ -245,6 +245,68 @@ function IconografiaLanding() {
   );
 }
 
+// Elysium: proyecto 3D. De momento solo la cabecera; el contenido llegará después.
+function ElysiumLanding() {
+  return (
+    <main className="project-main">
+      {/* --hero-hue en el contenedor: lo heredan el cuadro de cabecera y las
+          cajas de medios, para que todo vaya del color de la categoría. */}
+      <div className="project-content-wrap" style={{ ["--hero-hue" as string]: 262 }}>
+        <div
+          className="hover-trail-target project-hero-box"
+          data-trail-hue="262"
+          data-tint-color="#5D21C4"
+        >
+          <span className="project-back">
+            <BackCapsule category="3d" />
+          </span>
+
+          <div className="project-meta">
+            <div className="project-meta-row">
+              <span className="project-meta-key"><LangText es="Tipo" en="Type" /></span>
+              <span><LangText es="TFG" en="Final degree project" /></span>
+            </div>
+            <div className="project-meta-row">
+              <span className="project-meta-key"><LangText es="Rol" en="Role" /></span>
+              <span><LangText es="Dirección de arte y 3D" en="Art direction and 3D" /></span>
+            </div>
+          </div>
+        </div>
+
+        <ProjectHeroTitle es="Elysium" en="Elysium" />
+
+        <div className="project-introrow">
+          <p className="project-intro">
+            <LangText
+              es="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+              en="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            />
+          </p>
+          <ToolIcons tools={["Blender", "After Effects", "Photoshop", "Illustrator", "Figma"]} />
+        </div>
+
+        <p className="project-tagline">
+          <LangText es="｡ ₊°  Texto provisional — pendiente de escribir  °₊ ｡" en="｡ ₊°  Placeholder copy — still to be written  °₊ ｡" />
+        </p>
+
+        {/* Animación del logo: franja a todo el ancho. El 16:9 original se
+            recorta a 350px de alto (el logo va centrado, así que no se pierde). */}
+        <div className="project-media" style={{ ["--media-h" as string]: "350px" }}>
+          {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+          <video
+            src="/proyectos/elysium/logo.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+          />
+        </div>
+      </div>
+    </main>
+  );
+}
+
 export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const title = titles[id] ?? "Proyecto";
@@ -261,6 +323,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
         <NewslettersLanding />
       ) : id === "i4" ? (
         <IconografiaLanding />
+      ) : id === "d1" ? (
+        <ElysiumLanding />
       ) : (
         <main className="project-soon">
           <BackCapsule category={catFromId(id)} />

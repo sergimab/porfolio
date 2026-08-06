@@ -41,7 +41,9 @@
   height: 220px;
   margin-top: -24px;
   border-radius: 0 0 16px 16px;
-  border: 1.5px solid rgba(22, 163, 74, 0.6);
+  /* El tono lo fija cada proyecto con --hero-hue (por defecto, el verde de
+     Iberdrola). Así el cuadro combina con el color de su categoría. */
+  border: 1.5px solid hsl(var(--hero-hue, 142) 76% 36% / 0.6);
   border-top: none;
   display: flex;
   align-items: flex-end;
@@ -206,5 +208,39 @@
 @media (max-width: 768px) {
   .style-columns {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Bloque de medio a ancho completo dentro de una página de proyecto: caja con
+   esquinas redondeadas y borde en el color de texto (negro en claro, claro en
+   oscuro). La altura se fija con --media-h para poder recortar un 16:9 en una
+   franja ancha; el medio se centra con object-fit: cover. */
+.project-media {
+  margin-top: 32px;
+  width: 100%;
+  border: 1px solid var(--foreground);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--background);
+  line-height: 0;
+}
+.project-media > video,
+.project-media > img {
+  width: 100%;
+  display: block;
+  height: var(--media-h, auto);
+  object-fit: cover;
+  object-position: center;
+  /* Zoom mínimo: se come el píxel de los bordes del vídeo, que si no asoma
+     como una línea clara a los lados al redondear la caja. */
+  transform: scale(1.02);
+  transform-origin: center;
+}
+/* En pantallas estrechas una franja de 350px se come casi toda la imagen:
+   se deja algo más baja y proporcional. */
+@media (max-width: 700px) {
+  .project-media > video,
+  .project-media > img {
+    height: var(--media-h-sm, 220px);
   }
 }
