@@ -3,23 +3,19 @@
    el modo "negro"; en "cromo" y "violeta" el color lo pone un degradado. */
 .lienzo-fluido {
   --tinta: #0b0b0b;
-  --papel: #ffffff;
+  --papel: #f4f2ed;
+  --punto: rgba(28, 26, 22, 0.28);
+  --radio: 16px;
   margin-top: 48px;
 }
 /* En oscuro se invierte, para que el bloque no deslumbre en medio de la
    página. El planteamiento (tinta sobre papel liso) es el mismo. */
 [data-theme="dark"] .lienzo-fluido {
   --tinta: #f2eee2;
-  --papel: #14120e;
+  --papel: #100f0c;
+  --punto: rgba(242, 238, 226, 0.24);
 }
-/* Con acabado de cromo el papel se oscurece un poco en claro: el metal
-   necesita algo de contorno para leerse, sobre blanco puro se deslavaza. */
-.es-cromo .lienzo-marco {
-  background: #f3f2ee;
-}
-[data-theme="dark"] .es-cromo .lienzo-marco {
-  background: #100f0c;
-}
+
 
 /* El SVG solo aporta la definición de los filtros; no ocupa sitio. */
 .lienzo-defs {
@@ -32,9 +28,14 @@
   position: relative;
   width: 100%;
   height: min(70vh, 560px);
-  border-radius: 16px;
+  border-radius: var(--radio);
   overflow: hidden;
-  background: var(--papel);
+  /* Papel de puntos, el de las libretas de bocetos: una retícula de puntos
+     repetida con background-size, sin un solo elemento en el DOM. */
+  background-color: var(--papel);
+  background-image: radial-gradient(circle, var(--punto) 1.1px, transparent 1.2px);
+  background-size: 22px 22px;
+  background-position: center center;
   /* Borde en el color de texto: oscuro sobre tema claro y claro sobre tema
      oscuro, así el lienzo siempre queda delimitado. */
   border: 1px solid var(--foreground);
@@ -64,8 +65,9 @@
   cursor: crosshair;
 }
 
-/* Indicación centrada. No intercepta el puntero: se dibuja "a través" de
-   ella, y se desvanece en cuanto empieza el primer trazo. */
+/* Indicación centrada, dentro de una cápsula con el color del papel: sobre
+   la retícula de puntos, el texto suelto se leería mal. No intercepta el
+   puntero (se dibuja "a través" de ella) y se desvanece al primer trazo. */
 .lienzo-pista {
   position: absolute;
   top: 50%;
@@ -73,39 +75,41 @@
   transform: translate(-50%, -50%);
   margin: 0;
   pointer-events: none;
-  font-size: clamp(22px, 4vw, 34px);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: 14px;
   color: var(--foreground);
-  opacity: 0.35;
+  background: var(--papel);
+  /* Más aire a los lados que arriba y abajo. */
+  padding: 8px 22px;
+  border-radius: 999px;
   transition: opacity 0.5s ease;
 }
 .lienzo-pista.se-va {
   opacity: 0;
 }
 
-/* Botón tipográfico dentro del lienzo, arriba a la derecha. */
+/* Borrar: caja pegada a la esquina superior derecha. Solo se redondea la
+   esquina que queda hacia dentro del lienzo; las otras tres coinciden con el
+   marco, así que van rectas. */
 .lienzo-reset {
   position: absolute;
-  top: 14px;
-  right: 16px;
-  background: none;
+  top: 0;
+  right: 0;
+  background: var(--papel);
   border: none;
-  padding: 4px 2px;
+  border-left: 1px solid var(--foreground);
+  border-bottom: 1px solid var(--foreground);
+  border-radius: 0 0 0 var(--radio);
+  padding: 10px 16px;
   font: inherit;
-  font-size: 12px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-size: 14px;
   color: var(--foreground);
-  opacity: 0.55;
   cursor: pointer;
-  border-bottom: 1px solid transparent;
-  transition: opacity 0.2s, border-color 0.2s;
+  transition: background 0.2s, color 0.2s;
 }
 .lienzo-reset:hover,
 .lienzo-reset:focus-visible {
-  opacity: 1;
-  border-bottom-color: currentColor;
+  background: var(--foreground);
+  color: var(--papel);
 }
 
 @media (max-width: 700px) {
@@ -126,11 +130,12 @@
   width: 100%;
   height: 100%;
 }
-/* El metal necesita un fondo con algo de cuerpo: sobre blanco puro los
-   reflejos claros desaparecen. */
-.es-metal .lienzo-marco {
-  background: #ece9e3;
+/* El metal necesita un papel con algo de cuerpo: sobre blanco puro los
+   reflejos claros desaparecen. Se cambia la variable, no el fondo: con el
+   atajo "background" se borraba la retícula de puntos. */
+.es-metal {
+  --papel: #ece9e3;
 }
-[data-theme="dark"] .es-metal .lienzo-marco {
-  background: #0e0d0b;
+[data-theme="dark"] .es-metal {
+  --papel: #0e0d0b;
 }

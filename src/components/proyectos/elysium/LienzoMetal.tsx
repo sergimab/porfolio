@@ -136,8 +136,10 @@ function pulirGrosor(puntos: Punto[], ventana: number): Punto[] {
 // importa: con un porcentaje, la punta crece con el trazo y, mientras dibujas,
 // el extremo que está bajo el cursor tiene grosor cero — parece que la línea
 // se queda atrás. Con una longitud fija, la punta mide siempre lo mismo.
-function factorPunta(distanciaAlExtremo: number, radio: number): number {
-  const largo = Math.max(8, radio * LARGO_PUNTA);
+function factorPunta(distanciaAlExtremo: number, radio: number, largoTotal: number): number {
+  // La punta nunca ocupa más de un tercio del trazo: si no, en una línea
+  // corta las dos puntas se juntan y la línea desaparece.
+  const largo = Math.min(Math.max(8, radio * LARGO_PUNTA), largoTotal / 3);
   const t = Math.min(1, distanciaAlExtremo / largo);
   // El exponente va por encima de 1: así el grosor se desploma cerca del
   // extremo y la punta sale como una aguja. Por debajo de 1 haría lo
@@ -396,8 +398,8 @@ export default function LienzoMetal() {
       const radioEn = (i: number, extra = 0) => {
         const p = puntos[i];
         const s = largos[i] + extra;
-        const inicio = factorPunta(s, p.r);
-        const fin = enCurso ? 1 : factorPunta(total - s, p.r);
+        const inicio = factorPunta(s, p.r, total);
+        const fin = enCurso ? 1 : factorPunta(total - s, p.r, total);
         return Math.max(PUNTA_MIN, p.r * Math.min(inicio, fin));
       };
 
