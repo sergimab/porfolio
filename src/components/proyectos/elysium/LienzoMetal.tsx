@@ -39,7 +39,9 @@ const SUAVIZADO = 0.22;
 const AFILADO = 2.6;        // >1 afila; a más valor, la punta adelgaza antes
 const PUNTA_MIN = 0.35;
 const LARGO_PUNTA = 9;      // longitud de cada punta, en múltiplos del radio
-const SUAVIZAR_PASADAS = 2; // pasadas de suavizado del recorrido
+const SUAVIZAR_PASADAS = 3; // pasadas de suavizado del recorrido
+const PASO_REMUESTREO = 2;  // separación, en px, al reconstruir la curva
+const VENTANA_GROSOR = 9;   // puntos que se promedian para pulir el grosor
 
 // Plumilla: el trazo se comporta como una pluma de punta ancha inclinada.
 // Al moverse perpendicular al filo deja su grosor máximo y, al moverse en la
@@ -73,6 +75,61 @@ function suavizar(puntos: Punto[], pasadas: number): Punto[] {
     salida = siguiente;
   }
   return salida;
+}
+
+// Reconstruye el recorrido como una curva de Catmull-Rom muestreada a paso
+// constante. El puntero entrega los puntos donde le pilla el reloj —muy
+// juntos si vas lento, muy separados si aceleras—, y esa irregularidad se ve
+// en el metal como facetas. Al remuestrear, la línea queda pareja.
+function remuestrear(puntos: Punto[], paso: number): Punto[] {
+  if (puntos.length < 3) return puntos;
+  const salida: Punto[] = [];
+  const en = (i: number) => puntos[Math.max(0, Math.min(puntos.length - 1, i))];
+
+  for (let i = 0; i < puntos.length - 1; i++) {
+    const p0 = en(i - 1);
+    const p1 = en(i);
+    const p2 = en(i + 1);
+    const p3 = en(i + 2);
+    const tramo = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+    const trozos = Math.max(1, Math.ceil(tramo / paso));
+    for (let k = 0; k < trozos; k++) {
+      const t = k / trozos;
+      const t2 = t * t;
+      const t3 = t2 * t;
+      // Catmull-Rom: la curva pasa por los puntos y usa los vecinos para
+      // decidir con qué inclinación llega a cada uno.
+      const cr = (a: number, b: number, c: number, d: number) =>
+        0.5 * ((2 * b) + (-a + c) * t + (2 * a - 5 * b + 4 * c - d) * t2 + (-a + 3 * b - 3 * c + d) * t3);
+      salida.push({
+        x: cr(p0.x, p1.x, p2.x, p3.x),
+        y: cr(p0.y, p1.y, p2.y, p3.y),
+        r: cr(p0.r, p1.r, p2.r, p3.r),
+      });
+    }
+  }
+  salida.push(puntos[puntos.length - 1]);
+  return salida;
+}
+
+// Media móvil del grosor. El factor de plumilla se calcula tramo a tramo y
+// llega con dientes; promediándolo, el grosor crece y decrece de forma
+// continua en vez de a saltos.
+function pulirGrosor(puntos: Punto[], ventana: number): Punto[] {
+  if (puntos.length < 3) return puntos;
+  const mitad = Math.floor(ventana / 2);
+  return puntos.map((p, i) => {
+    let suma = 0;
+    let n = 0;
+    for (let k = -mitad; k <= mitad; k++) {
+      const q = puntos[i + k];
+      if (q) {
+        suma += q.r;
+        n++;
+      }
+    }
+    return { ...p, r: suma / n };
+  });
 }
 
 // Afilado por longitud recorrida, no por porcentaje del trazo. La diferencia
@@ -268,6 +325,9 @@ export default function LienzoMetal() {
   const lang = useLang();
   const contenedorRef = useRef<HTMLDivElement>(null);
   const maskRef = useRef<HTMLCanvasElement | null>(null);
+  const posoRef = useRef<HTMLCanvasElement | null>(null); // trazos terminados
+  const vivoRef = useRef<HTMLCanvasElement | null>(null); // trazo en curso
+  const dibujadosRef = useRef(0); // puntos del trazo en curso ya pintados
   const trazosRef = useRef<Punto[][]>([]);
   const actualRef = useRef<Punto[] | null>(null);
   const colaRef = useRef<{ x: number; y: number; t: number }[]>([]);
@@ -314,10 +374,15 @@ export default function LienzoMetal() {
   // píxel: sumar saturaría el centro y volveríamos a la meseta plana.
   // `enCurso` indica que el trazo aún se está dibujando: en ese caso no se
   // afila el final, porque ese extremo es el que sigue al cursor.
+  // Devuelve cuántos puntos de la curva ya reconstruida se han dibujado, para
+  // poder continuar desde ahí en el siguiente fotograma.
   const pintarTrazo = useCallback(
-    (ctx: CanvasRenderingContext2D, crudos: Punto[], enCurso = false) => {
-      if (!crudos.length) return;
-      const puntos = suavizar(crudos, SUAVIZAR_PASADAS);
+    (ctx: CanvasRenderingContext2D, crudos: Punto[], enCurso = false, desde = 0) => {
+      if (!crudos.length) return 0;
+      const puntos = pulirGrosor(
+        remuestrear(suavizar(crudos, SUAVIZAR_PASADAS), PASO_REMUESTREO),
+        VENTANA_GROSOR
+      );
       const previo = ctx.globalCompositeOperation;
       ctx.globalCompositeOperation = "lighten";
 
@@ -336,7 +401,7 @@ export default function LienzoMetal() {
         return Math.max(PUNTA_MIN, p.r * Math.min(inicio, fin));
       };
 
-      for (let i = 0; i < puntos.length; i++) {
+      for (let i = Math.max(0, desde); i < puntos.length; i++) {
         const p = puntos[i];
         cupula(ctx, p.x, p.y, radioEn(i));
         // Cúpulas intermedias, para que un movimiento rápido no deje el trazo
@@ -344,7 +409,7 @@ export default function LienzoMetal() {
         const q = puntos[i + 1];
         if (q) {
           const d = Math.hypot(q.x - p.x, q.y - p.y);
-          const pasos = Math.ceil(d / Math.max(1, p.r * 0.12));
+          const pasos = Math.ceil(d / Math.max(0.8, p.r * 0.25));
           for (let k = 1; k < pasos; k++) {
             const t = k / pasos;
             cupula(ctx, p.x + (q.x - p.x) * t, p.y + (q.y - p.y) * t, radioEn(i, d * t));
@@ -352,12 +417,19 @@ export default function LienzoMetal() {
         }
       }
       ctx.globalCompositeOperation = previo;
+      return puntos.length;
     },
     []
   );
 
-  const repintarMapa = useCallback(() => {
+  // El mapa se arma con dos capas: el poso (trazos terminados) y el vivo (el
+  // que se está dibujando). Así el trazo en curso se pinta a trocitos, solo
+  // la parte nueva de cada fotograma, en vez de entero: redibujarlo completo
+  // significaba miles de degradados por fotograma y lo tumbaba a 0,6 fps.
+  const componerMapa = useCallback(() => {
     const mask = maskRef.current;
+    const poso = posoRef.current;
+    const vivo = vivoRef.current;
     const ctx = mask?.getContext("2d");
     if (!mask || !ctx) return;
     ctx.save();
@@ -365,11 +437,32 @@ export default function LienzoMetal() {
     ctx.globalCompositeOperation = "source-over";
     ctx.fillStyle = "#000";
     ctx.fillRect(0, 0, mask.width, mask.height);
+    // "lighten" para quedarse con el máximo de las dos capas, igual que entre
+    // cúpulas: con source-over, el vivo taparía el poso con su fondo negro.
+    ctx.globalCompositeOperation = "lighten";
+    if (poso) ctx.drawImage(poso, 0, 0);
+    if (vivo) ctx.drawImage(vivo, 0, 0);
     ctx.restore();
-    for (const t of trazosRef.current) pintarTrazo(ctx, t);
-    if (actualRef.current) pintarTrazo(ctx, actualRef.current, true);
     sucioRef.current = true;
-  }, [pintarTrazo]);
+  }, []);
+
+  const limpiarCapa = (capa: HTMLCanvasElement | null) => {
+    const ctx = capa?.getContext("2d");
+    if (!capa || !ctx) return;
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, capa.width, capa.height);
+    ctx.restore();
+  };
+
+  const repintarMapa = useCallback(() => {
+    limpiarCapa(posoRef.current);
+    limpiarCapa(vivoRef.current);
+    const ctx = posoRef.current?.getContext("2d");
+    if (ctx) for (const t of trazosRef.current) pintarTrazo(ctx, t);
+    dibujadosRef.current = 0;
+    componerMapa();
+  }, [pintarTrazo, componerMapa]);
 
   // Montaje de WebGL.
   useEffect(() => {
@@ -378,6 +471,8 @@ export default function LienzoMetal() {
 
     const mask = document.createElement("canvas");
     maskRef.current = mask;
+    posoRef.current = document.createElement("canvas");
+    vivoRef.current = document.createElement("canvas");
 
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -432,10 +527,12 @@ export default function LienzoMetal() {
       renderer.setSize(width, height, false);
       renderer.domElement.style.width = "100%";
       renderer.domElement.style.height = "100%";
-      mask.width = Math.round(width * dpr);
-      mask.height = Math.round(height * dpr);
-      const ctx = mask.getContext("2d");
-      ctx?.setTransform(dpr, 0, 0, dpr, 0, 0);
+      for (const capa of [mask, posoRef.current, vivoRef.current]) {
+        if (!capa) continue;
+        capa.width = Math.round(width * dpr);
+        capa.height = Math.round(height * dpr);
+        capa.getContext("2d")?.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
       // El desenfoque se hace a media resolución: es donde se va el coste y
       // el campo resultante es suave, así que no se nota.
       rt1.setSize(Math.round(width * dpr * 0.5), Math.round(height * dpr * 0.5));
@@ -488,7 +585,18 @@ export default function LienzoMetal() {
           ultimoRef.current = p;
         }
         colaRef.current = [];
-        repintarMapa();
+        // Se redibujan unos pocos puntos ya pintados: el suavizado mueve algo
+        // los últimos y, como se compone por máximo, repetirlos no acumula.
+        const ctxVivo = vivoRef.current?.getContext("2d");
+        if (ctxVivo) {
+          dibujadosRef.current = pintarTrazo(
+            ctxVivo,
+            trazo,
+            true,
+            Math.max(0, dibujadosRef.current - 12)
+          );
+        }
+        componerMapa();
       }
 
       if (!sucioRef.current) return;
