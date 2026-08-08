@@ -36,10 +36,17 @@ const GROSOR_MAX = 46;
 const GROSOR_MIN = 18;
 const VELOCIDAD_TOPE = 3.2;
 const SUAVIZADO = 0.22;
-const AFILADO = 2.4;        // curva del afilado en las puntas
-const PUNTA_MIN = 0.8;
-const LARGO_PUNTA = 5.5;    // longitud de cada punta, en múltiplos del radio
+const AFILADO = 2.6;        // >1 afila; a más valor, la punta adelgaza antes
+const PUNTA_MIN = 0.35;
+const LARGO_PUNTA = 9;      // longitud de cada punta, en múltiplos del radio
 const SUAVIZAR_PASADAS = 2; // pasadas de suavizado del recorrido
+
+// Plumilla: el trazo se comporta como una pluma de punta ancha inclinada.
+// Al moverse perpendicular al filo deja su grosor máximo y, al moverse en la
+// dirección del filo, un pelo. Es de donde sale la alternancia de finas y
+// gruesas al cambiar de sentido.
+const PLUMILLA = (-38 * Math.PI) / 180; // inclinación del filo
+const PLUMILLA_MIN = 0.12;              // grosor en la dirección del filo
 const MAX_PUNTOS = 24000;
 
 type Punto = { x: number; y: number; r: number };
@@ -73,9 +80,21 @@ function suavizar(puntos: Punto[], pasadas: number): Punto[] {
 // el extremo que está bajo el cursor tiene grosor cero — parece que la línea
 // se queda atrás. Con una longitud fija, la punta mide siempre lo mismo.
 function factorPunta(distanciaAlExtremo: number, radio: number): number {
-  const largo = Math.max(6, radio * LARGO_PUNTA);
+  const largo = Math.max(8, radio * LARGO_PUNTA);
   const t = Math.min(1, distanciaAlExtremo / largo);
-  return Math.pow(t, 1 / AFILADO);
+  // El exponente va por encima de 1: así el grosor se desploma cerca del
+  // extremo y la punta sale como una aguja. Por debajo de 1 haría lo
+  // contrario, engordar enseguida y quedar roma.
+  return Math.pow(t, AFILADO);
+}
+
+// Grosor según la dirección del movimiento respecto al filo de la plumilla.
+function factorPlumilla(dx: number, dy: number): number {
+  const largo = Math.hypot(dx, dy);
+  if (largo < 0.0001) return 1;
+  const ang = Math.atan2(dy, dx);
+  const s = Math.abs(Math.sin(ang - PLUMILLA));
+  return PLUMILLA_MIN + (1 - PLUMILLA_MIN) * Math.pow(s, 0.7);
 }
 
 // Estudio equirectangular generado por código: un panorama 2:1 donde la
@@ -464,7 +483,8 @@ export default function LienzoMetal() {
             radio = GROSOR_MAX - (GROSOR_MAX - GROSOR_MIN) * v;
           }
           radioRef.current += (radio - radioRef.current) * SUAVIZADO;
-          trazo.push({ x: p.x, y: p.y, r: radioRef.current });
+          const plumilla = previo ? factorPlumilla(p.x - previo.x, p.y - previo.y) : 1;
+          trazo.push({ x: p.x, y: p.y, r: radioRef.current * plumilla });
           ultimoRef.current = p;
         }
         colaRef.current = [];
