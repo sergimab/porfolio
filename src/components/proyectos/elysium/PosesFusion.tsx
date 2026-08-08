@@ -164,7 +164,7 @@ export default function PosesFusion({
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={`/proyectos/elysium/pose-${n}.png`}
+                src={`/proyectos/elysium/pose-${n}.webp`}
                 alt={`Pose ${n} de la figura de Elysium`}
                 loading="lazy"
               />

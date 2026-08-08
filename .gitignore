@@ -8,3 +8,6 @@
 
 # macOS
 .DS_Store
+
+# Archivos originales de los proyectos (no se despliegan)
+originales/

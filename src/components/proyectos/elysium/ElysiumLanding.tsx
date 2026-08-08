@@ -99,7 +99,7 @@ export default function ElysiumLanding() {
           <div className="project-media">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/proyectos/elysium/avatar.gif"
+              src="/proyectos/elysium/avatar.webp"
               alt="Modelo base del avatar de Elysium girando sobre sí mismo"
               loading="lazy"
             />
@@ -108,10 +108,10 @@ export default function ElysiumLanding() {
 
         {/* Las tres poses: entran en fila y se fusionan al verse. */}
         <PosesFusion
-          imagenFinal={siExiste("/proyectos/elysium/figura-final.png")}
-          imagenPareja={siExiste("/proyectos/elysium/portada1-notexture.png")}
-          relevoIzquierda={siExiste("/proyectos/elysium/portada-2.png")}
-          relevoDerecha={siExiste("/proyectos/elysium/portada-1.png")}
+          imagenFinal={siExiste("/proyectos/elysium/figura-final.webp")}
+          imagenPareja={siExiste("/proyectos/elysium/portada1-notexture.webp")}
+          relevoIzquierda={siExiste("/proyectos/elysium/portada-2.webp")}
+          relevoDerecha={siExiste("/proyectos/elysium/portada-1.webp")}
         />
       </div>
     </main>
