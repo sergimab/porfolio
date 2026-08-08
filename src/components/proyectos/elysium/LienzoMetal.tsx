@@ -36,12 +36,106 @@ const GROSOR_MAX = 46;
 const GROSOR_MIN = 18;
 const VELOCIDAD_TOPE = 3.2;
 const SUAVIZADO = 0.22;
-const AFILADO = 2.4;      // >1 afila las puntas
+const AFILADO = 2.4;        // curva del afilado en las puntas
 const PUNTA_MIN = 0.8;
+const LARGO_PUNTA = 5.5;    // longitud de cada punta, en múltiplos del radio
+const SUAVIZAR_PASADAS = 2; // pasadas de suavizado del recorrido
 const MAX_PUNTOS = 24000;
 
 type Punto = { x: number; y: number; r: number };
-const perfil = (t: number) => Math.pow(Math.sin(Math.PI * t), AFILADO);
+
+// Suaviza el recorrido promediando cada punto con sus vecinos. El puntero
+// entrega una poligonal temblorosa; sin esto, el trazo sale con microacodos
+// que el metal delata en forma de reflejos rotos.
+function suavizar(puntos: Punto[], pasadas: number): Punto[] {
+  let salida = puntos;
+  for (let p = 0; p < pasadas; p++) {
+    if (salida.length < 3) return salida;
+    const siguiente: Punto[] = [salida[0]];
+    for (let i = 1; i < salida.length - 1; i++) {
+      const a = salida[i - 1];
+      const b = salida[i];
+      const c = salida[i + 1];
+      siguiente.push({
+        x: (a.x + b.x * 2 + c.x) / 4,
+        y: (a.y + b.y * 2 + c.y) / 4,
+        r: (a.r + b.r * 2 + c.r) / 4,
+      });
+    }
+    siguiente.push(salida[salida.length - 1]);
+    salida = siguiente;
+  }
+  return salida;
+}
+
+// Afilado por longitud recorrida, no por porcentaje del trazo. La diferencia
+// importa: con un porcentaje, la punta crece con el trazo y, mientras dibujas,
+// el extremo que está bajo el cursor tiene grosor cero — parece que la línea
+// se queda atrás. Con una longitud fija, la punta mide siempre lo mismo.
+function factorPunta(distanciaAlExtremo: number, radio: number): number {
+  const largo = Math.max(6, radio * LARGO_PUNTA);
+  const t = Math.min(1, distanciaAlExtremo / largo);
+  return Math.pow(t, 1 / AFILADO);
+}
+
+// Estudio equirectangular generado por código: un panorama 2:1 donde la
+// horizontal es el giro alrededor y la vertical va del cenit al nadir. Lleva
+// lo que tendría un plató real —techo claro, suelo oscuro, softboxes y tiras
+// de luz—, porque son esas formas, y no un degradado, las que al reflejarse
+// dibujan las cintas del cromo.
+function crearEstudio(): HTMLCanvasElement {
+  const c = document.createElement("canvas");
+  c.width = 1024;
+  c.height = 512;
+  const ctx = c.getContext("2d")!;
+
+  // Cielo y suelo.
+  const fondo = ctx.createLinearGradient(0, 0, 0, c.height);
+  fondo.addColorStop(0, "#ffffff");
+  fondo.addColorStop(0.3, "#e6eaf0");
+  fondo.addColorStop(0.46, "#3a3f47");
+  fondo.addColorStop(0.55, "#0d0f13");
+  fondo.addColorStop(1, "#030304");
+  ctx.fillStyle = fondo;
+  ctx.fillRect(0, 0, c.width, c.height);
+
+  // Softboxes: rectángulos muy claros repartidos por el techo y la banda
+  // media. Son la fuente de los reflejos alargados.
+  ctx.filter = "blur(9px)";
+  const cajas: [number, number, number, number, string][] = [
+    [40, 30, 240, 120, "#ffffff"],
+    [360, 10, 180, 90, "#ffffff"],
+    [640, 40, 300, 110, "#f2f6ff"],
+    [120, 170, 150, 60, "#ffffff"],
+    [520, 150, 220, 70, "#eef3ff"],
+    [830, 180, 130, 50, "#ffffff"],
+    [250, 240, 420, 26, "#dfe6f2"],
+    [700, 250, 260, 20, "#cdd6e4"],
+  ];
+  for (const [x, y, w, h, color] of cajas) {
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, w, h);
+  }
+
+  // Tiras verticales: los montantes del plató. Al reflejarse en una
+  // superficie curva se convierten en las cintas que la recorren.
+  ctx.filter = "blur(5px)";
+  for (let i = 0; i < 14; i++) {
+    const x = (i / 14) * c.width + (i % 3) * 12;
+    const ancho = 6 + (i % 4) * 5;
+    ctx.fillStyle = i % 2 ? "rgba(255,255,255,0.95)" : "rgba(4,5,7,0.95)";
+    ctx.fillRect(x, 40, ancho, 330);
+  }
+
+  // Un par de reflejos cálidos, para que el metal no salga muerto de color.
+  ctx.filter = "blur(26px)";
+  ctx.fillStyle = "rgba(255,214,170,0.5)";
+  ctx.fillRect(120, 120, 180, 90);
+  ctx.fillStyle = "rgba(150,190,255,0.45)";
+  ctx.fillRect(760, 90, 200, 110);
+  ctx.filter = "none";
+  return c;
+}
 
 const VERTEX = /* glsl */ `
   varying vec2 vUv;
@@ -80,41 +174,19 @@ const FRAGMENT = /* glsl */ `
   uniform vec2  uRes;
   uniform float uUmbral;      // dónde corta la silueta
   uniform float uRelieve;     // cuánto abomba la superficie
+  uniform sampler2D uEstudio; // panorama equirectangular del plató
 
-  // Entorno de estudio: franjas horizontales claras y oscuras, como los
-  // paneles y las lámparas de un plató reflejados en una pieza cromada.
-  // Es lo que se ve "dentro" del metal y lo que da las cintas.
+  // Muestreo del panorama: la dirección se convierte en coordenadas de la
+  // imagen equirectangular (giro alrededor y ángulo respecto al cenit).
   vec3 entorno(vec3 dir) {
-    float y = dir.y;
-    // Suelo oscuro, horizonte claro, techo con lámparas.
-    // Un cromo convincente necesita zonas MUY oscuras junto a zonas muy
-    // claras: si todo el entorno es medio, la pieza sale lavada y parece
-    // plástico blanco.
-    vec3 suelo = vec3(0.05, 0.05, 0.07);
-    vec3 medio = vec3(0.48, 0.52, 0.58);
-    vec3 techo = vec3(1.0, 1.0, 1.0);
-    vec3 base = mix(suelo, medio, smoothstep(-0.9, -0.05, y));
-    base = mix(base, techo, smoothstep(0.12, 0.55, y));
-
-    // Franjas: paneles del plató. Al variar con el ángulo, cada curva de la
-    // pieza refleja una franja distinta y aparecen las cintas.
-    // Paneles del plató: franjas de luz separadas por huecos oscuros. El
-    // contraste duro entre ambas es lo que dibuja las cintas al reflejarse.
-    float ang = atan(dir.x, dir.z);
-    float franjas = sin(ang * 4.0 + y * 2.0);
-    base = mix(base * 0.55, base + 0.5, smoothstep(0.05, 0.55, franjas));
-    float finas = sin(ang * 11.0 - y * 7.0);
-    base += smoothstep(0.85, 1.0, finas) * 0.5;
-    // Tinte frío arriba y cálido abajo: el metal puro sale muerto sin algo
-    // de temperatura de color.
-    base *= mix(vec3(1.05, 0.98, 0.92), vec3(0.94, 0.98, 1.08), smoothstep(-0.4, 0.5, y));
-
-    // Dos focos duros, que son los que dejan el destello pequeño y brillante.
-    float foco1 = pow(max(dot(normalize(dir), normalize(vec3(-0.4, 0.75, 0.5))), 0.0), 90.0);
-    float foco2 = pow(max(dot(normalize(dir), normalize(vec3(0.65, 0.35, 0.6))), 0.0), 45.0);
-    base += vec3(1.0) * foco1 * 3.0;
-    base += vec3(0.85, 0.9, 1.0) * foco2 * 1.2;
-    return base;
+    vec3 d = normalize(dir);
+    float u = atan(d.z, d.x) / 6.2831853 + 0.5;
+    float v = acos(clamp(d.y, -1.0, 1.0)) / 3.14159265;
+    vec3 col = texture2D(uEstudio, vec2(u, v)).rgb;
+    // El panorama se usa como iluminación, no como imagen: subirle el
+    // contraste separa los reflejos de las sombras y es lo que hace que el
+    // metal parezca pulido en vez de mate.
+    return col * col * 1.35;
   }
 
   // Altura de la superficie en un punto: la rampa del campo, redondeada.
@@ -221,31 +293,49 @@ export default function LienzoMetal() {
   // Dibuja un trazo en el mapa de altura como una sucesión de cúpulas, con el
   // perfil que afila las puntas. "lighten" se queda con el máximo en cada
   // píxel: sumar saturaría el centro y volveríamos a la meseta plana.
-  const pintarTrazo = useCallback((ctx: CanvasRenderingContext2D, puntos: Punto[]) => {
-    if (!puntos.length) return;
-    const previo = ctx.globalCompositeOperation;
-    ctx.globalCompositeOperation = "lighten";
+  // `enCurso` indica que el trazo aún se está dibujando: en ese caso no se
+  // afila el final, porque ese extremo es el que sigue al cursor.
+  const pintarTrazo = useCallback(
+    (ctx: CanvasRenderingContext2D, crudos: Punto[], enCurso = false) => {
+      if (!crudos.length) return;
+      const puntos = suavizar(crudos, SUAVIZAR_PASADAS);
+      const previo = ctx.globalCompositeOperation;
+      ctx.globalCompositeOperation = "lighten";
 
-    const n = Math.max(1, puntos.length - 1);
-    for (let i = 0; i < puntos.length; i++) {
-      const p = puntos[i];
-      const r = Math.max(PUNTA_MIN, p.r * perfil(puntos.length < 3 ? 0.5 : i / n));
-      cupula(ctx, p.x, p.y, r);
-      // Cúpulas intermedias, para que un movimiento rápido no deje el trazo
-      // a trocitos.
-      const q = puntos[i + 1];
-      if (q) {
-        const d = Math.hypot(q.x - p.x, q.y - p.y);
-        const pasos = Math.ceil(d / Math.max(1, r * 0.12));
-        for (let k = 1; k < pasos; k++) {
-          const t = k / pasos;
-          const rr = Math.max(PUNTA_MIN, (p.r + (q.r - p.r) * t) * perfil((i + t) / n));
-          cupula(ctx, p.x + (q.x - p.x) * t, p.y + (q.y - p.y) * t, rr);
+      // Longitud acumulada, para medir las puntas en píxeles reales.
+      const largos: number[] = [0];
+      for (let i = 1; i < puntos.length; i++) {
+        largos.push(largos[i - 1] + Math.hypot(puntos[i].x - puntos[i - 1].x, puntos[i].y - puntos[i - 1].y));
+      }
+      const total = largos[largos.length - 1] || 1;
+
+      const radioEn = (i: number, extra = 0) => {
+        const p = puntos[i];
+        const s = largos[i] + extra;
+        const inicio = factorPunta(s, p.r);
+        const fin = enCurso ? 1 : factorPunta(total - s, p.r);
+        return Math.max(PUNTA_MIN, p.r * Math.min(inicio, fin));
+      };
+
+      for (let i = 0; i < puntos.length; i++) {
+        const p = puntos[i];
+        cupula(ctx, p.x, p.y, radioEn(i));
+        // Cúpulas intermedias, para que un movimiento rápido no deje el trazo
+        // a trocitos.
+        const q = puntos[i + 1];
+        if (q) {
+          const d = Math.hypot(q.x - p.x, q.y - p.y);
+          const pasos = Math.ceil(d / Math.max(1, p.r * 0.12));
+          for (let k = 1; k < pasos; k++) {
+            const t = k / pasos;
+            cupula(ctx, p.x + (q.x - p.x) * t, p.y + (q.y - p.y) * t, radioEn(i, d * t));
+          }
         }
       }
-    }
-    ctx.globalCompositeOperation = previo;
-  }, []);
+      ctx.globalCompositeOperation = previo;
+    },
+    []
+  );
 
   const repintarMapa = useCallback(() => {
     const mask = maskRef.current;
@@ -258,7 +348,7 @@ export default function LienzoMetal() {
     ctx.fillRect(0, 0, mask.width, mask.height);
     ctx.restore();
     for (const t of trazosRef.current) pintarTrazo(ctx, t);
-    if (actualRef.current) pintarTrazo(ctx, actualRef.current);
+    if (actualRef.current) pintarTrazo(ctx, actualRef.current, true);
     sucioRef.current = true;
   }, [pintarTrazo]);
 
@@ -281,6 +371,13 @@ export default function LienzoMetal() {
     textura.minFilter = THREE.LinearFilter;
     textura.magFilter = THREE.LinearFilter;
 
+    const estudio = new THREE.CanvasTexture(crearEstudio());
+    estudio.minFilter = THREE.LinearFilter;
+    estudio.magFilter = THREE.LinearFilter;
+    // El panorama da la vuelta completa: la costura tiene que repetirse.
+    estudio.wrapS = THREE.RepeatWrapping;
+    estudio.wrapT = THREE.ClampToEdgeWrapping;
+
     const opciones = { depthBuffer: false, stencilBuffer: false };
     const rt1 = new THREE.WebGLRenderTarget(1, 1, opciones);
     const rt2 = new THREE.WebGLRenderTarget(1, 1, opciones);
@@ -296,9 +393,10 @@ export default function LienzoMetal() {
       fragmentShader: FRAGMENT,
       uniforms: {
         uCampo: { value: null },
+        uEstudio: { value: null },
         uRes: { value: new THREE.Vector2() },
         uUmbral: { value: 0.3 },
-        uRelieve: { value: 7.0 },
+        uRelieve: { value: 13.0 },
       },
       transparent: true,
     });
@@ -306,6 +404,7 @@ export default function LienzoMetal() {
     const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), matBlur);
     escena.add(quad);
 
+    matFinal.uniforms.uEstudio.value = estudio;
     tresRef.current = { renderer, escena, camara, textura, rt1, rt2, matBlur, matFinal, quad };
 
     const medir = () => {
@@ -335,6 +434,7 @@ export default function LienzoMetal() {
       rt1.dispose();
       rt2.dispose();
       textura.dispose();
+      estudio.dispose();
       quad.geometry.dispose();
       matBlur.dispose();
       matFinal.dispose();
