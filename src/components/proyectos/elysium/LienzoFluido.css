@@ -1,52 +1,27 @@
-/* Lienzo de dibujo fluido. Tinta y papel salen de variables para poder
-   cambiar de color (o de tema) sin tocar el JS: el componente lee --tinta
-   para pintar. Por defecto, negro sobre blanco. */
+/* Lienzo de dibujo. Tinta y papel salen de variables para poder cambiar de
+   color (o de tema) sin tocar el JS: el componente lee --tinta para pintar en
+   el modo "negro"; en "cromo" y "violeta" el color lo pone un degradado. */
 .lienzo-fluido {
   --tinta: #0b0b0b;
   --papel: #ffffff;
   margin-top: 48px;
 }
 /* En oscuro se invierte, para que el bloque no deslumbre en medio de la
-   página. El planteamiento (tinta sólida sobre papel liso) es el mismo. */
+   página. El planteamiento (tinta sobre papel liso) es el mismo. */
 [data-theme="dark"] .lienzo-fluido {
   --tinta: #f2eee2;
   --papel: #14120e;
 }
-
-.lienzo-cabecera {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 12px;
+/* Con acabado de cromo el papel se oscurece un poco en claro: el metal
+   necesita algo de contorno para leerse, sobre blanco puro se deslavaza. */
+.es-cromo .lienzo-marco {
+  background: #f3f2ee;
 }
-.lienzo-pista {
-  font-size: 13px;
-  color: var(--muted);
-  letter-spacing: 0.02em;
-}
-/* Botón tipográfico, sin caja ni icono: solo la palabra y un subrayado que
-   aparece al pasar por encima. */
-.lienzo-reset {
-  background: none;
-  border: none;
-  padding: 0;
-  font: inherit;
-  font-size: 13px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--muted);
-  cursor: pointer;
-  border-bottom: 1px solid transparent;
-  transition: color 0.2s, border-color 0.2s;
-}
-.lienzo-reset:hover,
-.lienzo-reset:focus-visible {
-  color: var(--foreground);
-  border-bottom-color: var(--foreground);
+[data-theme="dark"] .es-cromo .lienzo-marco {
+  background: #100f0c;
 }
 
-/* El SVG solo aporta la definición del filtro; no ocupa sitio. */
+/* El SVG solo aporta la definición de los filtros; no ocupa sitio. */
 .lienzo-defs {
   position: absolute;
   width: 0;
@@ -60,7 +35,11 @@
   border-radius: 16px;
   overflow: hidden;
   background: var(--papel);
+  /* Borde en el color de texto: oscuro sobre tema claro y claro sobre tema
+     oscuro, así el lienzo siempre queda delimitado. */
+  border: 1px solid var(--foreground);
 }
+
 /* El papel va en el marco y el filtro en esta capa interior, que es
    transparente. Es imprescindible: el efecto gooey funciona recortando el
    canal alfa, así que si la capa filtrada llevara un fondo opaco no habría
@@ -70,6 +49,11 @@
   inset: 0;
   filter: url(#lienzo-goo);
 }
+/* Acabado de cristal: la misma fusión, más relieve, reflejos y aberración. */
+.es-cristal .lienzo-tinta {
+  filter: url(#lienzo-cristal);
+}
+
 .lienzo-canvas {
   display: block;
   width: 100%;
@@ -78,6 +62,50 @@
      de dibujar. */
   touch-action: none;
   cursor: crosshair;
+}
+
+/* Indicación centrada. No intercepta el puntero: se dibuja "a través" de
+   ella, y se desvanece en cuanto empieza el primer trazo. */
+.lienzo-pista {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  pointer-events: none;
+  font-size: clamp(22px, 4vw, 34px);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--foreground);
+  opacity: 0.35;
+  transition: opacity 0.5s ease;
+}
+.lienzo-pista.se-va {
+  opacity: 0;
+}
+
+/* Botón tipográfico dentro del lienzo, arriba a la derecha. */
+.lienzo-reset {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: none;
+  border: none;
+  padding: 4px 2px;
+  font: inherit;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--foreground);
+  opacity: 0.55;
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  transition: opacity 0.2s, border-color 0.2s;
+}
+.lienzo-reset:hover,
+.lienzo-reset:focus-visible {
+  opacity: 1;
+  border-bottom-color: currentColor;
 }
 
 @media (max-width: 700px) {
