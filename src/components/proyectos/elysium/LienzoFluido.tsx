@@ -27,8 +27,8 @@ const GROSOR_MAX = 34;      // radio en el vientre del trazo, con el puntero len
 const GROSOR_MIN = 12;      // radio en el vientre, a toda velocidad
 const VELOCIDAD_TOPE = 3.2; // px/ms a partir de los cuales el trazo es mínimo
 const SUAVIZADO = 0.22;     // cuánto tarda el grosor en reaccionar (0-1)
-const AFILADO = 1.6;        // >1 afila las puntas; 1 sería un huso suave
-const PUNTA_MIN = 2.2;      // radio mínimo en la punta, en px
+const AFILADO = 2.4;        // >1 afila las puntas; a más valor, más espina
+const PUNTA_MIN = 0.8;      // radio mínimo en la punta, en px
 const MAX_PUNTOS = 24000;   // tope de memoria: se olvidan los trazos más viejos
 
 type Punto = { x: number; y: number; r: number };
@@ -65,14 +65,15 @@ export default function LienzoFluido() {
     }
     // Cromo: bandas claras y oscuras alternas. Un degradado suave parecería
     // plástico; lo que lee como metal es el salto brusco entre bandas.
-    g.addColorStop(0, "#f6f7f9");
-    g.addColorStop(0.18, "#9fa6ae");
-    g.addColorStop(0.32, "#ffffff");
-    g.addColorStop(0.46, "#585f68");
-    g.addColorStop(0.6, "#e8ebef");
-    g.addColorStop(0.76, "#767d86");
-    g.addColorStop(0.9, "#f2f4f7");
-    g.addColorStop(1, "#4b525a");
+    // Muchas bandas estrechas y contrastadas: son las que el filtro,
+    // al deformarlas, convierte en las cintas que recorren el metal. Con
+    // pocas bandas el resultado parece un degradado, no un reflejo.
+    const bandas = [
+      "#ffffff", "#8f98a3", "#f4f6f8", "#3f464e", "#dfe4ea", "#6d7681",
+      "#ffffff", "#4a525b", "#c9d1d9", "#93b7c9", "#ffffff", "#5b636d",
+      "#e7ebef", "#39404a", "#fbfcfd",
+    ];
+    bandas.forEach((c, i) => g.addColorStop(i / (bandas.length - 1), c));
     return g;
   }, []);
 
@@ -92,6 +93,10 @@ export default function LienzoFluido() {
         ctx.fill();
         return;
       }
+      // Cada tramo se traza como una curva que pasa por los puntos medios,
+      // usando el punto real como tirador. Con segmentos rectos la silueta
+      // salía quebrada; así las curvas quedan limpias, que es lo que hace que
+      // las puntas parezcan cuernos y no picos de sierra.
       const n = puntos.length - 1;
       for (let i = 1; i <= n; i++) {
         const a = puntos[i - 1];
@@ -100,8 +105,10 @@ export default function LienzoFluido() {
         const rb = Math.max(PUNTA_MIN, b.r * perfil(i / n));
         ctx.lineWidth = ra + rb;
         ctx.beginPath();
-        ctx.moveTo(a.x, a.y);
-        ctx.lineTo(b.x, b.y);
+        if (i === 1) ctx.moveTo(a.x, a.y);
+        else ctx.moveTo((puntos[i - 2].x + a.x) / 2, (puntos[i - 2].y + a.y) / 2);
+        ctx.quadraticCurveTo(a.x, a.y, (a.x + b.x) / 2, (a.y + b.y) / 2);
+        if (i === n) ctx.lineTo(b.x, b.y);
         ctx.stroke();
       }
     },
@@ -281,6 +288,30 @@ export default function LienzoFluido() {
                 bordes, que es lo que la luz puede iluminar. */}
             <feGaussianBlur in="masa" stdDeviation="4" result="relieve" />
 
+            {/* Falsa refracción: un ruido fractal desplaza los píxeles de la
+                masa, retorciendo las bandas del degradado en cintas. Es lo
+                más parecido a un reflejo de entorno que puede hacerse sin 3D:
+                no refleja nada real, pero rompe el degradado igual que lo
+                haría una superficie curva. */}
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.006 0.013"
+              numOctaves="3"
+              seed="9"
+              result="ruido"
+            />
+            <feDisplacementMap
+              in="masa"
+              in2="ruido"
+              scale="34"
+              xChannelSelector="R"
+              yChannelSelector="G"
+              result="refractado"
+            />
+            {/* La deformación se recorta contra la silueta original: las
+                cintas se mueven por dentro, pero el contorno no baila. */}
+            <feComposite in="refractado" in2="masa" operator="in" result="interior" />
+
             {/* Reflejo duro y pequeño: es lo que distingue el metal pulido del
                 plástico, que tiene el brillo ancho y blando. */}
             <feSpecularLighting
@@ -362,6 +393,7 @@ export default function LienzoFluido() {
             <feMerge>
               <feMergeNode in="flecos" />
               <feMergeNode in="masa" />
+              <feMergeNode in="interior" />
               <feMergeNode in="cantoDentro" />
               <feMergeNode in="destelloDentro" />
             </feMerge>
