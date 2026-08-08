@@ -5,6 +5,7 @@ import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
 import LangText from "@/components/shared/LangText";
 import ToolIcons from "@/components/shared/ToolIcons";
 import PosesFusion from "./PosesFusion";
+import LienzoFluido from "./LienzoFluido";
 
 // La figura final es opcional: mientras el archivo no esté en su sitio, las
 // poses se quedan fusionadas y no se intenta pintar una imagen que no existe.
@@ -113,6 +114,10 @@ export default function ElysiumLanding() {
           relevoIzquierda={siExiste("/proyectos/elysium/portada-2.webp")}
           relevoDerecha={siExiste("/proyectos/elysium/portada-1.webp")}
         />
+
+        {/* Lienzo interactivo: trazos que se funden como metaballs, guiño al
+            sistema de Geometry Nodes con el que se construyó la figura. */}
+        <LienzoFluido />
       </div>
     </main>
   );

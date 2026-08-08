@@ -1,0 +1,87 @@
+/* Lienzo de dibujo fluido. Tinta y papel salen de variables para poder
+   cambiar de color (o de tema) sin tocar el JS: el componente lee --tinta
+   para pintar. Por defecto, negro sobre blanco. */
+.lienzo-fluido {
+  --tinta: #0b0b0b;
+  --papel: #ffffff;
+  margin-top: 48px;
+}
+/* En oscuro se invierte, para que el bloque no deslumbre en medio de la
+   página. El planteamiento (tinta sólida sobre papel liso) es el mismo. */
+[data-theme="dark"] .lienzo-fluido {
+  --tinta: #f2eee2;
+  --papel: #14120e;
+}
+
+.lienzo-cabecera {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+.lienzo-pista {
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}
+/* Botón tipográfico, sin caja ni icono: solo la palabra y un subrayado que
+   aparece al pasar por encima. */
+.lienzo-reset {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+.lienzo-reset:hover,
+.lienzo-reset:focus-visible {
+  color: var(--foreground);
+  border-bottom-color: var(--foreground);
+}
+
+/* El SVG solo aporta la definición del filtro; no ocupa sitio. */
+.lienzo-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.lienzo-marco {
+  position: relative;
+  width: 100%;
+  height: min(70vh, 560px);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--papel);
+}
+/* El papel va en el marco y el filtro en esta capa interior, que es
+   transparente. Es imprescindible: el efecto gooey funciona recortando el
+   canal alfa, así que si la capa filtrada llevara un fondo opaco no habría
+   nada que recortar y las formas no se fundirían. */
+.lienzo-tinta {
+  position: absolute;
+  inset: 0;
+  filter: url(#lienzo-goo);
+}
+.lienzo-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* Sin esto, arrastrar el dedo en móvil haría scroll de la página en vez
+     de dibujar. */
+  touch-action: none;
+  cursor: crosshair;
+}
+
+@media (max-width: 700px) {
+  .lienzo-marco {
+    height: min(60vh, 420px);
+  }
+}
