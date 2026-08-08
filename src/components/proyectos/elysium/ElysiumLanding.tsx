@@ -5,7 +5,7 @@ import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
 import LangText from "@/components/shared/LangText";
 import ToolIcons from "@/components/shared/ToolIcons";
 import PosesFusion from "./PosesFusion";
-import LienzoFluido from "./LienzoFluido";
+import LienzoMetal from "./LienzoMetal";
 
 // La figura final es opcional: mientras el archivo no esté en su sitio, las
 // poses se quedan fusionadas y no se intenta pintar una imagen que no existe.
@@ -117,7 +117,7 @@ export default function ElysiumLanding() {
 
         {/* Lienzo interactivo: trazos que se funden como metaballs, guiño al
             sistema de Geometry Nodes con el que se construyó la figura. */}
-        <LienzoFluido />
+        <LienzoMetal />
       </div>
     </main>
   );

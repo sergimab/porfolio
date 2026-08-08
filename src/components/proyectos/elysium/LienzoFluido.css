@@ -113,3 +113,24 @@
     height: min(60vh, 420px);
   }
 }
+
+/* Versión WebGL: aquí no hay filtro SVG que valga — la fusión y el material
+   los calcula el shader. El contenedor recibe los eventos de puntero. */
+.lienzo-gl {
+  filter: none;
+  touch-action: none;
+  cursor: crosshair;
+}
+.lienzo-gl canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+/* El metal necesita un fondo con algo de cuerpo: sobre blanco puro los
+   reflejos claros desaparecen. */
+.es-metal .lienzo-marco {
+  background: #ece9e3;
+}
+[data-theme="dark"] .es-metal .lienzo-marco {
+  background: #0e0d0b;
+}
