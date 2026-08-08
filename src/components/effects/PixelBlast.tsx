@@ -548,7 +548,6 @@ const PixelBlast = ({
       let raf = 0;
       let lastFrame = 0;
       const minDelta = maxFps > 0 ? 1000 / maxFps : 0;
-      let lastTint: string | null | undefined;
       const animate = (now?: number) => {
         raf = requestAnimationFrame(animate);
         if (autoPauseOffscreen && !visibilityRef.current.visible) return;
@@ -565,9 +564,13 @@ const PixelBlast = ({
             // Cada zona puede pedir su propio color con data-tint-color (el de
             // su categoría); si no lo trae, se queda el color por defecto.
             const own = el.getAttribute("data-tint-color");
-            if (own !== lastTint) {
-              lastTint = own;
-              uniforms.uTintColor.value.set(own || tintColor || color);
+            // Se compara con el color que tiene puesto el uniform, no con el
+            // último que aplicamos: al cambiar de tema se recrean los uniforms
+            // con el color por defecto, y una caché propia no se enteraba (la
+            // caja se quedaba verde en oscuro).
+            const deseado = own || tintColor || color;
+            if (deseado && uniforms.uTintColor.value.getHexString() !== deseado.replace("#", "").toLowerCase()) {
+              uniforms.uTintColor.value.set(deseado);
             }
             const r = el.getBoundingClientRect();
             const pr = renderer.getPixelRatio();
