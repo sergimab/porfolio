@@ -1,0 +1,65 @@
+/* Secuencia de la figura, gobernada por el scroll.
+
+   La "pista" es un tramo alto de página; dentro, el bloque se queda pegado
+   (sticky) ocupando la ventana mientras se recorre. El progreso del recorrido
+   es lo que mueve la animación, así que al subir se deshace sola.
+
+   Nada lleva transición: las posiciones y opacidades las fija el componente en
+   cada fotograma, y una transición encima solo añadiría retardo respecto al
+   dedo o la rueda del ratón. */
+.poses-pista {
+  position: relative;
+  margin-top: 32px;
+}
+.poses-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  /* Recorta lo que se sale al ampliar las poses. Sin esto, la figura ampliada
+     desbordaba el bloque y alargaba la página con un hueco al final. */
+  overflow: clip;
+}
+
+.poses-fusion {
+  position: relative;
+  width: 100%;
+}
+
+.poses-fusion-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: left top;
+  will-change: transform, opacity;
+}
+.poses-fusion-item img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+/* Las dos piezas finales: la figura acabada y su pareja. Aparecen quietas,
+   fundiéndose, mientras las poses se acercan hasta su mismo encuadre. */
+.poses-fusion-final,
+.poses-fusion-pareja {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+.poses-fusion-final img,
+.poses-fusion-pareja img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+/* Cada pieza lleva encima su portada, que se funde sobre ella sin moverse. */
+.poses-fusion-relevo {
+  position: absolute;
+  inset: 0;
+}

@@ -236,11 +236,78 @@
   transform: scale(1.02);
   transform-origin: center;
 }
-/* En pantallas estrechas una franja de 350px se come casi toda la imagen:
-   se deja algo más baja y proporcional. */
+/* En móvil una franja apaisada deja la pieza diminuta: se pasa a cuadrado
+   (1:1) y se recorta por los lados, que es donde sobra fondo. */
 @media (max-width: 700px) {
   .project-media > video,
   .project-media > img {
-    height: var(--media-h-sm, 220px);
+    height: auto;
+    aspect-ratio: 1 / 1;
+  }
+}
+
+/* Bloque de texto largo a todo el ancho, bajo un medio. Fondo opaco (como
+   .project-intro) para que el efecto de píxeles no pase por detrás y el texto
+   se lea limpio. */
+.project-text {
+  margin-top: 32px;
+  background: var(--background);
+  border-radius: 12px;
+  padding: 20px 24px;
+  box-sizing: border-box;
+}
+.project-text p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--foreground);
+}
+.project-text p + p {
+  margin-top: 16px;
+}
+
+/* Fila de texto + medio: el texto a la izquierda y una pieza (gif, imagen o
+   vídeo) a la derecha. En pantallas estrechas se apilan, con el medio debajo. */
+.project-row {
+  margin-top: 32px;
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;
+}
+.project-row .project-text {
+  margin-top: 0;
+  flex: 1;
+  min-width: 0;
+}
+.project-row .project-media {
+  margin-top: 0;
+  flex: 0 0 var(--row-media-w, 340px);
+  width: var(--row-media-w, 340px);
+}
+@media (max-width: 860px) {
+  .project-row {
+    flex-direction: column;
+  }
+  .project-row .project-media {
+    flex: none;
+    width: 100%;
+  }
+}
+
+/* Tres piezas en fila (poses, vistas, variantes). En móvil pasan a una
+   columna. Cada hueco usa .project-media para la caja con borde. */
+.project-trio {
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+/* Las poses van sin borde: son renders sueltos, no piezas enmarcadas. */
+.project-trio .project-media {
+  margin-top: 0;
+  border: none;
+}
+@media (max-width: 700px) {
+  .project-trio {
+    grid-template-columns: 1fr;
   }
 }
