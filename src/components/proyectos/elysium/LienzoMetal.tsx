@@ -225,8 +225,10 @@ const VERTEX = /* glsl */ `
 
 // Desenfoque separable: se aplica en horizontal y luego en vertical, que sale
 // mucho más barato que un desenfoque en dos dimensiones de una sola pasada.
+// Sin declarar la precisión: Three inyecta la que soporte el dispositivo. Al
+// fijar "highp" a mano, en los móviles que no la admiten en el fragmento el
+// shader no compila y no se dibuja nada.
 const BLUR = /* glsl */ `
-  precision highp float;
   varying vec2 vUv;
   uniform sampler2D uTex;
   uniform vec2 uPaso;
@@ -246,7 +248,6 @@ const BLUR = /* glsl */ `
 `;
 
 const FRAGMENT = /* glsl */ `
-  precision highp float;
   varying vec2 vUv;
   uniform sampler2D uCampo;   // mapa de altura ya desenfocado
   uniform vec2  uRes;
@@ -349,6 +350,7 @@ export default function LienzoMetal() {
   } | null>(null);
   const sucioRef = useRef(true);
   const [vacio, setVacio] = useState(true);
+  const [sinWebgl, setSinWebgl] = useState(false);
 
   // Una cúpula en (x, y) de radio r. Las paradas del degradado siguen
   // aproximadamente sqrt(1 - d²), el perfil de una esfera: es lo que da la
@@ -476,10 +478,22 @@ export default function LienzoMetal() {
     posoRef.current = document.createElement("canvas");
     vivoRef.current = document.createElement("canvas");
 
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false });
+    } catch {
+      // Sin WebGL (móvil viejo, contexto agotado…) el lienzo no puede
+      // funcionar; mejor decirlo que dejar un recuadro que no responde.
+      setSinWebgl(true);
+      return;
+    }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     cont.appendChild(renderer.domElement);
     renderer.domElement.className = "lienzo-canvas";
+    // Los móviles retiran el contexto con facilidad (memoria, pestaña en
+    // segundo plano). Si pasa, se avisa en vez de quedarse en blanco.
+    const alPerderContexto = () => setSinWebgl(true);
+    renderer.domElement.addEventListener("webglcontextlost", alPerderContexto);
 
     const escena = new THREE.Scene();
     const camara = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
@@ -548,6 +562,7 @@ export default function LienzoMetal() {
 
     return () => {
       ro.disconnect();
+      renderer.domElement.removeEventListener("webglcontextlost", alPerderContexto);
       renderer.dispose();
       rt1.dispose();
       rt2.dispose();
@@ -686,9 +701,16 @@ export default function LienzoMetal() {
           onPointerCancel={alSoltar}
           onPointerLeave={alSoltar}
         />
-        <p className={`lienzo-pista${vacio ? "" : " se-va"}`} aria-hidden={!vacio}>
+        <p className={`lienzo-pista${vacio && !sinWebgl ? "" : " se-va"}`} aria-hidden={!vacio}>
           {lang === "en" ? "Draw here" : "Dibuja aquí"}
         </p>
+        {sinWebgl && (
+          <p className="lienzo-pista">
+            {lang === "en"
+              ? "This canvas needs WebGL"
+              : "Este lienzo necesita WebGL"}
+          </p>
+        )}
         <button type="button" className="lienzo-reset" onClick={limpiar}>
           {lang === "en" ? "Reset" : "Borrar"}
         </button>
