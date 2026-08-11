@@ -408,12 +408,22 @@ const PixelBlast = ({
         threeRef.current = null;
       }
       const canvas = document.createElement("canvas");
-      const renderer = new THREE.WebGLRenderer({
-        canvas,
-        antialias,
-        alpha: true,
-        powerPreference: "high-performance",
-      });
+      // Si el navegador no da contexto WebGL (móviles con poca memoria,
+      // Chrome con la GPU deshabilitada, máquinas virtuales…), Three lanza una
+      // excepción. Sin capturarla, el error sube por el árbol de React y se
+      // lleva por delante la página entera: el fondo es decorativo y no puede
+      // costar eso. Se renuncia al efecto y se sigue.
+      let renderer: THREE.WebGLRenderer;
+      try {
+        renderer = new THREE.WebGLRenderer({
+          canvas,
+          antialias,
+          alpha: true,
+          powerPreference: "high-performance",
+        });
+      } catch {
+        return;
+      }
       renderer.domElement.style.width = "100%";
       renderer.domElement.style.height = "100%";
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, maxPixelRatio));

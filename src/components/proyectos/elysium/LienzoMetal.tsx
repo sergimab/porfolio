@@ -354,6 +354,23 @@ export default function LienzoMetal() {
   const [sinWebgl, setSinWebgl] = useState(false);
   const [cerca, setCerca] = useState(false);
 
+  // Sondeo inmediato: ¿hay WebGL siquiera? Se comprueba con un lienzo de
+  // usar y tirar y se suelta el contexto enseguida para no ocupar uno de los
+  // pocos que permite el móvil. No se deja esto en manos del observador de
+  // visibilidad: si el navegador no produce fotogramas (GPU deshabilitada),
+  // ese observador no llega a dispararse nunca y el bloque se quedaría mudo.
+  useEffect(() => {
+    const sonda = document.createElement("canvas");
+    const gl =
+      (sonda.getContext("webgl2") as WebGL2RenderingContext | null) ||
+      (sonda.getContext("webgl") as WebGLRenderingContext | null);
+    if (!gl) {
+      setSinWebgl(true);
+      return;
+    }
+    gl.getExtension("WEBGL_lose_context")?.loseContext();
+  }, []);
+
   // Solo se enciende WebGL cuando el bloque está a punto de verse.
   useEffect(() => {
     const cont = contenedorRef.current;
@@ -601,7 +618,7 @@ export default function LienzoMetal() {
       renderer.domElement.remove();
       tresRef.current = null;
     };
-  }, [repintarMapa]);
+  }, [repintarMapa, cerca]);
 
   // Bucle: consume los puntos encolados y, si hay cambios, rehace el campo y
   // vuelve a sombrear.
@@ -670,7 +687,7 @@ export default function LienzoMetal() {
     };
     rafRef.current = requestAnimationFrame(dibujar);
     return () => cancelAnimationFrame(rafRef.current);
-  }, [repintarMapa, cerca]);
+  }, [repintarMapa]);
 
   const alBajar = (e: React.PointerEvent<HTMLDivElement>) => {
     try {
