@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { useLang } from "@/components/shared/useLang";
+import LienzoFluido from "./LienzoFluido";
 import "./LienzoFluido.css";
 
 // Lienzo de metal líquido.
@@ -351,6 +352,24 @@ export default function LienzoMetal() {
   const sucioRef = useRef(true);
   const [vacio, setVacio] = useState(true);
   const [sinWebgl, setSinWebgl] = useState(false);
+  const [cerca, setCerca] = useState(false);
+
+  // Solo se enciende WebGL cuando el bloque está a punto de verse.
+  useEffect(() => {
+    const cont = contenedorRef.current;
+    if (!cont) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setCerca(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "300px" }
+    );
+    io.observe(cont);
+    return () => io.disconnect();
+  }, []);
 
   // Una cúpula en (x, y) de radio r. Las paradas del degradado siguen
   // aproximadamente sqrt(1 - d²), el perfil de una esfera: es lo que da la
@@ -468,10 +487,13 @@ export default function LienzoMetal() {
     componerMapa();
   }, [pintarTrazo, componerMapa]);
 
-  // Montaje de WebGL.
+  // Montaje de WebGL. Se retrasa hasta que el lienzo se acerca a la pantalla:
+  // la página ya tiene otro contexto (el fondo de píxeles) y los móviles son
+  // muy estrictos con cuántos permiten a la vez. Creándolo solo cuando hace
+  // falta, hay bastantes menos posibilidades de que lo rechacen.
   useEffect(() => {
     const cont = contenedorRef.current;
-    if (!cont) return;
+    if (!cont || !cerca) return;
 
     const mask = document.createElement("canvas");
     maskRef.current = mask;
@@ -487,7 +509,10 @@ export default function LienzoMetal() {
       setSinWebgl(true);
       return;
     }
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    // En móvil se limita a 1,5: el búfer crece con el cuadrado del factor y
+    // es justo lo que hace que el sistema retire el contexto.
+    const tope = window.innerWidth <= 700 ? 1.5 : 2;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, tope));
     cont.appendChild(renderer.domElement);
     renderer.domElement.className = "lienzo-canvas";
     // Los móviles retiran el contexto con facilidad (memoria, pestaña en
@@ -539,7 +564,9 @@ export default function LienzoMetal() {
 
     const medir = () => {
       const { width, height } = cont.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      // El mismo tope que el renderer: los lienzos del mapa de altura también
+      // ocupan memoria de vídeo al subirse como textura.
+      const dpr = Math.min(window.devicePixelRatio || 1, tope);
       renderer.setSize(width, height, false);
       renderer.domElement.style.width = "100%";
       renderer.domElement.style.height = "100%";
@@ -643,7 +670,7 @@ export default function LienzoMetal() {
     };
     rafRef.current = requestAnimationFrame(dibujar);
     return () => cancelAnimationFrame(rafRef.current);
-  }, [repintarMapa]);
+  }, [repintarMapa, cerca]);
 
   const alBajar = (e: React.PointerEvent<HTMLDivElement>) => {
     try {
@@ -689,6 +716,10 @@ export default function LienzoMetal() {
     setVacio(true);
   };
 
+  // Sin WebGL no hay metal posible: se cambia por la versión de filtros SVG,
+  // que hace la misma fusión y un cromo aproximado sin tocar la GPU.
+  if (sinWebgl) return <LienzoFluido />;
+
   return (
     <section className="lienzo-fluido es-metal">
       <div className="lienzo-marco">
@@ -701,16 +732,10 @@ export default function LienzoMetal() {
           onPointerCancel={alSoltar}
           onPointerLeave={alSoltar}
         />
-        <p className={`lienzo-pista${vacio && !sinWebgl ? "" : " se-va"}`} aria-hidden={!vacio}>
+        <p className={`lienzo-pista${vacio ? "" : " se-va"}`} aria-hidden={!vacio}>
           {lang === "en" ? "Draw here" : "Dibuja aquí"}
         </p>
-        {sinWebgl && (
-          <p className="lienzo-pista">
-            {lang === "en"
-              ? "This canvas needs WebGL"
-              : "Este lienzo necesita WebGL"}
-          </p>
-        )}
+
         <button type="button" className="lienzo-reset" onClick={limpiar}>
           {lang === "en" ? "Reset" : "Borrar"}
         </button>
