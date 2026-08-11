@@ -383,6 +383,15 @@ export default function LienzoMetal() {
   const [vacio, setVacio] = useState(true);
   const [sinWebgl, setSinWebgl] = useState(false);
   const [cerca, setCerca] = useState(false);
+  // Panel de diagnóstico, solo si la URL lleva ?diag: sirve para ver en el
+  // propio móvil qué está pasando, sin depurador ni cable.
+  const [diag, setDiag] = useState<Record<string, string | number> | null>(null);
+  const diagRef = useRef<Record<string, string | number>>({});
+  useEffect(() => {
+    if (!new URLSearchParams(window.location.search).has("diag")) return;
+    const t = setInterval(() => setDiag({ ...diagRef.current }), 300);
+    return () => clearInterval(t);
+  }, []);
 
   // Sondeo inmediato: ¿hay WebGL siquiera? Se comprueba con un lienzo de
   // usar y tirar y se suelta el contexto enseguida para no ocupar uno de los
@@ -395,6 +404,7 @@ export default function LienzoMetal() {
       (sonda.getContext("webgl2") as WebGL2RenderingContext | null) ||
       (sonda.getContext("webgl") as WebGLRenderingContext | null);
     if (!gl) {
+      diagRef.current.webgl = "no";
       setSinWebgl(true);
       return;
     }
@@ -550,6 +560,7 @@ export default function LienzoMetal() {
     const cont = contenedorRef.current;
     if (!cont || !cerca) return;
 
+    diagRef.current.webgl = "sí";
     const mask = document.createElement("canvas");
     maskRef.current = mask;
     posoRef.current = document.createElement("canvas");
@@ -605,7 +616,7 @@ export default function LienzoMetal() {
         uCampo: { value: null },
         uEstudio: { value: null },
         uRes: { value: new THREE.Vector2() },
-        uUmbral: { value: 0.3 },
+        uUmbral: { value: 0.18 },
         uRelieve: { value: 13.0 },
       },
       transparent: true,
@@ -665,6 +676,11 @@ export default function LienzoMetal() {
   // esto se perderían.
   const consumirCola = useCallback(() => {
     const cola = colaRef.current;
+    if (cola.length) {
+      diagRef.current.puntos = ((diagRef.current.puntos as number) || 0) + cola.length;
+      const u = cola[cola.length - 1];
+      diagRef.current.ultimo = `${u.x.toFixed(2)},${u.y.toFixed(2)}`;
+    }
     const trazo = actualRef.current;
     if (!cola.length || !trazo) return;
     for (const p of cola) {
@@ -699,14 +715,18 @@ export default function LienzoMetal() {
   // Bucle: consume los puntos encolados y, si hay cambios, rehace el campo y
   // vuelve a sombrear.
   useEffect(() => {
+    let ultimoFrame = 0;
     const dibujar = () => {
       rafRef.current = requestAnimationFrame(dibujar);
       const tres = tresRef.current;
       if (!tres) return;
 
       consumirCola();
+      diagRef.current.fps = Math.round(1000 / Math.max(1, performance.now() - (ultimoFrame || performance.now())));
+      ultimoFrame = performance.now();
 
       if (!sucioRef.current) return;
+      diagRef.current.pintados = ((diagRef.current.pintados as number) || 0) + 1;
       sucioRef.current = false;
 
       const { renderer, escena, camara, textura, rt1, rt2, matBlur, matFinal, quad } = tres;
@@ -715,13 +735,13 @@ export default function LienzoMetal() {
       // Pasada 1: desenfoque horizontal del mapa.
       quad.material = matBlur;
       matBlur.uniforms.uTex.value = textura;
-      matBlur.uniforms.uPaso.value.set(1.5 / rt1.width, 0);
+      matBlur.uniforms.uPaso.value.set(0.9 / rt1.width, 0);
       renderer.setRenderTarget(rt1);
       renderer.render(escena, camara);
 
       // Pasada 2: desenfoque vertical. Aquí es donde se sueldan los trazos.
       matBlur.uniforms.uTex.value = rt1.texture;
-      matBlur.uniforms.uPaso.value.set(0, 1.5 / rt1.height);
+      matBlur.uniforms.uPaso.value.set(0, 0.9 / rt1.height);
       renderer.setRenderTarget(rt2);
       renderer.render(escena, camara);
 
@@ -744,6 +764,8 @@ export default function LienzoMetal() {
     // montaje, los primeros puntos de un trazo se normalizan con un ancho
     // provisional y salen con un radio disparatado.
     anchoCssRef.current = r.width || anchoCssRef.current;
+    diagRef.current.abajo = ((diagRef.current.abajo as number) || 0) + 1;
+    diagRef.current.lienzo = `${Math.round(r.width)}x${Math.round(r.height)}`;
     const p = {
       x: (e.clientX - r.left) / r.width,
       y: (e.clientY - r.top) / r.width,
@@ -814,6 +836,14 @@ export default function LienzoMetal() {
         <p className={`lienzo-pista${vacio ? "" : " se-va"}`} aria-hidden={!vacio}>
           {lang === "en" ? "Draw here" : "Dibuja aquí"}
         </p>
+
+        {diag && (
+          <pre className="lienzo-diag">
+            {Object.entries(diag)
+              .map(([k, v]) => `${k}: ${v}`)
+              .join("\n")}
+          </pre>
+        )}
 
         <button type="button" className="lienzo-reset" onClick={limpiar}>
           {lang === "en" ? "Reset" : "Borrar"}

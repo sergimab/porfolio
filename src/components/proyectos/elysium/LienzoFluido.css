@@ -139,3 +139,21 @@
 [data-theme="dark"] .es-metal {
   --papel: #0e0d0b;
 }
+
+/* Panel de diagnóstico (solo con ?diag en la URL). */
+.lienzo-diag {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  margin: 0;
+  padding: 8px 10px;
+  font-size: 11px;
+  line-height: 1.5;
+  font-family: ui-monospace, monospace;
+  color: var(--foreground);
+  background: var(--papel);
+  border: 1px solid var(--foreground);
+  border-radius: 8px;
+  pointer-events: none;
+  white-space: pre;
+}
