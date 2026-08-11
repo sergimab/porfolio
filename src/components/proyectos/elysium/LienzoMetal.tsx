@@ -43,6 +43,10 @@ const LARGO_PUNTA = 9;      // longitud de cada punta, en múltiplos del radio
 const SUAVIZAR_PASADAS = 3; // pasadas de suavizado del recorrido
 const PASO_REMUESTREO = 2;  // separación, en px, al reconstruir la curva
 const VENTANA_GROSOR = 9;   // puntos que se promedian para pulir el grosor
+// Cuánto puede engordar o adelgazar el trazo por cada píxel recorrido. Es lo
+// que evita el salto de aguja a ancho: con 0,18, pasar de 1 a 30 px de radio
+// exige unos 160 px de recorrido, así que el ensanchamiento se ve venir.
+const PENDIENTE_MAX = 0.18;
 
 // Plumilla: el trazo se comporta como una pluma de punta ancha inclinada.
 // Al moverse perpendicular al filo deja su grosor máximo y, al moverse en la
@@ -52,6 +56,11 @@ const PLUMILLA = (-38 * Math.PI) / 180; // inclinación del filo
 const PLUMILLA_MIN = 0.12;              // grosor en la dirección del filo
 const MAX_PUNTOS = 24000;
 
+// Los puntos se guardan en coordenadas relativas al lienzo (0-1 en x, y la
+// misma escala en y), no en píxeles. En móvil, al arrastrar el dedo la barra
+// del navegador se oculta y el alto del lienzo cambia: con píxeles, todo lo
+// dibujado se descolocaba respecto al dedo. Con coordenadas relativas, el
+// trazo sigue donde debe pase lo que pase con el tamaño.
 type Punto = { x: number; y: number; r: number };
 
 // Suaviza el recorrido promediando cada punto con sus vecinos. El puntero
@@ -133,6 +142,23 @@ function pulirGrosor(puntos: Punto[], ventana: number): Punto[] {
   });
 }
 
+// Limita la pendiente del grosor a lo largo del trazo: dos pasadas, una hacia
+// delante y otra hacia atrás, para que ni crezca ni decrezca de golpe. Sin
+// esto, el paso de la punta al cuerpo es un escalón.
+function limitarPendiente(puntos: Punto[], maxPendiente: number): Punto[] {
+  if (puntos.length < 2) return puntos;
+  const salida = puntos.map((p) => ({ ...p }));
+  for (let i = 1; i < salida.length; i++) {
+    const d = Math.hypot(salida[i].x - salida[i - 1].x, salida[i].y - salida[i - 1].y);
+    salida[i].r = Math.min(salida[i].r, salida[i - 1].r + maxPendiente * d);
+  }
+  for (let i = salida.length - 2; i >= 0; i--) {
+    const d = Math.hypot(salida[i + 1].x - salida[i].x, salida[i + 1].y - salida[i].y);
+    salida[i].r = Math.min(salida[i].r, salida[i + 1].r + maxPendiente * d);
+  }
+  return salida;
+}
+
 // Afilado por longitud recorrida, no por porcentaje del trazo. La diferencia
 // importa: con un porcentaje, la punta crece con el trazo y, mientras dibujas,
 // el extremo que está bajo el cursor tiene grosor cero — parece que la línea
@@ -145,7 +171,10 @@ function factorPunta(distanciaAlExtremo: number, radio: number, largoTotal: numb
   // El exponente va por encima de 1: así el grosor se desploma cerca del
   // extremo y la punta sale como una aguja. Por debajo de 1 haría lo
   // contrario, engordar enseguida y quedar roma.
-  return Math.pow(t, AFILADO);
+  // El suavizado previo redondea además el empalme con el cuerpo, que con la
+  // potencia sola llegaba en ángulo.
+  const suave = t * t * (3 - 2 * t);
+  return Math.pow(suave, AFILADO * 0.75);
 }
 
 // Grosor según la dirección del movimiento respecto al filo de la plumilla.
@@ -332,6 +361,7 @@ export default function LienzoMetal() {
   const posoRef = useRef<HTMLCanvasElement | null>(null); // trazos terminados
   const vivoRef = useRef<HTMLCanvasElement | null>(null); // trazo en curso
   const dibujadosRef = useRef(0); // puntos del trazo en curso ya pintados
+  const anchoCssRef = useRef(1);  // ancho del lienzo en px, para el paso a relativo
   const trazosRef = useRef<Punto[][]>([]);
   const actualRef = useRef<Punto[] | null>(null);
   const colaRef = useRef<{ x: number; y: number; t: number }[]>([]);
@@ -419,10 +449,18 @@ export default function LienzoMetal() {
   const pintarTrazo = useCallback(
     (ctx: CanvasRenderingContext2D, crudos: Punto[], enCurso = false, desde = 0) => {
       if (!crudos.length) return 0;
-      const puntos = pulirGrosor(
-        remuestrear(suavizar(crudos, SUAVIZAR_PASADAS), PASO_REMUESTREO),
-        VENTANA_GROSOR
+      // De relativo a píxeles: todo el trabajo de suavizado y afilado se hace
+      // ya en la escala en la que se va a pintar.
+      const escala = anchoCssRef.current || 1;
+      const enPx = crudos.map((p) => ({ x: p.x * escala, y: p.y * escala, r: p.r * escala }));
+      const puntos = limitarPendiente(
+        pulirGrosor(remuestrear(suavizar(enPx, SUAVIZAR_PASADAS), PASO_REMUESTREO), VENTANA_GROSOR),
+        PENDIENTE_MAX
       );
+      // El largo de la punta se mide con el radio mayor del trazo, no con el
+      // local: si se usa el local, donde el trazo ya es fino la punta sale
+      // cortísima y el cambio a la parte ancha resulta abrupto.
+      const radioMayor = puntos.reduce((m, p) => Math.max(m, p.r), 0);
       const previo = ctx.globalCompositeOperation;
       ctx.globalCompositeOperation = "lighten";
 
@@ -436,8 +474,8 @@ export default function LienzoMetal() {
       const radioEn = (i: number, extra = 0) => {
         const p = puntos[i];
         const s = largos[i] + extra;
-        const inicio = factorPunta(s, p.r, total);
-        const fin = enCurso ? 1 : factorPunta(total - s, p.r, total);
+        const inicio = factorPunta(s, radioMayor, total);
+        const fin = enCurso ? 1 : factorPunta(total - s, radioMayor, total);
         return Math.max(PUNTA_MIN, p.r * Math.min(inicio, fin));
       };
 
@@ -581,6 +619,7 @@ export default function LienzoMetal() {
 
     const medir = () => {
       const { width, height } = cont.getBoundingClientRect();
+      anchoCssRef.current = width || 1;
       // El mismo tope que el renderer: los lienzos del mapa de altura también
       // ocupan memoria de vídeo al subirse como textura.
       const dpr = Math.min(window.devicePixelRatio || 1, tope);
@@ -620,6 +659,43 @@ export default function LienzoMetal() {
     };
   }, [repintarMapa, cerca]);
 
+  // Pasa los puntos encolados al trazo en curso y pinta lo nuevo. Se llama
+  // desde el bucle y también al soltar: si el dedo baja y sube dentro del
+  // mismo fotograma —un trazo rápido—, el bucle aún no los ha consumido y sin
+  // esto se perderían.
+  const consumirCola = useCallback(() => {
+    const cola = colaRef.current;
+    const trazo = actualRef.current;
+    if (!cola.length || !trazo) return;
+    for (const p of cola) {
+      const previo = ultimoRef.current;
+      const ancho = anchoCssRef.current || 1;
+      let radio = GROSOR_MAX;
+      if (previo) {
+        const dt = Math.max(1, p.t - previo.t);
+        // La velocidad se mide en píxeles reales, no en unidades relativas,
+        // para que el trazo responda igual en cualquier tamaño de pantalla.
+        const dist = Math.hypot(p.x - previo.x, p.y - previo.y) * ancho;
+        const v = Math.min(dist / dt, VELOCIDAD_TOPE) / VELOCIDAD_TOPE;
+        radio = GROSOR_MAX - (GROSOR_MAX - GROSOR_MIN) * v;
+      }
+      radioRef.current += (radio - radioRef.current) * SUAVIZADO;
+      const plumilla = previo ? factorPlumilla(p.x - previo.x, p.y - previo.y) : 1;
+      // El radio se guarda en la misma escala relativa que x e y: en píxeles,
+      // al pintar se multiplicaría por el ancho y saldría descomunal.
+      trazo.push({ x: p.x, y: p.y, r: (radioRef.current * plumilla) / ancho });
+      ultimoRef.current = p;
+    }
+    colaRef.current = [];
+    const ctxVivo = vivoRef.current?.getContext("2d");
+    if (ctxVivo) {
+      // Se redibujan unos pocos puntos ya pintados: el suavizado mueve algo
+      // los últimos y, como se compone por máximo, repetirlos no acumula.
+      dibujadosRef.current = pintarTrazo(ctxVivo, trazo, true, Math.max(0, dibujadosRef.current - 12));
+    }
+    componerMapa();
+  }, [pintarTrazo, componerMapa]);
+
   // Bucle: consume los puntos encolados y, si hay cambios, rehace el campo y
   // vuelve a sombrear.
   useEffect(() => {
@@ -628,37 +704,7 @@ export default function LienzoMetal() {
       const tres = tresRef.current;
       if (!tres) return;
 
-      const cola = colaRef.current;
-      if (cola.length && actualRef.current) {
-        const trazo = actualRef.current;
-        for (const p of cola) {
-          const previo = ultimoRef.current;
-          let radio = GROSOR_MAX;
-          if (previo) {
-            const dt = Math.max(1, p.t - previo.t);
-            const dist = Math.hypot(p.x - previo.x, p.y - previo.y);
-            const v = Math.min(dist / dt, VELOCIDAD_TOPE) / VELOCIDAD_TOPE;
-            radio = GROSOR_MAX - (GROSOR_MAX - GROSOR_MIN) * v;
-          }
-          radioRef.current += (radio - radioRef.current) * SUAVIZADO;
-          const plumilla = previo ? factorPlumilla(p.x - previo.x, p.y - previo.y) : 1;
-          trazo.push({ x: p.x, y: p.y, r: radioRef.current * plumilla });
-          ultimoRef.current = p;
-        }
-        colaRef.current = [];
-        // Se redibujan unos pocos puntos ya pintados: el suavizado mueve algo
-        // los últimos y, como se compone por máximo, repetirlos no acumula.
-        const ctxVivo = vivoRef.current?.getContext("2d");
-        if (ctxVivo) {
-          dibujadosRef.current = pintarTrazo(
-            ctxVivo,
-            trazo,
-            true,
-            Math.max(0, dibujadosRef.current - 12)
-          );
-        }
-        componerMapa();
-      }
+      consumirCola();
 
       if (!sucioRef.current) return;
       sucioRef.current = false;
@@ -694,7 +740,15 @@ export default function LienzoMetal() {
       e.currentTarget.setPointerCapture(e.pointerId);
     } catch {}
     const r = e.currentTarget.getBoundingClientRect();
-    const p = { x: e.clientX - r.left, y: e.clientY - r.top, t: performance.now() };
+    // El ancho se toma del propio evento: si se espera a que lo mida el
+    // montaje, los primeros puntos de un trazo se normalizan con un ancho
+    // provisional y salen con un radio disparatado.
+    anchoCssRef.current = r.width || anchoCssRef.current;
+    const p = {
+      x: (e.clientX - r.left) / r.width,
+      y: (e.clientY - r.top) / r.width,
+      t: performance.now(),
+    };
     radioRef.current = GROSOR_MAX * 0.7;
     ultimoRef.current = p;
     actualRef.current = [];
@@ -708,12 +762,20 @@ export default function LienzoMetal() {
       typeof e.nativeEvent.getCoalescedEvents === "function" ? e.nativeEvent.getCoalescedEvents() : [];
     const eventos = agrupados.length ? agrupados : [e.nativeEvent];
     const r = e.currentTarget.getBoundingClientRect();
+    anchoCssRef.current = r.width || anchoCssRef.current;
     for (const ev of eventos) {
-      colaRef.current.push({ x: ev.clientX - r.left, y: ev.clientY - r.top, t: performance.now() });
+      colaRef.current.push({
+        x: (ev.clientX - r.left) / r.width,
+        y: (ev.clientY - r.top) / r.width,
+        t: performance.now(),
+      });
     }
   };
 
   const alSoltar = () => {
+    // Primero se vacía la cola: en un trazo muy rápido, el bucle no ha tenido
+    // ocasión de consumirla y esos puntos son todo el trazo.
+    consumirCola();
     const trazo = actualRef.current;
     actualRef.current = null;
     if (!trazo || !trazo.length) return;
