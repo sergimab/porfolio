@@ -47,6 +47,9 @@ const VENTANA_GROSOR = 9;   // puntos que se promedian para pulir el grosor
 // que evita el salto de aguja a ancho: con 0,18, pasar de 1 a 30 px de radio
 // exige unos 160 px de recorrido, así que el ensanchamiento se ve venir.
 const PENDIENTE_MAX = 0.18;
+// Puntos que se vuelven a procesar por detrás al pintar el tramo nuevo del
+// trazo en curso, para que el suavizado empalme sin costura.
+const SOLAPE_VIVO = 30;
 
 // Plumilla: el trazo se comporta como una pluma de punta ancha inclinada.
 // Al moverse perpendicular al filo deja su grosor máximo y, al moverse en la
@@ -360,7 +363,7 @@ export default function LienzoMetal() {
   const maskRef = useRef<HTMLCanvasElement | null>(null);
   const posoRef = useRef<HTMLCanvasElement | null>(null); // trazos terminados
   const vivoRef = useRef<HTMLCanvasElement | null>(null); // trazo en curso
-  const dibujadosRef = useRef(0); // puntos del trazo en curso ya pintados
+  const dibujadosRef = useRef(0); // puntos crudos del trazo en curso ya pintados
   const anchoCssRef = useRef(1);  // ancho del lienzo en px, para el paso a relativo
   const trazosRef = useRef<Punto[][]>([]);
   const actualRef = useRef<Punto[] | null>(null);
@@ -457,7 +460,13 @@ export default function LienzoMetal() {
   // Devuelve cuántos puntos de la curva ya reconstruida se han dibujado, para
   // poder continuar desde ahí en el siguiente fotograma.
   const pintarTrazo = useCallback(
-    (ctx: CanvasRenderingContext2D, crudos: Punto[], enCurso = false, desde = 0) => {
+    (
+      ctx: CanvasRenderingContext2D,
+      crudos: Punto[],
+      enCurso = false,
+      desde = 0,
+      sinPuntaInicial = false
+    ) => {
       if (!crudos.length) return 0;
       // De relativo a píxeles: todo el trabajo de suavizado y afilado se hace
       // ya en la escala en la que se va a pintar.
@@ -484,7 +493,7 @@ export default function LienzoMetal() {
       const radioEn = (i: number, extra = 0) => {
         const p = puntos[i];
         const s = largos[i] + extra;
-        const inicio = factorPunta(s, radioMayor, total);
+        const inicio = sinPuntaInicial ? 1 : factorPunta(s, radioMayor, total);
         const fin = enCurso ? 1 : factorPunta(total - s, radioMayor, total);
         return Math.max(PUNTA_MIN, p.r * Math.min(inicio, fin));
       };
@@ -705,9 +714,16 @@ export default function LienzoMetal() {
     colaRef.current = [];
     const ctxVivo = vivoRef.current?.getContext("2d");
     if (ctxVivo) {
-      // Se redibujan unos pocos puntos ya pintados: el suavizado mueve algo
-      // los últimos y, como se compone por máximo, repetirlos no acumula.
-      dibujadosRef.current = pintarTrazo(ctxVivo, trazo, true, Math.max(0, dibujadosRef.current - 12));
+      // Solo se procesa y se pinta el tramo nuevo, con un solapamiento hacia
+      // atrás para que el suavizado empalme. Antes se reprocesaba el trazo
+      // entero en cada fotograma: con miles de puntos, eso era el grueso del
+      // coste y hundía los fotogramas por segundo.
+      const desde = Math.max(0, dibujadosRef.current - SOLAPE_VIVO);
+      const ventana = trazo.slice(desde);
+      // El afilado de entrada solo tiene sentido si la ventana incluye el
+      // principio del trazo; si no, se pinta sin punta inicial.
+      pintarTrazo(ctxVivo, ventana, true, 0, desde > 0);
+      dibujadosRef.current = trazo.length;
     }
     componerMapa();
   }, [pintarTrazo, componerMapa]);
