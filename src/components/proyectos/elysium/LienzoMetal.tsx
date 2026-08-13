@@ -755,6 +755,24 @@ export default function LienzoMetal() {
     return () => cancelAnimationFrame(rafRef.current);
   }, [repintarMapa]);
 
+  // Mientras dura el trazo se escucha en la ventana, no en el elemento. En
+  // iOS, al arrastrar, el navegador manda pointerleave (y a veces
+  // pointercancel) aunque el dedo siga sobre el lienzo: tratándolos como
+  // "dedo levantado", el trazo se cortaba a los cuatro o cinco puntos y cada
+  // trozo salía como una bola suelta.
+  const finRef = useRef<(() => void) | null>(null);
+  const moverRef = useRef<((e: PointerEvent) => void) | null>(null);
+
+  const soltarGlobal = useCallback(() => {
+    if (moverRef.current) window.removeEventListener("pointermove", moverRef.current);
+    if (finRef.current) {
+      window.removeEventListener("pointerup", finRef.current);
+      window.removeEventListener("pointercancel", finRef.current);
+    }
+    moverRef.current = null;
+    finRef.current = null;
+  }, []);
+
   const alBajar = (e: React.PointerEvent<HTMLDivElement>) => {
     try {
       e.currentTarget.setPointerCapture(e.pointerId);
@@ -776,22 +794,33 @@ export default function LienzoMetal() {
     actualRef.current = [];
     colaRef.current = [p];
     setVacio(false);
-  };
 
-  const alMover = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!actualRef.current) return;
-    const agrupados =
-      typeof e.nativeEvent.getCoalescedEvents === "function" ? e.nativeEvent.getCoalescedEvents() : [];
-    const eventos = agrupados.length ? agrupados : [e.nativeEvent];
-    const r = e.currentTarget.getBoundingClientRect();
-    anchoCssRef.current = r.width || anchoCssRef.current;
-    for (const ev of eventos) {
-      colaRef.current.push({
-        x: (ev.clientX - r.left) / r.width,
-        y: (ev.clientY - r.top) / r.width,
-        t: performance.now(),
-      });
-    }
+    const caja = e.currentTarget;
+    const mover = (ev: PointerEvent) => {
+      if (!actualRef.current) return;
+      const c = caja.getBoundingClientRect();
+      anchoCssRef.current = c.width || anchoCssRef.current;
+      const agrupados =
+        typeof ev.getCoalescedEvents === "function" ? ev.getCoalescedEvents() : [];
+      const lista = agrupados.length ? agrupados : [ev];
+      for (const q of lista) {
+        colaRef.current.push({
+          x: (q.clientX - c.left) / c.width,
+          y: (q.clientY - c.top) / c.width,
+          t: performance.now(),
+        });
+      }
+      diagRef.current.puntos = ((diagRef.current.puntos as number) || 0) + lista.length;
+    };
+    const fin = () => {
+      alSoltar();
+      soltarGlobal();
+    };
+    moverRef.current = mover;
+    finRef.current = fin;
+    window.addEventListener("pointermove", mover, { passive: true });
+    window.addEventListener("pointerup", fin);
+    window.addEventListener("pointercancel", fin);
   };
 
   const alSoltar = () => {
@@ -828,10 +857,6 @@ export default function LienzoMetal() {
           ref={contenedorRef}
           className="lienzo-tinta lienzo-gl"
           onPointerDown={alBajar}
-          onPointerMove={alMover}
-          onPointerUp={alSoltar}
-          onPointerCancel={alSoltar}
-          onPointerLeave={alSoltar}
         />
         <p className={`lienzo-pista${vacio ? "" : " se-va"}`} aria-hidden={!vacio}>
           {lang === "en" ? "Draw here" : "Dibuja aquí"}
