@@ -1,0 +1,193 @@
+/* Bloque fijo de tres pasos: el contenido se queda quieto en pantalla y lo
+   que cambia son las dos columnas. La pista alta es la que da el recorrido. */
+/* La cabecera del sitio va pegada arriba (header-wrap es sticky), así que el
+   bloque fijo tiene que empezar por debajo de ella o le tapa el texto. */
+.simbolo-pista {
+  --alto-cabecera: 70px;
+  position: relative;
+  margin-top: 48px;
+}
+.simbolo-sticky {
+  position: sticky;
+  top: var(--alto-cabecera);
+  /* dvh en vez de vh: en móvil, la barra del navegador se oculta al hacer
+     scroll y con vh el bloque quedaría más alto que la pantalla visible. */
+  height: calc(100dvh - var(--alto-cabecera));
+  display: flex;
+  align-items: center;
+  /* Las capas van superpuestas y alguna sobresale al desplazarse: sin esto,
+     asomaría por encima del bloque anterior. */
+  overflow: clip;
+}
+
+.simbolo-rejilla {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+/* Las tres capas de cada columna ocupan el mismo sitio: se apilan en la misma
+   celda de la rejilla y se turnan por opacidad. Así el fundido es cruzado y
+   nada salta de posición al cambiar de paso. */
+.simbolo-textos,
+.simbolo-visuales {
+  display: grid;
+  grid-template-areas: "capa";
+  align-items: center;
+  min-height: 60vh;
+}
+.simbolo-capa {
+  grid-area: capa;
+  transition: none; /* lo mueve el scroll, no una transición */
+  will-change: opacity, transform;
+}
+
+.simbolo-texto p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--foreground);
+  max-width: 46ch;
+}
+.simbolo-texto p + p {
+  margin-top: 16px;
+}
+
+.simbolo-media {
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  line-height: 0;
+}
+.simbolo-media video,
+.simbolo-media img {
+  width: 100%;
+  height: auto;
+  display: block;
+  /* Tope de altura: el bloque tiene que caber en pantalla, porque mientras
+     está fijo no hay forma de hacer scroll dentro de él. */
+  max-height: 52vh;
+  object-fit: contain;
+}
+
+/* Paso 2: el vídeo y la tabla, uno al lado del otro. */
+.simbolo-paso2 {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 24px;
+  align-items: center;
+}
+.simbolo-tabla {
+  border-collapse: collapse;
+  font-size: 13px;
+  color: var(--foreground);
+  white-space: nowrap;
+}
+.simbolo-tabla th,
+.simbolo-tabla td {
+  padding: 7px 14px 7px 0;
+  text-align: left;
+  border-bottom: 1px solid color-mix(in srgb, var(--foreground) 18%, transparent);
+}
+.simbolo-tabla th {
+  font-weight: 500;
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.simbolo-tabla td:last-child,
+.simbolo-tabla th:last-child {
+  text-align: right;
+  padding-right: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+/* En pantallas estrechas, texto arriba y visual debajo. El bloque sigue fijo:
+   el gesto es el mismo, solo cambia la disposición. */
+@media (max-width: 860px) {
+  .simbolo-rejilla {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .simbolo-textos,
+  .simbolo-visuales {
+    min-height: 0;
+  }
+  .simbolo-textos {
+    min-height: 30vh;
+    align-items: start;
+  }
+  .simbolo-visuales {
+    min-height: 30vh;
+  }
+  .simbolo-media video,
+  .simbolo-media img {
+    max-height: 26vh;
+    width: auto;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  .simbolo-texto p {
+    font-size: 14px;
+    max-width: none;
+  }
+  /* La tabla pasa debajo del vídeo, que si no ambos quedan ilegibles. */
+  .simbolo-paso2 {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .simbolo-tabla {
+    font-size: 11px;
+    width: 100%;
+  }
+  .simbolo-tabla th,
+  .simbolo-tabla td {
+    padding: 3px 10px 3px 0;
+  }
+}
+
+/* ── Galería de símbolos de fans (ya sin bloque fijo) ── */
+.simbolo-galeria {
+  margin-top: 64px;
+}
+.simbolo-titular {
+  font-size: 20px;
+  line-height: 1.45;
+  font-weight: 500;
+  color: var(--foreground);
+  max-width: 34ch;
+}
+.simbolo-tira {
+  margin-top: 28px;
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  /* Cada pieza se queda encajada al arrastrar, como un carrusel. */
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+}
+.simbolo-tira::-webkit-scrollbar {
+  height: 6px;
+}
+.simbolo-tira::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--foreground) 25%, transparent);
+  border-radius: 3px;
+}
+.simbolo-tira img {
+  height: 200px;
+  width: auto;
+  flex: none;
+  scroll-snap-align: center;
+  display: block;
+}
+@media (max-width: 700px) {
+  .simbolo-titular {
+    font-size: 17px;
+  }
+  .simbolo-tira img {
+    height: 150px;
+  }
+}

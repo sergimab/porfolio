@@ -4,6 +4,7 @@ import BackCapsule from "@/components/shared/BackCapsule";
 import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
 import LangText from "@/components/shared/LangText";
 import ToolIcons from "@/components/shared/ToolIcons";
+import SimboloScroll, { GaleriaSimbolos } from "./SimboloScroll";
 import PosesFusion from "./PosesFusion";
 import LienzoMetal from "./LienzoMetal";
 
@@ -11,6 +12,21 @@ import LienzoMetal from "./LienzoMetal";
 // poses se quedan fusionadas y no se intenta pintar una imagen que no existe.
 function siExiste(ruta: string): string | null {
   return fs.existsSync(path.join(process.cwd(), "public", ruta)) ? ruta : null;
+}
+
+// Los símbolos de fans se leen de la carpeta en cada render del servidor: al
+// soltar más archivos icono-fan-*, aparecen en la galería sin tocar el código.
+function iconosDeFans(): string[] {
+  const dir = path.join(process.cwd(), "public/proyectos/elysium");
+  try {
+    return fs
+      .readdirSync(dir)
+      .filter((f) => /^icono-fan-.*\.webp$/i.test(f))
+      .sort((a, b) => a.localeCompare(b, "es", { numeric: true }))
+      .map((f) => `/proyectos/elysium/${f}`);
+  } catch {
+    return [];
+  }
 }
 
 // Elysium: TFG de Diseño Gráfico (categoría 3D).
@@ -75,6 +91,16 @@ export default function ElysiumLanding() {
           />
         </div>
 
+        {/* Cómo nace cada símbolo: tres pasos con el bloque fijo en
+            pantalla, y después la galería de símbolos de fans. */}
+        <SimboloScroll />
+        <GaleriaSimbolos iconos={iconosDeFans()} />
+
+        {/* ── Bloque: creación del avatar ──────────────────────────────
+            Va después del contenido nuevo. Son cuatro piezas seguidas
+            (texto, texto + gif, secuencia de poses y lienzo) que se mueven
+            juntas si hace falta reordenar. */}
+
         {/* Primer párrafo, a todo el ancho. */}
         <div className="project-text">
           <p>
@@ -116,8 +142,10 @@ export default function ElysiumLanding() {
         />
 
         {/* Lienzo interactivo: trazos que se funden como metaballs, guiño al
-            sistema de Geometry Nodes con el que se construyó la figura. */}
+            sistema de Geometry Nodes con el que se construyó la figura.
+            Pendiente de recolocar: irá más arriba. */}
         <LienzoMetal />
+        {/* ── Fin del bloque: creación del avatar ─────────────────────── */}
       </div>
     </main>
   );
