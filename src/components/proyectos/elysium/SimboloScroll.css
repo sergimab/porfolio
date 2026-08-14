@@ -74,12 +74,16 @@
   overflow: hidden;
   line-height: 0;
   box-sizing: border-box;
+  /* Fondo negro: los vídeos vienen sobre negro y así el marco no deja ver un
+     canto de otro color alrededor. */
+  background: #000;
 }
 /* El icono renderizado no lleva marco: no es una pieza de vídeo, es la
    figura suelta creciendo sobre el fondo. */
 .simbolo-media.es-icono {
   border: none;
   overflow: visible;
+  background: none;
 }
 .simbolo-media video,
 .simbolo-media img {
@@ -192,11 +196,16 @@
   margin-top: 28px;
   border: 1px solid var(--foreground);
   border-radius: 16px;
+  background: #000;
   padding: 18px 0 18px 20px;
   overflow: hidden;
 }
 .simbolo-tira {
   display: flex;
+  align-items: center;
+  /* "safe" evita que, cuando las piezas desbordan, el centrado corte las
+     primeras y no haya forma de llegar a ellas al desplazarse. */
+  justify-content: safe center;
   gap: 20px;
   overflow-x: auto;
   /* Aire por la derecha al llegar al final del recorrido, para que la última
