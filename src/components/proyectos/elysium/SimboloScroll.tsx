@@ -17,7 +17,8 @@ import "./SimboloScroll.css";
 
 const PASOS = 3;
 const ALTURA_PISTA = 300; // en vh: cuánto scroll dura cada paso (100 por paso)
-const SOLAPE = 0.35;      // parte del paso que dura el fundido entre uno y otro
+// Parte del paso que dura cada fundido, de entrada y de salida.
+const FUNDIDO = 0.16;
 
 const limitar = (v: number) => Math.min(1, Math.max(0, v));
 const suave = (t: number) => t * t * (3 - 2 * t);
@@ -99,14 +100,29 @@ export default function SimboloScroll() {
     v.currentTime = 0;
     v.play().catch(() => {});
   }, [pasoActivo]);
-  const estado = (i: number) => {
-    const entra = (t - i + SOLAPE) / SOLAPE;
-    const sale = (i + 1 + SOLAPE - t) / SOLAPE;
+  // `conDeslizamiento` solo se usa en la columna de texto. En la visual, el
+  // segundo vídeo es la continuación exacta del primero: si además de fundirse
+  // se desplazara, el relevo se vería como un salto.
+  //
+  // Los fundidos van encadenados, no cruzados: cada capa termina de irse antes
+  // de que entre la siguiente. Las cajas de texto son opacas y de distinto
+  // alto, así que al cruzarse asomaba el sobrante de la anterior por debajo de
+  // la nueva.
+  const estado = (i: number, conDeslizamiento = true) => {
+    const entra = (t - i) / FUNDIDO;
+    // El último paso no se va: tiene que seguir a la vista hasta que el
+    // bloque deje de estar fijo y siga el scroll normal.
+    const sale = i === PASOS - 1 ? 1 : (i + 1 - t) / FUNDIDO;
     const op = suave(limitar(Math.min(entra, sale)));
-    // Pequeño desplazamiento vertical acompañando al fundido: entra desde
-    // abajo y sale hacia arriba.
-    const y = limitar(Math.abs(t - (i + 0.5))) * (t < i + 0.5 ? 22 : -22);
-    return { opacity: op, transform: `translateY(${y.toFixed(1)}px)`, visibility: op < 0.01 ? ("hidden" as const) : ("visible" as const) };
+    const y = conDeslizamiento ? (1 - op) * (t < i + 0.5 ? 18 : -18) : 0;
+    return {
+      opacity: op,
+      transform: `translateY(${y.toFixed(1)}px)`,
+      visibility: op < 0.01 ? ("hidden" as const) : ("visible" as const),
+      // El que entra va por encima: así, mientras se cruzan, su caja tapa la
+      // del anterior en vez de dejar los dos textos mezclados.
+      zIndex: i,
+    };
   };
 
   // Avance dentro de un paso concreto (0 al entrar, 1 al salir).
@@ -171,16 +187,16 @@ export default function SimboloScroll() {
 
           {/* Columna visual */}
           <div className="simbolo-visuales">
-            <div className="simbolo-capa" style={estado(0)}>
+            <div className="simbolo-capa" style={estado(0, false)}>
               {video(0, "/proyectos/elysium/grafico-radial.mp4", "Formación del gráfico radial")}
             </div>
 
-            <div className="simbolo-capa" style={estado(1)}>
+            <div className="simbolo-capa" style={estado(1, false)}>
               {video(1, "/proyectos/elysium/simbolo-formacion.mp4", "Formación del símbolo")}
             </div>
 
-            <div className="simbolo-capa" style={estado(2)}>
-              <div className="simbolo-media">
+            <div className="simbolo-capa" style={estado(2, false)}>
+              <div className="simbolo-media es-icono">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/proyectos/elysium/icono-render.webp"
@@ -210,11 +226,18 @@ export function GaleriaSimbolos({ iconos }: { iconos: string[] }) {
           en="No two symbols here are alike. Dozens of different combinations, and every one of them comes out of exactly the same set of rules."
         />
       </p>
-      <div className="simbolo-tira">
-        {iconos.map((src, i) => (
+      <div className="simbolo-vitrina">
+        <div className="simbolo-tira">
+          {iconos.map((src, i) => (
           // eslint-disable-next-line @next/next/no-img-element
-          <img key={src} src={src} alt={`Símbolo generado a partir de las respuestas de un fan (${i + 1})`} loading="lazy" />
-        ))}
+            <img
+              key={src}
+              src={src}
+              alt={`Símbolo generado a partir de las respuestas de un fan (${i + 1})`}
+              loading="lazy"
+            />
+          ))}
+        </div>
       </div>
     </section>
   );

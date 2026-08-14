@@ -65,11 +65,21 @@
   margin-top: 16px;
 }
 
+/* Los vídeos van enmarcados, con el mismo borde que el resto de piezas de la
+   página: oscuro sobre tema claro y claro sobre tema oscuro. */
 .simbolo-media {
   width: 100%;
+  border: 1px solid var(--foreground);
   border-radius: 16px;
   overflow: hidden;
   line-height: 0;
+  box-sizing: border-box;
+}
+/* El icono renderizado no lleva marco: no es una pieza de vídeo, es la
+   figura suelta creciendo sobre el fondo. */
+.simbolo-media.es-icono {
+  border: none;
+  overflow: visible;
 }
 .simbolo-media video,
 .simbolo-media img {
@@ -94,9 +104,11 @@
 /* La tabla acompaña al texto del paso 2, debajo de su caja. */
 .simbolo-tabla {
   margin-top: 16px;
+  width: 100%;
+  max-width: 52ch;
   background: var(--background);
   border-radius: 12px;
-  padding: 6px 20px 10px;
+  padding: 10px 20px 14px;
   box-sizing: border-box;
   border-collapse: collapse;
   font-size: 13px;
@@ -105,7 +117,7 @@
 }
 .simbolo-tabla th,
 .simbolo-tabla td {
-  padding: 7px 14px 7px 0;
+  padding: 8px 14px;
   text-align: left;
   border-bottom: 1px solid color-mix(in srgb, var(--foreground) 18%, transparent);
 }
@@ -115,6 +127,10 @@
   font-size: 11px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+.simbolo-tabla td:first-child,
+.simbolo-tabla th:first-child {
+  padding-left: 0;
 }
 .simbolo-tabla td:last-child,
 .simbolo-tabla th:last-child {
@@ -168,12 +184,22 @@
   color: var(--foreground);
   max-width: 52ch;
 }
-.simbolo-tira {
+/* Vitrina: caja alargada de lado a lado que contiene la tira. El borde va en
+   el color de texto, como el resto de marcos de la página. */
+.simbolo-vitrina {
   margin-top: 28px;
+  border: 1px solid var(--foreground);
+  border-radius: 16px;
+  padding: 28px 0 28px 28px;
+  overflow: hidden;
+}
+.simbolo-tira {
   display: flex;
   gap: 20px;
   overflow-x: auto;
-  padding-bottom: 12px;
+  /* Aire por la derecha al llegar al final del recorrido, para que la última
+     pieza no quede pegada al borde de la caja. */
+  padding: 0 28px 14px 0;
   /* Cada pieza se queda encajada al arrastrar, como un carrusel. */
   scroll-snap-type: x proximity;
   -webkit-overflow-scrolling: touch;
