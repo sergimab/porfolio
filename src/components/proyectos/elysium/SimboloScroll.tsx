@@ -128,6 +128,22 @@ export default function SimboloScroll() {
   // Avance dentro de un paso concreto (0 al entrar, 1 al salir).
   const dentroDe = (i: number) => limitar(t - i);
 
+  // La columna visual no se funde entre los dos vídeos: el segundo es la
+  // continuación exacta del primero, así que el relevo tiene que ser un corte
+  // seco, como el de una película. El icono del tercer paso sí entra
+  // fundiéndose, porque no continúa nada: aparece.
+  const estadoVisual = (i: number) => {
+    if (i === PASOS - 1) return estado(i, false);
+    const visible = i === 0 ? t < 1 : t >= 1 && t < PASOS - 1 + FUNDIDO;
+    return {
+      opacity: visible ? 1 : 0,
+      // El segundo vídeo aguanta por debajo mientras el icono se funde
+      // encima: si desapareciera de golpe, quedaría un hueco vacío.
+      visibility: visible ? ("visible" as const) : ("hidden" as const),
+      zIndex: i,
+    };
+  };
+
   const video = (i: number, src: string, alt: string) => (
     <div className="simbolo-media">
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
@@ -187,15 +203,15 @@ export default function SimboloScroll() {
 
           {/* Columna visual */}
           <div className="simbolo-visuales">
-            <div className="simbolo-capa" style={estado(0, false)}>
+            <div className="simbolo-capa" style={estadoVisual(0)}>
               {video(0, "/proyectos/elysium/grafico-radial.mp4", "Formación del gráfico radial")}
             </div>
 
-            <div className="simbolo-capa" style={estado(1, false)}>
+            <div className="simbolo-capa" style={estadoVisual(1)}>
               {video(1, "/proyectos/elysium/simbolo-formacion.mp4", "Formación del símbolo")}
             </div>
 
-            <div className="simbolo-capa" style={estado(2, false)}>
+            <div className="simbolo-capa" style={estadoVisual(2)}>
               <div className="simbolo-media es-icono">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
