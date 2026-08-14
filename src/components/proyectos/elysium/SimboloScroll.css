@@ -30,13 +30,16 @@
 
 /* Las tres capas de cada columna ocupan el mismo sitio: se apilan en la misma
    celda de la rejilla y se turnan por opacidad. Así el fundido es cruzado y
-   nada salta de posición al cambiar de paso. */
+   nada salta de posición al cambiar de paso.
+   La altura es fija, no mínima: si dependiera del contenido, el paso con
+   tabla haría más alta la fila y el vídeo se descolocaría respecto al del
+   paso anterior, que es su continuación. */
 .simbolo-textos,
 .simbolo-visuales {
   display: grid;
   grid-template-areas: "capa";
   align-items: center;
-  min-height: 60vh;
+  height: 62vh;
 }
 .simbolo-capa {
   grid-area: capa;
@@ -44,11 +47,19 @@
   will-change: opacity, transform;
 }
 
+/* El texto va en caja con el color de la página: por detrás pasa el fondo de
+   píxeles animado y sin fondo opaco se lee fatal. */
+.simbolo-texto {
+  background: var(--background);
+  border-radius: 12px;
+  padding: 18px 20px;
+  box-sizing: border-box;
+  max-width: 52ch;
+}
 .simbolo-texto p {
   font-size: 15px;
   line-height: 1.7;
   color: var(--foreground);
-  max-width: 46ch;
 }
 .simbolo-texto p + p {
   margin-top: 16px;
@@ -70,15 +81,23 @@
   max-height: 52vh;
   object-fit: contain;
 }
-
-/* Paso 2: el vídeo y la tabla, uno al lado del otro. */
-.simbolo-paso2 {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 24px;
-  align-items: center;
+/* Zoom mínimo en los vídeos: se come el filo blanco que traen los bordes. */
+.simbolo-media video {
+  transform: scale(1.04);
+  transform-origin: center;
 }
+/* El icono crece con el scroll; el componente pone la escala. */
+.simbolo-media img {
+  transform-origin: center;
+}
+
+/* La tabla acompaña al texto del paso 2, debajo de su caja. */
 .simbolo-tabla {
+  margin-top: 16px;
+  background: var(--background);
+  border-radius: 12px;
+  padding: 6px 20px 10px;
+  box-sizing: border-box;
   border-collapse: collapse;
   font-size: 13px;
   color: var(--foreground);
@@ -111,16 +130,12 @@
     grid-template-columns: 1fr;
     gap: 24px;
   }
-  .simbolo-textos,
-  .simbolo-visuales {
-    min-height: 0;
-  }
   .simbolo-textos {
-    min-height: 30vh;
+    height: 46vh;
     align-items: start;
   }
   .simbolo-visuales {
-    min-height: 30vh;
+    height: 30vh;
   }
   .simbolo-media video,
   .simbolo-media img {
@@ -132,11 +147,6 @@
   .simbolo-texto p {
     font-size: 14px;
     max-width: none;
-  }
-  /* La tabla pasa debajo del vídeo, que si no ambos quedan ilegibles. */
-  .simbolo-paso2 {
-    grid-template-columns: 1fr;
-    gap: 12px;
   }
   .simbolo-tabla {
     font-size: 11px;
@@ -153,11 +163,10 @@
   margin-top: 64px;
 }
 .simbolo-titular {
-  font-size: 20px;
-  line-height: 1.45;
-  font-weight: 500;
+  font-size: 15px;
+  line-height: 1.7;
   color: var(--foreground);
-  max-width: 34ch;
+  max-width: 52ch;
 }
 .simbolo-tira {
   margin-top: 28px;
@@ -177,7 +186,7 @@
   border-radius: 3px;
 }
 .simbolo-tira img {
-  height: 200px;
+  height: 320px;
   width: auto;
   flex: none;
   scroll-snap-align: center;
@@ -185,9 +194,9 @@
 }
 @media (max-width: 700px) {
   .simbolo-titular {
-    font-size: 17px;
+    font-size: 14px;
   }
   .simbolo-tira img {
-    height: 150px;
+    height: 210px;
   }
 }

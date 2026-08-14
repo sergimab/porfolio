@@ -52,6 +52,7 @@ const TEXTOS = [
 export default function SimboloScroll() {
   const lang = useLang();
   const pista = useRef<HTMLDivElement>(null);
+  const videos = useRef<(HTMLVideoElement | null)[]>([]);
   const [avance, setAvance] = useState(0);
 
   useEffect(() => {
@@ -86,6 +87,18 @@ export default function SimboloScroll() {
   // Avance repartido entre los pasos: 0 al empezar el primero, 3 al acabar el
   // último. Cada paso se funde con el siguiente en las zonas de solape.
   const t = avance * PASOS;
+  const pasoActivo = Math.max(0, Math.min(PASOS - 1, Math.floor(t)));
+
+  // Los vídeos no van en bucle: se reproducen una vez al entrar en su paso y
+  // se quedan en el último fotograma. Al volver a entrar, empiezan de nuevo.
+  // A los demás no se les toca: si se pausaran al salir del paso, se
+  // quedarían congelados a media reproducción en vez de en su final.
+  useEffect(() => {
+    const v = videos.current[pasoActivo];
+    if (!v) return;
+    v.currentTime = 0;
+    v.play().catch(() => {});
+  }, [pasoActivo]);
   const estado = (i: number) => {
     const entra = (t - i + SOLAPE) / SOLAPE;
     const sale = (i + 1 + SOLAPE - t) / SOLAPE;
@@ -96,10 +109,22 @@ export default function SimboloScroll() {
     return { opacity: op, transform: `translateY(${y.toFixed(1)}px)`, visibility: op < 0.01 ? ("hidden" as const) : ("visible" as const) };
   };
 
-  const video = (src: string, alt: string) => (
+  // Avance dentro de un paso concreto (0 al entrar, 1 al salir).
+  const dentroDe = (i: number) => limitar(t - i);
+
+  const video = (i: number, src: string, alt: string) => (
     <div className="simbolo-media">
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-      <video src={src} autoPlay muted loop playsInline preload="metadata" aria-label={alt} />
+      <video
+        ref={(el) => {
+          videos.current[i] = el;
+        }}
+        src={src}
+        muted
+        playsInline
+        preload="auto"
+        aria-label={alt}
+      />
     </div>
   );
 
@@ -110,10 +135,36 @@ export default function SimboloScroll() {
           {/* Columna de texto */}
           <div className="simbolo-textos">
             {TEXTOS.map((texto, i) => (
-              <div className="simbolo-capa simbolo-texto" key={i} style={estado(i)}>
-                {(lang === "en" ? texto.en : texto.es).split("\n\n").map((parrafo, j) => (
-                  <p key={j}>{parrafo}</p>
-                ))}
+              <div className="simbolo-capa" key={i} style={estado(i)}>
+                <div className="simbolo-texto">
+                  {(lang === "en" ? texto.en : texto.es).split("\n\n").map((parrafo, j) => (
+                    <p key={j}>{parrafo}</p>
+                  ))}
+                </div>
+
+                {/* La tabla acompaña al texto, no al vídeo: el segundo vídeo es
+                    la continuación del primero y tiene que quedarse en su
+                    misma posición y tamaño. */}
+                {i === 1 && (
+                  <table className="simbolo-tabla">
+                    <thead>
+                      <tr>
+                        <th scope="col">
+                          <LangText es="Álbum" en="Album" />
+                        </th>
+                        <th scope="col">%</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {ALBUMES.map(([album, pct]) => (
+                        <tr key={album}>
+                          <td>{album}</td>
+                          <td>{pct}%</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
               </div>
             ))}
           </div>
@@ -121,29 +172,11 @@ export default function SimboloScroll() {
           {/* Columna visual */}
           <div className="simbolo-visuales">
             <div className="simbolo-capa" style={estado(0)}>
-              {video("/proyectos/elysium/grafico-radial.mp4", "Formación del gráfico radial")}
+              {video(0, "/proyectos/elysium/grafico-radial.mp4", "Formación del gráfico radial")}
             </div>
 
-            <div className="simbolo-capa simbolo-paso2" style={estado(1)}>
-              {video("/proyectos/elysium/simbolo-formacion.mp4", "Formación del símbolo")}
-              <table className="simbolo-tabla">
-                <thead>
-                  <tr>
-                    <th scope="col">
-                      <LangText es="Álbum" en="Album" />
-                    </th>
-                    <th scope="col">%</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {ALBUMES.map(([album, pct]) => (
-                    <tr key={album}>
-                      <td>{album}</td>
-                      <td>{pct}%</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="simbolo-capa" style={estado(1)}>
+              {video(1, "/proyectos/elysium/simbolo-formacion.mp4", "Formación del símbolo")}
             </div>
 
             <div className="simbolo-capa" style={estado(2)}>
@@ -153,6 +186,8 @@ export default function SimboloScroll() {
                   src="/proyectos/elysium/icono-render.webp"
                   alt="El icono del álbum, renderizado con su textura metálica"
                   loading="lazy"
+                  // El icono entra creciendo conforme se avanza por su paso.
+                  style={{ transform: `scale(${(0.72 + 0.28 * suave(dentroDe(2))).toFixed(3)})` }}
                 />
               </div>
             </div>
@@ -169,7 +204,7 @@ export function GaleriaSimbolos({ iconos }: { iconos: string[] }) {
   if (!iconos.length) return null;
   return (
     <section className="simbolo-galeria">
-      <p className="simbolo-titular">
+      <p className="simbolo-texto simbolo-titular">
         <LangText
           es="Aquí no hay dos símbolos iguales. Son docenas de combinaciones distintas y todas nacen exactamente del mismo sistema de reglas."
           en="No two symbols here are alike. Dozens of different combinations, and every one of them comes out of exactly the same set of rules."
