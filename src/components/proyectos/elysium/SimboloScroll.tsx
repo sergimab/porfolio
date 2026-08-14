@@ -109,9 +109,11 @@ export default function SimboloScroll() {
   // alto, así que al cruzarse asomaba el sobrante de la anterior por debajo de
   // la nueva.
   const estado = (i: number, conDeslizamiento = true) => {
-    const entra = (t - i) / FUNDIDO;
-    // El último paso no se va: tiene que seguir a la vista hasta que el
-    // bloque deje de estar fijo y siga el scroll normal.
+    // El primer paso no entra fundiéndose: ya está puesto desde el principio,
+    // junto a su vídeo, antes de que empiece el recorrido.
+    const entra = i === 0 ? 1 : (t - i) / FUNDIDO;
+    // Y el último no se va: tiene que seguir a la vista hasta que el bloque
+    // deje de estar fijo y siga el scroll normal.
     const sale = i === PASOS - 1 ? 1 : (i + 1 - t) / FUNDIDO;
     const op = suave(limitar(Math.min(entra, sale)));
     const y = conDeslizamiento ? (1 - op) * (t < i + 0.5 ? 18 : -18) : 0;
