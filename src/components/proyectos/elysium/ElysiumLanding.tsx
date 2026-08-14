@@ -96,6 +96,17 @@ export default function ElysiumLanding() {
         <SimboloScroll />
         <GaleriaSimbolos iconos={iconosDeFans()} />
 
+        {/* Lienzo interactivo, con su explicación delante. */}
+        <div className="project-text">
+          <p>
+            <LangText
+              es="Lo que viene ahora es una **simulación** del sistema que monté en **Blender** para desarrollar las formas y las texturas: allí, unos **Geometry Nodes** convertían cada trazo en volumen y lo fundían con los de al lado. Aquí puedes probarlo tú."
+              en="What comes next is a **simulation** of the system I built in **Blender** to develop the shapes and textures: there, a **Geometry Nodes** setup turned each stroke into volume and merged it with the ones beside it. Here you can try it yourself."
+            />
+          </p>
+        </div>
+        <LienzoMetal />
+
         {/* ── Bloque: creación del avatar ──────────────────────────────
             Va después del contenido nuevo. Son cuatro piezas seguidas
             (texto, texto + gif, secuencia de poses y lienzo) que se mueven
@@ -141,10 +152,6 @@ export default function ElysiumLanding() {
           relevoDerecha={siExiste("/proyectos/elysium/portada-1.webp")}
         />
 
-        {/* Lienzo interactivo: trazos que se funden como metaballs, guiño al
-            sistema de Geometry Nodes con el que se construyó la figura.
-            Pendiente de recolocar: irá más arriba. */}
-        <LienzoMetal />
         {/* ── Fin del bloque: creación del avatar ─────────────────────── */}
       </div>
     </main>

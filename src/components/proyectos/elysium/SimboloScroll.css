@@ -186,11 +186,13 @@
 }
 /* Vitrina: caja alargada de lado a lado que contiene la tira. El borde va en
    el color de texto, como el resto de marcos de la página. */
+/* Vitrina estrecha: una franja, no un panel. Las piezas mandan y la caja
+   solo las contiene. */
 .simbolo-vitrina {
   margin-top: 28px;
   border: 1px solid var(--foreground);
   border-radius: 16px;
-  padding: 28px 0 28px 28px;
+  padding: 18px 0 18px 20px;
   overflow: hidden;
 }
 .simbolo-tira {
@@ -199,7 +201,7 @@
   overflow-x: auto;
   /* Aire por la derecha al llegar al final del recorrido, para que la última
      pieza no quede pegada al borde de la caja. */
-  padding: 0 28px 14px 0;
+  padding: 0 20px 12px 0;
   /* Cada pieza se queda encajada al arrastrar, como un carrusel. */
   scroll-snap-type: x proximity;
   -webkit-overflow-scrolling: touch;
@@ -212,7 +214,7 @@
   border-radius: 3px;
 }
 .simbolo-tira img {
-  height: 320px;
+  height: 190px;
   width: auto;
   flex: none;
   scroll-snap-align: center;
@@ -223,6 +225,6 @@
     font-size: 14px;
   }
   .simbolo-tira img {
-    height: 210px;
+    height: 140px;
   }
 }
