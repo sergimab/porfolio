@@ -9,26 +9,27 @@ import "./LienzoFluido.css";
 // Lienzo de metal líquido.
 //
 // El dibujo no se pinta directamente: se construye en un canvas oculto un
-// MAPA DE ALTURA. Cada punto del trazo aporta una cúpula (un degradado radial
-// que vale 1 en el centro y 0 en el borde) y se combina con "lighten", es
-// decir, quedándose con el máximo. Así el trazo tiene sección de tubo, que es
-// lo que hace falta para que la superficie tenga curvatura en todo su ancho.
+// MAPA DE ALTURA, y de él sale todo lo demás.
 //
-// Un trazo blanco macizo, por mucho que se desenfoque, se satura por dentro:
-// la superficie sale como una meseta plana y el reflejo no cambia salvo en el
-// canto. Con cúpulas no pasa: la altura baja del centro al borde siempre.
+// Cada punto del trazo aporta una cúpula. DENTRO de un trazo las cúpulas se
+// combinan con el máximo, porque a lo largo del recorrido se pisan unas a
+// otras cientos de veces. ENTRE trazos distintos se SUMAN, como las
+// metaballs, y esa diferencia es todo el carácter de la pieza: una cinta
+// suelta apenas asoma por encima del umbral y sale fina, mientras que dos que
+// se acercan levantan entre ellas una masa mucho más gruesa que cualquiera de
+// las dos, hasta cerrar los huecos pequeños. Con el máximo no pasaría nada de
+// eso: el máximo nunca supera al mayor de los dos.
 //
-// Después, un desenfoque suave en dos pasadas redondea las uniones —ahí es
-// donde los trazos cercanos se sueldan entre sí— y la pendiente del campo en
-// cada píxel da la normal: hacia dónde mira la superficie ahí.
+// Después, un desenfoque en dos pasadas redondea las uniones —su radio es el
+// del filete cóncavo que las suelda— y la pendiente del campo en cada píxel
+// da la normal: hacia dónde mira la superficie ahí. La pendiente, y no el
+// valor: desde que los trazos se suman, el valor del campo ya no dice a qué
+// distancia del borde estás.
 //
-// Con la normal ya se puede hacer óptica de verdad en el shader:
-//   · reflejar la vista contra un entorno de estudio (de ahí las cintas que
-//     recorren el metal, que cambian según la curvatura),
-//   · refractar con un índice distinto para el rojo, el verde y el azul, que
-//     es lo que produce la dispersión iridiscente,
-//   · mezclar ambas según Fresnel: de frente manda la refracción y en los
-//     bordes rasantes, el reflejo.
+// Con la normal se hace óptica de verdad en el shader: reflejar la vista
+// contra un panorama de estudio (de ahí las cintas que recorren el metal),
+// con el rayo desviado un pelo en cada canal para la aberración cromática, y
+// Fresnel para que el filo se encienda al sesgo. Es opaco: metal, no vidrio.
 //
 // Es lo mismo que hace un render 3D, pero sobre un relieve deducido del
 // dibujo en vez de una malla.
@@ -61,6 +62,11 @@ const SOLAPE_VIVO = 30;
 const PLUMILLA = (-38 * Math.PI) / 180; // inclinación del filo
 const PLUMILLA_MIN = 0.12;              // grosor en la dirección del filo
 const MAX_PUNTOS = 24000;
+
+// Altura de una cúpula suelta, sobre 1. Junto con el umbral del shader es lo
+// que reparte el juego entre "trazo solo" y "trazos fundidos": cuanto más
+// bajo, más fino sale un trazo aislado y más se nota el engorde al juntarse.
+const PICO = 0.44;
 
 // Los puntos se guardan en coordenadas relativas al lienzo (0-1 en x, y la
 // misma escala en y), no en píxeles. En móvil, al arrastrar el dedo la barra
@@ -280,7 +286,13 @@ const BLUR = /* glsl */ `
     suma += texture2D(uTex, vUv + uPaso * 2.0).r * 0.121;
     suma += texture2D(uTex, vUv + uPaso * 3.0).r * 0.065;
     suma += texture2D(uTex, vUv + uPaso * 4.0).r * 0.028;
-    gl_FragColor = vec4(suma, suma, suma, suma);
+    // Alfa a 1, no al valor del campo. Con el valor, el material mezclaba el
+    // resultado consigo mismo al escribirlo y cada pasada lo elevaba al
+    // cuadrado: entre las dos, el campo salía a la cuarta. No se notaba
+    // mientras las cúpulas eran blancas —uno a la cuarta sigue siendo uno—,
+    // pero hunde cualquier valor por debajo de 1, que es justo lo que
+    // necesitan las metaballs para tener margen al sumarse.
+    gl_FragColor = vec4(suma, suma, suma, 1.0);
   }
 `;
 
@@ -291,11 +303,14 @@ const FRAGMENT = /* glsl */ `
   uniform float uUmbral;      // dónde corta la silueta
   uniform float uRelieve;     // pendiente de los faldones del tejadillo
   uniform float uFilo;        // cuánto vuelca el canto en el filo mismo
+  uniform float uGrano;       // pendiente a la que el faldón ya está a tope
   uniform sampler2D uEstudio; // panorama equirectangular del plató
 
   // Parte del ancho que ocupa el bisel del canto. Bajo = chapa plana con
   // arista viva; alto = vuelta a la sección de tubo.
   const float BISEL = 0.30;
+  // Grosor del reparto de relieve, en unidades de campo. Ver abajo.
+  const float RANGO = 0.16;
   // Inclinación del panorama (cos y sin de unos 58°). Cuanto más tumbado,
   // antes se descuelga el faldón al suelo y más oscura sale la pieza.
   const float ENV_COS = 0.53;
@@ -336,7 +351,12 @@ const FRAGMENT = /* glsl */ `
     if (dentro < 0.001) discard;
 
     // Cuánto adentro de la pieza estamos: 0 en el filo, 1 en el corazón.
-    float t = clamp((h - uUmbral) / (1.0 - uUmbral), 0.0, 1.0);
+    // El rango es corto y no llega hasta 1: ahora el campo puede valer
+    // cualquier cosa según cuántos trazos se sumen ahí, y si el reparto
+    // dependiera de eso, una cinta suelta saldría con el relieve a medias y
+    // una masa fundida, aplanada. Con un rango corto, ambas tienen el mismo
+    // canto y la misma cresta; lo que cambia entre ellas es el ancho.
+    float t = clamp((h - uUmbral) / RANGO, 0.0, 1.0);
     // Y dónde cae eso respecto al bisel: 0 en el filo, 1 al acabar el bisel y
     // empezar la meseta.
     float altura = clamp(t / BISEL, 0.0, 1.0);
@@ -354,7 +374,10 @@ const FRAGMENT = /* glsl */ `
     // un trazo fino —donde el campo cae en cuatro píxeles— sale casi vertical
     // y por tanto negro, mientras que uno ancho sale plano. Con el perfil, una
     // púa y un cuerpo ancho tienen el mismo canto y el mismo brillo.
-    vec2 d = px * 2.0;
+    // Las muestras van algo separadas a propósito. El mapa de altura solo
+    // tiene 256 niveles, y midiendo la pendiente entre píxeles contiguos esos
+    // escalones se amplifican y salpican la cresta de puntitos de color.
+    vec2 d = px * 3.0;
     vec2 grad = vec2(
       texture2D(uCampo, vUv + vec2(d.x, 0.0)).r - texture2D(uCampo, vUv - vec2(d.x, 0.0)).r,
       texture2D(uCampo, vUv + vec2(0.0, d.y)).r - texture2D(uCampo, vUv - vec2(0.0, d.y)).r
@@ -362,11 +385,18 @@ const FRAGMENT = /* glsl */ `
     float g = length(grad);
     vec2 dir = g > 0.00001 ? grad / g : vec2(0.0);
 
-    // Inclinación, en tangente del ángulo. El exponente bajo es lo que hace el
-    // tejadillo: la pendiente se mantiene casi igual a lo ancho del brazo y
-    // solo se desploma en la cresta. Con un exponente alto volveríamos a una
-    // superficie que se aplana enseguida, es decir, a la chapa.
-    float tilt = uRelieve * pow(1.0 - t, 0.4);
+    // La inclinación sale de LO EMPINADO que esté el campo, no de cuánto vale.
+    // Es la pieza que hace falta desde que los trazos se suman: el valor del
+    // campo ya no dice a qué distancia del borde estás —una masa fundida es
+    // una meseta saturada—, mientras que la pendiente lo dice siempre.
+    //
+    // Y sale gratis lo que buscábamos, sin un solo umbral que ajustar: en una
+    // cinta fina el campo baja por los dos lados casi hasta el centro, así que
+    // salen los dos faldones del tejadillo con su cresta; en una masa fundida
+    // el interior es llano y queda como una chapa de espejo con el canto
+    // biselado. Que es justo lo que hace la referencia.
+    float m = g / (g + uGrano);
+    float tilt = uRelieve * m;
     // Y un repunte corto justo en el filo: ahí el canto vuelca hasta rasante y
     // devuelve el hilo de luz que perfila cada pieza contra el fondo negro.
     tilt += uFilo * pow(1.0 - altura, 3.0);
@@ -385,7 +415,7 @@ const FRAGMENT = /* glsl */ `
     // es donde la desviación cambia deprisa— sin perder la opacidad.
     // Muy poca: lo justo para que el filo tenga franja de color. Subiéndola,
     // el bisel entero se vuelve un arcoíris y deja de leerse como metal.
-    float disp = 0.005;
+    float disp = 0.0028;
     vec3 refl = vec3(
       entorno(reflect(-V, normalize(n + vec3(-disp, -disp, 0.0)))).r,
       entorno(R).g,
@@ -413,6 +443,7 @@ export default function LienzoMetal() {
   const maskRef = useRef<HTMLCanvasElement | null>(null);
   const posoRef = useRef<HTMLCanvasElement | null>(null); // trazos terminados
   const vivoRef = useRef<HTMLCanvasElement | null>(null); // trazo en curso
+  const sueltoRef = useRef<HTMLCanvasElement | null>(null); // un trazo, a solas
   const dibujadosRef = useRef(0); // puntos crudos del trazo en curso ya pintados
   const anchoCssRef = useRef(1);  // ancho del lienzo en px, para el paso a relativo
   const trazosRef = useRef<Punto[][]>([]);
@@ -481,20 +512,32 @@ export default function LienzoMetal() {
     return () => io.disconnect();
   }, []);
 
-  // Una cúpula en (x, y) de radio r. Las paradas del degradado siguen
-  // aproximadamente sqrt(1 - d²), el perfil de una esfera: es lo que da la
-  // sección redonda del tubo.
+  // Una cúpula en (x, y) de radio r: el núcleo de una metaball.
+  //
+  // Dos cosas importan aquí. La primera, el perfil: (1 - d)^1,6. Tiene las
+  // dos propiedades que hacen falta a la vez, y no es el núcleo habitual de
+  // metaball —(1 - d²)²—, que es de cumbre plana y dejaba el interior de cada
+  // cinta como un gris liso. Este llega al borde con pendiente nula, así que
+  // dos cúpulas vecinas se suman sin costura, pero en el centro llega en
+  // ángulo, y ese pico es la cresta que recorre el brazo.
+  //
+  // La segunda, el PICO. No llega a blanco ni de lejos, y es a propósito: una
+  // cúpula sola apenas asoma por encima del umbral, así que un trazo suelto
+  // sale fino. Es al sumarse con los de al lado cuando el campo se dispara y
+  // aparece la masa. Si el pico fuera 1, un trazo solo ya saturaría y no
+  // quedaría margen para engordar al fusionarse.
   const cupula = (ctx: CanvasRenderingContext2D, x: number, y: number, r: number) => {
     if (r < 0.3) return;
-    // La altura va en el color sobre fondo negro opaco, no en el alfa: al
-    // componer, los alfas se suman y el interior se saturaría otra vez; los
-    // colores con "lighten" sí se quedan con el máximo.
+    // La altura va en el color sobre fondo negro, no en el alfa: al componer,
+    // los alfas se comportan distinto y el interior se ensuciaría.
     const g = ctx.createRadialGradient(x, y, 0, x, y, r);
-    g.addColorStop(0, "rgb(255,255,255)");
-    g.addColorStop(0.35, "rgb(240,240,240)");
-    g.addColorStop(0.6, "rgb(204,204,204)");
-    g.addColorStop(0.8, "rgb(153,153,153)");
-    g.addColorStop(0.93, "rgb(82,82,82)");
+    const v = (k: number) => Math.round(PICO * 255 * k);
+    g.addColorStop(0, `rgb(${v(1)},${v(1)},${v(1)})`);
+    g.addColorStop(0.15, `rgb(${v(0.771)},${v(0.771)},${v(0.771)})`);
+    g.addColorStop(0.3, `rgb(${v(0.565)},${v(0.565)},${v(0.565)})`);
+    g.addColorStop(0.5, `rgb(${v(0.33)},${v(0.33)},${v(0.33)})`);
+    g.addColorStop(0.7, `rgb(${v(0.146)},${v(0.146)},${v(0.146)})`);
+    g.addColorStop(0.85, `rgb(${v(0.048)},${v(0.048)},${v(0.048)})`);
     g.addColorStop(1, "rgb(0,0,0)");
     ctx.fillStyle = g;
     ctx.beginPath();
@@ -584,9 +627,9 @@ export default function LienzoMetal() {
     ctx.globalCompositeOperation = "source-over";
     ctx.fillStyle = "#000";
     ctx.fillRect(0, 0, mask.width, mask.height);
-    // "lighten" para quedarse con el máximo de las dos capas, igual que entre
-    // cúpulas: con source-over, el vivo taparía el poso con su fondo negro.
-    ctx.globalCompositeOperation = "lighten";
+    // Aquí se SUMA, no se toma el máximo: el trazo en curso tiene que engordar
+    // los que ya están cuando se les acerca, igual que ellos entre sí.
+    ctx.globalCompositeOperation = "lighter";
     if (poso) ctx.drawImage(poso, 0, 0);
     if (vivo) ctx.drawImage(vivo, 0, 0);
     ctx.restore();
@@ -602,11 +645,30 @@ export default function LienzoMetal() {
     ctx.restore();
   };
 
+  // Cada trazo se arma A SOLAS en una capa aparte y solo después se suma al
+  // poso. La distinción es todo el efecto: DENTRO de un trazo las cúpulas van
+  // al máximo, porque se pisan unas a otras cientos de veces a lo largo del
+  // recorrido y sumarlas lo saturaría al instante; ENTRE trazos distintos se
+  // suman, y por eso dos cintas finas que se cruzan levantan ahí una masa
+  // mucho más gruesa que cualquiera de las dos.
   const repintarMapa = useCallback(() => {
     limpiarCapa(posoRef.current);
     limpiarCapa(vivoRef.current);
-    const ctx = posoRef.current?.getContext("2d");
-    if (ctx) for (const t of trazosRef.current) pintarTrazo(ctx, t);
+    const poso = posoRef.current;
+    const suelto = sueltoRef.current;
+    const ctx = poso?.getContext("2d");
+    const ctxSuelto = suelto?.getContext("2d");
+    if (ctx && suelto && ctxSuelto) {
+      for (const t of trazosRef.current) {
+        limpiarCapa(suelto);
+        pintarTrazo(ctxSuelto, t);
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.globalCompositeOperation = "lighter";
+        ctx.drawImage(suelto, 0, 0);
+        ctx.restore();
+      }
+    }
     dibujadosRef.current = 0;
     componerMapa();
   }, [pintarTrazo, componerMapa]);
@@ -624,6 +686,7 @@ export default function LienzoMetal() {
     maskRef.current = mask;
     posoRef.current = document.createElement("canvas");
     vivoRef.current = document.createElement("canvas");
+    sueltoRef.current = document.createElement("canvas");
 
     let renderer: THREE.WebGLRenderer;
     try {
@@ -671,7 +734,10 @@ export default function LienzoMetal() {
       vertexShader: VERTEX,
       fragmentShader: BLUR,
       uniforms: { uTex: { value: null }, uPaso: { value: new THREE.Vector2() } },
-      transparent: true,
+      // Sin mezcla: el desenfoque escribe el campo tal cual en el destino.
+      // No está pintando nada encima de nada, está calculando.
+      transparent: false,
+      blending: THREE.NoBlending,
     });
     const matFinal = new THREE.ShaderMaterial({
       vertexShader: VERTEX,
@@ -680,9 +746,10 @@ export default function LienzoMetal() {
         uCampo: { value: null },
         uEstudio: { value: null },
         uRes: { value: new THREE.Vector2() },
-        uUmbral: { value: 0.18 },
-        uRelieve: { value: 1.1 },
+        uUmbral: { value: 0.12 },
+        uRelieve: { value: 1.3 },
         uFilo: { value: 1.7 },
+        uGrano: { value: 0.10 },
       },
       transparent: true,
     });
@@ -702,7 +769,7 @@ export default function LienzoMetal() {
       renderer.setSize(width, height, false);
       renderer.domElement.style.width = "100%";
       renderer.domElement.style.height = "100%";
-      for (const capa of [mask, posoRef.current, vivoRef.current]) {
+      for (const capa of [mask, posoRef.current, vivoRef.current, sueltoRef.current]) {
         if (!capa) continue;
         capa.width = Math.round(width * dpr);
         capa.height = Math.round(height * dpr);
