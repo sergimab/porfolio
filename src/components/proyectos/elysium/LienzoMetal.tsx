@@ -37,8 +37,8 @@ import "./LienzoFluido.css";
 // El trazo es casi parejo: la horquilla entre ir despacio y ir rápido es
 // estrecha a propósito. Un trazo que cambia mucho de grosor mientras lo
 // dibujas llega con silueta propia, y la silueta tiene que salir de la fusión.
-const GROSOR_MAX = 29;
-const GROSOR_MIN = 22;
+const GROSOR_MAX = 17;
+const GROSOR_MIN = 13;
 const VELOCIDAD_TOPE = 3.2;
 const SUAVIZADO = 0.22;
 const AFILADO = 3.2;        // >1 afila; a más valor, la punta adelgaza antes
@@ -71,6 +71,22 @@ const MAX_PUNTOS = 24000;
 // que reparte el juego entre "trazo solo" y "trazos fundidos": cuanto más
 // bajo, más fino sale un trazo aislado y más se nota el engorde al juntarse.
 const PICO = 0.44;
+
+// ALCANCE separa dos cosas que hasta ahora eran la misma: lo ANCHO que se ve
+// un trazo y lo LEJOS que llega su influencia. Cada cúpula se pinta con un
+// radio ALCANCE veces mayor que el grosor del trazo, pero el umbral corta muy
+// por encima de su falda, así que un trazo solo sigue viéndose como una cinta
+// fina: casi toda su cúpula queda por debajo del corte, invisible.
+//
+// Lo invisible es justo lo que hace el efecto. Cuando otro trazo pasa cerca,
+// las dos faldas se suman y el hueco entre ellos supera el corte de golpe: se
+// sueldan desde lejos, con una masa mucho más ancha que cualquiera de los dos,
+// y los huecos pequeños se cierran solos. Es el comportamiento de un líquido
+// con tensión superficial, y es de donde salen las formas de la referencia.
+//
+// Con ALCANCE = 1 volveríamos a lo de antes: trazos que solo engordan donde
+// literalmente se pisan.
+const ALCANCE = 2.6;
 
 // Los puntos se guardan en coordenadas relativas al lienzo (0-1 en x, y la
 // misma escala en y), no en píxeles. En móvil, al arrastrar el dedo la barra
@@ -523,9 +539,12 @@ export default function LienzoMetal() {
   // quedaría margen para engordar al fusionarse.
   const cupula = (ctx: CanvasRenderingContext2D, x: number, y: number, r: number) => {
     if (r < 0.3) return;
+    // El radio que se pinta es el de INFLUENCIA, bastante mayor que el grosor
+    // visible del trazo. La diferencia entre los dos es la que se fusiona.
+    const R = r * ALCANCE;
     // La altura va en el color sobre fondo negro, no en el alfa: al componer,
     // los alfas se comportan distinto y el interior se ensuciaría.
-    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    const g = ctx.createRadialGradient(x, y, 0, x, y, R);
     const v = (k: number) => Math.round(PICO * 255 * k);
     g.addColorStop(0, `rgb(${v(1)},${v(1)},${v(1)})`);
     g.addColorStop(0.15, `rgb(${v(0.771)},${v(0.771)},${v(0.771)})`);
@@ -536,7 +555,7 @@ export default function LienzoMetal() {
     g.addColorStop(1, "rgb(0,0,0)");
     ctx.fillStyle = g;
     ctx.beginPath();
-    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.arc(x, y, R, 0, Math.PI * 2);
     ctx.fill();
   };
 
@@ -741,7 +760,7 @@ export default function LienzoMetal() {
         uCampo: { value: null },
         uEstudio: { value: null },
         uRes: { value: new THREE.Vector2() },
-        uUmbral: { value: 0.12 },
+        uUmbral: { value: 0.19 },
         uRelieve: { value: 1.3 },
         uFilo: { value: 1.7 },
         uGrano: { value: 0.10 },
