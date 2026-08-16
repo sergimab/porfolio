@@ -34,19 +34,20 @@ import "./LienzoFluido.css";
 // Es lo mismo que hace un render 3D, pero sobre un relieve deducido del
 // dibujo en vez de una malla.
 
-// El trazo es casi parejo: la horquilla entre ir despacio y ir rápido es
-// estrecha a propósito. Un trazo que cambia mucho de grosor mientras lo
-// dibujas llega con silueta propia, y la silueta tiene que salir de la fusión.
-const GROSOR_MAX = 11;
-const GROSOR_MIN = 8;
-const VELOCIDAD_TOPE = 3.2;
+// Horquilla ancha entre ir despacio y ir rápido: un barrido veloz deja una
+// cinta finísima y uno lento un cuerpo con algo de carne. Es variación por
+// VELOCIDAD, no por dirección —eso era la plumilla, y se quitó—, así que no
+// impone una silueta al trazo: solo lo hace más o menos delgado.
+const GROSOR_MAX = 13;
+const GROSOR_MIN = 5;
+const VELOCIDAD_TOPE = 1.4;
 const SUAVIZADO = 0.22;
-const AFILADO = 3.2;        // >1 afila; a más valor, la punta adelgaza antes
+const AFILADO = 4.6;        // >1 afila; a más valor, la punta adelgaza antes
 const PUNTA_MIN = 0.12;
 // Longitud de cada punta, en múltiplos del radio. Es alta a propósito: en la
 // referencia las puntas son agujas larguísimas que salen del cuerpo y siguen
 // afinando durante un buen trecho, no conos cortos rematando el trazo.
-const LARGO_PUNTA = 15;
+const LARGO_PUNTA = 22;
 const SUAVIZAR_PASADAS = 3; // pasadas de suavizado del recorrido
 const PASO_REMUESTREO = 2;  // separación, en px, al reconstruir la curva
 const VENTANA_GROSOR = 9;   // puntos que se promedian para pulir el grosor
@@ -70,7 +71,7 @@ const MAX_PUNTOS = 24000;
 // Altura de una cúpula suelta, sobre 1. Junto con el umbral del shader es lo
 // que reparte el juego entre "trazo solo" y "trazos fundidos": cuanto más
 // bajo, más fino sale un trazo aislado y más se nota el engorde al juntarse.
-const PICO = 0.44;
+const PICO = 0.80;
 
 // ALCANCE separa dos cosas que hasta ahora eran la misma: lo ANCHO que se ve
 // un trazo y lo LEJOS que llega su influencia. Cada cúpula se pinta con un
@@ -86,7 +87,7 @@ const PICO = 0.44;
 //
 // Con ALCANCE = 1 volveríamos a lo de antes: trazos que solo engordan donde
 // literalmente se pisan.
-const ALCANCE = 4.1;
+const ALCANCE = 7.0;
 
 // Los puntos se guardan en coordenadas relativas al lienzo (0-1 en x, y la
 // misma escala en y), no en píxeles. En móvil, al arrastrar el dedo la barra
@@ -321,7 +322,7 @@ const FRAGMENT = /* glsl */ `
   // arista viva; alto = vuelta a la sección de tubo.
   const float BISEL = 0.30;
   // Grosor del reparto de relieve, en unidades de campo. Ver abajo.
-  const float RANGO = 0.16;
+  const float RANGO = 0.155;
   // Inclinación del panorama (cos y sin de unos 58°). Cuanto más tumbado,
   // antes se descuelga el faldón al suelo y más oscura sale la pieza.
   const float ENV_COS = 0.53;
@@ -760,7 +761,7 @@ export default function LienzoMetal() {
         uCampo: { value: null },
         uEstudio: { value: null },
         uRes: { value: new THREE.Vector2() },
-        uUmbral: { value: 0.28 },
+        uUmbral: { value: 0.627 },
         uRelieve: { value: 1.3 },
         uFilo: { value: 1.7 },
         uGrano: { value: 0.10 },
@@ -891,13 +892,13 @@ export default function LienzoMetal() {
       // cuánto se hunde la membrana entre dos brazos que se cruzan. Corto,
       // los trazos se tocan y ya; largo, se sueldan con esa curva cóncava que
       // recorre el hueco de lado a lado, como en la referencia.
-      matBlur.uniforms.uPaso.value.set(1.8 / rt1.width, 0);
+      matBlur.uniforms.uPaso.value.set(1.1 / rt1.width, 0);
       renderer.setRenderTarget(rt1);
       renderer.render(escena, camara);
 
       // Pasada 2: desenfoque vertical. Aquí es donde se sueldan los trazos.
       matBlur.uniforms.uTex.value = rt1.texture;
-      matBlur.uniforms.uPaso.value.set(0, 1.8 / rt1.height);
+      matBlur.uniforms.uPaso.value.set(0, 1.1 / rt1.height);
       renderer.setRenderTarget(rt2);
       renderer.render(escena, camara);
 
