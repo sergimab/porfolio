@@ -34,8 +34,11 @@ import "./LienzoFluido.css";
 // Es lo mismo que hace un render 3D, pero sobre un relieve deducido del
 // dibujo en vez de una malla.
 
-const GROSOR_MAX = 54;
-const GROSOR_MIN = 26;
+// El trazo es casi parejo: la horquilla entre ir despacio y ir rápido es
+// estrecha a propósito. Un trazo que cambia mucho de grosor mientras lo
+// dibujas llega con silueta propia, y la silueta tiene que salir de la fusión.
+const GROSOR_MAX = 42;
+const GROSOR_MIN = 32;
 const VELOCIDAD_TOPE = 3.2;
 const SUAVIZADO = 0.22;
 const AFILADO = 3.2;        // >1 afila; a más valor, la punta adelgaza antes
@@ -55,12 +58,13 @@ const PENDIENTE_MAX = 0.18;
 // trazo en curso, para que el suavizado empalme sin costura.
 const SOLAPE_VIVO = 30;
 
-// Plumilla: el trazo se comporta como una pluma de punta ancha inclinada.
-// Al moverse perpendicular al filo deja su grosor máximo y, al moverse en la
-// dirección del filo, un pelo. Es de donde sale la alternancia de finas y
-// gruesas al cambiar de sentido.
-const PLUMILLA = (-38 * Math.PI) / 180; // inclinación del filo
-const PLUMILLA_MIN = 0.12;              // grosor en la dirección del filo
+// Aquí hubo una plumilla: el grosor cambiaba según la dirección del trazo,
+// como una pluma de punta ancha inclinada. Se ha quitado a conciencia. Ese es
+// un gesto CALIGRÁFICO, y competía con el mecanismo que de verdad da la forma:
+// en la referencia la línea que dibujas es un pelo parejo, y todo el modelado
+// —dónde engorda, dónde se estrecha, dónde se cierra un hueco— sale de cómo se
+// funden unos trazos con otros. Con la plumilla encima, el trazo ya llegaba
+// con una silueta propia y ensuciaba la que producía la fusión.
 const MAX_PUNTOS = 24000;
 
 // Altura de una cúpula suelta, sobre 1. Junto con el umbral del shader es lo
@@ -187,15 +191,6 @@ function factorPunta(distanciaAlExtremo: number, radio: number, largoTotal: numb
   // potencia sola llegaba en ángulo.
   const suave = t * t * (3 - 2 * t);
   return Math.pow(suave, AFILADO * 0.75);
-}
-
-// Grosor según la dirección del movimiento respecto al filo de la plumilla.
-function factorPlumilla(dx: number, dy: number): number {
-  const largo = Math.hypot(dx, dy);
-  if (largo < 0.0001) return 1;
-  const ang = Math.atan2(dy, dx);
-  const s = Math.abs(Math.sin(ang - PLUMILLA));
-  return PLUMILLA_MIN + (1 - PLUMILLA_MIN) * Math.pow(s, 0.7);
 }
 
 // Estudio equirectangular generado por código: un panorama 2:1 donde la
@@ -828,10 +823,9 @@ export default function LienzoMetal() {
         radio = GROSOR_MAX - (GROSOR_MAX - GROSOR_MIN) * v;
       }
       radioRef.current += (radio - radioRef.current) * SUAVIZADO;
-      const plumilla = previo ? factorPlumilla(p.x - previo.x, p.y - previo.y) : 1;
       // El radio se guarda en la misma escala relativa que x e y: en píxeles,
       // al pintar se multiplicaría por el ancho y saldría descomunal.
-      trazo.push({ x: p.x, y: p.y, r: (radioRef.current * plumilla) / ancho });
+      trazo.push({ x: p.x, y: p.y, r: radioRef.current / ancho });
       ultimoRef.current = p;
     }
     colaRef.current = [];
