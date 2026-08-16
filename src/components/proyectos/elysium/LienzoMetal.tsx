@@ -33,13 +33,16 @@ import "./LienzoFluido.css";
 // Es lo mismo que hace un render 3D, pero sobre un relieve deducido del
 // dibujo en vez de una malla.
 
-const GROSOR_MAX = 46;
-const GROSOR_MIN = 18;
+const GROSOR_MAX = 54;
+const GROSOR_MIN = 26;
 const VELOCIDAD_TOPE = 3.2;
 const SUAVIZADO = 0.22;
-const AFILADO = 2.6;        // >1 afila; a más valor, la punta adelgaza antes
-const PUNTA_MIN = 0.35;
-const LARGO_PUNTA = 9;      // longitud de cada punta, en múltiplos del radio
+const AFILADO = 3.2;        // >1 afila; a más valor, la punta adelgaza antes
+const PUNTA_MIN = 0.12;
+// Longitud de cada punta, en múltiplos del radio. Es alta a propósito: en la
+// referencia las puntas son agujas larguísimas que salen del cuerpo y siguen
+// afinando durante un buen trecho, no conos cortos rematando el trazo.
+const LARGO_PUNTA = 15;
 const SUAVIZAR_PASADAS = 3; // pasadas de suavizado del recorrido
 const PASO_REMUESTREO = 2;  // separación, en px, al reconstruir la curva
 const VENTANA_GROSOR = 9;   // puntos que se promedian para pulir el grosor
@@ -200,50 +203,51 @@ function crearEstudio(): HTMLCanvasElement {
   c.height = 512;
   const ctx = c.getContext("2d")!;
 
-  // Cielo y suelo.
+  // Cielo y suelo, con el horizonte cortado en seco. Ese corte es la clave
+  // del cromo: al reflejarse sobre una superficie curva se convierte en la
+  // línea nítida que separa la mitad clara de la oscura en cada pieza. Con un
+  // degradado suave en su lugar, el metal sale gris y sin carácter.
   const fondo = ctx.createLinearGradient(0, 0, 0, c.height);
   fondo.addColorStop(0, "#ffffff");
-  fondo.addColorStop(0.3, "#e6eaf0");
-  fondo.addColorStop(0.46, "#3a3f47");
-  fondo.addColorStop(0.55, "#0d0f13");
-  fondo.addColorStop(1, "#030304");
+  fondo.addColorStop(0.34, "#f4f7fb");
+  fondo.addColorStop(0.46, "#c8d2de");
+  fondo.addColorStop(0.495, "#8e9099"); // horizonte
+  fondo.addColorStop(0.5, "#2a2622");
+  fondo.addColorStop(0.62, "#59544d"); // suelo, con un punto de calidez
+  fondo.addColorStop(0.78, "#2b2520");
+  fondo.addColorStop(1, "#050505");
   ctx.fillStyle = fondo;
   ctx.fillRect(0, 0, c.width, c.height);
 
-  // Softboxes: rectángulos muy claros repartidos por el techo y la banda
-  // media. Son la fuente de los reflejos alargados.
-  ctx.filter = "blur(9px)";
+  // Softboxes: pocos y muy grandes. En la referencia el metal refleja masas
+  // amplias de luz, no una retícula: son esas masas las que se estiran a lo
+  // largo del trazo y dan las cintas limpias.
+  ctx.filter = "blur(28px)";
   const cajas: [number, number, number, number, string][] = [
-    [40, 30, 240, 120, "#ffffff"],
-    [360, 10, 180, 90, "#ffffff"],
-    [640, 40, 300, 110, "#f2f6ff"],
-    [120, 170, 150, 60, "#ffffff"],
-    [520, 150, 220, 70, "#eef3ff"],
-    [830, 180, 130, 50, "#ffffff"],
-    [250, 240, 420, 26, "#dfe6f2"],
-    [700, 250, 260, 20, "#cdd6e4"],
+    [60, 20, 380, 150, "#ffffff"],
+    [560, 0, 420, 130, "#ffffff"],
+    [200, 200, 300, 70, "#ffffff"],
+    [700, 220, 240, 60, "#eef4ff"],
   ];
   for (const [x, y, w, h, color] of cajas) {
     ctx.fillStyle = color;
     ctx.fillRect(x, y, w, h);
   }
 
-  // Tiras verticales: los montantes del plató. Al reflejarse en una
-  // superficie curva se convierten en las cintas que la recorren.
-  ctx.filter = "blur(5px)";
-  for (let i = 0; i < 14; i++) {
-    const x = (i / 14) * c.width + (i % 3) * 12;
-    const ancho = 6 + (i % 4) * 5;
-    ctx.fillStyle = i % 2 ? "rgba(255,255,255,0.95)" : "rgba(4,5,7,0.95)";
-    ctx.fillRect(x, 40, ancho, 330);
+  // Unos pocos montantes oscuros, muy separados: cortan las masas de luz y
+  // producen los quiebros del reflejo sin llenarlo de rayas.
+  ctx.filter = "blur(10px)";
+  for (let i = 0; i < 5; i++) {
+    const x = 90 + i * 205;
+    ctx.fillStyle = "rgba(6,7,9,0.9)";
+    ctx.fillRect(x, 0, 26 + (i % 2) * 18, 250);
   }
 
-  // Un par de reflejos cálidos, para que el metal no salga muerto de color.
-  ctx.filter = "blur(26px)";
-  ctx.fillStyle = "rgba(255,214,170,0.5)";
-  ctx.fillRect(120, 120, 180, 90);
-  ctx.fillStyle = "rgba(150,190,255,0.45)";
-  ctx.fillRect(760, 90, 200, 110);
+  // Franja clara justo debajo del horizonte: es el rebote del suelo, y es lo
+  // que evita que la mitad inferior del metal se vaya a negro del todo.
+  ctx.filter = "blur(20px)";
+  ctx.fillStyle = "rgba(216,206,194,0.5)";
+  ctx.fillRect(0, 262, c.width, 26);
   ctx.filter = "none";
   return c;
 }
@@ -285,30 +289,39 @@ const FRAGMENT = /* glsl */ `
   uniform sampler2D uCampo;   // mapa de altura ya desenfocado
   uniform vec2  uRes;
   uniform float uUmbral;      // dónde corta la silueta
-  uniform float uRelieve;     // cuánto abomba la superficie
+  uniform float uRelieve;     // inclinación máxima del bisel, en tangente
   uniform sampler2D uEstudio; // panorama equirectangular del plató
+
+  // Parte del ancho que ocupa el bisel del canto. Bajo = chapa plana con
+  // arista viva; alto = vuelta a la sección de tubo.
+  const float BISEL = 0.30;
+  // Inclinación del panorama (cos y sin de unos 70°).
+  const float ENV_COS = 0.34;
+  const float ENV_SIN = 0.94;
 
   // Muestreo del panorama: la dirección se convierte en coordenadas de la
   // imagen equirectangular (giro alrededor y ángulo respecto al cenit).
   vec3 entorno(vec3 dir) {
-    vec3 d = normalize(dir);
+    // El panorama va TUMBADO unos 70°. Sin girarlo, la parte plana de la
+    // pieza —que mira de frente al espectador— refleja exactamente el
+    // horizonte, y como el horizonte es la banda oscura, el metal entero
+    // salía marrón. Tumbado del todo (90°) tampoco vale: lo plano queda
+    // blanco pero el bisel se descuelga al suelo de golpe y la pieza sale
+    // negra. A 70° lo plano mira al cielo, el bisel barre toda la franja
+    // clara mientras se inclina y solo el filo llega al suelo. Ese reparto
+    // —claro por dentro, oscuro justo en el canto— es el del cromo.
+    vec3 d = normalize(vec3(
+      dir.x,
+      dir.y * ENV_COS + dir.z * ENV_SIN,
+      dir.z * ENV_COS - dir.y * ENV_SIN
+    ));
     float u = atan(d.z, d.x) / 6.2831853 + 0.5;
     float v = acos(clamp(d.y, -1.0, 1.0)) / 3.14159265;
     vec3 col = texture2D(uEstudio, vec2(u, v)).rgb;
     // El panorama se usa como iluminación, no como imagen: subirle el
     // contraste separa los reflejos de las sombras y es lo que hace que el
     // metal parezca pulido en vez de mate.
-    return col * col * 1.35;
-  }
-
-  // Altura de la superficie en un punto: la rampa del campo, redondeada.
-  // La raíz cuadrada convierte la caída lineal del desenfoque en una sección
-  // de tubo; sin ella la pieza sería una meseta con el canto biselado y el
-  // reflejo solo cambiaría en el borde.
-  float alturaEn(vec2 uv) {
-    float h = texture2D(uCampo, uv).r;
-    float t = clamp((h - uUmbral) / (1.0 - uUmbral), 0.0, 1.0);
-    return sqrt(t);
+    return col * col * 1.1;
   }
 
   void main() {
@@ -320,38 +333,72 @@ const FRAGMENT = /* glsl */ `
     float dentro = smoothstep(uUmbral - 0.015, uUmbral + 0.015, h);
     if (dentro < 0.001) discard;
 
-    float altura = alturaEn(vUv);
+    // Cuánto adentro de la pieza estamos: 0 en el filo, 1 en el corazón.
+    float t = clamp((h - uUmbral) / (1.0 - uUmbral), 0.0, 1.0);
+    // Y dónde cae eso respecto al bisel: 0 en el filo, 1 al acabar el bisel y
+    // empezar la meseta.
+    float altura = clamp(t / BISEL, 0.0, 1.0);
 
-    // Normal por diferencias finitas sobre la altura ya redondeada: así la
-    // curvatura recorre todo el ancho del trazo y el reflejo cambia con ella.
+    // La superficie no es un tubo, es una CHAPA BISELADA: plana por dentro y
+    // con un bisel corto en el canto. De ahí salen los grandes planos de
+    // espejo limpio de la referencia, que una sección redonda no puede dar
+    // porque reparte la curvatura por todo el ancho y embarra el reflejo.
+    //
+    // Del campo se toma solo HACIA DÓNDE cae, no cuánto. La inclinación la
+    // pone el perfil. Es la diferencia que importa: deduciéndola del gradiente,
+    // un trazo fino —donde el campo cae en cuatro píxeles— sale casi vertical
+    // y por tanto negro, mientras que uno ancho sale plano. Con el perfil, una
+    // púa y un cuerpo ancho tienen el mismo canto y el mismo brillo.
     vec2 d = px * 2.0;
-    float ax1 = alturaEn(vUv + vec2(d.x, 0.0));
-    float ax0 = alturaEn(vUv - vec2(d.x, 0.0));
-    float ay1 = alturaEn(vUv + vec2(0.0, d.y));
-    float ay0 = alturaEn(vUv - vec2(0.0, d.y));
-    vec3 n = normalize(vec3(-(ax1 - ax0) * uRelieve, -(ay1 - ay0) * uRelieve, 1.0));
+    vec2 grad = vec2(
+      texture2D(uCampo, vUv + vec2(d.x, 0.0)).r - texture2D(uCampo, vUv - vec2(d.x, 0.0)).r,
+      texture2D(uCampo, vUv + vec2(0.0, d.y)).r - texture2D(uCampo, vUv - vec2(0.0, d.y)).r
+    );
+    float g = length(grad);
+    vec2 dir = g > 0.00001 ? grad / g : vec2(0.0);
+
+    // Inclinación (tangente del ángulo): máxima justo en el filo y nula en la
+    // meseta. El segundo término deja un abombamiento mínimo en el interior,
+    // para que el reflejo no se quede congelado en las piezas anchas.
+    // El segundo término no es un detalle: una meseta perfectamente plana
+    // refleja siempre el mismo punto del panorama y sale de un blanco liso.
+    // Con este abombamiento suave, el interior de cada pieza barre desde el
+    // cielo hasta el horizonte, y ahí aparece la línea oscura que recorre el
+    // trazo a lo largo — la marca de fábrica del cromo.
+    float tilt = uRelieve * pow(1.0 - altura, 0.7) + 0.9 * (1.0 - t);
+    vec3 n = normalize(vec3(-dir * tilt, 1.0));
 
     vec3 V = vec3(0.0, 0.0, 1.0);
 
-    // Reflexión del entorno.
+    // Esto es METAL, no vidrio: el color viene del reflejo, siempre. Antes se
+    // mezclaba con la refracción y de frente mandaba ella, que es lo que daba
+    // ese aspecto translúcido y lechoso; el cromo de la referencia es opaco y
+    // espeja igual mirándolo de frente que al sesgo.
     vec3 R = reflect(-V, n);
-    vec3 refl = entorno(R);
 
-    // Refracción con un índice por canal: el vidrio desvía más el azul que el
-    // rojo, y esa diferencia es la dispersión que se ve como iridiscencia.
-    vec3 tr = refract(-V, n, 1.0 / 1.36);
-    vec3 tg = refract(-V, n, 1.0 / 1.45);
-    vec3 tb = refract(-V, n, 1.0 / 1.54);
-    vec3 refr = vec3(entorno(tr).r, entorno(tg).g, entorno(tb).b);
+    // La aberración cromática se hace desviando un pelo el rayo REFLEJADO en
+    // cada canal, no refractando: así hay franja de color en las aristas —que
+    // es donde la desviación cambia deprisa— sin perder la opacidad.
+    // Muy poca: lo justo para que el filo tenga franja de color. Subiéndola,
+    // el bisel entero se vuelve un arcoíris y deja de leerse como metal.
+    float disp = 0.005;
+    vec3 refl = vec3(
+      entorno(reflect(-V, normalize(n + vec3(-disp, -disp, 0.0)))).r,
+      entorno(R).g,
+      entorno(reflect(-V, normalize(n + vec3(disp, disp, 0.0)))).b
+    );
 
-    // Fresnel: de frente se ve a través, al sesgo espeja.
+    // Fresnel sobre metal: no decide entre ver a través o espejar, solo sube
+    // el brillo al sesgo. El suelo del 0,78 es lo que lo mantiene metálico.
     float f = pow(1.0 - clamp(dot(n, V), 0.0, 1.0), 4.0);
-    f = clamp(0.12 + f * 0.85, 0.0, 1.0);
+    // Tinte de acero: el cromo no es un espejo neutro, apaga un punto el rojo.
+    vec3 tinte = vec3(0.94, 0.96, 1.0);
+    vec3 color = refl * tinte * (0.78 + 0.5 * f);
 
-    vec3 color = mix(refr, refl, f);
-
-    // Realce del canto, que es lo que hace que la pieza parezca tener grosor.
-    color += vec3(0.9, 0.95, 1.0) * pow(1.0 - altura, 6.0) * 0.35;
+    // El canto se OSCURECE, no se realza: en la referencia el filo de cada
+    // pieza recoge el suelo del plató y se funde con el negro del fondo. Es lo
+    // que separa una pieza de la de al lado sin necesidad de contorno.
+    color *= mix(0.40, 1.0, smoothstep(0.0, 0.5, altura));
 
     gl_FragColor = vec4(color, dentro);
   }
@@ -607,6 +654,11 @@ export default function LienzoMetal() {
     // El panorama da la vuelta completa: la costura tiene que repetirse.
     estudio.wrapS = THREE.RepeatWrapping;
     estudio.wrapT = THREE.ClampToEdgeWrapping;
+    // Sin voltear. Three sube las texturas del revés por defecto, y aquí eso
+    // ponía el cielo abajo: el shader calcula la vertical como el ángulo desde
+    // el cenit (0 arriba), así que una superficie plana miraba al suelo negro
+    // creyendo mirar al cielo, y el metal salía apagado.
+    estudio.flipY = false;
 
     const opciones = { depthBuffer: false, stencilBuffer: false };
     const rt1 = new THREE.WebGLRenderTarget(1, 1, opciones);
@@ -626,7 +678,7 @@ export default function LienzoMetal() {
         uEstudio: { value: null },
         uRes: { value: new THREE.Vector2() },
         uUmbral: { value: 0.18 },
-        uRelieve: { value: 13.0 },
+        uRelieve: { value: 2.2 },
       },
       transparent: true,
     });
