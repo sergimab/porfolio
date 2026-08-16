@@ -37,8 +37,8 @@ import "./LienzoFluido.css";
 // El trazo es casi parejo: la horquilla entre ir despacio y ir rápido es
 // estrecha a propósito. Un trazo que cambia mucho de grosor mientras lo
 // dibujas llega con silueta propia, y la silueta tiene que salir de la fusión.
-const GROSOR_MAX = 17;
-const GROSOR_MIN = 13;
+const GROSOR_MAX = 11;
+const GROSOR_MIN = 8;
 const VELOCIDAD_TOPE = 3.2;
 const SUAVIZADO = 0.22;
 const AFILADO = 3.2;        // >1 afila; a más valor, la punta adelgaza antes
@@ -86,7 +86,7 @@ const PICO = 0.44;
 //
 // Con ALCANCE = 1 volveríamos a lo de antes: trazos que solo engordan donde
 // literalmente se pisan.
-const ALCANCE = 2.6;
+const ALCANCE = 4.1;
 
 // Los puntos se guardan en coordenadas relativas al lienzo (0-1 en x, y la
 // misma escala en y), no en píxeles. En móvil, al arrastrar el dedo la barra
@@ -760,7 +760,7 @@ export default function LienzoMetal() {
         uCampo: { value: null },
         uEstudio: { value: null },
         uRes: { value: new THREE.Vector2() },
-        uUmbral: { value: 0.19 },
+        uUmbral: { value: 0.28 },
         uRelieve: { value: 1.3 },
         uFilo: { value: 1.7 },
         uGrano: { value: 0.10 },
