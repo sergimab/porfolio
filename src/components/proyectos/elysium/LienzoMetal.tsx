@@ -37,8 +37,8 @@ import "./LienzoFluido.css";
 // El trazo es casi parejo: la horquilla entre ir despacio y ir rápido es
 // estrecha a propósito. Un trazo que cambia mucho de grosor mientras lo
 // dibujas llega con silueta propia, y la silueta tiene que salir de la fusión.
-const GROSOR_MAX = 42;
-const GROSOR_MIN = 32;
+const GROSOR_MAX = 29;
+const GROSOR_MIN = 22;
 const VELOCIDAD_TOPE = 3.2;
 const SUAVIZADO = 0.22;
 const AFILADO = 3.2;        // >1 afila; a más valor, la punta adelgaza antes
