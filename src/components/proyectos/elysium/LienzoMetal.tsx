@@ -289,15 +289,17 @@ const FRAGMENT = /* glsl */ `
   uniform sampler2D uCampo;   // mapa de altura ya desenfocado
   uniform vec2  uRes;
   uniform float uUmbral;      // dónde corta la silueta
-  uniform float uRelieve;     // inclinación máxima del bisel, en tangente
+  uniform float uRelieve;     // pendiente de los faldones del tejadillo
+  uniform float uFilo;        // cuánto vuelca el canto en el filo mismo
   uniform sampler2D uEstudio; // panorama equirectangular del plató
 
   // Parte del ancho que ocupa el bisel del canto. Bajo = chapa plana con
   // arista viva; alto = vuelta a la sección de tubo.
   const float BISEL = 0.30;
-  // Inclinación del panorama (cos y sin de unos 70°).
-  const float ENV_COS = 0.34;
-  const float ENV_SIN = 0.94;
+  // Inclinación del panorama (cos y sin de unos 58°). Cuanto más tumbado,
+  // antes se descuelga el faldón al suelo y más oscura sale la pieza.
+  const float ENV_COS = 0.53;
+  const float ENV_SIN = 0.85;
 
   // Muestreo del panorama: la dirección se convierte en coordenadas de la
   // imagen equirectangular (giro alrededor y ángulo respecto al cenit).
@@ -339,10 +341,13 @@ const FRAGMENT = /* glsl */ `
     // empezar la meseta.
     float altura = clamp(t / BISEL, 0.0, 1.0);
 
-    // La superficie no es un tubo, es una CHAPA BISELADA: plana por dentro y
-    // con un bisel corto en el canto. De ahí salen los grandes planos de
-    // espejo limpio de la referencia, que una sección redonda no puede dar
-    // porque reparte la curvatura por todo el ancho y embarra el reflejo.
+    // La superficie es un TEJADILLO: dos faldones anchos y casi rectos que se
+    // encuentran en una cresta que recorre el brazo por el centro. Cada
+    // faldón, al ser casi plano, refleja una zona distinta del plató, y la
+    // cresta los separa con una línea limpia. Ese corte a lo largo de cada
+    // brazo es la firma de la referencia; ni el tubo ni la chapa plana lo dan
+    // —el tubo reparte la curvatura y embarra el reflejo, la chapa deja el
+    // interior de un gris liso.
     //
     // Del campo se toma solo HACIA DÓNDE cae, no cuánto. La inclinación la
     // pone el perfil. Es la diferencia que importa: deduciéndola del gradiente,
@@ -357,15 +362,14 @@ const FRAGMENT = /* glsl */ `
     float g = length(grad);
     vec2 dir = g > 0.00001 ? grad / g : vec2(0.0);
 
-    // Inclinación (tangente del ángulo): máxima justo en el filo y nula en la
-    // meseta. El segundo término deja un abombamiento mínimo en el interior,
-    // para que el reflejo no se quede congelado en las piezas anchas.
-    // El segundo término no es un detalle: una meseta perfectamente plana
-    // refleja siempre el mismo punto del panorama y sale de un blanco liso.
-    // Con este abombamiento suave, el interior de cada pieza barre desde el
-    // cielo hasta el horizonte, y ahí aparece la línea oscura que recorre el
-    // trazo a lo largo — la marca de fábrica del cromo.
-    float tilt = uRelieve * pow(1.0 - altura, 0.7) + 0.9 * (1.0 - t);
+    // Inclinación, en tangente del ángulo. El exponente bajo es lo que hace el
+    // tejadillo: la pendiente se mantiene casi igual a lo ancho del brazo y
+    // solo se desploma en la cresta. Con un exponente alto volveríamos a una
+    // superficie que se aplana enseguida, es decir, a la chapa.
+    float tilt = uRelieve * pow(1.0 - t, 0.4);
+    // Y un repunte corto justo en el filo: ahí el canto vuelca hasta rasante y
+    // devuelve el hilo de luz que perfila cada pieza contra el fondo negro.
+    tilt += uFilo * pow(1.0 - altura, 3.0);
     vec3 n = normalize(vec3(-dir * tilt, 1.0));
 
     vec3 V = vec3(0.0, 0.0, 1.0);
@@ -395,10 +399,9 @@ const FRAGMENT = /* glsl */ `
     vec3 tinte = vec3(0.94, 0.96, 1.0);
     vec3 color = refl * tinte * (0.78 + 0.5 * f);
 
-    // El canto se OSCURECE, no se realza: en la referencia el filo de cada
-    // pieza recoge el suelo del plató y se funde con el negro del fondo. Es lo
-    // que separa una pieza de la de al lado sin necesidad de contorno.
-    color *= mix(0.40, 1.0, smoothstep(0.0, 0.5, altura));
+    // Nada de oscurecer el canto a mano: en la referencia el filo es un hilo
+    // BLANCO, no una sombra. Sale solo, porque ahí el canto está volcado y
+    // Fresnel dispara el reflejo hasta rasante.
 
     gl_FragColor = vec4(color, dentro);
   }
@@ -678,7 +681,8 @@ export default function LienzoMetal() {
         uEstudio: { value: null },
         uRes: { value: new THREE.Vector2() },
         uUmbral: { value: 0.18 },
-        uRelieve: { value: 2.2 },
+        uRelieve: { value: 1.1 },
+        uFilo: { value: 1.7 },
       },
       transparent: true,
     });
@@ -803,13 +807,17 @@ export default function LienzoMetal() {
       // Pasada 1: desenfoque horizontal del mapa.
       quad.material = matBlur;
       matBlur.uniforms.uTex.value = textura;
-      matBlur.uniforms.uPaso.value.set(0.9 / rt1.width, 0);
+      // El radio del desenfoque ES el radio del filete: es lo que decide
+      // cuánto se hunde la membrana entre dos brazos que se cruzan. Corto,
+      // los trazos se tocan y ya; largo, se sueldan con esa curva cóncava que
+      // recorre el hueco de lado a lado, como en la referencia.
+      matBlur.uniforms.uPaso.value.set(1.8 / rt1.width, 0);
       renderer.setRenderTarget(rt1);
       renderer.render(escena, camara);
 
       // Pasada 2: desenfoque vertical. Aquí es donde se sueldan los trazos.
       matBlur.uniforms.uTex.value = rt1.texture;
-      matBlur.uniforms.uPaso.value.set(0, 0.9 / rt1.height);
+      matBlur.uniforms.uPaso.value.set(0, 1.8 / rt1.height);
       renderer.setRenderTarget(rt2);
       renderer.render(escena, camara);
 
