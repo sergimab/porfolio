@@ -107,6 +107,35 @@ export default function ElysiumLanding() {
         </div>
         <LienzoMetal />
 
+        {/* Los iconos de cada era, rehechos con el mismo sistema. */}
+        <div className="project-text">
+          <p>
+            <LangText
+              es="Antes de generar símbolos nuevos, había un lenguaje ya construido que llevaba **quince años** ahí. Cada era de Lady Gaga tiene su propio icono, el **rayo de The Fame**, el **triángulo invertido de Born This Way**, la **esfera de ARTPOP**, la **onda de Chromatica**, entre otros que fueron apareciendo con cada disco."
+              en="Before generating any new symbols, there was already a language in place that had been there for **fifteen years**. Every Lady Gaga era has its own icon: the **lightning bolt of The Fame**, the **inverted triangle of Born This Way**, the **ARTPOP sphere**, the **Chromatica wave**, among others that appeared with each record."
+            />
+          </p>
+          <p>
+            <LangText
+              es="En vez de dejarlos fuera del proyecto, los pasé por el mismo sistema que da forma a todo Elysium. Usando **Geometry Nodes** en Blender, cada icono se reconstruyó **desde cero**, conservando lo que lo hace reconocible pero hablando ahora en **formas orgánicas**, **texturas metálicas** y esa sensación de algo vivo que define el resto del universo."
+              en="Rather than leaving them out of the project, I ran them through the same system that shapes all of Elysium. Using **Geometry Nodes** in Blender, each icon was rebuilt **from scratch**, keeping what makes it recognisable but now speaking in **organic shapes**, **metallic textures** and that sense of something alive that defines the rest of the universe."
+            />
+          </p>
+        </div>
+
+        <div className="project-media">
+          {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+          <video
+            src="/proyectos/elysium/simbolos-home-video.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            aria-label="Los iconos de cada era de Lady Gaga, rehechos con el lenguaje de Elysium"
+          />
+        </div>
+
         {/* ── Bloque: creación del avatar ──────────────────────────────
             Va después del contenido nuevo. Son cuatro piezas seguidas
             (texto, texto + gif, secuencia de poses y lienzo) que se mueven
