@@ -4,6 +4,7 @@ import BackCapsule from "@/components/shared/BackCapsule";
 import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
 import LangText from "@/components/shared/LangText";
 import ToolIcons from "@/components/shared/ToolIcons";
+import CtaBanner from "@/components/shared/CtaBanner";
 import SimboloScroll, { GaleriaSimbolos } from "./SimboloScroll";
 import PosesFusion from "./PosesFusion";
 import LienzoMetal from "./LienzoMetal";
@@ -182,6 +183,32 @@ export default function ElysiumLanding() {
         />
 
         {/* ── Fin del bloque: creación del avatar ─────────────────────── */}
+
+        {/* El interior del álbum, y el paso al diseño editorial. */}
+        <div className="project-text">
+          <p>
+            <LangText
+              es="El álbum no se queda solo en la portada. Por dentro, en vez del típico cuadernillo, hay un **desplegable acordeón de seis cuerpos** que se abre hasta casi **setenta centímetros**, pensado más como **pieza de colección** que como libreto al uso. Por un lado aparecen distintas versiones del alter ego de Gaga en 3D, y por el otro, en vez de las letras de las canciones, hay **un poema para cada tema**, algo que la propia Gaga ha dicho que le gustaría explorar."
+              en="The album doesn't stop at the cover. Inside, instead of the usual booklet, there's a **six-panel accordion fold-out** that opens to almost **seventy centimetres**, conceived more as a **collector's piece** than as a standard insert. One side shows different versions of Gaga's alter ego in 3D; the other, instead of the lyrics, carries **a poem for each track** — something Gaga herself has said she would like to explore."
+            />
+          </p>
+          <p>
+            <LangText
+              es="El disco físico sigue la misma lógica, con el **inlay interior** pensado para completar esa misma narrativa visual."
+              en="The physical disc follows the same logic, with the **inner inlay** designed to complete that same visual narrative."
+            />
+          </p>
+          <p>
+            <LangText
+              es="Aquí puedes ver cómo queda todo montado, el desarrollo completo con los artes finales:"
+              en="Here you can see it all put together, the full development with the final artwork:"
+            />
+          </p>
+        </div>
+
+        {/* Falta el destino y la imagen de la franja: en cuanto lleguen, se
+            añaden aquí como href e imagen. Sin href no se pinta un enlace. */}
+        <CtaBanner es="Ver diseño editorial" en="See editorial design" />
       </div>
     </main>
   );
