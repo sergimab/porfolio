@@ -42,7 +42,7 @@ const projects: Record<string, { id: string; title: string; titleEn: string; cov
   fotografia: [{ id:"f1",title:"Proyecto Foto 01",titleEn:"Photo Project 01"},{id:"f2",title:"Proyecto Foto 02",titleEn:"Photo Project 02"},{id:"f3",title:"Proyecto Foto 03",titleEn:"Photo Project 03"}],
   iberdrola:  [{ id:"i2",title:"Sistema de diseño",titleEn:"Design system"},{id:"i5",title:"Sistema de ilustraciones",titleEn:"Illustration system",cover:"/covers/sistema-ilustraciones.svg"},{id:"i1",title:"Infografías",titleEn:"Infographics",cover:"/covers/infografias.svg"},{id:"i3",title:"Newsletters",titleEn:"Newsletters",cover:"/covers/newsletters.png"},{id:"i4",title:"Iconografía",titleEn:"Iconography",cover:"/covers/iberdrola-iconografia.svg"}],
   uiux:       [{ id:"u1",title:"Proyecto UI/UX 01",titleEn:"UI/UX Project 01"},{id:"u2",title:"Proyecto UI/UX 02",titleEn:"UI/UX Project 02"},{id:"u3",title:"Proyecto UI/UX 03",titleEn:"UI/UX Project 03"}],
-  "3d":       [{ id:"d1",title:"Elysium",titleEn:"Elysium"},{id:"d2",title:"Proyecto 3D 02",titleEn:"3D Project 02"},{id:"d3",title:"Proyecto 3D 03",titleEn:"3D Project 03"}],
+  "3d":       [{ id:"d1",title:"Elysium",titleEn:"Elysium",cover:"/covers/elysium-3D.jpg"},{id:"d2",title:"Proyecto 3D 02",titleEn:"3D Project 02"},{id:"d3",title:"Proyecto 3D 03",titleEn:"3D Project 03"}],
 };
 
 
