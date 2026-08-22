@@ -56,6 +56,10 @@
   height: 100%;
   display: block;
   object-fit: contain;
+  /* Los mismos 16px que las cajas de medios del resto de la página. Va en la
+     imagen y no en su contenedor porque estas piezas no llevan caja: son la
+     imagen suelta sobre el fondo. */
+  border-radius: 16px;
 }
 
 /* Cada pieza lleva encima su portada, que se funde sobre ella sin moverse. */
