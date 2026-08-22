@@ -70,6 +70,7 @@ export default function SkillDrop() {
   const [pillPos, setPillPos]     = useState<{ id:string; x:number; y:number; angle:number }[]>([]);
   const [dropped, setDropped]     = useState<string | null>(null);
   const [draggedId, setDraggedId] = useState<string | null>(null);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [isOver, setIsOver]       = useState(false);
   const [falling, setFalling]     = useState(false);
   const [lang, setLang]           = useState<"es"|"en">("es");
@@ -332,8 +333,25 @@ export default function SkillDrop() {
     const onTouchEnd = (e: TouchEvent) => {
       e.preventDefault();
       touchBody = null;
+      // En táctil no hay "salir con el ratón": si un toque llega a disparar un
+      // mousemove sintético, la cápsula se quedaría encendida para siempre.
+      setHoveredId(null);
       checkDrop();
     };
+
+    // Hover: qué cápsula hay bajo el cursor. Hay que preguntárselo al motor
+    // de física, no al DOM, porque las cápsulas que se ven son divs con
+    // pointer-events desactivado —sus posiciones las manda matter-js— y quien
+    // recibe el ratón es el canvas. Query.point hace justo eso: qué cuerpo
+    // ocupa ese punto.
+    const onHover = (e: MouseEvent) => {
+      const pos = canvasPos(e.clientX, e.clientY);
+      const found = Query.point(pillsRef.current.map(p => p.body), pos);
+      setHoveredId(found[0]?.label ?? null);
+    };
+    const onLeaveCanvas = () => setHoveredId(null);
+    canvas.addEventListener("mousemove", onHover);
+    canvas.addEventListener("mouseleave", onLeaveCanvas);
 
     canvas.addEventListener("touchstart", onTouchStart, { passive: false });
     canvas.addEventListener("touchmove",  onTouchMove,  { passive: false });
@@ -356,6 +374,8 @@ export default function SkillDrop() {
     tick();
 
     return () => {
+      canvas.removeEventListener("mousemove", onHover);
+      canvas.removeEventListener("mouseleave", onLeaveCanvas);
       canvas.removeEventListener("touchstart", onTouchStart);
       canvas.removeEventListener("touchmove",  onTouchMove);
       canvas.removeEventListener("touchend",   onTouchEnd);
@@ -495,6 +515,11 @@ export default function SkillDrop() {
             const skill = skills.find(s => s.id === id);
             if (!skill) return null;
             const isDragged = id === draggedId;
+            // El hover se pinta igual que el arrastre: relleno de color con su
+            // degradado en movimiento, texto en blanco y sin borde ni aro. Lo
+            // que NO comparte es la levitación, que sigue solo al arrastre: la
+            // cápsula sobre la que pasas el ratón sigue flotando como las demás.
+            const encendida = isDragged || id === hoveredId;
 
             const levitateDur   = 3 + seeded(id, 7) * 2.2;
             const levitateDelay = -(seeded(id, 13) * levitateDur);
@@ -515,21 +540,21 @@ export default function SkillDrop() {
                   <div style={{
                     width:"100%", height:"100%",
                     borderRadius:"999px",
-                    border: isDragged ? "none" : "1px solid var(--foreground)",
-                    backgroundColor: isDragged ? undefined : "var(--background)",
-                    backgroundImage: isDragged ? organicGradient(skill.hue, 85, 57) : undefined,
-                    backgroundSize: isDragged ? CAPSULE_DRIFT_SIZE : undefined,
-                    animation: isDragged ? "capsuleDrift 2.4s ease-in-out infinite" : undefined,
+                    border: encendida ? "none" : "1px solid var(--foreground)",
+                    backgroundColor: encendida ? undefined : "var(--background)",
+                    backgroundImage: encendida ? organicGradient(skill.hue, 85, 57) : undefined,
+                    backgroundSize: encendida ? CAPSULE_DRIFT_SIZE : undefined,
+                    animation: encendida ? "capsuleDrift 2.4s ease-in-out infinite" : undefined,
                     display:"flex", alignItems:"center", justifyContent:"center",
-                    fontSize:"13px", fontWeight: isDragged ? 500 : 400,
-                    color: isDragged ? "#fff" : "var(--foreground)",
+                    fontSize:"13px", fontWeight: encendida ? 500 : 400,
+                    color: encendida ? "#fff" : "var(--foreground)",
                     whiteSpace:"nowrap",
                     transition:"background 0.15s, color 0.15s",
                   }}>
                     {getLabel(skill)}
                   </div>
 
-                  {!isDragged && (
+                  {!encendida && (
                     <div style={{
                       position:"absolute", inset:0,
                       borderRadius:"999px",
