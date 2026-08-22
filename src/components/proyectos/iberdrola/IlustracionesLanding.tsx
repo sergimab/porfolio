@@ -2,6 +2,7 @@ import BackCapsule from "@/components/shared/BackCapsule";
 import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
 import LangText from "@/components/shared/LangText";
 import ToolIcons from "@/components/shared/ToolIcons";
+import CtaBanner from "@/components/shared/CtaBanner";
 import IlustracionesSistema from "./IlustracionesSistema";
 
 // Sistema de ilustraciones para Iberdrola y su subholding.
@@ -45,6 +46,15 @@ export default function IlustracionesLanding() {
         <div style={{ marginTop: "48px" }}>
           <IlustracionesSistema />
         </div>
+
+        <h2 className="project-h2">
+          <LangText es="Páginas recomendadas" en="Recommended pages" />
+        </h2>
+        <CtaBanner
+          href="/proyecto/i1"
+          es="Ver infografías"
+          en="See infographics"
+        />
       </div>
     </main>
   );

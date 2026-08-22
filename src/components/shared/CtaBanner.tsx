@@ -32,7 +32,27 @@ export default function CtaBanner({
         <img className="cta-banner-img" src={imagen} alt={alt} loading="lazy" />
       ) : null}
       <span className="cta-banner-label">
-        {lang === "en" ? en : es} <span aria-hidden="true">→</span>
+        {lang === "en" ? en : es}
+        {/* Galón dibujado, no el carácter ">": el signo de texto se apoya en la
+            línea base y queda bajo respecto a las mayúsculas, y su grosor
+            depende de la tipografía. Así va centrado y con el mismo trazo que
+            el borde. Hereda currentColor, de modo que se invierte en el hover
+            junto al texto. */}
+        <svg
+          className="cta-banner-galon"
+          viewBox="0 0 8 12"
+          fill="none"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path
+            d="M1.5 1 L6.5 6 L1.5 11"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
       </span>
     </>
   );

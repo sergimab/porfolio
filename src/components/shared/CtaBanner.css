@@ -50,6 +50,16 @@
   color: var(--foreground);
   white-space: nowrap;
   transition: background 0.2s, color 0.2s;
+  /* El galón se alinea con el texto por su centro óptico, no por la línea
+     base, que es lo que lo dejaría caído. */
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.cta-banner-galon {
+  width: 7px;
+  height: 11px;
+  flex: none;
 }
 
 /* El hover lo dispara la franja entera, no solo la etiqueta: si respondiera

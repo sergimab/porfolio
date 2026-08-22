@@ -265,6 +265,22 @@
   margin-top: 16px;
 }
 
+/* Titular de sección dentro de una página de proyecto. Va discreto a
+   propósito: el peso visual lo llevan las piezas, no los rótulos. El margen
+   superior es amplio porque su función es separar bloques. */
+.project-h2 {
+  margin-top: 64px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--foreground);
+}
+/* Pegado a lo que titula: si cada uno conservara su margen, quedarían
+   separados como si no tuvieran que ver. */
+.project-h2 + .cta-banner {
+  margin-top: 14px;
+}
+
 /* Fila de texto + medio: el texto a la izquierda y una pieza (gif, imagen o
    vídeo) a la derecha. En pantallas estrechas se apilan, con el medio debajo. */
 .project-row {
