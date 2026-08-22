@@ -54,7 +54,11 @@ export default function SimboloScroll() {
   const lang = useLang();
   const pista = useRef<HTMLDivElement>(null);
   const videos = useRef<(HTMLVideoElement | null)[]>([]);
+  // Pasos cuyo vídeo ya se ha lanzado, para no volver a lanzarlo al pasar de
+  // nuevo por ellos.
+  const vistos = useRef<Set<number>>(new Set());
   const [avance, setAvance] = useState(0);
+  const [aLaVista, setALaVista] = useState(false);
 
   useEffect(() => {
     // Con "reducir movimiento" no se anima: se deja el último paso a la vista.
@@ -90,16 +94,37 @@ export default function SimboloScroll() {
   const t = avance * PASOS;
   const pasoActivo = Math.max(0, Math.min(PASOS - 1, Math.floor(t)));
 
-  // Los vídeos no van en bucle: se reproducen una vez al entrar en su paso y
-  // se quedan en el último fotograma. Al volver a entrar, empiezan de nuevo.
-  // A los demás no se les toca: si se pausaran al salir del paso, se
-  // quedarían congelados a media reproducción en vez de en su final.
+  // Cada vídeo se reproduce UNA SOLA VEZ en toda la visita, la primera vez que
+  // se llega a su paso, y a partir de ahí se queda en su último fotograma.
+  // Subiendo y volviendo a bajar no vuelve a arrancar: lo que se ve es el
+  // resultado, ya formado, como una lámina.
+  //
+  // A los que quedan atrás no se les toca. Si se pausaran al salir del paso se
+  // quedarían congelados a media reproducción, y al volver mostrarían un
+  // fotograma intermedio en vez del final.
+  // Y no arrancan hasta que el bloque está en pantalla. Sin esta condición, el
+  // primero se lanzaba nada más cargar la página: como ya no se reproduce dos
+  // veces, quien tardase en bajar hasta aquí se lo encontraría terminado y no
+  // llegaría a ver la formación del gráfico.
   useEffect(() => {
+    const el = pista.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setALaVista(true); io.disconnect(); } },
+      { threshold: 0.15 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!aLaVista) return;
     const v = videos.current[pasoActivo];
-    if (!v) return;
+    if (!v || vistos.current.has(pasoActivo)) return;
+    vistos.current.add(pasoActivo);
     v.currentTime = 0;
     v.play().catch(() => {});
-  }, [pasoActivo]);
+  }, [pasoActivo, aLaVista]);
   // `conDeslizamiento` solo se usa en la columna de texto. En la visual, el
   // segundo vídeo es la continuación exacta del primero: si además de fundirse
   // se desplazara, el relevo se vería como un salto.
