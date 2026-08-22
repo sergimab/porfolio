@@ -15,21 +15,38 @@ export default function CtaBanner({
   es,
   en,
   imagen,
+  imagenMovil,
   alt = "",
 }: {
   /** Destino. Sin él la franja se pinta igual pero no navega. */
   href?: string;
   es: string;
   en: string;
+  /** Imagen de escritorio. Se ve a 1024 × 150; diséñala a 2048 × 300. */
   imagen?: string;
+  /**
+   * Imagen para pantallas estrechas (hasta 700px), donde la franja es mucho
+   * menos alargada. Sin ella se usa la de escritorio, recortada por los lados.
+   * Se ve a 652 × 110 como mucho; diséñala a 1304 × 220.
+   */
+  imagenMovil?: string;
   alt?: string;
 }) {
   const lang = useLang();
   const contenido = (
     <>
       {imagen ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img className="cta-banner-img" src={imagen} alt={alt} loading="lazy" />
+        // <picture> y no dos <img> con CSS: así el navegador se descarga UNA
+        // sola, la que le toca. Con dos imágenes y display:none, muchos
+        // navegadores bajan las dos y en móvil pagarías el peso de la de
+        // escritorio sin llegar a verla.
+        <picture>
+          {imagenMovil ? (
+            <source media="(max-width: 700px)" srcSet={imagenMovil} />
+          ) : null}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="cta-banner-img" src={imagen} alt={alt} loading="lazy" />
+        </picture>
       ) : null}
       <span className="cta-banner-label">
         {lang === "en" ? en : es}
