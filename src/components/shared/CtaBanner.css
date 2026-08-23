@@ -6,7 +6,8 @@
   position: relative;
   display: block;
   width: 100%;
-  /* Estrecha: es un pie de sección, no otro bloque de imagen. */
+  /* Alto solo del estado SIN imagen, para que la franja vacía no se venga
+     abajo. Con imagen manda ella (ver .con-imagen). */
   height: 150px;
   margin-top: 32px;
   border: 1px solid var(--foreground);
@@ -29,6 +30,11 @@
    parezca un hueco vacío. */
 .cta-banner.con-imagen {
   background-image: none;
+  /* El alto lo pone la imagen: ocupa todo el ancho y su altura sale de su
+     propia proporción. Así no se deforma, no se recorta y no quedan franjas
+     vacías, que es lo que pasaba al forzar un alto fijo con una imagen que no
+     tenía esa proporción. */
+  height: auto;
 }
 
 /* <picture> es un elemento en línea y no hereda el tamaño del contenedor: sin
@@ -36,18 +42,29 @@
 .cta-banner picture {
   display: block;
   width: 100%;
-  height: 100%;
 }
 .cta-banner-img {
   width: 100%;
-  height: 100%;
+  height: auto;
   display: block;
-  /* "contain" y no "cover": la imagen se diseña a la medida exacta de la
-     franja, así que recortarla sería tirar parte del dibujo. El ancho real
-     varía unos píxeles con el margen de la página, y con "cover" esa
-     diferencia se comía los extremos. */
-  object-fit: contain;
-  object-position: center;
+  transform-origin: center;
+  transition: transform 0.5s cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+/* Zoom corto al pasar el ratón. Lo dispara la franja entera, y el recorte del
+   contenedor es lo que hace que la imagen crezca hacia dentro del marco en
+   vez de desbordarlo. */
+a.cta-banner:hover .cta-banner-img,
+a.cta-banner:focus-visible .cta-banner-img {
+  transform: scale(1.045);
+}
+@media (prefers-reduced-motion: reduce) {
+  .cta-banner-img {
+    transition: none;
+  }
+  a.cta-banner:hover .cta-banner-img,
+  a.cta-banner:focus-visible .cta-banner-img {
+    transform: none;
+  }
 }
 
 /* La etiqueta, encajada en la esquina de abajo a la derecha. Solo lleva borde

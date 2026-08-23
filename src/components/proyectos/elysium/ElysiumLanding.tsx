@@ -206,9 +206,14 @@ export default function ElysiumLanding() {
           </p>
         </div>
 
-        {/* Falta el destino y la imagen de la franja: en cuanto lleguen, se
-            añaden aquí como href e imagen. Sin href no se pinta un enlace. */}
-        <CtaBanner es="Ver diseño editorial" en="See editorial design" />
+        <CtaBanner
+          href="/proyecto/e1"
+          es="Ver diseño editorial"
+          en="See editorial design"
+          imagen="/banners/elysium-editorial.webp"
+          imagenMovil="/banners/elysium-editorial-movil.webp"
+          alt="El desplegable acordeón del álbum, abierto sobre una superficie"
+        />
       </div>
     </main>
   );

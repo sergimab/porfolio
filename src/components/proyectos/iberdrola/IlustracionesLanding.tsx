@@ -55,8 +55,8 @@ export default function IlustracionesLanding() {
           href="/proyecto/i1"
           es="Ver infografías"
           en="See infographics"
-          imagen="/proyectos/iberdrola/ilustraciones/banners/infografias.webp"
-          imagenMovil="/proyectos/iberdrola/ilustraciones/banners/infografias-movil.webp"
+          imagen="/banners/infografias.webp"
+          imagenMovil="/banners/infografias-movil.webp"
           alt="Ilustración isométrica de una subestación eléctrica con puntos numerados"
         />
       </div>

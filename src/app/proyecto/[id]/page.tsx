@@ -13,6 +13,7 @@ import IlustracionesLanding from "@/components/proyectos/iberdrola/Ilustraciones
 import NewslettersLanding from "@/components/proyectos/iberdrola/NewslettersLanding";
 import IconografiaLanding from "@/components/proyectos/iberdrola/IconografiaLanding";
 import ElysiumLanding from "@/components/proyectos/elysium/ElysiumLanding";
+import DiscoElysiumLanding from "@/components/proyectos/disco-elysium/DiscoElysiumLanding";
 
 const LANDINGS: Record<string, React.ComponentType> = {
   i1: InfografiasLanding,
@@ -20,6 +21,7 @@ const LANDINGS: Record<string, React.ComponentType> = {
   i4: IconografiaLanding,
   i5: IlustracionesLanding,
   d1: ElysiumLanding,
+  e1: DiscoElysiumLanding,
 };
 
 function catFromId(id: string): string {
@@ -29,6 +31,7 @@ function catFromId(id: string): string {
     case "f": return "fotografia";
     case "u": return "uiux";
     case "d": return "3d";
+    case "e": return "editorial";
     default:  return "iberdrola";
   }
 }
@@ -40,6 +43,7 @@ const titles: Record<string, string> = {
   i1: "Infografías", i2: "Sistema de diseño", i3: "Newsletters", i4: "Iconografía", i5: "Sistema de ilustraciones",
   u1: "Proyecto UI/UX 01", u2: "Proyecto UI/UX 02", u3: "Proyecto UI/UX 03",
   d1: "Elysium", d2: "Proyecto 3D 02", d3: "Proyecto 3D 03",
+  e1: "Disco Elysium",
 };
 
 export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
