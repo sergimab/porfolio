@@ -76,10 +76,11 @@ export default function CtaBanner({
 
   // Sin destino no se pinta un enlace: un <a> sin href no es pulsable con el
   // teclado y anunciarlo como enlace cuando no lleva a ninguna parte engaña.
-  if (!href) return <div className="cta-banner">{contenido}</div>;
+  const clase = `cta-banner${imagen ? " con-imagen" : ""}`;
+  if (!href) return <div className={clase}>{contenido}</div>;
 
   return (
-    <a className="cta-banner" href={href}>
+    <a className={clase} href={href}>
       {contenido}
     </a>
   );
