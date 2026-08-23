@@ -41,7 +41,7 @@ const titles: Record<string, string> = {
   b1: "Proyecto Branding 01", b2: "Proyecto Branding 02", b3: "Proyecto Branding 03",
   f1: "Proyecto Foto 01", f2: "Proyecto Foto 02", f3: "Proyecto Foto 03",
   i1: "Infografías", i2: "Sistema de diseño", i3: "Newsletters", i4: "Iconografía", i5: "Sistema de ilustraciones",
-  u1: "Proyecto UI/UX 01", u2: "Proyecto UI/UX 02", u3: "Proyecto UI/UX 03",
+  u1: "Web de Elysium", u2: "Proyecto UI/UX 02", u3: "Proyecto UI/UX 03",
   d1: "Elysium", d2: "Proyecto 3D 02", d3: "Proyecto 3D 03",
   e1: "Disco Elysium",
 };

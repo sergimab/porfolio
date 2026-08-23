@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
+import { organicGradient, CAPSULE_DRIFT_SIZE, drift } from "@/components/shared/organico";
 import "./BounceCards.css";
 
 // Adaptación del componente BounceCards (React Bits) al portfolio: cada card
@@ -157,12 +158,24 @@ export default function BounceCards({
   };
 
   const textColor = accessibleTextColor(hue);
-  const bandColor = `hsl(${hue}, 70%, 55%)`;
+  // El mismo degradado orgánico de las cápsulas, con la misma saturación y
+  // luminosidad que tenía el color plano: así el contraste del texto sobre la
+  // banda sigue siendo el que calcula accessibleTextColor.
+  const degradado = organicGradient(hue, 70, 55);
+  const pintura = { backgroundImage: degradado, backgroundSize: CAPSULE_DRIFT_SIZE };
 
   const cardInner = (item: Item) => {
     const title = lang === "en" ? item.titleEn : item.title;
+    // Cada tarjeta deriva a su propio ritmo, sembrado con su id: si
+    // compartieran duración, las manchas irían todas a la vez y se leería
+    // como un parpadeo del bloque entero en vez de piezas con vida propia.
+    const ritmo = drift(item.id);
     return (
       <>
+        {/* El aro va en un elemento y no en el borde de la tarjeta: un borde
+            no admite degradado. Es un rectángulo con el degradado al que se le
+            recorta el centro con una máscara, así que solo queda el filo. */}
+        <span className="bc-ring" style={{ ...pintura, ...ritmo }} aria-hidden="true" />
         {item.cover ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img className="bc-img" src={item.cover} alt={title} />
@@ -175,7 +188,7 @@ export default function BounceCards({
             </svg>
           </div>
         )}
-        <span className="bc-name" style={{ color: textColor, backgroundColor: bandColor }}>
+        <span className="bc-name" style={{ color: textColor, ...pintura, ...ritmo }}>
           {title}
         </span>
       </>
@@ -192,7 +205,6 @@ export default function BounceCards({
             href={`/proyecto/${item.id}`}
             className="bc-card"
             style={{
-              borderColor: `hsl(${hue}, 70%, 55%)`,
               transform: `rotate(${MOBILE_ANGLE_POOL[idx % MOBILE_ANGLE_POOL.length]}deg) translateY(${MOBILE_OFFSET_POOL[idx % MOBILE_OFFSET_POOL.length]}px)`,
             }}
           >
@@ -216,7 +228,7 @@ export default function BounceCards({
             key={item.id}
             href={`/proyecto/${item.id}`}
             className={`bc-card bc-card-${idx}`}
-            style={{ transform: transformStyles[idx], borderColor: `hsl(${hue}, 70%, 55%)` }}
+            style={{ transform: transformStyles[idx] }}
             onMouseEnter={() => pushSiblings(idx)}
             onMouseLeave={resetSiblings}
           >

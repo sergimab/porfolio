@@ -6,6 +6,7 @@ import type MatterTypes from "matter-js";
 import BounceCards from "./BounceCards";
 import BackToTop from "@/components/layout/BackToTop";
 import DropcapTitle from "@/components/shared/DropcapTitle";
+import { seeded, organicGradient, CAPSULE_DRIFT_SIZE } from "@/components/shared/organico";
 import "./SkillDrop.css";
 
 const skills = [
@@ -21,32 +22,13 @@ const skills = [
   { id: "editorial",  label: "Editorial",         labelEn: "Editorial",       color: "rgba(104,165,13,0.13)", border: "rgba(104,165,13,0.6)",  hue: 84  },
 ];
 
-// Deterministic pseudo-random 0..1 from a string, so each capsule gets a
-// stable (but different) animation timing that doesn't reset every frame.
-function seeded(id: string, salt: number): number {
-  let h = salt;
-  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) % 100003;
-  return h / 100003;
-}
-
-// Degradado "orgánico" (varias manchas del hue que derivan) para las cápsulas
-// que se colorean, en lugar del barrido lineal. Va con capsuleDrift + backgroundSize.
-function organicGradient(hue: number, sat: number, base: number): string {
-  return [
-    `radial-gradient(130% 110% at 20% 30%, hsl(${hue},${sat}%,${base + 14}%) 0%, transparent 60%)`,
-    `radial-gradient(110% 130% at 80% 15%, hsl(${hue + 25},${sat - 6}%,${base + 4}%) 0%, transparent 55%)`,
-    `radial-gradient(140% 150% at 65% 85%, hsl(${hue},${sat - 10}%,${base - 14}%) 0%, transparent 62%)`,
-    `linear-gradient(hsl(${hue},${sat}%,${base}%), hsl(${hue},${sat}%,${base}%))`,
-  ].join(", ");
-}
-const CAPSULE_DRIFT_SIZE = "190% 190%, 200% 210%, 210% 200%, 100% 100%";
 
 const projects: Record<string, { id: string; title: string; titleEn: string; cover?: string }[]> = {
   motion:     [{ id:"m1",title:"Proyecto Motion 01",titleEn:"Motion Project 01"},{id:"m2",title:"Proyecto Motion 02",titleEn:"Motion Project 02"},{id:"m3",title:"Proyecto Motion 03",titleEn:"Motion Project 03"}],
   branding:   [{ id:"b1",title:"Proyecto Branding 01",titleEn:"Branding Project 01"},{id:"b2",title:"Proyecto Branding 02",titleEn:"Branding Project 02"},{id:"b3",title:"Proyecto Branding 03",titleEn:"Branding Project 03"}],
   fotografia: [{ id:"f1",title:"Proyecto Foto 01",titleEn:"Photo Project 01"},{id:"f2",title:"Proyecto Foto 02",titleEn:"Photo Project 02"},{id:"f3",title:"Proyecto Foto 03",titleEn:"Photo Project 03"}],
   iberdrola:  [{ id:"i2",title:"Sistema de diseño",titleEn:"Design system"},{id:"i5",title:"Sistema de ilustraciones",titleEn:"Illustration system",cover:"/covers/sistema-ilustraciones.svg"},{id:"i1",title:"Infografías",titleEn:"Infographics",cover:"/covers/infografias.svg"},{id:"i3",title:"Newsletters",titleEn:"Newsletters",cover:"/covers/newsletters.png"},{id:"i4",title:"Iconografía",titleEn:"Iconography",cover:"/covers/iberdrola-iconografia.svg"}],
-  uiux:       [{ id:"u1",title:"Proyecto UI/UX 01",titleEn:"UI/UX Project 01"},{id:"u2",title:"Proyecto UI/UX 02",titleEn:"UI/UX Project 02"},{id:"u3",title:"Proyecto UI/UX 03",titleEn:"UI/UX Project 03"}],
+  uiux:       [{ id:"u1",title:"Web de Elysium",titleEn:"Elysium website"},{id:"u2",title:"Proyecto UI/UX 02",titleEn:"UI/UX Project 02"},{id:"u3",title:"Proyecto UI/UX 03",titleEn:"UI/UX Project 03"}],
   "3d":       [{ id:"d1",title:"Elysium",titleEn:"Elysium",cover:"/covers/elysium-3D.jpg"},{id:"d2",title:"Proyecto 3D 02",titleEn:"3D Project 02"},{id:"d3",title:"Proyecto 3D 03",titleEn:"3D Project 03"}],
   editorial:  [{ id:"e1",title:"Disco Elysium",titleEn:"Disco Elysium",cover:"/covers/elysium-editorial.jpg"}],
 };

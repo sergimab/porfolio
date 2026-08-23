@@ -26,7 +26,9 @@
   position: absolute;
   width: var(--bc-card);
   aspect-ratio: 1;
-  border: 1px solid; /* color por categoría, inline */
+  /* Transparente, no ausente: el aro de degradado se dibuja encima justo aquí,
+     y quitando el borde la tarjeta cambiaría de tamaño. */
+  border: 1px solid transparent;
   border-radius: 16px;
   overflow: hidden;
   background: var(--background);
@@ -58,6 +60,23 @@
 /* Nombre del proyecto, siempre visible al pie de la card: banda sólida del
    color de categoría (inline via backgroundColor); texto en la tipografía
    normal del sitio, color elegido por contraste (ver accessibleTextColor). */
+/* Aro de degradado. Un borde CSS no admite degradados, así que se pinta un
+   rectángulo del tamaño de la tarjeta y se le recorta el interior con una
+   máscara: la de "content-box" tapa el centro y, al excluirla de la completa,
+   solo sobrevive el marco de 1px. */
+.bc-ring {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
 .bc-name {
   position: absolute;
   left: 0;
