@@ -199,12 +199,13 @@ export default function ElysiumLanding() {
           alt="El desplegable acordeón del álbum, abierto sobre una superficie"
         />
 
-        {/* Falta la imagen de esta franja; se añade como imagen e imagenMovil
-            en cuanto esté, igual que la de arriba. */}
         <CtaBanner
           href="/proyecto/u1"
           es="Ver la web de Elysium"
           en="See the Elysium website"
+          imagen="/banners/elysium-web.webp"
+          imagenMovil="/banners/elysium-web-movil.webp"
+          alt="La web de Elysium vista en varias pantallas"
         />
       </div>
     </main>
