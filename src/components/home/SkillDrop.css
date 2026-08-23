@@ -16,27 +16,11 @@
   padding: 0 24px;
 }
 
-.dropcap-title {
-  display: flex;
-  align-items: baseline;
-  font-size: 14px;
-  color: var(--foreground);
+/* El estilo del titular con capitular está en shared/DropcapTitle.css, que es
+   donde vive ahora el componente. Aquí solo queda su separación con el
+   formulario, que es cosa de este panel y no del titular. */
+.panel-contacto .dropcap-title {
   margin-bottom: 24px;
-}
-.dropcap-letter {
-  font-family: 'Kapakana', 'Cormorant Garamond', serif;
-  font-style: italic;
-  font-size: 40px;
-  line-height: 1;
-  margin-right: -2px;
-  position: relative;
-  z-index: 2;
-  -webkit-text-stroke: 5px var(--background);
-  paint-order: stroke fill;
-}
-.dropcap-rest {
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
 }
 
 .skill-grid {

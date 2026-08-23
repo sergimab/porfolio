@@ -265,15 +265,17 @@
   margin-top: 16px;
 }
 
-/* Titular de sección dentro de una página de proyecto. Va discreto a
-   propósito: el peso visual lo llevan las piezas, no los rótulos. El margen
-   superior es amplio porque su función es separar bloques. */
+/* Titular de sección dentro de una página de proyecto. Lleva la misma caja que
+   los bloques de texto —fondo, radio y aire— porque por detrás pasa el fondo
+   de píxeles animado y sin fondo opaco se leería mal. El margen superior es
+   amplio porque su función es separar bloques.
+   El estilo del texto lo pone DropcapTitle, que es el mismo del contacto. */
 .project-h2 {
   margin-top: 64px;
-  font-size: 15px;
-  font-weight: 500;
-  line-height: 1.4;
-  color: var(--foreground);
+  background: var(--background);
+  border-radius: 12px;
+  padding: 16px 24px;
+  box-sizing: border-box;
 }
 /* Pegado a lo que titula: si cada uno conservara su margen, quedarían
    separados como si no tuvieran que ver. */

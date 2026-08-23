@@ -5,6 +5,7 @@ import type MatterTypes from "matter-js";
 // import ProjectCard from "./ProjectCard"; // diseño anterior (rejilla) — guardado por si volvemos
 import BounceCards from "./BounceCards";
 import BackToTop from "@/components/layout/BackToTop";
+import DropcapTitle from "@/components/shared/DropcapTitle";
 import "./SkillDrop.css";
 
 const skills = [
@@ -664,11 +665,7 @@ export default function SkillDrop() {
 
       {selectedPanel === "contacto" && (
         <div className="home-panel panel-contacto">
-          <span className="dropcap-title">
-            {lang==="en"
-              ? <><span className="dropcap-letter">L</span><span className="dropcap-rest">et&apos;s talk</span></>
-              : <><span className="dropcap-letter">H</span><span className="dropcap-rest">ablemos</span></>}
-          </span>
+          <DropcapTitle es="Hablemos" en="Let's talk" />
 
           <form onSubmit={handleContactSubmit} className="contact-form">
             <input

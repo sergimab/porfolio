@@ -1,0 +1,27 @@
+/* Titular con capitular. Las reglas vivían en SkillDrop.css, donde estaba su
+   único uso; al pasar a usarse también en las páginas de proyecto se mueven
+   aquí, junto al componente. */
+.dropcap-title {
+  display: flex;
+  align-items: baseline;
+  font-size: 14px;
+  color: var(--foreground);
+}
+.dropcap-letter {
+  font-family: 'Kapakana', 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 40px;
+  line-height: 1;
+  margin-right: -2px;
+  position: relative;
+  z-index: 2;
+  /* Contorno del color del fondo: es lo que le abre hueco a la capitular
+     cuando se monta sobre la palabra, sin tener que separarlas. */
+  -webkit-text-stroke: 5px var(--background);
+  paint-order: stroke fill;
+}
+.dropcap-rest {
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-weight: 600;
+}

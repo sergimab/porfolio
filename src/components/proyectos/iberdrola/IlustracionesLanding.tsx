@@ -3,6 +3,7 @@ import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
 import LangText from "@/components/shared/LangText";
 import ToolIcons from "@/components/shared/ToolIcons";
 import CtaBanner from "@/components/shared/CtaBanner";
+import DropcapTitle from "@/components/shared/DropcapTitle";
 import IlustracionesSistema from "./IlustracionesSistema";
 
 // Sistema de ilustraciones para Iberdrola y su subholding.
@@ -48,7 +49,7 @@ export default function IlustracionesLanding() {
         </div>
 
         <h2 className="project-h2">
-          <LangText es="Páginas recomendadas" en="Recommended pages" />
+          <DropcapTitle es="Páginas recomendadas" en="Recommended pages" />
         </h2>
         <CtaBanner
           href="/proyecto/i1"
