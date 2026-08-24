@@ -3,12 +3,15 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import "./IconoConstruccion.css";
 
-// Cómo se construye un icono, en tres pasos horizontales encadenados:
+// Cómo se construye un icono, en un ÚNICO lienzo donde las tres fases se
+// suceden encima de la anterior:
 //   1. la retícula se dibuja sola, de fuera hacia dentro
-//   2. sobre esa retícula, el trazo del icono se traza como un trim paths
-//   3. variaciones de color corporativo (pendiente del arte definitivo)
-// Los paneles arrancan en blanco y cada uno espera a que termine el anterior;
-// entre medias aparece una flecha marcando el paso.
+//   2. sobre esa misma retícula, el trazo del icono se traza como un trim paths
+//   3. la retícula se retira y el icono pasa a relleno, alternando color
+//
+// Antes eran tres tarjetas en fila con flechas entre ellas. Al superponerlas se
+// lee como un proceso continuo —la retícula no se repite, se queda— y de paso
+// el lienzo puede ocupar todo el ancho en vez de un tercio.
 //
 // El "trim paths" es stroke-dasharray/stroke-dashoffset con pathLength="1", así
 // que el progreso va de 1 a 0 sin medir la longitud real de cada trazado.
@@ -18,7 +21,10 @@ import "./IconoConstruccion.css";
 // en vez del stroke-linejoin, dejando una muesca en el vértice (se veía en la
 // punta del rayo). Sin guion, el cierre se une correctamente.
 
-type Estado = "idle" | "drawing" | "done";
+// En qué fase va la secuencia. Una sola cuenta, en vez de un estado por panel:
+// ahora no hay paneles independientes, hay capas de un mismo lienzo.
+//   0 · en blanco   1 · retícula   2 · trazo   3 · color
+type Fase = 0 | 1 | 2 | 3;
 
 // Retícula de 32x32 sobre un lienzo de 210 (celda = 6.5625). Las coordenadas se
 // conservan tal cual vienen del original para que rejilla e icono encajen al
@@ -117,63 +123,41 @@ function Reticula({ onFin }: { onFin?: () => void }) {
   );
 }
 
-function Flecha({ visible }: { visible: boolean }) {
-  return (
-    <div className="icb-flecha" data-visible={visible} aria-hidden="true">
-      <svg viewBox="0 0 24 12" fill="none">
-        <path
-          d="M1 6h21m0 0-5-5m5 5-5 5"
-          stroke="currentColor"
-          strokeWidth="1.6"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    </div>
-  );
-}
-
 export default function IconoConstruccion() {
   const ref = useRef<HTMLDivElement>(null);
-  const [p1, setP1] = useState<Estado>("idle");
-  const [p2, setP2] = useState<Estado>("idle");
-  const [p3, setP3] = useState<Estado>("idle");
+  const [fase, setFase] = useState<Fase>(0);
   const [variante, setVariante] = useState(0);
 
   const reiniciar = useCallback(() => {
-    setP1("idle");
-    setP2("idle");
-    setP3("idle");
+    setFase(0);
     setVariante(0);
   }, []);
 
-  // Una vez le toca al tercer panel, las variantes de color se van alternando
-  // en bucle mientras el bloque siga en pantalla.
+  // Una vez llega a la fase de color, las variantes se alternan en bucle
+  // mientras el bloque siga en pantalla.
   useEffect(() => {
-    if (p3 === "idle") return;
+    if (fase < 3) return;
     const id = setInterval(
       () => setVariante((v) => (v + 1) % N_VARIANTES),
       MS_POR_VARIANTE
     );
     return () => clearInterval(id);
-  }, [p3]);
+  }, [fase]);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
 
-    // Sin animación: se muestra el resultado final de los tres pasos.
+    // Sin animación: se muestra directamente el resultado final.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setP1("done");
-      setP2("done");
-      setP3("done");
+      setFase(3);
       return;
     }
 
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setP1((s) => (s === "idle" ? "drawing" : s));
+          setFase((f) => (f === 0 ? 1 : f));
         } else {
           reiniciar(); // se rearma para volver a verla al bajar de nuevo
         }
@@ -186,58 +170,47 @@ export default function IconoConstruccion() {
 
   return (
     <div className="icb" ref={ref}>
-      {/* 1 · la retícula se construye sola */}
-      <div className="icb-panel icb-panel-1" data-state={p1}>
+      <div className="icb-panel" data-fase={fase} data-variante={variante}>
+        {/* Un solo SVG con las tres capas superpuestas. El orden importa: la
+            retícula al fondo, y encima el trazo y el icono relleno, que se
+            relevan por fundido. */}
         <svg viewBox="0 0 210 210" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <Reticula
-            onFin={() => {
-              setP1("done");
-              setP2("drawing");
-            }}
-          />
-        </svg>
-      </div>
-
-      <Flecha visible={p2 !== "idle"} />
-
-      {/* 2 · el trazo del icono se dibuja sobre la retícula */}
-      <div className="icb-panel icb-panel-2" data-state={p2}>
-        <svg viewBox="0 0 210 210" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <g className="icb-reticula-fija">
-            <Reticula />
+          {/* 1 · la retícula se construye sola, y se queda durante el trazo */}
+          <g className="icb-capa-reticula">
+            <Reticula onFin={() => setFase(2)} />
           </g>
-          <g className="icb-icon">
+
+          {/* 2 · el trazo del icono, sobre esa misma retícula */}
+          <g className="icb-capa-trazo icb-icon">
             {ICON_PATHS.map((d, i) => (
               <path
                 key={i}
                 style={{ ["--i" as string]: i }}
                 d={d}
                 pathLength={1}
-                onAnimationEnd={
-                  i === ULTIMO_TRAZO
-                    ? () => {
-                        setP2("done");
-                        setP3("drawing");
-                      }
-                    : undefined
-                }
+                onAnimationEnd={i === ULTIMO_TRAZO ? () => setFase(3) : undefined}
               />
             ))}
           </g>
-        </svg>
-      </div>
 
-      <Flecha visible={p3 !== "idle"} />
-
-      {/* 3 · el icono acabado, alternando variaciones de color en bucle */}
-      <div className="icb-panel icb-panel-3" data-state={p3} data-variante={variante}>
-        <svg viewBox="0 0 211 211" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <g className="icb-variantes" onAnimationEnd={() => setP3("done")}>
+          {/* 3 · el icono ya vectorizado, que releva al trazo sin moverse.
+              Va en un SVG anidado con su propio viewBox: estas coordenadas se
+              exportaron sobre un lienzo de 211 y las del trazo sobre uno de
+              210. Metidas sin más en el de 210 se agrandarían un 0,5%, y a todo
+              el ancho eso ya es un salto visible justo en el relevo. */}
+          <svg
+            className="icb-capa-color icb-variantes"
+            x="0"
+            y="0"
+            width="210"
+            height="210"
+            viewBox="0 0 211 211"
+          >
             <path className="icb-v-rayo" d={VARIANTE_PATHS.rayo} />
             <path className="icb-v-cuerpo" d={VARIANTE_PATHS.cuerpo} />
             <path className="icb-v-barra" d={VARIANTE_PATHS.barra1} />
             <path className="icb-v-barra" d={VARIANTE_PATHS.barra2} />
-          </g>
+          </svg>
         </svg>
       </div>
     </div>
