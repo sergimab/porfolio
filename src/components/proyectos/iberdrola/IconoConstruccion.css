@@ -1,14 +1,13 @@
 /* ── Cómo se construye un icono: retícula → trazo → color ──
-   UN SOLO lienzo con tres capas superpuestas que se relevan. Los tiempos de
-   cada fase están agrupados aquí arriba.
+   Tres paneles encadenados: cada uno arranca en blanco y espera a que termine
+   el anterior. Los tiempos de cada paso están agrupados aquí arriba.
 
-   El lienzo lleva data-fase (0 en blanco · 1 retícula · 2 trazo · 3 color) y
-   cada capa mira esa fase para saber si se dibuja, si se queda o si se va.
-
-   Detalle que importa: las reglas de dibujado solo se aplican DURANTE su fase.
-   En cuanto se pasa a la siguiente dejan de aplicarse y el trazo se queda en su
-   estilo base, sin guion, que es lo que evita la muesca en los vértices (ver
-   nota en .icb-icon path). */
+   Cada panel pasa por tres estados (data-state):
+     idle    → tarjeta en blanco, contenido oculto
+     drawing → se dibuja
+     done    → sin reglas de animación: el trazo queda en su estilo base, sin
+               guion. Esto es lo que evita la muesca en los vértices (ver nota
+               en .icb-icon path). */
 
 .icb {
   --icb-verde: #00a443;
@@ -30,21 +29,20 @@
   --icb-color-dur: 0.7s;
   --icb-variante-fundido: 0.5s;  /* fundido de una variante a la siguiente */
 
-  --icb-relevo: 0.6s;         /* fundido entre una capa y la siguiente */
-
   margin-top: 48px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  align-items: center;
+  gap: 16px;
   width: 100%;
 }
 
-/* Tarjeta clara a todo el ancho: la retícula es de trazo negro y el icono
-   verde, así que necesita fondo blanco independientemente del tema.
-   Cuadrada, porque el icono lo es: al ocupar todo el ancho crece con él. */
+/* Cada panel es una tarjeta clara: la retícula es de trazo negro y el icono
+   verde, así que necesitan fondo blanco independientemente del tema. */
 .icb-panel {
-  position: relative;
   border-radius: 15px;
   background: #ffffff;
   overflow: hidden;
-  width: 100%;
   aspect-ratio: 1;
 }
 
@@ -90,74 +88,53 @@
   stroke: none;
 }
 
-/* ── Reposo: la tarjeta blanca ya se ve, el contenido no ── */
-.icb-panel[data-fase="0"] > svg {
+/* ── Estado de reposo: la tarjeta blanca ya se ve, el contenido no ── */
+.icb-panel[data-state="idle"] svg {
   opacity: 0;
-}
-
-/* ── Relevo entre capas ──
-   La retícula acompaña al trazo y se retira al llegar el color; el trazo cede
-   su sitio al icono relleno. Como las dos versiones del icono ocupan la misma
-   posición exacta, el cruce se lee como si el trazo se rellenara. */
-.icb-capa-reticula,
-.icb-capa-trazo,
-.icb-capa-color {
-  transition: opacity var(--icb-relevo) ease;
-}
-
-.icb-capa-color {
-  opacity: 0;
-}
-
-.icb-panel[data-fase="3"] .icb-capa-reticula,
-.icb-panel[data-fase="3"] .icb-capa-trazo {
-  opacity: 0;
-}
-
-.icb-panel[data-fase="3"] .icb-capa-color {
-  opacity: 1;
 }
 
 /* ── Paso 1 · la retícula se dibuja de fuera hacia dentro ── */
-.icb-panel[data-fase="1"] .icb-line {
+.icb-panel-1[data-state="drawing"] .icb-line {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
   animation: icbTrazar var(--icb-linea-dur) ease-out both;
   animation-delay: calc(var(--i) * var(--icb-linea-paso));
 }
 
-.icb-panel[data-fase="1"] .icb-rect {
+.icb-panel-1[data-state="drawing"] .icb-rect {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
   animation: icbTrazar var(--icb-rect-dur) ease-in-out both;
   animation-delay: calc(var(--icb-rect-inicio) + var(--i) * var(--icb-rect-paso));
 }
 
-.icb-panel[data-fase="1"] .icb-safe {
+.icb-panel-1[data-state="drawing"] .icb-safe {
   animation: icbAparecer 0.6s ease-out both;
   animation-delay: var(--icb-rect-inicio);
 }
 
-/* ── Fase 2 · el trazo, como un trim paths, sobre la retícula ya montada ── */
-.icb-panel[data-fase="2"] .icb-icon path {
+/* ── Paso 2 · la retícula ya montada + el trazo como un trim paths ── */
+.icb-panel-2[data-state="drawing"] .icb-reticula-fija {
+  animation: icbAparecer var(--icb-fija-dur) ease-out both;
+}
+
+.icb-panel-2[data-state="drawing"] .icb-icon path {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
   animation: icbTrazar var(--icb-icono-dur) ease-in-out both;
   animation-delay: calc(var(--icb-icono-inicio) + var(--i) * var(--icb-icono-paso));
 }
 
-/* El trazo no asoma antes de tiempo: hasta su fase no hay nada dibujado. */
-.icb-panel[data-fase="0"] .icb-capa-trazo,
-.icb-panel[data-fase="1"] .icb-capa-trazo {
-  opacity: 0;
-}
-
-/* ── Fase 3 · variaciones de color en bucle ──
+/* ── Paso 3 · variaciones de color en bucle ──
    Los cinco SVG comparten geometría, así que solo cambian los rellenos y el
    fondo del panel. El cambio va con transition, de modo que una variante se
    funde con la siguiente en vez de saltar. Para añadir o quitar variantes:
    toca los bloques [data-variante] de abajo y N_VARIANTES en el .tsx. */
-.icb-panel {
+.icb-panel-3[data-state="drawing"] .icb-variantes {
+  animation: icbAparecer var(--icb-color-dur) ease-out both;
+}
+
+.icb-panel-3 {
   transition: background var(--icb-variante-fundido) ease;
 }
 
@@ -166,39 +143,39 @@
 }
 
 /* 1 · naranja sobre verde corporativo */
-.icb-panel[data-variante="0"] { background: #ffffff; }
-.icb-panel[data-variante="0"] .icb-v-rayo,
-.icb-panel[data-variante="0"] .icb-v-barra { fill: #ff9c1a; }
-.icb-panel[data-variante="0"] .icb-v-cuerpo { fill: #00a443; }
+.icb-panel-3[data-variante="0"] { background: #ffffff; }
+.icb-panel-3[data-variante="0"] .icb-v-rayo,
+.icb-panel-3[data-variante="0"] .icb-v-barra { fill: #ff9c1a; }
+.icb-panel-3[data-variante="0"] .icb-v-cuerpo { fill: #00a443; }
 
 /* 2 · azul sobre verde corporativo */
-.icb-panel[data-variante="1"] { background: #ffffff; }
-.icb-panel[data-variante="1"] .icb-v-rayo,
-.icb-panel[data-variante="1"] .icb-v-barra { fill: #0da9ff; }
-.icb-panel[data-variante="1"] .icb-v-cuerpo { fill: #00a443; }
+.icb-panel-3[data-variante="1"] { background: #ffffff; }
+.icb-panel-3[data-variante="1"] .icb-v-rayo,
+.icb-panel-3[data-variante="1"] .icb-v-barra { fill: #0da9ff; }
+.icb-panel-3[data-variante="1"] .icb-v-cuerpo { fill: #00a443; }
 
 /* 3 · mezcla: rayo naranja, barras azules */
-.icb-panel[data-variante="2"] { background: #ffffff; }
-.icb-panel[data-variante="2"] .icb-v-rayo { fill: #ff9c1a; }
-.icb-panel[data-variante="2"] .icb-v-barra { fill: #0da9ff; }
-.icb-panel[data-variante="2"] .icb-v-cuerpo { fill: #00a443; }
+.icb-panel-3[data-variante="2"] { background: #ffffff; }
+.icb-panel-3[data-variante="2"] .icb-v-rayo { fill: #ff9c1a; }
+.icb-panel-3[data-variante="2"] .icb-v-barra { fill: #0da9ff; }
+.icb-panel-3[data-variante="2"] .icb-v-cuerpo { fill: #00a443; }
 
 /* 4 · negativo: todo en blanco sobre fondo oscuro. El filo va con sombra
-   interior y no con borde: un borde sumaría al tamaño de la caja y el lienzo
-   daría un salto de milímetro y medio cada vez que entra esta variante. */
-.icb-panel[data-variante="3"] {
+   interior y no con borde: un borde suma al tamaño de la caja y el panel daba
+   un salto de milímetro y medio cada vez que entraba esta variante. */
+.icb-panel-3[data-variante="3"] {
   background: #1c1a16;
   box-shadow: inset 0 0 0 1.5px #ffffff;
 }
-.icb-panel[data-variante="3"] .icb-v-rayo,
-.icb-panel[data-variante="3"] .icb-v-barra,
-.icb-panel[data-variante="3"] .icb-v-cuerpo { fill: #ffffff; }
+.icb-panel-3[data-variante="3"] .icb-v-rayo,
+.icb-panel-3[data-variante="3"] .icb-v-barra,
+.icb-panel-3[data-variante="3"] .icb-v-cuerpo { fill: #ffffff; }
 
 /* 5 · naranja sobre verde bosque */
-.icb-panel[data-variante="4"] { background: #ffffff; }
-.icb-panel[data-variante="4"] .icb-v-rayo,
-.icb-panel[data-variante="4"] .icb-v-barra { fill: #ff9c1a; }
-.icb-panel[data-variante="4"] .icb-v-cuerpo { fill: #00402a; }
+.icb-panel-3[data-variante="4"] { background: #ffffff; }
+.icb-panel-3[data-variante="4"] .icb-v-rayo,
+.icb-panel-3[data-variante="4"] .icb-v-barra { fill: #ff9c1a; }
+.icb-panel-3[data-variante="4"] .icb-v-cuerpo { fill: #00402a; }
 
 @keyframes icbTrazar {
   from { stroke-dashoffset: 1; }
@@ -210,25 +187,77 @@
   to   { opacity: 1; }
 }
 
+/* ── Flecha de paso entre panel y panel ── */
+.icb-flecha {
+  width: 24px;
+  color: var(--foreground);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.icb-flecha[data-visible="true"] {
+  opacity: 0.75;
+  transform: none;
+}
+
+.icb-flecha svg {
+  width: 100%;
+  display: block;
+}
+
 /* ── Responsive ──
-   No hay nada que reorganizar: es un único lienzo cuadrado que se escala solo
-   con el ancho disponible. */
+   En escritorio los tres pasos se leen de izquierda a derecha, uno al lado del
+   otro. En móvil no caben: tres cuadrados en fila salen diminutos y no se
+   distingue ni la retícula. Así que ahí los tres paneles se APILAN en la misma
+   celda y la secuencia ocurre sobre un único lienzo a todo el ancho.
+
+   No hay marcado aparte para móvil: son los mismos tres paneles, superpuestos.
+   Para que se lea como uno solo hacen falta dos cosas más, abajo. */
 @media (max-width: 640px) {
   .icb {
+    grid-template-columns: 1fr;
+    gap: 0;
     margin-top: 32px;
+  }
+
+  .icb-panel {
+    grid-area: 1 / 1;
+  }
+
+  /* Las flechas separaban un paso del siguiente; apilados no hay nada que
+     separar. */
+  .icb-flecha {
+    display: none;
+  }
+
+  /* 1 · el panel del trazo va sin fondo, para que se vea por debajo la
+     retícula que ya dibujó el primero. La suya propia se funde encima de esa,
+     que es idéntica, así que el relevo no se nota: la retícula parece quedarse
+     mientras el icono se traza sobre ella. */
+  .icb-panel-2 {
+    background: transparent;
+  }
+
+  /* 2 · el del color tapa a los dos anteriores cuando le llega el turno, y
+     hasta entonces no existe. Con fundido, para que la retícula no desaparezca
+     de golpe. */
+  .icb-panel-3 {
+    transition: background var(--icb-variante-fundido) ease,
+                opacity var(--icb-color-dur) ease;
+  }
+
+  .icb-panel-3[data-state="idle"] {
+    opacity: 0;
   }
 }
 
 /* ── Accesibilidad: sin animación, se muestra el resultado final ── */
 @media (prefers-reduced-motion: reduce) {
-  .icb-panel > svg,
-  .icb-capa-color {
+  .icb-panel svg,
+  .icb-flecha {
     opacity: 1 !important;
-  }
-
-  .icb-capa-reticula,
-  .icb-capa-trazo {
-    opacity: 0 !important;
+    transform: none !important;
   }
 
   .icb-panel * {
