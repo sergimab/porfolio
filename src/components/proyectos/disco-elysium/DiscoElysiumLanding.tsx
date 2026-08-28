@@ -10,12 +10,14 @@ import TiraDeslizante from "./TiraDeslizante";
 // comparten el inlay y el disco: si se cambia, tienen que cambiar las dos.
 const ANCHO_PIEZA = "440px";
 
-// Las vistas del álbum acabado que cierran la página.
+// Las vistas del álbum acabado que cierran la página. "redondeado" va por
+// pieza y no por posición: si mañana se reordenan o se añade una, el redondeo
+// sigue a su imagen en vez de quedarse en el tercer y cuarto hueco.
 const MOCKUPS = [
   { src: "/proyectos/disco-elysium/mockup-1.webp", alt: "El álbum de Elysium montado, con el desplegable y el disco" },
   { src: "/proyectos/disco-elysium/mockup-2.webp", alt: "La caja abierta, con el disco y el interior a la vista" },
-  { src: "/proyectos/disco-elysium/mockup-3.webp", alt: "El desplegable extendido junto a la caja" },
-  { src: "/proyectos/disco-elysium/mockup-4.webp", alt: "Detalle del álbum de Elysium montado" },
+  { src: "/proyectos/disco-elysium/mockup-3.webp", alt: "El desplegable extendido junto a la caja", redondeado: true },
+  { src: "/proyectos/disco-elysium/mockup-4.webp", alt: "Detalle del álbum de Elysium montado", redondeado: true },
 ];
 
 // Disco Elysium: el diseño editorial del álbum — el desplegable acordeón, el
@@ -156,7 +158,13 @@ export default function DiscoElysiumLanding() {
         <div className="project-pila">
           {MOCKUPS.map((m) => (
             // eslint-disable-next-line @next/next/no-img-element
-            <img key={m.src} src={m.src} alt={m.alt} loading="lazy" />
+            <img
+              key={m.src}
+              className={m.redondeado ? "es-redondeada" : undefined}
+              src={m.src}
+              alt={m.alt}
+              loading="lazy"
+            />
           ))}
         </div>
       </div>

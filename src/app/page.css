@@ -378,6 +378,11 @@
   height: auto;
   display: block;
 }
+/* Solo redondeo, sin línea de borde: los mismos 16px del resto de piezas de la
+   página, para que el fondo de estudio del mockup no acabe en pico. */
+.project-pila img.es-redondeada {
+  border-radius: 16px;
+}
 
 /* Dos piezas en fila, a la misma anchura. Igual que el trío pero de dos, y
    aquí sí se conserva el borde: son piezas enmarcadas, no renders sueltos. */
