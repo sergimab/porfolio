@@ -344,6 +344,9 @@
   padding: 9px 16px;
   border: 1px solid var(--foreground);
   border-radius: 999px;
+  /* Fondo opaco en reposo: por detrás pasa el fondo de píxeles animado y, sin
+     él, se veía moverse dentro de la píldora. */
+  background: var(--background);
   font-size: 13px;
   line-height: 1.2;
   color: var(--foreground);

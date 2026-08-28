@@ -138,6 +138,26 @@ export default function DiscoElysiumLanding() {
         <div className="project-boton-fila">
           <BotonEntregable href="/proyectos/disco-elysium/entregable-disco.pdf" />
         </div>
+
+        {/* Cierre: el conjunto montado. */}
+        <div className="project-duo">
+          <div className="project-media">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/proyectos/disco-elysium/mockup-1.webp"
+              alt="El álbum de Elysium montado, con el desplegable y el disco"
+              loading="lazy"
+            />
+          </div>
+          <div className="project-media">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/proyectos/disco-elysium/mockup-2.webp"
+              alt="Otra vista del álbum de Elysium montado"
+              loading="lazy"
+            />
+          </div>
+        </div>
       </div>
     </main>
   );
