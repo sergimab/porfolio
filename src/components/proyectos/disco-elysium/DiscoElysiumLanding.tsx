@@ -73,7 +73,9 @@ export default function DiscoElysiumLanding() {
           src="/proyectos/disco-elysium/desplegable-aff-2.webp"
           alt="El reverso del desplegable: collage con el nombre GAGA y los símbolos de cada era"
         />
-        <BotonEntregable href="/proyectos/disco-elysium/entregable-desplegable.pdf" />
+        <div className="project-boton-fila">
+          <BotonEntregable href="/proyectos/disco-elysium/entregable-desplegable.pdf" />
+        </div>
 
         {/* El inlay */}
         <div className="project-text">
@@ -103,7 +105,9 @@ export default function DiscoElysiumLanding() {
             />
           </div>
         </div>
-        <BotonEntregable href="/proyectos/disco-elysium/entregable-inlay.pdf" />
+        <div className="project-boton-fila">
+          <BotonEntregable href="/proyectos/disco-elysium/entregable-inlay.pdf" />
+        </div>
 
         {/* El disco: texto a la izquierda y la galleta a la derecha. La pieza
             es cuadrada, así que se le da algo más de ancho que los 340 por
@@ -116,7 +120,6 @@ export default function DiscoElysiumLanding() {
                 en="And then there's the disc itself. A deep black background with the main Elysium symbol at the centre, though **not printed straight onto it — left transparent**. That lets the CD's own material show through underneath, which is already semi-transparent and full of **iridescent reflections**. The result shifts with the light, as if the symbol were **breathing** on the surface rather than stuck to it."
               />
             </p>
-            <BotonEntregable href="/proyectos/disco-elysium/entregable-disco.pdf" />
           </div>
 
           <div className="project-media">
@@ -127,6 +130,13 @@ export default function DiscoElysiumLanding() {
               loading="lazy"
             />
           </div>
+        </div>
+
+        {/* El de esta sección va bajo la galleta, no bajo el texto: acompaña a
+            la pieza, y así los tres botones quedan a la misma altura de la
+            columna derecha. */}
+        <div className="project-boton-fila">
+          <BotonEntregable href="/proyectos/disco-elysium/entregable-disco.pdf" />
         </div>
       </div>
     </main>

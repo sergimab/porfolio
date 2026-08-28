@@ -328,6 +328,14 @@
 /* Botón de apoyo dentro de una página de proyecto (abrir un entregable, una
    ficha…). Mismo lenguaje que el resto: 1px de borde en el color de texto y,
    al pasar por encima, se invierte. */
+/* Los botones de entregable van alineados a la derecha, debajo de la pieza a
+   la que acompañan. Necesitan contenedor propio porque el botón es en línea:
+   por sí solo no puede empujarse a un lado. */
+.project-boton-fila {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .project-boton {
   display: inline-flex;
   align-items: center;
