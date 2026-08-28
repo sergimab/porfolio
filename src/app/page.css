@@ -365,6 +365,20 @@
   flex: none;
 }
 
+/* Piezas apiladas a todo el ancho, sin marco: son mockups sobre su propio
+   fondo, así que enmarcarlos añadiría una caja dentro de otra. */
+.project-pila {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.project-pila img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 /* Dos piezas en fila, a la misma anchura. Igual que el trío pero de dos, y
    aquí sí se conserva el borde: son piezas enmarcadas, no renders sueltos. */
 .project-duo {

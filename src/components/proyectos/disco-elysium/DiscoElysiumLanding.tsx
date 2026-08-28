@@ -10,6 +10,14 @@ import TiraDeslizante from "./TiraDeslizante";
 // comparten el inlay y el disco: si se cambia, tienen que cambiar las dos.
 const ANCHO_PIEZA = "440px";
 
+// Las vistas del álbum acabado que cierran la página.
+const MOCKUPS = [
+  { src: "/proyectos/disco-elysium/mockup-1.webp", alt: "El álbum de Elysium montado, con el desplegable y el disco" },
+  { src: "/proyectos/disco-elysium/mockup-2.webp", alt: "La caja abierta, con el disco y el interior a la vista" },
+  { src: "/proyectos/disco-elysium/mockup-3.webp", alt: "El desplegable extendido junto a la caja" },
+  { src: "/proyectos/disco-elysium/mockup-4.webp", alt: "Detalle del álbum de Elysium montado" },
+];
+
 // Disco Elysium: el diseño editorial del álbum — el desplegable acordeón, el
 // inlay y los artes finales. Es el destino de la franja que cierra la página
 // de Elysium, y va en su propia categoría porque el trabajo es editorial y no
@@ -144,24 +152,12 @@ export default function DiscoElysiumLanding() {
           <BotonEntregable href="/proyectos/disco-elysium/entregable-disco.pdf" />
         </div>
 
-        {/* Cierre: el conjunto montado. */}
-        <div className="project-duo">
-          <div className="project-media">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/proyectos/disco-elysium/mockup-1.webp"
-              alt="El álbum de Elysium montado, con el desplegable y el disco"
-              loading="lazy"
-            />
-          </div>
-          <div className="project-media">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/proyectos/disco-elysium/mockup-2.webp"
-              alt="Otra vista del álbum de Elysium montado"
-              loading="lazy"
-            />
-          </div>
+        {/* Cierre: el conjunto montado, apilado y sin marco. */}
+        <div className="project-pila">
+          {MOCKUPS.map((m) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img key={m.src} src={m.src} alt={m.alt} loading="lazy" />
+          ))}
         </div>
       </div>
     </main>
