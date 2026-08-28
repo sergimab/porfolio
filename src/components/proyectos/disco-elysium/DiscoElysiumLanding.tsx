@@ -73,6 +73,35 @@ export default function DiscoElysiumLanding() {
           alt="El reverso del desplegable: collage con el nombre GAGA y los símbolos de cada era"
         />
 
+        {/* El inlay */}
+        <div className="project-text">
+          <p>
+            <LangText
+              es="Para el reverso se usó la **vista trasera de ese mismo avatar**, con la misma iluminación que en portada para que ambas caras se sientan como parte de una **sola pieza**. Lo único que se añade aquí es el **lettering de «Elysium»**, construido también con el mismo sistema de **Geometry Nodes** que da forma a todo lo demás en el proyecto."
+              en="For the reverse I used the **back view of that same avatar**, lit exactly as it is on the cover so that both faces read as parts of a **single piece**. The only addition here is the **“Elysium” lettering**, built with the same **Geometry Nodes** system that shapes everything else in the project."
+            />
+          </p>
+        </div>
+
+        <div className="project-duo">
+          <div className="project-media">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/proyectos/disco-elysium/inlay-disco-elysium-1.webp"
+              alt="Inlay del álbum: la vista trasera del avatar de Elysium"
+              loading="lazy"
+            />
+          </div>
+          <div className="project-media">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/proyectos/disco-elysium/inlay-disco-elysium-2.webp"
+              alt="Inlay del álbum: el lettering de Elysium sobre el reverso"
+              loading="lazy"
+            />
+          </div>
+        </div>
+
         {/* El disco: texto a la izquierda y la galleta a la derecha. La pieza
             es cuadrada, así que se le da algo más de ancho que los 340 por
             defecto de la fila, pensados para piezas apaisadas. */}

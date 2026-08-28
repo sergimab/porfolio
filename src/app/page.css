@@ -311,6 +311,23 @@
   }
 }
 
+/* Dos piezas en fila, a la misma anchura. Igual que el trío pero de dos, y
+   aquí sí se conserva el borde: son piezas enmarcadas, no renders sueltos. */
+.project-duo {
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+.project-duo .project-media {
+  margin-top: 0;
+}
+@media (max-width: 700px) {
+  .project-duo {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Tres piezas en fila (poses, vistas, variantes). En móvil pasan a una
    columna. Cada hueco usa .project-media para la caja con borde. */
 .project-trio {
