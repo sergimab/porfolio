@@ -73,23 +73,27 @@ export default function DiscoElysiumLanding() {
           alt="El reverso del desplegable: collage con el nombre GAGA y los símbolos de cada era"
         />
 
-        {/* El disco */}
-        <div className="project-text">
-          <p>
-            <LangText
-              es="Y luego está el disco en sí. Fondo negro profundo, con el símbolo principal de Elysium en el centro, pero **sin imprimir directamente encima, en transparencia**. Eso deja que se vea el propio material del CD por debajo, que ya de por sí es semitransparente y con **reflejos iridiscentes**. El resultado cambia según le da la luz, como si el símbolo **respirara** sobre la superficie en vez de estar pegado a ella."
-              en="And then there's the disc itself. A deep black background with the main Elysium symbol at the centre, though **not printed straight onto it — left transparent**. That lets the CD's own material show through underneath, which is already semi-transparent and full of **iridescent reflections**. The result shifts with the light, as if the symbol were **breathing** on the surface rather than stuck to it."
-            />
-          </p>
-        </div>
+        {/* El disco: texto a la izquierda y la galleta a la derecha. La pieza
+            es cuadrada, así que se le da algo más de ancho que los 340 por
+            defecto de la fila, pensados para piezas apaisadas. */}
+        <div className="project-row" style={{ ["--row-media-w" as string]: "380px" }}>
+          <div className="project-text">
+            <p>
+              <LangText
+                es="Y luego está el disco en sí. Fondo negro profundo, con el símbolo principal de Elysium en el centro, pero **sin imprimir directamente encima, en transparencia**. Eso deja que se vea el propio material del CD por debajo, que ya de por sí es semitransparente y con **reflejos iridiscentes**. El resultado cambia según le da la luz, como si el símbolo **respirara** sobre la superficie en vez de estar pegado a ella."
+                en="And then there's the disc itself. A deep black background with the main Elysium symbol at the centre, though **not printed straight onto it — left transparent**. That lets the CD's own material show through underneath, which is already semi-transparent and full of **iridescent reflections**. The result shifts with the light, as if the symbol were **breathing** on the surface rather than stuck to it."
+              />
+            </p>
+          </div>
 
-        <div className="project-media">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/proyectos/disco-elysium/galleta-cd.webp"
-            alt="Diseño de la galleta del CD: el símbolo de Elysium en transparencia sobre fondo negro"
-            loading="lazy"
-          />
+          <div className="project-media">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/proyectos/disco-elysium/galleta-cd.webp"
+              alt="Diseño de la galleta del CD: el símbolo de Elysium en transparencia sobre fondo negro"
+              loading="lazy"
+            />
+          </div>
         </div>
       </div>
     </main>
