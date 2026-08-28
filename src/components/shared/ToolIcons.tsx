@@ -65,6 +65,16 @@ const TOOLS: { name: string; brand: string; node: React.ReactNode }[] = [
     ),
   },
   {
+    name: "InDesign",
+    brand: "#FF3366",
+    node: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="1.5" y="1.5" width="21" height="21" rx="4.5" fill="none" stroke="currentColor" strokeWidth="1.4" />
+        <text x="12" y="12.4" textAnchor="middle" dominantBaseline="central" fontSize="9.5" fontWeight="600" fill="currentColor">Id</text>
+      </svg>
+    ),
+  },
+  {
     name: "Photoshop",
     brand: "#31A8FF",
     node: (

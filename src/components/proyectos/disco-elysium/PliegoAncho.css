@@ -1,0 +1,43 @@
+/* Pliego apaisado. Misma caja que el resto de piezas de la página: 1px de
+   borde en el color de texto y 16px de radio. */
+.pliego {
+  margin-top: 32px;
+  border: 1px solid var(--foreground);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--background);
+}
+
+/* El desplazamiento va en una capa interior y no en el marco: si el marco
+   fuera el que desplaza, el redondeo de las esquinas se movería con el
+   contenido. */
+.pliego-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  line-height: 0;
+}
+
+.pliego-scroll img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Barra fina, y solo cuando hay algo que desplazar. */
+.pliego-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+.pliego-scroll::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--foreground) 25%, transparent);
+  border-radius: 3px;
+}
+
+/* En pantallas estrechas el pliego deja de encogerse y pasa a desplazarse: se
+   le fija una altura con la que se lee y su ancho se sale de la pantalla. */
+@media (max-width: 700px) {
+  .pliego-scroll img {
+    width: auto;
+    max-width: none;
+    height: 200px;
+  }
+}

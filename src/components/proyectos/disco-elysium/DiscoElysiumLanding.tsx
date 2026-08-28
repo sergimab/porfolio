@@ -2,6 +2,7 @@ import BackCapsule from "@/components/shared/BackCapsule";
 import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
 import LangText from "@/components/shared/LangText";
 import ToolIcons from "@/components/shared/ToolIcons";
+import PliegoAncho from "./PliegoAncho";
 
 // Disco Elysium: el diseño editorial del álbum — el desplegable acordeón, el
 // inlay y los artes finales. Es el destino de la franja que cierra la página
@@ -39,19 +40,57 @@ export default function DiscoElysiumLanding() {
         <div className="project-introrow">
           <p className="project-intro">
             <LangText
-              es="Texto provisional. Aquí irá la introducción del proyecto: qué es el desplegable acordeón, cómo se resolvió el inlay y qué papel juegan los artes finales dentro del conjunto de Elysium."
-              en="Placeholder text. The project introduction goes here: what the accordion fold-out is, how the inlay was resolved and what part the final artwork plays within the Elysium set."
+              es="El diseño de Elysium no se queda en la pantalla ni en la portada. Quería que **todo lo que llegara a las manos** de quien comprara el álbum, desde el primer pliego hasta el propio disco, hablara el **mismo idioma visual**."
+              en="The design of Elysium doesn't stop at the screen or the cover. I wanted **everything that reached the hands** of whoever bought the album, from the first fold to the disc itself, to speak the **same visual language**."
             />
           </p>
-          <ToolIcons tools={["Illustrator", "Photoshop", "Blender"]} />
+          <ToolIcons tools={["InDesign", "Photoshop"]} />
         </div>
 
         <p className="project-tagline">
           <LangText
-            es="｡ ₊°  Texto provisional para la frase de apertura  °₊ ｡"
-            en="｡ ₊°  Placeholder for the opening line  °₊ ｡"
+            es="｡ ₊°  Setenta centímetros que caben en la palma de la mano  °₊ ｡"
+            en="｡ ₊°  Seventy centimetres that fold into the palm of a hand  °₊ ｡"
           />
         </p>
+
+        {/* El desplegable */}
+        <div className="project-text">
+          <p>
+            <LangText
+              es="En vez del cuadernillo de siempre, el álbum incluye un **desplegable acordeón de seis cuerpos** que se abre hasta casi **setenta centímetros**. Por un lado aparecen distintas versiones del alter ego de Gaga en 3D, cada una explorando una faceta distinta del personaje. Al desplegarlo del todo, el reverso revela un collage con el nombre **GAGA** a gran formato y los símbolos de cada una de sus eras. Y donde normalmente irían las letras de las canciones, hay **un poema para cada una**, algo que la propia Gaga ha dicho que le gustaría explorar en su música."
+              en="Instead of the usual booklet, the album comes with a **six-panel accordion fold-out** that opens to almost **seventy centimetres**. One side shows different versions of Gaga's alter ego in 3D, each exploring a different facet of the character. Opened out in full, the reverse reveals a collage with the name **GAGA** at large scale and the symbols of every one of her eras. And where the lyrics would normally go, there is **a poem for each song** — something Gaga herself has said she would like to explore in her music."
+            />
+          </p>
+        </div>
+
+        <PliegoAncho
+          src="/proyectos/disco-elysium/desplegable-aff-1.webp"
+          alt="El desplegable acordeón abierto: versiones del alter ego de Gaga en 3D"
+        />
+        <PliegoAncho
+          src="/proyectos/disco-elysium/desplegable-aff-2.webp"
+          alt="El reverso del desplegable: collage con el nombre GAGA y los símbolos de cada era"
+        />
+
+        {/* El disco */}
+        <div className="project-text">
+          <p>
+            <LangText
+              es="Y luego está el disco en sí. Fondo negro profundo, con el símbolo principal de Elysium en el centro, pero **sin imprimir directamente encima, en transparencia**. Eso deja que se vea el propio material del CD por debajo, que ya de por sí es semitransparente y con **reflejos iridiscentes**. El resultado cambia según le da la luz, como si el símbolo **respirara** sobre la superficie en vez de estar pegado a ella."
+              en="And then there's the disc itself. A deep black background with the main Elysium symbol at the centre, though **not printed straight onto it — left transparent**. That lets the CD's own material show through underneath, which is already semi-transparent and full of **iridescent reflections**. The result shifts with the light, as if the symbol were **breathing** on the surface rather than stuck to it."
+            />
+          </p>
+        </div>
+
+        <div className="project-media">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/proyectos/disco-elysium/galleta-cd.webp"
+            alt="Diseño de la galleta del CD: el símbolo de Elysium en transparencia sobre fondo negro"
+            loading="lazy"
+          />
+        </div>
       </div>
     </main>
   );
