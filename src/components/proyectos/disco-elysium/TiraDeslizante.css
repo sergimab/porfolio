@@ -1,0 +1,51 @@
+/* Marco fijo con dos imágenes que se turnan deslizándose. Misma caja que el
+   resto de piezas: 1px de borde en el color de texto y 16px de radio. */
+.tirad {
+  --tirad-espera: 4s;   /* lo que se queda quieta cada imagen */
+  --tirad-viaje: 1.1s;  /* lo que tarda en desplazarse de una a otra */
+
+  border: 1px solid var(--foreground);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--background);
+  line-height: 0;
+}
+
+.tirad-pista {
+  display: flex;
+  /* Tantas veces el ancho del marco como imágenes haya. */
+  width: calc(var(--n) * 100%);
+  animation: tiradPasar calc((var(--tirad-espera) + var(--tirad-viaje)) * 2)
+    ease-in-out infinite;
+}
+
+.tirad-pista img {
+  /* Cada imagen ocupa exactamente un marco. */
+  width: calc(100% / var(--n));
+  height: auto;
+  display: block;
+}
+
+/* Ida y vuelta, no un carrusel circular: con dos imágenes, volver del tirón a
+   la primera daría un salto seco. Los porcentajes salen de 4s quieta + 1,1s de
+   viaje sobre un ciclo de 10,2s. */
+@keyframes tiradPasar {
+  0%,
+  39.2% {
+    transform: translateX(0);
+  }
+  50%,
+  89.2% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Sin animación: se queda la primera imagen a la vista. */
+@media (prefers-reduced-motion: reduce) {
+  .tirad-pista {
+    animation: none;
+  }
+}

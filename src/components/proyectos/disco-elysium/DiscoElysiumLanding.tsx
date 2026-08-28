@@ -4,6 +4,11 @@ import LangText from "@/components/shared/LangText";
 import ToolIcons from "@/components/shared/ToolIcons";
 import BotonEntregable from "@/components/shared/BotonEntregable";
 import PliegoAncho from "./PliegoAncho";
+import TiraDeslizante from "./TiraDeslizante";
+
+// Ancho de las piezas que van junto a un texto. En un solo sitio porque lo
+// comparten el inlay y el disco: si se cambia, tienen que cambiar las dos.
+const ANCHO_PIEZA = "440px";
 
 // Disco Elysium: el diseño editorial del álbum — el desplegable acordeón, el
 // inlay y los artes finales. Es el destino de la franja que cierra la página
@@ -77,42 +82,42 @@ export default function DiscoElysiumLanding() {
           <BotonEntregable href="/proyectos/disco-elysium/entregable-desplegable.pdf" />
         </div>
 
-        {/* El inlay */}
-        <div className="project-text">
-          <p>
-            <LangText
-              es="Para el reverso se usó la **vista trasera de ese mismo avatar**, con la misma iluminación que en portada para que ambas caras se sientan como parte de una **sola pieza**. Lo único que se añade aquí es el **lettering de «Elysium»**, construido también con el mismo sistema de **Geometry Nodes** que da forma a todo lo demás en el proyecto."
-              en="For the reverse I used the **back view of that same avatar**, lit exactly as it is on the cover so that both faces read as parts of a **single piece**. The only addition here is the **“Elysium” lettering**, built with the same **Geometry Nodes** system that shapes everything else in the project."
-            />
-          </p>
-        </div>
-
-        <div className="project-duo">
-          <div className="project-media">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/proyectos/disco-elysium/inlay-disco-elysium-1.webp"
-              alt="Inlay del álbum: la vista trasera del avatar de Elysium"
-              loading="lazy"
+        {/* El inlay: las dos caras turnándose a la izquierda y el texto a la
+            derecha. La pieza va primero en el orden del documento, así que al
+            apilarse en móvil queda encima del texto. */}
+        <div className="project-row" style={{ ["--row-media-w" as string]: ANCHO_PIEZA }}>
+          <div className="project-media" style={{ border: "none", padding: 0 }}>
+            <TiraDeslizante
+              imagenes={[
+                {
+                  src: "/proyectos/disco-elysium/inlay-disco-elysium-1.webp",
+                  alt: "Inlay del álbum: la vista trasera del avatar de Elysium",
+                },
+                {
+                  src: "/proyectos/disco-elysium/inlay-disco-elysium-2.webp",
+                  alt: "Inlay del álbum: el lettering de Elysium sobre el reverso",
+                },
+              ]}
             />
           </div>
-          <div className="project-media">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/proyectos/disco-elysium/inlay-disco-elysium-2.webp"
-              alt="Inlay del álbum: el lettering de Elysium sobre el reverso"
-              loading="lazy"
-            />
+
+          <div className="project-text">
+            <p>
+              <LangText
+                es="Para el reverso se usó la **vista trasera de ese mismo avatar**, con la misma iluminación que en portada para que ambas caras se sientan como parte de una **sola pieza**. Lo único que se añade aquí es el **lettering de «Elysium»**, construido también con el mismo sistema de **Geometry Nodes** que da forma a todo lo demás en el proyecto."
+                en="For the reverse I used the **back view of that same avatar**, lit exactly as it is on the cover so that both faces read as parts of a **single piece**. The only addition here is the **“Elysium” lettering**, built with the same **Geometry Nodes** system that shapes everything else in the project."
+              />
+            </p>
           </div>
         </div>
         <div className="project-boton-fila">
           <BotonEntregable href="/proyectos/disco-elysium/entregable-inlay.pdf" />
         </div>
 
-        {/* El disco: texto a la izquierda y la galleta a la derecha. La pieza
-            es cuadrada, así que se le da algo más de ancho que los 340 por
-            defecto de la fila, pensados para piezas apaisadas. */}
-        <div className="project-row" style={{ ["--row-media-w" as string]: "380px" }}>
+        {/* El disco: texto a la izquierda y la galleta a la derecha, al mismo
+            ancho que la pieza del inlay para que las dos filas se lean como un
+            par y no como dos bloques sueltos. */}
+        <div className="project-row" style={{ ["--row-media-w" as string]: ANCHO_PIEZA }}>
           <div className="project-text">
             <p>
               <LangText
