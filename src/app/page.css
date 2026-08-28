@@ -311,6 +311,49 @@
   }
 }
 
+/* Texto solo para lectores de pantalla: no ocupa sitio ni se ve, pero se lee.
+   Con display:none no se anunciaría. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Botón de apoyo dentro de una página de proyecto (abrir un entregable, una
+   ficha…). Mismo lenguaje que el resto: 1px de borde en el color de texto y,
+   al pasar por encima, se invierte. */
+.project-boton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 9px 16px;
+  border: 1px solid var(--foreground);
+  border-radius: 999px;
+  font-size: 13px;
+  line-height: 1.2;
+  color: var(--foreground);
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+.project-boton:hover,
+.project-boton:focus-visible {
+  background: var(--foreground);
+  color: var(--background);
+}
+/* El icono hereda el color, así que se invierte con el botón. */
+.project-boton svg {
+  width: 13px;
+  height: 13px;
+  flex: none;
+}
+
 /* Dos piezas en fila, a la misma anchura. Igual que el trío pero de dos, y
    aquí sí se conserva el borde: son piezas enmarcadas, no renders sueltos. */
 .project-duo {
