@@ -34,12 +34,16 @@ import "./LienzoFluido.css";
 // Es lo mismo que hace un render 3D, pero sobre un relieve deducido del
 // dibujo en vez de una malla.
 
-// Horquilla ancha entre ir despacio y ir rápido: un barrido veloz deja una
-// cinta finísima y uno lento un cuerpo con algo de carne. Es variación por
-// VELOCIDAD, no por dirección —eso era la plumilla, y se quitó—, así que no
-// impone una silueta al trazo: solo lo hace más o menos delgado.
+// Horquilla ancha entre ir despacio y ir rápido: un barrido veloz deja un hilo
+// y uno lento un cuerpo con carne. Es variación por VELOCIDAD, no por dirección
+// —eso era la plumilla, y se quitó—, así que no impone una silueta al trazo:
+// solo lo hace más o menos delgado.
+//
+// El mínimo no puede bajar mucho más: por debajo, el desenfoque que suelda los
+// trazos rebaja el campo del hilo hasta por debajo del umbral y el trazo se
+// parte a trozos en vez de salir fino.
 const GROSOR_MAX = 13;
-const GROSOR_MIN = 5;
+const GROSOR_MIN = 2.6;
 const VELOCIDAD_TOPE = 1.4;
 const SUAVIZADO = 0.22;
 const AFILADO = 3.4;        // >1 afila; a más valor, la punta adelgaza antes
