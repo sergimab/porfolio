@@ -42,12 +42,23 @@ const GROSOR_MAX = 13;
 const GROSOR_MIN = 5;
 const VELOCIDAD_TOPE = 1.4;
 const SUAVIZADO = 0.22;
-const AFILADO = 4.6;        // >1 afila; a más valor, la punta adelgaza antes
+const AFILADO = 3.4;        // >1 afila; a más valor, la punta adelgaza antes
 const PUNTA_MIN = 0.12;
-// Longitud de cada punta, en múltiplos del radio. Es alta a propósito: en la
-// referencia las puntas son agujas larguísimas que salen del cuerpo y siguen
-// afinando durante un buen trecho, no conos cortos rematando el trazo.
-const LARGO_PUNTA = 22;
+// Longitud de cada punta, en múltiplos del radio.
+//
+// Estuvo en 22 buscando agujas largas, y era demasiado: con radio 13 son casi
+// 300px de trazo adelgazando desde nada, así que al empezar a dibujar no
+// aparecía nada hasta bien entrado el gesto. La punta se nota igual de afilada
+// siendo mucho más corta —de eso se encarga AFILADO—, y así el trazo sale
+// justo donde bajas el lápiz.
+const LARGO_PUNTA = 7;
+// Y la punta de ENTRADA es mucho más corta que la de salida. No es simetría
+// mal hecha, es cómo se dibuja: al bajar el lápiz el trazo empieza ya con
+// cuerpo, y es al levantarlo cuando se va afilando. Con las dos puntas iguales
+// pasaban dos cosas malas — el trazo tardaba en aparecer, y al cerrar un
+// círculo el final afilado se encontraba con un principio igual de afilado y
+// quedaba un hueco arriba en vez de soldarse.
+const ENTRADA_CORTA = 0.28;
 const SUAVIZAR_PASADAS = 3; // pasadas de suavizado del recorrido
 const PASO_REMUESTREO = 2;  // separación, en px, al reconstruir la curva
 const VENTANA_GROSOR = 9;   // puntos que se promedian para pulir el grosor
@@ -87,7 +98,7 @@ const PICO = 0.80;
 //
 // Con ALCANCE = 1 volveríamos a lo de antes: trazos que solo engordan donde
 // literalmente se pisan.
-const ALCANCE = 7.0;
+const ALCANCE = 3.4;
 
 // Los puntos se guardan en coordenadas relativas al lienzo (0-1 en x, y la
 // misma escala en y), no en píxeles. En móvil, al arrastrar el dedo la barra
@@ -196,10 +207,15 @@ function limitarPendiente(puntos: Punto[], maxPendiente: number): Punto[] {
 // importa: con un porcentaje, la punta crece con el trazo y, mientras dibujas,
 // el extremo que está bajo el cursor tiene grosor cero — parece que la línea
 // se queda atrás. Con una longitud fija, la punta mide siempre lo mismo.
-function factorPunta(distanciaAlExtremo: number, radio: number, largoTotal: number): number {
+function factorPunta(
+  distanciaAlExtremo: number,
+  radio: number,
+  largoTotal: number,
+  proporcion = 1
+): number {
   // La punta nunca ocupa más de un tercio del trazo: si no, en una línea
   // corta las dos puntas se juntan y la línea desaparece.
-  const largo = Math.min(Math.max(8, radio * LARGO_PUNTA), largoTotal / 3);
+  const largo = Math.min(Math.max(8, radio * LARGO_PUNTA * proporcion), largoTotal / 3);
   const t = Math.min(1, distanciaAlExtremo / largo);
   // El exponente va por encima de 1: así el grosor se desploma cerca del
   // extremo y la punta sale como una aguja. Por debajo de 1 haría lo
@@ -252,13 +268,23 @@ function crearEstudio(): HTMLCanvasElement {
     ctx.fillRect(x, y, w, h);
   }
 
-  // Unos pocos montantes oscuros, muy separados: cortan las masas de luz y
-  // producen los quiebros del reflejo sin llenarlo de rayas.
-  ctx.filter = "blur(10px)";
-  for (let i = 0; i < 5; i++) {
-    const x = 90 + i * 205;
-    ctx.fillStyle = "rgba(6,7,9,0.9)";
-    ctx.fillRect(x, 0, 26 + (i % 2) * 18, 250);
+  // Montantes oscuros, separados y de borde bastante definido: son ellos los
+  // que cortan las masas de luz. El metal se lee como metal por el CONTRASTE
+  // entre zonas encendidas y apagadas que se persiguen sobre la superficie; con
+  // un panorama suave sale un plástico gris. Por eso van poco desenfocados.
+  ctx.filter = "blur(5px)";
+  for (let i = 0; i < 6; i++) {
+    const x = 60 + i * 172;
+    ctx.fillStyle = "rgba(4,5,7,0.95)";
+    ctx.fillRect(x, 0, 22 + (i % 3) * 14, 250);
+  }
+
+  // Y un par de filos muy brillantes junto a los montantes: el reflejo
+  // especular que recorre el canto cuando la pieza gira.
+  ctx.filter = "blur(2px)";
+  for (let i = 0; i < 6; i++) {
+    ctx.fillStyle = "rgba(255,255,255,0.95)";
+    ctx.fillRect(60 + i * 172 - 7, 10, 5, 232);
   }
 
   // Franja clara justo debajo del horizonte: es el rebote del suelo, y es lo
@@ -322,7 +348,7 @@ const FRAGMENT = /* glsl */ `
   // arista viva; alto = vuelta a la sección de tubo.
   const float BISEL = 0.30;
   // Grosor del reparto de relieve, en unidades de campo. Ver abajo.
-  const float RANGO = 0.155;
+  const float RANGO = 0.30;
   // Inclinación del panorama (cos y sin de unos 58°). Cuanto más tumbado,
   // antes se descuelga el faldón al suelo y más oscura sale la pieza.
   const float ENV_COS = 0.53;
@@ -350,7 +376,7 @@ const FRAGMENT = /* glsl */ `
     // El panorama se usa como iluminación, no como imagen: subirle el
     // contraste separa los reflejos de las sombras y es lo que hace que el
     // metal parezca pulido en vez de mate.
-    return col * col * 1.1;
+    return col * col * 1.45;
   }
 
   void main() {
@@ -601,7 +627,7 @@ export default function LienzoMetal() {
       const radioEn = (i: number, extra = 0) => {
         const p = puntos[i];
         const s = largos[i] + extra;
-        const inicio = sinPuntaInicial ? 1 : factorPunta(s, radioMayor, total);
+        const inicio = sinPuntaInicial ? 1 : factorPunta(s, radioMayor, total, ENTRADA_CORTA);
         const fin = enCurso ? 1 : factorPunta(total - s, radioMayor, total);
         return Math.max(PUNTA_MIN, p.r * Math.min(inicio, fin));
       };
@@ -761,10 +787,10 @@ export default function LienzoMetal() {
         uCampo: { value: null },
         uEstudio: { value: null },
         uRes: { value: new THREE.Vector2() },
-        uUmbral: { value: 0.627 },
-        uRelieve: { value: 1.3 },
+        uUmbral: { value: 0.458 },
+        uRelieve: { value: 1.5 },
         uFilo: { value: 1.7 },
-        uGrano: { value: 0.10 },
+        uGrano: { value: 0.07 },
       },
       transparent: true,
     });
@@ -892,13 +918,13 @@ export default function LienzoMetal() {
       // cuánto se hunde la membrana entre dos brazos que se cruzan. Corto,
       // los trazos se tocan y ya; largo, se sueldan con esa curva cóncava que
       // recorre el hueco de lado a lado, como en la referencia.
-      matBlur.uniforms.uPaso.value.set(1.1 / rt1.width, 0);
+      matBlur.uniforms.uPaso.value.set(0.85 / rt1.width, 0);
       renderer.setRenderTarget(rt1);
       renderer.render(escena, camara);
 
       // Pasada 2: desenfoque vertical. Aquí es donde se sueldan los trazos.
       matBlur.uniforms.uTex.value = rt1.texture;
-      matBlur.uniforms.uPaso.value.set(0, 1.1 / rt1.height);
+      matBlur.uniforms.uPaso.value.set(0, 0.85 / rt1.height);
       renderer.setRenderTarget(rt2);
       renderer.render(escena, camara);
 
