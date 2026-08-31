@@ -52,13 +52,15 @@ const PUNTA_MIN = 0.12;
 // siendo mucho más corta —de eso se encarga AFILADO—, y así el trazo sale
 // justo donde bajas el lápiz.
 const LARGO_PUNTA = 7;
-// Y la punta de ENTRADA es mucho más corta que la de salida. No es simetría
-// mal hecha, es cómo se dibuja: al bajar el lápiz el trazo empieza ya con
-// cuerpo, y es al levantarlo cuando se va afilando. Con las dos puntas iguales
-// pasaban dos cosas malas — el trazo tardaba en aparecer, y al cerrar un
-// círculo el final afilado se encontraba con un principio igual de afilado y
-// quedaba un hueco arriba en vez de soldarse.
-const ENTRADA_CORTA = 0.28;
+// Y la punta de ENTRADA es más corta que la de salida: al bajar el lápiz el
+// trazo llega a su cuerpo enseguida, y es al levantarlo cuando se afila largo.
+//
+// El valor tiene dos límites, uno por arriba y otro por abajo. Muy largo (como
+// estaba, igual que la salida) y el trazo tarda en aparecer. Pero muy corto
+// tampoco vale: la parte fina de la punta no llega a superar el umbral, así que
+// no se dibuja, y lo que se ve es un corte redondeado en vez de una punta. Hace
+// falta recorrido suficiente para que el afilado se vea antes de desaparecer.
+const ENTRADA_CORTA = 0.55;
 const SUAVIZAR_PASADAS = 3; // pasadas de suavizado del recorrido
 const PASO_REMUESTREO = 2;  // separación, en px, al reconstruir la curva
 const VENTANA_GROSOR = 9;   // puntos que se promedian para pulir el grosor
