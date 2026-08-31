@@ -247,7 +247,11 @@ function factorPunta(
 ): number {
   // La punta nunca ocupa más de un tercio del trazo: si no, en una línea
   // corta las dos puntas se juntan y la línea desaparece.
-  const largo = Math.min(Math.max(8, radio * LARGO_PUNTA * proporcion), largoTotal / 3);
+  //
+  // El suelo de 1 px no es adorno: en el primer fotograma de un trazo solo hay
+  // un punto, el trazo mide cero, y sin él esto divide cero entre cero. Lo que
+  // sale de ahí no es un número, y acaba en el radio de un degradado.
+  const largo = Math.max(1, Math.min(Math.max(8, radio * LARGO_PUNTA * proporcion), largoTotal / 3));
   const t = Math.min(1, distanciaAlExtremo / largo);
   // El exponente va por encima de 1: así el grosor se desploma cerca del
   // extremo y la punta sale como una aguja. Por debajo de 1 haría lo
@@ -684,7 +688,7 @@ export default function LienzoMetal() {
       for (let i = 1; i < contexto.length; i++) {
         antes += Math.hypot(contexto[i].x - contexto[i - 1].x, contexto[i].y - contexto[i - 1].y) * escala;
       }
-      const largoTrazo = antes + total;
+      const largoTrazo = Math.max(1, antes + total);
 
       // Un trazo corto no llega a valer 1: le falta línea a los lados para que
       // la integral se complete. Si se dejara así, un gesto breve saldría por
