@@ -698,7 +698,22 @@ export default function LienzoMetal() {
       // De relativo a píxeles: todo el trabajo de suavizado y afilado se hace
       // ya en la escala en la que se va a pintar.
       const escala = anchoCssRef.current || 1;
-      const enPx = crudos.map((p) => ({ x: p.x * escala, y: p.y * escala, r: p.r * escala }));
+
+      // UN grosor para todo el trazo, no uno por tramo.
+      //
+      // La velocidad sigue mandando, pero se promedia sobre el gesto entero en
+      // vez de aplicarse punto a punto: un barrido rápido sale fino y uno lento
+      // sale con cuerpo, y en ambos casos la cinta es pareja de punta a punta.
+      // Midiendo la velocidad instantánea, el grosor subía y bajaba varias
+      // veces dentro del mismo trazo —la mano acelera y frena sola al girar— y
+      // eso no se lee como un material, se lee como un fallo. Lo que sí puede
+      // cambiar el grosor a lo largo del trazo son las puntas y la
+      // convergencia, que son forma y no temblor.
+      const todos = contexto.length ? contexto.concat(crudos) : crudos;
+      const radioUniforme =
+        (todos.reduce((suma, p) => suma + p.r, 0) / todos.length) * escala;
+
+      const enPx = crudos.map((p) => ({ x: p.x * escala, y: p.y * escala, r: radioUniforme }));
       const base = remuestrear(suavizar(enPx, SUAVIZAR_PASADAS), PASO_REMUESTREO);
 
       // Recorrido acumulado del tramo, y el del contexto que lo precede.
