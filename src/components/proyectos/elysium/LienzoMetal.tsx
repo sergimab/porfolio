@@ -11,14 +11,35 @@ import "./LienzoFluido.css";
 // El dibujo no se pinta directamente: se construye en un canvas oculto un
 // MAPA DE ALTURA, y de él sale todo lo demás.
 //
-// Cada punto del trazo aporta una cúpula. DENTRO de un trazo las cúpulas se
-// combinan con el máximo, porque a lo largo del recorrido se pisan unas a
-// otras cientos de veces. ENTRE trazos distintos se SUMAN, como las
-// metaballs, y esa diferencia es todo el carácter de la pieza: una cinta
-// suelta apenas asoma por encima del umbral y sale fina, mientras que dos que
-// se acercan levantan entre ellas una masa mucho más gruesa que cualquiera de
-// las dos, hasta cerrar los huecos pequeños. Con el máximo no pasaría nada de
-// eso: el máximo nunca supera al mayor de los dos.
+// El campo es una INTEGRAL A LO LARGO DEL RECORRIDO: cada tramo de la línea
+// aporta una cúpula, y TODAS se suman —las del mismo trazo entre sí y las de
+// unos trazos con otros—, cada una pesando lo que mide su tramo. Eso último es
+// lo que lo hace funcionar; conviene entender por qué.
+//
+// Si se sumaran las cúpulas a secas, el campo mediría la densidad de puntos, y
+// como el puntero entrega más puntos cuando vas despacio, el grosor acabaría
+// midiendo la velocidad. Pesando cada cúpula por la longitud que representa, la
+// suma deja de depender de cómo se muestreó la línea y pasa a depender solo de
+// la línea. Y se normaliza para que una recta larga y sola valga exactamente 1:
+// así una cinta suelta es siempre igual de ancha, vaya deprisa o despacio, se
+// dibuje con diez puntos o con mil.
+//
+// De ahí sale todo lo demás, sin una sola regla añadida:
+//
+//  · Una recta vale 1 de punta a punta: PAREJA. Antes esto había que forzarlo.
+//  · En un RINCÓN cerrado las dos ramas están a distancia parecida de los
+//    puntos del exterior, así que ahí se suman las dos y el campo aguanta por
+//    encima del umbral mucho más lejos: el vértice se estira en una AGUJA,
+//    tanto más larga cuanto más cerrado el giro. Es la forma que define la
+//    referencia, y es pura geometría: no hay código de esquinas.
+//  · Donde el trazo VUELVE sobre sí mismo, o donde pasa otro trazo, las dos
+//    faldas se suman y entre ellos nace una masa más ancha que cualquiera de
+//    los dos, que cierra los huecos pequeños. Antes esto había que detectarlo a
+//    mano contando ramas vecinas; ahora es el mismo mecanismo.
+//  · En un EXTREMO libre solo hay línea por un lado, así que el campo cae a la
+//    mitad y la punta se cierra sola en pico.
+//
+// Un solo mecanismo para las cuatro cosas. Antes eran tres, y peleaban.
 //
 // Después, un desenfoque en dos pasadas redondea las uniones —su radio es el
 // del filete cóncavo que las suelda— y la pendiente del campo en cada píxel
@@ -39,11 +60,12 @@ import "./LienzoFluido.css";
 // —eso era la plumilla, y se quitó—, así que no impone una silueta al trazo:
 // solo lo hace más o menos delgado.
 //
-// El mínimo no puede bajar mucho más: por debajo, el desenfoque que suelda los
-// trazos rebaja el campo del hilo hasta por debajo del umbral y el trazo se
-// parte a trozos en vez de salir fino.
+// El mínimo ya puede bajar mucho: con el campo normalizado, un hilo vale 1 en
+// su eje igual que una cinta ancha, así que no se parte por fino que sea. Antes
+// no: el hilo apenas asomaba por encima del umbral y el desenfoque lo rompía a
+// trozos, y por eso el suelo estaba en 2,6.
 const GROSOR_MAX = 13;
-const GROSOR_MIN = 2.6;
+const GROSOR_MIN = 1.4;
 const VELOCIDAD_TOPE = 1.4;
 const SUAVIZADO = 0.22;
 const AFILADO = 4.4;        // >1 afila; a más valor, la punta adelgaza antes
@@ -66,11 +88,6 @@ const LARGO_PUNTA = 12;
 const ENTRADA_CORTA = 0.32;
 const SUAVIZAR_PASADAS = 3; // pasadas de suavizado del recorrido
 const PASO_REMUESTREO = 2;  // separación, en px, al reconstruir la curva
-const VENTANA_GROSOR = 9;   // puntos que se promedian para pulir el grosor
-// Cuánto puede engordar o adelgazar el trazo por cada píxel recorrido. Es lo
-// que evita el salto de aguja a ancho: con 0,18, pasar de 1 a 30 px de radio
-// exige unos 160 px de recorrido, así que el ensanchamiento se ve venir.
-const PENDIENTE_MAX = 0.18;
 // Puntos que se vuelven a procesar por detrás al pintar el tramo nuevo del
 // trazo en curso, para que el suavizado empalme sin costura.
 const SOLAPE_VIVO = 30;
@@ -84,10 +101,32 @@ const SOLAPE_VIVO = 30;
 // con una silueta propia y ensuciaba la que producía la fusión.
 const MAX_PUNTOS = 24000;
 
-// Altura de una cúpula suelta, sobre 1. Junto con el umbral del shader es lo
-// que reparte el juego entre "trazo solo" y "trazos fundidos": cuanto más
-// bajo, más fino sale un trazo aislado y más se nota el engorde al juntarse.
-const PICO = 0.80;
+// ── La normalización de la integral ───────────────────────────────────────
+//
+// El perfil de cada cúpula es (1 - d/R)^1,6. Su integral a lo largo de una
+// recta que pase por el centro vale 2R/(1,6+1) = 0,769·R. Así que, para que la
+// suma de todas las cúpulas de una recta larga valga exactamente 1 en su eje,
+// cada una tiene que pesar paso/(0,769·R), donde "paso" es el trozo de línea
+// que representa. Eso es todo el truco, y es lo que hace el campo independiente
+// de cuántos puntos entregue el puntero.
+const NORMA_LINEA = 0.769;
+// Cúpulas por radio de influencia.
+//
+// Aquí hay que ser generoso, y no por el campo en sí: el shader deduce la
+// normal de la PENDIENTE del campo, así que amplifica cualquier rizado. Con
+// seis, un ondulado invisible a simple vista en el mapa —del orden de un nivel
+// de 255— salía en el metal como un moteado a lo largo del brazo. Con diez, el
+// rizado cae muy por debajo de eso y de paso el ruido de trama con que el
+// navegador dibuja los degradados se promedia entre más cúpulas. Sigue siendo
+// más barato que antes, que iba a un cuarto del grosor (unas catorce por radio).
+const MUESTRAS_POR_R = 10;
+// Y en qué parte del rango del canvas cae ese 1. No puede ser 1: el interés
+// está justo en lo que pasa POR ENCIMA —dos ramas que convergen valen 2, tres
+// valen 3—, y si el 1 tocara techo, todo lo que fusiona quedaría recortado
+// contra el mismo blanco y no habría fusión que ver. Con 0,55 caben 1,8 veces
+// una línea sola antes de saturar, que cubre las uniones; solo se recorta el
+// corazón de las masas más gruesas, y ahí el relieve ya lo saca la pendiente.
+const ESCALA_CAMPO = 0.55;
 
 // ALCANCE separa dos cosas que hasta ahora eran la misma: lo ANCHO que se ve
 // un trazo y lo LEJOS que llega su influencia. Cada cúpula se pinta con un
@@ -103,7 +142,21 @@ const PICO = 0.80;
 //
 // Con ALCANCE = 1 volveríamos a lo de antes: trazos que solo engordan donde
 // literalmente se pisan.
-const ALCANCE = 3.4;
+//
+// Ahora manda además el LARGO DE LAS AGUJAS. En un rincón de medio ángulo α, el
+// campo se mantiene mientras la distancia a las dos ramas quepa dentro del
+// alcance, así que la punta llega hasta ~R/sen α: cuanto mayor el alcance, más
+// larga la aguja del vértice. Es el mismo número para las dos cosas porque son
+// la misma: lo que suelda dos trazos de lejos es lo que estira una esquina.
+const ALCANCE = 3.6;
+// Umbral del shader, en unidades de campo (1 = una recta sola). Sale de dónde
+// quiere cortarse la falda: con 0,68 la media anchura visible cae en 1/3,6 del
+// alcance, o sea justo el grosor pedido. No está calculado a mano —la mezcla de
+// paradas de un degradado de canvas no es exactamente la potencia teórica—, sino
+// medido sobre el perfil que sale de verdad. Se guarda en unidades de campo y se
+// multiplica por la escala al pasarlo al shader: si se toca ESCALA_CAMPO, el
+// umbral se recoloca solo en vez de descuadrar la silueta.
+const UMBRAL_CAMPO = 0.68;
 
 // Los puntos se guardan en coordenadas relativas al lienzo (0-1 en x, y la
 // misma escala en y), no en píxeles. En móvil, al arrastrar el dedo la barra
@@ -171,125 +224,16 @@ function remuestrear(puntos: Punto[], paso: number): Punto[] {
   return salida;
 }
 
-// Media móvil del grosor. El factor de plumilla se calcula tramo a tramo y
-// llega con dientes; promediándolo, el grosor crece y decrece de forma
-// continua en vez de a saltos.
-function pulirGrosor(puntos: Punto[], ventana: number): Punto[] {
-  if (puntos.length < 3) return puntos;
-  const mitad = Math.floor(ventana / 2);
-  return puntos.map((p, i) => {
-    let suma = 0;
-    let n = 0;
-    for (let k = -mitad; k <= mitad; k++) {
-      const q = puntos[i + k];
-      if (q) {
-        suma += q.r;
-        n++;
-      }
-    }
-    return { ...p, r: suma / n };
-  });
-}
-
-// Limita la pendiente del grosor a lo largo del trazo: dos pasadas, una hacia
-// delante y otra hacia atrás, para que ni crezca ni decrezca de golpe. Sin
-// esto, el paso de la punta al cuerpo es un escalón.
-function limitarPendiente(puntos: Punto[], maxPendiente: number): Punto[] {
-  if (puntos.length < 2) return puntos;
-  const salida = puntos.map((p) => ({ ...p }));
-  for (let i = 1; i < salida.length; i++) {
-    const d = Math.hypot(salida[i].x - salida[i - 1].x, salida[i].y - salida[i - 1].y);
-    salida[i].r = Math.min(salida[i].r, salida[i - 1].r + maxPendiente * d);
-  }
-  for (let i = salida.length - 2; i >= 0; i--) {
-    const d = Math.hypot(salida[i + 1].x - salida[i].x, salida[i + 1].y - salida[i].y);
-    salida[i].r = Math.min(salida[i].r, salida[i + 1].r + maxPendiente * d);
-  }
-  return salida;
-}
-
-// ── Convergencia: dónde el trazo vuelve sobre sí mismo ────────────────────
+// Aquí vivían tres funciones que ya no hacen falta, y merece la pena decir por
+// qué se fueron las tres a la vez: las tres corregían a mano el grosor punto a
+// punto, y con el campo normalizado el grosor de un trazo ya es constante.
 //
-// Dentro de un mismo trazo las cúpulas se combinan con el MÁXIMO, nunca se
-// suman. Eso es deliberado —a lo largo del recorrido se pisan cientos de
-// cúpulas y sumarlas saturaría la línea entera—, pero deja fuera justo lo que
-// hace falta para dibujar el símbolo de Elysium de una tirada: al pasar dos
-// veces por el centro no se acumula nada, así que el trazo sale uniforme y el
-// centro no engorda.
-//
-// Se resuelve buscándolo a mano: para cada punto se mira si por su lado pasan
-// OTRAS ramas del mismo trazo, y si las hay, se le da más cuerpo. Los brazos
-// siguen finos y en el cruce nace la masa.
-const CONV_CERCA = 42;   // px: a qué distancia cuenta que pase otra rama
-const CONV_SALTO = 90;   // px de recorrido: por debajo de esto es la misma rama
-const CONV_ENGORDE = 2.4; // cuánto puede llegar a engordar el cruce
-
-// Cuenta las ramas del trazo que pasan cerca de cada punto y engorda el radio
-// en consecuencia.
-//
-// Se cuentan RAMAS y no puntos vecinos a propósito: los puntos vienen con
-// densidad variable —el puntero entrega más cuando vas despacio—, así que
-// contar puntos mediría la velocidad y no la convergencia. Agrupando los
-// vecinos por su posición dentro del recorrido, dos pasadas distintas cuentan
-// como dos, vayan al ritmo que vayan.
-function marcarConvergencia(
-  puntos: { x: number; y: number; r: number }[],
-  largos: number[],
-  contexto: { x: number; y: number; s: number }[]
-): { x: number; y: number; r: number }[] {
-  if (puntos.length < 2) return puntos;
-
-  // Rejilla de celdas del tamaño del alcance: así basta con mirar las nueve
-  // celdas de alrededor en vez de todos los puntos.
-  const celda = CONV_CERCA;
-  const rejilla = new Map<string, { x: number; y: number; s: number }[]>();
-  const clave = (x: number, y: number) =>
-    `${Math.floor(x / celda)},${Math.floor(y / celda)}`;
-  const meter = (p: { x: number; y: number; s: number }) => {
-    const k = clave(p.x, p.y);
-    const lista = rejilla.get(k);
-    if (lista) lista.push(p);
-    else rejilla.set(k, [p]);
-  };
-
-  for (const p of contexto) meter(p);
-  // Los propios puntos van con su recorrido desplazado por el del contexto,
-  // para que las distancias a lo largo del trazo sean comparables.
-  const desfase = contexto.length ? contexto[contexto.length - 1].s : 0;
-  for (let i = 0; i < puntos.length; i++) {
-    meter({ x: puntos[i].x, y: puntos[i].y, s: desfase + largos[i] });
-  }
-
-  return puntos.map((p, i) => {
-    const s = desfase + largos[i];
-    const cx = Math.floor(p.x / celda);
-    const cy = Math.floor(p.y / celda);
-    const cercanos: number[] = [];
-    for (let dx = -1; dx <= 1; dx++) {
-      for (let dy = -1; dy <= 1; dy++) {
-        const lista = rejilla.get(`${cx + dx},${cy + dy}`);
-        if (!lista) continue;
-        for (const q of lista) {
-          if (Math.abs(q.s - s) <= CONV_SALTO) continue; // la misma rama
-          if (Math.hypot(q.x - p.x, q.y - p.y) > CONV_CERCA) continue;
-          cercanos.push(q.s);
-        }
-      }
-    }
-    if (!cercanos.length) return p;
-
-    // Cuántas ramas distintas son: los vecinos se ordenan por recorrido y cada
-    // hueco grande separa una pasada de la siguiente.
-    cercanos.sort((a, b) => a - b);
-    let ramas = 1;
-    for (let k = 1; k < cercanos.length; k++) {
-      if (cercanos[k] - cercanos[k - 1] > CONV_SALTO) ramas++;
-    }
-
-    const fuerza = Math.min(1, ramas / 2);
-    return { ...p, r: p.r * (1 + (CONV_ENGORDE - 1) * fuerza) };
-  });
-}
+//  · pulirGrosor y limitarPendiente alisaban un grosor que cambiaba tramo a
+//    tramo. Ya no cambia: hay uno solo para todo el trazo.
+//  · marcarConvergencia buscaba con una rejilla espacial las ramas que pasaban
+//    cerca de cada punto para engordar los cruces. Eso lo hace ahora la propia
+//    suma, que era el sitio donde tenía que estar: la masa del cruce sale de
+//    que dos ramas sumen, no de que las contemos.
 
 // Afilado por longitud recorrida, no por porcentaje del trazo. La diferencia
 // importa: con un porcentaje, la punta crece con el trazo y, mientras dibujas,
@@ -435,8 +379,11 @@ const FRAGMENT = /* glsl */ `
   // Parte del ancho que ocupa el bisel del canto. Bajo = chapa plana con
   // arista viva; alto = vuelta a la sección de tubo.
   const float BISEL = 0.30;
-  // Grosor del reparto de relieve, en unidades de campo. Ver abajo.
-  const float RANGO = 0.30;
+  // Grosor del reparto de relieve, en unidades de campo. Ver abajo. Bajó de
+  // 0,30 al normalizarse el campo: entre el umbral y la cresta de una cinta
+  // sola hay ahora bastante menos recorrido de valor, y con el rango antiguo el
+  // bisel no llegaba a cerrarse en todo el ancho del brazo.
+  const float RANGO = 0.12;
   // Inclinación del panorama (cos y sin de unos 58°). Cuanto más tumbado,
   // antes se descuelga el faldón al suelo y más oscura sale la pieza.
   const float ENV_COS = 0.53;
@@ -569,8 +516,11 @@ export default function LienzoMetal() {
   const maskRef = useRef<HTMLCanvasElement | null>(null);
   const posoRef = useRef<HTMLCanvasElement | null>(null); // trazos terminados
   const vivoRef = useRef<HTMLCanvasElement | null>(null); // trazo en curso
-  const sueltoRef = useRef<HTMLCanvasElement | null>(null); // un trazo, a solas
-  const dibujadosRef = useRef(0); // puntos crudos del trazo en curso ya pintados
+  // La cabeza del trazo en curso: se borra y se repinta en cada fotograma, así
+  // que va en su propia capa. Ver componerMapa.
+  const cabezaRef = useRef<HTMLCanvasElement | null>(null);
+  const dibujadosRef = useRef(0);  // puntos crudos del trazo en curso ya pintados
+  const pintadoHastaRef = useRef(0); // px de recorrido del trazo en curso ya pintados
   const anchoCssRef = useRef(1);  // ancho del lienzo en px, para el paso a relativo
   const trazosRef = useRef<Punto[][]>([]);
   const actualRef = useRef<Punto[] | null>(null);
@@ -638,29 +588,28 @@ export default function LienzoMetal() {
     return () => io.disconnect();
   }, []);
 
-  // Una cúpula en (x, y) de radio r: el núcleo de una metaball.
+  // Una cúpula de radio de influencia R y altura `alto`, en unidades de canvas.
   //
-  // Dos cosas importan aquí. La primera, el perfil: (1 - d)^1,6. Tiene las
-  // dos propiedades que hacen falta a la vez, y no es el núcleo habitual de
-  // metaball —(1 - d²)²—, que es de cumbre plana y dejaba el interior de cada
-  // cinta como un gris liso. Este llega al borde con pendiente nula, así que
-  // dos cúpulas vecinas se suman sin costura, pero en el centro llega en
-  // ángulo, y ese pico es la cresta que recorre el brazo.
+  // El perfil es (1 - d/R)^1,6, y no el núcleo habitual de metaball —(1-d²)²—,
+  // que es de cumbre plana y dejaba el interior de cada cinta como un gris
+  // liso. Este llega al borde con pendiente nula, así que dos cúpulas vecinas
+  // se suman sin costura, pero en el centro llega en ángulo, y ese pico es la
+  // cresta que recorre el brazo.
   //
-  // La segunda, el PICO. No llega a blanco ni de lejos, y es a propósito: una
-  // cúpula sola apenas asoma por encima del umbral, así que un trazo suelto
-  // sale fino. Es al sumarse con los de al lado cuando el campo se dispara y
-  // aparece la masa. Si el pico fuera 1, un trazo solo ya saturaría y no
-  // quedaría margen para engordar al fusionarse.
-  const cupula = (ctx: CanvasRenderingContext2D, x: number, y: number, r: number) => {
-    if (r < 0.3) return;
-    // El radio que se pinta es el de INFLUENCIA, bastante mayor que el grosor
-    // visible del trazo. La diferencia entre los dos es la que se fusiona.
-    const R = r * ALCANCE;
+  // La altura ya no es una constante: la pone quien llama, y vale lo que mide
+  // el trozo de línea que esta cúpula representa. Ver NORMA_LINEA.
+  const cupula = (
+    ctx: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    R: number,
+    alto: number
+  ) => {
+    if (R < 0.5 || alto <= 0) return;
     // La altura va en el color sobre fondo negro, no en el alfa: al componer,
     // los alfas se comportan distinto y el interior se ensuciaría.
     const g = ctx.createRadialGradient(x, y, 0, x, y, R);
-    const v = (k: number) => Math.round(PICO * 255 * k);
+    const v = (k: number) => Math.round(Math.min(1, alto) * 255 * k);
     g.addColorStop(0, `rgb(${v(1)},${v(1)},${v(1)})`);
     g.addColorStop(0.15, `rgb(${v(0.771)},${v(0.771)},${v(0.771)})`);
     g.addColorStop(0.3, `rgb(${v(0.565)},${v(0.565)},${v(0.565)})`);
@@ -674,26 +623,34 @@ export default function LienzoMetal() {
     ctx.fill();
   };
 
-  // Dibuja un trazo en el mapa de altura como una sucesión de cúpulas, con el
-  // perfil que afila las puntas. "lighten" se queda con el máximo en cada
-  // píxel: sumar saturaría el centro y volveríamos a la meseta plana.
-  // `enCurso` indica que el trazo aún se está dibujando: en ese caso no se
-  // afila el final, porque ese extremo es el que sigue al cursor.
-  // Devuelve cuántos puntos de la curva ya reconstruida se han dibujado, para
-  // poder continuar desde ahí en el siguiente fotograma.
+  // Dibuja un trazo en el mapa de altura recorriéndolo A PASO CONSTANTE DE
+  // LONGITUD y soltando una cúpula en cada paso, todas SUMÁNDOSE ("lighter").
+  //
+  // Recorrerlo por longitud, y no punto a punto, es la mitad del asunto: los
+  // puntos vienen apelotonados donde la mano fue despacio, y sumando cúpulas
+  // por punto el trazo engordaría justo ahí. Andando por longitud, cada cúpula
+  // representa siempre el mismo trozo de línea, y por eso todas pesan igual.
+  //
+  // `desdeRecorrido` es la longitud del trazo ya pintada en fotogramas
+  // anteriores: se mide en píxeles desde el principio del trazo, no en índices
+  // de punto. Tiene que ser así porque al rehacer el suavizado los puntos se
+  // renumeran, y con la suma no hay margen de error: repetir un tramo ya
+  // pintado dejaría un bulto brillante en mitad del trazo. Con el máximo de
+  // antes daba igual, y por eso antes bastaba con un índice.
+  //
+  // Devuelve hasta dónde ha pintado, y dónde quedó la cabeza.
   const pintarTrazo = useCallback(
     (
       ctx: CanvasRenderingContext2D,
       crudos: Punto[],
       enCurso = false,
-      desde = 0,
+      desdeRecorrido = 0,
       sinPuntaInicial = false,
-      // Tramo del trazo ya pintado. No se vuelve a dibujar: sirve solo para
-      // saber si el tramo nuevo está volviendo sobre él. Sin esto, la masa del
-      // cruce no aparecería hasta soltar el lápiz.
+      // Tramo del trazo ya pintado. No se vuelve a dibujar: sirve para el
+      // grosor medio y para saber por dónde va el recorrido.
       contexto: Punto[] = []
-    ) => {
-      if (!crudos.length) return 0;
+    ): { hasta: number; cabeza: { x: number; y: number; R: number } | null } => {
+      if (!crudos.length) return { hasta: desdeRecorrido, cabeza: null };
       // De relativo a píxeles: todo el trabajo de suavizado y afilado se hace
       // ya en la escala en la que se va a pintar.
       const escala = anchoCssRef.current || 1;
@@ -705,81 +662,80 @@ export default function LienzoMetal() {
       // sale con cuerpo, y en ambos casos la cinta es pareja de punta a punta.
       // Midiendo la velocidad instantánea, el grosor subía y bajaba varias
       // veces dentro del mismo trazo —la mano acelera y frena sola al girar— y
-      // eso no se lee como un material, se lee como un fallo. Lo que sí puede
-      // cambiar el grosor a lo largo del trazo son las puntas y la
-      // convergencia, que son forma y no temblor.
+      // eso no se lee como un material, se lee como un fallo. Lo único que
+      // cambia el grosor a lo largo del trazo son las puntas, que son forma.
       const todos = contexto.length ? contexto.concat(crudos) : crudos;
       const radioUniforme =
         (todos.reduce((suma, p) => suma + p.r, 0) / todos.length) * escala;
 
       const enPx = crudos.map((p) => ({ x: p.x * escala, y: p.y * escala, r: radioUniforme }));
-      const base = remuestrear(suavizar(enPx, SUAVIZAR_PASADAS), PASO_REMUESTREO);
+      const puntos = remuestrear(suavizar(enPx, SUAVIZAR_PASADAS), PASO_REMUESTREO);
 
-      // Recorrido acumulado del tramo, y el del contexto que lo precede.
-      const recorrido: number[] = [0];
-      for (let i = 1; i < base.length; i++) {
-        recorrido.push(
-          recorrido[i - 1] + Math.hypot(base[i].x - base[i - 1].x, base[i].y - base[i - 1].y)
-        );
-      }
-      const contextoPx: { x: number; y: number; s: number }[] = [];
-      let acumulado = 0;
-      for (let i = 0; i < contexto.length; i++) {
-        const x = contexto[i].x * escala;
-        const y = contexto[i].y * escala;
-        if (i > 0) {
-          const a = contextoPx[i - 1];
-          acumulado += Math.hypot(x - a.x, y - a.y);
-        }
-        contextoPx.push({ x, y, s: acumulado });
-      }
-
-      // El engorde por convergencia va ANTES de pulir y de limitar la
-      // pendiente, para que la masa entre con una rampa suave y no como un
-      // escalón en mitad del brazo.
-      const puntos = limitarPendiente(
-        pulirGrosor(marcarConvergencia(base, recorrido, contextoPx), VENTANA_GROSOR),
-        PENDIENTE_MAX
-      );
-      // El largo de la punta se mide con el radio mayor del trazo, no con el
-      // local: si se usa el local, donde el trazo ya es fino la punta sale
-      // cortísima y el cambio a la parte ancha resulta abrupto.
-      const radioMayor = puntos.reduce((m, p) => Math.max(m, p.r), 0);
-      const previo = ctx.globalCompositeOperation;
-      ctx.globalCompositeOperation = "lighten";
-
-      // Longitud acumulada, para medir las puntas en píxeles reales.
+      // Longitud acumulada del tramo, y la del contexto que lo precede: juntas
+      // dan la posición dentro del trazo entero, que es lo que miden las puntas.
       const largos: number[] = [0];
       for (let i = 1; i < puntos.length; i++) {
-        largos.push(largos[i - 1] + Math.hypot(puntos[i].x - puntos[i - 1].x, puntos[i].y - puntos[i - 1].y));
+        largos.push(
+          largos[i - 1] + Math.hypot(puntos[i].x - puntos[i - 1].x, puntos[i].y - puntos[i - 1].y)
+        );
       }
-      const total = largos[largos.length - 1] || 1;
+      const total = largos[largos.length - 1];
+      let antes = 0;
+      for (let i = 1; i < contexto.length; i++) {
+        antes += Math.hypot(contexto[i].x - contexto[i - 1].x, contexto[i].y - contexto[i - 1].y) * escala;
+      }
+      const largoTrazo = antes + total;
 
-      const radioEn = (i: number, extra = 0) => {
-        const p = puntos[i];
-        const s = largos[i] + extra;
-        const inicio = sinPuntaInicial ? 1 : factorPunta(s, radioMayor, total, ENTRADA_CORTA);
-        const fin = enCurso ? 1 : factorPunta(total - s, radioMayor, total);
-        return Math.max(PUNTA_MIN, p.r * Math.min(inicio, fin));
+      // Un trazo corto no llega a valer 1: le falta línea a los lados para que
+      // la integral se complete. Si se dejara así, un gesto breve saldría por
+      // debajo del umbral y no se vería nada. Se resuelve encogiéndole el
+      // alcance hasta lo que su propia longitud puede llenar, con lo que sale
+      // lo que tiene que salir: una lenteja fina y en punta por los dos lados,
+      // que es exactamente como empieza un trazo en la referencia.
+      const alcanceUtil = Math.min(ALCANCE * radioUniforme, Math.max(largoTrazo, 8) * 0.9);
+      const factorR = radioUniforme > 0 ? alcanceUtil / (ALCANCE * radioUniforme) : 1;
+
+      const previo = ctx.globalCompositeOperation;
+      // SUMA, siempre. Antes aquí iba "lighten" —el máximo— para que un trazo no
+      // se saturara a sí mismo; con las cúpulas pesadas por longitud eso ya no
+      // pasa, y sumar es lo que hace que una esquina se estire en aguja y que el
+      // trazo se funda consigo mismo donde vuelve sobre sus pasos.
+      ctx.globalCompositeOperation = "lighter";
+
+      // Radio de influencia en un punto del recorrido, con las puntas ya
+      // aplicadas. El largo de la punta se mide con el radio del trazo, no con
+      // el local: con el local, donde ya es fino la punta saldría cortísima.
+      const radioEn = (s: number) => {
+        const inicio = sinPuntaInicial
+          ? 1
+          : factorPunta(antes + s, radioUniforme, largoTrazo, ENTRADA_CORTA);
+        const fin = enCurso ? 1 : factorPunta(largoTrazo - antes - s, radioUniforme, largoTrazo);
+        return Math.max(PUNTA_MIN, radioUniforme * Math.min(inicio, fin)) * ALCANCE * factorR;
       };
 
-      for (let i = Math.max(0, desde); i < puntos.length; i++) {
-        const p = puntos[i];
-        cupula(ctx, p.x, p.y, radioEn(i));
-        // Cúpulas intermedias, para que un movimiento rápido no deje el trazo
-        // a trocitos.
-        const q = puntos[i + 1];
-        if (q) {
-          const d = Math.hypot(q.x - p.x, q.y - p.y);
-          const pasos = Math.ceil(d / Math.max(0.8, p.r * 0.25));
-          for (let k = 1; k < pasos; k++) {
-            const t = k / pasos;
-            cupula(ctx, p.x + (q.x - p.x) * t, p.y + (q.y - p.y) * t, radioEn(i, d * t));
-          }
-        }
+      let idx = 0;
+      let s = Math.max(0, desdeRecorrido - antes);
+      let cabeza: { x: number; y: number; R: number } | null = null;
+      while (s <= total) {
+        while (idx < puntos.length - 2 && largos[idx + 1] < s) idx++;
+        const a = puntos[idx];
+        const b = puntos[idx + 1] ?? a;
+        const tramo = (largos[idx + 1] ?? largos[idx]) - largos[idx];
+        const t = tramo > 0 ? (s - largos[idx]) / tramo : 0;
+        const x = a.x + (b.x - a.x) * t;
+        const y = a.y + (b.y - a.y) * t;
+        const R = radioEn(s);
+        // El paso va con el alcance: seis cúpulas por radio. Así el número de
+        // degradados no se dispara en un trazo grueso, y en uno finísimo el
+        // suelo de un píxel impide que se hagan millones.
+        const paso = Math.max(1, R / MUESTRAS_POR_R);
+        cupula(ctx, x, y, R, (paso / (NORMA_LINEA * R)) * ESCALA_CAMPO);
+        cabeza = { x, y, R };
+        s += paso;
       }
+
       ctx.globalCompositeOperation = previo;
-      return puntos.length;
+      return { hasta: antes + s, cabeza: enCurso ? cabeza : null };
     },
     []
   );
@@ -804,6 +760,7 @@ export default function LienzoMetal() {
     ctx.globalCompositeOperation = "lighter";
     if (poso) ctx.drawImage(poso, 0, 0);
     if (vivo) ctx.drawImage(vivo, 0, 0);
+    if (cabezaRef.current) ctx.drawImage(cabezaRef.current, 0, 0);
     ctx.restore();
     sucioRef.current = true;
   }, []);
@@ -817,31 +774,24 @@ export default function LienzoMetal() {
     ctx.restore();
   };
 
-  // Cada trazo se arma A SOLAS en una capa aparte y solo después se suma al
-  // poso. La distinción es todo el efecto: DENTRO de un trazo las cúpulas van
-  // al máximo, porque se pisan unas a otras cientos de veces a lo largo del
-  // recorrido y sumarlas lo saturaría al instante; ENTRE trazos distintos se
-  // suman, y por eso dos cintas finas que se cruzan levantan ahí una masa
-  // mucho más gruesa que cualquiera de las dos.
+  // Todos los trazos, uno detrás de otro, en la misma capa y sumándose.
+  //
+  // Aquí había un tercer lienzo: cada trazo se armaba a solas y solo después se
+  // sumaba al poso, porque dentro de un trazo las cúpulas iban al máximo y solo
+  // entre trazos se sumaban. Ya no hace falta separarlos —ahora se suma
+  // siempre—, y de paso un trazo puede fundirse consigo mismo, que es lo que no
+  // se podía hacer antes y lo que hace falta para dibujar un símbolo de una
+  // sola tirada.
   const repintarMapa = useCallback(() => {
     limpiarCapa(posoRef.current);
     limpiarCapa(vivoRef.current);
-    const poso = posoRef.current;
-    const suelto = sueltoRef.current;
-    const ctx = poso?.getContext("2d");
-    const ctxSuelto = suelto?.getContext("2d");
-    if (ctx && suelto && ctxSuelto) {
-      for (const t of trazosRef.current) {
-        limpiarCapa(suelto);
-        pintarTrazo(ctxSuelto, t);
-        ctx.save();
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.globalCompositeOperation = "lighter";
-        ctx.drawImage(suelto, 0, 0);
-        ctx.restore();
-      }
+    limpiarCapa(cabezaRef.current);
+    const ctx = posoRef.current?.getContext("2d");
+    if (ctx) {
+      for (const t of trazosRef.current) pintarTrazo(ctx, t);
     }
     dibujadosRef.current = 0;
+    pintadoHastaRef.current = 0;
     componerMapa();
   }, [pintarTrazo, componerMapa]);
 
@@ -858,7 +808,7 @@ export default function LienzoMetal() {
     maskRef.current = mask;
     posoRef.current = document.createElement("canvas");
     vivoRef.current = document.createElement("canvas");
-    sueltoRef.current = document.createElement("canvas");
+    cabezaRef.current = document.createElement("canvas");
 
     let renderer: THREE.WebGLRenderer;
     try {
@@ -918,10 +868,17 @@ export default function LienzoMetal() {
         uCampo: { value: null },
         uEstudio: { value: null },
         uRes: { value: new THREE.Vector2() },
-        uUmbral: { value: 0.458 },
+        // El umbral se deriva, no se teclea: es el corte en unidades de campo
+        // llevado a la escala del canvas. Así, al mover ESCALA_CAMPO la silueta
+        // no se descuadra.
+        uUmbral: { value: UMBRAL_CAMPO * ESCALA_CAMPO },
         uRelieve: { value: 1.5 },
         uFilo: { value: 1.7 },
-        uGrano: { value: 0.07 },
+        // Bajó de 0,07 con el campo normalizado: la falda de la cinta cae ahora
+        // más suave —el campo llega a 1 y no a 0,8, pero repartido sobre un
+        // alcance mayor—, así que la pendiente a la que el faldón está a tope
+        // tiene que bajar en la misma proporción o el brazo sale plano.
+        uGrano: { value: 0.042 },
       },
       transparent: true,
     });
@@ -941,7 +898,7 @@ export default function LienzoMetal() {
       renderer.setSize(width, height, false);
       renderer.domElement.style.width = "100%";
       renderer.domElement.style.height = "100%";
-      for (const capa of [mask, posoRef.current, vivoRef.current, sueltoRef.current]) {
+      for (const capa of [mask, posoRef.current, vivoRef.current, cabezaRef.current]) {
         if (!capa) continue;
         capa.width = Math.round(width * dpr);
         capa.height = Math.round(height * dpr);
@@ -1012,12 +969,39 @@ export default function LienzoMetal() {
       // atrás para que el suavizado empalme. Antes se reprocesaba el trazo
       // entero en cada fotograma: con miles de puntos, eso era el grueso del
       // coste y hundía los fotogramas por segundo.
+      //
+      // La ventana se REPROCESA solapada pero se PINTA solo desde donde se
+      // quedó, y esas dos cosas son distintas a propósito: el solape es lo que
+      // hace que el suavizado empalme sin costura, pero volver a soltar cúpulas
+      // sobre un tramo ya pintado lo sumaría dos veces y dejaría un bulto
+      // brillante cada pocos fotogramas.
       const desde = Math.max(0, dibujadosRef.current - SOLAPE_VIVO);
       const ventana = trazo.slice(desde);
       // El afilado de entrada solo tiene sentido si la ventana incluye el
       // principio del trazo; si no, se pinta sin punta inicial.
-      pintarTrazo(ctxVivo, ventana, true, 0, desde > 0, trazo.slice(0, desde));
+      const { hasta, cabeza } = pintarTrazo(
+        ctxVivo,
+        ventana,
+        true,
+        pintadoHastaRef.current,
+        desde > 0,
+        trazo.slice(0, desde)
+      );
+      pintadoHastaRef.current = hasta;
       dibujadosRef.current = trazo.length;
+
+      // Y la cabeza, aparte. En un extremo libre el campo se queda en la mitad
+      // —solo hay línea por un lado—, así que la tinta se cerraría un buen
+      // trozo por detrás del dedo y parecería que el trazo va con retraso. Esta
+      // cúpula pone la mitad que falta, y va en su propia capa porque es lo
+      // único que hay que borrar y rehacer en cada fotograma: al soltar
+      // desaparece y en su sitio queda la punta afilada de verdad.
+      limpiarCapa(cabezaRef.current);
+      const ctxCabeza = cabezaRef.current?.getContext("2d");
+      if (ctxCabeza && cabeza) {
+        ctxCabeza.globalCompositeOperation = "lighter";
+        cupula(ctxCabeza, cabeza.x, cabeza.y, cabeza.R, 0.5 * ESCALA_CAMPO);
+      }
     }
     componerMapa();
   }, [pintarTrazo, componerMapa]);
@@ -1049,13 +1033,18 @@ export default function LienzoMetal() {
       // cuánto se hunde la membrana entre dos brazos que se cruzan. Corto,
       // los trazos se tocan y ya; largo, se sueldan con esa curva cóncava que
       // recorre el hueco de lado a lado, como en la referencia.
-      matBlur.uniforms.uPaso.value.set(0.85 / rt1.width, 0);
+      //
+      // Bajó de 0,85 a 0,7: soldar ya lo hace el propio campo, y lo que el
+      // desenfoque hacía de más era limar las agujas de los vértices, que es
+      // justo lo que no se puede tocar. Lo que queda es para disimular los
+      // escalones de los 256 niveles del mapa.
+      matBlur.uniforms.uPaso.value.set(0.7 / rt1.width, 0);
       renderer.setRenderTarget(rt1);
       renderer.render(escena, camara);
 
       // Pasada 2: desenfoque vertical. Aquí es donde se sueldan los trazos.
       matBlur.uniforms.uTex.value = rt1.texture;
-      matBlur.uniforms.uPaso.value.set(0, 0.85 / rt1.height);
+      matBlur.uniforms.uPaso.value.set(0, 0.7 / rt1.height);
       renderer.setRenderTarget(rt2);
       renderer.render(escena, camara);
 
@@ -1105,6 +1094,8 @@ export default function LienzoMetal() {
     };
     radioRef.current = GROSOR_MAX * 0.7;
     ultimoRef.current = p;
+    pintadoHastaRef.current = 0;
+    dibujadosRef.current = 0;
     actualRef.current = [];
     colaRef.current = [p];
     setVacio(false);
