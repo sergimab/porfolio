@@ -134,7 +134,8 @@
       "Bash(sips -s format jpeg -Z 900 '/Volumes/Crucial X8/TFG/TFG/Renders-Finales/galaxy-2.png' --out /private/tmp/claude-501/-Users-sergimab-Documents-GitHub-porfolio/e2982e45-6a2c-4be4-969d-81843a62eb93/scratchpad/galaxy-2.jpg)",
       "Bash(sips -s format png -Z 900 '/Volumes/Crucial X8/TFG/TFG/titulo/TITULO-blanco.png' --out /private/tmp/claude-501/-Users-sergimab-Documents-GitHub-porfolio/e2982e45-6a2c-4be4-969d-81843a62eb93/scratchpad/titulo.png)",
       "Bash(sips -s format jpeg -Z 900 '/Volumes/Crucial X8/TFG/TFG/Renders-Finales/galaxy.png' --out /private/tmp/claude-501/-Users-sergimab-Documents-GitHub-porfolio/e2982e45-6a2c-4be4-969d-81843a62eb93/scratchpad/galaxy.jpg)",
-      "Bash(sips -s format jpeg -Z 700 '/Volumes/Crucial X8/TFG/TFG/Renders-Finales/fondo-1.png' --out /private/tmp/claude-501/-Users-sergimab-Documents-GitHub-porfolio/e2982e45-6a2c-4be4-969d-81843a62eb93/scratchpad/fondo-1.jpg)"
+      "Bash(sips -s format jpeg -Z 700 '/Volumes/Crucial X8/TFG/TFG/Renders-Finales/fondo-1.png' --out /private/tmp/claude-501/-Users-sergimab-Documents-GitHub-porfolio/e2982e45-6a2c-4be4-969d-81843a62eb93/scratchpad/fondo-1.jpg)",
+      "Bash(xxd era-the-fame-monster.glb)"
     ],
     "defaultMode": "acceptEdits"
   }
