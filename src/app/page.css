@@ -365,6 +365,60 @@
   flex: none;
 }
 
+/* Los dos accesos de la Web de Elysium: uno lleva al caso —cómo se diseñó— y
+   otro abre la web funcionando. Van del mismo tamaño y en la misma fila porque
+   son dos caminos igual de importantes, no una acción principal y otra
+   secundaria. En estrecho se apilan y cada uno ocupa el ancho. */
+.project-accesos {
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+@media (max-width: 720px) {
+  .project-accesos {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Variante grande del botón: dos líneas, alineado a los lados y ocupando su
+   hueco entero. El botón normal es una píldora que se ajusta a su texto. */
+.project-boton.es-grande {
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 22px;
+  border-radius: 14px;
+  text-align: left;
+}
+.project-boton-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.project-boton-rotulo {
+  font-size: 15px;
+  font-weight: 600;
+}
+.project-boton-nota {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+/* Al invertirse el botón, la nota tiene que invertirse con él: en color de
+   texto apagado sobre el fondo oscuro no se leería. */
+.project-boton.es-grande:hover .project-boton-nota,
+.project-boton.es-grande:focus-visible .project-boton-nota {
+  color: var(--background);
+}
+.project-boton.es-grande svg {
+  width: 16px;
+  height: 16px;
+}
+
 /* Piezas apiladas a todo el ancho, sin marco: son mockups sobre su propio
    fondo, así que enmarcarlos añadiría una caja dentro de otra. */
 .project-pila {

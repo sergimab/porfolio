@@ -13,20 +13,34 @@ const CATS: Record<string, { label: string; hue: number }> = {
   editorial:  { label: "Editorial",       hue: 84  },
 };
 
-export default function BackCapsule({ category }: { category: string }) {
+// `category` da el color y, por defecto, el destino: la parrilla de esa
+// categoría. Las páginas que cuelgan de un proyecto —una fase, un apartado—
+// pueden cambiar el destino y el rótulo para volver AL PROYECTO y no a la
+// parrilla, que se saltaría el escalón intermedio. El color sigue siendo el de
+// la categoría, que es lo que mantiene la cápsula reconocible.
+export default function BackCapsule({
+  category,
+  href,
+  rotulo,
+}: {
+  category: string;
+  href?: string;
+  rotulo?: string;
+}) {
   const cat = CATS[category] ?? CATS.iberdrola;
+  const texto = rotulo ?? cat.label;
   return (
     <Link
-      href={`/?cat=${category}`}
+      href={href ?? `/?cat=${category}`}
       className="back-capsule"
       style={{ "--cap-hue": cat.hue } as React.CSSProperties}
-      aria-label={`Volver a los proyectos de ${cat.label}`}
+      aria-label={`Volver a ${texto}`}
     >
       <svg className="back-capsule-chev" width="8" height="14" viewBox="0 0 8 14" fill="none"
         stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M6.5 1 1.5 7l5 6" />
       </svg>
-      {cat.label}
+      {texto}
     </Link>
   );
 }
