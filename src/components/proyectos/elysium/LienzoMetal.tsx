@@ -209,6 +209,89 @@ function limitarPendiente(puntos: Punto[], maxPendiente: number): Punto[] {
   return salida;
 }
 
+// ── Convergencia: dónde el trazo vuelve sobre sí mismo ────────────────────
+//
+// Dentro de un mismo trazo las cúpulas se combinan con el MÁXIMO, nunca se
+// suman. Eso es deliberado —a lo largo del recorrido se pisan cientos de
+// cúpulas y sumarlas saturaría la línea entera—, pero deja fuera justo lo que
+// hace falta para dibujar el símbolo de Elysium de una tirada: al pasar dos
+// veces por el centro no se acumula nada, así que el trazo sale uniforme y el
+// centro no engorda.
+//
+// Se resuelve buscándolo a mano: para cada punto se mira si por su lado pasan
+// OTRAS ramas del mismo trazo, y si las hay, se le da más cuerpo. Los brazos
+// siguen finos y en el cruce nace la masa.
+const CONV_CERCA = 42;   // px: a qué distancia cuenta que pase otra rama
+const CONV_SALTO = 90;   // px de recorrido: por debajo de esto es la misma rama
+const CONV_ENGORDE = 2.4; // cuánto puede llegar a engordar el cruce
+
+// Cuenta las ramas del trazo que pasan cerca de cada punto y engorda el radio
+// en consecuencia.
+//
+// Se cuentan RAMAS y no puntos vecinos a propósito: los puntos vienen con
+// densidad variable —el puntero entrega más cuando vas despacio—, así que
+// contar puntos mediría la velocidad y no la convergencia. Agrupando los
+// vecinos por su posición dentro del recorrido, dos pasadas distintas cuentan
+// como dos, vayan al ritmo que vayan.
+function marcarConvergencia(
+  puntos: { x: number; y: number; r: number }[],
+  largos: number[],
+  contexto: { x: number; y: number; s: number }[]
+): { x: number; y: number; r: number }[] {
+  if (puntos.length < 2) return puntos;
+
+  // Rejilla de celdas del tamaño del alcance: así basta con mirar las nueve
+  // celdas de alrededor en vez de todos los puntos.
+  const celda = CONV_CERCA;
+  const rejilla = new Map<string, { x: number; y: number; s: number }[]>();
+  const clave = (x: number, y: number) =>
+    `${Math.floor(x / celda)},${Math.floor(y / celda)}`;
+  const meter = (p: { x: number; y: number; s: number }) => {
+    const k = clave(p.x, p.y);
+    const lista = rejilla.get(k);
+    if (lista) lista.push(p);
+    else rejilla.set(k, [p]);
+  };
+
+  for (const p of contexto) meter(p);
+  // Los propios puntos van con su recorrido desplazado por el del contexto,
+  // para que las distancias a lo largo del trazo sean comparables.
+  const desfase = contexto.length ? contexto[contexto.length - 1].s : 0;
+  for (let i = 0; i < puntos.length; i++) {
+    meter({ x: puntos[i].x, y: puntos[i].y, s: desfase + largos[i] });
+  }
+
+  return puntos.map((p, i) => {
+    const s = desfase + largos[i];
+    const cx = Math.floor(p.x / celda);
+    const cy = Math.floor(p.y / celda);
+    const cercanos: number[] = [];
+    for (let dx = -1; dx <= 1; dx++) {
+      for (let dy = -1; dy <= 1; dy++) {
+        const lista = rejilla.get(`${cx + dx},${cy + dy}`);
+        if (!lista) continue;
+        for (const q of lista) {
+          if (Math.abs(q.s - s) <= CONV_SALTO) continue; // la misma rama
+          if (Math.hypot(q.x - p.x, q.y - p.y) > CONV_CERCA) continue;
+          cercanos.push(q.s);
+        }
+      }
+    }
+    if (!cercanos.length) return p;
+
+    // Cuántas ramas distintas son: los vecinos se ordenan por recorrido y cada
+    // hueco grande separa una pasada de la siguiente.
+    cercanos.sort((a, b) => a - b);
+    let ramas = 1;
+    for (let k = 1; k < cercanos.length; k++) {
+      if (cercanos[k] - cercanos[k - 1] > CONV_SALTO) ramas++;
+    }
+
+    const fuerza = Math.min(1, ramas / 2);
+    return { ...p, r: p.r * (1 + (CONV_ENGORDE - 1) * fuerza) };
+  });
+}
+
 // Afilado por longitud recorrida, no por porcentaje del trazo. La diferencia
 // importa: con un porcentaje, la punta crece con el trazo y, mientras dibujas,
 // el extremo que está bajo el cursor tiene grosor cero — parece que la línea
@@ -605,15 +688,43 @@ export default function LienzoMetal() {
       crudos: Punto[],
       enCurso = false,
       desde = 0,
-      sinPuntaInicial = false
+      sinPuntaInicial = false,
+      // Tramo del trazo ya pintado. No se vuelve a dibujar: sirve solo para
+      // saber si el tramo nuevo está volviendo sobre él. Sin esto, la masa del
+      // cruce no aparecería hasta soltar el lápiz.
+      contexto: Punto[] = []
     ) => {
       if (!crudos.length) return 0;
       // De relativo a píxeles: todo el trabajo de suavizado y afilado se hace
       // ya en la escala en la que se va a pintar.
       const escala = anchoCssRef.current || 1;
       const enPx = crudos.map((p) => ({ x: p.x * escala, y: p.y * escala, r: p.r * escala }));
+      const base = remuestrear(suavizar(enPx, SUAVIZAR_PASADAS), PASO_REMUESTREO);
+
+      // Recorrido acumulado del tramo, y el del contexto que lo precede.
+      const recorrido: number[] = [0];
+      for (let i = 1; i < base.length; i++) {
+        recorrido.push(
+          recorrido[i - 1] + Math.hypot(base[i].x - base[i - 1].x, base[i].y - base[i - 1].y)
+        );
+      }
+      const contextoPx: { x: number; y: number; s: number }[] = [];
+      let acumulado = 0;
+      for (let i = 0; i < contexto.length; i++) {
+        const x = contexto[i].x * escala;
+        const y = contexto[i].y * escala;
+        if (i > 0) {
+          const a = contextoPx[i - 1];
+          acumulado += Math.hypot(x - a.x, y - a.y);
+        }
+        contextoPx.push({ x, y, s: acumulado });
+      }
+
+      // El engorde por convergencia va ANTES de pulir y de limitar la
+      // pendiente, para que la masa entre con una rampa suave y no como un
+      // escalón en mitad del brazo.
       const puntos = limitarPendiente(
-        pulirGrosor(remuestrear(suavizar(enPx, SUAVIZAR_PASADAS), PASO_REMUESTREO), VENTANA_GROSOR),
+        pulirGrosor(marcarConvergencia(base, recorrido, contextoPx), VENTANA_GROSOR),
         PENDIENTE_MAX
       );
       // El largo de la punta se mide con el radio mayor del trazo, no con el
@@ -891,7 +1002,7 @@ export default function LienzoMetal() {
       const ventana = trazo.slice(desde);
       // El afilado de entrada solo tiene sentido si la ventana incluye el
       // principio del trazo; si no, se pinta sin punta inicial.
-      pintarTrazo(ctxVivo, ventana, true, 0, desde > 0);
+      pintarTrazo(ctxVivo, ventana, true, 0, desde > 0, trazo.slice(0, desde));
       dibujadosRef.current = trazo.length;
     }
     componerMapa();
