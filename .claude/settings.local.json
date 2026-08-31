@@ -127,7 +127,14 @@
       "Bash(python3 -c 'print\\(round\\(13*12*0.32,1\\)\\)')",
       "Bash(echo \"entrada en px, con radio 13: $\\(python3 -c 'print\\(round\\(13*12*0.32,1\\)\\)'\\)  \\(antes 50.0\\)\")",
       "Bash(md5 -q 0001.png 0002.png 0060.png 0120.png)",
-      "Bash(mkdir -p public/proyectos/elysium-web && cp \"/Volumes/Crucial X8/TFG/TFG/simbolos glb/the-fame.glb\" public/proyectos/elysium-web/era-the-fame.glb && ls -la public/proyectos/elysium-web/)"
+      "Bash(mkdir -p public/proyectos/elysium-web && cp \"/Volumes/Crucial X8/TFG/TFG/simbolos glb/the-fame.glb\" public/proyectos/elysium-web/era-the-fame.glb && ls -la public/proyectos/elysium-web/)",
+      "Bash(echo \"=== titulo ===\")",
+      "Bash(echo)",
+      "Bash(echo \"=== AAFF ===\")",
+      "Bash(sips -s format jpeg -Z 900 '/Volumes/Crucial X8/TFG/TFG/Renders-Finales/galaxy-2.png' --out /private/tmp/claude-501/-Users-sergimab-Documents-GitHub-porfolio/e2982e45-6a2c-4be4-969d-81843a62eb93/scratchpad/galaxy-2.jpg)",
+      "Bash(sips -s format png -Z 900 '/Volumes/Crucial X8/TFG/TFG/titulo/TITULO-blanco.png' --out /private/tmp/claude-501/-Users-sergimab-Documents-GitHub-porfolio/e2982e45-6a2c-4be4-969d-81843a62eb93/scratchpad/titulo.png)",
+      "Bash(sips -s format jpeg -Z 900 '/Volumes/Crucial X8/TFG/TFG/Renders-Finales/galaxy.png' --out /private/tmp/claude-501/-Users-sergimab-Documents-GitHub-porfolio/e2982e45-6a2c-4be4-969d-81843a62eb93/scratchpad/galaxy.jpg)",
+      "Bash(sips -s format jpeg -Z 700 '/Volumes/Crucial X8/TFG/TFG/Renders-Finales/fondo-1.png' --out /private/tmp/claude-501/-Users-sergimab-Documents-GitHub-porfolio/e2982e45-6a2c-4be4-969d-81843a62eb93/scratchpad/fondo-1.jpg)"
     ],
     "defaultMode": "acceptEdits"
   }

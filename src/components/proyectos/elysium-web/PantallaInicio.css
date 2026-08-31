@@ -1,0 +1,122 @@
+/* Primera pantalla: galaxia, iconos flotando y el cartel de cristal. */
+.inicio {
+  position: relative;
+  /* Alto de ventana real: en móvil, 100vh cuenta la barra del navegador que se
+     esconde al hacer scroll, y la pantalla quedaba cortada por abajo. */
+  min-height: 100dvh;
+  overflow: hidden;
+  background: #000;
+}
+
+/* Las dos capas de fondo ocupan la pantalla entera y no reciben ratón: lo que
+   se pulsa está por encima. */
+.galaxia,
+.flotantes {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.flotantes canvas {
+  display: block;
+}
+
+.inicio-capa {
+  position: relative;
+  z-index: 2;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 34px;
+  padding: 40px 24px;
+  box-sizing: border-box;
+}
+
+/* El cartel: cristal esmerilado sobre la galaxia. El fondo semitransparente es
+   imprescindible además del desenfoque — solo con blur, las estrellas se
+   emborronan pero el conjunto sigue igual de claro y el texto no despega. */
+.inicio-cartel {
+  position: relative;
+  /* Ni a sangre ni pegado a los bordes: el cartel deja un margen a los lados
+     y arriba PARA QUE LOS ICONOS ASOMEN por fuera. Ese margen no es aire
+     decorativo, es lo que enseña nítido lo que por dentro se ve borroso, y sin
+     él la portada pierde la profundidad entera. */
+  width: min(1180px, 78%);
+  /* Sin alto fijo: crece con su contenido y así no recorta el texto cuando la
+     tipografía es mayor o la pantalla, más estrecha. El mínimo mantiene la
+     proporción ancha del diseño cuando sobra sitio. */
+  min-height: min(68dvh, 620px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(38px, 12vh, 130px);
+  padding: clamp(36px, 7vw, 90px) clamp(24px, 6vw, 80px);
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 18px;
+  background: rgba(10, 10, 12, 0.34);
+  -webkit-backdrop-filter: blur(26px) saturate(115%);
+  backdrop-filter: blur(26px) saturate(115%);
+}
+
+/* Reserva de sitio mientras el logo carga: sin ella el cartel da un salto de
+   alto justo cuando entra la imagen. */
+.inicio-logo {
+  display: block;
+  width: min(300px, 24%);
+  height: auto;
+  aspect-ratio: 900 / 409;
+}
+
+.inicio-frase {
+  margin: 0;
+  max-width: 620px;
+  text-align: center;
+  font-size: clamp(14px, 1.5vw, 18px);
+  line-height: 1.5;
+  color: #fff;
+  font-weight: 400;
+}
+.inicio-frase strong {
+  font-weight: 700;
+}
+
+.inicio-start {
+  padding: 11px 30px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  background: rgba(236, 236, 236, 0.92);
+  color: #111;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.15s;
+}
+.inicio-start:hover,
+.inicio-start:focus-visible {
+  background: #fff;
+  transform: translateY(-1px);
+}
+.inicio-start:active {
+  transform: translateY(0);
+}
+
+/* En móvil el cartel se hace alto en vez de ancho, que es como cae el
+   contenido cuando no hay sitio a los lados. */
+@media (max-width: 700px) {
+  .inicio-cartel {
+    /* En móvil el margen a los lados se estrecha: con un 78% el cartel se
+       quedaría en una columna en la que no cabe la frase. */
+    width: min(1180px, 90%);
+    min-height: min(62dvh, 520px);
+    border-radius: 14px;
+  }
+  .inicio-logo {
+    width: min(230px, 52%);
+  }
+}

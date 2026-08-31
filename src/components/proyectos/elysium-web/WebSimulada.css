@@ -1,12 +1,37 @@
-/* La web de Elysium a pantalla completa. Respeta el tema claro/oscuro del
-   sitio en vez de forzar el negro del álbum: el lienzo de metal y el visor 3D
-   eligen su papel a partir de esas mismas variables, y forzarlo aquí los
-   dejaría con el fondo cambiado y el material sin ajustar. */
+/* La web de Elysium a pantalla completa. El negro no se pinta a pelo: el
+   envoltorio lleva data-theme="dark" y el fondo sale de la variable, para que
+   el lienzo de metal y el visor 3D —que sacan su papel de esas mismas
+   variables— vayan a juego en vez de quedarse con el material sin ajustar. */
 .websim {
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   background: var(--background);
+  color: var(--foreground);
+}
+
+/* Enlace de salida al portfolio. Fijo y discreto, en una esquina que no pisa
+   ni el cartel de la portada ni la barra de las pantallas siguientes. */
+.websim-salir {
+  position: fixed;
+  right: 16px;
+  bottom: 14px;
+  z-index: 20;
+  padding: 7px 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(0, 0, 0, 0.45);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.78);
+  text-decoration: none;
+  transition: color 0.2s, border-color 0.2s;
+}
+.websim-salir:hover,
+.websim-salir:focus-visible {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.6);
 }
 
 .websim-barra {
@@ -21,13 +46,19 @@
   background: var(--background);
   border-bottom: 1px solid color-mix(in srgb, var(--foreground) 15%, transparent);
 }
+/* Es un <button> y no un enlace: no va a otra página, retrocede de pantalla
+   dentro de la misma. De ahí el reseteo de fondo y borde. */
 .websim-volver {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
   font-size: 12.5px;
   color: var(--foreground);
-  text-decoration: none;
+  cursor: pointer;
   opacity: 0.75;
   transition: opacity 0.2s;
 }
@@ -51,25 +82,6 @@
   box-sizing: border-box;
 }
 
-.websim-portada {
-  padding: 88px 0 64px;
-  text-align: center;
-}
-.websim-titulo {
-  margin: 0;
-  font-size: clamp(32px, 6vw, 62px);
-  font-weight: 700;
-  line-height: 1.06;
-  letter-spacing: -0.01em;
-  color: var(--foreground);
-}
-.websim-entradilla {
-  max-width: 480px;
-  margin: 22px auto 0;
-  font-size: 14.5px;
-  line-height: 1.65;
-  color: var(--muted);
-}
 
 .websim-seccion {
   margin-top: 72px;
