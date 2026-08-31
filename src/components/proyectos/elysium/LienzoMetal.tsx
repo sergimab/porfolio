@@ -46,16 +46,15 @@ const GROSOR_MAX = 13;
 const GROSOR_MIN = 2.6;
 const VELOCIDAD_TOPE = 1.4;
 const SUAVIZADO = 0.22;
-const AFILADO = 3.4;        // >1 afila; a más valor, la punta adelgaza antes
+const AFILADO = 4.4;        // >1 afila; a más valor, la punta adelgaza antes
 const PUNTA_MIN = 0.12;
 // Longitud de cada punta, en múltiplos del radio.
 //
-// Estuvo en 22 buscando agujas largas, y era demasiado: con radio 13 son casi
-// 300px de trazo adelgazando desde nada, así que al empezar a dibujar no
-// aparecía nada hasta bien entrado el gesto. La punta se nota igual de afilada
-// siendo mucho más corta —de eso se encarga AFILADO—, y así el trazo sale
-// justo donde bajas el lápiz.
-const LARGO_PUNTA = 7;
+// Cuanto más larga, más aguja y menos cono: la punta adelgaza durante más
+// recorrido y acaba en un filo mucho más fino. Estuvo en 22 y era pasarse —el
+// trazo tardaba en aparecer—, pero el problema era la punta de ENTRADA, no la
+// de salida; ahora que van por separado, la de salida puede ser larga.
+const LARGO_PUNTA = 12;
 // Y la punta de ENTRADA es más corta que la de salida: al bajar el lápiz el
 // trazo llega a su cuerpo enseguida, y es al levantarlo cuando se afila largo.
 //
@@ -64,7 +63,7 @@ const LARGO_PUNTA = 7;
 // tampoco vale: la parte fina de la punta no llega a superar el umbral, así que
 // no se dibuja, y lo que se ve es un corte redondeado en vez de una punta. Hace
 // falta recorrido suficiente para que el afilado se vea antes de desaparecer.
-const ENTRADA_CORTA = 0.55;
+const ENTRADA_CORTA = 0.32;
 const SUAVIZAR_PASADAS = 3; // pasadas de suavizado del recorrido
 const PASO_REMUESTREO = 2;  // separación, en px, al reconstruir la curva
 const VENTANA_GROSOR = 9;   // puntos que se promedian para pulir el grosor
