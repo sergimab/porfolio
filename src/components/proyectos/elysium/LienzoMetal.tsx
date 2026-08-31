@@ -267,7 +267,11 @@ function factorPunta(
 // lo que tendría un plató real —techo claro, suelo oscuro, softboxes y tiras
 // de luz—, porque son esas formas, y no un degradado, las que al reflejarse
 // dibujan las cintas del cromo.
-function crearEstudio(): HTMLCanvasElement {
+// Se exporta para el visor 3D de la web de Elysium: los modelos de las eras se
+// iluminan con este mismo plató. Es lo que hace que el metal del símbolo
+// dibujado y el de los modelos importados se lean como el mismo material y no
+// como dos cromos distintos pegados en la misma página.
+export function crearEstudio(): HTMLCanvasElement {
   const c = document.createElement("canvas");
   c.width = 1024;
   c.height = 512;
@@ -514,7 +518,23 @@ const FRAGMENT = /* glsl */ `
   }
 `;
 
-export default function LienzoMetal() {
+// Un trazo ya hecho, en las mismas coordenadas relativas que usa el lienzo por
+// dentro: x e y en fracción del ANCHO (no del alto), y r igual. Ver el
+// comentario del tipo Punto.
+export type TrazoHecho = Punto[];
+
+export default function LienzoMetal({
+  // Figura de partida. Si viene, el lienzo la pinta en vez de empezar vacío:
+  // es lo que permite usar el mismo motor de metal para enseñar un símbolo
+  // generado, sin duplicar el shader ni el mapa de altura.
+  figura,
+  // Con interactivo en false no se escucha al puntero y desaparecen la pista y
+  // el botón de borrar: el lienzo pasa a ser una pieza que se mira.
+  interactivo = true,
+}: {
+  figura?: TrazoHecho[];
+  interactivo?: boolean;
+} = {}) {
   const lang = useLang();
   const contenedorRef = useRef<HTMLDivElement>(null);
   const maskRef = useRef<HTMLCanvasElement | null>(null);
@@ -1155,21 +1175,45 @@ export default function LienzoMetal() {
     setVacio(true);
   };
 
+  // La figura de partida, cuando la hay.
+  //
+  // Se depende de su FIRMA y no del array: quien nos llama construye la figura
+  // al vuelo, así que el array es nuevo en cada render y usarlo de dependencia
+  // repintaría sin parar. Las figuras generadas son de unos pocos vértices, así
+  // que serializarlas no cuesta nada.
+  const firmaFigura = figura ? JSON.stringify(figura) : "";
+  useEffect(() => {
+    if (!figura) return;
+    trazosRef.current = figura.map((t) => t.map((p) => ({ ...p })));
+    setVacio(false);
+    // Si WebGL aún no ha montado, esto no pinta nada todavía: no importa, el
+    // montaje mide el lienzo y repinta, y para entonces la figura ya está
+    // puesta. Por eso `cerca` es dependencia.
+    repintarMapa();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [firmaFigura, cerca, repintarMapa]);
+
   // Sin WebGL no hay metal posible: se cambia por la versión de filtros SVG,
   // que hace la misma fusión y un cromo aproximado sin tocar la GPU.
-  if (sinWebgl) return <LienzoFluido />;
+  //
+  // Solo cuando se puede dibujar. Enseñando una figura ya hecha no sirve de
+  // recambio: pondría un lienzo en blanco donde tenía que haber un resultado, e
+  // invitaría a dibujar en un sitio que no es para eso.
+  if (sinWebgl) return interactivo ? <LienzoFluido /> : null;
 
   return (
-    <section className="lienzo-fluido es-metal">
+    <section className={`lienzo-fluido es-metal${interactivo ? "" : " es-fijo"}`}>
       <div className="lienzo-marco">
         <div
           ref={contenedorRef}
           className="lienzo-tinta lienzo-gl"
-          onPointerDown={alBajar}
+          onPointerDown={interactivo ? alBajar : undefined}
         />
-        <p className={`lienzo-pista${vacio ? "" : " se-va"}`} aria-hidden={!vacio}>
-          {lang === "en" ? "Draw here" : "Dibuja aquí"}
-        </p>
+        {interactivo && (
+          <p className={`lienzo-pista${vacio ? "" : " se-va"}`} aria-hidden={!vacio}>
+            {lang === "en" ? "Draw here" : "Dibuja aquí"}
+          </p>
+        )}
 
         {diag && (
           <pre className="lienzo-diag">
@@ -1179,9 +1223,11 @@ export default function LienzoMetal() {
           </pre>
         )}
 
-        <button type="button" className="lienzo-reset" onClick={limpiar}>
-          {lang === "en" ? "Reset" : "Borrar"}
-        </button>
+        {interactivo && (
+          <button type="button" className="lienzo-reset" onClick={limpiar}>
+            {lang === "en" ? "Reset" : "Borrar"}
+          </button>
+        )}
       </div>
     </section>
   );

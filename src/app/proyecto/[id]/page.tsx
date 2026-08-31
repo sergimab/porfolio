@@ -14,12 +14,14 @@ import NewslettersLanding from "@/components/proyectos/iberdrola/NewslettersLand
 import IconografiaLanding from "@/components/proyectos/iberdrola/IconografiaLanding";
 import ElysiumLanding from "@/components/proyectos/elysium/ElysiumLanding";
 import DiscoElysiumLanding from "@/components/proyectos/disco-elysium/DiscoElysiumLanding";
+import ElysiumWebLanding from "@/components/proyectos/elysium-web/ElysiumWebLanding";
 
 const LANDINGS: Record<string, React.ComponentType> = {
   i1: InfografiasLanding,
   i3: NewslettersLanding,
   i4: IconografiaLanding,
   i5: IlustracionesLanding,
+  u1: ElysiumWebLanding,
   d1: ElysiumLanding,
   e1: DiscoElysiumLanding,
 };

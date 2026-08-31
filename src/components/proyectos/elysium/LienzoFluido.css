@@ -130,6 +130,15 @@
   width: 100%;
   height: 100%;
 }
+/* Lienzo que solo se mira: enseña una figura ya generada, no se dibuja en él.
+   Sin la cruz del cursor, que prometería algo que no va a pasar, y devolviendo
+   el desplazamiento con el dedo, que en un bloque no interactivo tiene que
+   pasar la página en vez de quedarse atrapado. */
+.es-fijo .lienzo-gl {
+  cursor: default;
+  touch-action: auto;
+}
+
 /* El metal necesita un papel con algo de cuerpo: sobre blanco puro los
    reflejos claros desaparecen. Se cambia la variable, no el fondo: con el
    atajo "background" se borraba la retícula de puntos. */
