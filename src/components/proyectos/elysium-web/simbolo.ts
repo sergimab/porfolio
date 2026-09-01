@@ -191,8 +191,17 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
   // único que produce un pico: bajando solo la altura, la superficie termina
   // siempre en casquete.
   //
-  // Arrancan por dentro del brazo para que la suma las funda con él sin costura,
-  // y salen hacia fuera siguiendo el radio.
+  // Arrancan EN el vértice, no por dentro del brazo.
+  //
+  // Metiéndolas hacia dentro pasaba algo que no había previsto: un trazo suelto
+  // se afila por sus DOS extremos, y como la púa va en dirección radial mientras
+  // que el brazo en ese vértice va en diagonal, el extremo interior sacaba su
+  // propia aguja cruzada respecto al brazo. Las dos puntas opuestas juntas se
+  // veían como una pajarita clavada en cada vértice.
+  //
+  // Naciendo en el vértice, ese extremo interior queda justo donde convergen los
+  // dos tramos del recorrido y el campo es más alto, así que la suma se lo traga
+  // y solo queda la punta de fuera.
   const puas: [number, number][][] = [];
   const grosoresPua: number[][] = [];
   for (const era of recorrido) {
@@ -202,9 +211,8 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
     const d = Math.hypot(vx - cx, vy - cy) || 1;
     const ux = (vx - cx) / d;
     const uy = (vy - cy) / d;
-    const dentro = Math.min(d * 0.55, largo * 1.6);
     puas.push([
-      [vx - ux * dentro, vy - uy * dentro],
+      [vx, vy],
       [vx + ux * largo, vy + uy * largo],
     ]);
     const gr = Math.min(grosorDe(era), GROSOR * 0.5);
