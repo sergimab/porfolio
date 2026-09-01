@@ -157,6 +157,113 @@ const DOBLEZ = 0.45;
 const ADELGAZA_MAX = 0.34;
 const ALCANCE_MIN = 0.40;
 
+// ── El afilado de los picos ───────────────────────────────────────────────
+//
+// El alcance del campo, repetido aquí a propósito: LienzoMetal lo exporta, pero
+// importarlo metería un componente de React en este archivo, que es cálculo puro
+// y se puede ejecutar fuera del navegador para medirlo. Si allí cambia, cambia
+// aquí.
+const ALCANCE_CAMPO = 3.6;
+// Lo fino que queda el trazo justo en el pico, en fracción de su grosor.
+const PICO = 0.18;
+// La ventana del afilado, en veces el alcance del campo. Es la distancia en la
+// que la fusión redondea una punta, así que el afilado tiene que empezar antes
+// que ella: con menos, se afila dentro de la zona ya redondeada y no se nota.
+const PICO_VENTANA = 2.2;
+// A partir de qué cerrado está el giro se afila. 0 es seguir recto y 1 es
+// darse la vuelta del todo. Por debajo de esto el vértice se queda redondo, que
+// es lo que tiene que pasar: la gracia es que convivan los dos remates.
+const PICO_DESDE = 0.35;
+// Y el tope de la ventana como fracción del tramo más corto que llega al
+// vértice, para que un brazo corto no se afile entero. Ver abajo.
+const PICO_TRAMO = 0.4;
+// A partir de qué grosor —en fracción del máximo— el brazo recibe el afilado
+// entero. Por debajo, proporcional. Ver el cálculo de `cuerpo`.
+const PICO_GRUESO = 0.6;
+
+// Afila los vértices cerrados encogiendo el trazo por LOS DOS LADOS hasta el
+// pico.
+//
+// Un vértice interior no tiene ningún afilado: el del lienzo actúa en los
+// extremos del trazo, y por el medio el radio de las cúpulas se mantiene. Y una
+// punta solo sale si el RADIO encoge —bajando la altura, la superficie termina
+// siempre en casquete—, así que un giro cerrado se cerraba en una cápsula
+// alargada y blanda en vez de en una aguja.
+//
+// Aquí se dibuja lo que el campo no hace solo: al acercarse al vértice el trazo
+// adelgaza y acorta su alcance, y al salir vuelve a engordar. El resultado es
+// una punta de verdad, y como el afilado va con lo CERRADO del giro, los
+// vértices abiertos siguen saliendo redondeados.
+function afilarPicos(trazo: Punto[]): Punto[] {
+  const acum = [0];
+  for (let i = 1; i < trazo.length; i++) {
+    acum.push(acum[i - 1] + Math.hypot(trazo[i].x - trazo[i - 1].x, trazo[i].y - trazo[i - 1].y));
+  }
+
+  // Los vértices interiores, con lo cerrado de su giro. Van cada POR_TRAMO
+  // puntos por construcción; las dos puntas del trazo se saltan porque el
+  // lienzo ya las afila por su cuenta.
+  const picos: { i: number; agudeza: number; ventana: number }[] = [];
+  const ventanaMaxima = GROSOR * ALCANCE_CAMPO * PICO_VENTANA;
+  for (let i = POR_TRAMO; i < trazo.length - 1; i += POR_TRAMO) {
+    const antes = trazo[Math.max(0, i - 5)];
+    const luego = trazo[Math.min(trazo.length - 1, i + 5)];
+    const v = trazo[i];
+    const ax = v.x - antes.x;
+    const ay = v.y - antes.y;
+    const bx = luego.x - v.x;
+    const by = luego.y - v.y;
+    const la = Math.hypot(ax, ay) || 1;
+    const lb = Math.hypot(bx, by) || 1;
+    // 1 = sigue recto, -1 = se da la vuelta. Se lleva a 0..1.
+    const coseno = (ax * bx + ay * by) / (la * lb);
+
+    // La ventana no puede comerse el brazo entero, y esto no es una precaución
+    // teórica: con varios discos a cero los brazos se quedan en el radio mínimo
+    // y miden MENOS que la ventana. Esos brazos se afilaban de punta a punta,
+    // el trazo entero caía por debajo del umbral y el brazo se DESPRENDÍA de la
+    // figura. Medido: 8 figuras de 123 salían en trozos por esto.
+    //
+    // Limitándola a una parte del tramo más corto que llega al vértice, el
+    // afilado se queda donde tiene que estar —junto al pico— y el resto del
+    // brazo conserva su grosor.
+    const tramoAntes = acum[i] - acum[Math.max(0, i - POR_TRAMO)];
+    const tramoLuego = acum[Math.min(trazo.length - 1, i + POR_TRAMO)] - acum[i];
+    picos.push({
+      i,
+      agudeza: Math.min(1, Math.max(0, (1 - coseno) / 2)),
+      ventana: Math.min(ventanaMaxima, Math.min(tramoAntes, tramoLuego) * PICO_TRAMO),
+    });
+  }
+  return trazo.map((p, i) => {
+    let factor = 1;
+    for (const pico of picos) {
+      if (pico.agudeza < PICO_DESDE) continue;
+      const d = Math.abs(acum[i] - acum[pico.i]);
+      if (d >= pico.ventana) continue;
+      // Lleno en el vértice y nada en el borde de la ventana, graduado además
+      // por lo cerrado del giro.
+      // El afilado va con el GROSOR del brazo, además de con lo cerrado del
+      // giro. Un brazo gordo es el que forma masa y el que hay que romper; un
+      // hilo ya llega fino al vértice y encima vive pegado al umbral del campo,
+      // así que recortarlo más lo hunde por debajo y lo desprende. Por eso el
+      // hilo apenas se afila: no le hace falta y no lo aguanta.
+      const cuerpo = Math.min(1, p.r / (GROSOR * PICO_GRUESO));
+      const fuerza = ((pico.agudeza - PICO_DESDE) / (1 - PICO_DESDE)) * cuerpo;
+      factor = Math.min(factor, 1 - (1 - PICO) * fuerza * (1 - d / pico.ventana));
+    }
+    if (factor >= 1) return p;
+    return {
+      ...p,
+      r: p.r * factor,
+      // El alcance también, porque si no las dos ramas del pico se sueldan
+      // entre ellas y rellenan justo el hueco que hace la punta. Con suelo: sin
+      // nada de alcance, la punta se despegaría del brazo.
+      a: Math.min(p.a ?? 1, Math.max(ALCANCE_MIN, factor)),
+    };
+  });
+}
+
 // Adelgaza el trazo, y le acorta el alcance, allí donde la línea se dobla sobre
 // sí misma.
 //
@@ -395,9 +502,13 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
   //
   // Las púas van con el arranque SIN afilar: no empiezan en el aire, brotan del
   // brazo, y afilar esa base las convertía en dardos posados encima.
+  //
+  // El orden importa: primero se afilan los picos y luego se busca el
+  // amontonamiento. Al revés, el adelgazado mediría el trazo gordo y marcaría
+  // como amontonado un pico que el afilado ya iba a separar.
   const principal = tejer(vertices, grosores);
   return [
-    { ...principal, puntos: adelgazarDondeSeAmontona(principal.puntos) },
+    { ...principal, puntos: adelgazarDondeSeAmontona(afilarPicos(principal.puntos)) },
     ...puas.map((p, i) => tejer(p, grosoresPua[i], true, desdePua[i])),
   ];
 }
