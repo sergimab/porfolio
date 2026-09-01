@@ -163,7 +163,7 @@ const UMBRAL_CAMPO = 0.68;
 // del navegador se oculta y el alto del lienzo cambia: con píxeles, todo lo
 // dibujado se descolocaba respecto al dedo. Con coordenadas relativas, el
 // trazo sigue donde debe pase lo que pase con el tamaño.
-type Punto = { x: number; y: number; r: number };
+export type Punto = { x: number; y: number; r: number };
 
 // Suaviza el recorrido promediando cada punto con sus vecinos. El puntero
 // entrega una poligonal temblorosa; sin esto, el trazo sale con microacodos
@@ -549,7 +549,21 @@ const FRAGMENT = /* glsl */ `
 // Un trazo ya hecho, en las mismas coordenadas relativas que usa el lienzo por
 // dentro: x e y en fracción del ANCHO (no del alto), y r igual. Ver el
 // comentario del tipo Punto.
-export type TrazoHecho = Punto[];
+export type TrazoHecho = {
+  puntos: Punto[];
+  // No afilar el ARRANQUE del trazo.
+  //
+  // El afilado de extremos es lo que produce las puntas, y actúa en los dos
+  // cabos. Eso está bien en un trazo que empieza y acaba en el aire, pero no en
+  // uno que NACE DE OTRO: ahí el cabo de partida no es una punta, es una unión,
+  // y afilarlo adelgaza la base hasta que la pieza se lee como algo posado
+  // encima en vez de brotando de dentro —y con la base fina de más, llega a
+  // despegarse.
+  sinEntrada?: boolean;
+  // En qué momento del trazado aparece este trazo, de 0 a 1. Sirve para que una
+  // pieza que brota de otra no se dibuje antes que aquella de la que brota.
+  desde?: number;
+};
 
 export default function LienzoMetal({
   // Figura de partida. Si viene, el lienzo la pinta en vez de empezar vacío:
@@ -615,6 +629,9 @@ export default function LienzoMetal({
   const pintadoHastaRef = useRef(0); // px de recorrido del trazo en curso ya pintados
   const anchoCssRef = useRef(1);  // ancho del lienzo en px, para el paso a relativo
   const trazosRef = useRef<Punto[][]>([]);
+  // Paralelo a trazosRef: si cada trazo se afila también por donde empieza. Lo
+  // dibujado a mano siempre sí; las púas de una figura calculada, no.
+  const entradasRef = useRef<boolean[]>([]);
   const actualRef = useRef<Punto[] | null>(null);
   const colaRef = useRef<{ x: number; y: number; t: number }[]>([]);
   const ultimoRef = useRef<{ x: number; y: number; t: number } | null>(null);
@@ -982,8 +999,12 @@ export default function LienzoMetal({
     limpiarCapa(cabezaRef.current);
     const ctx = posoRef.current?.getContext("2d");
     if (ctx) {
-      for (const t of trazosRef.current)
-        pintarTrazo(ctx, t, false, 0, false, [], grosorLibre, atraccion, suavizado);
+      trazosRef.current.forEach((t, i) =>
+        pintarTrazo(
+          ctx, t, false, 0, entradasRef.current[i] ?? false, [],
+          grosorLibre, atraccion, suavizado
+        )
+      );
     }
     dibujadosRef.current = 0;
     pintadoHastaRef.current = 0;
@@ -1335,15 +1356,18 @@ export default function LienzoMetal({
     actualRef.current = null;
     if (!trazo || !trazo.length) return;
     trazosRef.current.push(trazo);
+    entradasRef.current.push(false);
     let total = trazosRef.current.reduce((s, t) => s + t.length, 0);
     while (total > MAX_PUNTOS && trazosRef.current.length > 1) {
       total -= trazosRef.current.shift()!.length;
+      entradasRef.current.shift();
     }
     repintarMapa();
   };
 
   const limpiar = () => {
     trazosRef.current = [];
+    entradasRef.current = [];
     actualRef.current = null;
     colaRef.current = [];
     repintarMapa();
@@ -1359,7 +1383,8 @@ export default function LienzoMetal({
   const firmaFigura = figura ? JSON.stringify(figura) : "";
   useEffect(() => {
     if (!figura) return;
-    trazosRef.current = figura.map((t) => t.map((p) => ({ ...p })));
+    trazosRef.current = figura.map((t) => t.puntos.map((p) => ({ ...p })));
+    entradasRef.current = figura.map((t) => !!t.sinEntrada);
     setVacio(false);
     // Si WebGL aún no ha montado, esto no pinta nada todavía: no importa, el
     // montaje mide el lienzo y repinta, y para entonces la figura ya está

@@ -28,8 +28,22 @@ function recortar(figura: TrazoHecho[], avance: number): TrazoHecho[] {
   // como un parpadeo seguido de una espera, en vez de como una línea que
   // empieza a salir de la nada.
   return figura
-    .map((trazo) => trazo.slice(0, Math.round(trazo.length * avance)))
-    .filter((trazo) => trazo.length >= 2);
+    .map((trazo) => {
+      // Cada trazo puede tener su propio momento de aparición. Una púa brota de
+      // un brazo, así que no debe dibujarse antes que él: hasta que el trazado
+      // no llega a su vértice, la púa ni existe, y a partir de ahí recorre su
+      // propio camino en lo que queda de animación.
+      const desde = trazo.desde ?? 0;
+      const propio = desde >= 1 ? 1 : (avance - desde) / (1 - desde);
+      return {
+        ...trazo,
+        puntos:
+          propio <= 0
+            ? []
+            : trazo.puntos.slice(0, Math.round(trazo.puntos.length * Math.min(1, propio))),
+      };
+    })
+    .filter((trazo) => trazo.puntos.length >= 2);
 }
 
 // La pantalla final: el universo se queda detrás, desenfocado, y el símbolo se

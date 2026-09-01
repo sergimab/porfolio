@@ -1,4 +1,4 @@
-import type { TrazoHecho } from "@/components/proyectos/elysium/LienzoMetal";
+import type { Punto, TrazoHecho } from "@/components/proyectos/elysium/LienzoMetal";
 
 // El generador de símbolos de Elysium.
 //
@@ -204,6 +204,10 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
   // y solo queda la punta de fuera.
   const puas: [number, number][][] = [];
   const grosoresPua: number[][] = [];
+  // Y en qué momento del trazado le toca a cada una: cuando la línea principal
+  // llegue a su vértice. Sin esto, al dibujarse la figura las púas asomaban
+  // sueltas por el lienzo antes de que llegara el trazo del que salen.
+  const desdePua: number[] = [];
   for (const era of recorrido) {
     const largo = puaDe(era);
     if (largo <= 0.004) continue;
@@ -217,6 +221,9 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
     ]);
     const gr = Math.min(grosorDe(era), GROSOR * 0.5);
     grosoresPua.push([gr, gr]);
+    // El vértice de esta era es el (i+1)-ésimo de los que recorre la línea, y la
+    // línea tiene un tramo por vértice más el de vuelta al centro.
+    desdePua.push((recorrido.indexOf(era) + 1) / (recorrido.length + 1));
   }
 
   // Encaje: se lleva la figura al centro del lienzo y se escala para que ocupe
@@ -246,8 +253,13 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
   ];
 
   // De poligonal a trazo, muestreando cada tramo e interpolando el grosor.
-  const tejer = (vs: [number, number][], gs: number[]): TrazoHecho => {
-    const trazo: TrazoHecho = [];
+  const tejer = (
+    vs: [number, number][],
+    gs: number[],
+    sinEntrada = false,
+    desde = 0
+  ): TrazoHecho => {
+    const trazo: Punto[] = [];
     for (let i = 0; i < vs.length - 1; i++) {
       const [x1, y1] = encajar(vs[i]);
       const [x2, y2] = encajar(vs[i + 1]);
@@ -264,9 +276,14 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
     }
     const [fx, fy] = encajar(vs[vs.length - 1]);
     trazo.push({ x: fx, y: fy, r: gs[gs.length - 1] });
-    return trazo;
+    return { puntos: trazo, sinEntrada, desde };
   };
 
   // El principal va primero: es el que fija el alcance del conjunto.
-  return [tejer(vertices, grosores), ...puas.map((p, i) => tejer(p, grosoresPua[i]))];
+  // Las púas van con el arranque SIN afilar: no empiezan en el aire, brotan del
+  // brazo, y afilar esa base las convertía en dardos posados encima.
+  return [
+    tejer(vertices, grosores),
+    ...puas.map((p, i) => tejer(p, grosoresPua[i], true, desdePua[i])),
+  ];
 }
