@@ -163,7 +163,19 @@ const UMBRAL_CAMPO = 0.68;
 // del navegador se oculta y el alto del lienzo cambia: con píxeles, todo lo
 // dibujado se descolocaba respecto al dedo. Con coordenadas relativas, el
 // trazo sigue donde debe pase lo que pase con el tamaño.
-export type Punto = { x: number; y: number; r: number };
+export type Punto = {
+  x: number;
+  y: number;
+  r: number;
+  // Multiplicador del ALCANCE en este punto, de 0 a 1. Sin él, uno.
+  //
+  // Existe porque con la atracción el alcance dejó de seguir al grosor, y eso
+  // tiene una consecuencia incómoda: adelgazar un trazo ya NO impide que se
+  // suelde con lo que tenga al lado, porque el alcance sigue siendo el mismo.
+  // Dos líneas finas que van juntas se funden igual que dos gruesas. Para que
+  // dejen de fundirse hay que bajarles el alcance, y eso es esto.
+  a?: number;
+};
 
 // Suaviza el recorrido promediando cada punto con sus vecinos. El puntero
 // entrega una poligonal temblorosa; sin esto, el trazo sale con microacodos
@@ -181,6 +193,7 @@ function suavizar(puntos: Punto[], pasadas: number): Punto[] {
         x: (a.x + b.x * 2 + c.x) / 4,
         y: (a.y + b.y * 2 + c.y) / 4,
         r: (a.r + b.r * 2 + c.r) / 4,
+        a: ((a.a ?? 1) + (b.a ?? 1) * 2 + (c.a ?? 1)) / 4,
       });
     }
     siguiente.push(salida[salida.length - 1]);
@@ -217,6 +230,7 @@ function remuestrear(puntos: Punto[], paso: number): Punto[] {
         x: cr(p0.x, p1.x, p2.x, p3.x),
         y: cr(p0.y, p1.y, p2.y, p3.y),
         r: cr(p0.r, p1.r, p2.r, p3.r),
+        a: cr(p0.a ?? 1, p1.a ?? 1, p2.a ?? 1, p3.a ?? 1),
       });
     }
   }
@@ -804,6 +818,7 @@ export default function LienzoMetal({
         x: p.x * escala,
         y: p.y * escala,
         r: grosorLibre ? p.r * escala : radioUniforme,
+        a: p.a ?? 1,
       }));
       const puntos = remuestrear(suavizar(enPx, pasadas), PASO_REMUESTREO);
       // El más gordo del trazo. Con atracción, es él quien fija el alcance de
@@ -862,6 +877,11 @@ export default function LienzoMetal({
         const a = puntos[i];
         const b = puntos[i + 1] ?? a;
         return a.r + (b.r - a.r) * t;
+      };
+      const alcanceLocal = (i: number, t: number) => {
+        const p = puntos[i];
+        const q = puntos[i + 1] ?? p;
+        return (p.a ?? 1) + ((q.a ?? 1) - (p.a ?? 1)) * t;
       };
 
       const radioEn = (s: number, base: number) => {
@@ -950,7 +970,10 @@ export default function LienzoMetal({
         let altura = 1;
         if (atraccion) {
           const tp = punta(s);
-          R = Math.max(PUNTA_MIN, radioMayor * Math.max(SUELO_ALCANCE, tp)) * ALCANCE * factorR;
+          // El alcance local es lo que permite que una zona apretada deje de
+          // soldarse con lo que tiene al lado sin cambiar nada del resto.
+          const al = grosorLibre ? alcanceLocal(idx, t) : 1;
+          R = Math.max(PUNTA_MIN, radioMayor * al * Math.max(SUELO_ALCANCE, tp)) * ALCANCE * factorR;
           altura = alturaEn(local) * Math.min(1, tp / SUELO_ALCANCE);
         } else {
           R = radioEn(s, local);

@@ -120,39 +120,72 @@ const POR_TRAMO = 14;
 // El mecanismo se queda entero: subir este número las devuelve.
 const PUA = 0;
 
-// Hasta dónde se mira para saber si un punto está en un amontonamiento, y desde
-// qué separación por el RECORRIDO cuenta un vecino como "otra parte de la
-// línea". Ver adelgazarDondeSeAmontona.
+// Hasta dónde se mira para saber si la línea se está doblando sobre sí misma.
+// Ver adelgazarDondeSeAmontona.
 const CERCA = 0.06;
-const SALTO = 26;
-// Lo fino que puede llegar a quedar el trazo en el peor amontonamiento.
+// Puntos del recorrido por debajo de los cuales dos son simplemente vecinos.
+const VECINO_INMEDIATO = 8;
+// Cuánto tiene que acortar el camino la línea recta para considerar que la línea
+// se ha doblado. Con 0,45, ir de un punto a otro por el aire cuesta menos de la
+// mitad que ir caminando por la línea.
+const DOBLEZ = 0.45;
+// Lo fino que puede llegar a quedar el trazo en el peor amontonamiento, y lo
+// corto que puede quedarse su alcance.
 const ADELGAZA_MAX = 0.34;
+const ALCANCE_MIN = 0.40;
 
-// Adelgaza el trazo allí donde se le juntan otras partes de sí mismo.
+// Adelgaza el trazo, y le acorta el alcance, allí donde la línea se dobla sobre
+// sí misma.
 //
-// Es lo que evita las masas. El campo del lienzo funde a distancia, así que
-// donde tres o cuatro tramos pasan cerca sus faldas se suman y entre todas
-// levantan un bulto —y cuanto más gruesos son esos tramos, más bulto—. En vez
-// de pelearlo desde el material, se quita la causa: donde hay aglomeración, la
-// línea se afina.
+// Es lo que evita los lóbulos. El campo del lienzo funde a distancia, así que
+// una ida y una vuelta que corren juntas se sueldan y el hueco entre ellas se
+// rellena: en vez de dos líneas queda un bulto grueso y redondeado.
 //
-// Se cuentan solo los vecinos LEJANOS por el recorrido. Los puntos de al lado
-// están cerca por definición —son la misma línea— y contarlos daría lo mismo en
-// todas partes; lo que interesa es cuándo la línea se cruza consigo misma o
-// pasa raspando otro brazo.
+// La prueba no es "cuántos puntos tengo cerca" —los de al lado siempre lo
+// están— sino si alguno está MUCHO MÁS CERCA EN EL ESPACIO QUE A LO LARGO DEL
+// RECORRIDO. En un tramo recto, la distancia en línea recta y la distancia
+// caminando por la línea son casi la misma; donde la línea se dobla, se separan,
+// y esa diferencia es exactamente "aquí la línea vuelve sobre sus pasos".
+//
+// Esa comparación es la que faltaba en el primer intento: descartaba a los
+// vecinos cercanos por el recorrido, y el lóbulo de un giro cerrado lo forman
+// justo esos. Se descartaba la única señal que servía.
+//
+// Y no basta con adelgazar: hay que bajar también el ALCANCE. Desde que el
+// alcance dejó de seguir al grosor —lo que hace que dos partes lejanas se
+// atraigan—, dos líneas finas se sueldan igual que dos gruesas, porque su radio
+// de influencia no ha cambiado. Adelgazando a secas, el lóbulo seguía saliendo:
+// solo que más fino.
 function adelgazarDondeSeAmontona(trazo: Punto[]): Punto[] {
+  // Longitud acumulada: cuánto hay que caminar por la línea hasta cada punto.
+  const acum = [0];
+  for (let i = 1; i < trazo.length; i++) {
+    acum.push(acum[i - 1] + Math.hypot(trazo[i].x - trazo[i - 1].x, trazo[i].y - trazo[i - 1].y));
+  }
+
   return trazo.map((p, i) => {
     let cerca = 0;
     for (let j = 0; j < trazo.length; j++) {
-      if (Math.abs(i - j) <= SALTO) continue;
+      // Los inmediatos no dicen nada: siempre están pegados.
+      if (Math.abs(i - j) < VECINO_INMEDIATO) continue;
       const q = trazo[j];
-      if (Math.hypot(q.x - p.x, q.y - p.y) < CERCA) cerca++;
+      const d = Math.hypot(q.x - p.x, q.y - p.y);
+      if (d >= CERCA) continue;
+      // Y si la distancia en línea recta se parece a la del camino, es que la
+      // línea sigue de largo: no se ha doblado.
+      if (d > Math.abs(acum[i] - acum[j]) * DOBLEZ) continue;
+      cerca++;
     }
     if (!cerca) return p;
-    // Cuantos más vecinos, más fino, con suelo: por debajo de cierto punto el
-    // trazo dejaría de verse en vez de adelgazar.
-    const factor = Math.max(ADELGAZA_MAX, 1 / (1 + cerca * 0.055));
-    return { ...p, r: p.r * factor };
+    // Cuantos más, más fino y más corto de alcance. Los dos con suelo: por
+    // debajo de cierto punto el trazo dejaría de verse en vez de adelgazar, y
+    // sin nada de alcance se rompería la unión con lo que sí toca.
+    const aprieto = 1 / (1 + cerca * 0.05);
+    return {
+      ...p,
+      r: p.r * Math.max(ADELGAZA_MAX, aprieto),
+      a: Math.max(ALCANCE_MIN, aprieto),
+    };
   });
 }
 
@@ -333,11 +366,15 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
     return { puntos: trazo, sinEntrada, desde };
   };
 
-  // El principal va primero: es el que fija el alcance del conjunto.
+  // El principal va primero: es el que fija el alcance del conjunto, y es el
+  // único al que se le pasa el adelgazado —las púas son cortas y no se doblan
+  // sobre sí mismas.
+  //
   // Las púas van con el arranque SIN afilar: no empiezan en el aire, brotan del
   // brazo, y afilar esa base las convertía en dardos posados encima.
+  const principal = tejer(vertices, grosores);
   return [
-    tejer(vertices, grosores),
+    { ...principal, puntos: adelgazarDondeSeAmontona(principal.puntos) },
     ...puas.map((p, i) => tejer(p, grosoresPua[i], true, desdePua[i])),
   ];
 }
