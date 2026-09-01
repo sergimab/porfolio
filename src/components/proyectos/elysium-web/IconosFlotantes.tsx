@@ -26,21 +26,39 @@ export type IconoFlotante = {
   x: number;
   y: number;
   escala: number;
-  // Cuánto se balancea sobre su eje vertical, en radianes, y hacia qué lado
-  // empieza (el signo).
+  // Cómo se mueve. Son dos maneras a propósito, repartidas: si todas hicieran
+  // lo mismo el conjunto latiría al unísono y se vería la maquinaria.
   //
-  // Es un BALANCEO y no un giro completo, y la razón es la forma de las piezas:
-  // son cintas planas, así que un giro entero las deja de canto dos veces por
-  // vuelta y desaparecen de la pantalla. Acotado a media vuelta escasa, la
-  // pieza nunca se pierde de vista, el reflejo sigue moviéndose y además se
-  // queda cerca del ángulo en que están en el render original.
-  giro: number;
+  //  · "flota": sube y baja, con muy poco recorrido.
+  //  · "gira": bascula sobre un eje DIAGONAL, hacia delante y hacia atrás, como
+  //    una moneda que se mece. Apenas se mueve de sitio; lo que cambia es la
+  //    cara que enseña, y con ella el reflejo.
+  //
+  // En los dos casos el recorrido es corto. Estas piezas son cintas planas: en
+  // cuanto se pasa de ahí se ponen de canto y desaparecen.
+  movimiento: "flota" | "gira";
 };
 
-// Al exportar las demás eras, cada una es una línea más aquí.
+// Las siete eras, colocadas como en el render del fondo.
+//
+// El orden en pantalla no es el de la discografía: es la composición del
+// render, con las masas repartidas para que el conjunto quede equilibrado. Las
+// coordenadas salen de medir esa imagen.
+//
+// Qué símbolo es cada una lo dicen dos cosas que coinciden: los nodos de los
+// .glb vienen numerados (1 the fame … 7 mayhem) y el propio texto del proyecto
+// nombra "el rayo de The Fame, el triángulo invertido de Born This Way, la
+// esfera de ARTPOP, la onda de Chromatica".
 export const FLOTANTES: IconoFlotante[] = [
-  { modelo: "/proyectos/elysium-web/era-the-fame.glb", x: -0.82, y: 0.30, escala: 1.15, giro: 1.1 },
-  { modelo: "/proyectos/elysium-web/era-the-fame-monster.glb", x: 0.84, y: -0.24, escala: 1.1, giro: -0.95 },
+  // Arriba: la cruz, la esfera y el sombrero.
+  { modelo: "/proyectos/elysium-web/era-the-fame-monster.glb", x: -0.60, y: 0.46, escala: 1.15, movimiento: "gira" },
+  { modelo: "/proyectos/elysium-web/era-artpop.glb",           x: -0.22, y: 0.38, escala: 1.05, movimiento: "flota" },
+  { modelo: "/proyectos/elysium-web/era-joanne.glb",           x: 0.36,  y: 0.58, escala: 1.2,  movimiento: "gira" },
+  // Abajo: el rayo, el triángulo, la onda y la estrella de púas.
+  { modelo: "/proyectos/elysium-web/era-the-fame.glb",         x: -0.78, y: -0.38, escala: 1.05, movimiento: "flota" },
+  { modelo: "/proyectos/elysium-web/era-born-this-way.glb",    x: -0.34, y: -0.56, escala: 1.1,  movimiento: "gira" },
+  { modelo: "/proyectos/elysium-web/era-chromatica.glb",       x: 0.24,  y: -0.28, escala: 1.05, movimiento: "flota" },
+  { modelo: "/proyectos/elysium-web/era-mayhem.glb",           x: 0.70,  y: -0.38, escala: 1.25, movimiento: "gira" },
 ];
 
 export default function IconosFlotantes({ iconos = FLOTANTES }: { iconos?: IconoFlotante[] }) {
@@ -85,6 +103,10 @@ export default function IconosFlotantes({ iconos = FLOTANTES }: { iconos?: Icono
       ritmo: [number, number];
       fase: [number, number];
       base: THREE.Vector2;
+      // Eje sobre el que bascula la pieza que "gira". Es diagonal, no vertical
+      // ni horizontal, y cada una lleva el suyo con una inclinación distinta.
+      eje: THREE.Vector3;
+      balanceo: number;
     };
     const alAzar = (min: number, max: number) => min + Math.random() * (max - min);
 
@@ -100,11 +122,22 @@ export default function IconosFlotantes({ iconos = FLOTANTES }: { iconos?: Icono
         def,
         vaiven: {
           // La onda larga es el viaje de subida y bajada; la corta, el temblor
-          // que le quita la regularidad.
-          amplitud: [alAzar(0.07, 0.13), alAzar(0.02, 0.045)],
-          ritmo: [alAzar(0.00013, 0.00022), alAzar(0.00029, 0.00048)],
+          // que le quita la regularidad. La que bascula apenas se desplaza: su
+          // movimiento es el del eje, y sumarle un paseo largo sería pedirle
+          // dos cosas a la vez.
+          amplitud:
+            def.movimiento === "flota"
+              ? [alAzar(0.035, 0.06), alAzar(0.012, 0.022)]
+              : [alAzar(0.012, 0.022), alAzar(0.006, 0.012)],
+          ritmo: [alAzar(0.00012, 0.00021), alAzar(0.00027, 0.00046)],
           fase: [alAzar(0, Math.PI * 2), alAzar(0, Math.PI * 2)],
           base: new THREE.Vector2(),
+          // Diagonal, con la inclinación repartida al azar para que no basculen
+          // todas sobre la misma línea.
+          eje: new THREE.Vector3(alAzar(0.5, 1), alAzar(0.5, 1), 0)
+            .multiply(new THREE.Vector3(Math.random() < 0.5 ? -1 : 1, 1, 0))
+            .normalize(),
+          balanceo: def.movimiento === "gira" ? alAzar(0.26, 0.42) : alAzar(0.05, 0.1),
         },
       });
       loader.load(def.modelo, (gltf) => {
@@ -157,9 +190,17 @@ export default function IconosFlotantes({ iconos = FLOTANTES }: { iconos?: Icono
         // Va en un grupo aparte porque el giro tiene que ocurrir DESPUÉS de
         // centrar: aplicado al mismo nodo, giraría la pieza alrededor del
         // origen del archivo y volvería a descolocarla.
+        // Solo se endereza si la pieza es CLARAMENTE plana: que su dimensión
+        // menor no llegue a la mitad de la mayor. Con siete formas distintas,
+        // alguna puede ser casi tan honda como ancha —una espiral, un aro
+        // combado—, y en ese caso no hay un "grosor" que valga: el criterio se
+        // quedaría con la diferencia de unos milímetros y la giraría por nada.
         const orientador = new THREE.Group();
-        if (tam.y < tam.x && tam.y < tam.z) orientador.rotation.x = Math.PI / 2;
-        else if (tam.x < tam.y && tam.x < tam.z) orientador.rotation.y = Math.PI / 2;
+        const menor = Math.min(tam.x, tam.y, tam.z);
+        if (menor < mayor * 0.5) {
+          if (menor === tam.y) orientador.rotation.x = Math.PI / 2;
+          else if (menor === tam.x) orientador.rotation.y = Math.PI / 2;
+        }
         orientador.add(modelo);
         grupo.add(orientador);
       });
@@ -197,7 +238,7 @@ export default function IconosFlotantes({ iconos = FLOTANTES }: { iconos?: Icono
     let raf = 0;
     const bucle = (t: number) => {
       raf = requestAnimationFrame(bucle);
-      for (const { grupo, def, vaiven } of piezas) {
+      for (const { grupo, vaiven } of piezas) {
         if (!quieto) {
           const [a1, a2] = vaiven.amplitud;
           const [w1, w2] = vaiven.ritmo;
@@ -205,16 +246,21 @@ export default function IconosFlotantes({ iconos = FLOTANTES }: { iconos?: Icono
           // Sube y baja: dos ondas sumadas que nunca vuelven a coincidir.
           grupo.position.y =
             vaiven.base.y + a1 * Math.sin(t * w1 + f1) + a2 * Math.sin(t * w2 + f2);
-          // Y un balanceo lateral mucho más corto. No se pide, pero sin él el
+          // Y una deriva lateral mucho más corta. No se pide, pero sin ella el
           // movimiento se lee como un ascensor: lo que flota nunca sube en
           // línea recta.
           grupo.position.x = vaiven.base.x + a2 * 0.6 * Math.sin(t * w2 * 0.7 + f1);
-          // El cabeceo va atado a la onda larga, así que la pieza se inclina
-          // acompañando su propia subida en vez de por su cuenta.
-          grupo.rotation.x = Math.sin(t * w1 * 1.7 + f2) * 0.2;
-          // Y el balanceo, con su propio ritmo para que no vaya sincronizado
-          // con la subida: si girase al compás, se vería el mecanismo.
-          grupo.rotation.y = def.giro * Math.sin(t * w2 * 0.55 + f1);
+          // El bamboleo sobre el eje diagonal: hacia delante y hacia atrás.
+          //
+          // Se pone con setRotationFromAxisAngle y no con rotation.x/.y porque
+          // eso son tres giros encadenados sobre ejes fijos, y encadenándolos
+          // el movimiento sale retorcido en vez de mecerse limpio sobre una
+          // sola línea. Aquí hay un eje y un ángulo, que es justo lo que se
+          // quiere decir con "bascular sobre su eje".
+          grupo.setRotationFromAxisAngle(
+            vaiven.eje,
+            vaiven.balanceo * Math.sin(t * w1 * 1.35 + f2)
+          );
         }
       }
       renderer.render(escena, camara);
