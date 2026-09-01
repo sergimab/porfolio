@@ -102,7 +102,32 @@ const ENCAJE = 0.62;
 // pierde el filo. Lo medí sobre la referencia y me pasé —el 9% que deduje de la
 // imagen no sobrevive al contraste con el resultado—, así que este número sale
 // de mirar figuras, no de una cuenta.
-export const GROSOR = 0.016;
+export const GROSOR = 0.0125;
+
+// ── El afilado de los vértices ────────────────────────────────────────────
+//
+// El alcance del campo, repetido aquí a propósito: LienzoMetal lo exporta, pero
+// importarlo metería un componente de React en este archivo, que es cálculo
+// puro y se puede ejecutar fuera del navegador para medirlo. Si allí cambia,
+// cambia aquí.
+const ALCANCE_CAMPO = 3.6;
+// Lo que queda del grosor justo en el vértice.
+const PICO = 0.22;
+// La ventana del afilado, en veces el alcance. Es la distancia en la que la
+// fusión redondea una esquina, así que el afilado tiene que empezar antes que
+// ella o se aplica dentro de la zona ya redondeada y no se nota.
+const PICO_VENTANA = 1.8;
+// Y su tope como fracción del tramo más corto que llega al vértice, para que un
+// tramo corto no se afile entero y se desprenda.
+const PICO_TRAMO = 0.42;
+// A partir de qué cerrado está el giro se afila. 0 es seguir recto, 1 es darse
+// la vuelta del todo. Bajo a propósito: la referencia es angulosa de arriba
+// abajo, así que hasta los vértices poco cerrados quieren su esquina.
+const PICO_DESDE = 0.12;
+// Y hasta dónde baja el alcance en el vértice. Sin esto no basta: desde que el
+// alcance dejó de seguir al grosor, dos ramas que salen del mismo vértice se
+// funden entre ellas y rellenan la muesca que acaba de abrir el afilado.
+const PICO_ALCANCE = 0.45;
 
 // Puntos por tramo. El lienzo remuestrea por su cuenta, pero necesita bastantes
 // puntos crudos para que su suavizado no redondee los vértices, que es donde
@@ -223,6 +248,72 @@ function disponer(pesos: Record<Era, number>) {
 
 // ── De reparto a trazos ───────────────────────────────────────────────────
 
+// Afila los vértices encogiendo el trazo por LOS DOS LADOS al acercarse a
+// ellos.
+//
+// Es lo único que produce una esquina. El afilado del lienzo actúa en los cabos
+// del trazo, y por el medio el radio de las cúpulas se mantiene, así que un
+// vértice interior se cierra siempre en casquete: redondo, por cerrado que sea
+// el giro. Y bajar la altura no sirve —la superficie termina igualmente en
+// casquete—; tiene que encoger el RADIO.
+//
+// Este mecanismo ya existió y hubo que quitarlo, pero por una razón que ya no
+// se da: entonces el grosor seguía a los votos, el brazo más flojo era un hilo
+// viviendo a un 5% del umbral del campo, y recortarlo lo hundía por debajo y lo
+// desprendía. Con el grosor parejo hay más de un 50% de margen sobre el umbral,
+// y el afilado cabe de sobra.
+function afilarVertices(trazo: Punto[], base: number): Punto[] {
+  const acum = [0];
+  for (let i = 1; i < trazo.length; i++) {
+    acum.push(acum[i - 1] + Math.hypot(trazo[i].x - trazo[i - 1].x, trazo[i].y - trazo[i - 1].y));
+  }
+
+  // Los vértices interiores, con lo cerrado de su giro. Van cada POR_TRAMO
+  // puntos por construcción; los dos cabos se saltan porque el lienzo ya se
+  // ocupa de ellos.
+  const ventanaMaxima = base * ALCANCE_CAMPO * PICO_VENTANA;
+  const picos: { i: number; agudeza: number; ventana: number }[] = [];
+  for (let i = POR_TRAMO; i < trazo.length - 1; i += POR_TRAMO) {
+    const antes = trazo[Math.max(0, i - 5)];
+    const luego = trazo[Math.min(trazo.length - 1, i + 5)];
+    const v = trazo[i];
+    const ax = v.x - antes.x;
+    const ay = v.y - antes.y;
+    const bx = luego.x - v.x;
+    const by = luego.y - v.y;
+    const la = Math.hypot(ax, ay) || 1;
+    const lb = Math.hypot(bx, by) || 1;
+    // 1 = sigue recto, −1 = se da la vuelta. Se lleva a 0..1.
+    const coseno = (ax * bx + ay * by) / (la * lb);
+    const tramoAntes = acum[i] - acum[Math.max(0, i - POR_TRAMO)];
+    const tramoLuego = acum[Math.min(trazo.length - 1, i + POR_TRAMO)] - acum[i];
+    picos.push({
+      i,
+      agudeza: Math.min(1, Math.max(0, (1 - coseno) / 2)),
+      ventana: Math.min(ventanaMaxima, Math.min(tramoAntes, tramoLuego) * PICO_TRAMO),
+    });
+  }
+
+  return trazo.map((p, i) => {
+    let factor = 1;
+    for (const pico of picos) {
+      if (pico.agudeza < PICO_DESDE) continue;
+      const d = Math.abs(acum[i] - acum[pico.i]);
+      if (d >= pico.ventana) continue;
+      // Lleno en el vértice y nada en el borde de la ventana, graduado por lo
+      // cerrado del giro.
+      const fuerza = (pico.agudeza - PICO_DESDE) / (1 - PICO_DESDE);
+      factor = Math.min(factor, 1 - (1 - PICO) * fuerza * (1 - d / pico.ventana));
+    }
+    if (factor >= 1) return p;
+    return {
+      ...p,
+      r: p.r * factor,
+      a: Math.max(PICO_ALCANCE, factor),
+    };
+  });
+}
+
 export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
   const d = disponer(pesos);
   if (!d) return [];
@@ -252,7 +343,10 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
   // punto y ahí se encuentran.
   return [
     {
-      puntos: tejer(d.vertices, () => GROSOR * d.escala),
+      puntos: afilarVertices(
+        tejer(d.vertices, () => GROSOR * d.escala),
+        GROSOR * d.escala
+      ),
       sinEntrada: true,
       sinSalida: true,
       desde: 0,
