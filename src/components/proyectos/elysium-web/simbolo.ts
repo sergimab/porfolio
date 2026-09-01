@@ -55,12 +55,21 @@ const ENCAJE = 0.66;
 // Este es el grosor del brazo MÁS votado. Los demás adelgazan con su peso, y el
 // del disco sin nada elegido baja hasta HILO.
 //
-// Con la atracción activada este número hace además de ALCANCE: es él quien fija
-// hasta dónde llega la influencia de todo el trazo, hilos incluidos. Por eso
-// bajó de 0,026 a 0,018 —con la atracción, el mismo número produce brazos más
-// anchos, porque el grosor pasa a salir de la altura de la cúpula y no de su
-// radio.
-const GROSOR = 0.016;
+// Con la atracción activada este número ya no es el grosor: es el ALCANCE. Fija
+// hasta dónde llega la influencia de todo el trazo —hilos incluidos— y, con
+// ella, dos cosas más: a qué distancia se atraen dos partes y CUÁNTO SE ESTIRA
+// LA AGUJA de un vértice, que es proporcional al alcance dividido por lo cerrado
+// del giro.
+//
+// Por eso puede subir mientras las cintas ADELGAZAN: son dos mandos distintos.
+// El alcance alarga las puntas; el grosor lo pone la altura de la cúpula, en el
+// lienzo. Antes iban juntos y no se podía tener lo uno sin lo otro.
+//
+// Pero tiene techo, y lo encontré pasándome: a 0,022 la atracción alcanzaba a
+// casi todas las partes a la vez y la figura se fundía en un contorno liso, sin
+// estructura por dentro. El alcance alarga las puntas y también se come los
+// huecos; 0,017 es donde las dos cosas conviven.
+const GROSOR = 0.017;
 // Lo fino que llega a ser un brazo, en fracción del más grueso.
 //
 // Bajó de 0,26 a 0,06. Con 0,26, el brazo de un disco poco votado seguía siendo

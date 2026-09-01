@@ -851,11 +851,20 @@ export default function LienzoMetal({
       // vecinos en una masa, y el más flojo no llegaba a leerse como hilo.
       // Repartido así, entre el más fino y el más gordo hay más del triple.
       const ALTURA_HILO = 0.715;
-      const ALTURA_RANGO = 0.33;
-      const alturaEn = (base: number) =>
-        radioMayor > 0
-          ? ALTURA_HILO + ALTURA_RANGO * Math.min(1, base / radioMayor)
-          : 1;
+      const ALTURA_RANGO = 0.30;
+      const alturaEn = (base: number) => {
+        if (radioMayor <= 0) return 1;
+        const q = Math.min(1, base / radioMayor);
+        // Con exponente, no en proporción directa. Repartido en línea recta, un
+        // brazo a media tabla salía a media anchura y casi todos quedaban
+        // parecidos; con exponente, solo el más votado llega al grosor máximo y
+        // el resto caen deprisa hacia el hilo. Que es lo que hace que en una
+        // misma figura convivan una cinta con cuerpo y un pelo.
+        //
+        // 1,6 y no 2: al cuadrado caían tanto que TODOS salían igual de finos y
+        // la figura perdía el contraste por el otro lado.
+        return ALTURA_HILO + ALTURA_RANGO * Math.pow(q, 1.6);
+      };
 
       // Y las puntas, que son el punto delicado.
       //
