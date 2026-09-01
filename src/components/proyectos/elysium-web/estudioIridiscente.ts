@@ -27,15 +27,15 @@ export function crearEstudioIridiscente(): HTMLCanvasElement {
   // el nadir.
   const fondo = ctx.createLinearGradient(0, 0, 0, c.height);
   fondo.addColorStop(0, "#ffffff");
-  fondo.addColorStop(0.18, "#d8fbf4");
-  fondo.addColorStop(0.32, "#7fe3d6"); // verde azulado, el dominante
-  fondo.addColorStop(0.44, "#2fa79c");
-  fondo.addColorStop(0.495, "#0d5f5c"); // horizonte
-  fondo.addColorStop(0.5, "#1b1020");
-  fondo.addColorStop(0.58, "#7a3352"); // el coral asoma por debajo
-  fondo.addColorStop(0.66, "#c96f7a");
-  fondo.addColorStop(0.76, "#4a2036");
-  fondo.addColorStop(1, "#040406");
+  fondo.addColorStop(0.16, "#c9fff4");
+  fondo.addColorStop(0.3, "#2bf3d8");  // verde azulado, el dominante
+  fondo.addColorStop(0.43, "#12a89f");
+  fondo.addColorStop(0.495, "#012c33"); // horizonte
+  fondo.addColorStop(0.5, "#12061c");
+  fondo.addColorStop(0.57, "#5e1a44");  // el coral asoma por debajo
+  fondo.addColorStop(0.65, "#d4566b");
+  fondo.addColorStop(0.75, "#3d0f2a");
+  fondo.addColorStop(1, "#020204");
   ctx.fillStyle = fondo;
   ctx.fillRect(0, 0, c.width, c.height);
 
@@ -45,11 +45,11 @@ export function crearEstudioIridiscente(): HTMLCanvasElement {
   ctx.filter = "blur(30px)";
   const cajas: [number, number, number, number, string][] = [
     [40, 10, 300, 150, "#ffffff"],
-    [330, 30, 260, 120, "#8ff5e6"],  // verde azulado
+    [330, 30, 260, 120, "#4dffe4"],  // verde azulado
     [620, 0, 300, 140, "#ffffff"],
-    [180, 190, 280, 80, "#ff9ec4"],  // rosa
-    [560, 200, 240, 70, "#9ad9ff"],  // azul frío
-    [850, 170, 180, 90, "#ffd8a8"],  // cálido, para que no sea todo frío
+    [180, 190, 280, 80, "#ff86bd"],  // rosa, de acento
+    [560, 200, 240, 70, "#4fbcff"],  // azul frío
+    [850, 170, 180, 90, "#ffc46b"],  // cálido, para que no sea todo frío
   ];
   for (const [x, y, w, h, color] of cajas) {
     ctx.fillStyle = color;
@@ -76,7 +76,7 @@ export function crearEstudioIridiscente(): HTMLCanvasElement {
   // Rebote del suelo, tirando a coral, para que la mitad de abajo no se vaya a
   // negro del todo y conserve algo de color.
   ctx.filter = "blur(24px)";
-  ctx.fillStyle = "rgba(226,150,150,0.45)";
+  ctx.fillStyle = "rgba(235,130,140,0.42)";
   ctx.fillRect(0, 262, c.width, 30);
   ctx.filter = "none";
   return c;

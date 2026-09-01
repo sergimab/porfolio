@@ -304,13 +304,20 @@ export default function IconosFlotantes({
             (hijo as THREE.Mesh).material = new THREE.MeshPhysicalMaterial({
               color: 0xeef2f8,
               metalness: 1,
-              roughness: 0.09,
+              // Más pulido: el reflejo llega con el borde más definido, y un
+              // reflejo definido es lo que separa un color del de al lado. Con
+              // la superficie mate los tonos se promedian entre sí y por muy
+              // saturados que sean acaban en un gris tornasolado.
+              roughness: 0.06,
               iridescence: 1,
-              iridescenceIOR: 1.8,
-              // El grosor de la película decide qué colores salen. Este rango
-              // es el que da verdes azulados y corales; subiéndolo se va a
-              // morados y amarillos y deja de parecerse a la referencia.
-              iridescenceThicknessRange: [130, 460],
+              // Cuanto más alto, más vira el tono por cada grado que gira la
+              // superficie: es el mando del contraste entre unas zonas y otras.
+              iridescenceIOR: 2.25,
+              // El grosor de la película decide qué colores salen, y el ANCHO
+              // del rango cuántos caben a la vez sobre la pieza. Ensanchado
+              // desde 130-460, que daba una gama corta y por tanto suave; ahora
+              // se recorre más arco de color de un canto al otro de la forma.
+              iridescenceThicknessRange: [100, 720],
               // Se enciende al pasar por encima. Va en negro de partida para
               // que no cambie nada mientras está apagada.
               emissive: 0x000000,
@@ -400,7 +407,7 @@ export default function IconosFlotantes({
         // devuelve a una talla que cabe, y deja la composición intacta a partir
         // de una ventana apaisada normal.
         const compacto = Math.min(1, aspecto / 1.5);
-        const tam = def.escala * 0.42 * compacto;
+        const tam = def.escala * 0.56 * compacto;
         vaiven.tam = tam;
         grupo.scale.setScalar(tam);
         // El cuadro que recoge el ratón va algo más grande que la pieza: son
