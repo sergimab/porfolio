@@ -138,7 +138,18 @@ const PICO_ALCANCE = 0.45;
 const CRUCE_CERCA = 1.6;
 const CRUCE_VECINO = 10;
 const CRUCE_DOBLEZ = 0.5;
-const CRUCE_MIN = 0.42;
+const CRUCE_MIN = 0.58;
+
+// Lo fino que llega a ser el tramo de un disco poco votado, en fracción del
+// grosor máximo.
+//
+// El grosor vuelve a contar los votos, pero en una horquilla ESTRECHA a
+// propósito. Con la horquilla ancha que hubo al principio, el disco menos
+// votado salía como un hilo, y un hilo se queda a un 5% del umbral del campo:
+// cualquier curva lo hunde por debajo y la figura se parte —10 de 123, medido—.
+// Con 0,62 el tramo más fino conserva cerca de un 25% de margen, que aguanta, y
+// aun así se distingue a simple vista del más gordo.
+const DELGADO = 0.62;
 
 // Puntos por tramo. El lienzo remuestrea por su cuenta, pero necesita bastantes
 // puntos crudos para que su suavizado no redondee los vértices, que es donde
@@ -209,6 +220,18 @@ function disponer(pesos: Record<Era, number>) {
     [cx, cy],
   ];
 
+  // Y el grosor de cada vértice, que es lo que hace que unos tramos salgan más
+  // finos que otros.
+  //
+  // Los dos del centro heredan el del disco que sale o entra por ellos, para
+  // que el cambio ocurra a lo largo del tramo y no de golpe en el arranque.
+  const grosorDe = (era: Era) => DELGADO + (1 - DELGADO) * proporcionDe(era);
+  const grosores: number[] = [
+    grosorDe(recorrido[0]),
+    ...recorrido.map(grosorDe),
+    grosorDe(recorrido[recorrido.length - 1]),
+  ];
+
   // Encaje: se lleva la figura al centro del lienzo y se escala para que ocupe
   // siempre lo mismo.
   //
@@ -240,6 +263,7 @@ function disponer(pesos: Record<Era, number>) {
     recorrido,
     punta,
     vertices,
+    grosores,
     encajar,
     // Cuánto se ha ampliado la figura para llenar el marco. El grosor tiene que
     // multiplicarse por esto, y es de las cosas menos evidentes de todo el
@@ -378,27 +402,28 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
   const d = disponer(pesos);
   if (!d) return [];
 
-  // De poligonal a trazo, muestreando cada tramo a paso constante.
-  const tejer = (vs: [number, number][], radio: (t: number) => number): Punto[] => {
+  // De poligonal a trazo, muestreando cada tramo a paso constante e
+  // interpolando el grosor entre sus dos vértices.
+  const base = GROSOR * d.escala;
+  const tejer = (vs: [number, number][], gs: number[]): Punto[] => {
     const puntos: Punto[] = [];
     for (let i = 0; i < vs.length - 1; i++) {
       const [x1, y1] = d.encajar(vs[i]);
       const [x2, y2] = d.encajar(vs[i + 1]);
       for (let n = 0; n < POR_TRAMO; n++) {
         const t = n / POR_TRAMO;
-        // El radio se mide sobre el recorrido ENTERO, no sobre el tramo: así la
-        // aguja adelgaza de su base a su punta y el camino se queda parejo.
-        const s = (i + t) / (vs.length - 1);
-        puntos.push({ x: x1 + (x2 - x1) * t, y: y1 + (y2 - y1) * t, r: radio(s) });
+        puntos.push({
+          x: x1 + (x2 - x1) * t,
+          y: y1 + (y2 - y1) * t,
+          r: base * (gs[i] + (gs[i + 1] - gs[i]) * t),
+        });
       }
     }
     const [fx, fy] = d.encajar(vs[vs.length - 1]);
-    puntos.push({ x: fx, y: fy, r: radio(1) });
+    puntos.push({ x: fx, y: fy, r: base * gs[gs.length - 1] });
     return puntos;
   };
 
-  // El camino, de una sola pieza y sin afilar por ninguno de sus dos cabos:
-  // salen del mismo punto y ahí se encuentran.
   // Un solo trazo, y sin afilar por ninguno de sus dos cabos: salen del mismo
   // punto y ahí se encuentran.
   return [
@@ -407,9 +432,13 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
       // cruces. Al revés, el afilado pisaría el alcance ya recogido de un cruce
       // que cae junto a un vértice —que es donde más se juntan las cosas— y
       // volvería a soldarlo.
+      //
+      // Y las dos medidas van contra `base`, el grosor máximo, no contra el
+      // radio de cada punto: si no, el tramo fino se afilaría en una ventana
+      // más corta y su vértice saldría con otro carácter que el de al lado.
       puntos: separarLosCruces(
-        afilarVertices(tejer(d.vertices, () => GROSOR * d.escala), GROSOR * d.escala),
-        GROSOR * d.escala
+        afilarVertices(tejer(d.vertices, d.grosores), base),
+        base
       ),
       sinEntrada: true,
       sinSalida: true,
