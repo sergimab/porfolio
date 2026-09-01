@@ -379,6 +379,8 @@ const FRAGMENT = /* glsl */ `
   uniform float uFilo;        // cuánto vuelca el canto en el filo mismo
   uniform float uGrano;       // pendiente a la que el faldón ya está a tope
   uniform float uDispersion;  // cuánto se separan los canales en el filo
+  uniform float uCapas;       // líneas de reflejo repetidas hacia dentro
+  uniform float uBrillo;      // ganancia final
   uniform sampler2D uEstudio; // panorama equirectangular del plató
 
   // Parte del ancho que ocupa el bisel del canto. Bajo = chapa plana con
@@ -456,10 +458,11 @@ const FRAGMENT = /* glsl */ `
     // tiene 256 niveles, y midiendo la pendiente entre píxeles contiguos esos
     // escalones se amplifican y salpican la cresta de puntitos de color.
     vec2 d = px * 3.0;
-    vec2 grad = vec2(
-      texture2D(uCampo, vUv + vec2(d.x, 0.0)).r - texture2D(uCampo, vUv - vec2(d.x, 0.0)).r,
-      texture2D(uCampo, vUv + vec2(0.0, d.y)).r - texture2D(uCampo, vUv - vec2(0.0, d.y)).r
-    );
+    float hIzq = texture2D(uCampo, vUv - vec2(d.x, 0.0)).r;
+    float hDer = texture2D(uCampo, vUv + vec2(d.x, 0.0)).r;
+    float hAba = texture2D(uCampo, vUv - vec2(0.0, d.y)).r;
+    float hArr = texture2D(uCampo, vUv + vec2(0.0, d.y)).r;
+    vec2 grad = vec2(hDer - hIzq, hArr - hAba);
     float g = length(grad);
     vec2 dir = g > 0.00001 ? grad / g : vec2(0.0);
 
@@ -478,6 +481,30 @@ const FRAGMENT = /* glsl */ `
     // Y un repunte corto justo en el filo: ahí el canto vuelca hasta rasante y
     // devuelve el hilo de luz que perfila cada pieza contra el fondo negro.
     tilt += uFilo * pow(1.0 - altura, 3.0);
+
+    // Las líneas de dentro, que son lo que distingue el vidrio del metal.
+    //
+    // Un canto grueso de vidrio no devuelve un solo reflejo: devuelve el borde
+    // repetido varias veces hacia dentro, porque el rayo rebota en la cara de
+    // atrás antes de salir. Aquí se imita repitiendo el repunte del filo a
+    // varias profundidades. Las curvas de nivel del campo siguen la silueta por
+    // definición, así que las líneas salen paralelas al contorno —púas
+    // incluidas— sin tener que calcular ningún contorno.
+    if (uCapas > 0.0) {
+      // Aquí NO se usa la altura del píxel, sino la media de las cinco muestras
+      // —la del centro y las cuatro que el gradiente ya ha traído, así que sale
+      // gratis—. El motivo es que el mapa tiene 256 niveles y el reparto de
+      // relieve ocupa una franja estrecha de ese rango: leyendo un solo píxel,
+      // las líneas caen siempre sobre los mismos escalones y se ven a peldaños.
+      // Promediando cinco, la altura pasa a tener valores intermedios y las
+      // líneas salen continuas.
+      float hSuave = (texture2D(uCampo, vUv).r + hIzq + hDer + hAba + hArr) * 0.2;
+      float tSuave = clamp((hSuave - uUmbral) / RANGO, 0.0, 1.0);
+      // El exponente decide lo fina que es cada línea. Muy alto las deja de un
+      // píxel y se rompen; con seis son anchas y se sostienen.
+      float onda = fract(tSuave * uCapas);
+      tilt += uFilo * 0.5 * pow(1.0 - onda, 6.0);
+    }
     vec3 n = normalize(vec3(-dir * tilt, 1.0));
 
     vec3 V = vec3(0.0, 0.0, 1.0);
@@ -508,7 +535,7 @@ const FRAGMENT = /* glsl */ `
     float f = pow(1.0 - clamp(dot(n, V), 0.0, 1.0), 4.0);
     // Tinte de acero: el cromo no es un espejo neutro, apaga un punto el rojo.
     vec3 tinte = vec3(0.94, 0.96, 1.0);
-    vec3 color = refl * tinte * (0.78 + 0.5 * f);
+    vec3 color = refl * tinte * (0.78 + 0.5 * f) * uBrillo;
 
     // Nada de oscurecer el canto a mano: en la referencia el filo es un hilo
     // BLANCO, no una sombra. Sale solo, porque ahí el canto está volcado y
@@ -538,11 +565,19 @@ export default function LienzoMetal({
   entorno,
   // Separación de los canales de color. Baja, cromo; alta, vidrio.
   dispersion = 0.0028,
+  // Cuántas líneas de reflejo se repiten hacia dentro. Cero es una chapa; a
+  // partir de tres se lee como un canto grueso de vidrio.
+  capas = 0,
+  // Ganancia final. El vidrio pide más que el metal: refleja de frente casi
+  // todo lo que le llega, mientras que el metal se queda una parte.
+  brillo = 1,
 }: {
   figura?: TrazoHecho[];
   interactivo?: boolean;
   entorno?: () => HTMLCanvasElement;
   dispersion?: number;
+  capas?: number;
+  brillo?: number;
 } = {}) {
   const lang = useLang();
   const contenedorRef = useRef<HTMLDivElement>(null);
@@ -913,6 +948,8 @@ export default function LienzoMetal({
         // tiene que bajar en la misma proporción o el brazo sale plano.
         uGrano: { value: 0.042 },
         uDispersion: { value: dispersion },
+        uCapas: { value: capas },
+        uBrillo: { value: brillo },
       },
       transparent: true,
     });
@@ -963,7 +1000,7 @@ export default function LienzoMetal({
       renderer.domElement.remove();
       tresRef.current = null;
     };
-  }, [repintarMapa, cerca, entorno, dispersion]);
+  }, [repintarMapa, cerca, entorno, dispersion, capas, brillo]);
 
   // Pasa los puntos encolados al trazo en curso y pinta lo nuevo. Se llama
   // desde el bucle y también al soltar: si el dedo baja y sube dentro del

@@ -9,8 +9,9 @@ import { figuraDeEras } from "./simbolo";
 import { contarPorEra } from "./canciones";
 import { crearEstudioCristal } from "./estudioCristal";
 
-// Lo que tarda el símbolo en trazarse entero.
-const DURACION = 2800;
+// Lo que tarda el símbolo en trazarse entero. Largo a propósito: es el momento
+// en que aparece lo que la persona acaba de generar, y merece verse nacer.
+const DURACION = 4600;
 
 // Recorta la figura para enseñar solo el principio de su recorrido.
 //
@@ -21,8 +22,13 @@ const DURACION = 2800;
 function recortar(figura: TrazoHecho[], avance: number): TrazoHecho[] {
   if (avance <= 0) return [];
   if (avance >= 1) return figura;
+  // Sin mínimo forzado: hasta que no hay dos puntos de verdad no se dibuja
+  // nada. Forzando dos, en el primer fotograma ya aparecía una mancha diminuta
+  // —el lienzo pinta cualquier trazo, por corto que sea— y el arranque se veía
+  // como un parpadeo seguido de una espera, en vez de como una línea que
+  // empieza a salir de la nada.
   return figura
-    .map((trazo) => trazo.slice(0, Math.max(2, Math.round(trazo.length * avance))))
+    .map((trazo) => trazo.slice(0, Math.round(trazo.length * avance)))
     .filter((trazo) => trazo.length >= 2);
 }
 
@@ -80,11 +86,26 @@ export default function PantallaSimbolo({ seleccion }: { seleccion: Set<string> 
               figura={figura}
               interactivo={false}
               entorno={crearEstudioCristal}
-              // Diez veces la del lienzo de dibujo. Ahí una pizca de separación
+              // Ocho veces la del lienzo de dibujo. Ahí una pizca de separación
               // es el hilo de color del filo de una pieza de cromo; aquí, tanta
-              // separación es lo que descompone la luz por toda la pieza y la
-              // convierte en vidrio.
-              dispersion={0.03}
+              // separación descompone la luz en los cantos y la convierte en
+              // vidrio.
+              //
+              // Llegó a estar en 0,045 y era pasarse: el color invadía la
+              // superficie entera, y en la referencia el cuerpo es casi blanco y
+              // el arcoíris vive solo en los bordes. De paso, tanta separación
+              // amplificaba los escalones de los 256 niveles del mapa de altura
+              // y salpicaba la pieza de moteado.
+              dispersion={0.022}
+              // Dos repeticiones del reflejo hacia dentro: es lo que hace que
+              // el canto se lea grueso y transparente en vez de como una chapa.
+              //
+              // Con tres se escalonaban. El mapa de altura tiene 256 niveles y
+              // el reparto de relieve ocupa una franja estrecha de ese rango, así
+              // que cuantas más líneas se pidan, menos escalones le tocan a cada
+              // una y antes se ven los peldaños.
+              capas={2}
+              brillo={1.75}
             />
           )}
         </div>

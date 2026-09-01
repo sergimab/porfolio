@@ -34,13 +34,13 @@ export function crearEstudioCristal(): HTMLCanvasElement {
   // plástico.
   const fondo = ctx.createLinearGradient(0, 0, 0, c.height);
   fondo.addColorStop(0, "#ffffff");
-  fondo.addColorStop(0.2, "#f2f7ff");
-  fondo.addColorStop(0.36, "#d5e2f2");
-  fondo.addColorStop(0.47, "#8fa3b8");
-  fondo.addColorStop(0.495, "#3f4a57"); // horizonte
-  fondo.addColorStop(0.5, "#171c24");
-  fondo.addColorStop(0.6, "#333c4a");
-  fondo.addColorStop(0.72, "#1a1f27");
+  fondo.addColorStop(0.2, "#ffffff");
+  fondo.addColorStop(0.36, "#eef4ff");
+  fondo.addColorStop(0.47, "#b9c8da");
+  fondo.addColorStop(0.495, "#5a6674"); // horizonte
+  fondo.addColorStop(0.5, "#20262f");
+  fondo.addColorStop(0.6, "#48535f");
+  fondo.addColorStop(0.72, "#252b34");
   fondo.addColorStop(1, "#05060a");
   ctx.fillStyle = fondo;
   ctx.fillRect(0, 0, c.width, c.height);
@@ -51,10 +51,10 @@ export function crearEstudioCristal(): HTMLCanvasElement {
   ctx.filter = "blur(26px)";
   const cajas: [number, number, number, number, string][] = [
     [30, 0, 320, 165, "#ffffff"],
-    [370, 20, 250, 130, "#eaf4ff"],
+    [370, 20, 250, 130, "#ffffff"],
     [650, 0, 330, 150, "#ffffff"],
     [150, 190, 300, 80, "#ffffff"],
-    [560, 195, 250, 70, "#f4efe6"],
+    [560, 195, 250, 70, "#fffaf2"],
     [860, 175, 160, 85, "#ffffff"],
   ];
   for (const [x, y, w, h, color] of cajas) {

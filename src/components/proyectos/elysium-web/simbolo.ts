@@ -51,7 +51,19 @@ const ENCAJE = 0.66;
 // Va en fracción del lienzo y no en píxeles a propósito: así la figura se ve
 // igual de proporcionada en el marco grande de escritorio que en el de móvil.
 // En píxeles, un valor bueno en uno de los dos sale de alambre en el otro.
-const GROSOR = 0.016;
+//
+// Subió de 0,016 al encajar la figura. Encajarla la agranda, y como el grosor
+// es constante, la cinta se quedaba proporcionalmente el doble de fina: un
+// alambre. Y un alambre no tiene sitio para el material —ni cara ancha que
+// refleje el cielo ni fondo donde quepan las líneas del canto—, así que por muy
+// bien resuelto que esté el vidrio, no se ve. El grosor es lo que le da
+// superficie donde ocurrir.
+//
+// Y una segunda subida, hasta 0,044, buscando la referencia: allí las caras
+// anchas son casi blancas porque son PLANAS y reflejan el cielo de frente. Con
+// la cinta estrecha casi todo es canto volcado, y el canto refleja el suelo,
+// que es oscuro. La cara ancha solo aparece si hay ancho.
+const GROSOR = 0.044;
 // Puntos por tramo recto. El lienzo remuestrea por su cuenta, pero necesita
 // bastantes puntos crudos para que su suavizado no redondee los vértices, que
 // es justo donde nacen las puntas.
