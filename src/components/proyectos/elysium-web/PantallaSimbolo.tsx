@@ -8,6 +8,7 @@ import { ERAS, POR_TRAMO, type Grafico } from "./simbolo";
 import { figuraDeEras, graficoDeEras } from "./simbolo";
 import { contarPorEra } from "./canciones";
 import { crearEstudioIridiscente } from "./estudioIridiscente";
+import Controles, { type Material } from "./Controles";
 
 // Lo que tarda el símbolo en trazarse entero. Largo a propósito: es el momento
 // en que aparece lo que la persona acaba de generar, y merece verse nacer.
@@ -136,21 +137,32 @@ function Esqueleto({ figura, grafico }: { figura: TrazoHecho[]; grafico: Grafico
 // La pantalla final: el universo se queda detrás, desenfocado, y el símbolo se
 // dibuja solo en el centro.
 export default function PantallaSimbolo({ seleccion }: { seleccion: Set<string> }) {
-  const figuraCompleta = useMemo(() => {
-    const pesos = contarPorEra(seleccion, ERAS);
-    return figuraDeEras(pesos);
-  }, [seleccion]);
-
-  // El gráfico del que sale, solo para la vista de taller.
-  const grafico = useMemo(
-    () => graficoDeEras(contarPorEra(seleccion, ERAS)),
-    [seleccion]
-  );
-
   const [avance, setAvance] = useState(0);
   // PROVISIONAL, para afinar la forma: enseña el recorrido del que sale el
   // metal. Se va con el botón que lo enciende.
   const [esqueleto, setEsqueleto] = useState(false);
+  // PROVISIONAL, como el esqueleto: el panel de mandos y un contador que sube
+  // en cada toque de barra. Los valores de la forma viven en el objeto AJUSTES
+  // —ver Controles—, así que hace falta algo que le diga a React que lo que
+  // dependía de ellos ha cambiado; el contador es ese aviso.
+  const [mandos, setMandos] = useState(false);
+  const [retoque, setRetoque] = useState(0);
+  const [material, setMaterial] = useState<Material>({
+    dispersion: 0.012,
+    suavidad: 9,
+    brillo: 1.25,
+  });
+
+  const figuraCompleta = useMemo(() => {
+    const pesos = contarPorEra(seleccion, ERAS);
+    return figuraDeEras(pesos);
+  }, [seleccion, retoque]);
+
+  // El gráfico del que sale, solo para la vista de taller.
+  const grafico = useMemo(
+    () => graficoDeEras(contarPorEra(seleccion, ERAS)),
+    [seleccion, retoque]
+  );
 
   useEffect(() => {
     // Sin animación, el símbolo aparece hecho. No es una versión pobre: para
@@ -212,14 +224,14 @@ export default function PantallaSimbolo({ seleccion }: { seleccion: Set<string> 
               // todo, amplificaba los escalones de los 256 niveles del mapa de
               // altura hasta salpicar la pieza de moteado. Lo que en la
               // referencia es un filo de arcoíris aquí se convertía en suciedad.
-              dispersion={0.012}
+              dispersion={material.dispersion}
               // Y sin capas. Eran el reflejo del canto repetido hacia dentro, y
               // funcionaban con la cinta gruesa; con la cinta fina no hay fondo
               // donde quepan, así que solo aportaban líneas que no correspondían
               // a nada y delataban el truco. Lo que hace realista a esto es la
               // óptica que ya había, no una capa más encima.
               capas={0}
-              brillo={1.25}
+              brillo={material.brillo}
               // Cada brazo con su grosor: es lo que deja que los discos poco
               // votados salgan como hilos y se peguen a los gruesos.
               grosorLibre
@@ -250,7 +262,7 @@ export default function PantallaSimbolo({ seleccion }: { seleccion: Set<string> 
               // cada montante —un punteado fino, como una costura—, y de 5 a 9
               // desaparece. Se paga con un filo un pelo menos seco, que en una
               // pieza de canto redondeado como esta no se echa de menos.
-              suavidad={9}
+              suavidad={material.suavidad}
             />
           )}
           {/* El esqueleto va sobre el mismo cuadrado y con el MISMO recorte que
@@ -270,6 +282,24 @@ export default function PantallaSimbolo({ seleccion }: { seleccion: Set<string> 
       >
         Trazo
       </button>
+
+      {/* PROVISIONAL: los mandos del generador. */}
+      <button
+        type="button"
+        className={`simfinal-esqueleto-boton es-mandos${mandos ? " es-activo" : ""}`}
+        onClick={() => setMandos((v) => !v)}
+        aria-pressed={mandos}
+      >
+        Mandos
+      </button>
+      {mandos && (
+        <Controles
+          material={material}
+          onMaterial={setMaterial}
+          onCambio={() => setRetoque((n) => n + 1)}
+          onCerrar={() => setMandos(false)}
+        />
+      )}
     </div>
   );
 }

@@ -1,5 +1,37 @@
 import type { Punto, TrazoHecho } from "@/components/proyectos/elysium/LienzoMetal";
 
+// ── Los mandos ────────────────────────────────────────────────────────────
+//
+// Estas nueve cifras son todo lo que decide el carácter de un símbolo, y van en
+// un objeto MUTABLE en vez de en constantes sueltas por una razón concreta: el
+// panel de la pantalla final las cambia en caliente. Ajustar a ojo, viendo la
+// figura cambiar, encuentra el punto bueno en un rato; hacerlo a ciegas por
+// rondas de "prueba esto" cuesta días, y lo sé porque así lo hicimos.
+//
+// Cada una está explicada donde se usa. El panel es provisional: cuando la
+// configuración esté decidida, estos valores se congelan y el panel se va.
+export const AJUSTES = {
+  // Distancia mínima al centro, en fracción de la máxima.
+  radioMinimo: 0.28,
+  // Lo que mide la figura de lado a lado una vez encajada.
+  encaje: 0.62,
+  // Grosor del montante —y, con la atracción, su alcance—.
+  grosor: 0.0125,
+  // Lo que queda del grosor justo en el vértice.
+  pico: 0.22,
+  // A partir de qué cerrado está el giro se afila.
+  picoDesde: 0.12,
+  // Hasta dónde baja el alcance en el vértice.
+  picoAlcance: 0.45,
+  // A qué distancia se considera que dos tramos se molestan.
+  cruceCerca: 1.6,
+  // Y hasta dónde se recoge su alcance. Más alto = más fusión.
+  cruceMin: 0.58,
+  // Lo fino que llega a ser el tramo de un disco poco votado.
+  delgado: 0.62,
+};
+
+
 // El generador de símbolos de Elysium.
 //
 // ── La regla ──────────────────────────────────────────────────────────────
@@ -29,7 +61,7 @@ import type { Punto, TrazoHecho } from "@/components/proyectos/elysium/LienzoMet
 //
 // 2. EL AMONTONAMIENTO DEL CENTRO NO SE COMBATE: ES EL RESULTADO. Durante
 //    mucho tiempo separé los vértices del centro para deshacer esa masa, y con
-//    eso me cargaba el mecanismo entero. Ver RADIO_MINIMO y `escala`.
+//    eso me cargaba el mecanismo entero. Ver AJUSTES.radioMinimo y `escala`.
 //
 // 3. NI ENTRADA NI SALIDA AFILADAS. El afilado de extremos del lienzo está
 //    pensado para un trazo que nace en el aire. Este nace en el centro y vuelve
@@ -77,11 +109,11 @@ const EXTENSION = 0.4;
 // un pegote. En el gráfico de referencia el trazo va del 20% al 45% del radio
 // —o sea que el más flojo llega a poco menos de la mitad del más votado—, que
 // es más o menos aquí.
-const RADIO_MINIMO = 0.28;
+// (ajustable en caliente: AJUSTES.radioMinimo)
 
 // Lo que mide la figura de lado a lado una vez encajada, en fracción del
 // lienzo.
-const ENCAJE = 0.62;
+// (ajustable en caliente: AJUSTES.encaje)
 
 // Grosor del montante. Es el radio, no el ancho, y es el MISMO para todo el
 // camino.
@@ -102,7 +134,7 @@ const ENCAJE = 0.62;
 // pierde el filo. Lo medí sobre la referencia y me pasé —el 9% que deduje de la
 // imagen no sobrevive al contraste con el resultado—, así que este número sale
 // de mirar figuras, no de una cuenta.
-export const GROSOR = 0.0125;
+// (ajustable en caliente: AJUSTES.grosor)
 
 // ── El afilado de los vértices ────────────────────────────────────────────
 //
@@ -112,7 +144,7 @@ export const GROSOR = 0.0125;
 // cambia aquí.
 const ALCANCE_CAMPO = 3.6;
 // Lo que queda del grosor justo en el vértice.
-const PICO = 0.22;
+// (ajustable en caliente: AJUSTES.pico)
 // La ventana del afilado, en veces el alcance. Es la distancia en la que la
 // fusión redondea una esquina, así que el afilado tiene que empezar antes que
 // ella o se aplica dentro de la zona ya redondeada y no se nota.
@@ -123,11 +155,11 @@ const PICO_TRAMO = 0.42;
 // A partir de qué cerrado está el giro se afila. 0 es seguir recto, 1 es darse
 // la vuelta del todo. Bajo a propósito: la referencia es angulosa de arriba
 // abajo, así que hasta los vértices poco cerrados quieren su esquina.
-const PICO_DESDE = 0.12;
+// (ajustable en caliente: AJUSTES.picoDesde)
 // Y hasta dónde baja el alcance en el vértice. Sin esto no basta: desde que el
 // alcance dejó de seguir al grosor, dos ramas que salen del mismo vértice se
 // funden entre ellas y rellenan la muesca que acaba de abrir el afilado.
-const PICO_ALCANCE = 0.45;
+// (ajustable en caliente: AJUSTES.picoAlcance)
 
 // ── La separación de los cruces ───────────────────────────────────────────
 //
@@ -135,10 +167,10 @@ const PICO_ALCANCE = 0.45;
 // debajo de los cuales dos son simplemente vecinos; cuánto tiene que acortar el
 // camino la línea recta para que cuente como cruce y no como tramo seguido; y
 // hasta dónde puede recogerse el alcance.
-const CRUCE_CERCA = 1.6;
+// (ajustable en caliente: AJUSTES.cruceCerca)
 const CRUCE_VECINO = 10;
 const CRUCE_DOBLEZ = 0.5;
-const CRUCE_MIN = 0.58;
+// (ajustable en caliente: AJUSTES.cruceMin)
 
 // Lo fino que llega a ser el tramo de un disco poco votado, en fracción del
 // grosor máximo.
@@ -149,7 +181,7 @@ const CRUCE_MIN = 0.58;
 // cualquier curva lo hunde por debajo y la figura se parte —10 de 123, medido—.
 // Con 0,62 el tramo más fino conserva cerca de un 25% de margen, que aguanta, y
 // aun así se distingue a simple vista del más gordo.
-const DELGADO = 0.62;
+// (ajustable en caliente: AJUSTES.delgado)
 
 // Puntos por tramo. El lienzo remuestrea por su cuenta, pero necesita bastantes
 // puntos crudos para que su suavizado no redondee los vértices, que es donde
@@ -201,7 +233,7 @@ function disponer(pesos: Record<Era, number>) {
     // El mínimo se suma por debajo en vez de sustituir: así un disco con una
     // canción sigue quedando por delante de uno con ninguna, que es lo que hace
     // que el reparto se siga leyendo en la forma.
-    const radio = EXTENSION * (RADIO_MINIMO + (1 - RADIO_MINIMO) * proporcionDe(era));
+    const radio = EXTENSION * (AJUSTES.radioMinimo + (1 - AJUSTES.radioMinimo) * proporcionDe(era));
     return [cx + radio * Math.cos(angulo), cy + radio * Math.sin(angulo)];
   };
 
@@ -230,7 +262,7 @@ function disponer(pesos: Record<Era, number>) {
   //
   // El grosor de un tramo sale de los dos discos que une: el de un tramo entre
   // dos muy votados tiene cuerpo, el de uno entre dos flojos es fino.
-  const grosorDe = (era: Era) => DELGADO + (1 - DELGADO) * proporcionDe(era);
+  const grosorDe = (era: Era) => AJUSTES.delgado + (1 - AJUSTES.delgado) * proporcionDe(era);
   const tramos = [recorrido[0], ...recorrido, recorrido[recorrido.length - 1]];
   const grosores: number[] = [];
   for (let i = 0; i < tramos.length - 1; i++) {
@@ -254,7 +286,7 @@ function disponer(pesos: Record<Era, number>) {
     Math.max(...xs) - Math.min(...xs),
     Math.max(...ys) - Math.min(...ys)
   );
-  const k = mayor > 1e-4 ? ENCAJE / mayor : 1;
+  const k = mayor > 1e-4 ? AJUSTES.encaje / mayor : 1;
   const mx = (Math.min(...xs) + Math.max(...xs)) / 2;
   const my = (Math.min(...ys) + Math.max(...ys)) / 2;
   const encajar = ([x, y]: [number, number]): [number, number] => [
@@ -337,19 +369,19 @@ function afilarVertices(trazo: Punto[], base: number): Punto[] {
   return trazo.map((p, i) => {
     let factor = 1;
     for (const pico of picos) {
-      if (pico.agudeza < PICO_DESDE) continue;
+      if (pico.agudeza < AJUSTES.picoDesde) continue;
       const d = Math.abs(acum[i] - acum[pico.i]);
       if (d >= pico.ventana) continue;
       // Lleno en el vértice y nada en el borde de la ventana, graduado por lo
       // cerrado del giro.
-      const fuerza = (pico.agudeza - PICO_DESDE) / (1 - PICO_DESDE);
-      factor = Math.min(factor, 1 - (1 - PICO) * fuerza * (1 - d / pico.ventana));
+      const fuerza = (pico.agudeza - AJUSTES.picoDesde) / (1 - AJUSTES.picoDesde);
+      factor = Math.min(factor, 1 - (1 - AJUSTES.pico) * fuerza * (1 - d / pico.ventana));
     }
     if (factor >= 1) return p;
     return {
       ...p,
       r: p.r * factor,
-      a: Math.max(PICO_ALCANCE, factor),
+      a: Math.max(AJUSTES.picoAlcance, factor),
     };
   });
 }
@@ -380,7 +412,7 @@ function separarLosCruces(trazo: Punto[], base: number): Punto[] {
   }
   // Se mira hasta donde llega la fusión: más allá, dos tramos ya no se enteran
   // el uno del otro.
-  const cerca = base * ALCANCE_CAMPO * CRUCE_CERCA;
+  const cerca = base * ALCANCE_CAMPO * AJUSTES.cruceCerca;
 
   return trazo.map((p, i) => {
     let vecinos = 0;
@@ -399,7 +431,7 @@ function separarLosCruces(trazo: Punto[], base: number): Punto[] {
     // alcance, el cruce dejaría de fundirse del todo y se vería como un aspa de
     // dos piezas superpuestas en vez de como una unión.
     const recogido = 1 / (1 + vecinos * 0.06);
-    return { ...p, a: Math.min(p.a ?? 1, Math.max(CRUCE_MIN, recogido)) };
+    return { ...p, a: Math.min(p.a ?? 1, Math.max(AJUSTES.cruceMin, recogido)) };
   });
 }
 
@@ -409,7 +441,7 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
 
   // De poligonal a trazo, muestreando cada tramo a paso constante e
   // interpolando el grosor entre sus dos vértices.
-  const base = GROSOR * d.escala;
+  const base = AJUSTES.grosor * d.escala;
   // `gs` trae UN grosor por tramo, no uno por vértice.
   const tejer = (vs: [number, number][], gs: number[]): Punto[] => {
     const puntos: Punto[] = [];

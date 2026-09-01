@@ -372,6 +372,10 @@
   color: #fff;
   border-color: rgba(255, 255, 255, 0.6);
 }
+/* El segundo botón de taller, debajo del primero. */
+.simfinal-esqueleto-boton.es-mandos {
+  top: 52px;
+}
 .simfinal-esqueleto-boton.es-activo {
   color: #ff2d6f;
   border-color: rgba(255, 45, 111, 0.7);
@@ -396,4 +400,86 @@
   background: none;
   border: none;
   border-radius: 0;
+}
+
+/* ── PROVISIONAL: el panel de mandos del generador ───────────────────────── */
+
+.mandos {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 30;
+  width: 268px;
+  max-height: calc(100dvh - 28px);
+  overflow-y: auto;
+  padding: 14px 16px 16px;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.62);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 12px;
+}
+.mandos-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.mandos-cabecera button {
+  border: none;
+  background: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+.mandos-cabecera button:hover {
+  color: #fff;
+}
+.mandos-nota {
+  margin: 14px 0 6px;
+  font-size: 10.5px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.42);
+}
+.mandos-barra {
+  display: block;
+  margin-bottom: 11px;
+}
+.mandos-rotulo {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 3px;
+}
+.mandos-rotulo em {
+  font-style: normal;
+  color: #ff2d6f;
+  font-variant-numeric: tabular-nums;
+}
+.mandos-barra input[type="range"] {
+  width: 100%;
+  accent-color: #ff2d6f;
+  cursor: pointer;
+}
+.mandos-pista {
+  display: block;
+  margin-top: 1px;
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.4);
+}
+.mandos-copia {
+  display: block;
+  /* Rompe por donde sea: es una línea larga de pares clave-valor y lo que
+     importa es poder leerla entera de un vistazo o capturarla. */
+  overflow-wrap: anywhere;
+  padding: 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.07);
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.72);
 }
