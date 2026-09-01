@@ -39,6 +39,10 @@ export type IconoFlotante = {
   // Vueltas CORTAS, no completas: estas piezas son cintas planas y una vuelta
   // entera las deja de canto dos veces, con lo que desaparecen.
   giraEje?: boolean;
+  // Solo sube y baja: sin bamboleo, sin vuelta sobre el eje y sin deriva
+  // lateral. Es para cuando la pieza se enseña a solas y de cerca —el popup de
+  // un álbum—, donde girar la aleja de la silueta con la que se la reconoce.
+  soloVertical?: boolean;
 };
 
 // Las siete eras, colocadas como en el render del fondo.
@@ -286,8 +290,12 @@ export default function IconosFlotantes({
           eje: new THREE.Vector3(alAzar(0.5, 1), alAzar(0.5, 1), 0)
             .multiply(new THREE.Vector3(Math.random() < 0.5 ? -1 : 1, 1, 0))
             .normalize(),
-          balanceo: def.movimiento === "gira" ? alAzar(0.38, 0.6) : alAzar(0.1, 0.18),
-          ejeCentral: def.giraEje ? alAzar(0.55, 0.95) : 0,
+          balanceo: def.soloVertical
+            ? 0
+            : def.movimiento === "gira"
+              ? alAzar(0.38, 0.6)
+              : alAzar(0.1, 0.18),
+          ejeCentral: def.giraEje && !def.soloVertical ? alAzar(0.55, 0.95) : 0,
           tam: 1,
         },
       });
@@ -469,6 +477,7 @@ export default function IconosFlotantes({
       raf = requestAnimationFrame(bucle);
       for (const pieza of piezas) {
         const { grupo, vaiven, blanco } = pieza;
+
         if (!quieto) {
           const [a1, a2] = vaiven.amplitud;
           const [w1, w2] = vaiven.ritmo;
@@ -477,8 +486,11 @@ export default function IconosFlotantes({
           grupo.position.y =
             vaiven.base.y + a1 * Math.sin(t * w1 + f1) + a2 * Math.sin(t * w2 + f2);
           // Y una deriva lateral mucho más corta. Sin ella el movimiento se lee
-          // como un ascensor: lo que flota nunca sube en línea recta.
-          grupo.position.x = vaiven.base.x + a2 * 0.7 * Math.sin(t * w2 * 0.7 + f1);
+          // como un ascensor: lo que flota nunca sube en línea recta. Salvo
+          // cuando se pide justo eso, que es el caso del popup.
+          grupo.position.x = pieza.def.soloVertical
+            ? vaiven.base.x
+            : vaiven.base.x + a2 * 0.7 * Math.sin(t * w2 * 0.7 + f1);
 
           // Dos giros compuestos: el bamboleo sobre el eje diagonal y, en
           // algunas, la vuelta corta sobre su propio eje vertical.

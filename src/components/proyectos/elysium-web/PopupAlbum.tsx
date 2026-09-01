@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import Cartel from "./Cartel";
 import IconosFlotantes, { FLOTANTES } from "./IconosFlotantes";
 import { CANCIONES, claveCancion } from "./canciones";
@@ -21,34 +22,45 @@ export default function PopupAlbum({
   onCerrar: () => void;
 }) {
   // El mismo modelo que flota en el fondo, traído al centro y a lo grande. Se
-  // reutiliza el componente de los flotantes en vez de una imagen del símbolo
-  // por dos razones: no hay que exportar siete PNG más, y la pieza sigue
-  // girando y tornasolando, que es lo que la hace reconocible como la misma que
-  // acabas de pulsar.
-  const suyo = FLOTANTES.find((f) => f.era === era);
-  const elegidas = CANCIONES[era].filter((c) => seleccion.has(claveCancion(era, c))).length;
+  // reutiliza el visor en vez de una imagen del símbolo por dos razones: no hay
+  // que exportar siete PNG más, y la pieza sigue levitando, que es lo que la
+  // hace reconocible como la misma que se acaba de pulsar.
+  //
+  // El useMemo NO es un adorno de rendimiento: es lo que impide que el símbolo
+  // dé un salto cada vez que se marca una casilla. Marcar cambia el estado y el
+  // componente se vuelve a dibujar; si la lista de iconos se construyera aquí
+  // mismo, sería un array NUEVO en cada pasada, y el visor la tiene como
+  // dependencia, así que respondía montando otra vez la escena entera —recargar
+  // el .glb incluido— y la pieza se reiniciaba a mitad de su vaivén. Atada al
+  // álbum, la lista es la misma mientras el popup lo sea.
+  const iconos = useMemo(() => {
+    const suyo = FLOTANTES.find((f) => f.era === era);
+    if (!suyo) return [];
+    return [
+      {
+        ...suyo,
+        x: 0,
+        y: 0,
+        // Bastante mayor que en el fondo: el visor mide el tamaño sobre el ALTO
+        // de su hueco, y aquí ese hueco es un cuadro, no la pantalla entera.
+        escala: 3.6,
+        movimiento: "flota" as const,
+        // Solo arriba y abajo. Girando se aleja de la silueta con la que se la
+        // acaba de reconocer, y de cerca eso despista más que decora.
+        soloVertical: true,
+      },
+    ];
+  }, [era]);
 
   return (
     <Cartel onCerrar={onCerrar} ancho="min(1060px, 93%)" etiqueta={`Canciones de ${era}`}>
       <div className="palbum">
         <div className="palbum-simbolo">
-          {suyo && (
-            <IconosFlotantes
-              // Centrado y a lo grande. La escala tiene que ser bastante mayor
-              // que la del fondo porque el visor mide el tamaño sobre el ALTO
-              // de su hueco, y aquí ese hueco es un cuadro pequeño, no la
-              // pantalla entera.
-              iconos={[{ ...suyo, x: 0, y: 0, escala: 2.7, movimiento: "flota" }]}
-            />
-          )}
+          {iconos.length > 0 && <IconosFlotantes iconos={iconos} />}
         </div>
 
         <div className="palbum-lista">
           <h2 className="palbum-titulo">{era}</h2>
-          <p className="palbum-ayuda">
-            Marca las canciones que te representan
-            {elegidas > 0 && <span className="palbum-cuenta">{elegidas}</span>}
-          </p>
 
           <ul className="palbum-canciones">
             {CANCIONES[era].map((cancion) => {

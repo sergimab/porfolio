@@ -71,7 +71,7 @@
   display: grid;
   /* El símbolo se lleva menos que las canciones: los tracklists llegan a
      diecisiete y necesitan el sitio. */
-  grid-template-columns: 0.72fr 1.28fr;
+  grid-template-columns: 0.82fr 1.18fr;
   gap: clamp(20px, 3vw, 40px);
   align-items: center;
 }
@@ -109,33 +109,19 @@
 }
 
 .palbum-titulo {
-  margin: 0;
+  margin: 0 0 18px;
   font-size: clamp(20px, 2.4vw, 28px);
   font-weight: 700;
   letter-spacing: 0.01em;
 }
-.palbum-ayuda {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  margin: 6px 0 18px;
-  font-size: 12.5px;
-  color: rgba(255, 255, 255, 0.6);
-}
-.palbum-cuenta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 20px;
-  height: 20px;
-  padding: 0 6px;
-  border-radius: 999px;
-  background: #fff;
-  color: #111;
-  font-size: 11px;
-  font-weight: 700;
-}
 
+/* Cada fila de la rejilla mide lo que su celda más alta, y el li se estira a
+   esa altura por defecto. Lo que faltaba era decirle al BOTÓN que llenara su
+   li: sin eso, un título que parte en dos líneas hacía su fila alta y las de al
+   lado se quedaban cortas, flotando dentro del hueco. */
+.palbum-canciones li {
+  display: flex;
+}
 .palbum-canciones {
   list-style: none;
   margin: 0 0 20px;
@@ -159,6 +145,7 @@
   align-items: center;
   gap: 11px;
   width: 100%;
+  height: 100%;
   /* Con el modelo de caja por defecto, el relleno y el borde se SUMAN al 100%
      y la fila acaba más ancha que el cartel: en móvil se salía por la derecha
      y dejaba una barra de desplazamiento dentro del popup. */
