@@ -163,32 +163,46 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
     (a, b) => (pesos[b] || 0) - (pesos[a] || 0) || ERAS.indexOf(a) - ERAS.indexOf(b)
   );
 
-  // El recorrido, vértice a vértice y con su grosor al lado. Los del centro se
-  // quedan con el del brazo que sale o entra por ellos, para que el cambio
-  // ocurra a lo largo del brazo y no de golpe en el centro.
-  let vertices: [number, number][] = [[cx, cy]];
+  // El recorrido principal, vértice a vértice y con su grosor al lado. Los del
+  // centro se quedan con el del brazo que sale o entra por ellos, para que el
+  // cambio ocurra a lo largo del brazo y no de golpe en el centro.
+  const vertices: [number, number][] = [[cx, cy]];
   const grosores: number[] = [grosorDe(recorrido[0])];
-
   for (const era of recorrido) {
-    const [vx, vy] = punto(era);
-    vertices.push([vx, vy]);
+    vertices.push(punto(era));
     grosores.push(grosorDe(era));
-
-    // Y, si le toca, la púa: se sale hacia fuera siguiendo el radio y se vuelve.
-    // La punta va con el grosor mínimo, que es lo que la hace aguja y no cuerno.
-    const largo = puaDe(era);
-    if (largo > 0.004) {
-      const d = Math.hypot(vx - cx, vy - cy) || 1;
-      const ux = (vx - cx) / d;
-      const uy = (vy - cy) / d;
-      vertices.push([vx + ux * largo, vy + uy * largo]);
-      grosores.push(GROSOR * HILO);
-      vertices.push([vx, vy]);
-      grosores.push(grosorDe(era));
-    }
   }
   vertices.push([cx, cy]);
   grosores.push(grosorDe(recorrido[recorrido.length - 1]));
+
+  // Las púas, cada una como TRAZO APARTE. Y esto es lo que las hace afiladas.
+  //
+  // Metidas dentro del recorrido principal —saliendo del vértice y volviendo—
+  // la punta quedaba en mitad del trazo, así que no pasaba por el afilado de
+  // extremos y salía como un pegote redondo. Un trazo suelto tiene dos extremos,
+  // y el afilado encoge el RADIO de las cúpulas a lo largo de ellos, que es lo
+  // único que produce un pico: bajando solo la altura, la superficie termina
+  // siempre en casquete.
+  //
+  // Arrancan por dentro del brazo para que la suma las funda con él sin costura,
+  // y salen hacia fuera siguiendo el radio.
+  const puas: [number, number][][] = [];
+  const grosoresPua: number[][] = [];
+  for (const era of recorrido) {
+    const largo = puaDe(era);
+    if (largo <= 0.004) continue;
+    const [vx, vy] = punto(era);
+    const d = Math.hypot(vx - cx, vy - cy) || 1;
+    const ux = (vx - cx) / d;
+    const uy = (vy - cy) / d;
+    const dentro = Math.min(d * 0.55, largo * 1.6);
+    puas.push([
+      [vx - ux * dentro, vy - uy * dentro],
+      [vx + ux * largo, vy + uy * largo],
+    ]);
+    const gr = Math.min(grosorDe(era), GROSOR * 0.5);
+    grosoresPua.push([gr, gr]);
+  }
 
   // Encaje: se lleva la figura al centro del lienzo y se escala para que ocupe
   // siempre lo mismo.
@@ -199,36 +213,45 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
   // radios pequeños. Midiendo su caja y ajustándola, todas llegan igual de
   // grandes y centradas, y lo que las distingue pasa a ser su FORMA, que es lo
   // único que debería distinguirlas.
-  const xs = vertices.map((v) => v[0]);
-  const ys = vertices.map((v) => v[1]);
-  const ancho = Math.max(...xs) - Math.min(...xs);
-  const alto = Math.max(...ys) - Math.min(...ys);
-  const mayor = Math.max(ancho, alto);
-  if (mayor > 1e-4) {
-    const k = ENCAJE / mayor;
-    const mx = (Math.min(...xs) + Math.max(...xs)) / 2;
-    const my = (Math.min(...ys) + Math.max(...ys)) / 2;
-    vertices = vertices.map(([x, y]) => [cx + (x - mx) * k, cy + (y - my) * k]);
-  }
+  //
+  // Se mide sobre TODO, púas incluidas: si no, las púas se saldrían del marco.
+  const todos = [...vertices, ...puas.flat()];
+  const xs = todos.map((v) => v[0]);
+  const ys = todos.map((v) => v[1]);
+  const mayor = Math.max(
+    Math.max(...xs) - Math.min(...xs),
+    Math.max(...ys) - Math.min(...ys)
+  );
+  const k = mayor > 1e-4 ? ENCAJE / mayor : 1;
+  const mx = (Math.min(...xs) + Math.max(...xs)) / 2;
+  const my = (Math.min(...ys) + Math.max(...ys)) / 2;
+  const encajar = ([x, y]: [number, number]): [number, number] => [
+    cx + (x - mx) * k,
+    cy + (y - my) * k,
+  ];
 
-  // Un solo trazo, sin levantar el lápiz: es lo que hace que la figura se funda
-  // consigo misma en el centro, donde convergen las siete líneas.
-  const trazo: TrazoHecho = [];
-  for (let i = 0; i < vertices.length - 1; i++) {
-    const [x1, y1] = vertices[i];
-    const [x2, y2] = vertices[i + 1];
-    const r1 = grosores[i];
-    const r2 = grosores[i + 1];
-    for (let k = 0; k < POR_TRAMO; k++) {
-      const t = k / POR_TRAMO;
-      trazo.push({
-        x: x1 + (x2 - x1) * t,
-        y: y1 + (y2 - y1) * t,
-        r: r1 + (r2 - r1) * t,
-      });
+  // De poligonal a trazo, muestreando cada tramo e interpolando el grosor.
+  const tejer = (vs: [number, number][], gs: number[]): TrazoHecho => {
+    const trazo: TrazoHecho = [];
+    for (let i = 0; i < vs.length - 1; i++) {
+      const [x1, y1] = encajar(vs[i]);
+      const [x2, y2] = encajar(vs[i + 1]);
+      const r1 = gs[i];
+      const r2 = gs[i + 1];
+      for (let n = 0; n < POR_TRAMO; n++) {
+        const t = n / POR_TRAMO;
+        trazo.push({
+          x: x1 + (x2 - x1) * t,
+          y: y1 + (y2 - y1) * t,
+          r: r1 + (r2 - r1) * t,
+        });
+      }
     }
-  }
-  const [ux, uy] = vertices[vertices.length - 1];
-  trazo.push({ x: ux, y: uy, r: grosores[grosores.length - 1] });
-  return [trazo];
+    const [fx, fy] = encajar(vs[vs.length - 1]);
+    trazo.push({ x: fx, y: fy, r: gs[gs.length - 1] });
+    return trazo;
+  };
+
+  // El principal va primero: es el que fija el alcance del conjunto.
+  return [tejer(vertices, grosores), ...puas.map((p, i) => tejer(p, grosoresPua[i]))];
 }
