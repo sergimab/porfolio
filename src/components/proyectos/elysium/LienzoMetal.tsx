@@ -381,6 +381,7 @@ const FRAGMENT = /* glsl */ `
   uniform float uDispersion;  // cuánto se separan los canales en el filo
   uniform float uCapas;       // líneas de reflejo repetidas hacia dentro
   uniform float uBrillo;      // ganancia final
+  uniform float uSuavidad;    // separación de las muestras que dan la normal
   uniform sampler2D uEstudio; // panorama equirectangular del plató
 
   // Parte del ancho que ocupa el bisel del canto. Bajo = chapa plana con
@@ -457,7 +458,7 @@ const FRAGMENT = /* glsl */ `
     // Las muestras van algo separadas a propósito. El mapa de altura solo
     // tiene 256 niveles, y midiendo la pendiente entre píxeles contiguos esos
     // escalones se amplifican y salpican la cresta de puntitos de color.
-    vec2 d = px * 3.0;
+    vec2 d = px * uSuavidad;
     float hIzq = texture2D(uCampo, vUv - vec2(d.x, 0.0)).r;
     float hDer = texture2D(uCampo, vUv + vec2(d.x, 0.0)).r;
     float hAba = texture2D(uCampo, vUv - vec2(0.0, d.y)).r;
@@ -571,6 +572,13 @@ export default function LienzoMetal({
   // Ganancia final. El vidrio pide más que el metal: refleja de frente casi
   // todo lo que le llega, mientras que el metal se queda una parte.
   brillo = 1,
+  // Cada punto de la figura conserva su radio en vez de heredar el medio del
+  // trazo. Solo tiene sentido con figuras calculadas: a mano, el grosor único
+  // es lo que impide que el trazo tiemble.
+  grosorLibre = false,
+  // A qué distancia, en píxeles, se miden las alturas para deducir la normal.
+  // Más lejos, normal más suave y menos ruido; también, bordes menos secos.
+  suavidad = 3,
 }: {
   figura?: TrazoHecho[];
   interactivo?: boolean;
@@ -578,6 +586,8 @@ export default function LienzoMetal({
   dispersion?: number;
   capas?: number;
   brillo?: number;
+  grosorLibre?: boolean;
+  suavidad?: number;
 } = {}) {
   const lang = useLang();
   const contenedorRef = useRef<HTMLDivElement>(null);
@@ -716,7 +726,9 @@ export default function LienzoMetal({
       sinPuntaInicial = false,
       // Tramo del trazo ya pintado. No se vuelve a dibujar: sirve para el
       // grosor medio y para saber por dónde va el recorrido.
-      contexto: Punto[] = []
+      contexto: Punto[] = [],
+      // Cada punto conserva su radio en vez de heredar el medio del trazo.
+      grosorLibre = false
     ): { hasta: number; cabeza: { x: number; y: number; R: number } | null } => {
       if (!crudos.length) return { hasta: desdeRecorrido, cabeza: null };
       // De relativo a píxeles: todo el trabajo de suavizado y afilado se hace
@@ -736,7 +748,20 @@ export default function LienzoMetal({
       const radioUniforme =
         (todos.reduce((suma, p) => suma + p.r, 0) / todos.length) * escala;
 
-      const enPx = crudos.map((p) => ({ x: p.x * escala, y: p.y * escala, r: radioUniforme }));
+      // Con grosorLibre cada punto conserva SU radio en vez de heredar el medio.
+      //
+      // El grosor único existe por la mano: la velocidad instantánea hacía subir
+      // y bajar el trazo dentro del mismo gesto —la mano acelera y frena sola al
+      // girar— y eso no se lee como material, se lee como fallo. Pero cuando el
+      // trazo no lo dibuja una mano sino que lo calcula el generador, el grosor
+      // ES un dato, y promediarlo borra justo lo que quiere decir: los brazos de
+      // los discos poco votados salen como hilos, y al fundirse con los gruesos
+      // aparece esa unión pegajosa.
+      const enPx = crudos.map((p) => ({
+        x: p.x * escala,
+        y: p.y * escala,
+        r: grosorLibre ? p.r * escala : radioUniforme,
+      }));
       const puntos = remuestrear(suavizar(enPx, SUAVIZAR_PASADAS), PASO_REMUESTREO);
 
       // Longitud acumulada del tramo, y la del contexto que lo precede: juntas
@@ -773,12 +798,20 @@ export default function LienzoMetal({
       // Radio de influencia en un punto del recorrido, con las puntas ya
       // aplicadas. El largo de la punta se mide con el radio del trazo, no con
       // el local: con el local, donde ya es fino la punta saldría cortísima.
-      const radioEn = (s: number) => {
+      // Radio local, para cuando cada punto trae el suyo. Se interpola entre los
+      // dos puntos que rodean esa posición del recorrido, igual que la posición.
+      const radioLocal = (i: number, t: number) => {
+        const a = puntos[i];
+        const b = puntos[i + 1] ?? a;
+        return a.r + (b.r - a.r) * t;
+      };
+
+      const radioEn = (s: number, base: number) => {
         const inicio = sinPuntaInicial
           ? 1
           : factorPunta(antes + s, radioUniforme, largoTrazo, ENTRADA_CORTA);
         const fin = enCurso ? 1 : factorPunta(largoTrazo - antes - s, radioUniforme, largoTrazo);
-        return Math.max(PUNTA_MIN, radioUniforme * Math.min(inicio, fin)) * ALCANCE * factorR;
+        return Math.max(PUNTA_MIN, base * Math.min(inicio, fin)) * ALCANCE * factorR;
       };
 
       let idx = 0;
@@ -792,7 +825,7 @@ export default function LienzoMetal({
         const t = tramo > 0 ? (s - largos[idx]) / tramo : 0;
         const x = a.x + (b.x - a.x) * t;
         const y = a.y + (b.y - a.y) * t;
-        const R = radioEn(s);
+        const R = radioEn(s, grosorLibre ? radioLocal(idx, t) : radioUniforme);
         // El paso va con el alcance: seis cúpulas por radio. Así el número de
         // degradados no se dispara en un trazo grueso, y en uno finísimo el
         // suelo de un píxel impide que se hagan millones.
@@ -856,12 +889,12 @@ export default function LienzoMetal({
     limpiarCapa(cabezaRef.current);
     const ctx = posoRef.current?.getContext("2d");
     if (ctx) {
-      for (const t of trazosRef.current) pintarTrazo(ctx, t);
+      for (const t of trazosRef.current) pintarTrazo(ctx, t, false, 0, false, [], grosorLibre);
     }
     dibujadosRef.current = 0;
     pintadoHastaRef.current = 0;
     componerMapa();
-  }, [pintarTrazo, componerMapa]);
+  }, [pintarTrazo, componerMapa, grosorLibre]);
 
   // Montaje de WebGL. Se retrasa hasta que el lienzo se acerca a la pantalla:
   // la página ya tiene otro contexto (el fondo de píxeles) y los móviles son
@@ -950,6 +983,7 @@ export default function LienzoMetal({
         uDispersion: { value: dispersion },
         uCapas: { value: capas },
         uBrillo: { value: brillo },
+        uSuavidad: { value: suavidad },
       },
       transparent: true,
     });
@@ -1000,7 +1034,7 @@ export default function LienzoMetal({
       renderer.domElement.remove();
       tresRef.current = null;
     };
-  }, [repintarMapa, cerca, entorno, dispersion, capas, brillo]);
+  }, [repintarMapa, cerca, entorno, dispersion, capas, brillo, suavidad]);
 
   // Pasa los puntos encolados al trazo en curso y pinta lo nuevo. Se llama
   // desde el bucle y también al soltar: si el dedo baja y sube dentro del
@@ -1075,7 +1109,7 @@ export default function LienzoMetal({
       }
     }
     componerMapa();
-  }, [pintarTrazo, componerMapa]);
+  }, [pintarTrazo, componerMapa, grosorLibre]);
 
   // Bucle: consume los puntos encolados y, si hay cambios, rehace el campo y
   // vuelve a sombrear.

@@ -86,26 +86,28 @@ export default function PantallaSimbolo({ seleccion }: { seleccion: Set<string> 
               figura={figura}
               interactivo={false}
               entorno={crearEstudioCristal}
-              // Ocho veces la del lienzo de dibujo. Ahí una pizca de separación
-              // es el hilo de color del filo de una pieza de cromo; aquí, tanta
-              // separación descompone la luz en los cantos y la convierte en
-              // vidrio.
-              //
-              // Llegó a estar en 0,045 y era pasarse: el color invadía la
-              // superficie entera, y en la referencia el cuerpo es casi blanco y
-              // el arcoíris vive solo en los bordes. De paso, tanta separación
-              // amplificaba los escalones de los 256 niveles del mapa de altura
-              // y salpicaba la pieza de moteado.
-              dispersion={0.022}
-              // Dos repeticiones del reflejo hacia dentro: es lo que hace que
-              // el canto se lea grueso y transparente en vez de como una chapa.
-              //
-              // Con tres se escalonaban. El mapa de altura tiene 256 niveles y
-              // el reparto de relieve ocupa una franja estrecha de ese rango, así
-              // que cuantas más líneas se pidan, menos escalones le tocan a cada
-              // una y antes se ven los peldaños.
-              capas={2}
-              brillo={1.75}
+              // Dispersión contenida. Llegó a estar en 0,045 y luego en 0,022, y
+              // las dos se pasaban: el color invadía la superficie y, sobre
+              // todo, amplificaba los escalones de los 256 niveles del mapa de
+              // altura hasta salpicar la pieza de moteado. Lo que en la
+              // referencia es un filo de arcoíris aquí se convertía en suciedad.
+              dispersion={0.015}
+              // Y sin capas. Eran el reflejo del canto repetido hacia dentro, y
+              // funcionaban con la cinta gruesa; con la cinta fina no hay fondo
+              // donde quepan, así que solo aportaban líneas que no correspondían
+              // a nada y delataban el truco. Lo que hace realista a esto es la
+              // óptica que ya había, no una capa más encima.
+              capas={0}
+              brillo={1.5}
+              // Cada brazo con su grosor: es lo que deja que los discos poco
+              // votados salgan como hilos y se peguen a los gruesos.
+              grosorLibre
+              // Las alturas para la normal se miden más lejos. La normal sale de
+              // restar dos muestras del mapa, y el mapa tiene 256 niveles: cuanto
+              // más juntas se toman, más pesa el escalón frente a la pendiente
+              // real, y eso es exactamente el ruido que se veía. Separándolas, la
+              // superficie sale limpia a cambio de un filo un pelo menos seco.
+              suavidad={5}
             />
           )}
         </div>

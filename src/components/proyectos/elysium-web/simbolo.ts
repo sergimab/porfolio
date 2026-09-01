@@ -52,18 +52,18 @@ const ENCAJE = 0.66;
 // igual de proporcionada en el marco grande de escritorio que en el de móvil.
 // En píxeles, un valor bueno en uno de los dos sale de alambre en el otro.
 //
-// Subió de 0,016 al encajar la figura. Encajarla la agranda, y como el grosor
-// es constante, la cinta se quedaba proporcionalmente el doble de fina: un
-// alambre. Y un alambre no tiene sitio para el material —ni cara ancha que
-// refleje el cielo ni fondo donde quepan las líneas del canto—, así que por muy
-// bien resuelto que esté el vidrio, no se ve. El grosor es lo que le da
-// superficie donde ocurrir.
+// Este es el grosor del brazo MÁS votado. Los demás adelgazan con su peso, y el
+// del disco sin nada elegido baja hasta HILO.
+const GROSOR = 0.026;
+// Lo fino que llega a ser un brazo, en fracción del más grueso.
 //
-// Y una segunda subida, hasta 0,044, buscando la referencia: allí las caras
-// anchas son casi blancas porque son PLANAS y reflejan el cielo de frente. Con
-// la cinta estrecha casi todo es canto volcado, y el canto refleja el suelo,
-// que es oscuro. La cara ancha solo aparece si hay ancho.
-const GROSOR = 0.044;
+// Es lo que da el efecto pegajoso: un hilo que se acerca a un brazo grueso no se
+// suma a él sin más, se le pega. El campo del lienzo funde a distancia, así que
+// entre los dos se levanta una membrana cóncava, y esa membrana es mucho más
+// ancha que el hilo y mucho más estrecha que el brazo. Con todos los brazos
+// iguales esa tensión no existe, porque no hay nada más fino que se pegue a
+// nada más grueso.
+const HILO = 0.26;
 // Puntos por tramo recto. El lienzo remuestrea por su cuenta, pero necesita
 // bastantes puntos crudos para que su suavizado no redondee los vértices, que
 // es justo donde nacen las puntas.
@@ -91,6 +91,12 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
   // ser cuadrado, este número deja de valer.
   const cy = 0.5;
 
+  // Grosor del brazo de cada era, del hilo al máximo según lo votada que esté.
+  const grosorDe = (era: Era) => {
+    const proporcion = (pesos[era] || 0) / maximo;
+    return GROSOR * (HILO + (1 - HILO) * proporcion);
+  };
+
   const punto = (era: Era): [number, number] => {
     const i = ERAS.indexOf(era);
     // Se empieza arriba y se gira a favor del reloj.
@@ -110,6 +116,15 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
   const recorrido = [...ERAS].sort(
     (a, b) => (pesos[b] || 0) - (pesos[a] || 0) || ERAS.indexOf(a) - ERAS.indexOf(b)
   );
+
+  // Cada vértice lleva su grosor. Los del centro se quedan con el del brazo que
+  // sale o entra por ellos, para que el cambio ocurra a lo largo del brazo y no
+  // de golpe en el centro.
+  const grosores = [
+    grosorDe(recorrido[0]),
+    ...recorrido.map(grosorDe),
+    grosorDe(recorrido[recorrido.length - 1]),
+  ];
 
   let vertices: [number, number][] = [
     [cx, cy],
@@ -144,12 +159,18 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
   for (let i = 0; i < vertices.length - 1; i++) {
     const [x1, y1] = vertices[i];
     const [x2, y2] = vertices[i + 1];
+    const r1 = grosores[i];
+    const r2 = grosores[i + 1];
     for (let k = 0; k < POR_TRAMO; k++) {
       const t = k / POR_TRAMO;
-      trazo.push({ x: x1 + (x2 - x1) * t, y: y1 + (y2 - y1) * t, r: GROSOR });
+      trazo.push({
+        x: x1 + (x2 - x1) * t,
+        y: y1 + (y2 - y1) * t,
+        r: r1 + (r2 - r1) * t,
+      });
     }
   }
   const [ux, uy] = vertices[vertices.length - 1];
-  trazo.push({ x: ux, y: uy, r: GROSOR });
+  trazo.push({ x: ux, y: uy, r: grosores[grosores.length - 1] });
   return [trazo];
 }

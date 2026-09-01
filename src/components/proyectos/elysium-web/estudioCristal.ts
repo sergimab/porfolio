@@ -62,24 +62,34 @@ export function crearEstudioCristal(): HTMLCanvasElement {
     ctx.fillRect(x, y, w, h);
   }
 
-  // Montantes muy oscuros y de borde duro. En vidrio importan todavía más que
-  // en metal: cada canto refracta el borde tres veces, una por canal, y de ese
-  // triple borde salen las franjas de color. Sobre un fondo sin cortes no
-  // habría nada que descomponer.
-  ctx.filter = "blur(3px)";
-  for (let i = 0; i < 9; i++) {
-    const x = 20 + i * 115;
-    ctx.fillStyle = "rgba(2,3,5,0.97)";
-    ctx.fillRect(x, 0, 14 + (i % 3) * 10, 252);
+  // Montantes oscuros que cortan las masas de luz. Son necesarios —sin cortes
+  // no hay nada que descomponer y el material sale plano—, pero POCOS y
+  // desiguales.
+  //
+  // Antes eran nueve, repartidos cada 115 píxeles. En una pieza ancha eso pasa
+  // desapercibido; en una cinta fina, la retícula regular se refleja como una
+  // ristra de rayas idénticas y es lo que hacía que el material se viera
+  // artificial. Un plató real tiene cuatro o cinco cosas oscuras, cada una a lo
+  // suyo.
+  ctx.filter = "blur(7px)";
+  const montantes: [number, number, number][] = [
+    [95, 34, 250],
+    [330, 18, 210],
+    [520, 46, 245],
+    [760, 26, 225],
+    [930, 14, 190],
+  ];
+  for (const [x, ancho, alto] of montantes) {
+    ctx.fillStyle = "rgba(4,6,10,0.95)";
+    ctx.fillRect(x, 0, ancho, alto);
   }
 
-  // Y los filos especulares, muy vivos y muy estrechos: el destello que recorre
-  // el canto al girar la pieza.
-  ctx.filter = "blur(1px)";
-  for (let i = 0; i < 9; i++) {
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(20 + i * 115 - 5, 6, 3, 240);
-  }
+  // Y junto a un par de ellos, el filo especular: el destello que recorre el
+  // canto al girar la pieza. Solo dos, y de anchos distintos, por lo mismo.
+  ctx.filter = "blur(2px)";
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(86, 12, 5, 232);
+  ctx.fillRect(755, 20, 3, 206);
 
   // Rebote del suelo, neutro y tenue.
   ctx.filter = "blur(22px)";
