@@ -129,6 +129,17 @@ const PICO_DESDE = 0.12;
 // funden entre ellas y rellenan la muesca que acaba de abrir el afilado.
 const PICO_ALCANCE = 0.45;
 
+// ── La separación de los cruces ───────────────────────────────────────────
+//
+// Hasta dónde se mira, en veces el alcance; cuántos puntos del camino por
+// debajo de los cuales dos son simplemente vecinos; cuánto tiene que acortar el
+// camino la línea recta para que cuente como cruce y no como tramo seguido; y
+// hasta dónde puede recogerse el alcance.
+const CRUCE_CERCA = 1.6;
+const CRUCE_VECINO = 10;
+const CRUCE_DOBLEZ = 0.5;
+const CRUCE_MIN = 0.42;
+
 // Puntos por tramo. El lienzo remuestrea por su cuenta, pero necesita bastantes
 // puntos crudos para que su suavizado no redondee los vértices, que es donde
 // nace la forma.
@@ -314,6 +325,55 @@ function afilarVertices(trazo: Punto[], base: number): Punto[] {
   });
 }
 
+// Acorta el ALCANCE donde el camino se junta consigo mismo, para que los huecos
+// no se rellenen.
+//
+// Cerca del centro pasan varios tramos, y el campo funde a distancia fija: dos
+// que corren a menos de esa distancia se sueldan y el hueco entre ellos
+// desaparece. En vez de dos líneas y un hueco queda una masa.
+//
+// Se toca SOLO el alcance, no el grosor. Son dos mandos distintos desde que
+// existe la atracción —el grosor lo pone la altura de la cúpula y el alcance su
+// anchura—, y aquí hace falta exactamente uno: los montantes tienen que seguir
+// midiendo lo mismo, lo que tiene que dejar de pasar es que se atraigan.
+// Adelgazándolos se conseguiría el hueco a costa de un trazo desigual, que es
+// justo lo que se acaba de arreglar.
+//
+// La prueba no es "cuántos puntos tengo cerca" —los de al lado siempre lo
+// están— sino si alguno está MUCHO MÁS CERCA EN EL ESPACIO QUE A LO LARGO DEL
+// CAMINO. En un tramo recto las dos distancias se parecen; donde el camino se
+// cruza consigo mismo, se separan, y esa diferencia es exactamente "aquí hay
+// otro tramo que no es mi continuación".
+function separarLosCruces(trazo: Punto[], base: number): Punto[] {
+  const acum = [0];
+  for (let i = 1; i < trazo.length; i++) {
+    acum.push(acum[i - 1] + Math.hypot(trazo[i].x - trazo[i - 1].x, trazo[i].y - trazo[i - 1].y));
+  }
+  // Se mira hasta donde llega la fusión: más allá, dos tramos ya no se enteran
+  // el uno del otro.
+  const cerca = base * ALCANCE_CAMPO * CRUCE_CERCA;
+
+  return trazo.map((p, i) => {
+    let vecinos = 0;
+    for (let j = 0; j < trazo.length; j++) {
+      if (Math.abs(i - j) < CRUCE_VECINO) continue;
+      const q = trazo[j];
+      const d = Math.hypot(q.x - p.x, q.y - p.y);
+      if (d >= cerca) continue;
+      // Si la distancia en línea recta se parece a la del camino, es que la
+      // línea sigue de largo: no hay cruce.
+      if (d > Math.abs(acum[i] - acum[j]) * CRUCE_DOBLEZ) continue;
+      vecinos++;
+    }
+    if (!vecinos) return p;
+    // Cuantos más tramos alrededor, más se recoge. Con suelo: sin nada de
+    // alcance, el cruce dejaría de fundirse del todo y se vería como un aspa de
+    // dos piezas superpuestas en vez de como una unión.
+    const recogido = 1 / (1 + vecinos * 0.06);
+    return { ...p, a: Math.min(p.a ?? 1, Math.max(CRUCE_MIN, recogido)) };
+  });
+}
+
 export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
   const d = disponer(pesos);
   if (!d) return [];
@@ -343,8 +403,12 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
   // punto y ahí se encuentran.
   return [
     {
-      puntos: afilarVertices(
-        tejer(d.vertices, () => GROSOR * d.escala),
+      // El orden importa: primero se afilan los vértices y luego se separan los
+      // cruces. Al revés, el afilado pisaría el alcance ya recogido de un cruce
+      // que cae junto a un vértice —que es donde más se juntan las cosas— y
+      // volvería a soldarlo.
+      puntos: separarLosCruces(
+        afilarVertices(tejer(d.vertices, () => GROSOR * d.escala), GROSOR * d.escala),
         GROSOR * d.escala
       ),
       sinEntrada: true,
