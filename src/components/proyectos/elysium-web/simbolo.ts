@@ -60,8 +60,13 @@ const ENCAJE = 0.66;
 // bajó de 0,026 a 0,018 —con la atracción, el mismo número produce brazos más
 // anchos, porque el grosor pasa a salir de la altura de la cúpula y no de su
 // radio.
-const GROSOR = 0.018;
+const GROSOR = 0.016;
 // Lo fino que llega a ser un brazo, en fracción del más grueso.
+//
+// Bajó de 0,26 a 0,06. Con 0,26, el brazo de un disco poco votado seguía siendo
+// una cinta con cuerpo, y las masas del centro salían de sumar cintas: quitando
+// suelo, esos brazos pasan a ser hilos de verdad y el nudo central adelgaza. De
+// paso, un vértice al que llega un hilo se cierra en aguja en vez de en cuña.
 //
 // Es lo que da el efecto pegajoso: un hilo que se acerca a un brazo grueso no se
 // suma a él sin más, se le pega. El campo del lienzo funde a distancia, así que
@@ -69,7 +74,7 @@ const GROSOR = 0.018;
 // ancha que el hilo y mucho más estrecha que el brazo. Con todos los brazos
 // iguales esa tensión no existe, porque no hay nada más fino que se pegue a
 // nada más grueso.
-const HILO = 0.26;
+const HILO = 0.06;
 // Puntos por tramo recto. El lienzo remuestrea por su cuenta, pero necesita
 // bastantes puntos crudos para que su suavizado no redondee los vértices, que
 // es justo donde nacen las puntas.

@@ -841,8 +841,17 @@ export default function LienzoMetal({
       //
       // La horquilla de altura es estrecha a propósito y no puede bajar de la
       // del umbral: por debajo, la cumbre no asoma y el brazo desaparece.
-      const ALTURA_HILO = 0.70;
-      const ALTURA_RANGO = 0.45;
+      // La horquilla de altura, que es la que decide el contraste entre el brazo
+      // más gordo y el más fino. Es estrecha porque tiene que serlo: por debajo
+      // del umbral la cumbre no asoma y el brazo desaparece, así que el suelo
+      // vive a un pelo de él. Justo ahí es donde el trazo sale como un hilo.
+      //
+      // El techo bajó de 1,15 a 1,045 y el suelo subió a 0,715: antes el brazo
+      // más votado engordaba tanto que al llegar al centro se fundía con sus
+      // vecinos en una masa, y el más flojo no llegaba a leerse como hilo.
+      // Repartido así, entre el más fino y el más gordo hay más del triple.
+      const ALTURA_HILO = 0.715;
+      const ALTURA_RANGO = 0.33;
       const alturaEn = (base: number) =>
         radioMayor > 0
           ? ALTURA_HILO + ALTURA_RANGO * Math.min(1, base / radioMayor)
