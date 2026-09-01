@@ -35,11 +35,18 @@ const EXTENSION = 0.4;
 // Radio mínimo de una punta, en fracción de la mayor. Un álbum sin nada elegido
 // NO se salta: se le deja una punta corta.
 //
-// Subió de 0,22 a 0,38 para deshacer las masas del centro: con el mínimo bajo,
-// tres o cuatro discos poco votados caían casi encima del centro, y esos
-// vértices amontonados se fundían en un bulto. Separándolos, el reparto sigue
-// leyéndose —lo dice sobre todo el GROSOR del brazo, que ahí sí es muy
-// contrastado— pero los vértices dejan de amontonarse.
+// Estuvo en 0,38 una temporada para deshacer unas masas del centro: con el
+// mínimo bajo, tres o cuatro discos poco votados caían casi encima del centro y
+// esos vértices amontonados se fundían en un bulto.
+//
+// Vuelve a 0,12, y ahora sí funciona, porque entretanto cambió lo que amontona:
+// aquellos brazos eran cintas con cuerpo y hoy son hilos. Tres hilos que se
+// cruzan cerca del centro no hacen bulto, hacen un nudo fino.
+//
+// Y ganamos lo que costaba tenerlo alto: con el mínimo alto, los siete puntos
+// caían casi en un anillo y la figura se leía como un polígono enredado. Con el
+// mínimo bajo, los flojos se acercan al centro y los fuertes se van al borde,
+// que es lo que hace que el recorrido de mayor a menor se VEA en la forma.
 //
 // Es lo que hace que toda figura tenga las siete direcciones y, con ellas,
 // carácter. Saltándose los ceros, quien elige de dos discos obtiene una línea
@@ -48,7 +55,7 @@ const EXTENSION = 0.4;
 // mismos casos salen como una estrella muy asimétrica: un brazo largo y seis
 // cortos. Y sigue diciendo la verdad, porque cerca del centro es exactamente lo
 // que significa no haber elegido nada de ese disco.
-const RADIO_MINIMO = 0.38;
+const RADIO_MINIMO = 0.12;
 // Lo que debe medir la figura de lado a lado una vez encajada, en fracción del
 // lienzo. Ver el reencuadre al final.
 const ENCAJE = 0.66;
