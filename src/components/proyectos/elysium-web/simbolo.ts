@@ -81,8 +81,14 @@ const ENCAJE = 0.66;
 // Pero tiene techo, y lo encontré pasándome: a 0,022 la atracción alcanzaba a
 // casi todas las partes a la vez y la figura se fundía en un contorno liso, sin
 // estructura por dentro. El alcance alarga las puntas y también se come los
-// huecos; 0,017 es donde las dos cosas conviven.
-const GROSOR = 0.017;
+// huecos.
+//
+// Baja de 0,017 a 0,015 junto con la subida de HILO, y las dos cosas van
+// juntas: menos campo de unión es menos masa —medido, un 20% menos de superficie
+// muy por dentro del umbral, que es el indicador de los bultos—, pero también
+// menos soldadura, así que por sí solo PARTE más la figura. Es el hilo más
+// gordo el que paga esa cuenta.
+const GROSOR = 0.015;
 // El mismo número, exportado: el lienzo lo necesita como referencia común de
 // todos los trazos de la figura. Ver la prop `referencia`.
 export const GROSOR_REFERENCIA = GROSOR;
@@ -99,7 +105,21 @@ export const GROSOR_REFERENCIA = GROSOR;
 // ancha que el hilo y mucho más estrecha que el brazo. Con todos los brazos
 // iguales esa tensión no existe, porque no hay nada más fino que se pegue a
 // nada más grueso.
-const HILO = 0.06;
+//
+// Y aquí está el suelo de verdad. Con 0,06, el brazo más flojo se apoyaba en el
+// mínimo de la horquilla de altura del lienzo, que vive a un 5% del umbral del
+// campo: en cuanto ese brazo giraba, la suma bajaba, cruzaba el umbral y la
+// cinta se PARTÍA, dejando el resto del recorrido como una pieza suelta. Medido
+// sobre 123 tests: 10 figuras salían en trozos.
+//
+// Subiéndolo a 0,35 el brazo más flojo se apoya un poco más arriba y aguanta la
+// curva. Sigue siendo un hilo al lado de una cinta —el reparto entre medias no
+// se toca—, y es mejor arreglo que subir el suelo del lienzo, que engordaba
+// TODOS los brazos menos uno y aplanaba el contraste entero.
+//
+// Medido con las dos cosas juntas —este hilo y el alcance a 0,015—: 0 figuras
+// en trozos de 123, y menos masa que antes.
+const HILO = 0.35;
 // Puntos por tramo recto. El lienzo remuestrea por su cuenta, pero necesita
 // bastantes puntos crudos para que su suavizado no redondee los vértices, que
 // es justo donde nacen las puntas.

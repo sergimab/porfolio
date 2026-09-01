@@ -917,21 +917,21 @@ export default function LienzoMetal({
       // El techo bajó de 1,15 a 1,045: antes el brazo más votado engordaba tanto
       // que al llegar al centro se fundía con sus vecinos en una masa.
       //
-      // Y el suelo NO puede pegarse al umbral, que es lo que estuvo haciendo
-      // hasta ahora. Con 0,715, un hilo se quedaba un 5% por encima del umbral:
-      // esa distancia ES su grosor, y con ella cualquier merma se lo come. Y hay
-      // mermas de verdad, porque la integral vale 1 en una RECTA LARGA: donde la
-      // línea se curva, o donde se adelgaza, la suma baja. El hilo cruzaba el
-      // umbral hacia abajo en mitad del recorrido, la cinta se partía en dos, y
-      // lo que quedaba al otro lado del corte se veía como una pieza suelta.
+      // Y el suelo queda a un 5% por encima del umbral del campo, que es POCO y
+      // hay que saberlo: esa distancia al umbral ES el grosor del hilo, así que
+      // cualquier merma se lo come. Y hay mermas de verdad, porque la integral
+      // vale 1 en una RECTA LARGA: donde la línea se curva, la suma baja. Si el
+      // punto más flojo de la figura se apoya en este suelo, cruza el umbral
+      // hacia abajo en mitad del recorrido, la cinta se parte y lo que queda al
+      // otro lado se ve como una pieza suelta.
       //
-      // Medido sobre 123 figuras: con 0,715, 10 salían en trozos. Con 0,78,
-      // ninguna. El precio es que entre el hilo y el brazo gordo ya no hay 3,6
-      // veces sino 2,25 —el hilo pasa de 10 a 18 píxeles de ancho—, y es un
-      // precio que hay que pagar: por debajo de esto no hay hilo fino, hay hilo
-      // roto.
-      const ALTURA_HILO = 0.78;
-      const ALTURA_RANGO = 0.265;
+      // Llegó a subir a 0,78 para arreglar eso, y se ha vuelto a bajar: subir el
+      // suelo aplana el reparto ENTERO —engorda todo lo que no sea el brazo más
+      // votado— y la figura pierde contraste. El sitio donde se arregla no es
+      // este suelo sino el del generador, que es quien decide a qué altura de la
+      // horquilla se apoya el brazo más flojo. Ver HILO en simbolo.ts.
+      const ALTURA_HILO = 0.715;
+      const ALTURA_RANGO = 0.30;
       const alturaEn = (base: number) => {
         if (radioMayor <= 0) return 1;
         const q = Math.min(1, base / radioMayor);
