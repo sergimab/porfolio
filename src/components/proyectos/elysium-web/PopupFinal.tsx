@@ -27,20 +27,20 @@ export default function PopupFinal({
       <div className="pfinal">
         <h2 className="pfinal-titulo">Are you done?</h2>
 
-        <div className="pfinal-cuerpo">
-          <p className="pfinal-rotulo">Albums with no selection:</p>
-          {sinNada.length ? (
+        {/* El aviso solo aparece cuando hay algo que avisar. Con canciones en
+            los siete discos no queda ni el rótulo: decir "no falta ninguno" es
+            hacer ruido para no decir nada, y deja la pregunta y los dos botones
+            solos, que es todo lo que hace falta ahí. */}
+        {sinNada.length > 0 && (
+          <div className="pfinal-cuerpo">
+            <p className="pfinal-rotulo">Albums with no selection:</p>
             <ul className="pfinal-lista">
               {sinNada.map((era) => (
                 <li key={era}>{era}</li>
               ))}
             </ul>
-          ) : (
-            // Con todos marcados la lista quedaría vacía, y un rótulo seguido de
-            // nada parece que algo ha fallado.
-            <p className="pfinal-ninguno">Ninguno: has elegido de los siete.</p>
-          )}
-        </div>
+          </div>
+        )}
 
         <div className="pfinal-botones">
           <button type="button" className="cartel-boton es-hueco" onClick={onVolver}>
