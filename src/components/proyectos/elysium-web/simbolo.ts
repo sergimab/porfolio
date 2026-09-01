@@ -27,10 +27,9 @@ import type { Punto, TrazoHecho } from "@/components/proyectos/elysium/LienzoMet
 //    Con todos los montantes iguales eso no puede pasar, y además es lo que se
 //    ve en la referencia.
 //
-// 2. LOS NUDOS NO SE ACERCAN AL CENTRO. Con el mínimo bajo, tres o cuatro
-//    discos poco votados caían casi encima del centro; sus tramos se sumaban
-//    justo donde ya se juntan la salida y la vuelta, y aquello era una masa.
-//    Ver RADIO_MINIMO.
+// 2. EL AMONTONAMIENTO DEL CENTRO NO SE COMBATE: ES EL RESULTADO. Durante
+//    mucho tiempo separé los vértices del centro para deshacer esa masa, y con
+//    eso me cargaba el mecanismo entero. Ver RADIO_MINIMO y `escala`.
 //
 // 3. NI ENTRADA NI SALIDA AFILADAS. El afilado de extremos del lienzo está
 //    pensado para un trazo que nace en el aire. Este nace en el centro y vuelve
@@ -57,13 +56,22 @@ const EXTENSION = 0.4;
 
 // Distancia mínima al centro, en fracción de la máxima.
 //
-// Es alta, y es de las cosas que más cambian el resultado. Un disco sin votos
-// no se salta —las siete direcciones existen siempre—, pero tampoco puede caer
-// sobre el centro: ahí es donde ya se juntan el tramo de salida y el de vuelta,
-// y un tercer y cuarto tramo encima convierten el arranque en un bulto. Con
-// 0,45 el reparto se sigue leyendo —del mínimo al máximo hay más del doble— y
-// el centro respira.
-const RADIO_MINIMO = 0.45;
+// CASI CERO, y esto es lo contrario de lo que estuve haciendo durante mucho
+// tiempo. La tentación es subirlo para que el centro "respire", porque ahí es
+// donde se juntan muchos tramos y se forma una masa. Pero esa masa ES el
+// resultado: en el gráfico de referencia el trazo se queda entre el 20% y el
+// 45% del radio, nunca llega al borde, y por eso los tramos de ida y de vuelta
+// corren juntos. De ahí sale todo lo que hace al símbolo:
+//
+//   · una excursión aguda hacia fuera y de vuelta se funde en una AGUJA,
+//   · los cruces cerca del centro dejan AGUJEROS diminutos,
+//   · y el amontonamiento del medio es el CUERPO de la pieza.
+//
+// Separando los vértices se destruye el mecanismo entero: sale un polígono
+// abierto, sin agujas y sin agujeros. El mínimo solo existe para que un disco
+// con cero votos siga teniendo dirección propia y no colapse sobre el centro
+// exacto.
+const RADIO_MINIMO = 0.06;
 
 // Lo que mide la figura de lado a lado una vez encajada, en fracción del
 // lienzo.
@@ -82,10 +90,12 @@ const ENCAJE = 0.62;
 // contorno liso sin nada dentro. Y su suelo: por debajo, dos tramos que se
 // cruzan se cortan en vez de fundirse y el cruce se ve como un aspa y no como
 // una unión.
-export const GROSOR = 0.013;
-// El mismo número, exportado: el lienzo lo necesita como referencia común de
-// todos los trazos de la figura. Ver la prop `referencia`.
-export const GROSOR_REFERENCIA = GROSOR;
+// Medido sobre la referencia: allí el trazo llega como mucho al 45% del radio
+// del gráfico y el grosor extruido es un 4% de ese radio, o sea que el grosor
+// es cerca de un 9% de lo que mide el trazo. Con 0,013 estábamos a la mitad de
+// eso, y por eso salía un alambre en vez de una pieza: sin grosor de sobra los
+// tramos vecinos no llegan a tocarse y no hay ni agujas ni agujeros.
+export const GROSOR = 0.024;
 
 // Puntos por tramo. El lienzo remuestrea por su cuenta, pero necesita bastantes
 // puntos crudos para que su suavizado no redondee los vértices, que es donde
@@ -95,19 +105,13 @@ export const GROSOR_REFERENCIA = GROSOR;
 // exactamente cuando su índice es múltiplo de esto.
 export const POR_TRAMO = 14;
 
-// La aguja: largo en fracción del radio del círculo, y lo que adelgaza de la
-// base a la punta.
+// No hay agujas dibujadas aparte, y es a propósito.
 //
-// Sale del disco más votado, hacia fuera y en dirección radial, que es la única
-// en la que no se cruza con el cuerpo. Va como trazo aparte porque una punta
-// solo aparece si el radio de las cúpulas encoge a lo largo de un extremo, y
-// eso el lienzo solo lo hace en los cabos de un trazo: metida dentro del
-// camino, la punta quedaría en mitad del recorrido y saldría redonda.
-const AGUJA = 1.0;
-const AGUJA_PUNTA = 0.2;
-// La segunda, más corta, y desde qué proporción de votos aparece.
-const AGUJA_2 = 0.5;
-const AGUJA_2_DESDE = 0.55;
+// Las hubo, y estaban de más. Una aguja aparece sola donde el camino se aleja
+// del montón y vuelve por casi el mismo sitio: ese giro de casi 180° es el más
+// cerrado que existe, y el campo lo estira en punta. Dibujarla encima era
+// sumar un adorno a algo que el propio recorrido ya produce, y por eso quedaba
+// como un añadido en vez de como parte de la pieza.
 
 // ── El reparto ────────────────────────────────────────────────────────────
 //
@@ -162,17 +166,6 @@ function disponer(pesos: Record<Era, number>) {
     [cx, cy],
   ];
 
-  // Las agujas, y de qué disco sale cada una.
-  const agujas: { era: Era; largo: number }[] = [{ era: recorrido[0], largo: AGUJA }];
-  if (proporcionDe(recorrido[1]) >= AGUJA_2_DESDE) {
-    agujas.push({ era: recorrido[1], largo: AGUJA_2 });
-  }
-  const puntaDeAguja = (era: Era, largo: number): [number, number] => {
-    const [x, y] = punta(era);
-    const d = Math.hypot(x - cx, y - cy) || 1;
-    return [x + ((x - cx) / d) * EXTENSION * largo, y + ((y - cy) / d) * EXTENSION * largo];
-  };
-
   // Encaje: se lleva la figura al centro del lienzo y se escala para que ocupe
   // siempre lo mismo.
   //
@@ -183,17 +176,7 @@ function disponer(pesos: Record<Era, number>) {
   // centradas, y lo que las distingue pasa a ser su FORMA, que es lo único que
   // debería distinguirlas.
   //
-  // La aguja cuenta a MEDIAS. Contándola entera, se lleva la caja ella sola y
-  // el cuerpo se queda pequeño en mitad del marco; sin contarla, se sale por el
-  // borde. A medias, el cuerpo manda y la aguja sobresale, que es lo que pasa
-  // en la referencia.
-  const cuerpo: [number, number][] = [...vertices];
-  const conAgujas: [number, number][] = agujas.map((a) => {
-    const [px, py] = puntaDeAguja(a.era, a.largo);
-    const [bx, by] = punta(a.era);
-    return [bx + (px - bx) * 0.5, by + (py - by) * 0.5];
-  });
-  const todos = [...cuerpo, ...conAgujas];
+  const todos: [number, number][] = [...vertices];
   const xs = todos.map((v) => v[0]);
   const ys = todos.map((v) => v[1]);
   const mayor = Math.max(
@@ -214,9 +197,20 @@ function disponer(pesos: Record<Era, number>) {
     recorrido,
     punta,
     vertices,
-    agujas,
-    puntaDeAguja,
     encajar,
+    // Cuánto se ha ampliado la figura para llenar el marco. El grosor tiene que
+    // multiplicarse por esto, y es de las cosas menos evidentes de todo el
+    // generador.
+    //
+    // El campo funde a una distancia FIJA. Si la figura se amplía y el grosor
+    // no, los tramos que en el gráfico corrían pegados quedan lejos en píxeles
+    // y dejan de fundirse: sale un polígono de alambre, sin agujas y sin
+    // agujeros. Ampliando las dos cosas a la vez, la figura de un disco poco
+    // votado —apretada, y por eso fundida en un cuerpo con agujeros— se ve
+    // grande y sigue siendo ese cuerpo, y la de uno muy votado sigue saliendo
+    // abierta. El tamaño en pantalla se iguala; la FORMA la siguen decidiendo
+    // los votos, que es lo que tiene que distinguir a una figura de otra.
+    escala: k,
   };
 }
 
@@ -247,35 +241,17 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
 
   // El camino, de una sola pieza y sin afilar por ninguno de sus dos cabos:
   // salen del mismo punto y ahí se encuentran.
-  const trazos: TrazoHecho[] = [
+  // Un solo trazo, y sin afilar por ninguno de sus dos cabos: salen del mismo
+  // punto y ahí se encuentran.
+  return [
     {
-      puntos: tejer(d.vertices, () => GROSOR),
+      puntos: tejer(d.vertices, () => GROSOR * d.escala),
       sinEntrada: true,
       sinSalida: true,
       desde: 0,
-      // El camino ocupa la mayor parte de la animación y las agujas rematan
-      // después, que es el orden en que se leen.
-      hasta: d.agujas.length ? 0.8 : 1,
+      hasta: 1,
     },
   ];
-
-  // Las agujas. Sin afilar por la base —brotan del vértice, y afilar ahí las
-  // convierte en dardos posados encima en vez de en algo que sale de la pieza—
-  // y afiladas por la punta, que es lo único que las hace agujas.
-  d.agujas.forEach((aguja, i) => {
-    const desde = 0.8 + (0.2 * i) / d.agujas.length;
-    trazos.push({
-      puntos: tejer(
-        [d.punta(aguja.era), d.puntaDeAguja(aguja.era, aguja.largo)],
-        (t) => GROSOR * (1 - (1 - AGUJA_PUNTA) * t)
-      ),
-      sinEntrada: true,
-      desde,
-      hasta: desde + 0.2 / d.agujas.length,
-    });
-  });
-
-  return trazos;
 }
 
 // ── El andamio, para la vista de taller ───────────────────────────────────
@@ -313,8 +289,8 @@ export function graficoDeEras(pesos: Record<Era, number>): Grafico | null {
       // 1 es el primero que visita la línea, 7 el último.
       orden: d.recorrido.indexOf(era) + 1,
       peso: pesos[era] || 0,
-      // Si de este disco sale una aguja.
-      celda: d.agujas.some((a) => a.era === era),
+      // Ya no se destaca ningún nudo: las agujas salen del propio recorrido.
+      celda: false,
     })),
     // El camino, tramo a tramo.
     aristas: d.vertices.slice(0, -1).map((v, i) => ({
