@@ -22,7 +22,11 @@ const DURACION = 4600;
 // que se está dibujando.
 function recortar(figura: TrazoHecho[], avance: number): TrazoHecho[] {
   if (avance <= 0) return [];
-  if (avance >= 1) return figura;
+  // Entera. Y aquí el trazo principal deja de tener cabeza: su final vuelve al
+  // centro, del que salió, así que no se afila. Mientras se dibuja sí lo hace
+  // —ese extremo es la punta que avanza—, y ese es justo el cambio que ocurre
+  // en el último fotograma.
+  if (avance >= 1) return figura.map((t, i) => (i === 0 ? { ...t, sinSalida: true } : t));
   // Sin mínimo forzado: hasta que no hay dos puntos de verdad no se dibuja
   // nada. Forzando dos, en el primer fotograma ya aparecía una mancha diminuta
   // —el lienzo pinta cualquier trazo, por corto que sea— y el arranque se veía

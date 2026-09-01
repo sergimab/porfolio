@@ -573,7 +573,17 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
   // El orden importa: primero se afilan los picos y luego se busca el
   // amontonamiento. Al revés, el adelgazado mediría el trazo gordo y marcaría
   // como amontonado un pico que el afilado ya iba a separar.
-  const principal = tejer(vertices, grosores);
+  //
+  // Y el principal no se afila por donde EMPIEZA. El afilado de extremos está
+  // pensado para un trazo que nace en el aire, y este nace en el centro y va a
+  // volver exactamente al mismo punto: afilándolo, la línea se apagaba antes de
+  // llegar y el símbolo parecía no arrancar del centro ni cerrarse en él.
+  //
+  // El final se afila o no según el momento: mientras se está trazando, ese
+  // extremo es la CABEZA del trazo y tiene que ir en punta; cuando la figura
+  // está entera, deja de serlo y se cierra sobre el arranque. Eso lo decide
+  // quien anima. Ver `sinSalida` en la pantalla del símbolo.
+  const principal = tejer(vertices, grosores, true);
   return [
     { ...principal, puntos: adelgazarDondeSeAmontona(afilarPicos(principal.puntos)) },
     ...puas.map((p, i) => tejer(p, grosoresPua[i], true, desdePua[i])),

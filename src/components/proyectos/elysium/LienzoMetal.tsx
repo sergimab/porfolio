@@ -577,6 +577,10 @@ export type TrazoHecho = {
   // encima en vez de brotando de dentro —y con la base fina de más, llega a
   // despegarse.
   sinEntrada?: boolean;
+  // Y sin afilar el final, para el trazo que se cierra sobre su propio
+  // arranque: si se afila, la línea se apaga antes de volver al punto de
+  // partida y el símbolo parece quedarse a medias.
+  sinSalida?: boolean;
   // En qué momento del trazado aparece este trazo, de 0 a 1. Sirve para que una
   // pieza que brota de otra no se dibuje antes que aquella de la que brota.
   desde?: number;
@@ -653,6 +657,9 @@ export default function LienzoMetal({
   // Paralelo a trazosRef: si cada trazo se afila también por donde empieza. Lo
   // dibujado a mano siempre sí; las púas de una figura calculada, no.
   const entradasRef = useRef<boolean[]>([]);
+  // Y lo mismo por donde acaba: un trazo que se cierra sobre su arranque no
+  // debe apagarse justo antes de llegar.
+  const salidasRef = useRef<boolean[]>([]);
   const actualRef = useRef<Punto[] | null>(null);
   const colaRef = useRef<{ x: number; y: number; t: number }[]>([]);
   const ultimoRef = useRef<{ x: number; y: number; t: number } | null>(null);
@@ -788,7 +795,10 @@ export default function LienzoMetal({
       pasadas = SUAVIZAR_PASADAS,
       // Radio con el que compararse para decidir grosor y alcance. Cero = el
       // mayor de este mismo trazo.
-      referencia = 0
+      referencia = 0,
+      // Sin afilar el final. Va el último para no mover el resto de argumentos,
+      // que se pasan por posición.
+      sinPuntaFinal = false
     ): { hasta: number; cabeza: { x: number; y: number; R: number } | null } => {
       if (!crudos.length) return { hasta: desdeRecorrido, cabeza: null };
       // De relativo a píxeles: todo el trabajo de suavizado y afilado se hace
@@ -891,7 +901,7 @@ export default function LienzoMetal({
         const inicio = sinPuntaInicial
           ? 1
           : factorPunta(antes + s, radioUniforme, largoTrazo, ENTRADA_CORTA);
-        const fin = enCurso ? 1 : factorPunta(largoTrazo - antes - s, radioUniforme, largoTrazo);
+        const fin = enCurso || sinPuntaFinal ? 1 : factorPunta(largoTrazo - antes - s, radioUniforme, largoTrazo);
         return Math.max(PUNTA_MIN, base * Math.min(inicio, fin)) * ALCANCE * factorR;
       };
 
@@ -974,7 +984,7 @@ export default function LienzoMetal({
         const inicio = sinPuntaInicial
           ? 1
           : factorPunta(antes + s, base, largoTrazo, ENTRADA_CORTA);
-        const fin = enCurso ? 1 : factorPunta(largoTrazo - antes - s, base, largoTrazo);
+        const fin = enCurso || sinPuntaFinal ? 1 : factorPunta(largoTrazo - antes - s, base, largoTrazo);
         return Math.min(inicio, fin);
       };
 
@@ -1070,7 +1080,8 @@ export default function LienzoMetal({
       trazosRef.current.forEach((t, i) =>
         pintarTrazo(
           ctx, t, false, 0, entradasRef.current[i] ?? false, [],
-          grosorLibre, atraccion, suavizado, referencia ?? 0
+          grosorLibre, atraccion, suavizado, referencia ?? 0,
+          salidasRef.current[i] ?? false
         )
       );
     }
@@ -1425,10 +1436,12 @@ export default function LienzoMetal({
     if (!trazo || !trazo.length) return;
     trazosRef.current.push(trazo);
     entradasRef.current.push(false);
+    salidasRef.current.push(false);
     let total = trazosRef.current.reduce((s, t) => s + t.length, 0);
     while (total > MAX_PUNTOS && trazosRef.current.length > 1) {
       total -= trazosRef.current.shift()!.length;
       entradasRef.current.shift();
+      salidasRef.current.shift();
     }
     repintarMapa();
   };
@@ -1436,6 +1449,7 @@ export default function LienzoMetal({
   const limpiar = () => {
     trazosRef.current = [];
     entradasRef.current = [];
+    salidasRef.current = [];
     actualRef.current = null;
     colaRef.current = [];
     repintarMapa();
@@ -1453,6 +1467,7 @@ export default function LienzoMetal({
     if (!figura) return;
     trazosRef.current = figura.map((t) => t.puntos.map((p) => ({ ...p })));
     entradasRef.current = figura.map((t) => !!t.sinEntrada);
+    salidasRef.current = figura.map((t) => !!t.sinSalida);
     setVacio(false);
     // Si WebGL aún no ha montado, esto no pinta nada todavía: no importa, el
     // montaje mide el lienzo y repinta, y para entonces la figura ya está
