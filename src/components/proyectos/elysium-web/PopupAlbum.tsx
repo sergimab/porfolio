@@ -29,7 +29,7 @@ export default function PopupAlbum({
   const elegidas = CANCIONES[era].filter((c) => seleccion.has(claveCancion(era, c))).length;
 
   return (
-    <Cartel onCerrar={onCerrar} ancho="min(980px, 92%)" etiqueta={`Canciones de ${era}`}>
+    <Cartel onCerrar={onCerrar} ancho="min(1060px, 93%)" etiqueta={`Canciones de ${era}`}>
       <div className="palbum">
         <div className="palbum-simbolo">
           {suyo && (

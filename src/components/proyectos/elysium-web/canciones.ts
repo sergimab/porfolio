@@ -7,18 +7,54 @@ import type { Era } from "./simbolo";
 // una copia en cada sitio, añadir un tema al tracklist arreglaría una y dejaría
 // la otra contando mal.
 //
-// Son seis canciones conocidas por disco, no la discografía entera. Es una
-// MUESTRA deliberada: basta para que el mecanismo se vea, y lo que decide la
-// figura es el REPARTO entre discos, no cuántas canciones tenga la lista.
-// Cambiarla por el tracklist completo es tocar solo este archivo.
+// Los tracklists completos, tal y como los pasó Sergio. El orden es el del
+// disco, no el alfabético: en un álbum el orden ES parte de la obra.
+//
+// Ojo a una consecuencia de tenerlos completos: las listas son MUY desiguales
+// —siete canciones The Fame Monster, diecisiete Mayhem—, y eso no distorsiona
+// la figura porque lo que la decide es el reparto entre discos y no el número
+// absoluto. Pero sí quiere decir que marcar "todo Mayhem" pesa mucho más que
+// marcar "todo The Fame Monster".
 export const CANCIONES: Record<Era, string[]> = {
-  "The Fame": ["Just Dance", "Poker Face", "LoveGame", "Paparazzi", "Beautiful, Dirty, Rich", "The Fame"],
-  "The Fame Monster": ["Bad Romance", "Telephone", "Alejandro", "Monster", "Speechless", "Dance in the Dark"],
-  "Born This Way": ["Born This Way", "Judas", "The Edge of Glory", "Yoü and I", "Marry the Night", "Hair"],
-  ARTPOP: ["Applause", "Do What U Want", "G.U.Y.", "Venus", "Dope", "Gypsy"],
-  Joanne: ["Perfect Illusion", "Million Reasons", "Joanne", "A-YO", "Diamond Heart", "Grigio Girls"],
-  Chromatica: ["Rain on Me", "Stupid Love", "911", "Alice", "Free Woman", "Sour Candy"],
-  Mayhem: ["Abracadabra", "Disease", "Garden of Eden", "Vanish Into You", "Die With a Smile", "Perfect Celebrity"],
+  "The Fame": [
+    "Just Dance", "LoveGame", "Paparazzi", "Poker Face",
+    "Eh, Eh (Nothing Else I Can Say)", "Beautiful, Dirty, Rich", "The Fame",
+    "Money Honey", "Starstruck", "Boys Boys Boys", "Paper Gangsta",
+    "Brown Eyes", "Summerboy", "Disco Heaven",
+  ],
+  "The Fame Monster": [
+    "Alejandro", "Monster", "Speechless", "Dance in the Dark", "Telephone",
+    "So Happy I Could Die", "Teeth",
+  ],
+  "Born This Way": [
+    "Marry the Night", "Born This Way", "Government Hooker", "Judas",
+    "Americano", "Hair", "Scheiße", "Bloody Mary", "Bad Kids",
+    "Highway Unicorn (Road To Love)", "Heavy Metal Lover", "Electric Chapel",
+    "Yoü And I", "The Edge Of Glory",
+  ],
+  ARTPOP: [
+    "Aura", "Venus", "G.U.Y.", "Sexxx Dreams", "Jewels N' Drugs", "MANiCURE",
+    "Do What U Want", "ARTPOP", "Swine", "Donatella", "Fashion!",
+    "Mary Jane Holland", "Dope", "Gypsy", "Applause",
+  ],
+  Joanne: [
+    "Diamond Heart", "A-Yo", "Joanne", "John Wayne", "Dancin' in Circles",
+    "Perfect Illusion", "Million Reasons", "Sinner's Prayer", "Come to Mama",
+    "Hey Girl", "Angel Down",
+  ],
+  Chromatica: [
+    "Chromatica I", "Alice", "Stupid Love", "Rain On Me", "Free Woman",
+    "Fun Tonight", "Chromatica II", "911", "Plastic Doll", "Sour Candy",
+    "Enigma", "Replay", "Chromatica III", "Sine From Above", "1000 Doves",
+    "Babylon",
+  ],
+  Mayhem: [
+    "Disease", "Abracadabra", "Garden of Eden", "Perfect Celebrity",
+    "Can't Stop the High", "Vanish Into You", "Killah", "Zombieboy",
+    "The Dead Dance", "LoveDrug", "How Bad Do U Want Me", "Don't Call Tonight",
+    "Kill for Love", "Shadow of a Man", "The Beast", "Blade of Grass",
+    "Die With a Smile",
+  ],
 };
 
 // La clave con la que se guarda una canción marcada. En un solo sitio porque la
