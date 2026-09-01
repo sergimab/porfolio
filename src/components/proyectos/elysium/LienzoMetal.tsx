@@ -148,7 +148,10 @@ const ESCALA_CAMPO = 0.55;
 // alcance, así que la punta llega hasta ~R/sen α: cuanto mayor el alcance, más
 // larga la aguja del vértice. Es el mismo número para las dos cosas porque son
 // la misma: lo que suelda dos trazos de lejos es lo que estira una esquina.
-const ALCANCE = 3.6;
+// Se exporta para la vista de esqueleto, que dibuja la huella real de cada
+// punto: sin este factor pintaría el radio del trazo y no su influencia, que es
+// la que se solapa y produce la masa.
+export const ALCANCE = 3.6;
 // Umbral del shader, en unidades de campo (1 = una recta sola). Sale de dónde
 // quiere cortarse la falda: con 0,68 la media anchura visible cae en 1/3,6 del
 // alcance, o sea justo el grosor pedido. No está calculado a mano —la mezcla de

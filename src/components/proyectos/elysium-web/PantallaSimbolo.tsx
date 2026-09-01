@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import LienzoMetal, { type TrazoHecho } from "@/components/proyectos/elysium/LienzoMetal";
+import LienzoMetal, { ALCANCE, type TrazoHecho } from "@/components/proyectos/elysium/LienzoMetal";
 import Galaxia from "./Galaxia";
 import IconosFlotantes from "./IconosFlotantes";
-import { ERAS } from "./simbolo";
+import { ERAS, POR_TRAMO } from "./simbolo";
 import { figuraDeEras } from "./simbolo";
 import { contarPorEra } from "./canciones";
 import { crearEstudioIridiscente } from "./estudioIridiscente";
@@ -47,6 +47,40 @@ function recortar(figura: TrazoHecho[], avance: number): TrazoHecho[] {
     .filter((trazo) => trazo.puntos.length >= 2);
 }
 
+// El esqueleto: el recorrido desnudo del que sale la figura.
+//
+// Es una herramienta de taller, no parte de la web. Encima del metal se dibuja
+// la línea que lo genera, sus vértices y —lo que de verdad explica las masas—
+// un círculo por punto con el radio que ese punto pide. Donde esos círculos se
+// solapan es donde el campo suma, y ahí es donde aparece el bulto: verlo es
+// mucho más rápido que deducirlo del resultado.
+//
+// Va en las mismas coordenadas que la figura, que son fracción del ANCHO del
+// lienzo. Por eso el viewBox es 0 0 1 1 y el marco tiene que ser cuadrado.
+function Esqueleto({ figura }: { figura: TrazoHecho[] }) {
+  return (
+    <svg className="simfinal-esqueleto" viewBox="0 0 1 1" aria-hidden="true">
+      {figura.map((trazo, t) => (
+        <g key={t}>
+          {/* El alcance de cada punto: la huella que deja en el campo. Se pinta
+              uno de cada tres, que basta para ver el solape y no tapa la línea. */}
+          {trazo.puntos.map((p, i) =>
+            i % 3 ? null : (
+              <circle key={i} cx={p.x} cy={p.y} r={p.r * (p.a ?? 1) * ALCANCE} className="es-alcance" />
+            )
+          )}
+          <polyline points={trazo.puntos.map((p) => `${p.x},${p.y}`).join(" ")} className="es-linea" />
+          {/* Los vértices, que es donde el recorrido cambia de dirección y donde
+              nace toda la forma. */}
+          {trazo.puntos.map((p, i) =>
+            i % POR_TRAMO ? null : <circle key={i} cx={p.x} cy={p.y} r={0.006} className="es-vertice" />
+          )}
+        </g>
+      ))}
+    </svg>
+  );
+}
+
 // La pantalla final: el universo se queda detrás, desenfocado, y el símbolo se
 // dibuja solo en el centro.
 export default function PantallaSimbolo({ seleccion }: { seleccion: Set<string> }) {
@@ -56,6 +90,9 @@ export default function PantallaSimbolo({ seleccion }: { seleccion: Set<string> 
   }, [seleccion]);
 
   const [avance, setAvance] = useState(0);
+  // PROVISIONAL, para afinar la forma: enseña el recorrido del que sale el
+  // metal. Se va con el botón que lo enciende.
+  const [esqueleto, setEsqueleto] = useState(false);
 
   useEffect(() => {
     // Sin animación, el símbolo aparece hecho. No es una versión pobre: para
@@ -152,8 +189,23 @@ export default function PantallaSimbolo({ seleccion }: { seleccion: Set<string> 
               suavidad={5}
             />
           )}
+          {/* El esqueleto va sobre el mismo cuadrado y con el MISMO recorte que
+              el metal, así que se construye a la vez que él: es la forma de ver
+              qué parte del trazo está produciendo cada masa, y en qué momento. */}
+          {esqueleto && <Esqueleto figura={figura} />}
         </div>
       </div>
+
+      {/* PROVISIONAL: el interruptor del esqueleto. Va en la esquina contraria a
+          la salida al portfolio para no pisarla. */}
+      <button
+        type="button"
+        className={`simfinal-esqueleto-boton${esqueleto ? " es-activo" : ""}`}
+        onClick={() => setEsqueleto((v) => !v)}
+        aria-pressed={esqueleto}
+      >
+        Trazo
+      </button>
     </div>
   );
 }

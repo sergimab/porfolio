@@ -123,7 +123,10 @@ const HILO = 0.35;
 // Puntos por tramo recto. El lienzo remuestrea por su cuenta, pero necesita
 // bastantes puntos crudos para que su suavizado no redondee los vértices, que
 // es justo donde nacen las puntas.
-const POR_TRAMO = 14;
+//
+// Se exporta para la vista de esqueleto: un punto es un VÉRTICE del recorrido
+// exactamente cuando su índice es múltiplo de esto.
+export const POR_TRAMO = 14;
 // Largo de la púa que sale de un vértice, en fracción del lienzo.
 //
 // Esto NO lo produce la fusión sola. El campo estira un vértice en aguja cuando

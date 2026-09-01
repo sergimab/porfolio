@@ -260,8 +260,76 @@
 /* Cuadrado: la figura es radial y en un marco apaisado saldría estirada. Ver
    el comentario de cy en simbolo.ts, que depende de que esto sea cuadrado. */
 .simfinal-lienzo {
+  position: relative;
   width: min(76vh, 76vw, 760px);
   aspect-ratio: 1 / 1;
+}
+
+/* ── Vista de taller: el esqueleto del trazo ─────────────────────────────── */
+
+/* Encaja con el metal porque ocupa el mismo cuadrado y sus coordenadas son las
+   mismas de la figura: fracción del ancho, con el viewBox en 0 0 1 1. */
+.simfinal-esqueleto {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+/* La huella de cada punto: donde dos de estos se solapan, el campo suma y sale
+   la masa. Muy tenue a propósito —son cientos y se pisan—, así que lo que se
+   lee no es cada círculo sino la DENSIDAD del amontonamiento. */
+.simfinal-esqueleto .es-alcance {
+  fill: rgba(90, 220, 255, 0.028);
+  stroke: none;
+}
+/* La sombra no es adorno: el metal tiene zonas casi blancas y una línea de un
+   par de píxeles se pierde encima de ellas. Con el reborde oscuro se lee sobre
+   cualquier parte de la pieza. */
+.simfinal-esqueleto .es-linea,
+.simfinal-esqueleto .es-vertice {
+  filter: drop-shadow(0 0 1.5px rgba(0, 0, 0, 0.9));
+}
+.simfinal-esqueleto .es-linea {
+  fill: none;
+  stroke: #ff2d6f;
+  stroke-width: 0.0022;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.simfinal-esqueleto .es-vertice {
+  fill: #ffe14d;
+}
+
+.simfinal-esqueleto-boton {
+  position: fixed;
+  left: 16px;
+  /* Arriba, no abajo: abajo a la izquierda está el distintivo de Next en
+     desarrollo, que se queda delante y se come el clic. */
+  top: 14px;
+  z-index: 20;
+  padding: 7px 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(0, 0, 0, 0.45);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  font: inherit;
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.78);
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.simfinal-esqueleto-boton:hover,
+.simfinal-esqueleto-boton:focus-visible {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.6);
+}
+.simfinal-esqueleto-boton.es-activo {
+  color: #ff2d6f;
+  border-color: rgba(255, 45, 111, 0.7);
+  background: rgba(255, 45, 111, 0.12);
 }
 /* El lienzo viene con su papel de puntos y su borde, que aquí sobran: lo que
    tiene que verse por detrás del metal es el universo desenfocado, no una hoja
