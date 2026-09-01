@@ -212,7 +212,7 @@ export default function PantallaSimbolo({ seleccion }: { seleccion: Set<string> 
               // todo, amplificaba los escalones de los 256 niveles del mapa de
               // altura hasta salpicar la pieza de moteado. Lo que en la
               // referencia es un filo de arcoíris aquí se convertía en suciedad.
-              dispersion={0.013}
+              dispersion={0.012}
               // Y sin capas. Eran el reflejo del canto repetido hacia dentro, y
               // funcionaban con la cinta gruesa; con la cinta fina no hay fondo
               // donde quepan, así que solo aportaban líneas que no correspondían
@@ -243,7 +243,14 @@ export default function PantallaSimbolo({ seleccion }: { seleccion: Set<string> 
               // más juntas se toman, más pesa el escalón frente a la pendiente
               // real, y eso es exactamente el ruido que se veía. Separándolas, la
               // superficie sale limpia a cambio de un filo un pelo menos seco.
-              suavidad={5}
+              // Las alturas para la normal se miden bastante lejos. La normal
+              // sale de restar dos muestras del mapa, y el mapa tiene 256
+              // niveles: cuanto más juntas se toman, más pesa el escalón frente
+              // a la pendiente real. Eso es el moteado que recorría la cresta de
+              // cada montante —un punteado fino, como una costura—, y de 5 a 9
+              // desaparece. Se paga con un filo un pelo menos seco, que en una
+              // pieza de canto redondeado como esta no se echa de menos.
+              suavidad={9}
             />
           )}
           {/* El esqueleto va sobre el mismo cuadrado y con el MISMO recorte que

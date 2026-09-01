@@ -220,17 +220,22 @@ function disponer(pesos: Record<Era, number>) {
     [cx, cy],
   ];
 
-  // Y el grosor de cada vértice, que es lo que hace que unos tramos salgan más
-  // finos que otros.
+  // Y el grosor, UNO POR TRAMO y constante de punta a punta.
   //
-  // Los dos del centro heredan el del disco que sale o entra por ellos, para
-  // que el cambio ocurra a lo largo del tramo y no de golpe en el arranque.
+  // No interpolado entre los dos vértices: eso hacía que el grosor subiera y
+  // bajara a lo largo del mismo tramo, y un montante que engorda por el camino
+  // no se lee como intención, se lee como un fallo. Cada tramo es una barra de
+  // una sección, y el cambio ocurre EN el vértice, donde se juntan dos barras
+  // distintas —que es exactamente lo que pasa en una pieza soldada—.
+  //
+  // El grosor de un tramo sale de los dos discos que une: el de un tramo entre
+  // dos muy votados tiene cuerpo, el de uno entre dos flojos es fino.
   const grosorDe = (era: Era) => DELGADO + (1 - DELGADO) * proporcionDe(era);
-  const grosores: number[] = [
-    grosorDe(recorrido[0]),
-    ...recorrido.map(grosorDe),
-    grosorDe(recorrido[recorrido.length - 1]),
-  ];
+  const tramos = [recorrido[0], ...recorrido, recorrido[recorrido.length - 1]];
+  const grosores: number[] = [];
+  for (let i = 0; i < tramos.length - 1; i++) {
+    grosores.push((grosorDe(tramos[i]) + grosorDe(tramos[i + 1])) / 2);
+  }
 
   // Encaje: se lleva la figura al centro del lienzo y se escala para que ocupe
   // siempre lo mismo.
@@ -405,6 +410,7 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
   // De poligonal a trazo, muestreando cada tramo a paso constante e
   // interpolando el grosor entre sus dos vértices.
   const base = GROSOR * d.escala;
+  // `gs` trae UN grosor por tramo, no uno por vértice.
   const tejer = (vs: [number, number][], gs: number[]): Punto[] => {
     const puntos: Punto[] = [];
     for (let i = 0; i < vs.length - 1; i++) {
@@ -415,7 +421,7 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
         puntos.push({
           x: x1 + (x2 - x1) * t,
           y: y1 + (y2 - y1) * t,
-          r: base * (gs[i] + (gs[i + 1] - gs[i]) * t),
+          r: base * gs[i],
         });
       }
     }
