@@ -181,6 +181,11 @@ const PICO_TRAMO = 0.4;
 // entero. Por debajo, proporcional. Ver el cálculo de `cuerpo`.
 const PICO_GRUESO = 0.6;
 
+// Cuánto adelgaza un brazo por su mitad, y por debajo de qué grosor —fracción
+// del máximo— no se estrecha en absoluto. Ver `cintura`.
+const CINTURA = 0.35;
+const CINTURA_DESDE = 0.55;
+
 // Afila los vértices cerrados encogiendo el trazo por LOS DOS LADOS hasta el
 // pico.
 //
@@ -536,6 +541,32 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
   if (!d) return [];
   const { vertices, grosores, puas, grosoresPua, desdePua, encajar } = d;
 
+  // La cintura de cada tramo: el brazo adelgaza hacia su mitad y recupera el
+  // grosor al llegar a los vértices.
+  //
+  // El grosor de un brazo sale de los votos de sus dos extremos, así que dos
+  // discos con votos parecidos daban una cinta de ancho constante —recta, plana
+  // y sin nada que mirar—. Con la cintura, ese mismo tramo pasa a tener un
+  // punto más estrecho por el medio, que es además como se comporta un material
+  // estirado entre dos puntos: engorda donde se ancla y afina donde tira.
+  //
+  // El seno hace que valga 1 justo en los dos vértices, así que no toca las
+  // uniones ni el afilado de los picos, que trabajan ahí.
+  //
+  // Y va con el cuerpo del brazo, por lo de siempre: un hilo vive pegado al
+  // umbral del campo y estrecharlo por el medio lo partiría en dos.
+  //
+  // Y el hilo tiene que quedar EXENTO, no solo aliviado. Con un reparto
+  // proporcional al grosor, el brazo más fino seguía recibiendo un 12% de
+  // cintura, y con eso bastaba para hundirlo bajo el umbral: 3 figuras de 123
+  // salían partidas hiciera lo que hiciera con la intensidad. Por debajo de
+  // CINTURA_DESDE el brazo no se estrecha nada.
+  const cintura = (t: number, r: number) => {
+    const cuerpo = (r / GROSOR - CINTURA_DESDE) / (1 - CINTURA_DESDE);
+    if (cuerpo <= 0) return 1;
+    return 1 - CINTURA * Math.sin(Math.PI * t) * Math.min(1, cuerpo);
+  };
+
   // De poligonal a trazo, muestreando cada tramo e interpolando el grosor.
   const tejer = (
     vs: [number, number][],
@@ -551,10 +582,11 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
       const r2 = gs[i + 1];
       for (let n = 0; n < POR_TRAMO; n++) {
         const t = n / POR_TRAMO;
+        const r = r1 + (r2 - r1) * t;
         trazo.push({
           x: x1 + (x2 - x1) * t,
           y: y1 + (y2 - y1) * t,
-          r: r1 + (r2 - r1) * t,
+          r: r * cintura(t, r),
         });
       }
     }
