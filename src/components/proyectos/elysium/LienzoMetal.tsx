@@ -848,6 +848,24 @@ export default function LienzoMetal({
           ? ALTURA_HILO + ALTURA_RANGO * Math.min(1, base / radioMayor)
           : 1;
 
+      // Y las puntas, que son el punto delicado.
+      //
+      // El afilado funciona encogiendo el radio, pero con atracción el radio ES
+      // el alcance: afilando a secas, la atracción se apaga justo en la punta,
+      // que es donde más falta hace —una punta es lo que más se acerca a otra
+      // parte—. Se resuelve repartiendo el afilado entre las dos cosas: el radio
+      // baja solo hasta un suelo, para que la punta conserve alcance, y de ahí
+      // en adelante lo que adelgaza es la altura, que la hunde bajo el umbral y
+      // la cierra en pico igual que antes.
+      const SUELO_ALCANCE = 0.5;
+      const punta = (s: number) => {
+        const inicio = sinPuntaInicial
+          ? 1
+          : factorPunta(antes + s, radioUniforme, largoTrazo, ENTRADA_CORTA);
+        const fin = enCurso ? 1 : factorPunta(largoTrazo - antes - s, radioUniforme, largoTrazo);
+        return Math.min(inicio, fin);
+      };
+
       let idx = 0;
       let s = Math.max(0, desdeRecorrido - antes);
       let cabeza: { x: number; y: number; R: number } | null = null;
@@ -862,8 +880,15 @@ export default function LienzoMetal({
         const local = grosorLibre ? radioLocal(idx, t) : radioUniforme;
         // Con atracción el alcance lo pone el brazo más gordo y el grosor lo
         // pone la altura; sin ella, el alcance sigue al grosor, como siempre.
-        const R = radioEn(s, atraccion ? radioMayor : local);
-        const altura = atraccion ? alturaEn(local) : 1;
+        let R: number;
+        let altura = 1;
+        if (atraccion) {
+          const tp = punta(s);
+          R = Math.max(PUNTA_MIN, radioMayor * Math.max(SUELO_ALCANCE, tp)) * ALCANCE * factorR;
+          altura = alturaEn(local) * Math.min(1, tp / SUELO_ALCANCE);
+        } else {
+          R = radioEn(s, local);
+        }
         // El paso va con el alcance: seis cúpulas por radio. Así el número de
         // degradados no se dispara en un trazo grueso, y en uno finísimo el
         // suelo de un píxel impide que se hagan millones.

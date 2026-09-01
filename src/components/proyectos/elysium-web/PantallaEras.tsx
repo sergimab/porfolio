@@ -19,10 +19,14 @@ export default function PantallaEras({
   seleccion,
   onAlternar,
   onTerminar,
+  onAleatorio,
 }: {
   seleccion: Set<string>;
   onAlternar: (id: string) => void;
   onTerminar: () => void;
+  // PROVISIONAL: rellena el test al azar para poder ver formas distintas
+  // deprisa. Se va con el botón que lo dispara.
+  onAleatorio: () => void;
 }) {
   const [abierta, setAbierta] = useState<Era | null>(null);
   const [cerrando, setCerrando] = useState(false);
@@ -39,6 +43,12 @@ export default function PantallaEras({
       />
 
       <div className="eras-pie">
+        {/* PROVISIONAL, para probar formas: rellena el test al azar y vuelve a
+            sortear en cada pulsación. Va vaciado para que no compita con
+            FINISH, que es el botón de verdad. */}
+        <button type="button" className="cartel-boton es-hueco" onClick={onAleatorio}>
+          ALEATORIO
+        </button>
         <button type="button" className="cartel-boton" onClick={() => setCerrando(true)}>
           FINISH
         </button>

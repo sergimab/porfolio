@@ -76,3 +76,38 @@ export function contarPorEra(
   }
   return cuenta;
 }
+
+// Una selección al azar, para probar formas deprisa.
+//
+// PROVISIONAL: existe solo para el botón de pruebas de la pantalla de las eras.
+// Cuando el test esté cerrado, se van los dos.
+//
+// El azar está sesgado a propósito. Repartiendo uniformemente, casi todas las
+// tiradas salen con los siete discos a media tabla y las figuras se parecen
+// entre sí; lo interesante de probar son los extremos —un disco arrasando, dos
+// o tres a cero—, así que se sortea primero QUÉ PERFIL tiene esta tirada y
+// luego se rellena en consecuencia.
+export function seleccionAlAzar(eras: readonly Era[]): Set<string> {
+  const puesta = new Set<string>();
+  const dado = (n: number) => Math.floor(Math.random() * n);
+
+  // Cuántos discos se quedan sin nada: de cero a tres.
+  const vacios = new Set<Era>();
+  const cuantosVacios = dado(4);
+  while (vacios.size < cuantosVacios) vacios.add(eras[dado(eras.length)]);
+
+  for (const era of eras) {
+    if (vacios.has(era)) continue;
+    const lista = CANCIONES[era];
+    // Entre una canción y el disco entero, con el sesgo hacia abajo para que
+    // haya brazos finos: elevar al cuadrado un número entre 0 y 1 amontona los
+    // resultados cerca del cero.
+    const t = Math.random() * Math.random();
+    const cuantas = 1 + Math.floor(t * (lista.length - 1));
+    const barajada = [...lista].sort(() => Math.random() - 0.5);
+    for (const cancion of barajada.slice(0, cuantas)) {
+      puesta.add(claveCancion(era, cancion));
+    }
+  }
+  return puesta;
+}

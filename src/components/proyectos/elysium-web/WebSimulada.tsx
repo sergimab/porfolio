@@ -5,6 +5,8 @@ import Link from "next/link";
 import PantallaInicio from "./PantallaInicio";
 import PantallaEras from "./PantallaEras";
 import PantallaSimbolo from "./PantallaSimbolo";
+import { seleccionAlAzar } from "./canciones";
+import { ERAS } from "./simbolo";
 import "./PantallaInicio.css";
 import "./Popups.css";
 import "./WebSimulada.css";
@@ -49,6 +51,7 @@ export default function WebSimulada() {
           seleccion={seleccion}
           onAlternar={alternar}
           onTerminar={() => setPantalla("simbolo")}
+          onAleatorio={() => setSeleccion(seleccionAlAzar(ERAS))}
         />
       )}
 
