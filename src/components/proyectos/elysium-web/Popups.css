@@ -1,0 +1,237 @@
+/* Los popups que se abren sobre el universo de símbolos.
+   Mismo cristal esmerilado que la portada: ver .inicio-cartel. */
+
+.cartel-fondo {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  box-sizing: border-box;
+  /* Un velo muy leve además del cristal del cartel. No es para oscurecer, es
+     para que el borde blanco del cartel tenga contra qué recortarse cuando por
+     detrás pasa justo una zona negra de la galaxia. */
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.cartel {
+  width: min(980px, 92%);
+  max-height: calc(100dvh - 48px);
+  overflow: auto;
+  box-sizing: border-box;
+  padding: clamp(24px, 3.5vw, 40px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 18px;
+  background: rgba(10, 10, 12, 0.42);
+  -webkit-backdrop-filter: blur(26px) saturate(115%);
+  backdrop-filter: blur(26px) saturate(115%);
+  color: #fff;
+}
+.cartel:focus {
+  outline: none;
+}
+
+/* Botón del lenguaje de la portada: pastilla clara sobre el cristal. */
+.cartel-boton {
+  padding: 10px 26px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  background: rgba(236, 236, 236, 0.92);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #111;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.15s;
+}
+.cartel-boton:hover,
+.cartel-boton:focus-visible {
+  background: #fff;
+  transform: translateY(-1px);
+}
+.cartel-boton:active {
+  transform: translateY(0);
+}
+/* Variante secundaria: el mismo botón vaciado, para cuando hay dos juntos y uno
+   es el que continúa. */
+.cartel-boton.es-hueco {
+  background: transparent;
+  color: #fff;
+}
+.cartel-boton.es-hueco:hover,
+.cartel-boton.es-hueco:focus-visible {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* ── Popup de álbum: símbolo a la izquierda, canciones a la derecha ── */
+.palbum {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(20px, 3vw, 44px);
+  align-items: center;
+}
+/* Los hijos de una rejilla traen un mínimo automático: no encogen por debajo
+   del ancho de su contenido. Con títulos de canción largos, la columna se
+   quedaba más ancha que el cartel y se salía por la derecha. Poniendo el mínimo
+   a cero, la columna encoge y el texto parte de línea, que es lo que se
+   espera. */
+.palbum > * {
+  min-width: 0;
+}
+@media (max-width: 720px) {
+  .palbum {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* El símbolo va en un hueco cuadrado con position relative, que es lo que el
+   visor necesita: se coloca en absoluto sobre su contenedor. */
+.palbum-simbolo {
+  position: relative;
+  /* El ancho, explícito. Con la proporción y solo un alto mínimo, es el ALTO el
+     que acaba imponiendo el ancho —160px de alto en 16:9 son 284 de ancho— y el
+     hueco se salía de su columna. Fijando el ancho, la proporción deriva de él,
+     que es el sentido en el que tiene que ir. */
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  min-height: 220px;
+}
+@media (max-width: 720px) {
+  .palbum-simbolo {
+    aspect-ratio: 16 / 9;
+    min-height: 0;
+  }
+}
+
+.palbum-titulo {
+  margin: 0;
+  font-size: clamp(20px, 2.4vw, 28px);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+.palbum-ayuda {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 6px 0 18px;
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.6);
+}
+.palbum-cuenta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: #fff;
+  color: #111;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.palbum-canciones {
+  list-style: none;
+  margin: 0 0 22px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.palbum-cancion {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  /* Con el modelo de caja por defecto, el relleno y el borde se SUMAN al 100%
+     y la fila acaba más ancha que el cartel: en móvil se salía por la derecha
+     y dejaba una barra de desplazamiento dentro del popup. */
+  box-sizing: border-box;
+  padding: 9px 13px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 10px;
+  background: transparent;
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.palbum-cancion:hover,
+.palbum-cancion:focus-visible {
+  border-color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.06);
+}
+.palbum-cancion.es-puesta {
+  border-color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.14);
+}
+/* La casilla mantiene su hueco esté marcada o no: si apareciera solo al
+   marcarla, la línea entera daría un salto al pulsar. */
+.palbum-marca {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 5px;
+  color: #111;
+}
+.palbum-cancion.es-puesta .palbum-marca {
+  background: #fff;
+  border-color: #fff;
+}
+.palbum-marca svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* ── Popup de cierre ── */
+.pfinal {
+  text-align: center;
+}
+.pfinal-titulo {
+  margin: 0;
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 700;
+}
+.pfinal-cuerpo {
+  margin: 26px 0 30px;
+}
+.pfinal-rotulo {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+}
+.pfinal-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+.pfinal-lista li {
+  padding: 6px 13px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  font-size: 13px;
+}
+.pfinal-ninguno {
+  margin: 0;
+  font-size: 13.5px;
+  color: rgba(255, 255, 255, 0.85);
+}
+.pfinal-botones {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}

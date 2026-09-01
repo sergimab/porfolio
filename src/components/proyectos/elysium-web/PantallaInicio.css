@@ -29,23 +29,23 @@
   z-index: 3;
 }
 
-/* Pie de la pantalla de las eras. Va por encima del lienzo pero sin recoger el
-   ratón: si lo recogiera, taparía las piezas que pasen por detrás. */
+/* Pie de la pantalla de las eras: solo el botón de FINISH. El contenedor no
+   recoge el ratón —taparía las piezas que pasen por detrás— y se lo devuelve
+   únicamente al botón. */
 .eras-pie {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 34px;
   z-index: 4;
-  margin: 0;
-  text-align: center;
-  font-size: 12px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
+  display: flex;
+  justify-content: center;
   pointer-events: none;
 }
-/* En móvil los dos botones fijos de abajo se comen esa línea, así que sube por
+.eras-pie > * {
+  pointer-events: auto;
+}
+/* En móvil los dos botones fijos de abajo se comen esa franja, así que sube por
    encima de ellos. */
 @media (max-width: 700px) {
   .eras-pie {

@@ -7,6 +7,7 @@ import PantallaEras from "./PantallaEras";
 import VisorEra from "./VisorEra";
 import TestSimbolo from "./TestSimbolo";
 import "./PantallaInicio.css";
+import "./Popups.css";
 import "./WebSimulada.css";
 
 // La web de Elysium, a pantalla completa.
@@ -19,10 +20,18 @@ type Pantalla = "inicio" | "eras" | "test";
 
 export default function WebSimulada() {
   const [pantalla, setPantalla] = useState<Pantalla>("inicio");
-  // La era pulsada. Todavía no lleva a ninguna parte —el test por álbum está
-  // por hacer—, pero se guarda para que el día que lo esté baste con leerla
-  // aquí en vez de rehacer el cableado.
-  const [, setEra] = useState<string | null>(null);
+  // Las canciones marcadas, con la clave "Álbum|Canción". Vive aquí arriba, y
+  // no dentro de la pantalla de las eras, porque tiene que sobrevivir a ir y
+  // venir entre pantallas: es el dato que ha ido recogiendo la persona, y
+  // perderlo al cambiar de sitio sería perder el test entero.
+  const [seleccion, setSeleccion] = useState<Set<string>>(new Set());
+  const alternar = (id: string) =>
+    setSeleccion((antes) => {
+      const nuevo = new Set(antes);
+      if (nuevo.has(id)) nuevo.delete(id);
+      else nuevo.add(id);
+      return nuevo;
+    });
 
   // data-theme="dark" en el envoltorio, no un fondo negro a pelo. Esta web es
   // negra por diseño, pero el lienzo de metal y el visor 3D sacan su papel de
@@ -35,7 +44,13 @@ export default function WebSimulada() {
         <PantallaInicio onStart={() => setPantalla("eras")} />
       ) : pantalla === "eras" ? (
         <>
-          <PantallaEras onElegir={(era) => setEra(era)} />
+          <PantallaEras
+            seleccion={seleccion}
+            onAlternar={alternar}
+            // FINISH todavía no lleva a ninguna parte, como se pidió. El sitio
+            // donde enchufarlo es este.
+            onTerminar={() => {}}
+          />
           {/* Puente provisional a lo que ya estaba construido. Al pulsar una era
               todavía no pasa nada —el test por álbum está por hacer—, y sin este
               enlace la pantalla del símbolo se quedaría sin manera de llegar a

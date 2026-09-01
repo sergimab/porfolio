@@ -3,25 +3,13 @@
 import { useMemo, useState } from "react";
 import LienzoMetal from "@/components/proyectos/elysium/LienzoMetal";
 import { ERAS, figuraDeEras, type Era } from "./simbolo";
+import { CANCIONES, claveCancion, contarPorEra } from "./canciones";
 import "./TestSimbolo.css";
 
 // El test de Elysium, funcionando: eliges las canciones que te representan y el
 // símbolo se genera delante de ti, con el mismo motor de metal que el lienzo.
 //
-// Sobre el repertorio: aquí van seis canciones conocidas por disco, no la
-// discografía entera. Es una MUESTRA deliberada —basta para que el mecanismo se
-// vea, y el reparto entre discos es lo que decide la figura, no cuántas
-// canciones haya en la lista—. Cambiarla por el tracklist completo es tocar
-// solo esta constante.
-const CANCIONES: Record<Era, string[]> = {
-  "The Fame": ["Just Dance", "Poker Face", "LoveGame", "Paparazzi", "Beautiful, Dirty, Rich", "The Fame"],
-  "The Fame Monster": ["Bad Romance", "Telephone", "Alejandro", "Monster", "Speechless", "Dance in the Dark"],
-  "Born This Way": ["Born This Way", "Judas", "The Edge of Glory", "Yoü and I", "Marry the Night", "Hair"],
-  ARTPOP: ["Applause", "Do What U Want", "G.U.Y.", "Venus", "Dope", "Gypsy"],
-  Joanne: ["Perfect Illusion", "Million Reasons", "Joanne", "A-YO", "Diamond Heart", "Grigio Girls"],
-  Chromatica: ["Rain on Me", "Stupid Love", "911", "Alice", "Free Woman", "Sour Candy"],
-  Mayhem: ["Abracadabra", "Disease", "Garden of Eden", "Vanish Into You", "Die With a Smile", "Perfect Celebrity"],
-};
+// El repertorio vive en canciones.ts, compartido con los popups de las eras.
 
 export default function TestSimbolo() {
   const [elegidas, setElegidas] = useState<Set<string>>(new Set());
@@ -36,15 +24,7 @@ export default function TestSimbolo() {
 
   // Cuántas canciones ha elegido de cada disco. Eso, y solo eso, es lo que
   // decide la figura.
-  const pesos = useMemo(() => {
-    const cuenta = Object.fromEntries(ERAS.map((e) => [e, 0])) as Record<Era, number>;
-    for (const era of ERAS) {
-      for (const cancion of CANCIONES[era]) {
-        if (elegidas.has(`${era}|${cancion}`)) cuenta[era]++;
-      }
-    }
-    return cuenta;
-  }, [elegidas]);
+  const pesos = useMemo(() => contarPorEra(elegidas, ERAS), [elegidas]);
 
   const figura = useMemo(() => figuraDeEras(pesos), [pesos]);
   const total = elegidas.size;
@@ -61,7 +41,7 @@ export default function TestSimbolo() {
             </legend>
             <div className="testsim-canciones">
               {CANCIONES[era].map((cancion) => {
-                const id = `${era}|${cancion}`;
+                const id = claveCancion(era, cancion);
                 const puesta = elegidas.has(id);
                 return (
                   <button
