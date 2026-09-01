@@ -116,6 +116,13 @@ export default function PantallaSimbolo({ seleccion }: { seleccion: Set<string> 
               // Y el alcance desligado del grosor, que es lo que hace que dos
               // partes finas que se acercan se unan en vez de pasar de largo.
               atraccion
+              // Sin suavizar el recorrido. El suavizado está para el temblor de
+              // la mano, y aquí no hay mano: lo único que hacía era redondear
+              // las esquinas, que son justo lo que tiene que quedar afilado.
+              // Las redondeadas siguen saliendo solas —una esquina a la que
+              // llega un brazo grueso se cierra en curva porque la fusión la
+              // rellena—, así que conviven las dos.
+              suavizado={0}
               // Las alturas para la normal se miden más lejos. La normal sale de
               // restar dos muestras del mapa, y el mapa tiene 256 niveles: cuanto
               // más juntas se toman, más pesa el escalón frente a la pendiente

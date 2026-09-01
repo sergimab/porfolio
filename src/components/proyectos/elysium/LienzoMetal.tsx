@@ -583,6 +583,14 @@ export default function LienzoMetal({
   // para todo el trazo. Es lo que hace que dos partes finas que se acercan se
   // unan como si se atrajeran. Solo tiene sentido junto a grosorLibre.
   atraccion = false,
+  // Cuánto se alisa el recorrido antes de pintarlo.
+  //
+  // El suavizado existe por la mano: el puntero entrega una poligonal
+  // temblorosa y sin alisarla el metal delata cada microacodo con un reflejo
+  // roto. Pero REDONDEA LOS VÉRTICES, y en un trazo calculado no hay temblor
+  // que quitar: solo esquinas de verdad que se están perdiendo. Con cero, las
+  // esquinas llegan intactas y las agudas salen como agujas.
+  suavizado = SUAVIZAR_PASADAS,
 }: {
   figura?: TrazoHecho[];
   interactivo?: boolean;
@@ -593,6 +601,7 @@ export default function LienzoMetal({
   grosorLibre?: boolean;
   suavidad?: number;
   atraccion?: boolean;
+  suavizado?: number;
 } = {}) {
   const lang = useLang();
   const contenedorRef = useRef<HTMLDivElement>(null);
@@ -735,7 +744,10 @@ export default function LienzoMetal({
       // Cada punto conserva su radio en vez de heredar el medio del trazo.
       grosorLibre = false,
       // El alcance deja de seguir al grosor: ver el bloque de atracción.
-      atraccion = false
+      atraccion = false,
+      // Pasadas de suavizado del recorrido. Con cero, los vértices se quedan
+      // como vienen.
+      pasadas = SUAVIZAR_PASADAS
     ): { hasta: number; cabeza: { x: number; y: number; R: number } | null } => {
       if (!crudos.length) return { hasta: desdeRecorrido, cabeza: null };
       // De relativo a píxeles: todo el trabajo de suavizado y afilado se hace
@@ -769,7 +781,7 @@ export default function LienzoMetal({
         y: p.y * escala,
         r: grosorLibre ? p.r * escala : radioUniforme,
       }));
-      const puntos = remuestrear(suavizar(enPx, SUAVIZAR_PASADAS), PASO_REMUESTREO);
+      const puntos = remuestrear(suavizar(enPx, pasadas), PASO_REMUESTREO);
       // El más gordo del trazo. Con atracción, es él quien fija el alcance de
       // TODOS los puntos, incluidos los hilos.
       const radioMayor = puntos.reduce((m, p) => Math.max(m, p.r), 0) || radioUniforme;
@@ -971,12 +983,12 @@ export default function LienzoMetal({
     const ctx = posoRef.current?.getContext("2d");
     if (ctx) {
       for (const t of trazosRef.current)
-        pintarTrazo(ctx, t, false, 0, false, [], grosorLibre, atraccion);
+        pintarTrazo(ctx, t, false, 0, false, [], grosorLibre, atraccion, suavizado);
     }
     dibujadosRef.current = 0;
     pintadoHastaRef.current = 0;
     componerMapa();
-  }, [pintarTrazo, componerMapa, grosorLibre, atraccion]);
+  }, [pintarTrazo, componerMapa, grosorLibre, atraccion, suavizado]);
 
   // Montaje de WebGL. Se retrasa hasta que el lienzo se acerca a la pantalla:
   // la página ya tiene otro contexto (el fondo de píxeles) y los móviles son
@@ -1191,7 +1203,7 @@ export default function LienzoMetal({
       }
     }
     componerMapa();
-  }, [pintarTrazo, componerMapa, grosorLibre, atraccion]);
+  }, [pintarTrazo, componerMapa, grosorLibre, atraccion, suavizado]);
 
   // Bucle: consume los puntos encolados y, si hay cambios, rehace el campo y
   // vuelve a sombrear.

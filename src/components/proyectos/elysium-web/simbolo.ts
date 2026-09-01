@@ -35,6 +35,12 @@ const EXTENSION = 0.4;
 // Radio mínimo de una punta, en fracción de la mayor. Un álbum sin nada elegido
 // NO se salta: se le deja una punta corta.
 //
+// Subió de 0,22 a 0,38 para deshacer las masas del centro: con el mínimo bajo,
+// tres o cuatro discos poco votados caían casi encima del centro, y esos
+// vértices amontonados se fundían en un bulto. Separándolos, el reparto sigue
+// leyéndose —lo dice sobre todo el GROSOR del brazo, que ahí sí es muy
+// contrastado— pero los vértices dejan de amontonarse.
+//
 // Es lo que hace que toda figura tenga las siete direcciones y, con ellas,
 // carácter. Saltándose los ceros, quien elige de dos discos obtiene una línea
 // de ida y vuelta —dos vértices— que no es un símbolo, es una raya; y quien
@@ -42,7 +48,7 @@ const EXTENSION = 0.4;
 // mismos casos salen como una estrella muy asimétrica: un brazo largo y seis
 // cortos. Y sigue diciendo la verdad, porque cerca del centro es exactamente lo
 // que significa no haber elegido nada de ese disco.
-const RADIO_MINIMO = 0.22;
+const RADIO_MINIMO = 0.38;
 // Lo que debe medir la figura de lado a lado una vez encajada, en fracción del
 // lienzo. Ver el reencuadre al final.
 const ENCAJE = 0.66;
