@@ -8,6 +8,7 @@ import { ERAS } from "./simbolo";
 import { figuraDeEras } from "./simbolo";
 import { contarPorEra } from "./canciones";
 import { crearEstudioIridiscente } from "./estudioIridiscente";
+import { GROSOR_REFERENCIA } from "./simbolo";
 
 // Lo que tarda el símbolo en trazarse entero. Largo a propósito: es el momento
 // en que aparece lo que la persona acaba de generar, y merece verse nacer.
@@ -137,6 +138,12 @@ export default function PantallaSimbolo({ seleccion }: { seleccion: Set<string> 
               // llega un brazo grueso se cierra en curva porque la fusión la
               // rellena—, así que conviven las dos.
               suavizado={0}
+              // El grosor de referencia, común a TODOS los trazos de la figura.
+              // Sin él, cada púa se normaliza contra sí misma y sale a plena
+              // altura por fina que sea, mientras que el brazo del que nace
+              // —fino de verdad comparado con el resto— se queda casi invisible.
+              // La púa se veía y su brazo no, y parecía flotando.
+              referencia={GROSOR_REFERENCIA}
               // Las alturas para la normal se miden más lejos. La normal sale de
               // restar dos muestras del mapa, y el mapa tiene 256 niveles: cuanto
               // más juntas se toman, más pesa el escalón frente a la pendiente

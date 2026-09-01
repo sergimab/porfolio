@@ -597,6 +597,9 @@ export default function LienzoMetal({
   // para todo el trazo. Es lo que hace que dos partes finas que se acercan se
   // unan como si se atrajeran. Solo tiene sentido junto a grosorLibre.
   atraccion = false,
+  // Radio de referencia común a toda la figura, en las mismas unidades
+  // relativas que los puntos. Ver el comentario de radioMayor.
+  referencia,
   // Cuánto se alisa el recorrido antes de pintarlo.
   //
   // El suavizado existe por la mano: el puntero entrega una poligonal
@@ -615,6 +618,7 @@ export default function LienzoMetal({
   grosorLibre?: boolean;
   suavidad?: number;
   atraccion?: boolean;
+  referencia?: number;
   suavizado?: number;
 } = {}) {
   const lang = useLang();
@@ -764,7 +768,10 @@ export default function LienzoMetal({
       atraccion = false,
       // Pasadas de suavizado del recorrido. Con cero, los vértices se quedan
       // como vienen.
-      pasadas = SUAVIZAR_PASADAS
+      pasadas = SUAVIZAR_PASADAS,
+      // Radio con el que compararse para decidir grosor y alcance. Cero = el
+      // mayor de este mismo trazo.
+      referencia = 0
     ): { hasta: number; cabeza: { x: number; y: number; R: number } | null } => {
       if (!crudos.length) return { hasta: desdeRecorrido, cabeza: null };
       // De relativo a píxeles: todo el trabajo de suavizado y afilado se hace
@@ -801,7 +808,19 @@ export default function LienzoMetal({
       const puntos = remuestrear(suavizar(enPx, pasadas), PASO_REMUESTREO);
       // El más gordo del trazo. Con atracción, es él quien fija el alcance de
       // TODOS los puntos, incluidos los hilos.
-      const radioMayor = puntos.reduce((m, p) => Math.max(m, p.r), 0) || radioUniforme;
+      // El más gordo con el que compararse. Por defecto, el de este trazo; pero
+      // una figura de varios trazos tiene que pasar el suyo COMÚN.
+      //
+      // Sin eso, cada trazo se normaliza contra sí mismo, y ahí estaba el fallo
+      // de las púas sueltas: una púa hecha de radios finísimos seguía siendo lo
+      // más gordo de su propio trazo, así que salía a plena altura y bien
+      // visible, mientras el brazo del que nace —fino de verdad comparado con
+      // el resto de la figura— se quedaba casi por debajo del umbral. La púa se
+      // veía y su brazo no, y parecía flotando.
+      const radioMayor =
+        referencia > 0
+          ? referencia * escala
+          : puntos.reduce((m, p) => Math.max(m, p.r), 0) || radioUniforme;
 
       // Longitud acumulada del tramo, y la del contexto que lo precede: juntas
       // dan la posición dentro del trazo entero, que es lo que miden las puntas.
@@ -1002,14 +1021,14 @@ export default function LienzoMetal({
       trazosRef.current.forEach((t, i) =>
         pintarTrazo(
           ctx, t, false, 0, entradasRef.current[i] ?? false, [],
-          grosorLibre, atraccion, suavizado
+          grosorLibre, atraccion, suavizado, referencia ?? 0
         )
       );
     }
     dibujadosRef.current = 0;
     pintadoHastaRef.current = 0;
     componerMapa();
-  }, [pintarTrazo, componerMapa, grosorLibre, atraccion, suavizado]);
+  }, [pintarTrazo, componerMapa, grosorLibre, atraccion, suavizado, referencia]);
 
   // Montaje de WebGL. Se retrasa hasta que el lienzo se acerca a la pantalla:
   // la página ya tiene otro contexto (el fondo de píxeles) y los móviles son
@@ -1224,7 +1243,7 @@ export default function LienzoMetal({
       }
     }
     componerMapa();
-  }, [pintarTrazo, componerMapa, grosorLibre, atraccion, suavizado]);
+  }, [pintarTrazo, componerMapa, grosorLibre, atraccion, suavizado, referencia]);
 
   // Bucle: consume los puntos encolados y, si hay cambios, rehace el campo y
   // vuelve a sombrear.

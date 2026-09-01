@@ -83,6 +83,9 @@ const ENCAJE = 0.66;
 // estructura por dentro. El alcance alarga las puntas y también se come los
 // huecos; 0,017 es donde las dos cosas conviven.
 const GROSOR = 0.017;
+// El mismo número, exportado: el lienzo lo necesita como referencia común de
+// todos los trazos de la figura. Ver la prop `referencia`.
+export const GROSOR_REFERENCIA = GROSOR;
 // Lo fino que llega a ser un brazo, en fracción del más grueso.
 //
 // Bajó de 0,26 a 0,06. Con 0,26, el brazo de un disco poco votado seguía siendo
@@ -219,8 +222,10 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
       [vx, vy],
       [vx + ux * largo, vy + uy * largo],
     ]);
-    const gr = Math.min(grosorDe(era), GROSOR * 0.5);
-    grosoresPua.push([gr, gr]);
+    // La púa hereda el grosor DEL BRAZO del que sale, y adelgaza hacia la
+    // punta. Así una era floja saca una aguja de pelo y una fuerte una de
+    // cuerpo, en vez de salir todas iguales y desentonar con su propio brazo.
+    grosoresPua.push([grosorDe(era), grosorDe(era) * 0.4]);
     // El vértice de esta era es el (i+1)-ésimo de los que recorre la línea, y la
     // línea tiene un tramo por vértice más el de vuelta al centro.
     desdePua.push((recorrido.indexOf(era) + 1) / (recorrido.length + 1));
