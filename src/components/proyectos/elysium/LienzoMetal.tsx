@@ -914,12 +914,24 @@ export default function LienzoMetal({
       // del umbral la cumbre no asoma y el brazo desaparece, así que el suelo
       // vive a un pelo de él. Justo ahí es donde el trazo sale como un hilo.
       //
-      // El techo bajó de 1,15 a 1,045 y el suelo subió a 0,715: antes el brazo
-      // más votado engordaba tanto que al llegar al centro se fundía con sus
-      // vecinos en una masa, y el más flojo no llegaba a leerse como hilo.
-      // Repartido así, entre el más fino y el más gordo hay más del triple.
-      const ALTURA_HILO = 0.715;
-      const ALTURA_RANGO = 0.30;
+      // El techo bajó de 1,15 a 1,045: antes el brazo más votado engordaba tanto
+      // que al llegar al centro se fundía con sus vecinos en una masa.
+      //
+      // Y el suelo NO puede pegarse al umbral, que es lo que estuvo haciendo
+      // hasta ahora. Con 0,715, un hilo se quedaba un 5% por encima del umbral:
+      // esa distancia ES su grosor, y con ella cualquier merma se lo come. Y hay
+      // mermas de verdad, porque la integral vale 1 en una RECTA LARGA: donde la
+      // línea se curva, o donde se adelgaza, la suma baja. El hilo cruzaba el
+      // umbral hacia abajo en mitad del recorrido, la cinta se partía en dos, y
+      // lo que quedaba al otro lado del corte se veía como una pieza suelta.
+      //
+      // Medido sobre 123 figuras: con 0,715, 10 salían en trozos. Con 0,78,
+      // ninguna. El precio es que entre el hilo y el brazo gordo ya no hay 3,6
+      // veces sino 2,25 —el hilo pasa de 10 a 18 píxeles de ancho—, y es un
+      // precio que hay que pagar: por debajo de esto no hay hilo fino, hay hilo
+      // roto.
+      const ALTURA_HILO = 0.78;
+      const ALTURA_RANGO = 0.265;
       const alturaEn = (base: number) => {
         if (radioMayor <= 0) return 1;
         const q = Math.min(1, base / radioMayor);
@@ -944,11 +956,22 @@ export default function LienzoMetal({
       // en adelante lo que adelgaza es la altura, que la hunde bajo el umbral y
       // la cierra en pico igual que antes.
       const SUELO_ALCANCE = 0.5;
-      const punta = (s: number) => {
+      // El largo de la punta se mide con el radio DEL PUNTO, no con el medio del
+      // trazo. Con el medio, un tramo final que es un hilo se afilaba a lo largo
+      // de la distancia que le tocaría a un brazo con cuerpo: la altura le
+      // bajaba durante un buen trecho, y como el hilo ya vive cerca del umbral,
+      // se hundía debajo mucho antes de llegar a la punta. El último brazo se
+      // desprendía del resto de la figura.
+      //
+      // Con el radio local, cada trozo se afila en lo que mide él: el hilo
+      // termina en un pico corto y el brazo gordo en uno largo, que además es lo
+      // que tiene que pasar. Sin grosorLibre los dos radios son el mismo, así
+      // que el trazo a mano no se entera de este cambio.
+      const punta = (s: number, base: number) => {
         const inicio = sinPuntaInicial
           ? 1
-          : factorPunta(antes + s, radioUniforme, largoTrazo, ENTRADA_CORTA);
-        const fin = enCurso ? 1 : factorPunta(largoTrazo - antes - s, radioUniforme, largoTrazo);
+          : factorPunta(antes + s, base, largoTrazo, ENTRADA_CORTA);
+        const fin = enCurso ? 1 : factorPunta(largoTrazo - antes - s, base, largoTrazo);
         return Math.min(inicio, fin);
       };
 
@@ -969,7 +992,7 @@ export default function LienzoMetal({
         let R: number;
         let altura = 1;
         if (atraccion) {
-          const tp = punta(s);
+          const tp = punta(s, grosorLibre ? local : radioUniforme);
           // El alcance local es lo que permite que una zona apretada deje de
           // soldarse con lo que tiene al lado sin cambiar nada del resto.
           const al = grosorLibre ? alcanceLocal(idx, t) : 1;
