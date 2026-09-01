@@ -144,13 +144,22 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
     return GROSOR * (HILO + (1 - HILO) * proporcion);
   };
 
-  // Cuánto sobresale la púa de cada vértice. Va al REVÉS que los votos: el
-  // disco más votado no saca ninguna y se queda con su esquina redondeada,
-  // mientras que los flojos salen en aguja. Es lo que hace que en una misma
-  // figura convivan las dos terminaciones sin repartirlas a mano.
+  // Cuánto sobresale la púa de cada vértice. Va CON los votos: la saca el disco
+  // muy elegido, en la punta de su brazo largo, y no la sacan los flojos.
+  //
+  // Antes iba al revés y producía una roseta. Los discos sin votos se colocan
+  // todos a la misma distancia corta del centro —el radio mínimo—, así que
+  // están amontonados; dándoles a ELLOS la púa más larga, salían media docena de
+  // agujas naciendo casi del mismo punto y radiando en abanico. Eso no es el
+  // recorrido de porcentajes, es un adorno que se monta encima de él.
+  //
+  // Repartidas al revés, las agujas caen en las puntas de los brazos largos, que
+  // es donde hay sitio y donde de verdad rematan algo. Y el umbral deja sin púa
+  // a todo lo que se acerque al montón del centro.
   const puaDe = (era: Era) => {
     const proporcion = (pesos[era] || 0) / maximo;
-    return PUA * Math.pow(1 - proporcion, 1.5);
+    if (proporcion < 0.34) return 0;
+    return PUA * proporcion;
   };
 
   const punto = (era: Era): [number, number] => {
