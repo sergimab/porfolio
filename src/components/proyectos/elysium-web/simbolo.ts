@@ -114,7 +114,47 @@ const POR_TRAMO = 14;
 //
 // Y ese pico de ida y vuelta sí lo afila la fusión, porque es un giro de 180°:
 // el más cerrado que hay. De un rabito corto sale una aguja larga.
-const PUA = 0.115;
+//
+// APARCADO EN CERO. Las púas quedaban irregulares —unas veces rematan bien y
+// otras parecen un añadido— y se prefiere el trazo limpio mientras se afinan.
+// El mecanismo se queda entero: subir este número las devuelve.
+const PUA = 0;
+
+// Hasta dónde se mira para saber si un punto está en un amontonamiento, y desde
+// qué separación por el RECORRIDO cuenta un vecino como "otra parte de la
+// línea". Ver adelgazarDondeSeAmontona.
+const CERCA = 0.06;
+const SALTO = 26;
+// Lo fino que puede llegar a quedar el trazo en el peor amontonamiento.
+const ADELGAZA_MAX = 0.34;
+
+// Adelgaza el trazo allí donde se le juntan otras partes de sí mismo.
+//
+// Es lo que evita las masas. El campo del lienzo funde a distancia, así que
+// donde tres o cuatro tramos pasan cerca sus faldas se suman y entre todas
+// levantan un bulto —y cuanto más gruesos son esos tramos, más bulto—. En vez
+// de pelearlo desde el material, se quita la causa: donde hay aglomeración, la
+// línea se afina.
+//
+// Se cuentan solo los vecinos LEJANOS por el recorrido. Los puntos de al lado
+// están cerca por definición —son la misma línea— y contarlos daría lo mismo en
+// todas partes; lo que interesa es cuándo la línea se cruza consigo misma o
+// pasa raspando otro brazo.
+function adelgazarDondeSeAmontona(trazo: Punto[]): Punto[] {
+  return trazo.map((p, i) => {
+    let cerca = 0;
+    for (let j = 0; j < trazo.length; j++) {
+      if (Math.abs(i - j) <= SALTO) continue;
+      const q = trazo[j];
+      if (Math.hypot(q.x - p.x, q.y - p.y) < CERCA) cerca++;
+    }
+    if (!cerca) return p;
+    // Cuantos más vecinos, más fino, con suelo: por debajo de cierto punto el
+    // trazo dejaría de verse en vez de adelgazar.
+    const factor = Math.max(ADELGAZA_MAX, 1 / (1 + cerca * 0.055));
+    return { ...p, r: p.r * factor };
+  });
+}
 
 // De porcentajes a la figura, en las coordenadas relativas del lienzo.
 //
