@@ -7,6 +7,7 @@ import IconosFlotantes from "./IconosFlotantes";
 import { ERAS } from "./simbolo";
 import { figuraDeEras } from "./simbolo";
 import { contarPorEra } from "./canciones";
+import { crearEstudioCristal } from "./estudioCristal";
 
 // Lo que tarda el símbolo en trazarse entero.
 const DURACION = 2800;
@@ -74,7 +75,18 @@ export default function PantallaSimbolo({ seleccion }: { seleccion: Set<string> 
 
       <div className="simfinal-centro">
         <div className="simfinal-lienzo">
-          {figura.length > 0 && <LienzoMetal figura={figura} interactivo={false} />}
+          {figura.length > 0 && (
+            <LienzoMetal
+              figura={figura}
+              interactivo={false}
+              entorno={crearEstudioCristal}
+              // Diez veces la del lienzo de dibujo. Ahí una pizca de separación
+              // es el hilo de color del filo de una pieza de cromo; aquí, tanta
+              // separación es lo que descompone la luz por toda la pieza y la
+              // convierte en vidrio.
+              dispersion={0.03}
+            />
+          )}
         </div>
       </div>
     </div>

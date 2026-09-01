@@ -43,6 +43,14 @@ export type IconoFlotante = {
   // lateral. Es para cuando la pieza se enseña a solas y de cerca —el popup de
   // un álbum—, donde girar la aleja de la silueta con la que se la reconoce.
   soloVertical?: boolean;
+  // Dónde y de qué tamaño va en una pantalla VERTICAL.
+  //
+  // No basta con encoger la composición de escritorio: está pensada para un
+  // rectángulo apaisado, y metida en uno alto deja las piezas amontonadas en
+  // una banda central con la mitad de la pantalla vacía. En vertical hace falta
+  // otro reparto —dos columnas escalonadas— y un tamaño mayor, porque hay menos
+  // ancho que repartir pero mucho más alto.
+  movil?: { x: number; y: number; escala: number };
 };
 
 // Las siete eras, colocadas como en el render del fondo.
@@ -55,16 +63,30 @@ export type IconoFlotante = {
 // .glb vienen numerados (1 the fame … 7 mayhem) y el propio texto del proyecto
 // nombra "el rayo de The Fame, el triángulo invertido de Born This Way, la
 // esfera de ARTPOP, la onda de Chromatica".
+// En vertical se reparten en DOS COLUMNAS y CUATRO FILAS, con la séptima sola
+// abajo en el centro. Las cifras no son a ojo: con el tamaño de vertical cada
+// pieza mide como mucho 0,4 de las dos unidades de alto, y tanto la separación
+// entre filas (0,46) como la que hay entre columnas dejan más hueco que eso, que
+// es lo que garantiza que no se pisen. Los ±0,46 de los lados dejan además
+// medio icono de margen contra el borde de la pantalla, y la última fila se
+// queda por encima del botón de FINISH.
 export const FLOTANTES: IconoFlotante[] = [
   // Arriba: la cruz, la esfera y el sombrero.
-  { era: "The Fame Monster", modelo: "/proyectos/elysium-web/era-the-fame-monster.glb", x: -0.60, y: 0.46, escala: 1.15, movimiento: "gira", giraEje: true },
-  { era: "ARTPOP",           modelo: "/proyectos/elysium-web/era-artpop.glb",           x: -0.22, y: 0.38, escala: 1.05, movimiento: "flota" },
-  { era: "Joanne",           modelo: "/proyectos/elysium-web/era-joanne.glb",           x: 0.36,  y: 0.58, escala: 1.2,  movimiento: "gira" },
+  { era: "The Fame Monster", modelo: "/proyectos/elysium-web/era-the-fame-monster.glb", x: -0.60, y: 0.46, escala: 1.15, movimiento: "gira", giraEje: true,
+    movil: { x: -0.46, y: 0.70, escala: 0.95 } },
+  { era: "ARTPOP",           modelo: "/proyectos/elysium-web/era-artpop.glb",           x: -0.22, y: 0.38, escala: 1.05, movimiento: "flota",
+    movil: { x: 0.46, y: 0.70, escala: 0.95 } },
+  { era: "Joanne",           modelo: "/proyectos/elysium-web/era-joanne.glb",           x: 0.36,  y: 0.58, escala: 1.2,  movimiento: "gira",
+    movil: { x: -0.46, y: 0.28, escala: 1.0 } },
   // Abajo: el rayo, el triángulo, la onda y la estrella de púas.
-  { era: "The Fame",         modelo: "/proyectos/elysium-web/era-the-fame.glb",         x: -0.78, y: -0.38, escala: 1.05, movimiento: "flota", giraEje: true },
-  { era: "Born This Way",    modelo: "/proyectos/elysium-web/era-born-this-way.glb",    x: -0.34, y: -0.56, escala: 1.1,  movimiento: "gira" },
-  { era: "Chromatica",       modelo: "/proyectos/elysium-web/era-chromatica.glb",       x: 0.24,  y: -0.28, escala: 1.05, movimiento: "flota", giraEje: true },
-  { era: "Mayhem",           modelo: "/proyectos/elysium-web/era-mayhem.glb",           x: 0.70,  y: -0.38, escala: 1.25, movimiento: "gira" },
+  { era: "The Fame",         modelo: "/proyectos/elysium-web/era-the-fame.glb",         x: -0.78, y: -0.38, escala: 1.05, movimiento: "flota", giraEje: true,
+    movil: { x: 0.46, y: 0.28, escala: 0.95 } },
+  { era: "Born This Way",    modelo: "/proyectos/elysium-web/era-born-this-way.glb",    x: -0.34, y: -0.56, escala: 1.1,  movimiento: "gira",
+    movil: { x: -0.46, y: -0.14, escala: 1.0 } },
+  { era: "Chromatica",       modelo: "/proyectos/elysium-web/era-chromatica.glb",       x: 0.24,  y: -0.28, escala: 1.05, movimiento: "flota", giraEje: true,
+    movil: { x: 0.46, y: -0.14, escala: 0.95 } },
+  { era: "Mayhem",           modelo: "/proyectos/elysium-web/era-mayhem.glb",           x: 0.70,  y: -0.38, escala: 1.25, movimiento: "gira",
+    movil: { x: 0.0, y: -0.56, escala: 0.95 } },
 ];
 
 // El resplandor de las piezas encendidas.
@@ -399,23 +421,27 @@ export default function IconosFlotantes({
       rtA.setSize(anchoRT, altoRT);
       rtB.setSize(anchoRT, altoRT);
 
+      // En vertical manda la otra composición. El corte está por debajo de 1
+      // —más alto que ancho—, que es exactamente cuando la de escritorio deja
+      // de tener sitio a los lados.
+      const vertical = aspecto < 1;
       for (const { grupo, def, vaiven, blanco } of piezas) {
+        const col = vertical && def.movil ? def.movil : def;
         // Se guarda el sitio de reposo; la deriva se suma encima en cada
         // fotograma. Si aquí se escribiera la posición final, el vaivén se
         // reiniciaría de golpe cada vez que se cambia el tamaño de la ventana.
-        vaiven.base.set(def.x * aspecto, def.y);
+        vaiven.base.set(col.x * aspecto, col.y);
         grupo.position.set(vaiven.base.x, vaiven.base.y, 0);
-        // El tamaño se mide sobre el ALTO, pero encogido cuando la ventana es
-        // estrecha.
+        // El tamaño se mide siempre sobre el ALTO: atado al ancho, los iconos
+        // se encogerían hasta desaparecer en un móvil.
         //
-        // Sobre el alto porque atado al ancho los iconos se encogerían hasta
-        // desaparecer en un móvil. Pero solo sobre el alto tampoco vale: en una
-        // pantalla alta y estrecha, un 21% del alto es media pantalla de ancho,
-        // y las siete piezas se montaban unas encima de otras. El factor las
-        // devuelve a una talla que cabe, y deja la composición intacta a partir
-        // de una ventana apaisada normal.
-        const compacto = Math.min(1, aspecto / 1.5);
-        const tam = def.escala * 0.56 * compacto;
+        // En apaisado se encoge además cuando la ventana se estrecha, porque la
+        // composición de escritorio empieza a quedarse sin sitio. En vertical no
+        // hace falta ese apaño: la composición ya está pensada para esa forma de
+        // pantalla, así que el tamaño es fijo y bastante mayor.
+        const tam = vertical
+          ? col.escala * 0.40
+          : col.escala * 0.56 * Math.min(1, aspecto / 1.5);
         vaiven.tam = tam;
         grupo.scale.setScalar(tam);
         // El cuadro que recoge el ratón va algo más grande que la pieza: son

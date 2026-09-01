@@ -378,6 +378,7 @@ const FRAGMENT = /* glsl */ `
   uniform float uRelieve;     // pendiente de los faldones del tejadillo
   uniform float uFilo;        // cuánto vuelca el canto en el filo mismo
   uniform float uGrano;       // pendiente a la que el faldón ya está a tope
+  uniform float uDispersion;  // cuánto se separan los canales en el filo
   uniform sampler2D uEstudio; // panorama equirectangular del plató
 
   // Parte del ancho que ocupa el bisel del canto. Bajo = chapa plana con
@@ -487,12 +488,15 @@ const FRAGMENT = /* glsl */ `
     // espeja igual mirándolo de frente que al sesgo.
     vec3 R = reflect(-V, n);
 
-    // La aberración cromática se hace desviando un pelo el rayo REFLEJADO en
-    // cada canal, no refractando: así hay franja de color en las aristas —que
-    // es donde la desviación cambia deprisa— sin perder la opacidad.
-    // Muy poca: lo justo para que el filo tenga franja de color. Subiéndola,
-    // el bisel entero se vuelve un arcoíris y deja de leerse como metal.
-    float disp = 0.0028;
+    // La aberración cromática se hace desviando el rayo REFLEJADO en cada
+    // canal, no refractando: así hay franja de color en las aristas —que es
+    // donde la desviación cambia deprisa— sin perder la opacidad.
+    //
+    // Cuánto, lo decide quien usa el lienzo. Muy poca es cromo: un hilo de
+    // color solo en el filo. Mucha separa los tres canales por toda la pieza y
+    // el material se lee como vidrio, que dispersa de verdad. Es el mismo
+    // cálculo; lo que cambia es de qué material parece.
+    float disp = uDispersion;
     vec3 refl = vec3(
       entorno(reflect(-V, normalize(n + vec3(-disp, -disp, 0.0)))).r,
       entorno(R).g,
@@ -527,9 +531,18 @@ export default function LienzoMetal({
   // Con interactivo en false no se escucha al puntero y desaparecen la pista y
   // el botón de borrar: el lienzo pasa a ser una pieza que se mira.
   interactivo = true,
+  // El plató que se refleja. Por defecto el de estudio, neutro, que es el que
+  // hace que lo dibujado se lea como acero. Pasando otro se cambia el material
+  // sin tocar nada más: un metal no tiene color propio, así que el panorama ES
+  // el material.
+  entorno,
+  // Separación de los canales de color. Baja, cromo; alta, vidrio.
+  dispersion = 0.0028,
 }: {
   figura?: TrazoHecho[];
   interactivo?: boolean;
+  entorno?: () => HTMLCanvasElement;
+  dispersion?: number;
 } = {}) {
   const lang = useLang();
   const contenedorRef = useRef<HTMLDivElement>(null);
@@ -856,7 +869,7 @@ export default function LienzoMetal({
     textura.minFilter = THREE.LinearFilter;
     textura.magFilter = THREE.LinearFilter;
 
-    const estudio = new THREE.CanvasTexture(crearEstudio());
+    const estudio = new THREE.CanvasTexture((entorno ?? crearEstudio)());
     estudio.minFilter = THREE.LinearFilter;
     estudio.magFilter = THREE.LinearFilter;
     // El panorama da la vuelta completa: la costura tiene que repetirse.
@@ -899,6 +912,7 @@ export default function LienzoMetal({
         // alcance mayor—, así que la pendiente a la que el faldón está a tope
         // tiene que bajar en la misma proporción o el brazo sale plano.
         uGrano: { value: 0.042 },
+        uDispersion: { value: dispersion },
       },
       transparent: true,
     });
@@ -949,7 +963,7 @@ export default function LienzoMetal({
       renderer.domElement.remove();
       tresRef.current = null;
     };
-  }, [repintarMapa, cerca]);
+  }, [repintarMapa, cerca, entorno, dispersion]);
 
   // Pasa los puntos encolados al trazo en curso y pinta lo nuevo. Se llama
   // desde el bucle y también al soltar: si el dedo baja y sube dentro del

@@ -32,6 +32,20 @@ export type Era = (typeof ERAS)[number];
 // llega a 1 para que las agujas de los vértices —que salen POR FUERA de la
 // línea— quepan dentro y no se corten contra el borde.
 const EXTENSION = 0.4;
+// Radio mínimo de una punta, en fracción de la mayor. Un álbum sin nada elegido
+// NO se salta: se le deja una punta corta.
+//
+// Es lo que hace que toda figura tenga las siete direcciones y, con ellas,
+// carácter. Saltándose los ceros, quien elige de dos discos obtiene una línea
+// de ida y vuelta —dos vértices— que no es un símbolo, es una raya; y quien
+// elige de uno, una línea doblada sobre sí misma. Con la punta corta, esos
+// mismos casos salen como una estrella muy asimétrica: un brazo largo y seis
+// cortos. Y sigue diciendo la verdad, porque cerca del centro es exactamente lo
+// que significa no haber elegido nada de ese disco.
+const RADIO_MINIMO = 0.22;
+// Lo que debe medir la figura de lado a lado una vez encajada, en fracción del
+// lienzo. Ver el reencuadre al final.
+const ENCAJE = 0.66;
 // Grosor de la cinta, en la misma escala relativa. Es el radio, no el ancho.
 //
 // Va en fracción del lienzo y no en píxeles a propósito: así la figura se ve
@@ -69,19 +83,48 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
     const i = ERAS.indexOf(era);
     // Se empieza arriba y se gira a favor del reloj.
     const angulo = (-90 + (i * 360) / ERAS.length) * (Math.PI / 180);
-    const radio = EXTENSION * ((pesos[era] || 0) / maximo);
+    const proporcion = (pesos[era] || 0) / maximo;
+    // El mínimo se suma por debajo en vez de sustituir: así un disco con una
+    // canción sigue quedando por delante de uno con ninguna, que es lo que
+    // hace que el reparto se siga leyendo en la forma.
+    const radio = EXTENSION * (RADIO_MINIMO + (1 - RADIO_MINIMO) * proporcion);
     return [cx + radio * Math.cos(angulo), cy + radio * Math.sin(angulo)];
   };
 
-  const recorrido = [...ERAS]
-    .filter((e) => (pesos[e] || 0) > 0)
-    .sort((a, b) => pesos[b] - pesos[a]);
+  // Ahora se visitan los SIETE, de más votado a menos. Los empates —y los ceros
+  // lo son entre sí— se deshacen por el orden de la discografía, que es un
+  // criterio fijo: sin él, dos personas con las mismas respuestas podrían
+  // obtener figuras distintas según cómo hubiera ordenado el navegador.
+  const recorrido = [...ERAS].sort(
+    (a, b) => (pesos[b] || 0) - (pesos[a] || 0) || ERAS.indexOf(a) - ERAS.indexOf(b)
+  );
 
-  const vertices: [number, number][] = [
+  let vertices: [number, number][] = [
     [cx, cy],
     ...recorrido.map(punto),
     [cx, cy],
   ];
+
+  // Encaje: se lleva la figura al centro del lienzo y se escala para que ocupe
+  // siempre lo mismo.
+  //
+  // Sin esto, el tamaño y la posición dependían de qué eras se hubieran elegido:
+  // una figura tirando a un solo lado se iba a esa esquina y dejaba media
+  // pantalla vacía, y una de radios parecidos ocupaba el doble que otra de
+  // radios pequeños. Midiendo su caja y ajustándola, todas llegan igual de
+  // grandes y centradas, y lo que las distingue pasa a ser su FORMA, que es lo
+  // único que debería distinguirlas.
+  const xs = vertices.map((v) => v[0]);
+  const ys = vertices.map((v) => v[1]);
+  const ancho = Math.max(...xs) - Math.min(...xs);
+  const alto = Math.max(...ys) - Math.min(...ys);
+  const mayor = Math.max(ancho, alto);
+  if (mayor > 1e-4) {
+    const k = ENCAJE / mayor;
+    const mx = (Math.min(...xs) + Math.max(...xs)) / 2;
+    const my = (Math.min(...ys) + Math.max(...ys)) / 2;
+    vertices = vertices.map(([x, y]) => [cx + (x - mx) * k, cy + (y - my) * k]);
+  }
 
   // Un solo trazo, sin levantar el lápiz: es lo que hace que la figura se funda
   // consigo misma en el centro, donde convergen las siete líneas.
