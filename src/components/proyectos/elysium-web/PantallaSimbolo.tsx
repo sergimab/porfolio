@@ -22,11 +22,7 @@ const DURACION = 4600;
 // que se está dibujando.
 function recortar(figura: TrazoHecho[], avance: number): TrazoHecho[] {
   if (avance <= 0) return [];
-  // Entera. Y aquí el trazo principal deja de tener cabeza: su final vuelve al
-  // centro, del que salió, así que no se afila. Mientras se dibuja sí lo hace
-  // —ese extremo es la punta que avanza—, y ese es justo el cambio que ocurre
-  // en el último fotograma.
-  if (avance >= 1) return figura.map((t, i) => (i === 0 ? { ...t, sinSalida: true } : t));
+  if (avance >= 1) return figura;
   // Sin mínimo forzado: hasta que no hay dos puntos de verdad no se dibuja
   // nada. Forzando dos, en el primer fotograma ya aparecía una mancha diminuta
   // —el lienzo pinta cualquier trazo, por corto que sea— y el arranque se veía
@@ -34,14 +30,21 @@ function recortar(figura: TrazoHecho[], avance: number): TrazoHecho[] {
   // empieza a salir de la nada.
   return figura
     .map((trazo) => {
-      // Cada trazo puede tener su propio momento de aparición. Una púa brota de
-      // un brazo, así que no debe dibujarse antes que él: hasta que el trazado
-      // no llega a su vértice, la púa ni existe, y a partir de ahí recorre su
-      // propio camino en lo que queda de animación.
+      // Cada trazo tiene su TURNO dentro de la animación: empieza cuando le
+      // toca y termina antes de que empiece el siguiente. La figura es una
+      // retícula de una docena de piezas, y sin turnos crecerían todas a la vez
+      // desde sitios distintos —que no se lee como trazar, se lee como
+      // aparecer—.
       const desde = trazo.desde ?? 0;
-      const propio = desde >= 1 ? 1 : (avance - desde) / (1 - desde);
+      const hasta = trazo.hasta ?? 1;
+      const propio = hasta <= desde ? 1 : (avance - desde) / (hasta - desde);
+      // Mientras se está trazando, el extremo que avanza es la CABEZA y tiene
+      // que ir en punta aunque el trazo acabado no se afile ahí. En cuanto le
+      // llega su final, recupera su remate de verdad.
+      const enCurso = propio < 1;
       return {
         ...trazo,
+        sinSalida: enCurso ? false : trazo.sinSalida,
         puntos:
           propio <= 0
             ? []
@@ -77,14 +80,30 @@ function Esqueleto({ figura, grafico }: { figura: TrazoHecho[]; grafico: Grafico
               className="es-eje"
             />
           ))}
-          {/* El anillo del centro: la línea sale de aquí y vuelve aquí. */}
-          <circle cx={grafico.centro[0]} cy={grafico.centro[1]} r={0.014} className="es-centro" />
+          {/* El alambre: el contorno a trazo continuo y las cuerdas que lo
+              subdividen en celdas, a rayas, para distinguir a simple vista qué
+              parte de la retícula viene de dónde. */}
+          {grafico.aristas.map((a, i) => (
+            <line
+              key={i}
+              x1={a.a[0]}
+              y1={a.a[1]}
+              x2={a.b[0]}
+              y2={a.b[1]}
+              className={a.contorno ? "es-contorno" : "es-cuerda"}
+            />
+          ))}
+          <circle cx={grafico.centro[0]} cy={grafico.centro[1]} r={0.006} className="es-centro" />
           {grafico.marcas.map((m) => (
             <g key={m.era}>
-              <circle cx={m.en[0]} cy={m.en[1]} r={0.009} className="es-marca" />
-              {/* El orden en que la línea lo visita, y cuántas canciones lo
-                  sostienen: con los dos se lee de un vistazo si el recorrido es
-                  el que debería ser. */}
+              <circle
+                cx={m.en[0]}
+                cy={m.en[1]}
+                r={0.009}
+                className={m.celda ? "es-marca es-recorta" : "es-marca"}
+              />
+              {/* Su puesto por votos y cuántas canciones lo sostienen: con los
+                  dos se lee de un vistazo si la retícula es la que debería. */}
               <text x={m.en[0]} y={m.en[1] - 0.019} className="es-orden">
                 {m.orden}
                 <tspan className="es-peso">{` (${m.peso})`}</tspan>

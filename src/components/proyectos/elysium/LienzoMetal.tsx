@@ -584,6 +584,11 @@ export type TrazoHecho = {
   // En qué momento del trazado aparece este trazo, de 0 a 1. Sirve para que una
   // pieza que brota de otra no se dibuje antes que aquella de la que brota.
   desde?: number;
+  // Y en qué momento termina de trazarse. Con los dos, cada trazo tiene su
+  // TURNO dentro de la animación, que es lo que hace que una figura de muchas
+  // piezas se lea como una plumilla recorriéndolas una detrás de otra en vez de
+  // como todas creciendo a la vez.
+  hasta?: number;
 };
 
 export default function LienzoMetal({

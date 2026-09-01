@@ -294,6 +294,20 @@
   stroke: rgba(255, 255, 255, 0.5);
   stroke-width: 0.0016;
 }
+/* El nudo que recorta su propia celda. */
+.simfinal-esqueleto .es-recorta {
+  stroke: #ffe14d;
+  stroke-width: 0.0026;
+}
+.simfinal-esqueleto .es-contorno {
+  stroke: rgba(120, 235, 255, 0.75);
+  stroke-width: 0.0016;
+}
+.simfinal-esqueleto .es-cuerda {
+  stroke: rgba(255, 225, 77, 0.75);
+  stroke-width: 0.0016;
+  stroke-dasharray: 0.01 0.006;
+}
 .simfinal-esqueleto .es-orden {
   fill: #fff;
   font-size: 0.026px;
