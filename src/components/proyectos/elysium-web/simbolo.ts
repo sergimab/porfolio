@@ -54,7 +54,13 @@ const ENCAJE = 0.66;
 //
 // Este es el grosor del brazo MÁS votado. Los demás adelgazan con su peso, y el
 // del disco sin nada elegido baja hasta HILO.
-const GROSOR = 0.026;
+//
+// Con la atracción activada este número hace además de ALCANCE: es él quien fija
+// hasta dónde llega la influencia de todo el trazo, hilos incluidos. Por eso
+// bajó de 0,026 a 0,018 —con la atracción, el mismo número produce brazos más
+// anchos, porque el grosor pasa a salir de la altura de la cúpula y no de su
+// radio.
+const GROSOR = 0.018;
 // Lo fino que llega a ser un brazo, en fracción del más grueso.
 //
 // Es lo que da el efecto pegajoso: un hilo que se acerca a un brazo grueso no se

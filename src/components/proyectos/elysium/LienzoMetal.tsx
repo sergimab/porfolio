@@ -579,6 +579,10 @@ export default function LienzoMetal({
   // A qué distancia, en píxeles, se miden las alturas para deducir la normal.
   // Más lejos, normal más suave y menos ruido; también, bordes menos secos.
   suavidad = 3,
+  // El alcance de cada punto deja de seguir a su grosor y pasa a ser el mismo
+  // para todo el trazo. Es lo que hace que dos partes finas que se acercan se
+  // unan como si se atrajeran. Solo tiene sentido junto a grosorLibre.
+  atraccion = false,
 }: {
   figura?: TrazoHecho[];
   interactivo?: boolean;
@@ -588,6 +592,7 @@ export default function LienzoMetal({
   brillo?: number;
   grosorLibre?: boolean;
   suavidad?: number;
+  atraccion?: boolean;
 } = {}) {
   const lang = useLang();
   const contenedorRef = useRef<HTMLDivElement>(null);
@@ -728,7 +733,9 @@ export default function LienzoMetal({
       // grosor medio y para saber por dónde va el recorrido.
       contexto: Punto[] = [],
       // Cada punto conserva su radio en vez de heredar el medio del trazo.
-      grosorLibre = false
+      grosorLibre = false,
+      // El alcance deja de seguir al grosor: ver el bloque de atracción.
+      atraccion = false
     ): { hasta: number; cabeza: { x: number; y: number; R: number } | null } => {
       if (!crudos.length) return { hasta: desdeRecorrido, cabeza: null };
       // De relativo a píxeles: todo el trabajo de suavizado y afilado se hace
@@ -763,6 +770,9 @@ export default function LienzoMetal({
         r: grosorLibre ? p.r * escala : radioUniforme,
       }));
       const puntos = remuestrear(suavizar(enPx, SUAVIZAR_PASADAS), PASO_REMUESTREO);
+      // El más gordo del trazo. Con atracción, es él quien fija el alcance de
+      // TODOS los puntos, incluidos los hilos.
+      const radioMayor = puntos.reduce((m, p) => Math.max(m, p.r), 0) || radioUniforme;
 
       // Longitud acumulada del tramo, y la del contexto que lo precede: juntas
       // dan la posición dentro del trazo entero, que es lo que miden las puntas.
@@ -814,6 +824,30 @@ export default function LienzoMetal({
         return Math.max(PUNTA_MIN, base * Math.min(inicio, fin)) * ALCANCE * factorR;
       };
 
+      // ── Atracción a distancia ────────────────────────────────────────────
+      //
+      // Sin esto, dos partes finas que se acercan no se unen, y la razón es que
+      // el alcance de un trazo es PROPORCIONAL a su grosor: un hilo influye
+      // hasta poco más allá de sí mismo, así que puede pasar a diez píxeles de
+      // otro sin enterarse.
+      //
+      // Con atracción, las dos cosas se separan. El alcance pasa a ser el mismo
+      // para todo el trazo —el del brazo más gordo—, y lo que decide el grosor
+      // de cada punto es la ALTURA de su cúpula, no su anchura. Un hilo pasa a
+      // ser una loma baja y ancha: se ve fino porque solo asoma su cumbre por
+      // encima del umbral, pero su falda llega lejos. Cuando dos faldas se
+      // solapan, la suma cruza el umbral y entre las dos piezas aparece la
+      // membrana. Eso es lo que se lee como atracción magnética.
+      //
+      // La horquilla de altura es estrecha a propósito y no puede bajar de la
+      // del umbral: por debajo, la cumbre no asoma y el brazo desaparece.
+      const ALTURA_HILO = 0.70;
+      const ALTURA_RANGO = 0.45;
+      const alturaEn = (base: number) =>
+        radioMayor > 0
+          ? ALTURA_HILO + ALTURA_RANGO * Math.min(1, base / radioMayor)
+          : 1;
+
       let idx = 0;
       let s = Math.max(0, desdeRecorrido - antes);
       let cabeza: { x: number; y: number; R: number } | null = null;
@@ -825,12 +859,16 @@ export default function LienzoMetal({
         const t = tramo > 0 ? (s - largos[idx]) / tramo : 0;
         const x = a.x + (b.x - a.x) * t;
         const y = a.y + (b.y - a.y) * t;
-        const R = radioEn(s, grosorLibre ? radioLocal(idx, t) : radioUniforme);
+        const local = grosorLibre ? radioLocal(idx, t) : radioUniforme;
+        // Con atracción el alcance lo pone el brazo más gordo y el grosor lo
+        // pone la altura; sin ella, el alcance sigue al grosor, como siempre.
+        const R = radioEn(s, atraccion ? radioMayor : local);
+        const altura = atraccion ? alturaEn(local) : 1;
         // El paso va con el alcance: seis cúpulas por radio. Así el número de
         // degradados no se dispara en un trazo grueso, y en uno finísimo el
         // suelo de un píxel impide que se hagan millones.
         const paso = Math.max(1, R / MUESTRAS_POR_R);
-        cupula(ctx, x, y, R, (paso / (NORMA_LINEA * R)) * ESCALA_CAMPO);
+        cupula(ctx, x, y, R, (paso / (NORMA_LINEA * R)) * ESCALA_CAMPO * altura);
         cabeza = { x, y, R };
         s += paso;
       }
@@ -889,12 +927,13 @@ export default function LienzoMetal({
     limpiarCapa(cabezaRef.current);
     const ctx = posoRef.current?.getContext("2d");
     if (ctx) {
-      for (const t of trazosRef.current) pintarTrazo(ctx, t, false, 0, false, [], grosorLibre);
+      for (const t of trazosRef.current)
+        pintarTrazo(ctx, t, false, 0, false, [], grosorLibre, atraccion);
     }
     dibujadosRef.current = 0;
     pintadoHastaRef.current = 0;
     componerMapa();
-  }, [pintarTrazo, componerMapa, grosorLibre]);
+  }, [pintarTrazo, componerMapa, grosorLibre, atraccion]);
 
   // Montaje de WebGL. Se retrasa hasta que el lienzo se acerca a la pantalla:
   // la página ya tiene otro contexto (el fondo de píxeles) y los móviles son
@@ -1109,7 +1148,7 @@ export default function LienzoMetal({
       }
     }
     componerMapa();
-  }, [pintarTrazo, componerMapa, grosorLibre]);
+  }, [pintarTrazo, componerMapa, grosorLibre, atraccion]);
 
   // Bucle: consume los puntos encolados y, si hay cambios, rehace el campo y
   // vuelve a sombrear.

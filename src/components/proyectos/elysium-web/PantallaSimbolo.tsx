@@ -7,7 +7,7 @@ import IconosFlotantes from "./IconosFlotantes";
 import { ERAS } from "./simbolo";
 import { figuraDeEras } from "./simbolo";
 import { contarPorEra } from "./canciones";
-import { crearEstudioCristal } from "./estudioCristal";
+import { crearEstudioIridiscente } from "./estudioIridiscente";
 
 // Lo que tarda el símbolo en trazarse entero. Largo a propósito: es el momento
 // en que aparece lo que la persona acaba de generar, y merece verse nacer.
@@ -85,23 +85,37 @@ export default function PantallaSimbolo({ seleccion }: { seleccion: Set<string> 
             <LienzoMetal
               figura={figura}
               interactivo={false}
-              entorno={crearEstudioCristal}
+              // El MISMO plató que ilumina los iconos que flotan en el fondo.
+              // No es parecido, es el mismo archivo: un metal no tiene color
+              // propio, así que el panorama ES el material, y compartirlo hace
+              // que el símbolo generado y las eras se lean como la misma
+              // sustancia.
+              //
+              // Lo que no se puede clonar es el modelo de sombreado: los iconos
+              // son geometría 3D con el material físico de la librería, y esto
+              // es un relieve deducido de un mapa de altura. Comparten el
+              // entorno y la óptica del reflejo; la iridiscencia de película
+              // fina de aquellos la sustituye aquí la dispersión.
+              entorno={crearEstudioIridiscente}
               // Dispersión contenida. Llegó a estar en 0,045 y luego en 0,022, y
               // las dos se pasaban: el color invadía la superficie y, sobre
               // todo, amplificaba los escalones de los 256 niveles del mapa de
               // altura hasta salpicar la pieza de moteado. Lo que en la
               // referencia es un filo de arcoíris aquí se convertía en suciedad.
-              dispersion={0.015}
+              dispersion={0.013}
               // Y sin capas. Eran el reflejo del canto repetido hacia dentro, y
               // funcionaban con la cinta gruesa; con la cinta fina no hay fondo
               // donde quepan, así que solo aportaban líneas que no correspondían
               // a nada y delataban el truco. Lo que hace realista a esto es la
               // óptica que ya había, no una capa más encima.
               capas={0}
-              brillo={1.5}
+              brillo={1.25}
               // Cada brazo con su grosor: es lo que deja que los discos poco
               // votados salgan como hilos y se peguen a los gruesos.
               grosorLibre
+              // Y el alcance desligado del grosor, que es lo que hace que dos
+              // partes finas que se acercan se unan en vez de pasar de largo.
+              atraccion
               // Las alturas para la normal se miden más lejos. La normal sale de
               // restar dos muestras del mapa, y el mapa tiene 256 niveles: cuanto
               // más juntas se toman, más pesa el escalón frente a la pendiente
