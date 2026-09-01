@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import PantallaInicio from "./PantallaInicio";
+import PantallaEras from "./PantallaEras";
 import VisorEra from "./VisorEra";
 import TestSimbolo from "./TestSimbolo";
 import "./PantallaInicio.css";
@@ -14,10 +15,14 @@ import "./WebSimulada.css";
 // START lleva a la siguiente. Se guarda en estado y no en la URL porque es un
 // recorrido, no un sitio al que se llegue de fuera; si más adelante hay que
 // poder enlazar una pantalla suelta, esto pasa a ser una ruta.
-type Pantalla = "inicio" | "test";
+type Pantalla = "inicio" | "eras" | "test";
 
 export default function WebSimulada() {
   const [pantalla, setPantalla] = useState<Pantalla>("inicio");
+  // La era pulsada. Todavía no lleva a ninguna parte —el test por álbum está
+  // por hacer—, pero se guarda para que el día que lo esté baste con leerla
+  // aquí en vez de rehacer el cableado.
+  const [, setEra] = useState<string | null>(null);
 
   // data-theme="dark" en el envoltorio, no un fondo negro a pelo. Esta web es
   // negra por diseño, pero el lienzo de metal y el visor 3D sacan su papel de
@@ -27,14 +32,29 @@ export default function WebSimulada() {
   return (
     <div className="websim" data-theme="dark">
       {pantalla === "inicio" ? (
-        <PantallaInicio onStart={() => setPantalla("test")} />
+        <PantallaInicio onStart={() => setPantalla("eras")} />
+      ) : pantalla === "eras" ? (
+        <>
+          <PantallaEras onElegir={(era) => setEra(era)} />
+          {/* Puente provisional a lo que ya estaba construido. Al pulsar una era
+              todavía no pasa nada —el test por álbum está por hacer—, y sin este
+              enlace la pantalla del símbolo se quedaría sin manera de llegar a
+              ella. Se va en cuanto las eras lleven a su propio test. */}
+          <button
+            type="button"
+            className="eras-puente"
+            onClick={() => setPantalla("test")}
+          >
+            Ver la generación del símbolo
+          </button>
+        </>
       ) : (
         <>
           <header className="websim-barra">
             <button
               type="button"
               className="websim-volver"
-              onClick={() => setPantalla("inicio")}
+              onClick={() => setPantalla("eras")}
             >
               <svg width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="currentColor"
                 strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

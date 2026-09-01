@@ -21,6 +21,37 @@
 .flotantes canvas {
   display: block;
 }
+/* Salvo cuando los iconos son el contenido y no el fondo. Entonces sí recogen
+   el ratón, y el cursor lo decide el propio componente según qué haya debajo:
+   sobre una pieza, mano; sobre el hueco, flecha. */
+.flotantes.es-pulsable {
+  pointer-events: auto;
+  z-index: 3;
+}
+
+/* Pie de la pantalla de las eras. Va por encima del lienzo pero sin recoger el
+   ratón: si lo recogiera, taparía las piezas que pasen por detrás. */
+.eras-pie {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 34px;
+  z-index: 4;
+  margin: 0;
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+}
+/* En móvil los dos botones fijos de abajo se comen esa línea, así que sube por
+   encima de ellos. */
+@media (max-width: 700px) {
+  .eras-pie {
+    bottom: 74px;
+  }
+}
 
 .inicio-capa {
   position: relative;
