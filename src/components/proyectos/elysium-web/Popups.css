@@ -277,6 +277,38 @@
   pointer-events: none;
   overflow: visible;
 }
+/* El andamio: los siete ejes del gráfico, la marca de cada era y el orden en
+   que la línea las visita. Va apagado para quedar por detrás del trazo. */
+.simfinal-esqueleto .es-eje {
+  stroke: rgba(255, 255, 255, 0.22);
+  stroke-width: 0.0012;
+  stroke-dasharray: 0.008 0.008;
+}
+.simfinal-esqueleto .es-centro {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.55);
+  stroke-width: 0.0018;
+}
+.simfinal-esqueleto .es-marca {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.5);
+  stroke-width: 0.0016;
+}
+.simfinal-esqueleto .es-orden {
+  fill: #fff;
+  font-size: 0.026px;
+  font-weight: 700;
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: rgba(0, 0, 0, 0.85);
+  stroke-width: 0.006;
+  stroke-linejoin: round;
+}
+.simfinal-esqueleto .es-peso {
+  font-weight: 400;
+  fill: rgba(255, 255, 255, 0.6);
+}
+
 /* La huella de cada punto: donde dos de estos se solapan, el campo suma y sale
    la masa. Muy tenue a propósito —son cientos y se pisan—, así que lo que se
    lee no es cada círculo sino la DENSIDAD del amontonamiento. */

@@ -4,8 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import LienzoMetal, { ALCANCE, type TrazoHecho } from "@/components/proyectos/elysium/LienzoMetal";
 import Galaxia from "./Galaxia";
 import IconosFlotantes from "./IconosFlotantes";
-import { ERAS, POR_TRAMO } from "./simbolo";
-import { figuraDeEras } from "./simbolo";
+import { ERAS, POR_TRAMO, type Grafico } from "./simbolo";
+import { figuraDeEras, graficoDeEras } from "./simbolo";
 import { contarPorEra } from "./canciones";
 import { crearEstudioIridiscente } from "./estudioIridiscente";
 import { GROSOR_REFERENCIA } from "./simbolo";
@@ -57,9 +57,39 @@ function recortar(figura: TrazoHecho[], avance: number): TrazoHecho[] {
 //
 // Va en las mismas coordenadas que la figura, que son fracción del ANCHO del
 // lienzo. Por eso el viewBox es 0 0 1 1 y el marco tiene que ser cuadrado.
-function Esqueleto({ figura }: { figura: TrazoHecho[] }) {
+function Esqueleto({ figura, grafico }: { figura: TrazoHecho[]; grafico: Grafico | null }) {
   return (
     <svg className="simfinal-esqueleto" viewBox="0 0 1 1" aria-hidden="true">
+      {/* El gráfico va debajo de todo: es el andamio, no el dibujo. */}
+      {grafico && (
+        <g className="es-grafico">
+          {grafico.ejes.map((eje) => (
+            <line
+              key={eje.era}
+              x1={grafico.centro[0]}
+              y1={grafico.centro[1]}
+              x2={eje.punta[0]}
+              y2={eje.punta[1]}
+              className="es-eje"
+            />
+          ))}
+          {/* El anillo del centro: la línea sale de aquí y vuelve aquí. */}
+          <circle cx={grafico.centro[0]} cy={grafico.centro[1]} r={0.014} className="es-centro" />
+          {grafico.marcas.map((m) => (
+            <g key={m.era}>
+              <circle cx={m.en[0]} cy={m.en[1]} r={0.009} className="es-marca" />
+              {/* El orden en que la línea lo visita, y cuántas canciones lo
+                  sostienen: con los dos se lee de un vistazo si el recorrido es
+                  el que debería ser. */}
+              <text x={m.en[0]} y={m.en[1] - 0.019} className="es-orden">
+                {m.orden}
+                <tspan className="es-peso">{` (${m.peso})`}</tspan>
+              </text>
+            </g>
+          ))}
+        </g>
+      )}
+
       {figura.map((trazo, t) => (
         <g key={t}>
           {/* El alcance de cada punto: la huella que deja en el campo. Se pinta
@@ -88,6 +118,12 @@ export default function PantallaSimbolo({ seleccion }: { seleccion: Set<string> 
     const pesos = contarPorEra(seleccion, ERAS);
     return figuraDeEras(pesos);
   }, [seleccion]);
+
+  // El gráfico del que sale, solo para la vista de taller.
+  const grafico = useMemo(
+    () => graficoDeEras(contarPorEra(seleccion, ERAS)),
+    [seleccion]
+  );
 
   const [avance, setAvance] = useState(0);
   // PROVISIONAL, para afinar la forma: enseña el recorrido del que sale el
@@ -192,7 +228,7 @@ export default function PantallaSimbolo({ seleccion }: { seleccion: Set<string> 
           {/* El esqueleto va sobre el mismo cuadrado y con el MISMO recorte que
               el metal, así que se construye a la vez que él: es la forma de ver
               qué parte del trazo está produciendo cada masa, y en qué momento. */}
-          {esqueleto && <Esqueleto figura={figura} />}
+          {esqueleto && <Esqueleto figura={figura} grafico={grafico} />}
         </div>
       </div>
 

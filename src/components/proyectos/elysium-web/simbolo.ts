@@ -319,7 +319,14 @@ function adelgazarDondeSeAmontona(trazo: Punto[]): Punto[] {
   });
 }
 
-// De porcentajes a la figura, en las coordenadas relativas del lienzo.
+// El reparto: de porcentajes a dónde cae cada cosa, antes de convertirlo en
+// trazo.
+//
+// Está separado del tejido porque hay dos consumidores. La figura lo usa para
+// dibujar el metal, y la vista de taller lo usa para dibujar el GRÁFICO del que
+// sale: los siete ejes, hasta dónde llega cada uno y en qué orden los visita la
+// línea. Calculándolo dos veces se irían separando en cuanto uno de los dos
+// cambiara, y entonces el gráfico dejaría de explicar la figura.
 //
 // `pesos` no tiene por qué sumar 100 ni estar acotado: lo único que importa es
 // la proporción entre unos y otros, porque la figura se NORMALIZA —el álbum más
@@ -327,11 +334,11 @@ function adelgazarDondeSeAmontona(trazo: Punto[]): Punto[] {
 // canciones obtendría una figura diminuta, más pequeña que la distancia a la
 // que el metal se funde, y saldría un borrón en vez de un símbolo. Lo que dice
 // algo de una persona es el reparto entre discos, no cuántas canciones marcó.
-export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
+function disponer(pesos: Record<Era, number>) {
   const maximo = Math.max(...ERAS.map((e) => pesos[e] || 0));
-  // Nadie ha elegido nada: no hay figura que dibujar. Devolver un trazo aquí
+  // Nadie ha elegido nada: no hay figura que dibujar. Devolver algo aquí
   // pintaría un punto en medio del lienzo como si fuera un resultado.
-  if (maximo <= 0) return [];
+  if (maximo <= 0) return null;
 
   const cx = 0.5;
   // El lienzo mide la y en fracción del ANCHO, no del alto. Que el centro
@@ -468,6 +475,66 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
     cx + (x - mx) * k,
     cy + (y - my) * k,
   ];
+
+  return {
+    centro: [cx, cy] as [number, number],
+    maximo,
+    recorrido,
+    punto,
+    encajar,
+    vertices,
+    grosores,
+    puas,
+    grosoresPua,
+    desdePua,
+  };
+}
+
+// El gráfico del que sale la figura, ya encajado sobre el lienzo: los siete
+// ejes completos, la marca de cada era en su eje y el orden en que la línea los
+// visita.
+//
+// Es material de taller —lo pinta el interruptor "Trazo"— y existe porque el
+// recorrido es difícil de reconstruir mirando el metal: al fundirse, dos tramos
+// que se cruzan parecen uno, y un brazo que pasa cerca de otro parece que
+// termina ahí. Con los ejes y los números delante se ve lo que hay: dónde
+// empieza, en qué orden va y que vuelve al mismo sitio del que salió.
+export type Grafico = {
+  centro: [number, number];
+  ejes: { era: Era; punta: [number, number] }[];
+  marcas: { era: Era; en: [number, number]; orden: number; peso: number }[];
+};
+
+export function graficoDeEras(pesos: Record<Era, number>): Grafico | null {
+  const d = disponer(pesos);
+  if (!d) return null;
+  const [cx, cy] = d.centro;
+  return {
+    centro: d.encajar(d.centro),
+    // El eje entero, no hasta donde llega la marca: es la referencia contra la
+    // que se lee lo votado que está cada disco.
+    ejes: ERAS.map((era) => {
+      const i = ERAS.indexOf(era);
+      const angulo = (-90 + (i * 360) / ERAS.length) * (Math.PI / 180);
+      return {
+        era,
+        punta: d.encajar([cx + EXTENSION * Math.cos(angulo), cy + EXTENSION * Math.sin(angulo)]),
+      };
+    }),
+    marcas: ERAS.map((era) => ({
+      era,
+      en: d.encajar(d.punto(era)),
+      // 1 es el primero que visita la línea, 7 el último.
+      orden: d.recorrido.indexOf(era) + 1,
+      peso: pesos[era] || 0,
+    })),
+  };
+}
+
+export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
+  const d = disponer(pesos);
+  if (!d) return [];
+  const { vertices, grosores, puas, grosoresPua, desdePua, encajar } = d;
 
   // De poligonal a trazo, muestreando cada tramo e interpolando el grosor.
   const tejer = (
