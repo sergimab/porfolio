@@ -267,11 +267,7 @@ function factorPunta(
 // lo que tendría un plató real —techo claro, suelo oscuro, softboxes y tiras
 // de luz—, porque son esas formas, y no un degradado, las que al reflejarse
 // dibujan las cintas del cromo.
-// Se exporta para el visor 3D de la web de Elysium: los modelos de las eras se
-// iluminan con este mismo plató. Es lo que hace que el metal del símbolo
-// dibujado y el de los modelos importados se lean como el mismo material y no
-// como dos cromos distintos pegados en la misma página.
-export function crearEstudio(): HTMLCanvasElement {
+function crearEstudio(): HTMLCanvasElement {
   const c = document.createElement("canvas");
   c.width = 1024;
   c.height = 512;

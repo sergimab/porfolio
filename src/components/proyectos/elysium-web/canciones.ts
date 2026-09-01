@@ -23,8 +23,8 @@ export const CANCIONES: Record<Era, string[]> = {
     "Brown Eyes", "Summerboy", "Disco Heaven",
   ],
   "The Fame Monster": [
-    "Alejandro", "Monster", "Speechless", "Dance in the Dark", "Telephone",
-    "So Happy I Could Die", "Teeth",
+    "Bad Romance", "Alejandro", "Monster", "Speechless", "Dance in the Dark",
+    "Telephone", "So Happy I Could Die", "Teeth",
   ],
   "Born This Way": [
     "Marry the Night", "Born This Way", "Government Hooker", "Judas",

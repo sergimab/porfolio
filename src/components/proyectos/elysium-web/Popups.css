@@ -25,8 +25,8 @@
   border: 1px solid rgba(255, 255, 255, 0.85);
   border-radius: 18px;
   background: rgba(10, 10, 12, 0.42);
-  -webkit-backdrop-filter: blur(26px) saturate(115%);
-  backdrop-filter: blur(26px) saturate(115%);
+  -webkit-backdrop-filter: blur(15px) saturate(200%);
+  backdrop-filter: blur(15px) saturate(200%);
   color: #fff;
 }
 .cartel:focus {
@@ -234,4 +234,55 @@
   display: flex;
   justify-content: center;
   gap: 12px;
+}
+
+/* ── Pantalla final: el símbolo trazándose sobre el universo desenfocado ── */
+
+/* El velo cubre la pantalla entera y solo desenfoca lo que hay detrás. Va por
+   encima de la galaxia y los iconos, y por debajo del símbolo. */
+.simfinal-velo {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  -webkit-backdrop-filter: blur(15px) saturate(200%);
+  backdrop-filter: blur(15px) saturate(200%);
+  pointer-events: none;
+}
+
+.simfinal-centro {
+  position: relative;
+  z-index: 6;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+/* Cuadrado: la figura es radial y en un marco apaisado saldría estirada. Ver
+   el comentario de cy en simbolo.ts, que depende de que esto sea cuadrado. */
+.simfinal-lienzo {
+  width: min(76vh, 76vw, 760px);
+  aspect-ratio: 1 / 1;
+}
+/* El lienzo viene con su papel de puntos y su borde, que aquí sobran: lo que
+   tiene que verse por detrás del metal es el universo desenfocado, no una hoja
+   de cuaderno.
+   La altura hay que pasarla por la sección intermedia: el marco la pide en
+   porcentaje, y un porcentaje contra un padre sin altura definida vale cero.
+   Con el lienzo a cero, el mapa de altura se queda en un canvas de 0x0 y el
+   navegador rechaza dibujar sobre él. */
+.simfinal-lienzo .lienzo-fluido {
+  height: 100%;
+  /* El lienzo trae un margen superior pensado para cuando va dentro del scroll
+     de una página. Aquí sumaba 48px al alto y dejaba el marco rectangular, y la
+     figura se coloca dando por hecho que es cuadrado. */
+  margin-top: 0;
+}
+.simfinal-lienzo .lienzo-marco {
+  height: 100%;
+  background: none;
+  border: none;
+  border-radius: 0;
 }
