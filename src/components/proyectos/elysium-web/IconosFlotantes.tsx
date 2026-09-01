@@ -63,30 +63,61 @@ export const FLOTANTES: IconoFlotante[] = [
   { era: "Mayhem",           modelo: "/proyectos/elysium-web/era-mayhem.glb",           x: 0.70,  y: -0.38, escala: 1.25, movimiento: "gira" },
 ];
 
-// El resplandor que se enciende bajo la pieza al pasar por encima.
+// El resplandor de las piezas encendidas.
 //
-// Es un halo pintado, no un contorno calcado a la silueta, y es a conciencia:
-// un contorno exige una pasada de posproceso por cada pieza iluminada, y estas
-// son cintas caladas y llenas de púas, así que el contorno saldría enredado.
-// Un halo detrás, sumándose al fondo negro, se lee como luz propia y cuesta un
-// sprite.
-function crearHalo(): THREE.Texture {
-  const c = document.createElement("canvas");
-  c.width = c.height = 256;
-  const ctx = c.getContext("2d")!;
-  const g = ctx.createRadialGradient(128, 128, 0, 128, 128, 128);
-  // La caída es rápida al principio y larga al final: así hay un núcleo claro
-  // pegado a la pieza y una falda muy suave que se funde con el negro sin
-  // dejar el borde del círculo a la vista.
-  g.addColorStop(0, "rgba(190,255,246,0.95)");
-  g.addColorStop(0.18, "rgba(150,240,235,0.55)");
-  g.addColorStop(0.42, "rgba(110,200,220,0.20)");
-  g.addColorStop(0.72, "rgba(80,150,190,0.06)");
-  g.addColorStop(1, "rgba(0,0,0,0)");
-  ctx.fillStyle = g;
-  ctx.fillRect(0, 0, 256, 256);
-  return new THREE.CanvasTexture(c);
-}
+// Aquí hubo un halo pintado: un círculo degradado detrás de la pieza. Se ha
+// quitado porque delataba lo que era —una mancha redonda bajo una forma que no
+// lo es— y no se pegaba a la silueta.
+//
+// Ahora es BLOOM de verdad: se dibuja la pieza a solas en una textura aparte,
+// se desenfoca, y ese desenfoque se pinta por detrás sumándose al negro. Como
+// el resplandor sale de la pieza misma, rodea su contorno —púas incluidas— y
+// arrastra sus propios colores, que es lo que hace que parezca luz que emite
+// ella y no un foco puesto debajo.
+const VERTEX_QUAD = /* glsl */ `
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    gl_Position = vec4(position.xy, 0.0, 1.0);
+  }
+`;
+
+// Desenfoque separable: primero en horizontal y luego en vertical, que sale
+// mucho más barato que uno en dos dimensiones de una sola pasada.
+const BLUR_QUAD = /* glsl */ `
+  varying vec2 vUv;
+  uniform sampler2D uTex;
+  uniform vec2 uPaso;
+  void main() {
+    vec4 suma = vec4(0.0);
+    suma += texture2D(uTex, vUv - uPaso * 4.0) * 0.028;
+    suma += texture2D(uTex, vUv - uPaso * 3.0) * 0.065;
+    suma += texture2D(uTex, vUv - uPaso * 2.0) * 0.121;
+    suma += texture2D(uTex, vUv - uPaso)       * 0.175;
+    suma += texture2D(uTex, vUv)               * 0.198;
+    suma += texture2D(uTex, vUv + uPaso)       * 0.175;
+    suma += texture2D(uTex, vUv + uPaso * 2.0) * 0.121;
+    suma += texture2D(uTex, vUv + uPaso * 3.0) * 0.065;
+    suma += texture2D(uTex, vUv + uPaso * 4.0) * 0.028;
+    gl_FragColor = suma;
+  }
+`;
+
+// Y el que estampa el resplandor ya desenfocado.
+//
+// Hace falta un shader propio, y no un material normal con opacidad, por una
+// razón concreta: desparramar una cinta fina sobre una superficie ancha reparte
+// su luz y la deja casi negra, así que hay que poder MULTIPLICAR por encima de
+// uno para recuperarla. La opacidad solo sabe bajar de uno.
+const RESPLANDOR_QUAD = /* glsl */ `
+  varying vec2 vUv;
+  uniform sampler2D uTex;
+  uniform float uFuerza;
+  void main() {
+    vec4 c = texture2D(uTex, vUv);
+    gl_FragColor = vec4(c.rgb * uFuerza, c.a * uFuerza);
+  }
+`;
 
 export default function IconosFlotantes({
   iconos = FLOTANTES,
@@ -133,7 +164,54 @@ export default function IconosFlotantes({
     estudio.mapping = THREE.EquirectangularReflectionMapping;
     estudio.colorSpace = THREE.SRGBColorSpace;
     escena.environment = estudio;
-    const texturaHalo = crearHalo();
+
+    // ── Montaje del bloom ────────────────────────────────────────────────────
+    //
+    // Dos destinos a baja resolución para el ping-pong del desenfoque. Bajos a
+    // propósito: lo que se guarda ahí es una mancha borrosa, así que el detalle
+    // sobra, y a un tercio de tamaño cada pasada cuesta la novena parte.
+    const opcionesRT = { depthBuffer: false, stencilBuffer: false };
+    const rtA = new THREE.WebGLRenderTarget(1, 1, opcionesRT);
+    const rtB = new THREE.WebGLRenderTarget(1, 1, opcionesRT);
+    const matBlur = new THREE.ShaderMaterial({
+      vertexShader: VERTEX_QUAD,
+      fragmentShader: BLUR_QUAD,
+      uniforms: { uTex: { value: null }, uPaso: { value: new THREE.Vector2() } },
+      // Sin mezcla: el desenfoque no pinta encima de nada, calcula.
+      transparent: false,
+      blending: THREE.NoBlending,
+    });
+    const escenaQuad = new THREE.Scene();
+    const camaraQuad = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), matBlur);
+    escenaQuad.add(quad);
+
+    // El cuadro que lleva el resplandor ya desenfocado, a pantalla completa y
+    // POR DETRÁS de las piezas: así las rodea sin lavarles el metal.
+    const matResplandor = new THREE.ShaderMaterial({
+      vertexShader: VERTEX_QUAD,
+      fragmentShader: RESPLANDOR_QUAD,
+      uniforms: { uTex: { value: rtA.texture }, uFuerza: { value: 0 } },
+      transparent: true,
+      depthTest: false,
+      depthWrite: false,
+      // Suma pura: lo que sale del shader se añade a lo que hay debajo, sin
+      // que el alfa vuelva a escalarlo. Con AdditiveBlending a secas el color
+      // se multiplicaría otra vez por el alfa y el resplandor se apagaría justo
+      // en su falda, que es donde tiene que verse.
+      blending: THREE.CustomBlending,
+      blendSrc: THREE.OneFactor,
+      blendDst: THREE.OneFactor,
+    });
+    // En su PROPIA escena, no en la de las piezas.
+    //
+    // Es lo que permite pintarlo antes que ellas y que quede por DETRÁS. Metido
+    // en la escena principal acabaría dibujándose después —los materiales con
+    // mezcla van siempre detrás de los opacos en el orden de dibujo— y el
+    // resplandor se sumaría también sobre el metal, lavándolo justo donde tiene
+    // que estar más limpio.
+    const escenaResplandor = new THREE.Scene();
+    escenaResplandor.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), matResplandor));
 
     type Vaiven = {
       amplitud: [number, number];
@@ -154,12 +232,10 @@ export default function IconosFlotantes({
       grupo: THREE.Group;
       def: IconoFlotante;
       vaiven: Vaiven;
-      // Cuadro invisible que recoge el ratón, y halo que se enciende debajo.
-      // Los dos van SUELTOS de la pieza, no colgando de ella: si colgaran,
-      // basculando con ella el cuadro se volvería difícil de acertar y el halo
-      // se vería en escorzo justo cuando la pieza se pone de perfil.
+      // Cuadro invisible que recoge el ratón. Va SUELTO de la pieza, no
+      // colgando de ella: colgando, bascularía con ella y acertarle se
+      // convertiría en un juego de puntería.
       blanco: THREE.Mesh;
-      halo: THREE.Sprite;
       // Cuánto está encendida, de 0 a 1. Se persigue al objetivo en vez de
       // saltar, que es lo que hace que encienda y apague con suavidad.
       brillo: number;
@@ -187,26 +263,10 @@ export default function IconosFlotantes({
       );
       escena.add(blanco);
 
-      const halo = new THREE.Sprite(
-        new THREE.SpriteMaterial({
-          map: texturaHalo,
-          transparent: true,
-          opacity: 0,
-          depthWrite: false,
-          // Sumándose al fondo, que es como se comporta la luz: el halo aclara
-          // lo que hay detrás en vez de taparlo con un disco gris.
-          blending: THREE.AdditiveBlending,
-        })
-      );
-      // Por detrás de la pieza, para que la ilumine sin lavarla.
-      halo.position.z = -0.5;
-      escena.add(halo);
-
       piezas.push({
         grupo,
         def,
         blanco,
-        halo,
         brillo: 0,
         pulso: 0,
         vaiven: {
@@ -315,7 +375,16 @@ export default function IconosFlotantes({
       camara.top = 1;
       camara.bottom = -1;
       camara.updateProjectionMatrix();
-      for (const { grupo, def, vaiven, blanco, halo } of piezas) {
+
+      // Los destinos del desenfoque, a un tercio: lo que guardan es una mancha
+      // borrosa y el detalle sobra, así que cada pasada cuesta la novena parte.
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const anchoRT = Math.max(2, Math.round(width * dpr * 0.34));
+      const altoRT = Math.max(2, Math.round(height * dpr * 0.34));
+      rtA.setSize(anchoRT, altoRT);
+      rtB.setSize(anchoRT, altoRT);
+
+      for (const { grupo, def, vaiven, blanco } of piezas) {
         // Se guarda el sitio de reposo; la deriva se suma encima en cada
         // fotograma. Si aquí se escribiera la posición final, el vaivén se
         // reiniciaría de golpe cada vez que se cambia el tamaño de la ventana.
@@ -338,7 +407,6 @@ export default function IconosFlotantes({
         // formas caladas y llenas de huecos, y pedir que se acierte en el metal
         // mismo convertiría pulsarlas en un juego de puntería.
         blanco.scale.setScalar(tam * 1.25);
-        halo.scale.setScalar(tam * 2.6);
       }
     };
     medir();
@@ -393,7 +461,7 @@ export default function IconosFlotantes({
     const bucle = (t: number) => {
       raf = requestAnimationFrame(bucle);
       for (const pieza of piezas) {
-        const { grupo, vaiven, blanco, halo } = pieza;
+        const { grupo, vaiven, blanco } = pieza;
         if (!quieto) {
           const [a1, a2] = vaiven.amplitud;
           const [w1, w2] = vaiven.ritmo;
@@ -421,16 +489,12 @@ export default function IconosFlotantes({
           }
         }
 
-        // El cuadro y el halo siguen a la pieza, pero solo en POSICIÓN.
+        // El cuadro sigue a la pieza, pero solo en POSICIÓN.
         blanco.position.set(grupo.position.x, grupo.position.y, 0);
-        halo.position.set(grupo.position.x, grupo.position.y, -0.5);
 
-        // Encendido y apagado suaves. El 0,12 es la parte del camino que
-        // recorre en cada fotograma: sube en unas décimas y baja igual, sin el
-        // parpadeo que daría cambiar de golpe al entrar y salir del cuadro.
-        // El pulso del clic se desinfla solo, y mientras dura hincha la pieza y
-        // el halo. Va sobre el tamaño de reposo guardado, no sobre la escala
-        // actual, o cada pulso partiría del tamaño que dejó el anterior.
+        // El pulso del clic se desinfla solo y mientras dura hincha la pieza.
+        // Va sobre el tamaño de reposo guardado, no sobre la escala actual, o
+        // cada pulso partiría del tamaño que dejó el anterior.
         if (pieza.pulso > 0.001) {
           pieza.pulso *= 0.9;
           grupo.scale.setScalar(vaiven.tam * (1 + pieza.pulso * 0.16));
@@ -439,25 +503,64 @@ export default function IconosFlotantes({
           grupo.scale.setScalar(vaiven.tam);
         }
 
+        // Encendido y apagado suaves. El 0,12 es la parte del camino que
+        // recorre en cada fotograma: sube en unas décimas y baja igual, sin el
+        // parpadeo que daría cambiar de golpe al entrar y salir del cuadro.
         const objetivo = pieza === encima ? 1 : 0;
         pieza.brillo += (objetivo - pieza.brillo) * 0.12;
-        (halo.material as THREE.SpriteMaterial).opacity =
-          Math.min(1, pieza.brillo * 0.85 + pieza.pulso * 0.5);
-        if (pieza.brillo > 0.002) {
-          grupo.traverse((h) => {
-            const m = h as THREE.Mesh;
-            const mat = m.material as THREE.MeshPhysicalMaterial | undefined;
-            if (m.isMesh && mat?.emissive) {
-              mat.emissive.setRGB(
-                pieza.brillo * 0.10,
-                pieza.brillo * 0.19,
-                pieza.brillo * 0.20
-              );
-            }
-          });
-        }
       }
+
+      // ── El resplandor ─────────────────────────────────────────────────────
+      //
+      // Tres pasos: dibujar a solas las piezas encendidas, desenfocar lo
+      // dibujado, y dejar ese desenfoque puesto por detrás de todo.
+      const fuerza = piezas.reduce(
+        (m, p) => Math.max(m, p.brillo + p.pulso * 0.6),
+        0
+      );
+      const hayResplandor = fuerza > 0.004;
+      if (hayResplandor) {
+        // 1. La silueta: solo las piezas encendidas, a solas.
+        for (const p of piezas) p.grupo.visible = p.brillo > 0.004 || p.pulso > 0.004;
+        renderer.setRenderTarget(rtA);
+        renderer.setClearColor(0x000000, 0);
+        renderer.clear();
+        renderer.render(escena, camara);
+
+        // 2. El desenfoque, en tres vueltas con el paso cada vez más largo. Con
+        //    una sola vuelta el resplandor queda corto y con el borde a la
+        //    vista; encadenando pasos crecientes se consigue una falda ancha y
+        //    suave sin un kernel enorme.
+        quad.material = matBlur;
+        for (const paso of [1.5, 3, 5.5]) {
+          matBlur.uniforms.uTex.value = rtA.texture;
+          matBlur.uniforms.uPaso.value.set(paso / rtA.width, 0);
+          renderer.setRenderTarget(rtB);
+          renderer.render(escenaQuad, camaraQuad);
+
+          matBlur.uniforms.uTex.value = rtB.texture;
+          matBlur.uniforms.uPaso.value.set(0, paso / rtA.height);
+          renderer.setRenderTarget(rtA);
+          renderer.render(escenaQuad, camaraQuad);
+        }
+
+        // 3. Todas vuelven a verse.
+        for (const p of piezas) p.grupo.visible = true;
+        matResplandor.uniforms.uFuerza.value = fuerza * 2.9;
+      }
+
+      // Y el dibujo final, en dos capas: primero el resplandor y encima las
+      // piezas. Con autoClear apagado entre las dos, para que la segunda no
+      // borre la primera.
+      renderer.setRenderTarget(null);
+      renderer.clear();
+      if (hayResplandor) {
+        renderer.autoClear = false;
+        renderer.render(escenaResplandor, camaraQuad);
+      }
+      renderer.autoClear = false;
       renderer.render(escena, camara);
+      renderer.autoClear = true;
     };
     raf = requestAnimationFrame(bucle);
 
@@ -491,8 +594,10 @@ export default function IconosFlotantes({
           else mat?.dispose();
         }
       });
-      for (const p of piezas) p.halo.material.dispose();
-      texturaHalo.dispose();
+      rtA.dispose();
+      rtB.dispose();
+      matBlur.dispose();
+      matResplandor.dispose();
       estudio.dispose();
       renderer.dispose();
       renderer.domElement.remove();
