@@ -71,7 +71,13 @@ const EXTENSION = 0.4;
 // abierto, sin agujas y sin agujeros. El mínimo solo existe para que un disco
 // con cero votos siga teniendo dirección propia y no colapse sobre el centro
 // exacto.
-const RADIO_MINIMO = 0.06;
+// 0,28 sale de las dos veces que me pasé: con 0,45 los siete vértices quedaban
+// tan repartidos que no se tocaba nada y salía un polígono de alambre; con
+// 0,06, tres o cuatro discos flojos se apilaban sobre el centro y aquello era
+// un pegote. En el gráfico de referencia el trazo va del 20% al 45% del radio
+// —o sea que el más flojo llega a poco menos de la mitad del más votado—, que
+// es más o menos aquí.
+const RADIO_MINIMO = 0.28;
 
 // Lo que mide la figura de lado a lado una vez encajada, en fracción del
 // lienzo.
@@ -90,12 +96,13 @@ const ENCAJE = 0.62;
 // contorno liso sin nada dentro. Y su suelo: por debajo, dos tramos que se
 // cruzan se cortan en vez de fundirse y el cruce se ve como un aspa y no como
 // una unión.
-// Medido sobre la referencia: allí el trazo llega como mucho al 45% del radio
-// del gráfico y el grosor extruido es un 4% de ese radio, o sea que el grosor
-// es cerca de un 9% de lo que mide el trazo. Con 0,013 estábamos a la mitad de
-// eso, y por eso salía un alambre en vez de una pieza: sin grosor de sobra los
-// tramos vecinos no llegan a tocarse y no hay ni agujas ni agujeros.
-export const GROSOR = 0.024;
+// El punto de equilibrio, y es estrecho. A 0,013 sale un alambre: los tramos
+// vecinos no llegan a tocarse y no hay ni agujas ni agujeros. A 0,024 sale un
+// pegote: el campo alcanza a todo a la vez, los huecos se cierran y la pieza
+// pierde el filo. Lo medí sobre la referencia y me pasé —el 9% que deduje de la
+// imagen no sobrevive al contraste con el resultado—, así que este número sale
+// de mirar figuras, no de una cuenta.
+export const GROSOR = 0.016;
 
 // Puntos por tramo. El lienzo remuestrea por su cuenta, pero necesita bastantes
 // puntos crudos para que su suavizado no redondee los vértices, que es donde
