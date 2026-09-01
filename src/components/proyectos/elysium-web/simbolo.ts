@@ -94,6 +94,17 @@ const HILO = 0.06;
 // bastantes puntos crudos para que su suavizado no redondee los vértices, que
 // es justo donde nacen las puntas.
 const POR_TRAMO = 14;
+// Largo de la púa que sale de un vértice, en fracción del lienzo.
+//
+// Esto NO lo produce la fusión sola. El campo estira un vértice en aguja cuando
+// el giro es muy cerrado, pero los vértices de esta figura son giros suaves, y
+// ahí lo que sale es una esquina redondeada. La aguja hay que dibujarla: al
+// llegar al vértice, el recorrido sale un poco hacia fuera y vuelve por donde ha
+// venido.
+//
+// Y ese pico de ida y vuelta sí lo afila la fusión, porque es un giro de 180°:
+// el más cerrado que hay. De un rabito corto sale una aguja larga.
+const PUA = 0.115;
 
 // De porcentajes a la figura, en las coordenadas relativas del lienzo.
 //
@@ -123,6 +134,15 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
     return GROSOR * (HILO + (1 - HILO) * proporcion);
   };
 
+  // Cuánto sobresale la púa de cada vértice. Va al REVÉS que los votos: el
+  // disco más votado no saca ninguna y se queda con su esquina redondeada,
+  // mientras que los flojos salen en aguja. Es lo que hace que en una misma
+  // figura convivan las dos terminaciones sin repartirlas a mano.
+  const puaDe = (era: Era) => {
+    const proporcion = (pesos[era] || 0) / maximo;
+    return PUA * Math.pow(1 - proporcion, 1.5);
+  };
+
   const punto = (era: Era): [number, number] => {
     const i = ERAS.indexOf(era);
     // Se empieza arriba y se gira a favor del reloj.
@@ -143,20 +163,32 @@ export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
     (a, b) => (pesos[b] || 0) - (pesos[a] || 0) || ERAS.indexOf(a) - ERAS.indexOf(b)
   );
 
-  // Cada vértice lleva su grosor. Los del centro se quedan con el del brazo que
-  // sale o entra por ellos, para que el cambio ocurra a lo largo del brazo y no
-  // de golpe en el centro.
-  const grosores = [
-    grosorDe(recorrido[0]),
-    ...recorrido.map(grosorDe),
-    grosorDe(recorrido[recorrido.length - 1]),
-  ];
+  // El recorrido, vértice a vértice y con su grosor al lado. Los del centro se
+  // quedan con el del brazo que sale o entra por ellos, para que el cambio
+  // ocurra a lo largo del brazo y no de golpe en el centro.
+  let vertices: [number, number][] = [[cx, cy]];
+  const grosores: number[] = [grosorDe(recorrido[0])];
 
-  let vertices: [number, number][] = [
-    [cx, cy],
-    ...recorrido.map(punto),
-    [cx, cy],
-  ];
+  for (const era of recorrido) {
+    const [vx, vy] = punto(era);
+    vertices.push([vx, vy]);
+    grosores.push(grosorDe(era));
+
+    // Y, si le toca, la púa: se sale hacia fuera siguiendo el radio y se vuelve.
+    // La punta va con el grosor mínimo, que es lo que la hace aguja y no cuerno.
+    const largo = puaDe(era);
+    if (largo > 0.004) {
+      const d = Math.hypot(vx - cx, vy - cy) || 1;
+      const ux = (vx - cx) / d;
+      const uy = (vy - cy) / d;
+      vertices.push([vx + ux * largo, vy + uy * largo]);
+      grosores.push(GROSOR * HILO);
+      vertices.push([vx, vy]);
+      grosores.push(grosorDe(era));
+    }
+  }
+  vertices.push([cx, cy]);
+  grosores.push(grosorDe(recorrido[recorrido.length - 1]));
 
   // Encaje: se lleva la figura al centro del lienzo y se escala para que ocupe
   // siempre lo mismo.
