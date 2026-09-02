@@ -14,23 +14,27 @@
 .bounceCardsContainer {
   --bc-card: 200px;
   --bc-spread: 145px;
-  /* La proporción de la portada (alto respecto al ancho) y el alto de la banda
-     del nombre. La tarjeta es la suma de las dos. */
-  --bc-alto: 1.25;
-  --bc-banda: 34px;
+  /* La proporción de la banda del nombre: cinco de ancho por uno de alto, o sea
+     un quinto del ancho de la tarjeta.
+     Va en proporción y no en píxeles a propósito. La tarjeta es cuadrada y la
+     portada es lo que queda al restarle la banda, así que con un alto fijo la
+     proporción de la portada cambiaría con el tamaño de la tarjeta —y no
+     habría un tamaño único con el que diseñar las portadas—. Así la portada es
+     SIEMPRE 5:4. */
+  --bc-banda: 5 / 1;
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   width: calc(var(--bc-card) + var(--bc-spread) * (var(--bc-count) - 1) + 48px);
-  /* El alto sigue al de la tarjeta, que ya no es cuadrada: la portada mide
-     ALTO_PORTADA de ancho y la banda va debajo. */
-  height: calc(var(--bc-card) * var(--bc-alto) + var(--bc-banda) + 90px);
+  height: calc(var(--bc-card) + 90px);
 }
 
 .bc-card {
   position: absolute;
   width: var(--bc-card);
+  /* Cuadrada la TARJETA, contando la banda: la portada es lo que sobra. */
+  aspect-ratio: 1;
   display: flex;
   flex-direction: column;
   /* Transparente, no ausente: el aro de degradado se dibuja encima justo aquí,
@@ -44,14 +48,15 @@
   will-change: transform;
 }
 
-/* La caja de la portada: rectangular y con su propio recorte. La imagen la
-   llena con object-fit, así que se recorta por donde sobre y lo que se ve es
-   siempre el centro. */
+/* La caja de la portada: se queda con todo el alto que la banda no usa. La
+   imagen la llena con object-fit, así que se recorta por donde sobre y lo que
+   se ve es siempre el centro. */
 .bc-medio {
   display: block;
   position: relative;
+  flex: 1;
+  min-height: 0;
   width: 100%;
-  aspect-ratio: 1 / var(--bc-alto, 1.25);
   overflow: hidden;
   border-radius: 15px 15px 0 0;
 }
@@ -100,14 +105,25 @@
 .bc-name {
   position: relative;
   z-index: 2;
-  min-height: var(--bc-banda, 34px);
+  flex: none;
+  /* El alto sale de la PROPORCIÓN y no de un porcentaje: un `height: 20%` se
+     resuelve contra el alto del contenedor y ahí se cuela el borde y el
+     redondeo de la tarjeta, así que la banda salía un par de píxeles más alta
+     de la cuenta y la portada dejaba de ser 5:4 exacto. Con la proporción, el
+     alto se deriva del ANCHO, que es el que manda. */
+  aspect-ratio: var(--bc-banda, 5 / 1);
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 0 0 15px 15px;
-  padding: 8px 12px;
+  padding: 4px 10px;
+  box-sizing: border-box;
+  /* Un título largo en una tarjeta estrecha parte en dos líneas; el recorte
+     evita que empuje la banda y descuadre el cuadrado. */
+  overflow: hidden;
   text-align: center;
-  font-size: 12px;
+  line-height: 1.2;
+  font-size: 11.5px;
   font-weight: 500;
   letter-spacing: 0.02em;
 }

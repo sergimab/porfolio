@@ -180,17 +180,19 @@ export default function BounceCards({
             encima. Antes la banda flotaba sobre la imagen y se comía su franja
             de abajo, así que había que diseñar cada portada dejando ese hueco
             libre —y aun así tapaba cosas—. Separadas, la portada se ve entera y
-            se puede componer centrada. */}
+            se puede componer centrada.
+            El cuadrado sigue siendo la TARJETA: la portada es lo que queda al
+            restarle la banda. */}
         <span className="bc-medio">
           {item.cover ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img className="bc-img" src={item.cover} alt={title} />
           ) : (
             <div className="bc-img bc-placeholder" aria-hidden="true">
-              <svg viewBox="0 0 200 250">
-                <rect x="45" y="85" width="110" height="80" rx="6" fill="none" stroke="currentColor" strokeWidth="2" />
-                <circle cx="72" cy="111" r="9" fill="none" stroke="currentColor" strokeWidth="2" />
-                <path d="M45 147 82 117l30 16 40-28" fill="none" stroke="currentColor" strokeWidth="2" />
+              <svg viewBox="0 0 200 160">
+                <rect x="45" y="40" width="110" height="80" rx="6" fill="none" stroke="currentColor" strokeWidth="2" />
+                <circle cx="72" cy="66" r="9" fill="none" stroke="currentColor" strokeWidth="2" />
+                <path d="M45 102 82 72l30 16 40-28" fill="none" stroke="currentColor" strokeWidth="2" />
               </svg>
             </div>
           )}
