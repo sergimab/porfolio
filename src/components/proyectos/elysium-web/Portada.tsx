@@ -61,14 +61,20 @@ export default function Portada({ seleccion }: { seleccion: Set<string> }) {
             // color de lo que le rodea, así que para que la pieza pertenezca a
             // la carátula hay que cambiarle la habitación, no el material.
             entorno={crearEstudioPortada}
-            dispersion={0.012}
+            // Cromo, no vidrio: los canales apenas se separan, así que el
+            // arcoíris se queda en un hilo en el filo mismo y el cuerpo de la
+            // pieza devuelve limpio el rosa y el violeta de la caja. Es lo que
+            // la hace mimetizarse con la carátula en vez de destacar sobre
+            // ella.
+            dispersion={0.006}
+            // Y sin líneas interiores: una chapa pulida, no un canto de vidrio.
             capas={0}
-            brillo={1.5}
+            brillo={1.62}
             grosorLibre
             atraccion
             suavizado={0}
             suavidad={9}
-            redondeo={2.5}
+            redondeo={3.5}
           />
         )}
       </div>

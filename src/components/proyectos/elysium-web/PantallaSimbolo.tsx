@@ -7,7 +7,7 @@ import IconosFlotantes from "./IconosFlotantes";
 import { ERAS, POR_TRAMO, type Grafico } from "./simbolo";
 import { figuraDeEras, graficoDeEras } from "./simbolo";
 import { contarPorEra } from "./canciones";
-import { crearEstudioIridiscente } from "./estudioIridiscente";
+import { crearEstudioVidrio } from "./estudioVidrio";
 import Controles, { type Material } from "./Controles";
 
 // Las dos herramientas de taller —el esqueleto del trazo y el panel de mandos—
@@ -167,10 +167,12 @@ export default function PantallaSimbolo({
   const [mandos, setMandos] = useState(false);
   const [retoque, setRetoque] = useState(0);
   const [material, setMaterial] = useState<Material>({
-    dispersion: 0.012,
+    // Vidrio, no cromo: los canales muy separados son los destellos de
+    // arcoíris de los filos.
+    dispersion: 0.022,
     suavidad: 9,
     redondeo: 2.5,
-    brillo: 1.25,
+    brillo: 1.45,
   });
 
   const pesos = useMemo(() => contarPorEra(seleccion, ERAS), [seleccion]);
@@ -236,30 +238,22 @@ export default function PantallaSimbolo({
             <LienzoMetal
               figura={figura}
               interactivo={false}
-              // El MISMO plató que ilumina los iconos que flotan en el fondo.
-              // No es parecido, es el mismo archivo: un metal no tiene color
-              // propio, así que el panorama ES el material, y compartirlo hace
-              // que el símbolo generado y las eras se lean como la misma
-              // sustancia.
-              //
-              // Lo que no se puede clonar es el modelo de sombreado: los iconos
-              // son geometría 3D con el material físico de la librería, y esto
-              // es un relieve deducido de un mapa de altura. Comparten el
-              // entorno y la óptica del reflejo; la iridiscencia de película
-              // fina de aquellos la sustituye aquí la dispersión.
-              entorno={crearEstudioIridiscente}
-              // Dispersión contenida. Llegó a estar en 0,045 y luego en 0,022, y
-              // las dos se pasaban: el color invadía la superficie y, sobre
-              // todo, amplificaba los escalones de los 256 niveles del mapa de
-              // altura hasta salpicar la pieza de moteado. Lo que en la
-              // referencia es un filo de arcoíris aquí se convertía en suciedad.
+              // El plató del vidrio: oscuro con unas pocas fuentes muy
+              // brillantes. Un objeto transparente se ilumina así en un plató
+              // de verdad, y es lo que produce las bandas nítidas; en una
+              // habitación clara y pareja el vidrio pierde el dibujo interior y
+              // sale como una pastilla blanca.
+              entorno={crearEstudioVidrio}
               dispersion={material.dispersion}
-              // Y sin capas. Eran el reflejo del canto repetido hacia dentro, y
-              // funcionaban con la cinta gruesa; con la cinta fina no hay fondo
-              // donde quepan, así que solo aportaban líneas que no correspondían
-              // a nada y delataban el truco. Lo que hace realista a esto es la
-              // óptica que ya había, no una capa más encima.
-              capas={0}
+              // Y CON capas: son el reflejo del canto repetido hacia dentro,
+              // que es exactamente el dibujo de la referencia —cada brazo
+              // llevando dos o tres líneas paralelas a su propio contorno—.
+              //
+              // Estuvieron en cero mucho tiempo, y con razón: entonces la cinta
+              // era fina y no había fondo donde cupieran, así que solo aportaban
+              // líneas que no correspondían a nada. Ahora los montantes tienen
+              // cuerpo y las líneas caen donde deben.
+              capas={3}
               brillo={material.brillo}
               // Cada brazo con su grosor: es lo que deja que los discos poco
               // votados salgan como hilos y se peguen a los gruesos.
