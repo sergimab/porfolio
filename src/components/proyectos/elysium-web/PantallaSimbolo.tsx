@@ -19,6 +19,10 @@ const TALLER = false;
 // Lo que tarda el símbolo en trazarse entero. Largo a propósito: es el momento
 // en que aparece lo que la persona acaba de generar, y merece verse nacer.
 const DURACION = 4600;
+// Y lo que se queda a la vista, ya entero, antes de pasar a la portada. Sin
+// esta pausa el símbolo se termina de trazar y desaparece en el mismo gesto:
+// hay que darle un momento para verlo hecho.
+const PAUSA = 1400;
 
 // Recorta la figura para enseñar solo el principio de su recorrido.
 //
@@ -142,7 +146,16 @@ function Esqueleto({ figura, grafico }: { figura: TrazoHecho[]; grafico: Grafico
 
 // La pantalla final: el universo se queda detrás, desenfocado, y el símbolo se
 // dibuja solo en el centro.
-export default function PantallaSimbolo({ seleccion }: { seleccion: Set<string> }) {
+export default function PantallaSimbolo({
+  seleccion,
+  onListo,
+}: {
+  seleccion: Set<string>;
+  // Se avisa cuando el símbolo ha terminado de trazarse, para pasar a la
+  // portada. La espera no va aquí dentro sino en el efecto: el símbolo recién
+  // hecho merece un momento a la vista antes de que la pantalla cambie.
+  onListo: () => void;
+}) {
   const [avance, setAvance] = useState(0);
   // PROVISIONAL, para afinar la forma: enseña el recorrido del que sale el
   // metal. Se va con el botón que lo enciende.
@@ -179,9 +192,11 @@ export default function PantallaSimbolo({ seleccion }: { seleccion: Set<string> 
     // el adorno.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setAvance(1);
-      return;
+      const salto = window.setTimeout(onListo, PAUSA);
+      return () => clearTimeout(salto);
     }
     let raf = 0;
+    let espera = 0;
     let inicio = 0;
     const paso = (t: number) => {
       if (!inicio) inicio = t;
@@ -190,9 +205,14 @@ export default function PantallaSimbolo({ seleccion }: { seleccion: Set<string> 
       // final frenando, que es como se termina un trazo a mano.
       setAvance(p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2);
       if (p < 1) raf = requestAnimationFrame(paso);
+      else espera = window.setTimeout(onListo, PAUSA);
     };
     raf = requestAnimationFrame(paso);
-    return () => cancelAnimationFrame(raf);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(espera);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const figura = useMemo(

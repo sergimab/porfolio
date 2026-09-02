@@ -1,0 +1,57 @@
+/* La portada del disco: fondo, símbolo y manos, en ese orden. */
+.portada {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  /* El disco es cuadrado y la pantalla no: se limita por los dos lados para que
+     no se salga ni por alto ni por ancho. */
+  max-width: min(86vh, 100%);
+  margin: 0 auto;
+}
+
+.portada-capa {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  /* Las dos capas están exportadas al mismo tamaño y alineadas, así que tienen
+     que escalar EXACTAMENTE igual: cualquier recorte distinto entre ellas
+     desalinearía las manos respecto a su propio hueco. */
+  object-fit: fill;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+/* Las manos, por encima del símbolo. No recogen el ratón: lo que hay debajo
+   —el símbolo— tiene que poder recibirlo si algún día se hace interactivo. */
+.portada-capa.es-frente {
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* El hueco. Los números salen de medir la mancha oscura en la imagen del fondo;
+   ver HUECO en Portada.tsx, que es de donde tienen que venir. */
+.portada-hueco {
+  position: absolute;
+  left: 22.33%;
+  top: 22.67%;
+  width: 54.67%;
+  /* Cuadrado, no la caja del hueco: la figura es radial y en un marco apaisado
+     saldría estirada. El hueco es casi cuadrado, así que la diferencia es un
+     pelo de aire arriba y abajo. */
+  aspect-ratio: 1 / 1;
+  z-index: 2;
+}
+/* El lienzo trae papel, borde y un margen pensados para ir dentro del scroll de
+   una página. Aquí sobran los tres: lo que tiene que verse por detrás del metal
+   es el interior oscuro de la caja. */
+.portada-hueco .lienzo-fluido {
+  height: 100%;
+  margin-top: 0;
+}
+.portada-hueco .lienzo-marco {
+  height: 100%;
+  background: none;
+  border: none;
+  border-radius: 0;
+}

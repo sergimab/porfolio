@@ -5,10 +5,12 @@ import Link from "next/link";
 import PantallaInicio from "./PantallaInicio";
 import PantallaEras from "./PantallaEras";
 import PantallaSimbolo from "./PantallaSimbolo";
+import Portada from "./Portada";
 import { seleccionAlAzar } from "./canciones";
 import { ERAS } from "./simbolo";
 import "./PantallaInicio.css";
 import "./Popups.css";
+import "./Portada.css";
 import "./WebSimulada.css";
 
 // La web de Elysium, a pantalla completa.
@@ -18,7 +20,7 @@ import "./WebSimulada.css";
 // estado y no en la URL porque es un recorrido, no un sitio al que se llegue de
 // fuera; si más adelante hay que poder enlazar una pantalla suelta, esto pasa a
 // ser una ruta.
-type Pantalla = "inicio" | "eras" | "simbolo";
+type Pantalla = "inicio" | "eras" | "simbolo" | "portada";
 
 export default function WebSimulada() {
   const [pantalla, setPantalla] = useState<Pantalla>("inicio");
@@ -55,7 +57,15 @@ export default function WebSimulada() {
         />
       )}
 
-      {pantalla === "simbolo" && <PantallaSimbolo seleccion={seleccion} />}
+      {pantalla === "simbolo" && (
+        <PantallaSimbolo seleccion={seleccion} onListo={() => setPantalla("portada")} />
+      )}
+
+      {pantalla === "portada" && (
+        <div className="websim-portada">
+          <Portada seleccion={seleccion} />
+        </div>
+      )}
 
       {/* El hilo de vuelta al portfolio, siempre disponible: sin él, quien entra
           aquí desde el proyecto se queda encerrado. Va discreto y por encima de

@@ -34,3 +34,21 @@
   border-color: rgba(255, 255, 255, 0.6);
 }
 
+
+/* La pantalla de la portada. De momento es solo el disco centrado: la página
+   entera —lista de canciones, importar a la plataforma, comprar— viene
+   después. */
+.websim-portada {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4vh 24px;
+  box-sizing: border-box;
+  /* Fondo claro, como en el diseño: la portada es rosa y sobre negro se
+     recortaría como una pegatina. */
+  background: #fff;
+}
+.websim-portada .portada {
+  width: min(720px, 100%);
+}
