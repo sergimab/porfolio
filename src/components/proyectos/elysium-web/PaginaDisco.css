@@ -280,3 +280,33 @@
   line-height: 1;
   cursor: pointer;
 }
+
+/* La columna es el sistema de referencia de los marcos líquidos, así que
+   necesita posicionamiento propio. */
+.disco-derecha {
+  position: relative;
+}
+/* El metal que rodea los bloques. Cubre la columna entera —los recorridos se
+   miden en fracción de SU ancho— y va por encima sin recoger el ratón. */
+.marcoliq {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+.marcoliq .lienzo-fluido {
+  height: 100%;
+  margin-top: 0;
+}
+.marcoliq .lienzo-marco {
+  height: 100%;
+  background: none;
+  border: none;
+  border-radius: 0;
+}
+/* Una sombra corta para despegar la cinta del papel. El metal ya trae su propio
+   contraste, pero sobre blanco puro le falta el apoyo que en la portada le da
+   el interior oscuro de la caja. */
+.marcoliq .lienzo-marco {
+  filter: drop-shadow(0 1px 3px rgba(42, 20, 80, 0.28));
+}

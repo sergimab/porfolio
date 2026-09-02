@@ -62,14 +62,17 @@ export default function Portada({ seleccion }: { seleccion: Set<string> }) {
             // color de lo que le rodea, así que para que la pieza pertenezca a
             // la carátula hay que cambiarle la habitación, no el material.
             entorno={crearEstudioPortada}
-            // Cromo, no vidrio: los canales apenas se separan, así que el
-            // arcoíris se queda en un hilo en el filo mismo y el cuerpo de la
-            // pieza devuelve limpio el rosa y el violeta de la caja. Es lo que
-            // la hace mimetizarse con la carátula en vez de destacar sobre
-            // ella.
-            dispersion={0.006}
-            // Y sin líneas interiores: una chapa pulida, no un canto de vidrio.
-            capas={0}
+            // Vidrio, pero conservando el tono neutro: los canales se separan
+            // lo justo para que el filo saque arcoíris sin teñir el cuerpo.
+            // Subiendo más, el color invade la superficie y la pieza deja de
+            // pertenecer a la carátula.
+            dispersion={0.015}
+            // Y CON líneas interiores, que es lo que de verdad distingue el
+            // vidrio del metal: un canto grueso de vidrio no devuelve un solo
+            // reflejo, devuelve el borde repetido hacia dentro porque el rayo
+            // rebota en la cara de atrás antes de salir. Tres es lo que cabe en
+            // un montante de este grosor; con más se apelotonan.
+            capas={3}
             brillo={1.95}
             grosorLibre
             atraccion
@@ -86,7 +89,7 @@ export default function Portada({ seleccion }: { seleccion: Set<string> }) {
             // pendiente media incline menos, con lo que el pliegue de la unión
             // se aplana y el brazo conserva su bombeo. Ninguno de los dos toca
             // la geometría, así que no pueden partir nada.
-            filo={0.65}
+            filo={0.9}
             grano={0.1}
           />
         )}

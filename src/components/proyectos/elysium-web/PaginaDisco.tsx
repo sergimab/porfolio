@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import Portada from "./Portada";
+import MarcoLiquido, { type Marco } from "./MarcoLiquido";
 import { ERAS } from "./simbolo";
 import { CANCIONES, claveCancion } from "./canciones";
 
@@ -20,6 +21,21 @@ import { CANCIONES, claveCancion } from "./canciones";
 // logotipos de Apple Music, Spotify y Amazon Music son marcas registradas y
 // tienen que venir de sus kits oficiales, no dibujados a mano.
 const PLATAFORMAS = ["Apple Music", "Spotify", "Amazon Music"];
+
+// Por qué lados rodea el metal a cada bloque, y en qué turno.
+//
+// No los rodea enteros a propósito: en la referencia la cinta entra por un
+// lado, dobla y se va, dejando el resto del borde limpio. Rodearlos del todo
+// convertiría el adorno en un recuadro, que es justo lo que no es.
+//
+// Y los turnos se solapan un poco —el siguiente arranca antes de que el
+// anterior termine— para que el conjunto se lea como una sola cinta que
+// recorre la columna y no como tres piezas por separado.
+const MARCOS: Marco[] = [
+  { bloque: "lista", lados: ["izquierda", "arriba", "derecha"], desde: 0, hasta: 0.55 },
+  { bloque: "importar", lados: ["derecha", "abajo"], desde: 0.45, hasta: 0.8 },
+  { bloque: "tarjetas", lados: ["abajo", "izquierda"], desde: 0.7, hasta: 1 },
+];
 
 export default function PaginaDisco({
   seleccion,
@@ -68,7 +84,11 @@ export default function PaginaDisco({
         </section>
 
         <section className="disco-derecha">
-          <div className="disco-lista">
+          {/* El metal va por encima de los bloques y no recoge el ratón: es un
+              adorno que los abraza, no una superficie con la que se trata. */}
+          <MarcoLiquido marcos={MARCOS} />
+
+          <div className="disco-lista" data-marco="lista">
             <ol>
               {elegidas.map((c, i) => (
                 <li key={`${c.era}-${c.titulo}`}>
@@ -84,7 +104,7 @@ export default function PaginaDisco({
             </button>
           </div>
 
-          <div className="disco-importar">
+          <div className="disco-importar" data-marco="importar">
             <p>Import to:</p>
             <ul>
               {PLATAFORMAS.map((p) => (
@@ -95,7 +115,7 @@ export default function PaginaDisco({
             </ul>
           </div>
 
-          <div className="disco-tarjetas">
+          <div className="disco-tarjetas" data-marco="tarjetas">
             <article className="disco-tarjeta">
               <div className="disco-tarjeta-imagen" aria-hidden="true" />
               <div className="disco-tarjeta-pie">
