@@ -75,7 +75,11 @@ export default function Portada({ seleccion }: { seleccion: Set<string> }) {
             atraccion
             suavizado={0}
             suavidad={9}
-            redondeo={3.5}
+            // Alto: es lo que funde las uniones. El campo suma donde dos
+            // montantes se encuentran y ahí queda un resalte; desenfocando el
+            // mapa de altura antes de iluminarlo, el encuentro pasa a ser una
+            // transición y no un escalón.
+            redondeo={6.5}
           />
         )}
       </div>

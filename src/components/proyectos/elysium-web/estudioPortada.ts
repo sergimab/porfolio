@@ -9,7 +9,10 @@
 // Un metal no tiene color propio: devuelve el de lo que le rodea. Así que para
 // que la pieza pertenezca a la portada, lo que hay que cambiar no es su
 // material sino la habitación donde se refleja. Aquí la habitación es la propia
-// carátula: rosas, lilas, y mucho blanco arriba.
+// carátula, pero DESATURADA: grises lilas y mucho blanco arriba, con el rosa
+// reducido a un tinte. Con el plató rosa de verdad la pieza salía rosa, y eso
+// no es lo que hace un metal: un cromo neutro devuelve el rosa que tiene
+// alrededor sin volverse rosa él.
 //
 // Y el blanco es lo que más importa. En la referencia el símbolo se lee como
 // CROMO CLARO, casi blanco, y eso solo sale si la mitad de arriba del plató es
@@ -32,15 +35,15 @@ export function crearEstudioPortada(): HTMLCanvasElement {
   // recorre cada montante; con un degradado suave saldría una pompa de jabón.
   const fondo = ctx.createLinearGradient(0, 0, 0, c.height);
   fondo.addColorStop(0, "#ffffff");
-  fondo.addColorStop(0.2, "#fdf2fb");
-  fondo.addColorStop(0.34, "#f7dcef");  // el rosa del cuerpo
-  fondo.addColorStop(0.44, "#dcb8ea");  // lila
-  fondo.addColorStop(0.495, "#5a3d78"); // horizonte
-  fondo.addColorStop(0.5, "#3d2456");
-  fondo.addColorStop(0.6, "#6b4489");
-  fondo.addColorStop(0.72, "#b98ec8");
-  fondo.addColorStop(0.85, "#4a2c5c");
-  fondo.addColorStop(1, "#1a1026");
+  fondo.addColorStop(0.2, "#f8f6fa");
+  fondo.addColorStop(0.34, "#ecebf0");  // gris claro apenas templado
+  fondo.addColorStop(0.44, "#cfcbd8");  // gris lila
+  fondo.addColorStop(0.495, "#5c5768"); // horizonte
+  fondo.addColorStop(0.5, "#413d4d");
+  fondo.addColorStop(0.6, "#6a6478");
+  fondo.addColorStop(0.72, "#a9a2b6");
+  fondo.addColorStop(0.85, "#4c4757");
+  fondo.addColorStop(1, "#1e1b25");
   ctx.fillStyle = fondo;
   ctx.fillRect(0, 0, c.width, c.height);
 
@@ -50,11 +53,11 @@ export function crearEstudioPortada(): HTMLCanvasElement {
   ctx.filter = "blur(30px)";
   const cajas: [number, number, number, number, string][] = [
     [20, 0, 340, 170, "#ffffff"],
-    [340, 20, 280, 130, "#ffe6f7"],
+    [340, 20, 280, 130, "#faf7fb"],
     [610, 0, 330, 160, "#ffffff"],
-    [140, 185, 300, 80, "#e9b8ff"],  // lila, en la banda baja del cielo
-    [520, 195, 260, 70, "#ffb9dd"],  // rosa
-    [820, 175, 190, 90, "#b9d9ff"],  // un frío para que el blanco no sea plano
+    [140, 185, 300, 80, "#dcd6e6"],  // lila muy lavado
+    [520, 195, 260, 70, "#eadfe4"],  // el rosa, reducido a un tinte
+    [820, 175, 190, 90, "#d3dde9"],  // un frío para que el blanco no sea plano
   ];
   for (const [x, y, w, h, color] of cajas) {
     ctx.fillStyle = color;
@@ -68,7 +71,7 @@ export function crearEstudioPortada(): HTMLCanvasElement {
   ctx.filter = "blur(6px)";
   for (let i = 0; i < 6; i++) {
     const x = 60 + i * 172;
-    ctx.fillStyle = "rgba(40,18,62,0.72)";
+    ctx.fillStyle = "rgba(38,34,48,0.72)";
     ctx.fillRect(x, 0, 14 + (i % 3) * 10, 250);
   }
 
@@ -80,10 +83,13 @@ export function crearEstudioPortada(): HTMLCanvasElement {
     ctx.fillRect(60 + i * 172 - 6, 8, 5, 236);
   }
 
-  // Rebote del suelo, rosado, para que la mitad de abajo de la pieza no se vaya
-  // a negro y siga perteneciendo a la carátula.
+  // Rebote del suelo, apenas templado. Fue rosa fuerte y teñía la pieza entera:
+  // el símbolo salía rosa en vez de plateado dentro de una caja rosa, que son
+  // dos cosas distintas. Un cromo neutro REFLEJA el rosa de alrededor sin
+  // volverse rosa él, y esa diferencia es la que separa el metal del plástico
+  // pintado.
   ctx.filter = "blur(24px)";
-  ctx.fillStyle = "rgba(255,205,235,0.62)";
+  ctx.fillStyle = "rgba(246,232,240,0.6)";
   ctx.fillRect(0, 262, c.width, 34);
   ctx.filter = "none";
   return c;
