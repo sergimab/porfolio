@@ -1,0 +1,282 @@
+/* La página del disco. Fondo claro, al contrario que el resto de la web: aquí
+   ya no estamos en el universo, estamos en la ficha de un álbum. */
+.disco {
+  min-height: 100dvh;
+  background: #fff;
+  color: #2a1450;
+  display: flex;
+  flex-direction: column;
+}
+
+.disco-barra {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 14px 22px;
+  border-bottom: 1px solid rgba(42, 20, 80, 0.1);
+}
+.disco-menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 24px;
+  height: 15px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+.disco-menu span {
+  display: block;
+  height: 2px;
+  background: #2a1450;
+  border-radius: 2px;
+}
+/* La marca va centrada en la barra, no en el hueco que deja el menú: por eso
+   se posiciona en absoluto en vez de repartir el espacio. */
+.disco-marca {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.disco-marca img {
+  height: 17px;
+  width: auto;
+  /* El logo viene en blanco, para el fondo negro del resto de la web. Aquí el
+     fondo es claro, así que se invierte en vez de guardar un segundo archivo. */
+  filter: invert(1);
+}
+.disco-marca span {
+  padding-left: 10px;
+  border-left: 1px solid rgba(42, 20, 80, 0.3);
+}
+
+.disco-cuerpo {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: clamp(20px, 3vw, 46px);
+  align-items: start;
+  padding: clamp(20px, 3vw, 44px);
+  max-width: 1500px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+/* Los hijos de una rejilla no encogen por debajo del ancho de su contenido: sin
+   esto, un título de canción largo ensancha la columna y la página se sale. */
+.disco-cuerpo > * {
+  min-width: 0;
+}
+@media (max-width: 900px) {
+  .disco-cuerpo {
+    grid-template-columns: 1fr;
+  }
+}
+
+.disco-izquierda {
+  position: relative;
+}
+.disco-otra {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 5;
+  padding: 9px 18px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(228, 222, 245, 0.92);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  font: inherit;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #2a1450;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.disco-otra:hover,
+.disco-otra:focus-visible {
+  background: #fff;
+}
+
+.disco-derecha {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* ── La lista de canciones ── */
+.disco-lista {
+  position: relative;
+  border-radius: 18px;
+  padding: 14px 14px 22px;
+  background: linear-gradient(150deg, rgba(233, 210, 240, 0.9), rgba(214, 206, 244, 0.75));
+  border: 1px solid rgba(255, 255, 255, 0.8);
+}
+.disco-lista ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  /* Tope de alto con desplazamiento propio: la lista puede tener noventa
+     canciones y no puede empujar hacia abajo todo lo que viene después. */
+  max-height: min(38dvh, 330px);
+  overflow-y: auto;
+}
+.disco-lista li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.75);
+}
+.disco-lista li:last-child {
+  border-bottom: none;
+}
+.disco-num {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  font-size: 12px;
+}
+.disco-titulo {
+  font-size: 13.5px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.disco-play {
+  position: absolute;
+  right: 16px;
+  bottom: -16px;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: 50%;
+  background: #2a1450;
+  color: #fff;
+  cursor: pointer;
+}
+.disco-play svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ── Importar a la plataforma ── */
+.disco-importar {
+  margin-top: 12px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(42, 20, 80, 0.12);
+  text-align: center;
+}
+.disco-importar p {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: rgba(42, 20, 80, 0.7);
+}
+.disco-importar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.disco-importar button {
+  padding: 8px 16px;
+  border: 1px solid rgba(42, 20, 80, 0.18);
+  border-radius: 999px;
+  background: #fff;
+  font: inherit;
+  font-size: 13px;
+  color: #2a1450;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.disco-importar button:hover,
+.disco-importar button:focus-visible {
+  border-color: #2a1450;
+  background: rgba(42, 20, 80, 0.05);
+}
+
+/* ── Las dos tarjetas de compra ── */
+.disco-tarjetas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 520px) {
+  .disco-tarjetas {
+    grid-template-columns: 1fr;
+  }
+}
+.disco-tarjeta {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #ded7ef;
+}
+/* Hueco de la fotografía. Provisional: son degradados hasta que estén las dos
+   imágenes de verdad —la camiseta y el disco físico—. */
+.disco-tarjeta-imagen {
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(140deg, #d9d2e6, #b9aecd);
+}
+.disco-tarjeta-imagen.es-disco {
+  background: linear-gradient(140deg, #e7c6e0, #9f7fc4);
+}
+.disco-tarjeta-pie {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  background: rgba(58, 33, 104, 0.88);
+  color: #fff;
+}
+.disco-tarjeta-pie p {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+.disco-tarjeta-pie strong {
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+.disco-tarjeta-pie span {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+.disco-tarjeta-pie button {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: 50%;
+  background: #fff;
+  color: #2a1450;
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+}

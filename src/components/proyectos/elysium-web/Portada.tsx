@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import LienzoMetal from "@/components/proyectos/elysium/LienzoMetal";
 import { ERAS, figuraDeEras } from "./simbolo";
 import { contarPorEra } from "./canciones";
-import { crearEstudioIridiscente } from "./estudioIridiscente";
+import { crearEstudioPortada } from "./estudioPortada";
 
 // La portada del disco con el símbolo dentro del hueco.
 //
@@ -27,9 +27,15 @@ import { crearEstudioIridiscente } from "./estudioIridiscente";
 // vuelve a medir en vez de andar cuadrando números a mano.
 const HUECO = { izq: 0.2233, arriba: 0.2267, ancho: 0.5467, alto: 0.5533 };
 
+// Cuánto ocupa la figura dentro del hueco.
+const ENCAJE_PORTADA = 0.78;
+
 export default function Portada({ seleccion }: { seleccion: Set<string> }) {
+  // Más encaje que en la pantalla del trazado: aquí el símbolo va dentro de una
+  // caja y tiene que llenarla, mientras que allí va suelto sobre el universo y
+  // necesita aire alrededor.
   const figura = useMemo(
-    () => figuraDeEras(contarPorEra(seleccion, ERAS)),
+    () => figuraDeEras(contarPorEra(seleccion, ERAS), ENCAJE_PORTADA),
     [seleccion]
   );
 
@@ -46,10 +52,13 @@ export default function Portada({ seleccion }: { seleccion: Set<string> }) {
           <LienzoMetal
             figura={figura}
             interactivo={false}
-            entorno={crearEstudioIridiscente}
+            // El plató de la portada, no el del espacio: un metal devuelve el
+            // color de lo que le rodea, así que para que la pieza pertenezca a
+            // la carátula hay que cambiarle la habitación, no el material.
+            entorno={crearEstudioPortada}
             dispersion={0.012}
             capas={0}
-            brillo={1.25}
+            brillo={1.5}
             grosorLibre
             atraccion
             suavizado={0}

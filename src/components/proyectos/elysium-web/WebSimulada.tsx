@@ -5,12 +5,13 @@ import Link from "next/link";
 import PantallaInicio from "./PantallaInicio";
 import PantallaEras from "./PantallaEras";
 import PantallaSimbolo from "./PantallaSimbolo";
-import Portada from "./Portada";
+import PaginaDisco from "./PaginaDisco";
 import { seleccionAlAzar } from "./canciones";
 import { ERAS } from "./simbolo";
 import "./PantallaInicio.css";
 import "./Popups.css";
 import "./Portada.css";
+import "./PaginaDisco.css";
 import "./WebSimulada.css";
 
 // La web de Elysium, a pantalla completa.
@@ -62,9 +63,7 @@ export default function WebSimulada() {
       )}
 
       {pantalla === "portada" && (
-        <div className="websim-portada">
-          <Portada seleccion={seleccion} />
-        </div>
+        <PaginaDisco seleccion={seleccion} onReintentar={() => setPantalla("eras")} />
       )}
 
       {/* El hilo de vuelta al portfolio, siempre disponible: sin él, quien entra

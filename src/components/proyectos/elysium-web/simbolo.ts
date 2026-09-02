@@ -590,8 +590,18 @@ function separarLosCruces(trazo: Punto[], base: number): Punto[] {
   });
 }
 
-export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
+export function figuraDeEras(
+  pesos: Record<Era, number>,
+  // Cuánto ocupa la figura en su marco, si hace falta otra cosa que el valor
+  // general. La portada lo sube: allí el símbolo va dentro de una caja y tiene
+  // que llenarla, mientras que en la pantalla del trazado va suelto sobre el
+  // universo y necesita aire alrededor.
+  encaje?: number
+): TrazoHecho[] {
+  const previo = AJUSTES.encaje;
+  if (encaje) AJUSTES.encaje = encaje;
   const d = disponer(pesos, AJUSTES.minimoAuto ? minimoDe(pesos) : undefined);
+  AJUSTES.encaje = previo;
   if (!d) return [];
 
   // De poligonal a trazo, muestreando cada tramo a paso constante e

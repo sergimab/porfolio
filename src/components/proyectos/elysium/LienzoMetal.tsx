@@ -1071,9 +1071,15 @@ export default function LienzoMetal({
     // los que ya están cuando se les acerca, igual que ellos entre sí.
     ctx.globalCompositeOperation = "lighter";
     if (redondeo > 0) ctx.filter = `blur(${redondeo}px)`;
-    if (poso) ctx.drawImage(poso, 0, 0);
-    if (vivo) ctx.drawImage(vivo, 0, 0);
-    if (cabezaRef.current) ctx.drawImage(cabezaRef.current, 0, 0);
+    // Una capa de 0x0 hace que drawImage lance, y las hay: entre que el
+    // componente monta y que el contenedor tiene medidas pasa al menos un
+    // fotograma, y en ese hueco puede llegar un repintado. Se saltan en vez de
+    // dejar que rompa el dibujado entero.
+    const vale = (capa: HTMLCanvasElement | null | undefined) =>
+      !!capa && capa.width > 0 && capa.height > 0;
+    if (vale(poso)) ctx.drawImage(poso!, 0, 0);
+    if (vale(vivo)) ctx.drawImage(vivo!, 0, 0);
+    if (vale(cabezaRef.current)) ctx.drawImage(cabezaRef.current!, 0, 0);
     ctx.filter = "none";
     ctx.restore();
     sucioRef.current = true;
