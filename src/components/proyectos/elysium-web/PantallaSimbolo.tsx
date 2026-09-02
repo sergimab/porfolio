@@ -150,6 +150,7 @@ export default function PantallaSimbolo({ seleccion }: { seleccion: Set<string> 
   const [material, setMaterial] = useState<Material>({
     dispersion: 0.012,
     suavidad: 9,
+    redondeo: 2.5,
     brillo: 1.25,
   });
 
@@ -265,6 +266,9 @@ export default function PantallaSimbolo({ seleccion }: { seleccion: Set<string> 
               // desaparece. Se paga con un filo un pelo menos seco, que en una
               // pieza de canto redondeado como esta no se echa de menos.
               suavidad={material.suavidad}
+              // El mapa de altura, redondeado antes de iluminarlo: es lo que
+              // quita el pico de los cruces. Ver componerMapa en el lienzo.
+              redondeo={material.redondeo}
             />
           )}
           {/* El esqueleto va sobre el mismo cuadrado y con el MISMO recorte que

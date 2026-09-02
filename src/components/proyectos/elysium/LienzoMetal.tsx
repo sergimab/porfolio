@@ -619,6 +619,8 @@ export default function LienzoMetal({
   // A qué distancia, en píxeles, se miden las alturas para deducir la normal.
   // Más lejos, normal más suave y menos ruido; también, bordes menos secos.
   suavidad = 3,
+  // Desenfoque del mapa de altura antes de iluminarlo. Ver componerMapa.
+  redondeo = 0,
   // El alcance de cada punto deja de seguir a su grosor y pasa a ser el mismo
   // para todo el trazo. Es lo que hace que dos partes finas que se acercan se
   // unan como si se atrajeran. Solo tiene sentido junto a grosorLibre.
@@ -643,6 +645,7 @@ export default function LienzoMetal({
   brillo?: number;
   grosorLibre?: boolean;
   suavidad?: number;
+  redondeo?: number;
   atraccion?: boolean;
   referencia?: number;
   suavizado?: number;
@@ -1038,6 +1041,21 @@ export default function LienzoMetal({
   // que se está dibujando). Así el trazo en curso se pinta a trocitos, solo
   // la parte nueva de cada fotograma, en vez de entero: redibujarlo completo
   // significaba miles de degradados por fotograma y lo tumbaba a 0,6 fps.
+  // El redondeo del mapa de altura, en píxeles de desenfoque.
+  //
+  // El perfil de cada cúpula llega a su centro EN ÁNGULO —es lo que produce la
+  // cresta que recorre un trazo—, y donde dos crestas se cruzan ese ángulo se
+  // dobla: sale un pico con cuatro valles alrededor, que en el metal se lee
+  // como un solapamiento con sombras en punta. Desenfocando el mapa antes de
+  // iluminarlo, la cresta se redondea y el cruce pasa a ser una transición
+  // lisa.
+  //
+  // Se aplica al COMPONER y no al pintar cada trazo porque el desenfoque es
+  // lineal: desenfocar la suma es lo mismo que sumar los desenfocados, y así se
+  // hace una vez en vez de una por trazo.
+  //
+  // Cero por defecto: el lienzo a mano no lo quiere, ahí la cresta es la
+  // plumilla.
   const componerMapa = useCallback(() => {
     const mask = maskRef.current;
     const poso = posoRef.current;
@@ -1052,12 +1070,14 @@ export default function LienzoMetal({
     // Aquí se SUMA, no se toma el máximo: el trazo en curso tiene que engordar
     // los que ya están cuando se les acerca, igual que ellos entre sí.
     ctx.globalCompositeOperation = "lighter";
+    if (redondeo > 0) ctx.filter = `blur(${redondeo}px)`;
     if (poso) ctx.drawImage(poso, 0, 0);
     if (vivo) ctx.drawImage(vivo, 0, 0);
     if (cabezaRef.current) ctx.drawImage(cabezaRef.current, 0, 0);
+    ctx.filter = "none";
     ctx.restore();
     sucioRef.current = true;
-  }, []);
+  }, [redondeo]);
 
   const limpiarCapa = (capa: HTMLCanvasElement | null) => {
     const ctx = capa?.getContext("2d");

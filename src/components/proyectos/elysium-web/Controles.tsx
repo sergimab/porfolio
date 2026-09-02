@@ -19,6 +19,7 @@ export type Material = {
   dispersion: number;
   suavidad: number;
   brillo: number;
+  redondeo: number;
 };
 
 type Barra = {
@@ -145,6 +146,20 @@ export default function Controles({
       </label>
       <label className="mandos-barra">
         <span className="mandos-rotulo">
+          Redondeo<em>{material.redondeo}</em>
+        </span>
+        <input
+          type="range"
+          min={0}
+          max={8}
+          step={0.5}
+          value={material.redondeo}
+          onChange={(e) => onMaterial({ ...material, redondeo: Number(e.target.value) })}
+        />
+        <span className="mandos-pista">alisa las crestas y los cruces</span>
+      </label>
+      <label className="mandos-barra">
+        <span className="mandos-rotulo">
           Brillo<em>{material.brillo.toFixed(2)}</em>
         </span>
         <input
@@ -164,7 +179,7 @@ export default function Controles({
       <p className="mandos-nota">Configuración</p>
       <code className="mandos-copia">
         {BARRAS.map((b) => `${b.clave}: ${AJUSTES[b.clave]}`).join(", ")},{" "}
-        {`dispersion: ${material.dispersion}, suavidad: ${material.suavidad}, brillo: ${material.brillo}`}
+        {`dispersion: ${material.dispersion}, suavidad: ${material.suavidad}, redondeo: ${material.redondeo}, brillo: ${material.brillo}`}
       </code>
     </div>
   );
