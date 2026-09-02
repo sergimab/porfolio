@@ -176,18 +176,25 @@ export default function BounceCards({
             no admite degradado. Es un rectángulo con el degradado al que se le
             recorta el centro con una máscara, así que solo queda el filo. */}
         <span className="bc-ring" style={{ ...pintura, ...ritmo }} aria-hidden="true" />
-        {item.cover ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img className="bc-img" src={item.cover} alt={title} />
-        ) : (
-          <div className="bc-img bc-placeholder" aria-hidden="true">
-            <svg viewBox="0 0 200 200">
-              <rect x="45" y="60" width="110" height="80" rx="6" fill="none" stroke="currentColor" strokeWidth="2" />
-              <circle cx="72" cy="86" r="9" fill="none" stroke="currentColor" strokeWidth="2" />
-              <path d="M45 122 82 92l30 16 40-28" fill="none" stroke="currentColor" strokeWidth="2" />
-            </svg>
-          </div>
-        )}
+        {/* La portada va en su propia caja y la banda del nombre DEBAJO, no
+            encima. Antes la banda flotaba sobre la imagen y se comía su franja
+            de abajo, así que había que diseñar cada portada dejando ese hueco
+            libre —y aun así tapaba cosas—. Separadas, la portada se ve entera y
+            se puede componer centrada. */}
+        <span className="bc-medio">
+          {item.cover ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img className="bc-img" src={item.cover} alt={title} />
+          ) : (
+            <div className="bc-img bc-placeholder" aria-hidden="true">
+              <svg viewBox="0 0 200 250">
+                <rect x="45" y="85" width="110" height="80" rx="6" fill="none" stroke="currentColor" strokeWidth="2" />
+                <circle cx="72" cy="111" r="9" fill="none" stroke="currentColor" strokeWidth="2" />
+                <path d="M45 147 82 117l30 16 40-28" fill="none" stroke="currentColor" strokeWidth="2" />
+              </svg>
+            </div>
+          )}
+        </span>
         <span className="bc-name" style={{ color: textColor, ...pintura, ...ritmo }}>
           {title}
         </span>

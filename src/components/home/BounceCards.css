@@ -14,18 +14,25 @@
 .bounceCardsContainer {
   --bc-card: 200px;
   --bc-spread: 145px;
+  /* La proporción de la portada (alto respecto al ancho) y el alto de la banda
+     del nombre. La tarjeta es la suma de las dos. */
+  --bc-alto: 1.25;
+  --bc-banda: 34px;
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   width: calc(var(--bc-card) + var(--bc-spread) * (var(--bc-count) - 1) + 48px);
-  height: calc(var(--bc-card) + 90px);
+  /* El alto sigue al de la tarjeta, que ya no es cuadrada: la portada mide
+     ALTO_PORTADA de ancho y la banda va debajo. */
+  height: calc(var(--bc-card) * var(--bc-alto) + var(--bc-banda) + 90px);
 }
 
 .bc-card {
   position: absolute;
   width: var(--bc-card);
-  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
   /* Transparente, no ausente: el aro de degradado se dibuja encima justo aquí,
      y quitando el borde la tarjeta cambiaría de tamaño. */
   border: 1px solid transparent;
@@ -37,6 +44,17 @@
   will-change: transform;
 }
 
+/* La caja de la portada: rectangular y con su propio recorte. La imagen la
+   llena con object-fit, así que se recorta por donde sobre y lo que se ve es
+   siempre el centro. */
+.bc-medio {
+  display: block;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / var(--bc-alto, 1.25);
+  overflow: hidden;
+  border-radius: 15px 15px 0 0;
+}
 .bc-img {
   position: absolute;
   inset: 0;
@@ -77,13 +95,17 @@
   mask-composite: exclude;
 }
 
+/* La banda del nombre, DEBAJO de la portada y no encima. Ver el comentario del
+   componente. */
 .bc-name {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  position: relative;
   z-index: 2;
-  padding: 10px 12px;
+  min-height: var(--bc-banda, 34px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 0 15px 15px;
+  padding: 8px 12px;
   text-align: center;
   font-size: 12px;
   font-weight: 500;
