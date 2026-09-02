@@ -46,6 +46,15 @@ const POR_LADO = 10;
 const POR_CURVA = 8;
 const POR_PUENTE = 16;
 
+// El ancho de referencia del contenedor, y los ajustes de material medidos
+// sobre él. Van en píxeles —el redondeo es un desenfoque y la suavidad, la
+// separación de las muestras que dan la normal—, así que en una pantalla
+// estrecha pesan más y adelgazan la cinta. Escalándolos, se ve igual en
+// cualquier tamaño. Ver el mismo apaño en Portada.
+const ANCHO_BASE = 1100;
+const REDONDEO_BASE = 1.5;
+const SUAVIDAD_BASE = 7;
+
 type Caja = { x: number; y: number; ancho: number; alto: number };
 
 // Un recorrido en L o en U alrededor de una caja, indicando por qué lados pasa.
@@ -185,6 +194,7 @@ export default function MarcoLiquido({ marcos }: { marcos: Marco[] }) {
   const cajaRef = useRef<HTMLDivElement>(null);
   const [medidas, setMedidas] = useState<Record<string, Caja>>({});
   const [avance, setAvance] = useState(0);
+  const [ancho, setAncho] = useState(ANCHO_BASE);
 
   // Se mide el sitio de cada bloque dentro de este contenedor, en fracción de
   // su ANCHO —incluida la vertical—, porque es en esas unidades en las que
@@ -195,6 +205,7 @@ export default function MarcoLiquido({ marcos }: { marcos: Marco[] }) {
     const medir = () => {
       const base = cont.getBoundingClientRect();
       if (base.width < 1) return;
+      setAncho(base.width);
       const salida: Record<string, Caja> = {};
       for (const m of marcos) {
         const el = document.querySelector<HTMLElement>(`[data-marco="${m.bloque}"]`);
@@ -287,8 +298,8 @@ export default function MarcoLiquido({ marcos }: { marcos: Marco[] }) {
           grosorLibre
           atraccion
           suavizado={0}
-          suavidad={7}
-          redondeo={1.5}
+          suavidad={Math.max(3, Math.round((SUAVIDAD_BASE * ancho) / ANCHO_BASE))}
+          redondeo={(REDONDEO_BASE * ancho) / ANCHO_BASE}
           filo={0.9}
           grano={0.1}
         />

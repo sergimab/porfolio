@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import LienzoMetal from "@/components/proyectos/elysium/LienzoMetal";
 import { ERAS, figuraDeEras } from "./simbolo";
 import { contarPorEra } from "./canciones";
@@ -31,7 +31,39 @@ const HUECO = { izq: 0.2233, arriba: 0.2267, ancho: 0.5467, alto: 0.5533 };
 // carátula, no un detalle dentro de la caja.
 const ENCAJE_PORTADA = 0.92;
 
+// El ancho de referencia del hueco, en píxeles de CSS, y los ajustes de
+// material medidos sobre él.
+//
+// Hacen falta porque `redondeo` y `suavidad` van en PÍXELES, no en fracciones:
+// el redondeo es un desenfoque y la suavidad, a qué distancia se toman las
+// muestras que dan la normal. En escritorio el hueco mide unos 260 px y en un
+// móvil 183, así que los mismos números pesan ahí un 40% más y se comen el
+// cuerpo de la pieza —el desenfoque baja la altura del campo, y sobre una cinta
+// de menos píxeles la baja proporcionalmente más—. Por eso el símbolo salía
+// deshilachado en móvil aunque la figura fuera idéntica.
+//
+// Escalándolos con el ancho real, el material se ve igual a cualquier tamaño.
+const ANCHO_BASE = 260;
+const REDONDEO_BASE = 2;
+const SUAVIDAD_BASE = 9;
+
 export default function Portada({ seleccion }: { seleccion: Set<string> }) {
+  // El ancho real del hueco, para escalar con él los ajustes que van en
+  // píxeles.
+  const huecoRef = useRef<HTMLDivElement>(null);
+  const [ancho, setAncho] = useState(ANCHO_BASE);
+  useEffect(() => {
+    const el = huecoRef.current;
+    if (!el) return;
+    const obs = new ResizeObserver(([e]) => {
+      const w = e.contentRect.width;
+      if (w > 1) setAncho(w);
+    });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  const k = ancho / ANCHO_BASE;
+
   // Más encaje que en la pantalla del trazado: aquí el símbolo va dentro de una
   // caja y tiene que llenarla, mientras que allí va suelto sobre el universo y
   // necesita aire alrededor.
@@ -53,7 +85,7 @@ export default function Portada({ seleccion }: { seleccion: Set<string> }) {
       {/* El símbolo va en su propio cuadrado dentro del hueco. El marco tiene
           que ser CUADRADO —la figura es radial y en uno apaisado saldría
           estirada—, así que se toma el lado menor del hueco y se centra. */}
-      <div className="portada-hueco">
+      <div className="portada-hueco" ref={huecoRef}>
         {figura.length > 0 && (
           <LienzoMetal
             figura={figura}
@@ -77,12 +109,12 @@ export default function Portada({ seleccion }: { seleccion: Set<string> }) {
             grosorLibre
             atraccion
             suavizado={0}
-            suavidad={9}
+            suavidad={Math.max(3, Math.round(SUAVIDAD_BASE * k))}
             // Contenido. Subirlo a 6,5 para fundir las uniones ROMPIÓ la
             // figura: el desenfoque baja la altura del campo, las partes finas
             // cayeron por debajo del umbral y la pieza salió a trozos. El
             // desenfoque es acabado, no forma.
-            redondeo={2}
+            redondeo={REDONDEO_BASE * k}
             // Las uniones se suavizan aquí, en la LUZ. El filo bajo quita el
             // hilo duro que perfilaba cada tramo y hacía que un encuentro se
             // leyera como dos piezas soldadas; el grano alto hace que una

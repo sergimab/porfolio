@@ -310,3 +310,15 @@
 .marcoliq .lienzo-marco {
   filter: drop-shadow(0 1px 3px rgba(42, 20, 80, 0.28));
 }
+
+/* En móvil, sin cinta.
+   La rejilla se apila en una columna, y los puentes entre bloques —que en
+   escritorio son saltos cortos de una caja a la de al lado— pasan a ser
+   diagonales que cruzan la pantalla por encima del contenido. No es un ajuste
+   de tamaño: el recorrido tiene que ser otro, y ese recorrido está por
+   diseñar. Hasta entonces vale más no enseñarlo que enseñarlo mal. */
+@media (max-width: 900px) {
+  .marcoliq {
+    display: none;
+  }
+}
