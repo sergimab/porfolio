@@ -252,7 +252,30 @@ export default function SkillDrop() {
       pillsRef.current = [...pillsRef.current, { body, id: skill.id }];
     };
 
+    // Suelta lo que el ratón tuviera agarrado, pase lo que pase.
+    //
+    // matter-js escucha el ratón EN EL CANVAS, así que si sueltas el botón
+    // fuera de él —arrastrando una cápsula más abajo del recuadro, por
+    // ejemplo— nunca se entera: se queda con el cuerpo agarrado y el botón
+    // pulsado. El siguiente clic no agarra nada, porque para él ya está
+    // arrastrando; y el de después sí, porque su mouseup por fin llega dentro.
+    // De ahí el "al primer clic no va y al segundo sí".
+    //
+    // Esto va colgado de la VENTANA, que es donde el navegador entrega el
+    // mouseup siempre, y deshace el agarre a mano.
+    const soltarRaton = () => {
+      // Los tipos de matter-js declaran estos campos como no nulos, pero la
+      // librería los pone a null justo aquí: es su forma de decir "no hay nada
+      // agarrado". Se afloja el tipo en vez de inventar un cuerpo vacío.
+      const constraint = mc.constraint as unknown as Record<string, unknown>;
+      constraint.bodyB = null;
+      constraint.pointB = null;
+      (mc as unknown as Record<string, unknown>).body = null;
+      mouse.button = -1;
+    };
+
     const checkDrop = () => {
+      soltarRaton();
       const id = draggedRef.current;
       draggedRef.current = null;
       setDraggedId(null);
