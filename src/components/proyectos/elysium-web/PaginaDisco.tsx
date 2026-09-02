@@ -22,19 +22,22 @@ import { CANCIONES, claveCancion } from "./canciones";
 // tienen que venir de sus kits oficiales, no dibujados a mano.
 const PLATAFORMAS = ["Apple Music", "Spotify", "Amazon Music"];
 
-// Por qué lados rodea el metal a cada bloque, y en qué turno.
+// El recorrido del metal por la página, y es UNO SOLO.
 //
-// No los rodea enteros a propósito: en la referencia la cinta entra por un
-// lado, dobla y se va, dejando el resto del borde limpio. Rodearlos del todo
-// convertiría el adorno en un recuadro, que es justo lo que no es.
+// Rodea la portada, salta a la lista, baja al importar y muere en las tarjetas.
+// Encadenarlo en vez de poner un marco por bloque es lo que lo convierte en una
+// cinta que recorre la página: con piezas sueltas, por muy bien colocadas que
+// estén, se lee como cuatro recuadros.
 //
-// Y los turnos se solapan un poco —el siguiente arranca antes de que el
-// anterior termine— para que el conjunto se lea como una sola cinta que
-// recorre la columna y no como tres piezas por separado.
+// Los lados van en orden cíclico —arriba, derecha, abajo, izquierda— porque el
+// final de cada uno es el principio del siguiente. Y ningún bloque se rodea
+// entero salvo la portada: la cinta entra por un lado, dobla y se va, dejando
+// el resto del borde limpio.
 const MARCOS: Marco[] = [
-  { bloque: "lista", lados: ["izquierda", "arriba", "derecha"], desde: 0, hasta: 0.55 },
-  { bloque: "importar", lados: ["derecha", "abajo"], desde: 0.45, hasta: 0.8 },
-  { bloque: "tarjetas", lados: ["abajo", "izquierda"], desde: 0.7, hasta: 1 },
+  { bloque: "portada", lados: ["derecha", "abajo", "izquierda", "arriba"] },
+  { bloque: "lista", lados: ["izquierda", "arriba", "derecha"], unir: true },
+  { bloque: "importar", lados: ["derecha", "abajo"], unir: true },
+  { bloque: "tarjetas", lados: ["izquierda", "abajo"], unir: true },
 ];
 
 export default function PaginaDisco({
@@ -74,8 +77,16 @@ export default function PaginaDisco({
       </header>
 
       <main className="disco-cuerpo">
+        {/* El metal va por encima de todo y no recoge el ratón: es un adorno que
+            abraza los bloques, no una superficie con la que se trata. Cuelga del
+            cuerpo entero y no de una columna porque la cinta cruza de una a
+            otra. */}
+        <MarcoLiquido marcos={MARCOS} />
+
         <section className="disco-izquierda">
-          <Portada seleccion={seleccion} />
+          <div data-marco="portada">
+            <Portada seleccion={seleccion} />
+          </div>
           {/* Vuelve al universo con la selección INTACTA: "otra vez" es rehacer
               el test, no perder lo marcado y empezar de cero. */}
           <button type="button" className="disco-otra" onClick={onReintentar}>
@@ -84,9 +95,6 @@ export default function PaginaDisco({
         </section>
 
         <section className="disco-derecha">
-          {/* El metal va por encima de los bloques y no recoge el ratón: es un
-              adorno que los abraza, no una superficie con la que se trata. */}
-          <MarcoLiquido marcos={MARCOS} />
 
           <div className="disco-lista" data-marco="lista">
             <ol>

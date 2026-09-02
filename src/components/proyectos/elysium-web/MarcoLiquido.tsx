@@ -24,7 +24,7 @@ const ESPERA = 500;
 
 // El radio con el que el recorrido dobla una esquina. En fracción del ancho del
 // contenedor, igual que el resto de coordenadas.
-const CURVA = 0.035;
+const CURVA = 0.012;
 // Cuánto se separa el recorrido del borde de su bloque. NEGATIVO: va por
 // dentro, montado sobre el borde.
 //
@@ -33,17 +33,18 @@ const CURVA = 0.035;
 // borde del contenedor —o directamente fuera de él— y el lienzo lo recorta. Se
 // veía el tramo de abajo de un bloque y poco más. Montado sobre el borde, el
 // recorrido está siempre dentro y además es donde lo pone el diseño.
-const MARGEN = -0.005;
+const MARGEN = -0.0016;
 // Grosor del montante, en las mismas unidades.
 //
-// Con 0,006 la cinta salía tan fina que apenas cruzaba el umbral del campo y se
-// veía a trozos. Es la misma cuenta de siempre: el grosor va en fracción del
-// ancho del CONTENEDOR, y esta columna es estrecha, así que el mismo número que
-// en el símbolo da aquí la mitad de píxeles.
-const GROSOR = 0.013;
-// Puntos por tramo recto y por cuarto de curva.
+// Va en fracción del ancho del CONTENEDOR, y el contenedor es ahora la página
+// entera, no una columna: el mismo grosor aparente pide aquí un número tres
+// veces menor. Es la cuenta que ya me falló una vez en sentido contrario, con
+// la cinta tan fina que no cruzaba el umbral del campo.
+const GROSOR = 0.0042;
+// Puntos por tramo recto, por cuarto de curva y por puente entre bloques.
 const POR_LADO = 10;
 const POR_CURVA = 8;
+const POR_PUENTE = 16;
 
 type Caja = { x: number; y: number; ancho: number; alto: number };
 
@@ -137,10 +138,48 @@ export type Marco = {
   // El atributo data-marco del bloque al que sigue.
   bloque: string;
   lados: Lado[];
-  // Su turno dentro del trazado, de 0 a 1.
-  desde: number;
-  hasta: number;
+  // Si se encadena con el bloque anterior en vez de empezar una cinta nueva.
+  // Con esto, una sola línea puede rodear la portada, saltar a la lista, bajar
+  // al importar y morir en las tarjetas: es lo que hace que el conjunto se lea
+  // como UNA cinta recorriendo la página y no como cuatro recuadros.
+  unir?: boolean;
 };
+
+// El puente entre dos bloques: una curva que sale por donde acabó la cinta y
+// entra por donde empieza la siguiente.
+//
+// Los tirantes salen en la DIRECCIÓN en la que iba y en la que va a ir cada
+// cinta, no hacia el otro bloque. Es lo que hace que el puente parezca una
+// continuación del recorrido y no un cable tendido entre dos piezas: la línea
+// no da un volantazo al llegar al borde, sigue y gira.
+function puente(
+  desde: [number, number],
+  salida: [number, number],
+  hasta: [number, number],
+  entrada: [number, number],
+  pasos: number
+): [number, number][] {
+  const d = Math.hypot(hasta[0] - desde[0], hasta[1] - desde[1]);
+  const tirante = Math.max(0.04, d * 0.45);
+  const c1: [number, number] = [desde[0] + salida[0] * tirante, desde[1] + salida[1] * tirante];
+  const c2: [number, number] = [hasta[0] - entrada[0] * tirante, hasta[1] - entrada[1] * tirante];
+  const puntos: [number, number][] = [];
+  for (let n = 1; n < pasos; n++) {
+    const t = n / pasos;
+    const u = 1 - t;
+    puntos.push([
+      u * u * u * desde[0] + 3 * u * u * t * c1[0] + 3 * u * t * t * c2[0] + t * t * t * hasta[0],
+      u * u * u * desde[1] + 3 * u * u * t * c1[1] + 3 * u * t * t * c2[1] + t * t * t * hasta[1],
+    ]);
+  }
+  return puntos;
+}
+
+// La dirección de un punto al siguiente, normalizada.
+function rumbo(a: [number, number], b: [number, number]): [number, number] {
+  const d = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1;
+  return [(b[0] - a[0]) / d, (b[1] - a[1]) / d];
+}
 
 export default function MarcoLiquido({ marcos }: { marcos: Marco[] }) {
   const cajaRef = useRef<HTMLDivElement>(null);
@@ -186,19 +225,47 @@ export default function MarcoLiquido({ marcos }: { marcos: Marco[] }) {
   }, []);
 
   const figura = useMemo<TrazoHecho[]>(() => {
-    return marcos
-      .filter((m) => medidas[m.bloque])
-      .map((m) => {
-        const puntos: Punto[] = recorrido(medidas[m.bloque], m.lados).map(([x, y]) => ({
-          x,
-          y,
-          r: GROSOR,
-        }));
-        // Sin afilar por donde empieza y afilado por donde acaba: la cinta
-        // nace del borde de la pantalla o de otro marco y muere en punta, que
-        // es lo que hace en la referencia.
-        return { puntos, sinEntrada: true, desde: m.desde, hasta: m.hasta };
-      });
+    const listos = marcos.filter((m) => medidas[m.bloque]);
+    if (!listos.length) return [];
+
+    // Se encadenan en cintas: cada marco con `unir` se pega al anterior por un
+    // puente, y el que no lo lleva empieza una cinta nueva.
+    const cintas: [number, number][][] = [];
+    for (const m of listos) {
+      const tramo = recorrido(medidas[m.bloque], m.lados);
+      const anterior = cintas[cintas.length - 1];
+      if (m.unir && anterior && anterior.length > 1) {
+        const fin = anterior[anterior.length - 1];
+        const salida = rumbo(anterior[anterior.length - 2], fin);
+        const entrada = rumbo(tramo[0], tramo[1]);
+        anterior.push(...puente(fin, salida, tramo[0], entrada, POR_PUENTE), ...tramo);
+      } else {
+        cintas.push(tramo);
+      }
+    }
+
+    // El reparto del tiempo va por LONGITUD y no por número de cintas: si no,
+    // el marco corto de las tarjetas tardaría lo mismo en trazarse que la
+    // vuelta entera a la portada, y la velocidad de la línea daría tirones al
+    // pasar de una a otra.
+    const largos = cintas.map((c) =>
+      c.reduce((s, p, i) => (i ? s + Math.hypot(p[0] - c[i - 1][0], p[1] - c[i - 1][1]) : 0), 0)
+    );
+    const total = largos.reduce((s, l) => s + l, 0) || 1;
+    let acumulado = 0;
+
+    return cintas.map((c, i) => {
+      const desde = acumulado / total;
+      acumulado += largos[i];
+      // Sin afilar por donde empieza y afilada por donde acaba: la cinta nace
+      // pegada al bloque y muere en punta, que es lo que hace en la referencia.
+      return {
+        puntos: c.map(([x, y]) => ({ x, y, r: GROSOR })) as Punto[],
+        sinEntrada: true,
+        desde,
+        hasta: acumulado / total,
+      };
+    });
   }, [marcos, medidas]);
 
   const recortada = useMemo(() => recortar(figura, avance), [figura, avance]);

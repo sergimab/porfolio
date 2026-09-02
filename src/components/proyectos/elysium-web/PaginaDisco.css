@@ -281,9 +281,9 @@
   cursor: pointer;
 }
 
-/* La columna es el sistema de referencia de los marcos líquidos, así que
+/* El cuerpo es el sistema de referencia de los marcos líquidos, así que
    necesita posicionamiento propio. */
-.disco-derecha {
+.disco-cuerpo {
   position: relative;
 }
 /* El metal que rodea los bloques. Cubre la columna entera —los recorridos se
