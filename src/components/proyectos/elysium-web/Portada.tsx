@@ -70,7 +70,7 @@ export default function Portada({ seleccion }: { seleccion: Set<string> }) {
             dispersion={0.006}
             // Y sin líneas interiores: una chapa pulida, no un canto de vidrio.
             capas={0}
-            brillo={1.62}
+            brillo={1.95}
             grosorLibre
             atraccion
             suavizado={0}

@@ -15,6 +15,12 @@
 // CROMO CLARO, casi blanco, y eso solo sale si la mitad de arriba del plató es
 // luminosa de verdad: un metal en una habitación oscura sale oscuro por muy
 // brillante que sea su material.
+//
+// Por eso también la mitad de ABAJO se ha ido aclarando. Es la que se refleja
+// en las caras que miran hacia el suelo, y con un suelo oscuro esas caras se
+// van a negro y la pieza se parte visualmente en una mitad clara y otra que
+// desaparece contra el interior de la caja. Subir la ganancia no lo arregla:
+// multiplica también el negro, que sigue siendo negro.
 export function crearEstudioPortada(): HTMLCanvasElement {
   const c = document.createElement("canvas");
   c.width = 1024;
@@ -27,14 +33,14 @@ export function crearEstudioPortada(): HTMLCanvasElement {
   const fondo = ctx.createLinearGradient(0, 0, 0, c.height);
   fondo.addColorStop(0, "#ffffff");
   fondo.addColorStop(0.2, "#fdf2fb");
-  fondo.addColorStop(0.34, "#f0c9e6");  // el rosa del cuerpo
-  fondo.addColorStop(0.44, "#c79ad8");  // lila
-  fondo.addColorStop(0.495, "#3a2352"); // horizonte
-  fondo.addColorStop(0.5, "#241436");
-  fondo.addColorStop(0.6, "#4a2a63");
-  fondo.addColorStop(0.72, "#8e5f9e");
-  fondo.addColorStop(0.85, "#2a1636");
-  fondo.addColorStop(1, "#0d0714");
+  fondo.addColorStop(0.34, "#f7dcef");  // el rosa del cuerpo
+  fondo.addColorStop(0.44, "#dcb8ea");  // lila
+  fondo.addColorStop(0.495, "#5a3d78"); // horizonte
+  fondo.addColorStop(0.5, "#3d2456");
+  fondo.addColorStop(0.6, "#6b4489");
+  fondo.addColorStop(0.72, "#b98ec8");
+  fondo.addColorStop(0.85, "#4a2c5c");
+  fondo.addColorStop(1, "#1a1026");
   ctx.fillStyle = fondo;
   ctx.fillRect(0, 0, c.width, c.height);
 
@@ -62,7 +68,7 @@ export function crearEstudioPortada(): HTMLCanvasElement {
   ctx.filter = "blur(6px)";
   for (let i = 0; i < 6; i++) {
     const x = 60 + i * 172;
-    ctx.fillStyle = "rgba(26,10,40,0.9)";
+    ctx.fillStyle = "rgba(40,18,62,0.72)";
     ctx.fillRect(x, 0, 14 + (i % 3) * 10, 250);
   }
 
@@ -77,7 +83,7 @@ export function crearEstudioPortada(): HTMLCanvasElement {
   // Rebote del suelo, rosado, para que la mitad de abajo de la pieza no se vaya
   // a negro y siga perteneciendo a la carátula.
   ctx.filter = "blur(24px)";
-  ctx.fillStyle = "rgba(255,180,220,0.5)";
+  ctx.fillStyle = "rgba(255,205,235,0.62)";
   ctx.fillRect(0, 262, c.width, 34);
   ctx.filter = "none";
   return c;
