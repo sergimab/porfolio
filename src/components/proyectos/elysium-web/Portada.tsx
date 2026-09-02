@@ -75,11 +75,19 @@ export default function Portada({ seleccion }: { seleccion: Set<string> }) {
             atraccion
             suavizado={0}
             suavidad={9}
-            // Alto: es lo que funde las uniones. El campo suma donde dos
-            // montantes se encuentran y ahí queda un resalte; desenfocando el
-            // mapa de altura antes de iluminarlo, el encuentro pasa a ser una
-            // transición y no un escalón.
-            redondeo={6.5}
+            // Contenido. Subirlo a 6,5 para fundir las uniones ROMPIÓ la
+            // figura: el desenfoque baja la altura del campo, las partes finas
+            // cayeron por debajo del umbral y la pieza salió a trozos. El
+            // desenfoque es acabado, no forma.
+            redondeo={2}
+            // Las uniones se suavizan aquí, en la LUZ. El filo bajo quita el
+            // hilo duro que perfilaba cada tramo y hacía que un encuentro se
+            // leyera como dos piezas soldadas; el grano alto hace que una
+            // pendiente media incline menos, con lo que el pliegue de la unión
+            // se aplana y el brazo conserva su bombeo. Ninguno de los dos toca
+            // la geometría, así que no pueden partir nada.
+            filo={0.65}
+            grano={0.1}
           />
         )}
       </div>

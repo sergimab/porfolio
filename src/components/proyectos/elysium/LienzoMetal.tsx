@@ -620,7 +620,21 @@ export default function LienzoMetal({
   // Más lejos, normal más suave y menos ruido; también, bordes menos secos.
   suavidad = 3,
   // Desenfoque del mapa de altura antes de iluminarlo. Ver componerMapa.
+  //
+  // OJO: el desenfoque baja también la ALTURA del campo, y el campo tiene un
+  // umbral. Subiéndolo de más, las partes finas caen por debajo y la figura se
+  // parte en trozos. Es un mando de acabado, no de forma: para suavizar cómo se
+  // ven las uniones están `filo` y `grano`, que trabajan en la luz y no tocan la
+  // geometría.
   redondeo = 0,
+  // Cuánto vuelca el canto en el filo mismo. Es el hilo de luz que perfila la
+  // pieza contra el fondo; bajándolo, los encuentros dejan de leerse como dos
+  // piezas soldadas y pasan a ser una sola fundida.
+  filo = 1.7,
+  // La pendiente a la que el faldón ya está a tope. Subiéndolo, una pendiente
+  // media inclina menos, así que el pliegue de una unión se aplana y el brazo
+  // conserva su bombeo.
+  grano = 0.042,
   // El alcance de cada punto deja de seguir a su grosor y pasa a ser el mismo
   // para todo el trazo. Es lo que hace que dos partes finas que se acercan se
   // unan como si se atrajeran. Solo tiene sentido junto a grosorLibre.
@@ -646,6 +660,8 @@ export default function LienzoMetal({
   grosorLibre?: boolean;
   suavidad?: number;
   redondeo?: number;
+  filo?: number;
+  grano?: number;
   atraccion?: boolean;
   referencia?: number;
   suavizado?: number;
@@ -1199,12 +1215,12 @@ export default function LienzoMetal({
         // no se descuadra.
         uUmbral: { value: UMBRAL_CAMPO * ESCALA_CAMPO },
         uRelieve: { value: 1.5 },
-        uFilo: { value: 1.7 },
+        uFilo: { value: filo },
         // Bajó de 0,07 con el campo normalizado: la falda de la cinta cae ahora
         // más suave —el campo llega a 1 y no a 0,8, pero repartido sobre un
         // alcance mayor—, así que la pendiente a la que el faldón está a tope
         // tiene que bajar en la misma proporción o el brazo sale plano.
-        uGrano: { value: 0.042 },
+        uGrano: { value: grano },
         uDispersion: { value: dispersion },
         uCapas: { value: capas },
         uBrillo: { value: brillo },
@@ -1259,7 +1275,7 @@ export default function LienzoMetal({
       renderer.domElement.remove();
       tresRef.current = null;
     };
-  }, [repintarMapa, cerca, entorno, dispersion, capas, brillo, suavidad]);
+  }, [repintarMapa, cerca, entorno, dispersion, capas, brillo, suavidad, filo, grano]);
 
   // Pasa los puntos encolados al trazo en curso y pinta lo nuevo. Se llama
   // desde el bucle y también al soltar: si el dedo baja y sube dentro del
