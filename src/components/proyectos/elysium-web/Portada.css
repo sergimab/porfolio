@@ -65,16 +65,16 @@
    cerrado que da el punto caliente. */
 .portada-luz {
   position: absolute;
-  left: 12%;
-  top: 12%;
-  width: 76%;
-  height: 76%;
+  left: 20%;
+  top: 20%;
+  width: 60%;
+  height: 60%;
   z-index: 1;
   pointer-events: none;
   background:
-    radial-gradient(closest-side, rgba(255, 214, 245, 0.5), rgba(255, 214, 245, 0) 72%),
-    radial-gradient(closest-side, rgba(168, 120, 255, 0.42), rgba(168, 120, 255, 0) 62%);
-  filter: blur(26px);
+    radial-gradient(closest-side, rgba(255, 214, 245, 0.2), rgba(255, 214, 245, 0) 70%),
+    radial-gradient(closest-side, rgba(168, 120, 255, 0.16), rgba(168, 120, 255, 0) 60%);
+  filter: blur(20px);
   /* Suma en vez de tapar: es luz, no pintura. Sobre el violeta oscuro del
      interior aclara, y sobre el rosa del cuerpo apenas hace nada, que es como
      se comporta un foco de verdad. */
@@ -85,8 +85,8 @@
 /* Un latido muy lento. No es un efecto: es lo que impide que la luz se lea como
    una mancha pintada en la imagen. */
 @keyframes portada-latido {
-  0%, 100% { opacity: 0.82; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.04); }
+  0%, 100% { opacity: 0.75; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.03); }
 }
 @media (prefers-reduced-motion: reduce) {
   .portada-luz {
@@ -102,8 +102,11 @@
    figura —agujas y agujeros incluidos— en vez de con la del cuadrado.
    Tres, de cerca a lejos: el filo, el halo y el derrame. */
 .portada-hueco {
+  /* Corto y flojo. Un halo ancho convierte la pieza en un cartel de neón y la
+     saca de la fotografía: aquí solo tiene que insinuarse que el metal devuelve
+     algo de luz a lo que tiene alrededor. */
   filter:
-    drop-shadow(0 0 3px rgba(255, 235, 250, 0.55))
-    drop-shadow(0 0 14px rgba(233, 176, 255, 0.5))
-    drop-shadow(0 0 38px rgba(150, 96, 230, 0.42));
+    drop-shadow(0 0 2px rgba(255, 240, 252, 0.26))
+    drop-shadow(0 0 7px rgba(233, 190, 255, 0.2))
+    drop-shadow(0 0 16px rgba(160, 110, 235, 0.14));
 }
