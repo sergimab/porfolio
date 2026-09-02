@@ -72,8 +72,8 @@
   z-index: 1;
   pointer-events: none;
   background:
-    radial-gradient(closest-side, rgba(255, 214, 245, 0.2), rgba(255, 214, 245, 0) 70%),
-    radial-gradient(closest-side, rgba(168, 120, 255, 0.16), rgba(168, 120, 255, 0) 60%);
+    radial-gradient(closest-side, rgba(255, 214, 245, 0.12), rgba(255, 214, 245, 0) 70%),
+    radial-gradient(closest-side, rgba(168, 120, 255, 0.09), rgba(168, 120, 255, 0) 60%);
   filter: blur(20px);
   /* Suma en vez de tapar: es luz, no pintura. Sobre el violeta oscuro del
      interior aclara, y sobre el rosa del cuerpo apenas hace nada, que es como
@@ -105,8 +105,9 @@
   /* Corto y flojo. Un halo ancho convierte la pieza en un cartel de neón y la
      saca de la fotografía: aquí solo tiene que insinuarse que el metal devuelve
      algo de luz a lo que tiene alrededor. */
+  /* Dos sombras y cortas. La tercera, la ancha, era la que se veía de lejos y
+     la que convertía la pieza en un cartel de neón. */
   filter:
-    drop-shadow(0 0 2px rgba(255, 240, 252, 0.26))
-    drop-shadow(0 0 7px rgba(233, 190, 255, 0.2))
-    drop-shadow(0 0 16px rgba(160, 110, 235, 0.14));
+    drop-shadow(0 0 2px rgba(255, 240, 252, 0.16))
+    drop-shadow(0 0 6px rgba(233, 190, 255, 0.1));
 }

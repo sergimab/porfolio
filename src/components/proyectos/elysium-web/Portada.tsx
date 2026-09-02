@@ -27,8 +27,9 @@ import { crearEstudioPortada } from "./estudioPortada";
 // vuelve a medir en vez de andar cuadrando números a mano.
 const HUECO = { izq: 0.2233, arriba: 0.2267, ancho: 0.5467, alto: 0.5533 };
 
-// Cuánto ocupa la figura dentro del hueco.
-const ENCAJE_PORTADA = 0.78;
+// Cuánto ocupa la figura dentro del hueco. Alto: el símbolo es el sujeto de la
+// carátula, no un detalle dentro de la caja.
+const ENCAJE_PORTADA = 0.92;
 
 export default function Portada({ seleccion }: { seleccion: Set<string> }) {
   // Más encaje que en la pantalla del trazado: aquí el símbolo va dentro de una
