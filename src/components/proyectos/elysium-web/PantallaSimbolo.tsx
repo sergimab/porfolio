@@ -10,6 +10,12 @@ import { contarPorEra } from "./canciones";
 import { crearEstudioIridiscente } from "./estudioIridiscente";
 import Controles, { type Material } from "./Controles";
 
+// Las dos herramientas de taller —el esqueleto del trazo y el panel de mandos—
+// se apagan aquí. El código se queda: mientras la forma no esté cerrada del
+// todo, volver a encenderlas es cambiar este `false` por `true`, y borrarlas
+// significaría reescribirlas la próxima vez que haya que afinar algo.
+const TALLER = false;
+
 // Lo que tarda el símbolo en trazarse entero. Largo a propósito: es el momento
 // en que aparece lo que la persona acaba de generar, y merece verse nacer.
 const DURACION = 4600;
@@ -280,6 +286,8 @@ export default function PantallaSimbolo({ seleccion }: { seleccion: Set<string> 
 
       {/* PROVISIONAL: el interruptor del esqueleto. Va en la esquina contraria a
           la salida al portfolio para no pisarla. */}
+      {TALLER && (
+        <>
       <button
         type="button"
         className={`simfinal-esqueleto-boton${esqueleto ? " es-activo" : ""}`}
@@ -306,6 +314,8 @@ export default function PantallaSimbolo({ seleccion }: { seleccion: Set<string> 
           onCerrar={() => setMandos(false)}
           pesos={pesos}
         />
+      )}
+        </>
       )}
     </div>
   );
