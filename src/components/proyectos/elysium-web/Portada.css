@@ -55,3 +55,55 @@
   border: none;
   border-radius: 0;
 }
+
+/* ── La luz de detrás y el resplandor de la pieza ────────────────────────── */
+
+/* Un foco suave dentro de la caja, por detrás del símbolo.
+   Va en el mismo sitio que el hueco del símbolo pero más grande, para que la
+   luz se derrame por las paredes de la caja en vez de quedarse recortada en el
+   cuadrado. Dos capas: un halo amplio que tiñe el fondo y un núcleo más
+   cerrado que da el punto caliente. */
+.portada-luz {
+  position: absolute;
+  left: 12%;
+  top: 12%;
+  width: 76%;
+  height: 76%;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(closest-side, rgba(255, 214, 245, 0.5), rgba(255, 214, 245, 0) 72%),
+    radial-gradient(closest-side, rgba(168, 120, 255, 0.42), rgba(168, 120, 255, 0) 62%);
+  filter: blur(26px);
+  /* Suma en vez de tapar: es luz, no pintura. Sobre el violeta oscuro del
+     interior aclara, y sobre el rosa del cuerpo apenas hace nada, que es como
+     se comporta un foco de verdad. */
+  mix-blend-mode: screen;
+  animation: portada-latido 7s ease-in-out infinite;
+}
+
+/* Un latido muy lento. No es un efecto: es lo que impide que la luz se lea como
+   una mancha pintada en la imagen. */
+@keyframes portada-latido {
+  0%, 100% { opacity: 0.82; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.04); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .portada-luz {
+    animation: none;
+  }
+}
+
+/* Y el resplandor de la propia pieza, como el de los iconos al pasar por
+   encima.
+   Se hace con sombras proyectadas y no con un desenfoque aparte porque
+   drop-shadow respeta la TRANSPARENCIA del canvas: el shader descarta todo lo
+   que está fuera del metal, así que la sombra sale con la silueta exacta de la
+   figura —agujas y agujeros incluidos— en vez de con la del cuadrado.
+   Tres, de cerca a lejos: el filo, el halo y el derrame. */
+.portada-hueco {
+  filter:
+    drop-shadow(0 0 3px rgba(255, 235, 250, 0.55))
+    drop-shadow(0 0 14px rgba(233, 176, 255, 0.5))
+    drop-shadow(0 0 38px rgba(150, 96, 230, 0.42));
+}

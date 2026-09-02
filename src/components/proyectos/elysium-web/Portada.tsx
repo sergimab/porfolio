@@ -44,6 +44,11 @@ export default function Portada({ seleccion }: { seleccion: Set<string> }) {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img className="portada-capa" src="/proyectos/elysium-web/portada-fondo.webp" alt="" />
 
+      {/* La luz de detrás. Va entre el fondo y el símbolo, así que ilumina el
+          interior de la caja y la pieza se recorta contra ella: es lo que hace
+          que el símbolo parezca estar DENTRO del hueco y no pegado encima. */}
+      <div className="portada-luz" aria-hidden="true" />
+
       {/* El símbolo va en su propio cuadrado dentro del hueco. El marco tiene
           que ser CUADRADO —la figura es radial y en uno apaisado saldría
           estirada—, así que se toma el lado menor del hueco y se centra. */}
