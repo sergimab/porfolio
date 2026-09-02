@@ -29,6 +29,9 @@ export const AJUSTES = {
   cruceMin: 0.58,
   // Lo fino que llega a ser el tramo de un disco poco votado.
   delgado: 0.62,
+  // Si el mínimo lo elige la propia figura en vez de valer lo de arriba. Ver
+  // minimoDe: no hay un mínimo bueno para todos los repartos de votos.
+  minimoAuto: true,
 };
 
 
@@ -213,7 +216,7 @@ export const POR_TRAMO = 14;
 // canciones obtendría una figura diminuta, más pequeña que la distancia a la
 // que el metal se funde, y saldría un borrón en vez de un símbolo. Lo que dice
 // algo de una persona es el reparto entre discos, no cuántas canciones marcó.
-function disponer(pesos: Record<Era, number>) {
+function disponer(pesos: Record<Era, number>, minimoDado?: number) {
   const maximo = Math.max(...ERAS.map((e) => pesos[e] || 0));
   // Nadie ha elegido nada: no hay figura que dibujar.
   if (maximo <= 0) return null;
@@ -233,7 +236,8 @@ function disponer(pesos: Record<Era, number>) {
     // El mínimo se suma por debajo en vez de sustituir: así un disco con una
     // canción sigue quedando por delante de uno con ninguna, que es lo que hace
     // que el reparto se siga leyendo en la forma.
-    const radio = EXTENSION * (AJUSTES.radioMinimo + (1 - AJUSTES.radioMinimo) * proporcionDe(era));
+    const minimo = minimoDado ?? AJUSTES.radioMinimo;
+    const radio = EXTENSION * (minimo + (1 - minimo) * proporcionDe(era));
     return [cx + radio * Math.cos(angulo), cy + radio * Math.sin(angulo)];
   };
 
@@ -316,6 +320,157 @@ function disponer(pesos: Record<Era, number>) {
     // los votos, que es lo que tiene que distinguir a una figura de otra.
     escala: k,
   };
+}
+
+// ── La elección automática del mínimo ─────────────────────────────────────
+//
+// El mínimo es el mando que más cambia el resultado, y el problema es que su
+// mejor valor NO es el mismo para todas las figuras: depende del reparto de
+// votos. Con siete discos parejos, los vértices caen casi en un anillo y hace
+// falta acercarlos al centro para que la línea se cruce y aparezcan formas; con
+// uno dominante y seis a cero, esos seis se apilan y hay que separarlos o sale
+// un pegote. Un número fijo acierta en unas figuras y falla en otras, y eso es
+// exactamente lo que se veía tirando del ALEATORIO.
+//
+// Así que se busca. Se prueban valores y se puntúa cada uno contra lo que
+// queremos de verdad:
+//
+//   · NADA DE MASAS: tramos que corren tan pegados que se funden en un bulto.
+//   · CUANTAS MÁS FORMAS, MEJOR: cada cruce de la línea consigo misma encierra
+//     un hueco, y un hueco es una forma. Solo cuentan los que tienen tamaño
+//     suficiente para no rellenarse.
+//   · FUSIÓN ORGÁNICA: tramos que se acercan lo justo para soldarse con una
+//     membrana, sin llegar a fundirse del todo.
+//
+// Se mide sobre la geometría, sin pintar. El campo del lienzo tiene un alcance
+// conocido, así que la distancia entre dos tramos basta para saber si se
+// ignoran, se sueldan o se funden en una masa.
+
+// Distancias en las que ocurre cada cosa, en veces el alcance del campo.
+const MASA = 0.55;
+const MEMBRANA = 1.15;
+// Cuántos pares muy juntos se toleran —son el cuerpo de la pieza— y cuántas
+// membranas se buscan. Los dos salen de mirar el barrido de figuras reales, no
+// de una cuenta: por debajo de la treintena la pieza se lee como alambre y por
+// encima empieza a pegarse consigo misma.
+const MASA_PERDONADA = 4;
+const MEMBRANAS_OBJETIVO = 34;
+
+export function medir(pesos: Record<Era, number>, minimo: number) {
+  const d = disponer(pesos, minimo);
+  if (!d) return { nota: -Infinity, minimo };
+
+  // El recorrido, muestreado grueso: para medir distancias no hacen falta los
+  // catorce puntos por tramo que necesita el tejido.
+  const POR_LADO = 8;
+  const puntos: { x: number; y: number; s: number }[] = [];
+  let largo = 0;
+  for (let i = 0; i < d.vertices.length - 1; i++) {
+    const [x1, y1] = d.encajar(d.vertices[i]);
+    const [x2, y2] = d.encajar(d.vertices[i + 1]);
+    const tramo = Math.hypot(x2 - x1, y2 - y1);
+    for (let n = 0; n < POR_LADO; n++) {
+      const t = n / POR_LADO;
+      puntos.push({ x: x1 + (x2 - x1) * t, y: y1 + (y2 - y1) * t, s: largo + tramo * t });
+    }
+    largo += tramo;
+  }
+
+  // El alcance, en las mismas unidades que los puntos.
+  const alcance = AJUSTES.grosor * d.escala * ALCANCE_CAMPO;
+
+  let masa = 0;
+  let membranas = 0;
+  for (let i = 0; i < puntos.length; i++) {
+    for (let j = i + 1; j < puntos.length; j++) {
+      const p = puntos[i];
+      const q = puntos[j];
+      const dist = Math.hypot(q.x - p.x, q.y - p.y);
+      if (dist >= alcance * MEMBRANA) continue;
+      // Si están cerca POR EL CAMINO son vecinos, no dos tramos que se
+      // encuentran: la distancia entre ellos no dice nada.
+      if (Math.abs(q.s - p.s) < alcance * 2) continue;
+      if (dist < alcance * MASA) masa++;
+      else membranas++;
+    }
+  }
+
+  // Los cruces de la línea consigo misma, y el tamaño del hueco que encierran.
+  // Un cruce cuyo lazo sea más pequeño que el propio grosor no deja hueco: se
+  // rellena y lo que queda es un nudo.
+  let formas = 0;
+  const vs = d.vertices.map(d.encajar);
+  for (let i = 0; i < vs.length - 1; i++) {
+    for (let j = i + 2; j < vs.length - 1; j++) {
+      const corte = cruce(vs[i], vs[i + 1], vs[j], vs[j + 1]);
+      if (!corte) continue;
+      // El lazo que encierra el cruce son los vértices entre los dos tramos.
+      const lazo = [corte, ...vs.slice(i + 1, j + 1), corte];
+      if (area(lazo) > alcance * alcance * 2.2) formas++;
+    }
+  }
+
+  // La nota, y su forma importa más que sus pesos.
+  //
+  // El primer intento sumaba formas, restaba masa y premiaba la fusión con
+  // techo. Salía mal por una razón que solo se ve midiendo: separar los
+  // vértices MEJORA las dos primeras a la vez —más cruces con hueco de sobra y
+  // menos tramos pegados—, así que el máximo se iba siempre al extremo del
+  // barrido. Y ese extremo es exactamente el polígono de alambre: lleno de
+  // huecos, sí, pero sin nada fundido.
+  //
+  // Lo que faltaba es que la fusión tire EN CONTRA, y no como "cuantas más
+  // mejor" sino con una banda: pocas membranas es un alambre y muchas es una
+  // figura pegándose consigo misma entera. Con el objetivo en medio, el máximo
+  // cae dentro del barrido y no en su borde.
+  //
+  // Y la masa se perdona hasta cierto punto: unos pocos tramos muy juntos son
+  // el CUERPO de la pieza, que es algo que queremos. Lo que no queremos es que
+  // el cuerpo se coma la figura.
+  const nota =
+    formas * 2.5 -
+    Math.max(0, masa - MASA_PERDONADA) * 0.8 -
+    Math.abs(membranas - MEMBRANAS_OBJETIVO) * 0.5;
+  return { nota, minimo, formas, masa, membranas };
+}
+
+// Dónde se cruzan dos segmentos, si es que se cruzan.
+function cruce(
+  a: [number, number],
+  b: [number, number],
+  c: [number, number],
+  e: [number, number]
+): [number, number] | null {
+  const r = [b[0] - a[0], b[1] - a[1]];
+  const s = [e[0] - c[0], e[1] - c[1]];
+  const den = r[0] * s[1] - r[1] * s[0];
+  if (Math.abs(den) < 1e-9) return null;
+  const t = ((c[0] - a[0]) * s[1] - (c[1] - a[1]) * s[0]) / den;
+  const u = ((c[0] - a[0]) * r[1] - (c[1] - a[1]) * r[0]) / den;
+  if (t <= 0 || t >= 1 || u <= 0 || u >= 1) return null;
+  return [a[0] + r[0] * t, a[1] + r[1] * t];
+}
+
+function area(poligono: [number, number][]) {
+  let doble = 0;
+  for (let i = 0; i < poligono.length - 1; i++) {
+    doble += poligono[i][0] * poligono[i + 1][1] - poligono[i + 1][0] * poligono[i][1];
+  }
+  return Math.abs(doble) / 2;
+}
+
+// El mínimo elegido para este reparto de votos.
+//
+// Barrido grueso y quedarse con el mejor. Veintiuna pruebas de unos pocos miles
+// de operaciones cada una: se ejecuta en unos milisegundos, así que puede vivir
+// en el propio generador en vez de en una tabla calculada de antemano.
+export function minimoDe(pesos: Record<Era, number>): number {
+  let mejor = { nota: -Infinity, minimo: AJUSTES.radioMinimo };
+  for (let m = 0.04; m <= 0.56001; m += 0.02) {
+    const r = medir(pesos, m);
+    if (r.nota > mejor.nota) mejor = r;
+  }
+  return mejor.minimo;
 }
 
 // ── De reparto a trazos ───────────────────────────────────────────────────
@@ -436,7 +591,7 @@ function separarLosCruces(trazo: Punto[], base: number): Punto[] {
 }
 
 export function figuraDeEras(pesos: Record<Era, number>): TrazoHecho[] {
-  const d = disponer(pesos);
+  const d = disponer(pesos, AJUSTES.minimoAuto ? minimoDe(pesos) : undefined);
   if (!d) return [];
 
   // De poligonal a trazo, muestreando cada tramo a paso constante e
@@ -500,7 +655,7 @@ export type Grafico = {
 };
 
 export function graficoDeEras(pesos: Record<Era, number>): Grafico | null {
-  const d = disponer(pesos);
+  const d = disponer(pesos, AJUSTES.minimoAuto ? minimoDe(pesos) : undefined);
   if (!d) return null;
   const [cx, cy] = d.centro;
   return {

@@ -1,6 +1,6 @@
 "use client";
 
-import { AJUSTES } from "./simbolo";
+import { AJUSTES, minimoDe } from "./simbolo";
 
 // PROVISIONAL: el panel de mandos del generador.
 //
@@ -22,7 +22,7 @@ export type Material = {
 };
 
 type Barra = {
-  clave: keyof typeof AJUSTES;
+  clave: Exclude<keyof typeof AJUSTES, "minimoAuto">;
   rotulo: string;
   min: number;
   max: number;
@@ -56,11 +56,14 @@ export default function Controles({
   onMaterial,
   onCambio,
   onCerrar,
+  pesos,
 }: {
   material: Material;
   onMaterial: (m: Material) => void;
   onCambio: () => void;
   onCerrar: () => void;
+  // Solo para enseñar qué mínimo ha elegido la figura que hay en pantalla.
+  pesos: Record<string, number>;
 }) {
   return (
     <div className="mandos">
@@ -72,6 +75,23 @@ export default function Controles({
       </div>
 
       <p className="mandos-nota">Forma</p>
+
+      {/* El mínimo automático. Va el primero porque cuando está puesto, la barra
+          de "Mínimo" no pinta nada, y conviene verlo antes de moverla. */}
+      <label className="mandos-interruptor">
+        <input
+          type="checkbox"
+          defaultChecked={AJUSTES.minimoAuto}
+          onChange={(e) => {
+            AJUSTES.minimoAuto = e.target.checked;
+            onCambio();
+          }}
+        />
+        <span>
+          Mínimo automático
+          <em>{minimoDe(pesos as never).toFixed(2)}</em>
+        </span>
+      </label>
       {BARRAS.map((b) => (
         <label key={b.clave} className="mandos-barra">
           <span className="mandos-rotulo">
@@ -83,9 +103,10 @@ export default function Controles({
             min={b.min}
             max={b.max}
             step={b.paso}
-            defaultValue={AJUSTES[b.clave]}
+            defaultValue={AJUSTES[b.clave] as number}
+            disabled={b.clave === "radioMinimo" && AJUSTES.minimoAuto}
             onChange={(e) => {
-              AJUSTES[b.clave] = Number(e.target.value);
+              (AJUSTES[b.clave] as number) = Number(e.target.value);
               onCambio();
             }}
           />

@@ -483,3 +483,29 @@
   line-height: 1.5;
   color: rgba(255, 255, 255, 0.72);
 }
+
+.mandos-interruptor {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+.mandos-interruptor input {
+  accent-color: #ff2d6f;
+  cursor: pointer;
+}
+.mandos-interruptor span {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+}
+.mandos-interruptor em {
+  font-style: normal;
+  color: #ff2d6f;
+  font-variant-numeric: tabular-nums;
+}
+.mandos-barra input[type="range"]:disabled {
+  opacity: 0.35;
+  cursor: default;
+}

@@ -153,15 +153,17 @@ export default function PantallaSimbolo({ seleccion }: { seleccion: Set<string> 
     brillo: 1.25,
   });
 
-  const figuraCompleta = useMemo(() => {
-    const pesos = contarPorEra(seleccion, ERAS);
-    return figuraDeEras(pesos);
-  }, [seleccion, retoque]);
+  const pesos = useMemo(() => contarPorEra(seleccion, ERAS), [seleccion]);
+
+  const figuraCompleta = useMemo(
+    () => figuraDeEras(pesos),
+    [pesos, retoque]
+  );
 
   // El gráfico del que sale, solo para la vista de taller.
   const grafico = useMemo(
-    () => graficoDeEras(contarPorEra(seleccion, ERAS)),
-    [seleccion, retoque]
+    () => graficoDeEras(pesos),
+    [pesos, retoque]
   );
 
   useEffect(() => {
@@ -298,6 +300,7 @@ export default function PantallaSimbolo({ seleccion }: { seleccion: Set<string> 
           onMaterial={setMaterial}
           onCambio={() => setRetoque((n) => n + 1)}
           onCerrar={() => setMandos(false)}
+          pesos={pesos}
         />
       )}
     </div>
