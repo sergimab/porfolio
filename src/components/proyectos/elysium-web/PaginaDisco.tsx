@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import Portada from "./Portada";
-import MarcoLiquido, { type Marco } from "./MarcoLiquido";
+import MarcoLiquido, { type Marco, type Suelto } from "./MarcoLiquido";
 import { ERAS } from "./simbolo";
 import { CANCIONES, claveCancion } from "./canciones";
 
@@ -22,22 +22,65 @@ import { CANCIONES, claveCancion } from "./canciones";
 // tienen que venir de sus kits oficiales, no dibujados a mano.
 const PLATAFORMAS = ["Apple Music", "Spotify", "Amazon Music"];
 
-// El recorrido del metal por la página, y es UNO SOLO.
+// El recorrido del metal por la página. No es una cinta única: son TRES piezas
+// y un par de esquirlas sueltas, que es como está dibujado.
 //
-// Rodea la portada, salta a la lista, baja al importar y muere en las tarjetas.
-// Encadenarlo en vez de poner un marco por bloque es lo que lo convierte en una
-// cinta que recorre la página: con piezas sueltas, por muy bien colocadas que
-// estén, se lee como cuatro recuadros.
+// La primera versión daba la vuelta completa a cada bloque y saltaba de uno a
+// otro por el camino más corto, o sea cruzando el contenido. Aquí ningún bloque
+// se cierra —cada pieza abraza dos o tres lados y se marcha—, los cabos se
+// pasan de largo y mueren en aguja, en los nudos cruzan púas, y el único salto
+// serpentea por el HUECO que queda entre la lista y el bloque de importar.
 //
-// Los lados van en orden cíclico —arriba, derecha, abajo, izquierda— porque el
-// final de cada uno es el principio del siguiente. Y ningún bloque se rodea
-// entero salvo la portada: la cinta entra por un lado, dobla y se va, dejando
-// el resto del borde limpio.
+// Los lados se nombran siempre en el sentido de las agujas del reloj, porque es
+// el único en el que se encadenan; `invertir` recorre esa misma poligonal al
+// revés, y es lo que permite empezar por un cabo al aire en vez de por una
+// esquina.
 const MARCOS: Marco[] = [
-  { bloque: "portada", lados: ["derecha", "abajo", "izquierda", "arriba"] },
-  { bloque: "lista", lados: ["izquierda", "arriba", "derecha"], unir: true },
-  { bloque: "importar", lados: ["derecha", "abajo"], unir: true },
-  { bloque: "tarjetas", lados: ["izquierda", "abajo"], unir: true },
+  // Columna derecha: nace en el aire a la derecha de la lista, corre por su
+  // borde de arriba hacia la izquierda, baja por su costado, serpentea por el
+  // hueco y rodea el bloque de importar hasta salir por su derecha.
+  {
+    bloque: "lista",
+    lados: ["izquierda", "arriba"],
+    invertir: true,
+    asomo: [0.5, 0],
+    nudos: [{ en: 0.18 }],
+  },
+  {
+    bloque: "importar",
+    lados: ["derecha", "abajo", "izquierda"],
+    invertir: true,
+    unir: "serpiente",
+    asomo: [0, 0.55],
+    nudos: [{ en: 0.92, angulos: [18, -74] }],
+  },
+  // La portada: una L por debajo y por la izquierda, con dos nudos, abierta por
+  // arriba y por la derecha.
+  {
+    bloque: "portada",
+    lados: ["abajo", "izquierda"],
+    asomo: [0.6, 0.55],
+    nudos: [{ en: 0.24 }, { en: 0.66, angulos: [12, -80], largo: 0.09 }],
+  },
+  // Y las tarjetas, que solo reciben una escuadra por el lado que da al hueco.
+  {
+    bloque: "tarjetas",
+    lados: ["abajo", "izquierda"],
+    invertir: true,
+    asomo: [0.45, 0.8],
+    nudos: [{ en: 0.85 }],
+  },
+];
+
+// Las esquirlas que flotan en el blanco, ancladas a un bloque para que sigan a
+// su caja al redimensionar pero colocadas fuera de él. Son remate, no marco: en
+// la referencia hay un par de agujas sueltas sin tocar nada, y quitarlas deja
+// la composición demasiado ordenada.
+const SUELTOS: Suelto[] = [
+  // Van pegadas por dentro del relleno de la página: más afuera, el lienzo
+  // acaba y la aguja se corta a la mitad en vez de terminar en punta.
+  { bloque: "portada", x: 0.36, y: -0.05, giro: -3, largo: 0.13, cruz: [64, 0.34] },
+  { bloque: "importar", x: 1.02, y: 0.55, giro: 84, largo: 0.09, cruz: [70, 0.4] },
 ];
 
 export default function PaginaDisco({
@@ -81,7 +124,7 @@ export default function PaginaDisco({
             abraza los bloques, no una superficie con la que se trata. Cuelga del
             cuerpo entero y no de una columna porque la cinta cruza de una a
             otra. */}
-        <MarcoLiquido marcos={MARCOS} />
+        <MarcoLiquido marcos={MARCOS} sueltos={SUELTOS} />
 
         <section className="disco-izquierda">
           <div data-marco="portada">
