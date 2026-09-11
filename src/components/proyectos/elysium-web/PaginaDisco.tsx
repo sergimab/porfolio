@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import Portada from "./Portada";
 import MarcoLiquido, { type Marco, type Suelto } from "./MarcoLiquido";
 import { ERAS } from "./simbolo";
@@ -76,6 +76,13 @@ const MARCOS: Marco[] = [
 // su caja al redimensionar pero colocadas fuera de él. Son remate, no marco: en
 // la referencia hay un par de agujas sueltas sin tocar nada, y quitarlas deja
 // la composición demasiado ordenada.
+// Lo menos que puede medir la lista por mucho que aprieten las dos columnas.
+// Por debajo de esto deja de ser una lista con la que se pueda tratar y pasa a
+// ser una rendija con desplazamiento.
+const LISTA_MINIMA = 150;
+// Y lo más, para que con pocas canciones no se estire hasta lo absurdo.
+const LISTA_MAXIMA = 420;
+
 const SUELTOS: Suelto[] = [
   // Van pegadas por dentro del relleno de la página: más afuera, el lienzo
   // acaba y la aguja se corta a la mitad en vez de terminar en punta.
@@ -104,6 +111,45 @@ export default function PaginaDisco({
     return salida;
   }, [seleccion]);
 
+  // El alto de la lista sale de MEDIR, no de un número escrito a mano.
+  //
+  // La columna derecha tiene una parte que no se puede encoger —importar y las
+  // dos tarjetas— y la lista es lo único elástico que hay en ella. Con un tope
+  // fijo, la derecha acababa 278 px más abajo que la carátula y esa diferencia
+  // era un pegote de blanco debajo de la portada. Midiendo, la lista se queda
+  // exactamente con el hueco que le deja la carátula y las dos columnas
+  // terminan a la misma altura.
+  //
+  // No se puede hacer en CSS: el alto de la carátula es su propio ancho —es
+  // cuadrada— y ninguna de las dos columnas sabe lo que mide la otra. Probé
+  // antes con `align-items: stretch` y una derecha de alto cero estirada al
+  // 100%, y lo que pasó es que la fila creció igual y estiró la izquierda.
+  const izquierdaRef = useRef<HTMLElement>(null);
+  const derechaRef = useRef<HTMLElement>(null);
+  const listaRef = useRef<HTMLOListElement>(null);
+  const [altoLista, setAltoLista] = useState<number>();
+
+  useLayoutEffect(() => {
+    const izq = izquierdaRef.current;
+    const der = derechaRef.current;
+    const ol = listaRef.current;
+    if (!izq || !der || !ol) return;
+    const medir = () => {
+      // Lo que ocupa la derecha SIN la lista es estable, así que el cálculo
+      // converge a la primera: al aplicar el alto nuevo, el observador vuelve a
+      // disparar, sale el mismo número y ahí se queda.
+      const resto = der.getBoundingClientRect().height - ol.getBoundingClientRect().height;
+      const hueco = izq.getBoundingClientRect().height - resto;
+      const alto = Math.round(Math.min(LISTA_MAXIMA, Math.max(LISTA_MINIMA, hueco)));
+      setAltoLista((antes) => (antes === alto ? antes : alto));
+    };
+    medir();
+    const obs = new ResizeObserver(medir);
+    obs.observe(izq);
+    obs.observe(der);
+    return () => obs.disconnect();
+  }, []);
+
   return (
     <div className="disco">
       <header className="disco-barra">
@@ -126,7 +172,7 @@ export default function PaginaDisco({
             otra. */}
         <MarcoLiquido marcos={MARCOS} sueltos={SUELTOS} />
 
-        <section className="disco-izquierda">
+        <section className="disco-izquierda" ref={izquierdaRef}>
           <div data-marco="portada">
             <Portada seleccion={seleccion} />
           </div>
@@ -137,10 +183,10 @@ export default function PaginaDisco({
           </button>
         </section>
 
-        <section className="disco-derecha">
+        <section className="disco-derecha" ref={derechaRef}>
 
           <div className="disco-lista" data-marco="lista">
-            <ol>
+            <ol ref={listaRef} style={altoLista ? { maxHeight: altoLista } : undefined}>
               {elegidas.map((c, i) => (
                 <li key={`${c.era}-${c.titulo}`}>
                   <span className="disco-num">{i + 1}</span>

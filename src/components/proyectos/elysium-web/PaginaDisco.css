@@ -127,7 +127,10 @@
   margin: 0;
   padding: 0;
   /* Tope de alto con desplazamiento propio: la lista puede tener noventa
-     canciones y no puede empujar hacia abajo todo lo que viene después. */
+     canciones y no puede empujar hacia abajo todo lo que viene después.
+     En escritorio lo pisa un alto medido —el hueco exacto que deja la
+     carátula—, así que este valor es la red: lo que se ve antes de la primera
+     medida, y lo que queda si el cálculo no llega a correr. */
   max-height: min(38dvh, 330px);
   overflow-y: auto;
 }
@@ -177,7 +180,9 @@
 
 /* ── Importar a la plataforma ── */
 .disco-importar {
-  margin-top: 12px;
+  /* Sin margen propio: la separación ya la pone el hueco de la columna. El
+     margen extra existía para dejar sitio al botón de reproducir, que sobresale
+     de la lista, y para eso bastan los 18 px del hueco. */
   padding: 16px 18px;
   border-radius: 18px;
   border: 1px solid rgba(42, 20, 80, 0.12);
