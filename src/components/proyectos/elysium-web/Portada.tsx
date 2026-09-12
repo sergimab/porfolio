@@ -85,7 +85,15 @@ export default function Portada({ seleccion }: { seleccion: Set<string> }) {
       {/* El símbolo va en su propio cuadrado dentro del hueco. El marco tiene
           que ser CUADRADO —la figura es radial y en uno apaisado saldría
           estirada—, así que se toma el lado menor del hueco y se centra. */}
-      <div className="portada-hueco" ref={huecoRef}>
+      {/* El ancho real del hueco viaja al CSS como variable porque las sombras
+          laterales van en PÍXELES —drop-shadow no entiende porcentajes— y sin
+          escalarlas con el hueco, en móvil serían el doble de largas en
+          proporción. Es el mismo apaño que `k` hace con el material. */}
+      <div
+        className="portada-hueco"
+        ref={huecoRef}
+        style={{ "--hueco": `${ancho}px` } as React.CSSProperties}
+      >
         {figura.length > 0 && (
           <LienzoMetal
             figura={figura}

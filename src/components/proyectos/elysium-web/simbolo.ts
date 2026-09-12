@@ -26,7 +26,14 @@ export const AJUSTES = {
   // A qué distancia se considera que dos tramos se molestan.
   cruceCerca: 1.6,
   // Y hasta dónde se recoge su alcance. Más alto = más fusión.
-  cruceMin: 0.58,
+  //
+  // Recogerlo mucho es lo que producía la pirámide de cuatro caras en cada
+  // cruce: al quitarle alcance a los puntos de la X, los cuatro valles que
+  // quedan entre los brazos dejan de rellenarse, sus paredes se enderezan y el
+  // sombreado —que lee la PENDIENTE— encuentra cuatro caras planas con sus
+  // aristas. Dejando más alcance, las cúpulas de los dos tramos se solapan en
+  // esos valles, el fondo sube y el cruce se lee como un nudo fundido.
+  cruceMin: 0.84,
   // Lo fino que llega a ser el tramo de un disco poco votado.
   delgado: 0.62,
   // Si el mínimo lo elige la propia figura en vez de valer lo de arriba. Ver
@@ -585,7 +592,7 @@ function separarLosCruces(trazo: Punto[], base: number): Punto[] {
     // Cuantos más tramos alrededor, más se recoge. Con suelo: sin nada de
     // alcance, el cruce dejaría de fundirse del todo y se vería como un aspa de
     // dos piezas superpuestas en vez de como una unión.
-    const recogido = 1 / (1 + vecinos * 0.06);
+    const recogido = 1 / (1 + vecinos * 0.04);
     return { ...p, a: Math.min(p.a ?? 1, Math.max(AJUSTES.cruceMin, recogido)) };
   });
 }

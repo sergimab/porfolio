@@ -107,7 +107,30 @@
      algo de luz a lo que tiene alrededor. */
   /* Dos sombras y cortas. La tercera, la ancha, era la que se veía de lejos y
      la que convertía la pieza en un cartel de neón. */
+  /* Y las dos SOMBRAS LATERALES, que son lo que mete la pieza dentro de la
+     caja.
+     Una sola sombra dice de qué lado viene la luz; dos, una a cada costado,
+     dicen que la pieza está metida en un cajón con paredes cerca, que es lo que
+     hay. Se proyectan con la silueta exacta del símbolo —agujas y huecos
+     incluidos—, así que en las paredes se lee el reflejo de la figura y no una
+     mancha.
+     Van antes que el resplandor para que el halo claro quede por encima de
+     ellas y no al revés; y en fracción del ancho del hueco, que llega en
+     --hueco desde Portada.tsx. */
   filter:
+    /* Lo que llega a las PAREDES de la caja no es sombra, es LUZ.
+       Lo probé primero con dos sombras oscuras largas y no se veían: el
+       interior de la caja ya es casi negro, así que una sombra negra ahí es
+       sombra sobre sombra. Lo que una pieza de metal hace de verdad contra una
+       pared cercana es lo contrario —le devuelve luz—, y eso sí se recorta
+       sobre el fondo oscuro. Al ir con la silueta exacta del símbolo, en la
+       pared se lee la figura desenfocada y no una mancha. */
+    drop-shadow(calc(var(--hueco, 260px) * -0.1) 0 calc(var(--hueco, 260px) * 0.07) rgba(206, 172, 255, 0.24))
+    drop-shadow(calc(var(--hueco, 260px) * 0.1) 0 calc(var(--hueco, 260px) * 0.07) rgba(206, 172, 255, 0.2))
+    /* Y las cortas, el contacto: lo que ancla la pieza al fondo en vez de
+       dejarla flotando delante de él. */
+    drop-shadow(calc(var(--hueco, 260px) * -0.03) 0 calc(var(--hueco, 260px) * 0.02) rgba(26, 6, 40, 0.38))
+    drop-shadow(calc(var(--hueco, 260px) * 0.03) 0 calc(var(--hueco, 260px) * 0.02) rgba(26, 6, 40, 0.3))
     drop-shadow(0 0 2px rgba(255, 240, 252, 0.16))
     drop-shadow(0 0 6px rgba(233, 190, 255, 0.1));
 }
