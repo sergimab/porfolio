@@ -43,9 +43,11 @@ export default function PrevioSimbolo({
             figura={figura}
             interactivo={false}
             entorno={crearEstudioIridiscente}
-            dispersion={0.009}
+            // Poca dispersión: el color lo pone ahora la película, no la
+            // separación de canales. Sumando las dos, el tornasol se ensucia.
+            dispersion={0.004}
             capas={1}
-            brillo={1.75}
+            brillo={1.95}
             grosorLibre
             atraccion
             suavizado={0}
@@ -53,6 +55,13 @@ export default function PrevioSimbolo({
             redondeo={2.5}
             techo={0.56}
             relieve={0.85}
+            // La película fina de los iconos que flotan: mismos números que
+            // ellos —iridiscencia entera, índice 2,25 y el grosor alto de su
+            // rango—, que es lo que hace que compartan tornasol y no solo
+            // habitación.
+            tornasol={1}
+            pelicula={720}
+            peliculaIOR={2.25}
           />
         )}
       </div>

@@ -396,6 +396,9 @@ const FRAGMENT = /* glsl */ `
   uniform float uFilo;        // cuánto vuelca el canto en el filo mismo
   uniform float uGrano;       // pendiente a la que el faldón ya está a tope
   uniform float uTecho;       // dónde empieza a aplanarse la cima (0 = sin techo)
+  uniform float uTornasol;    // cuánta película fina encima (0 = metal a secas)
+  uniform float uPelicula;    // grosor de esa película, en nanómetros
+  uniform float uPeliculaIOR; // y su índice de refracción
   uniform float uDispersion;  // cuánto se separan los canales en el filo
   uniform float uCapas;       // líneas de reflejo repetidas hacia dentro
   uniform float uBrillo;      // ganancia final
@@ -588,7 +591,35 @@ const FRAGMENT = /* glsl */ `
     float f = pow(1.0 - clamp(dot(n, V), 0.0, 1.0), 4.0);
     // Tinte de acero: el cromo no es un espejo neutro, apaga un punto el rojo.
     vec3 tinte = vec3(0.94, 0.96, 1.0);
-    vec3 color = refl * tinte * (0.78 + 0.5 * f) * uBrillo;
+    // LA PELÍCULA FINA, que es de donde sale el tornasol.
+    //
+    // Es lo que separaba a esta pieza de los iconos que flotan en el espacio
+    // aunque compartieran plató: ellos llevan iridiscencia de película, y aquí
+    // el color solo podía venir del panorama y de separar los canales. Son dos
+    // cosas distintas —la dispersión desvía el rayo y deja franjas en las
+    // aristas; la película hace que el TONO vire con el ángulo de la
+    // superficie, que es el efecto de la gasolina sobre el agua—, y ninguna
+    // cantidad de la primera imita a la segunda.
+    //
+    // El cálculo es el de la interferencia: el rayo que rebota en la cara de
+    // arriba y el que rebota en la de abajo recorren caminos distintos, y esa
+    // diferencia refuerza unas longitudes de onda y cancela otras. Con el
+    // grosor fijo, lo único que la mueve es el ángulo, así que cada inclinación
+    // de la superficie devuelve su color.
+    vec3 iri = vec3(1.0);
+    if (uTornasol > 0.0) {
+      float cosT = clamp(dot(n, V), 0.0, 1.0);
+      float camino = 2.0 * uPeliculaIOR * uPelicula * cosT;
+      vec3 fase = 6.2831853 * camino / vec3(680.0, 550.0, 440.0);
+      // Base alta y amplitud corta. Con la amplitud entera —0,55 + 0,9— los
+      // mínimos de cada canal se van por debajo de cero y la pieza sale a
+      // arcoíris saturado sobre negro, que no es lo que hace una película fina
+      // sobre metal: ahí el cuerpo sigue siendo claro y el tono solo se
+      // desplaza. La película tiñe, no pinta.
+      iri = mix(vec3(1.0), 0.82 + 0.3 * cos(fase), uTornasol);
+    }
+
+    vec3 color = refl * tinte * iri * (0.78 + 0.5 * f) * uBrillo;
 
     // Nada de oscurecer el canto a mano: en la referencia el filo es un hilo
     // BLANCO, no una sombra. Sale solo, porque ahí el canto está volcado y
@@ -690,6 +721,16 @@ export default function LienzoMetal({
   // Por eso la misma habitación da una pieza clara o una teñida del color del
   // suelo según este número.
   relieve = 1.5,
+  // La película fina que hace virar el tono con el ángulo, como la gasolina
+  // sobre el agua. Cero es metal a secas. Es lo que llevan los iconos que
+  // flotan en el espacio, y no se puede imitar con `dispersion`: esa desvía el
+  // rayo y deja franjas de color en las aristas, mientras que la película tiñe
+  // según lo inclinada que esté la superficie.
+  tornasol = 0,
+  // Su grosor en nanómetros y su índice: el grosor decide qué colores salen y
+  // cuántos caben de un canto al otro de la pieza.
+  pelicula = 720,
+  peliculaIOR = 2.25,
   // El alcance de cada punto deja de seguir a su grosor y pasa a ser el mismo
   // para todo el trazo. Es lo que hace que dos partes finas que se acercan se
   // unan como si se atrajeran. Solo tiene sentido junto a grosorLibre.
@@ -719,6 +760,9 @@ export default function LienzoMetal({
   grano?: number;
   techo?: number;
   relieve?: number;
+  tornasol?: number;
+  pelicula?: number;
+  peliculaIOR?: number;
   atraccion?: boolean;
   referencia?: number;
   suavizado?: number;
@@ -1272,6 +1316,9 @@ export default function LienzoMetal({
         // no se descuadra.
         uUmbral: { value: UMBRAL_CAMPO * ESCALA_CAMPO },
         uRelieve: { value: relieve },
+        uTornasol: { value: tornasol },
+        uPelicula: { value: pelicula },
+        uPeliculaIOR: { value: peliculaIOR },
         uFilo: { value: filo },
         // Bajó de 0,07 con el campo normalizado: la falda de la cinta cae ahora
         // más suave —el campo llega a 1 y no a 0,8, pero repartido sobre un
@@ -1333,7 +1380,7 @@ export default function LienzoMetal({
       renderer.domElement.remove();
       tresRef.current = null;
     };
-  }, [repintarMapa, cerca, entorno, dispersion, capas, brillo, suavidad, filo, grano, techo, relieve]);
+  }, [repintarMapa, cerca, entorno, dispersion, capas, brillo, suavidad, filo, grano, techo, relieve, tornasol, pelicula, peliculaIOR]);
 
   // Pasa los puntos encolados al trazo en curso y pinta lo nuevo. Se llama
   // desde el bucle y también al soltar: si el dedo baja y sube dentro del

@@ -177,10 +177,10 @@ export default function PantallaSimbolo({
   const [material, setMaterial] = useState<Material>({
     // Vidrio, no cromo: los canales muy separados son los destellos de
     // arcoíris de los filos.
-    dispersion: 0.009,
+    dispersion: 0.004,
     suavidad: 9,
     redondeo: 2.5,
-    brillo: 1.75,
+    brillo: 1.95,
   });
 
   const pesos = useMemo(() => contarPorEra(seleccion, ERAS), [seleccion]);
@@ -307,6 +307,13 @@ export default function PantallaSimbolo({
               // porque la inclinación decide qué zona del panorama refleja cada
               // punto.
               relieve={0.85}
+              // Y la película fina de los iconos que flotan. Es lo que faltaba
+              // para que se vieran del mismo material: compartir plató no
+              // bastaba, porque su tornasol no sale de la habitación sino de la
+              // película. Mismos números que ellos.
+              tornasol={1}
+              pelicula={720}
+              peliculaIOR={2.25}
               // Sin filo ni grano bajos, al contrario que en la portada, y
               // probado: allí aplanan los pliegues, pero aquí el plató es otro
               // —el del vidrio, con sus bandas oscuras estrechas— y lo que sale
