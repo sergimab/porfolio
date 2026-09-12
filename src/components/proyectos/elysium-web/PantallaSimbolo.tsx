@@ -297,6 +297,13 @@ export default function PantallaSimbolo({
               // El mapa de altura, redondeado antes de iluminarlo: es lo que
               // quita el pico de los cruces. Ver componerMapa en el lienzo.
               redondeo={material.redondeo}
+              // Sin filo ni grano bajos, al contrario que en la portada, y
+              // probado: allí aplanan los pliegues, pero aquí el plató es otro
+              // —el del vidrio, con sus bandas oscuras estrechas— y lo que sale
+              // es un enrejado de facetas romboidales por toda la superficie.
+              // Estos dos mandos trabajan sobre la luz, así que su resultado
+              // depende de la habitación, y lo que vale en una no vale en la
+              // otra.
             />
           )}
           {/* El esqueleto va sobre el mismo cuadrado y con el MISMO recorte que

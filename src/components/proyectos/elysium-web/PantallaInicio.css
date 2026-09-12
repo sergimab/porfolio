@@ -152,3 +152,40 @@
     width: min(230px, 52%);
   }
 }
+
+/* PROVISIONAL — la previsualización del símbolo, para afinar la forma sin
+   repetir el test entero. Se va con el botón PREVIO de PantallaEras. */
+.previo {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  background: rgba(0, 0, 0, 0.86);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+/* Cuadrado y grande: la figura es radial —en un marco apaisado saldría
+   estirada— y lo que se viene a mirar aquí son los cruces, que a tamaño de
+   portada no se distinguen. */
+.previo-lienzo {
+  width: min(74vh, 74vw);
+  aspect-ratio: 1 / 1;
+}
+.previo-lienzo .lienzo-fluido {
+  height: 100%;
+  margin-top: 0;
+}
+.previo-lienzo .lienzo-marco {
+  height: 100%;
+  background: none;
+  border: none;
+  border-radius: 0;
+}
+.previo-pie {
+  display: flex;
+  gap: 12px;
+}

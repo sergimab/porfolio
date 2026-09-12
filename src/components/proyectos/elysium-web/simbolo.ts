@@ -501,7 +501,32 @@ export function minimoDe(pesos: Record<Era, number>): number {
 // viviendo a un 5% del umbral del campo, y recortarlo lo hundía por debajo y lo
 // desprendía. Con el grosor parejo hay más de un 50% de margen sobre el umbral,
 // y el afilado cabe de sobra.
-function afilarVertices(trazo: Punto[], base: number): Punto[] {
+// La distancia de cada punto al tramo AJENO más cercano, o infinito si no hay
+// ninguno. Es el dato del que viven las dos funciones siguientes, y se calcula
+// una sola vez porque las dos preguntan exactamente lo mismo.
+//
+// "Ajeno" no es "lejos en el array": los puntos de al lado siempre están cerca.
+// Es que esté MUCHO MÁS CERCA EN EL ESPACIO QUE A LO LARGO DEL CAMINO. En un
+// tramo recto las dos distancias se parecen; donde el camino se dobla sobre sí
+// mismo o se cruza, se separan.
+function distanciasAjenas(trazo: Punto[]): number[] {
+  const acum = [0];
+  for (let i = 1; i < trazo.length; i++) {
+    acum.push(acum[i - 1] + Math.hypot(trazo[i].x - trazo[i - 1].x, trazo[i].y - trazo[i - 1].y));
+  }
+  return trazo.map((p, i) => {
+    let mejor = Infinity;
+    for (let j = 0; j < trazo.length; j++) {
+      if (Math.abs(i - j) < CRUCE_VECINO) continue;
+      const d = Math.hypot(trazo[j].x - p.x, trazo[j].y - p.y);
+      if (d > Math.abs(acum[i] - acum[j]) * CRUCE_DOBLEZ) continue;
+      if (d < mejor) mejor = d;
+    }
+    return mejor;
+  });
+}
+
+function afilarVertices(trazo: Punto[], base: number, ajena: number[]): Punto[] {
   const acum = [0];
   for (let i = 1; i < trazo.length; i++) {
     acum.push(acum[i - 1] + Math.hypot(trazo[i].x - trazo[i - 1].x, trazo[i].y - trazo[i - 1].y));
@@ -511,7 +536,11 @@ function afilarVertices(trazo: Punto[], base: number): Punto[] {
   // puntos por construcción; los dos cabos se saltan porque el lienzo ya se
   // ocupa de ellos.
   const ventanaMaxima = base * ALCANCE_CAMPO * PICO_VENTANA;
-  const picos: { i: number; agudeza: number; ventana: number }[] = [];
+  // Hasta dónde se considera que un vértice tiene compañía. El mismo radio con
+  // el que se detectan los cruces: si ahí hay otro tramo, este vértice no está
+  // al aire.
+  const radioLibre = base * ALCANCE_CAMPO * AJUSTES.cruceCerca;
+  const picos: { i: number; agudeza: number; ventana: number; libre: number }[] = [];
   for (let i = POR_TRAMO; i < trazo.length - 1; i += POR_TRAMO) {
     const antes = trazo[Math.max(0, i - 5)];
     const luego = trazo[Math.min(trazo.length - 1, i + 5)];
@@ -530,6 +559,19 @@ function afilarVertices(trazo: Punto[], base: number): Punto[] {
       i,
       agudeza: Math.min(1, Math.max(0, (1 - coseno) / 2)),
       ventana: Math.min(ventanaMaxima, Math.min(tramoAntes, tramoLuego) * PICO_TRAMO),
+      // Cuánto está AL AIRE, y de aquí venía el cráter con forma de estrella.
+      //
+      // Afilar un vértice es encogerle el radio hasta un 22%. En una punta
+      // suelta eso es exactamente lo que se quiere: la punta sale afilada en
+      // vez de en casquete. Pero cuando el vértice cae en medio de la figura,
+      // con otros tramos alrededor, esos tramos llegan con su grosor entero
+      // hasta un centro estrangulado, y el resultado es un hoyo de cuatro caras
+      // justo donde se juntan. Lo que parecía un problema de fusión entre los
+      // brazos era el propio vértice hundiéndose.
+      //
+      // Con esto, el afilado se apaga a medida que el vértice tiene compañía:
+      // entero al aire, nada dentro de un nudo.
+      libre: Math.min(1, ajena[i] / radioLibre),
     });
   }
 
@@ -541,7 +583,8 @@ function afilarVertices(trazo: Punto[], base: number): Punto[] {
       if (d >= pico.ventana) continue;
       // Lleno en el vértice y nada en el borde de la ventana, graduado por lo
       // cerrado del giro.
-      const fuerza = (pico.agudeza - AJUSTES.picoDesde) / (1 - AJUSTES.picoDesde);
+      const fuerza =
+        ((pico.agudeza - AJUSTES.picoDesde) / (1 - AJUSTES.picoDesde)) * pico.libre;
       factor = Math.min(factor, 1 - (1 - AJUSTES.pico) * fuerza * (1 - d / pico.ventana));
     }
     if (factor >= 1) return p;
@@ -567,45 +610,27 @@ function afilarVertices(trazo: Punto[], base: number): Punto[] {
 // Adelgazándolos se conseguiría el hueco a costa de un trazo desigual, que es
 // justo lo que se acaba de arreglar.
 //
-// La prueba no es "cuántos puntos tengo cerca" —los de al lado siempre lo
-// están— sino si alguno está MUCHO MÁS CERCA EN EL ESPACIO QUE A LO LARGO DEL
-// CAMINO. En un tramo recto las dos distancias se parecen; donde el camino se
-// cruza consigo mismo, se separan, y esa diferencia es exactamente "aquí hay
-// otro tramo que no es mi continuación".
-function separarLosCruces(trazo: Punto[], base: number): Punto[] {
-  const acum = [0];
-  for (let i = 1; i < trazo.length; i++) {
-    acum.push(acum[i - 1] + Math.hypot(trazo[i].x - trazo[i - 1].x, trazo[i].y - trazo[i - 1].y));
-  }
-  // Se mira hasta donde llega la fusión: más allá, dos tramos ya no se enteran
-  // el uno del otro.
+// La vecindad la da distanciasAjenas, que es donde está explicada la prueba.
+function separarLosCruces(trazo: Punto[], base: number, ajena: number[]): Punto[] {
+  // Hasta donde llega la fusión: más allá, dos tramos ya no se enteran el uno
+  // del otro.
   const cerca = base * ALCANCE_CAMPO * AJUSTES.cruceCerca;
 
   return trazo.map((p, i) => {
-    let vecinos = 0;
-    // Y la distancia al tramo ajeno MÁS CERCANO, que es lo que decide el
-    // filete.
+    // La distancia al tramo ajeno más cercano decide las dos cosas: cuánto se
+    // recoge el alcance y cuánto engorda el filete.
     //
-    // Tiene que ser el más cercano y no la suma de todos, y esto lo hice mal la
-    // primera vez: sumando un peso por vecino, en el interior de la figura hay
-    // decenas de puntos a tiro y el total se desbordaba en casi todas partes,
-    // así que el filete dejaba de ser un filete y engordaba la pieza entera.
-    // La figura salió como una masa con los montantes finos comidos. Lo que
-    // define un rincón es lo cerca que está la pared de enfrente, y eso es una
-    // distancia, no un recuento.
-    let masCerca = Infinity;
-    for (let j = 0; j < trazo.length; j++) {
-      if (Math.abs(i - j) < CRUCE_VECINO) continue;
-      const q = trazo[j];
-      const d = Math.hypot(q.x - p.x, q.y - p.y);
-      if (d >= cerca) continue;
-      // Si la distancia en línea recta se parece a la del camino, es que la
-      // línea sigue de largo: no hay cruce.
-      if (d > Math.abs(acum[i] - acum[j]) * CRUCE_DOBLEZ) continue;
-      vecinos++;
-      if (d < masCerca) masCerca = d;
-    }
-    if (!vecinos) return p;
+    // Tiene que ser el más cercano y no un recuento de vecinos, y esto lo hice
+    // mal la primera vez: sumando un peso por vecino, en el interior de la
+    // figura hay decenas de puntos a tiro y el total se desbordaba en casi
+    // todas partes, así que el filete dejaba de ser un filete y engordaba la
+    // pieza entera. La figura salió como una masa con los montantes finos
+    // comidos. Lo que define un rincón es lo cerca que está la pared de
+    // enfrente: una distancia, no un recuento.
+    const masCerca = ajena[i];
+    if (masCerca >= cerca) return p;
+    // Cuánto se recoge el alcance, graduado por la misma distancia.
+    const vecinos = (1 - masCerca / cerca) * 6;
     // Cuantos más tramos alrededor, más se recoge. Con suelo: sin nada de
     // alcance, el cruce dejaría de fundirse del todo y se vería como un aspa de
     // dos piezas superpuestas en vez de como una unión.
@@ -682,10 +707,14 @@ export function figuraDeEras(
       // Y las dos medidas van contra `base`, el grosor máximo, no contra el
       // radio de cada punto: si no, el tramo fino se afilaría en una ventana
       // más corta y su vértice saldría con otro carácter que el de al lado.
-      puntos: separarLosCruces(
-        afilarVertices(tejer(d.vertices, d.grosores), base),
-        base
-      ),
+      puntos: (() => {
+        // Las distancias se miden UNA vez sobre el trazo crudo y las usan las
+        // dos funciones. Ninguna de las dos mueve puntos —solo tocan radio y
+        // alcance—, así que siguen valiendo después de afilar.
+        const crudo = tejer(d.vertices, d.grosores);
+        const ajena = distanciasAjenas(crudo);
+        return separarLosCruces(afilarVertices(crudo, base, ajena), base, ajena);
+      })(),
       sinEntrada: true,
       sinSalida: true,
       desde: 0,

@@ -5,6 +5,7 @@ import Galaxia from "./Galaxia";
 import IconosFlotantes from "./IconosFlotantes";
 import PopupAlbum from "./PopupAlbum";
 import PopupFinal from "./PopupFinal";
+import PrevioSimbolo from "./PrevioSimbolo";
 import type { Era } from "./simbolo";
 
 // La segunda pantalla: se va el cartel y quedan las siete eras flotando, ahora
@@ -30,6 +31,9 @@ export default function PantallaEras({
 }) {
   const [abierta, setAbierta] = useState<Era | null>(null);
   const [cerrando, setCerrando] = useState(false);
+  // PROVISIONAL, como ALEATORIO: la previsualización del símbolo sin pasar por
+  // el trazado. Ver PrevioSimbolo.
+  const [previo, setPrevio] = useState(false);
 
   return (
     <div className="inicio">
@@ -49,6 +53,11 @@ export default function PantallaEras({
         <button type="button" className="cartel-boton es-hueco" onClick={onAleatorio}>
           ALEATORIO
         </button>
+        {/* PROVISIONAL, para afinar la forma: el símbolo de lo que hay marcado
+            ahora mismo, ya hecho, sin pasar por el trazado ni por la portada. */}
+        <button type="button" className="cartel-boton es-hueco" onClick={() => setPrevio(true)}>
+          PREVIO
+        </button>
         <button type="button" className="cartel-boton" onClick={() => setCerrando(true)}>
           FINISH
         </button>
@@ -60,6 +69,14 @@ export default function PantallaEras({
           seleccion={seleccion}
           onAlternar={onAlternar}
           onCerrar={() => setAbierta(null)}
+        />
+      )}
+
+      {previo && (
+        <PrevioSimbolo
+          seleccion={seleccion}
+          onOtra={onAleatorio}
+          onCerrar={() => setPrevio(false)}
         />
       )}
 
