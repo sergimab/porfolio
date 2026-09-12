@@ -34,6 +34,9 @@ export const AJUSTES = {
   // aristas. Dejando más alcance, las cúpulas de los dos tramos se solapan en
   // esos valles, el fondo sube y el cruce se lee como un nudo fundido.
   cruceMin: 0.84,
+  // Cuánto engorda la cinta en un cruce: el filete que rellena los rincones
+  // entre los brazos. Ver separarLosCruces.
+  cruceRelleno: 0.45,
   // Lo fino que llega a ser el tramo de un disco poco votado.
   delgado: 0.62,
   // Si el mínimo lo elige la propia figura en vez de valer lo de arriba. Ver
@@ -180,6 +183,8 @@ const PICO_TRAMO = 0.42;
 // (ajustable en caliente: AJUSTES.cruceCerca)
 const CRUCE_VECINO = 10;
 const CRUCE_DOBLEZ = 0.5;
+// Qué parte del radio de detección ocupa el filete. Ver separarLosCruces.
+const CRUCE_FILETE = 0.5;
 // (ajustable en caliente: AJUSTES.cruceMin)
 
 // Lo fino que llega a ser el tramo de un disco poco votado, en fracción del
@@ -578,6 +583,17 @@ function separarLosCruces(trazo: Punto[], base: number): Punto[] {
 
   return trazo.map((p, i) => {
     let vecinos = 0;
+    // Y la distancia al tramo ajeno MÁS CERCANO, que es lo que decide el
+    // filete.
+    //
+    // Tiene que ser el más cercano y no la suma de todos, y esto lo hice mal la
+    // primera vez: sumando un peso por vecino, en el interior de la figura hay
+    // decenas de puntos a tiro y el total se desbordaba en casi todas partes,
+    // así que el filete dejaba de ser un filete y engordaba la pieza entera.
+    // La figura salió como una masa con los montantes finos comidos. Lo que
+    // define un rincón es lo cerca que está la pared de enfrente, y eso es una
+    // distancia, no un recuento.
+    let masCerca = Infinity;
     for (let j = 0; j < trazo.length; j++) {
       if (Math.abs(i - j) < CRUCE_VECINO) continue;
       const q = trazo[j];
@@ -587,13 +603,33 @@ function separarLosCruces(trazo: Punto[], base: number): Punto[] {
       // línea sigue de largo: no hay cruce.
       if (d > Math.abs(acum[i] - acum[j]) * CRUCE_DOBLEZ) continue;
       vecinos++;
+      if (d < masCerca) masCerca = d;
     }
     if (!vecinos) return p;
     // Cuantos más tramos alrededor, más se recoge. Con suelo: sin nada de
     // alcance, el cruce dejaría de fundirse del todo y se vería como un aspa de
     // dos piezas superpuestas en vez de como una unión.
     const recogido = 1 / (1 + vecinos * 0.04);
-    return { ...p, a: Math.min(p.a ?? 1, Math.max(AJUSTES.cruceMin, recogido)) };
+    // EL FILETE. Más alcance no basta para quitar los valles de un cruce, y
+    // esto costó una pasada entenderlo: el alcance ensancha la cúpula de cada
+    // punto, pero los dos brazos que salen del cruce siguen siendo dos crestas
+    // separadas, y el rincón agudo que queda entre ellas sigue ahí. Lo que
+    // rellena un rincón es MASA en el rincón, o sea grosor. Engordando la cinta
+    // en el propio cruce, el encuentro pasa de dos tubos cruzados a un nudo con
+    // sus curvas de acuerdo, que es lo que hace cualquier soldadura.
+    //
+    // El relleno cae al CUADRADO de la distancia, así que es fuerte donde los
+    // dos tramos se tocan y prácticamente nulo a media distancia: engorda el
+    // rincón y deja el resto del montante como estaba. El radio del filete es
+    // más corto que el de detección, porque detectar un cruce y estar dentro de
+    // él son dos cosas distintas.
+    const radio = cerca * CRUCE_FILETE;
+    const lleno = masCerca >= radio ? 0 : Math.pow(1 - masCerca / radio, 2);
+    return {
+      ...p,
+      r: p.r * (1 + AJUSTES.cruceRelleno * lleno),
+      a: Math.min(p.a ?? 1, Math.max(AJUSTES.cruceMin, recogido)),
+    };
   });
 }
 
