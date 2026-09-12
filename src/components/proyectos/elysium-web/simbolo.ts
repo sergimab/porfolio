@@ -33,10 +33,10 @@ export const AJUSTES = {
   // sombreado —que lee la PENDIENTE— encuentra cuatro caras planas con sus
   // aristas. Dejando más alcance, las cúpulas de los dos tramos se solapan en
   // esos valles, el fondo sube y el cruce se lee como un nudo fundido.
-  cruceMin: 0.42,
+  cruceMin: 0.84,
   // Cuánto engorda la cinta en un cruce: el filete que rellena los rincones
   // entre los brazos. Ver separarLosCruces.
-  cruceRelleno: 0.16,
+  cruceRelleno: 0.45,
   // Lo fino que llega a ser el tramo de un disco poco votado.
   delgado: 0.62,
   // Si el mínimo lo elige la propia figura en vez de valer lo de arriba. Ver
