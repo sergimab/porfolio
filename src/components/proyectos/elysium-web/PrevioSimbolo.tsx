@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import LienzoMetal from "@/components/proyectos/elysium/LienzoMetal";
 import { ERAS, figuraDeEras } from "./simbolo";
 import { contarPorEra } from "./canciones";
-import { crearEstudioIridiscente } from "./estudioIridiscente";
+import { crearEstudioCromo } from "./estudioCromo";
 
 // PROVISIONAL — herramienta de taller.
 //
@@ -42,28 +42,28 @@ export default function PrevioSimbolo({
           <LienzoMetal
             figura={figura}
             interactivo={false}
-            entorno={crearEstudioIridiscente}
+            entorno={crearEstudioCromo}
             // Poca dispersión: el color lo pone ahora la película, no la
             // separación de canales. Sumando las dos, el tornasol se ensucia.
-            dispersion={0.004}
-            capas={1}
-            brillo={1.95}
+            dispersion={0.012}
+            capas={2}
+            brillo={1.7}
             grosorLibre
             atraccion
             suavizado={0}
             suavidad={9}
             redondeo={2.5}
-            techo={0.52}
-            relieve={0.85}
+            techo={0.66}
+            relieve={1.5}
             // La película fina de los iconos que flotan: mismos números que
             // ellos —iridiscencia entera, índice 2,25 y el grosor alto de su
             // rango—, que es lo que hace que compartan tornasol y no solo
             // habitación.
-            tornasol={0.45}
+            tornasol={0}
             pelicula={340}
             peliculaIOR={2.25}
-            saturacion={0.5}
-            planicie={1}
+            saturacion={1}
+            planicie={0.65}
           />
         )}
       </div>
