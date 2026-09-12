@@ -18,7 +18,7 @@ const TALLER = false;
 
 // Lo que tarda el símbolo en trazarse entero. Largo a propósito: es el momento
 // en que aparece lo que la persona acaba de generar, y merece verse nacer.
-const DURACION = 4600;
+const DURACION = 6800;
 // Y lo que se queda a la vista, ya entero, antes de pasar a la portada. Sin
 // esta pausa el símbolo se termina de trazar y desaparece en el mismo gesto:
 // hay que darle un momento para verlo hecho.
@@ -49,9 +49,17 @@ function recortar(figura: TrazoHecho[], avance: number): TrazoHecho[] {
       const hasta = trazo.hasta ?? 1;
       const propio = hasta <= desde ? 1 : (avance - desde) / (hasta - desde);
       // Mientras se está trazando, el extremo que avanza es la CABEZA y tiene
-      // que ir en punta aunque el trazo acabado no se afile ahí. En cuanto le
-      // llega su final, recupera su remate de verdad.
-      const enCurso = propio < 1;
+      // que ir en punta aunque el trazo acabado no se afile ahí.
+      //
+      // El remate de verdad se recupera UN POCO ANTES del final, no en el
+      // último fotograma, y de ahí venía el saltito al completarse: la cabeza
+      // pasaba de aguja a cabo romo de golpe, con la figura ya quieta, y ese
+      // engorde repentino se lee como un tirón. Cambiándolo cuando aún quedan
+      // unos puntos por recorrer, el cambio de remate ocurre mientras la línea
+      // todavía avanza y queda enmascarado por su propio movimiento. Además,
+      // esos últimos puntos caen dentro de la masa del centro —el trazo vuelve
+      // ahí—, así que el cabo romo se entierra en ella.
+      const enCurso = propio < 0.96;
       return {
         ...trazo,
         sinSalida: enCurso ? false : trazo.sinSalida,

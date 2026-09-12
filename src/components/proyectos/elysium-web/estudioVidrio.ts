@@ -25,15 +25,26 @@ export function crearEstudioVidrio(): HTMLCanvasElement {
   // El fondo, oscuro y con el verde grisáceo de la referencia. El horizonte se
   // corta igual que en los otros platós: ese corte es lo que se convierte en la
   // línea que separa el cielo del suelo sobre cada superficie curva.
+  // El suelo es CLARO, y aquí estaba el problema de las zonas negras.
+  //
+  // Antes el horizonte caía a media altura y por debajo iba casi a negro
+  // (#0d1413 a #060909). Como el símbolo va sobre el negro del universo, todo
+  // montante cuya cara mirase hacia abajo devolvía ese negro y se perdía contra
+  // el fondo: no era una sombra, era el plató. Ahora el horizonte está más
+  // arriba —más cielo que suelo— y lo de debajo es un gris medio con su propio
+  // rebote, así que la pieza tiene valor por todas partes.
+  //
+  // El corte en seco del horizonte se mantiene: esa línea es la que recorre
+  // cada montante curvo separando el cielo del suelo, y difuminarla la borra.
   const fondo = ctx.createLinearGradient(0, 0, 0, c.height);
   fondo.addColorStop(0, "#ffffff");
   fondo.addColorStop(0.34, "#f4f9f8");
-  fondo.addColorStop(0.46, "#dfe9e7");
-  fondo.addColorStop(0.495, "#18211f"); // horizonte, cortado en seco
-  fondo.addColorStop(0.5, "#0d1413");
-  fondo.addColorStop(0.68, "#26332f");  // el verde grisáceo de la referencia
-  fondo.addColorStop(0.86, "#121a19");
-  fondo.addColorStop(1, "#060909");
+  fondo.addColorStop(0.55, "#e4eeec");
+  fondo.addColorStop(0.6, "#5d6f6a");  // horizonte, cortado en seco
+  fondo.addColorStop(0.62, "#495a55");
+  fondo.addColorStop(0.76, "#6b7d77");  // el rebote del suelo, bien visible
+  fondo.addColorStop(0.9, "#4e5d59");
+  fondo.addColorStop(1, "#3a4744");
   ctx.fillStyle = fondo;
   ctx.fillRect(0, 0, c.width, c.height);
 

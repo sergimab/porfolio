@@ -32,7 +32,7 @@ import { animarAvance, recortar } from "./trim";
 
 // Cuánto tarda en trazarse el conjunto, y cuánto espera desde que la página
 // aparece: primero se lee el contenido, luego lo rodea el metal.
-const DURACION = 2600;
+const DURACION = 4600;
 const ESPERA = 500;
 
 // El radio con el que el recorrido dobla una esquina, en fracción del ancho del
