@@ -1,3 +1,8 @@
+// SIN USO ahora mismo: el símbolo mientras se forma pasó a compartir plató con
+// los iconos que flotan en el espacio, que es lo que se pidió. Se conserva
+// porque es el único plató de vidrio que hay y hemos ido y venido dos veces con
+// el material; si dentro de un tiempo sigue sin usarse, fuera.
+//
 // El plató del símbolo mientras se forma y en la pantalla del test.
 //
 // La referencia es una pieza de vidrio pulido sobre un fondo oscuro verdoso:

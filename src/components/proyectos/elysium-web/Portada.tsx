@@ -107,12 +107,13 @@ export default function Portada({ seleccion }: { seleccion: Set<string> }) {
             // Subiendo más, el color invade la superficie y la pieza deja de
             // pertenecer a la carátula.
             dispersion={0.015}
-            // Y CON líneas interiores, que es lo que de verdad distingue el
-            // vidrio del metal: un canto grueso de vidrio no devuelve un solo
-            // reflejo, devuelve el borde repetido hacia dentro porque el rayo
-            // rebota en la cara de atrás antes de salir. Tres es lo que cabe en
-            // un montante de este grosor; con más se apelotonan.
-            capas={3}
+            // UNA línea interior, no tres. La línea interior es el borde
+            // repetido hacia dentro, que es lo que distingue un canto grueso de
+            // vidrio de una chapa. Con los faldones tumbados, sin embargo, esas
+            // repeticiones caen sobre una superficie casi plana y dejan de
+            // leerse como profundidad: se ven como escamas. Una sola conserva
+            // el canto de vidrio y deja el interior limpio.
+            capas={1}
             brillo={1.95}
             grosorLibre
             atraccion
@@ -135,7 +136,14 @@ export default function Portada({ seleccion }: { seleccion: Set<string> }) {
             // dos trazos que se cruzan suman, el cruce sobresale por encima de
             // los brazos y esa cima trae sus laderas sombreadas. Ver `tapar` en
             // el lienzo.
-            techo={0.6}
+            techo={0.56}
+            // Y los faldones tumbados, como en la pantalla del trazado: la
+            // superficie se acerca a una chapa de espejo y el vuelco se queda
+            // solo en el canto. Aquí el plató SIGUE siendo el neutro de la
+            // carátula y no el del espacio: lo que se pidió iridiscente es el
+            // símbolo mientras se genera, y dentro de la caja el encargo era el
+            // contrario, que no tirase a rosa.
+            relieve={0.9}
           />
         )}
       </div>

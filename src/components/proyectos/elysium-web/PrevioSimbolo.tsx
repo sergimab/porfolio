@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import LienzoMetal from "@/components/proyectos/elysium/LienzoMetal";
 import { ERAS, figuraDeEras } from "./simbolo";
 import { contarPorEra } from "./canciones";
-import { crearEstudioVidrio } from "./estudioVidrio";
+import { crearEstudioIridiscente } from "./estudioIridiscente";
 
 // PROVISIONAL — herramienta de taller.
 //
@@ -42,16 +42,17 @@ export default function PrevioSimbolo({
           <LienzoMetal
             figura={figura}
             interactivo={false}
-            entorno={crearEstudioVidrio}
-            dispersion={0.022}
-            capas={3}
-            brillo={1.45}
+            entorno={crearEstudioIridiscente}
+            dispersion={0.009}
+            capas={1}
+            brillo={1.75}
             grosorLibre
             atraccion
             suavizado={0}
             suavidad={9}
             redondeo={2.5}
-            techo={0.6}
+            techo={0.56}
+            relieve={0.85}
           />
         )}
       </div>

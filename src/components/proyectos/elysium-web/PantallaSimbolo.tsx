@@ -7,7 +7,7 @@ import IconosFlotantes from "./IconosFlotantes";
 import { ERAS, POR_TRAMO, type Grafico } from "./simbolo";
 import { figuraDeEras, graficoDeEras } from "./simbolo";
 import { contarPorEra } from "./canciones";
-import { crearEstudioVidrio } from "./estudioVidrio";
+import { crearEstudioIridiscente } from "./estudioIridiscente";
 import Controles, { type Material } from "./Controles";
 
 // Las dos herramientas de taller —el esqueleto del trazo y el panel de mandos—
@@ -177,10 +177,10 @@ export default function PantallaSimbolo({
   const [material, setMaterial] = useState<Material>({
     // Vidrio, no cromo: los canales muy separados son los destellos de
     // arcoíris de los filos.
-    dispersion: 0.022,
+    dispersion: 0.009,
     suavidad: 9,
     redondeo: 2.5,
-    brillo: 1.45,
+    brillo: 1.75,
   });
 
   const pesos = useMemo(() => contarPorEra(seleccion, ERAS), [seleccion]);
@@ -251,7 +251,7 @@ export default function PantallaSimbolo({
               // de verdad, y es lo que produce las bandas nítidas; en una
               // habitación clara y pareja el vidrio pierde el dibujo interior y
               // sale como una pastilla blanca.
-              entorno={crearEstudioVidrio}
+              entorno={crearEstudioIridiscente}
               dispersion={material.dispersion}
               // Y CON capas: son el reflejo del canto repetido hacia dentro,
               // que es exactamente el dibujo de la referencia —cada brazo
@@ -261,7 +261,7 @@ export default function PantallaSimbolo({
               // era fina y no había fondo donde cupieran, así que solo aportaban
               // líneas que no correspondían a nada. Ahora los montantes tienen
               // cuerpo y las líneas caen donde deben.
-              capas={3}
+              capas={1}
               brillo={material.brillo}
               // Cada brazo con su grosor: es lo que deja que los discos poco
               // votados salgan como hilos y se peguen a los gruesos.
@@ -300,7 +300,13 @@ export default function PantallaSimbolo({
               // La tapa del campo, que es lo que quita los valles de los
               // cruces: donde dos trazos se suman, el cruce sobresale y esa
               // cima trae sus laderas sombreadas. Ver `tapar` en el lienzo.
-              techo={0.6}
+              techo={0.56}
+              // Y los faldones tumbados: la superficie se acerca a una chapa de
+              // espejo y el vuelco se queda solo en el canto, que es lo que
+              // pedía la referencia. De paso es lo que quita el tono rojizo,
+              // porque la inclinación decide qué zona del panorama refleja cada
+              // punto.
+              relieve={0.85}
               // Sin filo ni grano bajos, al contrario que en la portada, y
               // probado: allí aplanan los pliegues, pero aquí el plató es otro
               // —el del vidrio, con sus bandas oscuras estrechas— y lo que sale

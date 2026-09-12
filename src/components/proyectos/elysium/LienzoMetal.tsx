@@ -459,11 +459,19 @@ const FRAGMENT = /* glsl */ `
   // una.
   // Importante: por debajo del techo no toca nada, y ahí es donde vive el borde
   // de la pieza, así que ni la silueta ni el bisel se enteran.
+  // La constante es LO QUE TARDA en quedarse plano, y es corta a propósito.
+  //
+  // La primera versión usaba todo el margen que quedaba hasta 1 como escala de
+  // la exponencial, y con eso la curva sale casi recta: su pendiente en el
+  // techo vale 1, o sea que justo por encima no comprime nada, y necesita medio
+  // campo para doblarse. En pantalla no se notó apenas —las cimas seguían
+  // teniendo ladera—. Con una escala corta, en cuanto el campo pasa el techo
+  // por unas centésimas ya está tumbado: eso sí es una meseta.
+  const float PLANO = 0.045;
+
   float tapar(float x) {
     if (uTecho <= 0.0 || x <= uTecho) return x;
-    float margen = 1.0 - uTecho;
-    if (margen <= 0.0) return uTecho;
-    return uTecho + margen * (1.0 - exp(-(x - uTecho) / margen));
+    return uTecho + PLANO * (1.0 - exp(-(x - uTecho) / PLANO));
   }
 
   void main() {
@@ -671,6 +679,17 @@ export default function LienzoMetal({
   // lo que alcanza un trazo solo, o aplanaría también los brazos. Ver `tapar`
   // en el shader.
   techo = 0,
+  // Cuánto se inclinan los faldones de la superficie. 1,5 es el tejadillo de
+  // toda la vida; bajándolo, el interior se acerca a una chapa de espejo y solo
+  // el canto conserva su vuelco, que lo pone `filo` aparte. Es el mando de
+  // "más plano pero con relieve en los bordes".
+  //
+  // Y de paso cambia el COLOR, aunque no lo parezca: la inclinación decide qué
+  // zona del panorama refleja cada punto. Con faldones muy tumbados se refleja
+  // lo que hay de frente; con faldones inclinados, lo de arriba y lo de abajo.
+  // Por eso la misma habitación da una pieza clara o una teñida del color del
+  // suelo según este número.
+  relieve = 1.5,
   // El alcance de cada punto deja de seguir a su grosor y pasa a ser el mismo
   // para todo el trazo. Es lo que hace que dos partes finas que se acercan se
   // unan como si se atrajeran. Solo tiene sentido junto a grosorLibre.
@@ -699,6 +718,7 @@ export default function LienzoMetal({
   filo?: number;
   grano?: number;
   techo?: number;
+  relieve?: number;
   atraccion?: boolean;
   referencia?: number;
   suavizado?: number;
@@ -1251,7 +1271,7 @@ export default function LienzoMetal({
         // llevado a la escala del canvas. Así, al mover ESCALA_CAMPO la silueta
         // no se descuadra.
         uUmbral: { value: UMBRAL_CAMPO * ESCALA_CAMPO },
-        uRelieve: { value: 1.5 },
+        uRelieve: { value: relieve },
         uFilo: { value: filo },
         // Bajó de 0,07 con el campo normalizado: la falda de la cinta cae ahora
         // más suave —el campo llega a 1 y no a 0,8, pero repartido sobre un
@@ -1313,7 +1333,7 @@ export default function LienzoMetal({
       renderer.domElement.remove();
       tresRef.current = null;
     };
-  }, [repintarMapa, cerca, entorno, dispersion, capas, brillo, suavidad, filo, grano, techo]);
+  }, [repintarMapa, cerca, entorno, dispersion, capas, brillo, suavidad, filo, grano, techo, relieve]);
 
   // Pasa los puntos encolados al trazo en curso y pinta lo nuevo. Se llama
   // desde el bucle y también al soltar: si el dedo baja y sube dentro del
