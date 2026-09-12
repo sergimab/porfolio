@@ -37,6 +37,10 @@ export const AJUSTES = {
   // Cuánto engorda la cinta en un cruce: el filete que rellena los rincones
   // entre los brazos. Ver separarLosCruces.
   cruceRelleno: 0.45,
+  // Y hasta dónde se recoge el alcance cuando el tramo de enfrente va
+  // PARALELO, no cruzado: bajo, para que la ida y la vuelta de una punta no se
+  // suelden en una masa alargada. Ver separarLosCruces.
+  paraleloMin: 0.34,
   // Lo fino que llega a ser el tramo de un disco poco votado.
   delgado: 0.62,
   // Si el mínimo lo elige la propia figura en vez de valer lo de arriba. Ver
@@ -509,24 +513,72 @@ export function minimoDe(pesos: Record<Era, number>): number {
 // Es que esté MUCHO MÁS CERCA EN EL ESPACIO QUE A LO LARGO DEL CAMINO. En un
 // tramo recto las dos distancias se parecen; donde el camino se dobla sobre sí
 // mismo o se cruza, se separan.
-function distanciasAjenas(trazo: Punto[]): number[] {
+type Vecindad = {
+  // Distancia al tramo ajeno más cercano, o infinito si no hay.
+  cerca: number[];
+  // Y si ese tramo va PARALELO al nuestro, de 0 a 1.
+  //
+  // Es la distinción que separa las dos peticiones, que parecían la misma y no
+  // lo son. Dos tramos ajenos pueden encontrarse de dos maneras:
+  //
+  //   · CRUZÁNDOSE, en ángulo abierto. Ahí la fusión es lo que se quiere: el
+  //     nudo tiene que leerse como una pieza y no como dos tubos superpuestos.
+  //   · CORRIENDO JUNTOS, casi en la misma línea. Eso pasa en cada punta: el
+  //     camino sale hacia fuera y vuelve por al lado, y la ida y la vuelta se
+  //     sueldan a lo largo en una masa alargada con un hueco dentro, en vez de
+  //     leerse como dos trazos finos.
+  //
+  // Con el ángulo se pueden tratar distinto: fundir los cruces y separar los
+  // paralelos. Sin él solo cabía elegir entre fundirlo todo o nada.
+  paralelo: number[];
+};
+
+function distanciasAjenas(trazo: Punto[]): Vecindad {
   const acum = [0];
   for (let i = 1; i < trazo.length; i++) {
     acum.push(acum[i - 1] + Math.hypot(trazo[i].x - trazo[i - 1].x, trazo[i].y - trazo[i - 1].y));
   }
-  return trazo.map((p, i) => {
+  // La dirección local de cada punto, para poder comparar rumbos.
+  const rumbo = trazo.map((p, i) => {
+    const a = trazo[Math.max(0, i - 2)];
+    const b = trazo[Math.min(trazo.length - 1, i + 2)];
+    const d = Math.hypot(b.x - a.x, b.y - a.y) || 1;
+    return [(b.x - a.x) / d, (b.y - a.y) / d] as const;
+  });
+
+  const cerca: number[] = [];
+  const paralelo: number[] = [];
+  trazo.forEach((p, i) => {
     let mejor = Infinity;
+    let mejorJ = -1;
     for (let j = 0; j < trazo.length; j++) {
       if (Math.abs(i - j) < CRUCE_VECINO) continue;
       const d = Math.hypot(trazo[j].x - p.x, trazo[j].y - p.y);
       if (d > Math.abs(acum[i] - acum[j]) * CRUCE_DOBLEZ) continue;
-      if (d < mejor) mejor = d;
+      if (d < mejor) {
+        mejor = d;
+        mejorJ = j;
+      }
     }
-    return mejor;
+    cerca.push(mejor);
+    if (mejorJ < 0) {
+      paralelo.push(0);
+      return;
+    }
+    // En VALOR ABSOLUTO: la ida y la vuelta de una punta van en sentidos
+    // contrarios, así que su coseno es −1 y no +1, y sin el absoluto el caso
+    // que más importa se contaría como el más perpendicular de todos.
+    const coseno = Math.abs(
+      rumbo[i][0] * rumbo[mejorJ][0] + rumbo[i][1] * rumbo[mejorJ][1]
+    );
+    // Solo cuenta como paralelo lo que de verdad lo es: por debajo de un
+    // coseno de 0,7 —unos 45º— se considera cruce y se funde.
+    paralelo.push(Math.min(1, Math.max(0, (coseno - 0.7) / 0.3)));
   });
+  return { cerca, paralelo };
 }
 
-function afilarVertices(trazo: Punto[], base: number, ajena: number[]): Punto[] {
+function afilarVertices(trazo: Punto[], base: number, vecindad: Vecindad): Punto[] {
   const acum = [0];
   for (let i = 1; i < trazo.length; i++) {
     acum.push(acum[i - 1] + Math.hypot(trazo[i].x - trazo[i - 1].x, trazo[i].y - trazo[i - 1].y));
@@ -571,7 +623,7 @@ function afilarVertices(trazo: Punto[], base: number, ajena: number[]): Punto[] 
       //
       // Con esto, el afilado se apaga a medida que el vértice tiene compañía:
       // entero al aire, nada dentro de un nudo.
-      libre: Math.min(1, ajena[i] / radioLibre),
+      libre: Math.min(1, vecindad.cerca[i] / radioLibre),
     });
   }
 
@@ -611,7 +663,7 @@ function afilarVertices(trazo: Punto[], base: number, ajena: number[]): Punto[] 
 // justo lo que se acaba de arreglar.
 //
 // La vecindad la da distanciasAjenas, que es donde está explicada la prueba.
-function separarLosCruces(trazo: Punto[], base: number, ajena: number[]): Punto[] {
+function separarLosCruces(trazo: Punto[], base: number, vecindad: Vecindad): Punto[] {
   // Hasta donde llega la fusión: más allá, dos tramos ya no se enteran el uno
   // del otro.
   const cerca = base * ALCANCE_CAMPO * AJUSTES.cruceCerca;
@@ -627,7 +679,10 @@ function separarLosCruces(trazo: Punto[], base: number, ajena: number[]): Punto[
     // pieza entera. La figura salió como una masa con los montantes finos
     // comidos. Lo que define un rincón es lo cerca que está la pared de
     // enfrente: una distancia, no un recuento.
-    const masCerca = ajena[i];
+    const masCerca = vecindad.cerca[i];
+    // Lo paralelo que va el tramo de enfrente: cerca de 1, es la ida y la
+    // vuelta de una punta corriendo juntas; cerca de 0, un cruce de verdad.
+    const par = vecindad.paralelo[i];
     if (masCerca >= cerca) return p;
     // Cuánto se recoge el alcance, graduado por la misma distancia.
     const vecinos = (1 - masCerca / cerca) * 6;
@@ -650,10 +705,21 @@ function separarLosCruces(trazo: Punto[], base: number, ajena: number[]): Punto[
     // él son dos cosas distintas.
     const radio = cerca * CRUCE_FILETE;
     const lleno = masCerca >= radio ? 0 : Math.pow(1 - masCerca / radio, 2);
+    // Y aquí se separan los dos casos.
+    //
+    // En un CRUCE se funde: el alcance apenas se recoge y el filete rellena el
+    // rincón, que es lo que hace que el nudo se lea como una pieza.
+    //
+    // Entre dos tramos PARALELOS se hace lo contrario: se recoge el alcance
+    // hasta que dejan de alcanzarse y no se engorda nada, así que la ida y la
+    // vuelta de una punta se ven como dos trazos finos en vez de soldarse en
+    // una masa alargada. Lo que antes obligaba a elegir entre las dos cosas
+    // para toda la figura, ahora lo decide el ángulo punto por punto.
+    const suelo = AJUSTES.cruceMin + (AJUSTES.paraleloMin - AJUSTES.cruceMin) * par;
     return {
       ...p,
-      r: p.r * (1 + AJUSTES.cruceRelleno * lleno),
-      a: Math.min(p.a ?? 1, Math.max(AJUSTES.cruceMin, recogido)),
+      r: p.r * (1 + AJUSTES.cruceRelleno * lleno * (1 - par)),
+      a: Math.min(p.a ?? 1, Math.max(suelo, recogido * (1 - par) + AJUSTES.paraleloMin * par)),
     };
   });
 }
@@ -712,8 +778,8 @@ export function figuraDeEras(
         // dos funciones. Ninguna de las dos mueve puntos —solo tocan radio y
         // alcance—, así que siguen valiendo después de afilar.
         const crudo = tejer(d.vertices, d.grosores);
-        const ajena = distanciasAjenas(crudo);
-        return separarLosCruces(afilarVertices(crudo, base, ajena), base, ajena);
+        const vecindad = distanciasAjenas(crudo);
+        return separarLosCruces(afilarVertices(crudo, base, vecindad), base, vecindad);
       })(),
       sinEntrada: true,
       sinSalida: true,

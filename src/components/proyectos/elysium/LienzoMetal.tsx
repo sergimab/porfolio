@@ -400,6 +400,7 @@ const FRAGMENT = /* glsl */ `
   uniform float uPelicula;    // grosor de esa película, en nanómetros
   uniform float uPeliculaIOR; // y su índice de refracción
   uniform float uSaturacion;  // 1 = el color tal cual sale; 0 = gris
+  uniform float uPlanicie;    // cuánto se aplana lo llano (0 = como siempre)
   uniform float uDispersion;  // cuánto se separan los canales en el filo
   uniform float uCapas;       // líneas de reflejo repetidas hacia dentro
   uniform float uBrillo;      // ganancia final
@@ -471,7 +472,7 @@ const FRAGMENT = /* glsl */ `
   // campo para doblarse. En pantalla no se notó apenas —las cimas seguían
   // teniendo ladera—. Con una escala corta, en cuanto el campo pasa el techo
   // por unas centésimas ya está tumbado: eso sí es una meseta.
-  const float PLANO = 0.045;
+  const float PLANO = 0.02;
 
   float tapar(float x) {
     if (uTecho <= 0.0 || x <= uTecho) return x;
@@ -533,7 +534,24 @@ const FRAGMENT = /* glsl */ `
     // salen los dos faldones del tejadillo con su cresta; en una masa fundida
     // el interior es llano y queda como una chapa de espejo con el canto
     // biselado. Que es justo lo que hace la referencia.
-    float m = g / (g + uGrano);
+    // De la pendiente a la inclinación. Y la curva importa.
+    //
+    // La de toda la vida, g/(g+grano), tiene pendiente infinita en el cero: una
+    // pendiente ridícula ya devuelve una inclinación apreciable. En el interior
+    // de un cruce eso se nota muchísimo, porque ahí el campo tiene un punto de
+    // silla —casi llano, pero con la dirección del gradiente girando 360º
+    // alrededor— y una inclinación pequeña multiplicada por una dirección que
+    // da la vuelta entera barre el panorama completo en cuatro píxeles. Eso son
+    // las estrellas de líneas radiales de cada nudo: no es geometría, es el
+    // reflejo persiguiendo una dirección que no significa nada.
+    //
+    // La versión al cuadrado sale del cero con pendiente cero, así que lo casi
+    // llano se queda LLANO y la dirección deja de importar donde no significa
+    // nada. El canto no se entera: ahí la pendiente es grande y las dos curvas
+    // valen casi lo mismo.
+    float m1 = g / (g + uGrano);
+    float m2 = (g * g) / (g * g + uGrano * uGrano);
+    float m = mix(m1, m2, uPlanicie);
     float tilt = uRelieve * m;
     // Y un repunte corto justo en el filo: ahí el canto vuelca hasta rasante y
     // devuelve el hilo de luz que perfila cada pieza contra el fondo negro.
@@ -752,6 +770,11 @@ export default function LienzoMetal({
   // Cuánto color conserva el resultado. Uno es tal cual sale; por debajo, la
   // pieza se acerca al gris sin perder ni el dibujo ni el brillo.
   saturacion = 1,
+  // Cuánto se aplana lo que ya es casi llano. Cero deja la respuesta de
+  // siempre; uno hace que una pendiente ridícula devuelva una inclinación
+  // ridícula, que es lo que quita las estrellas de líneas de los cruces sin
+  // tocar el canto. Ver el comentario de m1/m2 en el shader.
+  planicie = 0,
   // El alcance de cada punto deja de seguir a su grosor y pasa a ser el mismo
   // para todo el trazo. Es lo que hace que dos partes finas que se acercan se
   // unan como si se atrajeran. Solo tiene sentido junto a grosorLibre.
@@ -785,6 +808,7 @@ export default function LienzoMetal({
   pelicula?: number;
   peliculaIOR?: number;
   saturacion?: number;
+  planicie?: number;
   atraccion?: boolean;
   referencia?: number;
   suavizado?: number;
@@ -1342,6 +1366,7 @@ export default function LienzoMetal({
         uPelicula: { value: pelicula },
         uPeliculaIOR: { value: peliculaIOR },
         uSaturacion: { value: saturacion },
+        uPlanicie: { value: planicie },
         uFilo: { value: filo },
         // Bajó de 0,07 con el campo normalizado: la falda de la cinta cae ahora
         // más suave —el campo llega a 1 y no a 0,8, pero repartido sobre un
@@ -1403,7 +1428,7 @@ export default function LienzoMetal({
       renderer.domElement.remove();
       tresRef.current = null;
     };
-  }, [repintarMapa, cerca, entorno, dispersion, capas, brillo, suavidad, filo, grano, techo, relieve, tornasol, pelicula, peliculaIOR, saturacion]);
+  }, [repintarMapa, cerca, entorno, dispersion, capas, brillo, suavidad, filo, grano, techo, relieve, tornasol, pelicula, peliculaIOR, saturacion, planicie]);
 
   // Pasa los puntos encolados al trazo en curso y pinta lo nuevo. Se llama
   // desde el bucle y también al soltar: si el dedo baja y sube dentro del

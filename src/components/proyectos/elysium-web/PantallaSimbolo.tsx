@@ -300,7 +300,7 @@ export default function PantallaSimbolo({
               // La tapa del campo, que es lo que quita los valles de los
               // cruces: donde dos trazos se suman, el cruce sobresale y esa
               // cima trae sus laderas sombreadas. Ver `tapar` en el lienzo.
-              techo={0.56}
+              techo={0.52}
               // Y los faldones tumbados: la superficie se acerca a una chapa de
               // espejo y el vuelco se queda solo en el canto, que es lo que
               // pedía la referencia. De paso es lo que quita el tono rojizo,
@@ -315,6 +315,7 @@ export default function PantallaSimbolo({
               pelicula={340}
               peliculaIOR={2.25}
               saturacion={0.5}
+              planicie={1}
               // Sin filo ni grano bajos, al contrario que en la portada, y
               // probado: allí aplanan los pliegues, pero aquí el plató es otro
               // —el del vidrio, con sus bandas oscuras estrechas— y lo que sale

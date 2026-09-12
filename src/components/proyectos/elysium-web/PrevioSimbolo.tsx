@@ -53,7 +53,7 @@ export default function PrevioSimbolo({
             suavizado={0}
             suavidad={9}
             redondeo={2.5}
-            techo={0.56}
+            techo={0.52}
             relieve={0.85}
             // La película fina de los iconos que flotan: mismos números que
             // ellos —iridiscencia entera, índice 2,25 y el grosor alto de su
@@ -63,6 +63,7 @@ export default function PrevioSimbolo({
             pelicula={340}
             peliculaIOR={2.25}
             saturacion={0.5}
+            planicie={1}
           />
         )}
       </div>
