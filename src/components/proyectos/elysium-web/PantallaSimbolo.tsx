@@ -297,6 +297,10 @@ export default function PantallaSimbolo({
               // El mapa de altura, redondeado antes de iluminarlo: es lo que
               // quita el pico de los cruces. Ver componerMapa en el lienzo.
               redondeo={material.redondeo}
+              // La tapa del campo, que es lo que quita los valles de los
+              // cruces: donde dos trazos se suman, el cruce sobresale y esa
+              // cima trae sus laderas sombreadas. Ver `tapar` en el lienzo.
+              techo={0.6}
               // Sin filo ni grano bajos, al contrario que en la portada, y
               // probado: allí aplanan los pliegues, pero aquí el plató es otro
               // —el del vidrio, con sus bandas oscuras estrechas— y lo que sale

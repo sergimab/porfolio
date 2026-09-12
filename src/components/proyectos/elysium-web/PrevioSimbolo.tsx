@@ -51,6 +51,7 @@ export default function PrevioSimbolo({
             suavizado={0}
             suavidad={9}
             redondeo={2.5}
+            techo={0.6}
           />
         )}
       </div>

@@ -395,6 +395,7 @@ const FRAGMENT = /* glsl */ `
   uniform float uRelieve;     // pendiente de los faldones del tejadillo
   uniform float uFilo;        // cuánto vuelca el canto en el filo mismo
   uniform float uGrano;       // pendiente a la que el faldón ya está a tope
+  uniform float uTecho;       // dónde empieza a aplanarse la cima (0 = sin techo)
   uniform float uDispersion;  // cuánto se separan los canales en el filo
   uniform float uCapas;       // líneas de reflejo repetidas hacia dentro
   uniform float uBrillo;      // ganancia final
@@ -439,9 +440,35 @@ const FRAGMENT = /* glsl */ `
     return col * col * 1.45;
   }
 
+  // EL TECHO DEL CAMPO.
+  //
+  // Las cúpulas se SUMAN, así que donde dos trazos se cruzan el campo no se
+  // queda a la altura de un trazo: se pone al doble. Ese montículo de más es
+  // una cima con sus laderas, y como la inclinación de la superficie sale de la
+  // PENDIENTE, esas laderas se sombrean —son los valles que se veían en cada
+  // cruce, con su pinta de pirámide—. No es un defecto del generador: es que el
+  // cruce de verdad sobresale.
+  //
+  // Aquí se le pone tapa. Por encima de uTecho el campo se comprime contra 1,
+  // así que dos trazos sumados llegan al techo y se quedan ahí: la cima pasa a
+  // ser una meseta sin pendiente, o sea sin sombreado, y el cruce se lee como
+  // una placa lisa de la que salen los brazos.
+  //
+  // La compresión es SUAVE y no un corte. Un min() a secas deja una arista
+  // justo en la curva de nivel del techo, y eso es cambiar cuatro aristas por
+  // una.
+  // Importante: por debajo del techo no toca nada, y ahí es donde vive el borde
+  // de la pieza, así que ni la silueta ni el bisel se enteran.
+  float tapar(float x) {
+    if (uTecho <= 0.0 || x <= uTecho) return x;
+    float margen = 1.0 - uTecho;
+    if (margen <= 0.0) return uTecho;
+    return uTecho + margen * (1.0 - exp(-(x - uTecho) / margen));
+  }
+
   void main() {
     vec2 px = 1.0 / uRes;
-    float h = texture2D(uCampo, vUv).r;
+    float h = tapar(texture2D(uCampo, vUv).r);
 
     // Silueta: el corte del campo desenfocado. Igual que el contraste de alfa
     // del truco gooey, pero aquí además conservamos la rampa para el relieve.
@@ -476,10 +503,10 @@ const FRAGMENT = /* glsl */ `
     // tiene 256 niveles, y midiendo la pendiente entre píxeles contiguos esos
     // escalones se amplifican y salpican la cresta de puntitos de color.
     vec2 d = px * uSuavidad;
-    float hIzq = texture2D(uCampo, vUv - vec2(d.x, 0.0)).r;
-    float hDer = texture2D(uCampo, vUv + vec2(d.x, 0.0)).r;
-    float hAba = texture2D(uCampo, vUv - vec2(0.0, d.y)).r;
-    float hArr = texture2D(uCampo, vUv + vec2(0.0, d.y)).r;
+    float hIzq = tapar(texture2D(uCampo, vUv - vec2(d.x, 0.0)).r);
+    float hDer = tapar(texture2D(uCampo, vUv + vec2(d.x, 0.0)).r);
+    float hAba = tapar(texture2D(uCampo, vUv - vec2(0.0, d.y)).r);
+    float hArr = tapar(texture2D(uCampo, vUv + vec2(0.0, d.y)).r);
     vec2 grad = vec2(hDer - hIzq, hArr - hAba);
     float g = length(grad);
     vec2 dir = g > 0.00001 ? grad / g : vec2(0.0);
@@ -635,6 +662,15 @@ export default function LienzoMetal({
   // media inclina menos, así que el pliegue de una unión se aplana y el brazo
   // conserva su bombeo.
   grano = 0.042,
+  // A qué altura del campo empieza a aplanarse la cima. Cero, sin tapa.
+  //
+  // Sirve para un problema concreto: donde dos trazos se cruzan las cúpulas se
+  // suman, el cruce sobresale por encima de los brazos y ese montículo trae sus
+  // laderas sombreadas —los valles con pinta de pirámide de cada nudo—. Con
+  // techo, el cruce llega a la tapa y se queda en meseta lisa. Va por debajo de
+  // lo que alcanza un trazo solo, o aplanaría también los brazos. Ver `tapar`
+  // en el shader.
+  techo = 0,
   // El alcance de cada punto deja de seguir a su grosor y pasa a ser el mismo
   // para todo el trazo. Es lo que hace que dos partes finas que se acercan se
   // unan como si se atrajeran. Solo tiene sentido junto a grosorLibre.
@@ -662,6 +698,7 @@ export default function LienzoMetal({
   redondeo?: number;
   filo?: number;
   grano?: number;
+  techo?: number;
   atraccion?: boolean;
   referencia?: number;
   suavizado?: number;
@@ -1221,6 +1258,7 @@ export default function LienzoMetal({
         // alcance mayor—, así que la pendiente a la que el faldón está a tope
         // tiene que bajar en la misma proporción o el brazo sale plano.
         uGrano: { value: grano },
+        uTecho: { value: techo },
         uDispersion: { value: dispersion },
         uCapas: { value: capas },
         uBrillo: { value: brillo },
@@ -1275,7 +1313,7 @@ export default function LienzoMetal({
       renderer.domElement.remove();
       tresRef.current = null;
     };
-  }, [repintarMapa, cerca, entorno, dispersion, capas, brillo, suavidad, filo, grano]);
+  }, [repintarMapa, cerca, entorno, dispersion, capas, brillo, suavidad, filo, grano, techo]);
 
   // Pasa los puntos encolados al trazo en curso y pinta lo nuevo. Se llama
   // desde el bucle y también al soltar: si el dedo baja y sube dentro del

@@ -131,6 +131,11 @@ export default function Portada({ seleccion }: { seleccion: Set<string> }) {
             // la geometría, así que no pueden partir nada.
             filo={0.9}
             grano={0.1}
+            // Y la tapa del campo. Es la que quita los valles de los cruces:
+            // dos trazos que se cruzan suman, el cruce sobresale por encima de
+            // los brazos y esa cima trae sus laderas sombreadas. Ver `tapar` en
+            // el lienzo.
+            techo={0.6}
           />
         )}
       </div>
