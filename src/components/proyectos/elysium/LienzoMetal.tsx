@@ -401,6 +401,7 @@ const FRAGMENT = /* glsl */ `
   uniform float uPeliculaIOR; // y su índice de refracción
   uniform float uSaturacion;  // 1 = el color tal cual sale; 0 = gris
   uniform float uPlanicie;    // cuánto se aplana lo llano (0 = como siempre)
+  uniform float uPerfil;      // radio de la sección, en píxeles (0 = sin perfil)
   uniform float uDispersion;  // cuánto se separan los canales en el filo
   uniform float uCapas;       // líneas de reflejo repetidas hacia dentro
   uniform float uBrillo;      // ganancia final
@@ -553,6 +554,40 @@ const FRAGMENT = /* glsl */ `
     float m2 = (g * g) / (g * g + uGrano * uGrano);
     float m = mix(m1, m2, uPlanicie);
     float tilt = uRelieve * m;
+
+    // EL PERFIL DE TUBO, que es lo que hace que un nudo sea un DOMO.
+    //
+    // Todo lo anterior deduce la inclinación de lo empinado que esté el campo,
+    // y ese fue el origen de la pelea entera. En un brazo fino funciona; en un
+    // nudo ancho, el interior es casi llano y solo caben dos resultados malos:
+    // o se respeta esa pendiente ridícula y el reflejo persigue una dirección
+    // que no significa nada —las estrellas radiales—, o se aplana y entonces
+    // todo el interior devuelve EL MISMO punto del plató, que es el parche
+    // blanco con borde.
+    //
+    // Ninguno de los dos es lo que hace un metaball de verdad. Ahí la
+    // superficie es una isosuperficie: la sección de un brazo es un
+    // semicírculo, y donde dos brazos se juntan el nudo no se aplana, se abomba
+    // MÁS porque es más ancho. Lo que decide la inclinación no es la pendiente,
+    // es LO ADENTRO QUE ESTÁS, y eso se puede estimar: la distancia al contorno
+    // vale, más o menos, lo que sobra del umbral dividido por lo deprisa que
+    // cae el campo.
+    //
+    // Con esa distancia y un radio de referencia sale el perfil del tubo:
+    // rasante en el filo, llano en el eje, y un arco continuo entre los dos. En
+    // un nudo ancho la parte llana es mayor, pero se llega a ella por una curva
+    // en vez de por un escalón, que es justo lo que faltaba.
+    if (uPerfil > 0.0) {
+      // g se mide entre muestras separadas uSuavidad píxeles a cada lado, así
+      // que la pendiente por píxel es g partido por esa distancia.
+      float porPixel = g / max(2.0 * uSuavidad, 1.0);
+      float dentroPx = (h - uUmbral) / max(porPixel, 1e-6);
+      // El radio va en FRACCIÓN del ancho del lienzo, no en píxeles: la figura
+      // se define en esas unidades y así el material se ve igual en el marco
+      // grande de escritorio y en el pequeño de la portada.
+      float u = clamp(dentroPx / max(uPerfil * uRes.x, 1.0), 0.0, 1.0);
+      tilt = uRelieve * sqrt(max(0.0, 1.0 - u * u));
+    }
     // Y un repunte corto justo en el filo: ahí el canto vuelca hasta rasante y
     // devuelve el hilo de luz que perfila cada pieza contra el fondo negro.
     tilt += uFilo * pow(1.0 - altura, 3.0);
@@ -775,6 +810,12 @@ export default function LienzoMetal({
   // ridícula, que es lo que quita las estrellas de líneas de los cruces sin
   // tocar el canto. Ver el comentario de m1/m2 en el shader.
   planicie = 0,
+  // Radio de la sección del brazo, en fracción del ancho. Cero deja la inclinación
+  // deducida de la pendiente, como siempre; con un valor, la superficie se
+  // resuelve como el PERFIL DE UN TUBO a partir de lo adentro que esté cada
+  // punto. Es lo que convierte un nudo en un domo en vez de en un parche llano
+  // con borde. Ver el comentario en el shader.
+  perfil = 0,
   // El alcance de cada punto deja de seguir a su grosor y pasa a ser el mismo
   // para todo el trazo. Es lo que hace que dos partes finas que se acercan se
   // unan como si se atrajeran. Solo tiene sentido junto a grosorLibre.
@@ -809,6 +850,7 @@ export default function LienzoMetal({
   peliculaIOR?: number;
   saturacion?: number;
   planicie?: number;
+  perfil?: number;
   atraccion?: boolean;
   referencia?: number;
   suavizado?: number;
@@ -1367,6 +1409,7 @@ export default function LienzoMetal({
         uPeliculaIOR: { value: peliculaIOR },
         uSaturacion: { value: saturacion },
         uPlanicie: { value: planicie },
+        uPerfil: { value: perfil },
         uFilo: { value: filo },
         // Bajó de 0,07 con el campo normalizado: la falda de la cinta cae ahora
         // más suave —el campo llega a 1 y no a 0,8, pero repartido sobre un
@@ -1428,7 +1471,7 @@ export default function LienzoMetal({
       renderer.domElement.remove();
       tresRef.current = null;
     };
-  }, [repintarMapa, cerca, entorno, dispersion, capas, brillo, suavidad, filo, grano, techo, relieve, tornasol, pelicula, peliculaIOR, saturacion, planicie]);
+  }, [repintarMapa, cerca, entorno, dispersion, capas, brillo, suavidad, filo, grano, techo, relieve, tornasol, pelicula, peliculaIOR, saturacion, planicie, perfil]);
 
   // Pasa los puntos encolados al trazo en curso y pinta lo nuevo. Se llama
   // desde el bucle y también al soltar: si el dedo baja y sube dentro del

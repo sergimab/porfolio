@@ -46,14 +46,14 @@ export default function PrevioSimbolo({
             // Poca dispersión: el color lo pone ahora la película, no la
             // separación de canales. Sumando las dos, el tornasol se ensucia.
             dispersion={0.012}
-            capas={2}
+            capas={0}
             brillo={1.7}
             grosorLibre
             atraccion
             suavizado={0}
             suavidad={9}
             redondeo={2.5}
-            techo={0.66}
+            techo={0}
             relieve={1.5}
             // La película fina de los iconos que flotan: mismos números que
             // ellos —iridiscencia entera, índice 2,25 y el grosor alto de su
@@ -63,7 +63,8 @@ export default function PrevioSimbolo({
             pelicula={340}
             peliculaIOR={2.25}
             saturacion={1}
-            planicie={0.65}
+            planicie={0}
+            perfil={0.028}
           />
         )}
       </div>

@@ -261,7 +261,7 @@ export default function PantallaSimbolo({
               // era fina y no había fondo donde cupieran, así que solo aportaban
               // líneas que no correspondían a nada. Ahora los montantes tienen
               // cuerpo y las líneas caen donde deben.
-              capas={2}
+              capas={0}
               brillo={material.brillo}
               // Cada brazo con su grosor: es lo que deja que los discos poco
               // votados salgan como hilos y se peguen a los gruesos.
@@ -300,7 +300,7 @@ export default function PantallaSimbolo({
               // La tapa del campo, que es lo que quita los valles de los
               // cruces: donde dos trazos se suman, el cruce sobresale y esa
               // cima trae sus laderas sombreadas. Ver `tapar` en el lienzo.
-              techo={0.66}
+              techo={0}
               // Y los faldones tumbados: la superficie se acerca a una chapa de
               // espejo y el vuelco se queda solo en el canto, que es lo que
               // pedía la referencia. De paso es lo que quita el tono rojizo,
@@ -315,7 +315,8 @@ export default function PantallaSimbolo({
               pelicula={340}
               peliculaIOR={2.25}
               saturacion={1}
-              planicie={0.65}
+              planicie={0}
+              perfil={0.028}
               // Sin filo ni grano bajos, al contrario que en la portada, y
               // probado: allí aplanan los pliegues, pero aquí el plató es otro
               // —el del vidrio, con sus bandas oscuras estrechas— y lo que sale
