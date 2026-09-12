@@ -311,9 +311,10 @@ export default function PantallaSimbolo({
               // para que se vieran del mismo material: compartir plató no
               // bastaba, porque su tornasol no sale de la habitación sino de la
               // película. Mismos números que ellos.
-              tornasol={1}
-              pelicula={720}
+              tornasol={0.45}
+              pelicula={340}
               peliculaIOR={2.25}
+              saturacion={0.5}
               // Sin filo ni grano bajos, al contrario que en la portada, y
               // probado: allí aplanan los pliegues, pero aquí el plató es otro
               // —el del vidrio, con sus bandas oscuras estrechas— y lo que sale

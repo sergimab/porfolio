@@ -399,6 +399,7 @@ const FRAGMENT = /* glsl */ `
   uniform float uTornasol;    // cuánta película fina encima (0 = metal a secas)
   uniform float uPelicula;    // grosor de esa película, en nanómetros
   uniform float uPeliculaIOR; // y su índice de refracción
+  uniform float uSaturacion;  // 1 = el color tal cual sale; 0 = gris
   uniform float uDispersion;  // cuánto se separan los canales en el filo
   uniform float uCapas;       // líneas de reflejo repetidas hacia dentro
   uniform float uBrillo;      // ganancia final
@@ -625,6 +626,23 @@ const FRAGMENT = /* glsl */ `
     // BLANCO, no una sombra. Sale solo, porque ahí el canto está volcado y
     // Fresnel dispara el reflejo hasta rasante.
 
+    // Y la saturación al final, sobre todo lo demás.
+    //
+    // Hace falta un mando propio porque en esta pieza el color llega de tres
+    // sitios a la vez —el panorama, la dispersión y la película— y cada uno se
+    // ajusta por otra razón. Bajar cualquiera de ellos para quitar saturación
+    // cambia además otra cosa: el panorama, el tono; la dispersión, las franjas
+    // del filo; la película, el tornasol. Con este se desaturan los tres de
+    // golpe y sin tocar el dibujo.
+    //
+    // Contra la luminancia y no contra la media de los canales: el ojo pesa
+    // mucho más el verde, y un gris hecho con la media deja los azules oscuros
+    // y los amarillos luminosos.
+    if (uSaturacion != 1.0) {
+      float lum = dot(color, vec3(0.2126, 0.7152, 0.0722));
+      color = mix(vec3(lum), color, uSaturacion);
+    }
+
     gl_FragColor = vec4(color, dentro);
   }
 `;
@@ -731,6 +749,9 @@ export default function LienzoMetal({
   // cuántos caben de un canto al otro de la pieza.
   pelicula = 720,
   peliculaIOR = 2.25,
+  // Cuánto color conserva el resultado. Uno es tal cual sale; por debajo, la
+  // pieza se acerca al gris sin perder ni el dibujo ni el brillo.
+  saturacion = 1,
   // El alcance de cada punto deja de seguir a su grosor y pasa a ser el mismo
   // para todo el trazo. Es lo que hace que dos partes finas que se acercan se
   // unan como si se atrajeran. Solo tiene sentido junto a grosorLibre.
@@ -763,6 +784,7 @@ export default function LienzoMetal({
   tornasol?: number;
   pelicula?: number;
   peliculaIOR?: number;
+  saturacion?: number;
   atraccion?: boolean;
   referencia?: number;
   suavizado?: number;
@@ -1319,6 +1341,7 @@ export default function LienzoMetal({
         uTornasol: { value: tornasol },
         uPelicula: { value: pelicula },
         uPeliculaIOR: { value: peliculaIOR },
+        uSaturacion: { value: saturacion },
         uFilo: { value: filo },
         // Bajó de 0,07 con el campo normalizado: la falda de la cinta cae ahora
         // más suave —el campo llega a 1 y no a 0,8, pero repartido sobre un
@@ -1380,7 +1403,7 @@ export default function LienzoMetal({
       renderer.domElement.remove();
       tresRef.current = null;
     };
-  }, [repintarMapa, cerca, entorno, dispersion, capas, brillo, suavidad, filo, grano, techo, relieve, tornasol, pelicula, peliculaIOR]);
+  }, [repintarMapa, cerca, entorno, dispersion, capas, brillo, suavidad, filo, grano, techo, relieve, tornasol, pelicula, peliculaIOR, saturacion]);
 
   // Pasa los puntos encolados al trazo en curso y pinta lo nuevo. Se llama
   // desde el bucle y también al soltar: si el dedo baja y sube dentro del

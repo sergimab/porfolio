@@ -59,9 +59,10 @@ export default function PrevioSimbolo({
             // ellos —iridiscencia entera, índice 2,25 y el grosor alto de su
             // rango—, que es lo que hace que compartan tornasol y no solo
             // habitación.
-            tornasol={1}
-            pelicula={720}
+            tornasol={0.45}
+            pelicula={340}
             peliculaIOR={2.25}
+            saturacion={0.5}
           />
         )}
       </div>
