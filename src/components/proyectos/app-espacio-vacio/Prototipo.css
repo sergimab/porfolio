@@ -79,8 +79,13 @@
    cuerpos distintos conviviendo —3, 3,2, 3,4, 3,6, 4, 4,4…—, que es lo que hacía
    que una pantalla pareciera de otra app que la de al lado.
    Van en `cqw`, o sea en porcentaje del ancho del móvil, para que la pantalla
-   escale entera como una pieza. */
-.ev-app {
+   escale entera como una pieza.
+
+   El mismo bloque lo hereda el lienzo del sistema de diseño: allí las muestras
+   son estos mismos componentes, con estas mismas medidas, y no una copia
+   dibujada aparte que se quedaría vieja al primer retoque. */
+.ev-app,
+.ev-sd-lienzo {
   --texto: 3.6cqw;      /* el cuerpo de lectura */
   --menudo: 3.2cqw;     /* rótulos, botones y campos */
   --rotulo: 4.2cqw;     /* las entradas de menú y las pestañas */
@@ -94,13 +99,16 @@
   --aire-max: 7cqw;
   --margen: 11.5cqw;    /* el margen lateral de la app */
 
-  position: absolute;
-  inset: 0;
   font-family: "Clash Grotesk", system-ui, sans-serif;
   /* El negro de la marca, no un negro cualquiera. */
   color: #252221;
   font-size: var(--texto);
   line-height: 1.6;
+}
+
+.ev-app {
+  position: absolute;
+  inset: 0;
   /* Cada pantalla entra con un desplazamiento mínimo. Corto a propósito: una
      app cambia de pantalla casi de golpe, y una transición lucida aquí se
      leería como una web, no como un móvil. */

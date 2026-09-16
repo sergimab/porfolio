@@ -1,0 +1,202 @@
+/* El sistema de diseño de la app.
+   La página lo enseña con SUS tipos y sus colores —los del portfolio—, y las
+   muestras van con los de la app: se distingue de un vistazo qué es la ficha y
+   qué es la pieza. */
+.ev-sd {
+  margin: 8px 0 48px;
+}
+
+.ev-sd-titulo {
+  display: inline-block;
+  margin: 0 0 32px;
+  padding: 9px 16px;
+  border: 1px solid currentColor;
+  font-size: 15px;
+  font-weight: 500;
+  background: var(--background);
+}
+
+.ev-sd-apartado {
+  margin: 48px 0 16px;
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: var(--background);
+}
+.ev-sd-entradilla {
+  max-width: 560px;
+  margin: 0 0 24px;
+  font-size: 14px;
+  line-height: 1.6;
+  background: var(--background);
+}
+.ev-sd-nota {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+/* ── La retícula ── */
+.ev-sd-medidas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  /* El hueco de un píxel deja ver el fondo y hace de línea entre celdas: una
+     rejilla de fichas sin tener que dibujar bordes que se doblan al juntarse. */
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+.ev-sd-medidas li {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  background: var(--background);
+}
+.ev-sd-dato {
+  font-size: 22px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.ev-sd-que {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ── La tipografía ── */
+.ev-sd-tipos {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--border);
+}
+.ev-sd-tipos li {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+/* La muestra va con la tipografía de la app y a su tamaño real, que es de lo
+   que va este apartado. */
+.ev-sd-tipo-muestra {
+  flex: 0 0 90px;
+  font-family: "Clash Grotesk", system-ui, sans-serif;
+  line-height: 1;
+  text-align: center;
+}
+.ev-sd-tipo-datos {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 13px;
+}
+
+/* ── El color ── */
+.ev-sd-tintas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ev-sd-tintas li {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+}
+.ev-sd-tinta {
+  height: 64px;
+  margin-bottom: 8px;
+  /* Hilo flojo en todas y no solo en el blanco: en oscuro la que se pierde
+     contra el papel es la negra, y así no hay que saber cuál es cuál. */
+  border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+}
+
+/* ── Los componentes ──
+   Cada muestra vive en un lienzo del ancho de la pantalla del móvil y declarado
+   contenedor de consulta: es lo que hace que las medidas en `cqw` de la app den
+   aquí exactamente el mismo resultado que allí. */
+.ev-sd-piezas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 24px;
+}
+.ev-sd-pieza {
+  margin: 0;
+}
+.ev-sd-lienzo {
+  container-type: inline-size;
+  /* ANCHO FIJO, el de la pantalla del móvil, y sin relleno lateral: `cqw` se
+     mide sobre el ancho del lienzo, así que solo dando aquí los mismos 330 las
+     piezas salen al tamaño que tienen en la app. Si el lienzo se estirara con
+     la columna, cada muestra saldría de un tamaño distinto. */
+  width: 330px;
+  max-width: 100%;
+  padding: 22px 0;
+  box-sizing: border-box;
+  /* Fondo blanco fijo: es la pantalla de la app, que es blanca en los dos modos
+     del sitio, y las piezas están pensadas contra ese blanco. */
+  background: #fff;
+  border: 1px solid var(--border);
+}
+/* El forro pone el margen lateral de la app —el mismo token—, así que la pieza
+   se ve con el aire que tiene dentro de una pantalla. */
+.ev-sd-dentro {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 88px;
+  padding: 0 var(--margen);
+}
+/* Las que van de canto a canto en la app, aquí también. */
+.ev-sd-dentro.es-sangre {
+  padding: 0;
+  display: block;
+}
+.ev-sd-pieza figcaption {
+  margin-top: 10px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+/* Las piezas que se miden por su ancho ocupan el forro entero. */
+.ev-sd-dentro > .ev-app-rejilla,
+.ev-sd-dentro > .ev-app-hueco-foto,
+.ev-sd-dentro > .ev-app-pestanas,
+.ev-sd-dentro > .ev-sd-bandas,
+.ev-sd-dentro > .ev-app-fila,
+.ev-sd-dentro > .ev-app-dato,
+.ev-sd-dentro > .ev-app-campo,
+.ev-sd-dentro > .ev-app-cuentas {
+  width: 100%;
+}
+
+.ev-sd-mases {
+  display: flex;
+  gap: 5cqw;
+}
+/* Las bandas del menú, con su hilo entre ellas como en la home. */
+.ev-sd-bandas {
+  display: flex;
+  flex-direction: column;
+}
+.ev-sd-bandas .ev-app-banda {
+  padding: 5cqw 0;
+}
+
+@media (max-width: 760px) {
+  .ev-sd-piezas {
+    grid-template-columns: 1fr;
+  }
+  .ev-sd-tipos li {
+    gap: 16px;
+  }
+  .ev-sd-tipo-muestra {
+    flex-basis: 64px;
+  }
+}

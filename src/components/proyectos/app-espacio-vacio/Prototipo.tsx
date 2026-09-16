@@ -339,7 +339,7 @@ function Dato({
 // OJO CON LOS COLORES: aquí el naranja es «hábitos saludables» y el verde
 // «logros», al revés que en la lámina de marca. Se respeta lo que dice esta
 // pantalla, que es la que se está montando.
-const COLORES = {
+export const COLORES = {
   habitos: "#FFAE11",
   relaciones: "#FF5C5C",
   aficiones: "#A484FF",
