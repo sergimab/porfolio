@@ -161,98 +161,6 @@
   }
 }
 
-/* ── El giro del isotipo de color ──
-   Vuelta completa y todo vuelve a su sitio: el conjunto gira una vez hacia la
-   izquierda y, a la vez, cada cuarto gira una vez sobre sí mismo hacia la
-   derecha. Al ser vueltas ENTERAS, cada color acaba en su misma esquina y
-   mirando igual que al empezar; lo que se ve es el recorrido, no un cambio.
-   Los dos giros van en sentidos contrarios a propósito: si cada cuarto no
-   girase, las esquinas darían la vuelta con el conjunto y el isotipo se
-   leería del revés a mitad de camino. */
-.ev-iso-gira {
-  transform-box: view-box;
-  transform-origin: 35.77px 35.5px;
-}
-.ev-iso-gira path {
-  transform-box: fill-box;
-  transform-origin: center;
-}
-.ev-grid.es-visible .ev-iso-gira {
-  animation: ev-iso-gira 1900ms cubic-bezier(0.62, 0, 0.3, 1) 900ms both;
-}
-.ev-grid.es-visible .ev-iso-gira path {
-  animation: ev-cuarto-gira 1900ms cubic-bezier(0.62, 0, 0.3, 1) 900ms both;
-}
-@keyframes ev-iso-gira {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(-360deg);
-  }
-}
-@keyframes ev-cuarto-gira {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ev-grid .ev-guias > * {
-    opacity: 0.55;
-    transform: none;
-    animation: none;
-  }
-  .ev-grid .ev-grid-iso,
-  .ev-grid .ev-iso-gira,
-  .ev-grid .ev-iso-gira path {
-    opacity: 1;
-    transform: none;
-    animation: none;
-  }
-}
-
-/* ── Área de seguridad ── */
-
-.ev-seguridad {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7%;
-  width: 100%;
-}
-.ev-seguridad-pieza {
-  max-height: 100%;
-  width: 58%;
-  height: auto;
-}
-.ev-seguridad-pieza.es-cuadrada {
-  width: 22%;
-}
-/* Estas guías no se animan: esta lámina es una cota, no una construcción, y
-   verla montarse distrae de lo que mide. */
-.ev-guias.es-quietas > * {
-  opacity: 0.75;
-}
-
-/* ── El estampado ── */
-
-.ev-lamina-entera:not(.es-fondo) {
-  padding: 0;
-}
-.ev-estampado {
-  width: 100%;
-  height: 100%;
-  display: block;
-  color: #252221;
-}
-[data-theme="dark"] .ev-estampado {
-  color: #ededed;
-}
-
 @media (max-width: 760px) {
   /* Las láminas partidas se apilan: a 380 px de ancho cada mitad se queda en
      190 y la construcción deja de leerse, que es lo único que tiene que hacer. */
@@ -269,21 +177,11 @@
   .ev-lamina-partida .ev-lamina-mitad:not(.es-fondo) .es-isotipo-color {
     display: none;
   }
-  .ev-grid.es-visible .ev-grid-iso {
-    animation: ev-iso-entra 700ms cubic-bezier(0.22, 1, 0.36, 1) 760ms both,
-      ev-iso-gira 1900ms cubic-bezier(0.62, 0, 0.3, 1) 900ms both;
-  }
-  .ev-grid .ev-grid-iso {
-    transform-box: view-box;
-    transform-origin: 35.77px 35.5px;
-  }
-  .ev-grid .ev-grid-iso path {
-    transform-box: fill-box;
-    transform-origin: center;
-  }
+  /* Sin giro, pero el isotipo de la izquierda sigue encendiéndose al final:
+     en móvil la versión a color no se enseña aparte, así que este es el único
+     sitio donde se ven los cuatro colores. */
   .ev-grid.es-visible .ev-grid-iso path {
-    animation: ev-cuarto-gira 1900ms cubic-bezier(0.62, 0, 0.3, 1) 900ms both,
-      ev-cuarto-color 700ms ease-out 2600ms both;
+    animation: ev-cuarto-color 700ms ease-out 1500ms both;
   }
   @keyframes ev-cuarto-color {
     to {

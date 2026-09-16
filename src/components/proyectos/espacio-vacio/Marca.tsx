@@ -153,14 +153,8 @@ export default function Marca() {
             </svg>
           </div>
           <div className="ev-lamina-mitad">
-            {/* El viewBox va con aire alrededor y el giro en un <g> interior, no
-                en el <svg>: al rotar el conjunto, la diagonal de la pieza es más
-                larga que su lado y a mitad de camino se salía del marco, así que
-                dos de los cuartos se recortaban y parecían desaparecer. */}
-            <svg className="ev-lamina-pieza es-isotipo-color" viewBox="-16 -16 103.55 103" aria-hidden="true">
-              <g className="ev-iso-gira">
-                <Isotipo colores={CUARTOS_COLOR} />
-              </g>
+            <svg className="ev-lamina-pieza es-isotipo-color" viewBox="0 0 71.55 71" aria-hidden="true">
+              <Isotipo colores={CUARTOS_COLOR} />
             </svg>
           </div>
         </div>
