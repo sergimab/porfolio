@@ -1,0 +1,90 @@
+/* Las dos pestañas y su caja. Es el mismo gesto que el holding / subholding de
+   Ilustraciones: la pestaña puesta se funde con la caja —sin borde de abajo y
+   sin esquina de ese lado— para que se lean como una sola pieza y no como un
+   botón encima de un cuadro. */
+.ev-fichas {
+  margin: 64px 0 48px;
+}
+
+.ev-fichas-pestanas {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  position: relative;
+  z-index: 2;
+}
+.ev-ficha-pestana {
+  flex: 1;
+  padding: 18px;
+  border: 1px solid var(--foreground);
+  border-radius: 12px;
+  background: var(--background);
+  color: var(--foreground);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.ev-ficha-pestana[data-puesta="false"]:hover {
+  background: var(--foreground);
+  color: var(--background);
+}
+/* La puesta se une con la caja: el relleno de abajo de más y el margen negativo
+   son lo que tapa la línea que las separaría. */
+.ev-ficha-pestana[data-puesta="true"] {
+  background: var(--foreground);
+  color: var(--background);
+  border-color: var(--foreground);
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+  padding-bottom: 34px;
+  margin-bottom: -1px;
+}
+
+.ev-fichas-caja {
+  border: 1px solid var(--foreground);
+  border-radius: 16px;
+  padding: 24px 20px 20px;
+  background: var(--background);
+}
+/* La esquina del lado de la pestaña puesta se cuadra para unirse con ella. */
+.ev-fichas-caja[data-cual="prototipo"] {
+  border-top-left-radius: 0;
+}
+.ev-fichas-caja[data-cual="sistema"] {
+  border-top-right-radius: 0;
+}
+
+/* Dentro de la caja, los dos apartados pierden sus márgenes de página: el aire
+   ya lo pone ella. */
+.ev-fichas-caja .ev-proto,
+.ev-fichas-caja .ev-sd {
+  margin: 0;
+}
+/* Y el primer rótulo del sistema sobra: la pestaña ya dice dónde estás. */
+.ev-fichas-caja .ev-sd-apartado:first-of-type {
+  margin-top: 8px;
+}
+
+@media (max-width: 600px) {
+  /* Apiladas no caben dos rótulos largos en una línea, y la de abajo dejaría de
+     tocar la caja: pasan a columna y solo la puesta se funde con ella. */
+  .ev-fichas-pestanas {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .ev-ficha-pestana {
+    width: 100%;
+  }
+  .ev-ficha-pestana[data-puesta="true"] {
+    padding-bottom: 26px;
+    border-radius: 12px 12px 0 0;
+  }
+  .ev-fichas-caja {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    padding: 20px 14px 16px;
+  }
+}

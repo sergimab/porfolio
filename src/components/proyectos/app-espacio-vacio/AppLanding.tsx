@@ -4,8 +4,7 @@ import DropcapTitle from "@/components/shared/DropcapTitle";
 import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
 import LangText from "@/components/shared/LangText";
 import ToolIcons from "@/components/shared/ToolIcons";
-import Prototipo from "./Prototipo";
-import SistemaDiseno from "./SistemaDiseno";
+import Apartados from "./Apartados";
 // El papel y los divisores son los mismos que los de la página de marca: las
 // dos páginas son el mismo proyecto visto desde dos categorías.
 import "../espacio-vacio/Marca.css";
@@ -94,10 +93,7 @@ export default function AppLanding() {
           <ToolIcons tools={["Figma"]} />
         </div>
 
-        <Prototipo />
-
-        <hr className="ev-divisor" />
-        <SistemaDiseno />
+        <Apartados />
 
         {/* Y de vuelta a la marca, que es de donde sale todo esto.
             Falta la imagen del banner: sin ella la franja se pinta igual, solo

@@ -80,8 +80,7 @@ export default function SistemaDiseno() {
 
   return (
     <section className="ev-sd">
-      <h2 className="ev-sd-titulo">{t("Sistema de diseño", "Design system")}</h2>
-
+      {/* Sin rótulo propio: el apartado vive en una pestaña que ya lo nombra. */}
       {/* ── La retícula ── */}
       <h3 className="ev-sd-apartado">{t("Retícula", "Grid")}</h3>
       <ul className="ev-sd-medidas">

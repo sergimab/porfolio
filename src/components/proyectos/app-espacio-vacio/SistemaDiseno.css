@@ -6,15 +6,6 @@
   margin: 8px 0 48px;
 }
 
-.ev-sd-titulo {
-  display: inline-block;
-  margin: 0 0 32px;
-  padding: 9px 16px;
-  border: 1px solid currentColor;
-  font-size: 15px;
-  font-weight: 500;
-  background: var(--background);
-}
 
 .ev-sd-apartado {
   margin: 48px 0 16px;
@@ -37,23 +28,25 @@
 }
 
 /* ── La retícula ── */
+/* Fichas en fila que se reparten el ancho y saltan de línea cuando no caben.
+   El borde lo pone cada una y los márgenes negativos los solapan, así que entre
+   dos vecinas hay un hilo y no dos. En rejilla, la última línea dejaba media
+   fila pintada de fondo, que se leía como un hueco a medio hacer. */
 .ev-sd-medidas {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  gap: 1px;
+  display: flex;
+  flex-wrap: wrap;
   margin: 0;
   padding: 0;
   list-style: none;
-  /* El hueco de un píxel deja ver el fondo y hace de línea entre celdas: una
-     rejilla de fichas sin tener que dibujar bordes que se doblan al juntarse. */
-  background: var(--border);
-  border: 1px solid var(--border);
 }
 .ev-sd-medidas li {
+  flex: 1 1 190px;
   display: flex;
   flex-direction: column;
   gap: 4px;
   padding: 16px;
+  border: 1px solid var(--border);
+  margin: 0 -1px -1px 0;
   background: var(--background);
 }
 .ev-sd-dato {
