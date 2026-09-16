@@ -116,11 +116,14 @@ export default function Marca() {
         <h2 className="ev-lamina-titulo">
           <LangText es="Composición isotipo" en="Icon construction" />
         </h2>
-        <div className="ev-lamina-partida">
-          <div
-            className={`ev-lamina-mitad es-fondo ev-grid${grid.visible ? " es-visible" : ""}`}
-            ref={grid.ref}
-          >
+        {/* El observador va en la lámina ENTERA y no en una mitad: el grid se
+            dibuja a la izquierda y el isotipo gira a la derecha, así que las dos
+            cosas tienen que arrancar del mismo aviso. */}
+        <div
+          className={`ev-lamina-partida ev-grid${grid.visible ? " es-visible" : ""}`}
+          ref={grid.ref}
+        >
+          <div className="ev-lamina-mitad es-fondo">
             {/* La geometría de la que sale el isotipo, dibujándose al llegar.
                 Cada guía entra con su retardo, de fuera hacia dentro —primero la
                 caja, luego los ejes, al final los círculos—, que es el orden en
@@ -150,8 +153,14 @@ export default function Marca() {
             </svg>
           </div>
           <div className="ev-lamina-mitad">
-            <svg className="ev-lamina-pieza es-isotipo-color" viewBox="0 0 71.55 71" aria-hidden="true">
-              <Isotipo colores={CUARTOS_COLOR} />
+            {/* El viewBox va con aire alrededor y el giro en un <g> interior, no
+                en el <svg>: al rotar el conjunto, la diagonal de la pieza es más
+                larga que su lado y a mitad de camino se salía del marco, así que
+                dos de los cuartos se recortaban y parecían desaparecer. */}
+            <svg className="ev-lamina-pieza es-isotipo-color" viewBox="-16 -16 103.55 103" aria-hidden="true">
+              <g className="ev-iso-gira">
+                <Isotipo colores={CUARTOS_COLOR} />
+              </g>
             </svg>
           </div>
         </div>
