@@ -30,7 +30,7 @@ const ASUNTOS = [
 // que queda bajo el logotipo, medido sobre el diseño; `va` es la pantalla a la
 // que lleva cada una, y las que aún no existen se pintan igual pero no navegan.
 const MENU: { es: string; en: string; alto: number; va?: string }[] = [
-  { es: "Calendario", en: "Calendar", alto: 184 },
+  { es: "Calendario", en: "Calendar", alto: 184, va: "calendario" },
   { es: "Momentos", en: "Moments", alto: 186, va: "momentos" },
   { es: "Datos", en: "Data", alto: 192, va: "datos" },
 ];
@@ -301,11 +301,15 @@ function Dato({
   etiqueta,
   valor,
   despliega,
+  solo,
   t,
 }: {
   etiqueta: string;
   valor: string;
   despliega?: boolean;
+  // Sin botón de cambiar: en el formulario de envío estos campos se rellenan,
+  // no se modifican.
+  solo?: boolean;
   t: T;
 }) {
   return (
@@ -321,7 +325,7 @@ function Dato({
         </p>
         <p className="ev-app-dato-valor">{valor}</p>
       </div>
-      {!despliega && (
+      {!despliega && !solo && (
         <button type="button" className="ev-app-dato-cambiar">
           {t("cambiar", "change")}
         </button>
@@ -341,6 +345,50 @@ const COLORES = {
   aficiones: "#A484FF",
   logros: "#A1F08D",
 };
+
+// ── Calendario ───────────────────────────────────────────────────────────────
+// El calendario impreso, en sus tres plazos. Igual que en Datos, cambiar de
+// vista no es un paso del recorrido, así que es estado de la propia pantalla.
+const POSTERES = [
+  { id: "diario", es: "Diario", en: "Daily", img: "diario" },
+  { id: "mensual", es: "Mensual", en: "Monthly", img: "mensual" },
+  { id: "anual", es: "Anual", en: "Yearly", img: "anual" },
+];
+
+function Calendario({ t, ir }: { t: T; ir: (id: string) => void }) {
+  const [cual, setCual] = useState("diario");
+  const puesto = POSTERES.find((p) => p.id === cual) ?? POSTERES[0];
+  return (
+    <>
+      <div className="ev-app-pestanas">
+        {POSTERES.map((p) => (
+          <button
+            key={p.id}
+            type="button"
+            className={`ev-app-pestana${p.id === cual ? " es-puesta" : ""}`}
+            onClick={() => setCual(p.id)}
+            aria-pressed={p.id === cual}
+          >
+            {t(p.es, p.en)}
+          </button>
+        ))}
+      </div>
+
+      {/* El póster, en su marco. Lo que se enseña aquí es la pieza impresa, así
+          que ocupa casi toda la pantalla. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        className="ev-app-poster"
+        src={`/proyectos/app-espacio-vacio/posters/${puesto.img}.webp`}
+        alt={t(`Calendario ${puesto.es.toLowerCase()}`, `${puesto.en} calendar`)}
+      />
+
+      <Boton clase="es-centrado es-encargar" onClick={() => ir("encargo")}>
+        {t("Encargar", "Order")}
+      </Boton>
+    </>
+  );
+}
 
 // ── Momentos ─────────────────────────────────────────────────────────────────
 // Las cuatro cosas que se anotan a mano, con el color que les da la marca.
@@ -1365,6 +1413,80 @@ const PANTALLAS: Pantalla[] = [
     },
   },
 
+  {
+    id: "calendario",
+    es: "Calendario",
+    en: "Calendar",
+    atras: true,
+    flecha: true,
+    atrasVa: "home",
+    arranque: 30,
+    cuerpo: (c) => <Calendario t={c.t} ir={c.ir} />,
+  },
+  {
+    id: "encargo",
+    es: "Calendario · Encargo",
+    en: "Calendar · Order",
+    atras: true,
+    flecha: true,
+    atrasVa: "calendario",
+    arranque: 30,
+    // Con el pedido hecho, la flecha cierra el aviso en vez de salir.
+    alVolver: (c) => {
+      if (c.abierta !== "pedido") return false;
+      c.setAbierta(null);
+      return true;
+    },
+    cuerpo: (c) => (
+      <>
+        <p className="ev-app-texto es-guia">
+          {c.t(
+            "Ha finalizado el año y podrás tener tu calendario impreso. Para poder enviártelo necesitamos que rellenes los siguientes campos:",
+            "The year is over and you can have your calendar printed. To send it to you, we need you to fill in these fields:"
+          )}
+        </p>
+        <div className="ev-app-envio">
+          <Dato etiqueta={c.t("Nombre", "First name")} valor="Clara" t={c.t} solo />
+          <Dato etiqueta={c.t("Apellidos", "Surname")} valor="Gutiérrez García" t={c.t} solo />
+          <Dato etiqueta={c.t("Dirección", "Address")} valor="C/Las Palmas n.23" t={c.t} solo />
+          <Dato etiqueta={c.t("Teléfono", "Phone")} valor="+34 658 58 90 65" t={c.t} solo />
+        </div>
+        <Boton clase="es-encargar" onClick={() => c.setAbierta("pedido")}>
+          {c.t("Encargar", "Order")}
+        </Boton>
+      </>
+    ),
+    encima: (c) => {
+      if (c.abierta !== "pedido") return null;
+      return (
+        <div className="ev-app-popup">
+          <div className="ev-app-popup-caja es-aviso">
+            <h3 className="ev-app-titulo">
+              {c.t("¡Pedido realizado con éxito!", "Order placed!")}
+            </h3>
+            <p className="ev-app-texto">
+              {c.t(
+                "Hemos recibido tu solicitud de pedido, recibirás un email de confirmación y un link de seguimiento de tu pedido una vez lo enviemos.",
+                "We've received your order. You'll get a confirmation email and a tracking link as soon as we ship it."
+              )}
+            </p>
+            <p className="ev-app-texto">
+              {c.t("¡Gracias por utilizar Espacio Vacío!", "Thanks for using Empty Space!")}
+            </p>
+            <Boton
+              clase="es-centrado"
+              onClick={() => {
+                c.setAbierta(null);
+                c.ir("home");
+              }}
+            >
+              {c.t("Continuar", "Continue")}
+            </Boton>
+          </div>
+        </div>
+      );
+    },
+  },
 ];
 
 const PORID = new Map(PANTALLAS.map((p) => [p.id, p]));

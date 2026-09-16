@@ -147,6 +147,38 @@
   padding: 0;
 }
 
+/* ── Calendario ── */
+
+/* El póster, en su marco. Es la pieza impresa, así que manda en la pantalla y
+   ocupa todo el ancho. */
+.ev-app-poster {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 0.28cqw solid #252221;
+}
+.ev-app-boton.es-encargar {
+  margin-top: 7cqw;
+}
+
+/* Los campos del envío van más sueltos que los del perfil: aquí no hay botón al
+   lado, así que la línea puede llegar de lado a lado. */
+.ev-app-envio {
+  margin-top: 7cqw;
+}
+
+/* El aviso del pedido: solo texto, así que ni foto ni márgenes de galería. */
+.ev-app-popup-caja.es-aviso {
+  padding: 7cqw 6cqw 8cqw;
+}
+.ev-app-popup-caja.es-aviso .ev-app-titulo {
+  font-size: 5cqw;
+  margin-bottom: 4cqw;
+}
+.ev-app-popup-caja.es-aviso .ev-app-texto {
+  font-size: 3.6cqw;
+}
+
 /* ── Momentos ── */
 
 /* La pantalla se pinta entera: el texto arriba, con sus márgenes, y el
