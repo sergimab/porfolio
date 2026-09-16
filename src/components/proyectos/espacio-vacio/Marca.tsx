@@ -260,14 +260,32 @@ export default function Marca() {
               el resto son marcas de recorte vacías. */}
           <svg className="ev-estampado" viewBox="0 0 1200 660" aria-hidden="true">
             <defs>
-              <pattern id="ev-trama" width="100" height="100" patternUnits="userSpaceOnUse">
-                <g transform="translate(14 14)">
+              {/* El motivo NO va en cuadrícula: los cuatro isotipos del azulejo
+                  están descolocados entre sí —cada uno con su desplazamiento—,
+                  que es lo que hace que la trama se lea como un estampado y no
+                  como una tabla. El azulejo mide 200 y ninguno pasa de 128 en x
+                  ni de 129 en y, que es lo que impide que se corten en la
+                  costura al repetirse. */}
+              <pattern id="ev-trama" width="200" height="200" patternUnits="userSpaceOnUse">
+                <g transform="translate(10 6)">
+                  <Isotipo />
+                </g>
+                <g transform="translate(112 34)">
+                  <Isotipo />
+                </g>
+                <g transform="translate(28 112)">
+                  <Isotipo />
+                </g>
+                <g transform="translate(126 128)">
                   <Isotipo />
                 </g>
               </pattern>
             </defs>
             <rect width="1200" height="660" fill="url(#ev-trama)" />
-            <g transform="translate(714 314)">
+            {/* El de color cae EXACTAMENTE sobre uno de la trama —el del
+                desplazamiento (10, 6) del azulejo que empieza en (600, 200)—,
+                así que no se añade uno más: se enciende el que ya estaba. */}
+            <g transform="translate(610 206)">
               <Isotipo colores={CUARTOS_COLOR} />
             </g>
           </svg>
