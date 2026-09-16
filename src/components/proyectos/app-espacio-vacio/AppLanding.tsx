@@ -58,17 +58,33 @@ export default function AppLanding() {
           </div>
         </div>
 
-        <ProjectHeroTitle es="App Espacio vacío" en="Empty space app" />
+        {/* El mismo título que en branding: es el mismo proyecto. Lo que
+            distingue a una página de otra es la categoría, no el nombre. */}
+        <ProjectHeroTitle es="Espacio vacío" en="Empty space" />
 
-        {/* La entradilla destacada con los programas al lado, como en el resto
-            de páginas de proyecto. */}
-        <div className="project-introrow ev-papel">
-          <p className="project-intro">
+        {/* Los mismos tres párrafos que la página de branding, y con el mismo
+            papel: entrando por una o por otra, el proyecto se presenta igual. */}
+        <div className="ev-papel project-text">
+          <p>
             <LangText
-              es="La app es el centro de la campaña: es donde la persona ve cuánto tiempo se le va en las redes sociales y lo pone al lado del que dedica a lo que de verdad le importa. Está aquí entera y navegable: el alta, el calendario, los momentos, los datos, el perfil y la guía."
-              en="The app is the heart of the campaign: it's where you see how much time is going into social media and set it against the time you give to what actually matters. Here it is in full, and playable: onboarding, the calendar, the moments, the data, the profile and the guide."
+              es="Este proyecto tiene como punto de partida **concretar un problema social**. Nuestra elección fue tratar el tema de la **adicción a las redes sociales**, y de este problema hacer una **campaña de concienciación**."
+              en="The project starts from **pinning down a social problem**. We chose to deal with **social media addiction**, and to build an **awareness campaign** out of it."
             />
           </p>
+          <p>
+            <LangText
+              es="Mediante una **app**, el usuario se podrá crear un perfil donde a lo largo del año, diariamente, irá registrando de manera **automática** el tiempo que consume en las redes sociales, y de manera **manual** las actividades importantes para él."
+              en="Through an **app**, you create a profile and, day by day over the course of a year, it logs **automatically** the time you spend on social media, and **manually** the activities that matter to you."
+            />
+          </p>
+          <p>
+            <LangText
+              es="La finalidad de esta app es que el usuario, al acabar el año, sea **consciente de la cantidad de tiempo que ha desperdiciado** consumiendo estas redes sociales, y pueda poner en contraste este tiempo con el invertido en **actividades que son mucho más importantes**."
+              en="The point is that by the end of the year you become **aware of how much time you have wasted** on those networks, and can set it against the time you put into the **things that matter far more**."
+            />
+          </p>
+          {/* Los programas, debajo del texto: es lo único propio de esta página,
+              porque la app se dibujó entera en Figma. */}
           <ToolIcons tools={["Figma"]} />
         </div>
 

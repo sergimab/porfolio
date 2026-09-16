@@ -56,7 +56,12 @@
   position: relative;
   z-index: 6;
 }
-/* Caja de metadatos (Agencia / Equipo) */
+/* Caja de metadatos (Agencia / Equipo)
+   Va en REJILLA de dos columnas y las filas se disuelven con `display:
+   contents`, así que todas las etiquetas y todos los valores caen en la misma
+   columna. Antes cada fila se apañaba sola con un ancho mínimo de 64: bastaba
+   con una etiqueta más larga —«Asignatura»— para que su valor arrancara más a
+   la derecha que los demás y la ficha se viera descuadrada. */
 .project-meta {
   position: relative;
   z-index: 6;
@@ -64,18 +69,17 @@
   border-radius: 12px;
   padding: 14px 20px;
   background: var(--background);
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 24px;
+  row-gap: 6px;
+  font-size: 13px;
 }
 .project-meta-row {
-  display: flex;
-  gap: 24px;
-  font-size: 13px;
+  display: contents;
 }
 .project-meta-key {
   font-weight: 700;
-  min-width: 64px;
 }
 /* En pantallas estrechas la ficha no cabe al lado de la cápsula de vuelta, y
    un elemento flexible no encoge por debajo del ancho de su contenido: con un
@@ -83,19 +87,31 @@
    cuadro de cabecera y se iba fuera de la pantalla. Con min-width en cero puede
    encoger y el texto pasa a varias líneas, que en un cuadro de 220 px caben. */
 @media (max-width: 600px) {
+  /* Y el cuadro deja de tener alto fijo: con tres filas y un valor que ocupa
+     tres líneas, la ficha medía más que los 220 del cuadro y se salía por
+     arriba. Con el alto como MÍNIMO, el cuadro crece lo que haga falta y en las
+     páginas con fichas cortas se ve exactamente igual que antes. */
+  .project-hero-box {
+    height: auto;
+    min-height: 220px;
+  }
   .project-meta {
     min-width: 0;
     padding: 12px 14px;
+    font-size: 12px;
   }
   /* Y la etiqueta encima del valor, no al lado: en dos columnas dentro de una
      caja tan estrecha, «Asignatura» se comía el hueco y se pegaba a su propio
-     valor. */
+     valor. Vuelve la pila, así que las filas dejan de disolverse. */
+  .project-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
   .project-meta-row {
+    display: flex;
     flex-direction: column;
     gap: 1px;
-  }
-  .project-meta-key {
-    min-width: 0;
   }
 }
 /* Texto de introducción y frase en cursiva */
