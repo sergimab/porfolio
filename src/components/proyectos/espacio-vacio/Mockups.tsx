@@ -112,13 +112,15 @@ const APILADOS: Pieza[] = [
 ];
 
 // El ratio que se le da aquí NO es el del archivo: el original es apaisado
-// (1,37) y lleva mucho aire transparente a los lados, así que el móvil salía
-// pequeño dentro de su caja. Con una caja casi cuadrada y recorte, lo que se
-// pierde es ese aire y el móvil pasa a llenar el hueco. Es mejor que escalar la
-// imagen, que crecería también hacia fuera y se comería a los de al lado.
+// (1,37) y el móvil ocupa su franja central, con mucho aire transparente a los
+// lados. En una caja apaisada —o incluso cuadrada— el aparato sale pequeño por
+// mucho ancho que se le dé. Con una caja VERTICAL y recorte se pierde ese aire
+// y el móvil llena el alto, que es como está en la referencia. Es mejor que
+// escalar la imagen, que crecería también hacia fuera y se comería a los de al
+// lado.
 const GRANDE: Pieza = {
   src: "/proyectos/espacio-vacio/mockup-3.webp",
-  ratio: 1.02,
+  ratio: 0.47,
   clase: "ev-mock-recorte",
   alt: "Publicación de Instagram de la campaña",
   sx: 34,

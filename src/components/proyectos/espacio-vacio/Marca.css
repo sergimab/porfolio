@@ -278,23 +278,25 @@
    era la que peor se veía. */
 .ev-mock-fila {
   display: grid;
-  grid-template-columns: 1.08fr 0.92fr;
-  /* Alineados por ABAJO y no centrados: los dos posts y el móvil tienen altos
-     distintos, y lo que los ata visualmente es la línea del suelo. Centrados,
-     cada uno flotaba a su altura y la fila parecía tres piezas sueltas. */
-  align-items: end;
-  gap: 18px;
-  margin-top: 26px;
-}
-/* Los dos posts, uno al lado del otro y también a ras de suelo. */
-.ev-mock-columna {
-  display: flex;
+  /* Tres columnas de verdad —post, post y móvil— en vez de dos con una
+     anidada: así las tres piezas se reparten el ancho entero y ninguna queda a
+     media escala. */
+  grid-template-columns: 1fr 1fr 0.7fr;
+  /* Alineados por ABAJO y no centrados: las tres piezas tienen altos distintos,
+     y lo que las ata visualmente es la línea del suelo. Centradas, cada una
+     flotaba a su altura y la fila parecía tres piezas sueltas. */
   align-items: end;
   gap: 14px;
+  /* Y la fila MONTA sobre el mockup de arriba, igual que ese monta sobre el
+     primero. El móvil es mucho más alto que los posts, así que sube por encima
+     de la línea de la fila y se mete en el bloque anterior: es lo que ata todo
+     el montaje en una escena en vez de dejarlo como láminas seguidas. */
+  margin-top: -9%;
+  position: relative;
+  z-index: 2;
 }
-.ev-mock-columna > * {
-  flex: 1 1 0;
-  min-width: 0;
+.ev-mock-columna {
+  display: contents;
 }
 
 @media (max-width: 760px) {
@@ -305,6 +307,14 @@
   .ev-mock-solapado {
     margin-top: 0;
   }
+}
+
+/* El móvil de la fila: caja VERTICAL, que es lo que le da el tamaño. El archivo
+   es apaisado y el aparato ocupa su franja central, así que en una caja
+   cuadrada salía pequeño por mucho ancho que se le diera; en una vertical, y
+   con recorte, el móvil llena el alto y sube por encima de los dos posts. */
+.ev-mock-fila .ev-mock-recorte {
+  align-self: end;
 }
 
 /* La pieza a la que se le recorta el aire del archivo. `cover` en vez de
