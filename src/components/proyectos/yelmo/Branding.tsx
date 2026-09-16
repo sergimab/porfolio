@@ -4,6 +4,7 @@ import { RUTA, TINTAS, GRADACIONES, SUBMARCAS } from "./marca";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import LaminaGuias from "./LaminaGuias";
+import Tipografia from "./Tipografia";
 import "./Branding.css";
 
 // Una pieza de la marca, recortada con su archivo y pintada con lo que se le
@@ -107,6 +108,9 @@ export default function Branding() {
           ))}
         </ul>
       </section>
+
+      {/* ── La tipografía ─────────────────────────────────────────────────── */}
+      <Tipografia />
 
       {/* ── Las submarcas ────────────────────────────────────────────────── */}
       <section className="ym-seccion">

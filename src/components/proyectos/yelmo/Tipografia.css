@@ -1,0 +1,148 @@
+/* Somatic Rounded, servida desde el propio sitio: no está en Google Fonts.
+   `swap`: hasta que llega, el texto se lee con la del sistema en vez de
+   quedarse invisible. */
+@font-face {
+  font-family: "Somatic Rounded";
+  src: url("/fonts/somatic-rounded.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+.ym-tipo {
+  /* El morado de la marca para las muestras, y el turquesa para los filetes:
+     son los dos colores con los que está montada la lámina del manual. */
+  --ym-morado: #5025a0;
+  /* El tono fuerte de la lámina es el morado hondo, pero sobre el papel oscuro
+     del sitio no se lee: ahí sube al morado claro de la propia paleta. */
+  --ym-morado-hondo: #ab5eec;
+  --ym-turquesa: #00ffe2;
+}
+:root[data-theme="light"] .ym-tipo {
+  --ym-morado-hondo: #3c1f71;
+  --ym-turquesa: #0e8f84;
+}
+
+/* ── La corporativa ── */
+.ym-tipo-fila {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  flex-wrap: wrap;
+}
+.ym-tipo-marca {
+  flex: 1 1 260px;
+  margin: 0;
+  font-family: "Somatic Rounded", system-ui, sans-serif;
+  font-size: clamp(56px, 9vw, 104px);
+  line-height: 1;
+  color: var(--ym-morado);
+  text-align: center;
+}
+.ym-tipo-ficha {
+  flex: 1 1 300px;
+}
+.ym-tipo-etiqueta {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.ym-tipo-etiqueta.es-pie {
+  margin: 22px 0 8px;
+}
+/* Los dos filetes que encierran la muestra, como en la lámina. */
+.ym-tipo-nombre {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 18px 0;
+  border-top: 1px solid var(--ym-morado);
+  border-bottom: 1px solid var(--ym-morado);
+}
+.ym-tipo-familia {
+  margin: 0;
+  font-family: "Somatic Rounded", system-ui, sans-serif;
+  font-size: clamp(24px, 3.4vw, 34px);
+  line-height: 1.1;
+  color: var(--ym-turquesa);
+}
+.ym-tipo-muestra {
+  margin: 0;
+  font-family: "Somatic Rounded", system-ui, sans-serif;
+  font-size: clamp(30px, 4.4vw, 44px);
+  line-height: 1;
+  color: var(--ym-morado);
+}
+
+/* ── La auxiliar ── */
+.ym-tipo-auxiliar {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+}
+/* Todo lo que va en Dosis lo dice aquí una vez. El nombre de la familia y la
+   muestra se nombran aparte: heredan de `.ym-tipo-familia`, que fija Somatic
+   —es la corporativa—, y una muestra de Dosis escrita en Somatic no enseña
+   nada. */
+.es-dosis,
+.ym-tipo-pesos,
+.ym-tipo-parrafo,
+.ym-tipo-par .ym-tipo-familia,
+.ym-tipo-par .ym-tipo-muestra {
+  font-family: var(--ym-dosis), system-ui, sans-serif;
+}
+.ym-tipo-par {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 16px 0;
+  border-top: 1px solid var(--ym-turquesa);
+  border-bottom: 1px solid var(--ym-turquesa);
+}
+.ym-tipo-par .ym-tipo-familia {
+  color: var(--ym-morado-hondo);
+  font-weight: 700;
+}
+.ym-tipo-par .ym-tipo-familia.es-ligera,
+.ym-tipo-muestra.es-ligera {
+  font-weight: 300;
+}
+.ym-tipo-par .ym-tipo-muestra {
+  color: #a45ce8;
+}
+
+.ym-tipo-pesos {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 32px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 19px;
+  color: #a45ce8;
+}
+.ym-tipo-pesos li {
+  display: contents;
+}
+
+.ym-tipo-parrafo {
+  margin: 18px 0 0;
+  font-size: 14.5px;
+  font-weight: 300;
+  line-height: 1.5;
+  text-align: justify;
+  color: var(--foreground);
+}
+
+@media (max-width: 760px) {
+  .ym-tipo-auxiliar {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .ym-tipo-fila {
+    gap: 28px;
+  }
+}
