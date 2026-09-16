@@ -179,10 +179,10 @@
   transform-origin: center;
 }
 .ev-grid.es-visible .ev-iso-gira {
-  animation: ev-iso-gira 1400ms cubic-bezier(0.62, 0, 0.3, 1) 900ms both;
+  animation: ev-iso-gira 1900ms cubic-bezier(0.62, 0, 0.3, 1) 900ms both;
 }
 .ev-grid.es-visible .ev-iso-gira path {
-  animation: ev-cuarto-gira 1400ms cubic-bezier(0.62, 0, 0.3, 1) 900ms both;
+  animation: ev-cuarto-gira 1900ms cubic-bezier(0.62, 0, 0.3, 1) 900ms both;
 }
 @keyframes ev-iso-gira {
   from {
@@ -192,12 +192,18 @@
     transform: rotate(-90deg);
   }
 }
+/* 450 y no 360: cada cuarto da la vuelta ENTERA que se le pide y, además, el
+   cuarto que compensa el giro del conjunto. Con 360 clavados la vuelta se ve
+   igual de bien, pero al terminar cada esquina queda girada noventa grados
+   respecto al conjunto y el isotipo aparece del revés: lo que tiene que
+   cancelarse entre los dos giros es la orientación final, no el número de
+   vueltas. */
 @keyframes ev-cuarto-gira {
   from {
     transform: rotate(0deg);
   }
   to {
-    transform: rotate(90deg);
+    transform: rotate(450deg);
   }
 }
 
@@ -272,7 +278,7 @@
   }
   .ev-grid.es-visible .ev-grid-iso {
     animation: ev-iso-entra 700ms cubic-bezier(0.22, 1, 0.36, 1) 760ms both,
-      ev-iso-gira 1400ms cubic-bezier(0.62, 0, 0.3, 1) 900ms both;
+      ev-iso-gira 1900ms cubic-bezier(0.62, 0, 0.3, 1) 900ms both;
   }
   .ev-grid .ev-grid-iso {
     transform-box: view-box;
@@ -283,8 +289,8 @@
     transform-origin: center;
   }
   .ev-grid.es-visible .ev-grid-iso path {
-    animation: ev-cuarto-gira 1400ms cubic-bezier(0.62, 0, 0.3, 1) 900ms both,
-      ev-cuarto-color 700ms ease-out 2100ms both;
+    animation: ev-cuarto-gira 1900ms cubic-bezier(0.62, 0, 0.3, 1) 900ms both,
+      ev-cuarto-color 700ms ease-out 2600ms both;
   }
   @keyframes ev-cuarto-color {
     to {
