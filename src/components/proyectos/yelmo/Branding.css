@@ -103,9 +103,13 @@
 /* Los iconos y la lámina de márgenes: centrados y con aire entre ellos. */
 .ym-iconos {
   display: block;
-  height: auto;
-  margin: 48px auto 0;
   width: min(400px, 82%);
+  /* La proporción la pone la caja: una máscara no trae tamaño propio. */
+  aspect-ratio: 490.4 / 93;
+  margin: 48px auto 0;
+  background: currentColor;
+  -webkit-mask: url("/proyectos/yelmo/branding/iconos-submarcas.svg") center / contain no-repeat;
+  mask: url("/proyectos/yelmo/branding/iconos-submarcas.svg") center / contain no-repeat;
 }
 
 /* ── Las cuatro líneas ──
@@ -124,16 +128,10 @@
 .ym-y {
   display: block;
   aspect-ratio: 180 / 219.55;
-  background-image: var(--ym-ys);
+  background-image: url("/proyectos/yelmo/branding/submarcas-Y.svg");
   background-size: 533% auto;
   background-position: calc(var(--ym-i) * 33.33%) center;
   background-repeat: no-repeat;
-}
-.ym-ys {
-  --ym-ys: url("/proyectos/yelmo/branding/submarcas-Y-oscuro.svg");
-}
-:root[data-theme="light"] .ym-ys {
-  --ym-ys: url("/proyectos/yelmo/branding/submarcas-Y-claro.svg");
 }
 .ym-y-nombre {
   position: relative;
@@ -149,17 +147,6 @@
 .ym-seccion .ym-lamina-guias {
   margin-top: 48px;
 }
-/* La versión de cada modo: se enseña la que toca. */
-.ym-iconos.es-claro {
-  display: none;
-}
-:root[data-theme="light"] .ym-iconos.es-oscuro {
-  display: none;
-}
-:root[data-theme="light"] .ym-iconos.es-claro {
-  display: block;
-}
-
 /* En la lámina de márgenes, los dos cuadrados que encajan el icono van en el
    turquesa de la marca: son la medida que se está enseñando, y en el mismo
    color que el resto se perdían entre las demás guías. */

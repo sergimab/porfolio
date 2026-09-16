@@ -89,23 +89,11 @@ export default function Branding() {
           />
         </p>
         {/* Los cuatro iconos juntos y en fila, que es donde se ve que son una
-            misma familia. No valen ni la máscara ni un archivo único: llevan
-            detalles en negativo —el interior de la estrella, la contra de la
-            e—, así que hay una versión por modo, con el icono del color del
-            texto y esos huecos del color del papel. */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          className="ym-iconos es-oscuro"
-          src={`${RUTA}/iconos-submarcas-oscuro.svg`}
-          alt="Los iconos de las cuatro submarcas de Yelmo"
-        />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          className="ym-iconos es-claro"
-          src={`${RUTA}/iconos-submarcas-claro.svg`}
-          alt=""
-          aria-hidden="true"
-        />
+            misma familia. El archivo es de un solo color, así que va como
+            máscara: recorta, y el color lo pone la página. Así vale el mismo
+            para los dos modos del sitio —claro sobre oscuro y al revés— en vez
+            del morado de origen, que contra el papel oscuro no se veía. */}
+        <span className="ym-iconos" aria-hidden="true" />
 
         {/* El margen de aplicación: cuánto aire pide el icono al lado de la
             marca. Se dibuja al llegar, como la lámina de construcción. */}
