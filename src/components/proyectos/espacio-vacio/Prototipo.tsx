@@ -704,7 +704,10 @@ const PANTALLAS: Pantalla[] = [
           <Campo texto={c.t("Correo electrónico", "Email")} />
           <Campo texto={c.t("Contraseña", "Password")} />
         </div>
-        <Boton clase="es-suelto" onClick={() => c.ir("quienes")}>
+        {/* Quien ya tiene cuenta entra directo a la home: las instrucciones y
+            la foto son del alta, y repetírselas cada vez que entra sería
+            hacerle pasar otra vez por lo que ya hizo. */}
+        <Boton clase="es-suelto" onClick={() => c.ir("home")}>
           {c.t("Entrar", "Log in")}
         </Boton>
       </>
