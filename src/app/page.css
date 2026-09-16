@@ -77,6 +77,27 @@
   font-weight: 700;
   min-width: 64px;
 }
+/* En pantallas estrechas la ficha no cabe al lado de la cápsula de vuelta, y
+   un elemento flexible no encoge por debajo del ancho de su contenido: con un
+   valor largo —«Proyectos Experimentales · ESD Madrid»— la caja se salía del
+   cuadro de cabecera y se iba fuera de la pantalla. Con min-width en cero puede
+   encoger y el texto pasa a varias líneas, que en un cuadro de 220 px caben. */
+@media (max-width: 600px) {
+  .project-meta {
+    min-width: 0;
+    padding: 12px 14px;
+  }
+  /* Y la etiqueta encima del valor, no al lado: en dos columnas dentro de una
+     caja tan estrecha, «Asignatura» se comía el hueco y se pegaba a su propio
+     valor. */
+  .project-meta-row {
+    flex-direction: column;
+    gap: 1px;
+  }
+  .project-meta-key {
+    min-width: 0;
+  }
+}
 /* Texto de introducción y frase en cursiva */
 /* Textos de introducción: caja con el color de la página (sin borde) para
    que el texto quede legible y el efecto de píxeles pase por detrás. */

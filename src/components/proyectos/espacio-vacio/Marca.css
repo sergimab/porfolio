@@ -214,8 +214,16 @@
      la izquierda SE ENCIENDE al terminar de girar, que cuenta lo mismo —de la
      geometría sale la pieza, y la pieza tiene sus cuatro colores— en la mitad
      de sitio. */
-  .ev-lamina-partida .ev-lamina-mitad:not(.es-fondo) .es-isotipo-color {
+  /* Se esconde LA MITAD ENTERA y no solo el SVG de dentro: ocultando la pieza,
+     la mitad seguía ocupando su fila de la rejilla y la lámina se quedaba con
+     media caja de paper en blanco debajo del grid. */
+  .ev-lamina-partida .ev-lamina-mitad:has(.es-isotipo-color) {
     display: none;
+  }
+  /* Y con una sola mitad, la caja deja de necesitar el alto de dos: cuadrada,
+     que es la forma de la pieza que enseña. */
+  .ev-lamina-partida.ev-grid {
+    aspect-ratio: 1 / 1;
   }
   /* Sin giro, pero el isotipo de la izquierda sigue encendiéndose al final:
      en móvil la versión a color no se enseña aparte, así que este es el único
@@ -239,7 +247,11 @@
     width: 84%;
   }
   .ev-seguridad-pieza.es-cuadrada {
-    width: 34%;
+    /* Apiladas, las dos piezas se comparan por ALTO: el logotipo al 84 % de
+       ancho mide 37 % de alto por su proporción, así que al cuadrado le toca
+       algo parecido para que las dos láminas pesen igual. A 34 % se veía como
+       una nota al pie de la de arriba. */
+    width: 42%;
   }
 }
 
