@@ -53,11 +53,12 @@
 .ym-lamina.es-marca {
   background: #3c1f71;
 }
-/* La de construcción va al revés: el dibujo viene en morado con las guías en
-   turquesa, así que necesita papel claro —sobre el morado de las otras el
-   logotipo desaparecía y solo quedaban las guías flotando—. */
-.ym-lamina.es-papel {
-  background: #fff;
+/* La construcción no lleva lámina: se apoya en el papel de la página. */
+.ym-construccion {
+  display: block;
+  width: min(760px, 100%);
+  height: auto;
+  margin: 12px auto 0;
 }
 .ym-lamina-pieza {
   max-width: 100%;

@@ -73,17 +73,16 @@ export default function Branding() {
       {/* ── El logotipo ──────────────────────────────────────────────────── */}
       <section className="ym-seccion">
         <RotuloSeccion es="Construcción del logotipo" en="Logotype construction" />
-        {/* La lámina de construcción tal cual sale del archivo, con sus guías
-            turquesa sobre el morado de la marca. Va como imagen y no como
-            máscara: aquí el color forma parte del dibujo. */}
-        <div className="ym-lamina es-papel">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            className="ym-lamina-pieza"
-            src={`${RUTA}/composicion-logo.svg`}
-            alt="Construcción del logotipo de Yelmo sobre su retícula de círculos"
-          />
-        </div>
+        {/* La construcción, directamente sobre el papel de la página: sin caja
+            ni fondo propio. Va como imagen y no como máscara porque el color
+            forma parte del dibujo —el logotipo en morado y las guías en
+            turquesa—. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="ym-construccion"
+          src={`${RUTA}/composicion-logo-alt.svg`}
+          alt="Construcción del logotipo de Yelmo sobre su retícula de círculos"
+        />
       </section>
 
       {/* ── El isotipo ───────────────────────────────────────────────────── */}
