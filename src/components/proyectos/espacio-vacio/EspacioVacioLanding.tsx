@@ -49,6 +49,12 @@ export default function EspacioVacioLanding() {
                 />
               </span>
             </div>
+            <div className="project-meta-row">
+              <span className="project-meta-key"><LangText es="Equipo" en="Team" /></span>
+              <span>
+                <LangText es="3 diseñadores" en="3 designers" />
+              </span>
+            </div>
           </div>
         </div>
 

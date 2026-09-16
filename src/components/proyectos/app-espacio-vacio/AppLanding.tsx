@@ -31,16 +31,29 @@ export default function AppLanding() {
             <BackCapsule category="uiux" />
           </span>
 
+          {/* La misma ficha que la página de branding: es el mismo proyecto, y
+              tenerla distinta en cada una lo partía en dos trabajos. */}
           <div className="project-meta">
             <div className="project-meta-row">
               <span className="project-meta-key"><LangText es="Tipo" en="Type" /></span>
               <span>
-                <LangText es="Diseño de producto" en="Product design" />
+                <LangText es="Campaña de concienciación" en="Awareness campaign" />
               </span>
             </div>
             <div className="project-meta-row">
-              <span className="project-meta-key"><LangText es="Herramienta" en="Tool" /></span>
-              <span>Figma</span>
+              <span className="project-meta-key"><LangText es="Asignatura" en="Course" /></span>
+              <span>
+                <LangText
+                  es="Proyectos Experimentales · ESD Madrid"
+                  en="Experimental Projects · ESD Madrid"
+                />
+              </span>
+            </div>
+            <div className="project-meta-row">
+              <span className="project-meta-key"><LangText es="Equipo" en="Team" /></span>
+              <span>
+                <LangText es="3 diseñadores" en="3 designers" />
+              </span>
             </div>
           </div>
         </div>
