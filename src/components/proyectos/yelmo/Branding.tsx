@@ -48,37 +48,6 @@ const construccion = readFileSync(
 export default function Branding() {
   return (
     <div className="ym-branding">
-      {/* ── La portada ───────────────────────────────────────────────────────
-          La apertura de la presentación: el logotipo grande y solo, como en la
-          lámina que cierra el proyecto.
-
-          El degradado no acaba en el azul oscuro del original sino en el PAPEL
-          DE LA PÁGINA: así la marca se desvanece contra el fondo en vez de
-          apoyarse en una caja de color. */}
-      <header className="ym-portada">
-        {/* El logotipo en su versión de trazos: cada forma lleva su propio
-            degradado, así que aquí no vale la máscara —que pinta la pieza
-            entera de una vez— y va como imagen.
-
-            Van DOS archivos, uno por modo del sitio: el color vive dentro del
-            SVG y desde fuera no se puede cambiar. Los dos salen del mismo
-            original, con el extremo oscuro del degradado llevado al papel de
-            cada tema; el turquesa se queda igual en los dos. */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          className="ym-trazos es-oscuro"
-          src={`${RUTA}/logotipo-trazos-oscuro.svg`}
-          alt="Logotipo de Yelmo"
-        />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          className="ym-trazos es-claro"
-          src={`${RUTA}/logotipo-trazos-claro.svg`}
-          alt=""
-          aria-hidden="true"
-        />
-      </header>
-
       {/* ── El logotipo ──────────────────────────────────────────────────── */}
       <section className="ym-seccion">
         <RotuloSeccion es="Construcción del logotipo" en="Logotype construction" />

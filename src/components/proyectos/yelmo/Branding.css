@@ -7,36 +7,6 @@
   margin-bottom: 56px;
 }
 
-/* ── La portada ──
-   Las dos piezas centradas y con aire de sobra a los lados: es una apertura, no
-   una lámina, así que no lleva caja ni borde. */
-.ym-portada {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 40px;
-  margin-bottom: 72px;
-  padding: 24px 0 8px;
-}
-/* El logotipo de trazos existe en dos versiones, una por modo del sitio: se
-   enseña la que toca y la otra se queda fuera. Su color vive dentro del SVG y
-   desde aquí no se puede cambiar. */
-.ym-trazos.es-claro {
-  display: none;
-}
-:root[data-theme="light"] .ym-trazos.es-oscuro {
-  display: none;
-}
-:root[data-theme="light"] .ym-trazos.es-claro {
-  display: block;
-}
-
-.ym-trazos {
-  display: block;
-  width: min(680px, 88%);
-  height: auto;
-}
-
 /* El papel opaco de cada lámina: el fondo de la página lleva una trama animada
    y por detrás de un dibujo de un píxel se confunde con él. */
 .ym-lamina {
