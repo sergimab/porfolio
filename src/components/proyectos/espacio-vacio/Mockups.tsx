@@ -178,12 +178,6 @@ const RESTO: Pieza[] = [
     alt: "Aplicación de la marca sobre soportes",
     sy: 52,
   },
-  {
-    src: "/proyectos/espacio-vacio/mockup-8.webp",
-    ratio: 1.5,
-    alt: "Detalle de las piezas de la campaña",
-    sy: 52,
-  },
 ];
 
 export default function Mockups() {
