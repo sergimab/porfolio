@@ -54,6 +54,10 @@
 
 .ev-muestra-uso {
   min-height: 2.6em;
+  /* Las dos líneas que reserva el `min-height` son de TEXTO: en border-box el
+     papel de 6+6 se comía medio renglón, así que «Relaciones personales» crecía
+     y bajaba su disco respecto a los otros tres. */
+  box-sizing: content-box;
   margin: 0 0 8px;
   font-size: 14px;
   font-weight: 600;
