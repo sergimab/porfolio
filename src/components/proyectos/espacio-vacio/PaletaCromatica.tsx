@@ -1,4 +1,5 @@
 import LangText from "@/components/shared/LangText";
+import RotuloSeccion from "@/components/shared/RotuloSeccion";
 import "./PaletaCromatica.css";
 
 // La lámina de paleta cromática del manual, montada en web.
@@ -87,9 +88,7 @@ function Ficha({ m }: { m: Muestra }) {
 export default function PaletaCromatica() {
   return (
     <section className="ev-paleta">
-      <h2 className="ev-paleta-titulo ev-rotulo-fila">
-        <span className="ev-rotulo"><LangText es="Paleta cromática" en="Colour palette" /></span>
-      </h2>
+      <RotuloSeccion className="ev-paleta-titulo" es="Paleta cromática" en="Colour palette" />
 
       {/* Los neutros, arriba y a la derecha. */}
       <div className="ev-paleta-fila es-derecha">

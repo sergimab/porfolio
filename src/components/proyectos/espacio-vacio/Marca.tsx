@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import LangText from "@/components/shared/LangText";
+import RotuloSeccion from "@/components/shared/RotuloSeccion";
 import "./Marca.css";
 
 // Las láminas de marca del manual: la construcción del logotipo, la del
@@ -85,9 +86,7 @@ export default function Marca() {
     <div className="ev-marca">
       {/* ── Composición del logotipo ─────────────────────────────────────── */}
       <section className="ev-lamina">
-        <h2 className="ev-lamina-titulo ev-rotulo-fila">
-          <span className="ev-rotulo"><LangText es="Composición logotipo" en="Logotype construction" /></span>
-        </h2>
+        <RotuloSeccion className="ev-lamina-titulo" es="Composición logotipo" en="Logotype construction" />
         <div className="ev-lamina-partida">
           <div className="ev-lamina-mitad es-fondo">
             {/* La lámina de construcción tal cual sale del archivo original, con
@@ -113,9 +112,7 @@ export default function Marca() {
 
       {/* ── Composición del isotipo ──────────────────────────────────────── */}
       <section className="ev-lamina">
-        <h2 className="ev-lamina-titulo ev-rotulo-fila">
-          <span className="ev-rotulo"><LangText es="Composición isotipo" en="Icon construction" /></span>
-        </h2>
+        <RotuloSeccion className="ev-lamina-titulo" es="Composición isotipo" en="Icon construction" />
         {/* El observador va en la lámina ENTERA y no en una mitad: el grid se
             dibuja a la izquierda y el isotipo gira a la derecha, así que las dos
             cosas tienen que arrancar del mismo aviso. */}
@@ -190,9 +187,7 @@ export default function Marca() {
 
       {/* ── Área de seguridad ────────────────────────────────────────────── */}
       <section className="ev-lamina">
-        <h2 className="ev-lamina-titulo ev-rotulo-fila">
-          <span className="ev-rotulo"><LangText es="Área de seguridad" en="Clear space" /></span>
-        </h2>
+        <RotuloSeccion className="ev-lamina-titulo" es="Área de seguridad" en="Clear space" />
         <div className="ev-lamina-entera es-fondo">
           <div className="ev-seguridad">
             {/* El margen que hay que respetar alrededor de cada versión, medido
@@ -265,9 +260,7 @@ export default function Marca() {
 
       {/* ── El estampado ─────────────────────────────────────────────────── */}
       <section className="ev-lamina">
-        <h2 className="ev-lamina-titulo ev-rotulo-fila">
-          <span className="ev-rotulo"><LangText es="Estampado" en="Pattern" /></span>
-        </h2>
+        <RotuloSeccion className="ev-lamina-titulo" es="Estampado" en="Pattern" />
         {/* Sin fondo: la trama se pinta sobre el papel de la página, así que en
             claro sale oscura y en oscuro sale clara. */}
         <div className="ev-lamina-entera es-estampado">

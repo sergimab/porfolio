@@ -1,5 +1,3 @@
-@import "./rotulos.css";
-
 /* Las láminas de marca.
    Cada una es un cuadro 16:9 con su rótulo encima, como en el manual. */
 .ev-marca {
@@ -10,8 +8,7 @@
   margin-bottom: 40px;
 }
 
-/* El rótulo y su línea están en rotulos.css, que comparten los tres apartados.
-   Aquí solo su sitio. */
+/* El rótulo es un componente del portfolio: aquí solo su sitio. */
 .ev-lamina-titulo {
   margin: 0 0 14px;
 }

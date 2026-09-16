@@ -1,0 +1,70 @@
+/* Rótulo de sección: una pastilla con el nombre y, saliendo de su base, la
+   línea que separa hasta el borde derecho.
+   Antes esto eran dos piezas —una caja y, más arriba, un filete suelto de lado a
+   lado—; juntas se lee de dónde a dónde separa en vez de quedar flotando entre
+   dos apartados. */
+.rotulo-seccion {
+  display: flex;
+  align-items: stretch;
+  margin: 0 0 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  /* La del portfolio, y no la que herede del apartado: es un componente del
+     sitio, así que habla con su voz aunque por debajo se esté enseñando otra
+     tipografía —como en la lámina de Tipografía, que va entera en la fuente de
+     la marca—. */
+  font-family: var(--font-geist-sans, system-ui, sans-serif);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.rotulo-seccion-caja {
+  /* Alto conocido —22 de renglón, 9+9 de aire y 1+1 de hilo: 42— porque de él
+     sale el radio, y del radio, cuánto tiene que meterse la línea. */
+  padding: 9px 20px;
+  line-height: 22px;
+  border: 1px solid currentColor;
+  /* Redondeo al máximo: con un radio mayor que la mitad del alto, el navegador
+     lo recorta a esa mitad, que es la pastilla. */
+  border-radius: 999px;
+  background: var(--background);
+  white-space: nowrap;
+  /* Por delante de la línea, que es lo que le deja esconder el tramo de más. */
+  position: relative;
+  z-index: 1;
+}
+
+/* La línea, a ras del borde de abajo y ocupando todo lo que sobra hasta el
+   extremo derecho. Lleva su propio papel porque la trama animada del fondo pasa
+   por detrás. */
+.rotulo-seccion::after {
+  content: "";
+  flex: 1;
+  align-self: flex-end;
+  /* Se mete DEBAJO de la pastilla los 21 px del radio: ahí es donde la curva
+     toca la base, así que la línea nace pegada al borde en vez de arrancar en
+     el aire que deja la esquina redonda. Lo que sobra queda tapado. */
+  margin-left: -21px;
+  border-bottom: 1px solid currentColor;
+  background: var(--background);
+}
+
+@media (max-width: 600px) {
+  .rotulo-seccion {
+    font-size: 13.5px;
+  }
+  .rotulo-seccion-caja {
+    /* Alto 38: 20 de renglón, 8+8 de aire y los dos hilos. */
+    padding: 8px 16px;
+    line-height: 20px;
+    /* Un nombre largo vale más partido que desbordado; entonces la pastilla
+       crece y el radio deja de ser el de una línea, así que el trozo que se
+       mete por debajo se queda en lo que mide la esquina de una sola. */
+    white-space: normal;
+  }
+  .rotulo-seccion::after {
+    margin-left: -19px;
+  }
+}

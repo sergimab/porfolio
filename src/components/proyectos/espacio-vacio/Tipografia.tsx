@@ -1,4 +1,5 @@
 import LangText from "@/components/shared/LangText";
+import RotuloSeccion from "@/components/shared/RotuloSeccion";
 import "./Tipografia.css";
 
 // La lámina de tipografía del manual, montada en web.
@@ -37,9 +38,7 @@ const SIGNOS = ["®îŠŁåãæÖÙÜÚ¼½¾", "§{}¶!¡#$%&()"];
 export default function Tipografia() {
   return (
     <section className="ev-tipo">
-      <h2 className="ev-tipo-titulo ev-rotulo-fila">
-        <span className="ev-rotulo"><LangText es="Tipografía" en="Typography" /></span>
-      </h2>
+      <RotuloSeccion className="ev-tipo-titulo" es="Tipografía" en="Typography" />
 
       <div className="ev-tipo-rejilla">
         {/* Columna izquierda: la muestra grande, el nombre y por qué esta. */}
