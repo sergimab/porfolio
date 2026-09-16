@@ -160,24 +160,30 @@ export default function Marca() {
                 de ser una cifra en milímetros que deja de valer al reducir.
                 Las dos piezas comparten unidad —34 sobre un cuadro de 176—, que
                 es lo que hace que las dos láminas se lean como una sola regla. */}
-            <svg className="ev-seguridad-pieza" viewBox="0 0 470 176" aria-hidden="true">
+            <svg className="ev-seguridad-pieza" viewBox="0 0 470 206" aria-hidden="true">
               <g className="ev-guias es-quietas">
-                <rect x="0.5" y="0.5" width="469" height="175" />
+                <rect x="0.5" y="0.5" width="469" height="205" />
                 <rect x="0.5" y="0.5" width="34" height="34" />
                 <rect x="435.5" y="0.5" width="34" height="34" />
-                <rect x="0.5" y="141.5" width="34" height="34" />
-                <rect x="435.5" y="141.5" width="34" height="34" />
-                <line x1="34.5" y1="0.5" x2="34.5" y2="175.5" />
-                <line x1="435.5" y1="0.5" x2="435.5" y2="175.5" />
+                <rect x="0.5" y="171.5" width="34" height="34" />
+                <rect x="435.5" y="171.5" width="34" height="34" />
+                <line x1="34.5" y1="0.5" x2="34.5" y2="205.5" />
+                <line x1="435.5" y1="0.5" x2="435.5" y2="205.5" />
                 <line x1="0.5" y1="34.5" x2="469.5" y2="34.5" />
-                <line x1="0.5" y1="141.5" x2="469.5" y2="141.5" />
+                <line x1="0.5" y1="171.5" x2="469.5" y2="171.5" />
               </g>
+              {/* El alto sale de la proporción real del logotipo (456,56 x
+                  155,27 = 2,94), no de un número redondo. Estaba en 107 y el
+                  logotipo, al conservar su forma, se encogía hasta caber en esa
+                  franja y dejaba 43 de aire a cada lado: las líneas parecían muy
+                  separadas de la marca cuando en realidad la marca no llegaba a
+                  ellas. */}
               <image
                 href="/proyectos/espacio-vacio/espacio-vacio-logo.svg"
                 x="34.5"
                 y="34.5"
                 width="401"
-                height="107"
+                height="137"
                 className="es-sobre-negro"
               />
             </svg>

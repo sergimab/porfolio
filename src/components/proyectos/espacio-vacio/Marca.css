@@ -70,11 +70,16 @@
    · `es-sobre-negro` — archivo negro dentro de una lámina de fondo oscuro: se
                         invierte SIEMPRE, porque detrás hay oscuro en los dos
                         modos. */
+/* `brightness(0) invert(1)` y no `invert(1)` a secas: el archivo es #252221 y
+   darle la vuelta devuelve #DADDDE, un gris apagado que sobre el fondo oscuro
+   de la lámina se lee como si la marca estuviera medio encendida. Con el
+   brillo a cero primero, toda la silueta se va a negro conservando el alfa, y
+   al invertirla sale BLANCO puro. */
 [data-theme="dark"] .es-sigue-papel {
-  filter: invert(1);
+  filter: brightness(0) invert(1);
 }
 .es-sobre-negro {
-  filter: invert(1);
+  filter: brightness(0) invert(1);
 }
 
 /* Las piezas se topan por alto Y por ancho: manda la dimensión que se quede
@@ -310,6 +315,20 @@
   min-width: 0;
 }
 
+/* En móvil el primer mockup se queda diminuto: es una escena isométrica con
+   mucho aire dentro del propio archivo, así que en una columna de 380 px el
+   aparato no llega a verse. Se le deja rebasar el ancho del contenido —hasta el
+   borde de la ventana— con márgenes negativos. */
+@media (max-width: 760px) {
+  .ev-mockups > .ev-mock:first-child,
+  .ev-mock-solapado {
+    width: 100vw;
+    max-width: none;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+  }
+}
+
 @media (max-width: 760px) {
   .ev-mock-fila {
     grid-template-columns: 1fr;
@@ -332,4 +351,30 @@
   flex-direction: column;
   gap: 26px;
   margin-top: 26px;
+}
+
+/* ── El papel de los apartados ──
+   El fondo de la página lleva una trama animada, y donde cae sobre un texto o
+   sobre una lámina compite con lo que hay que leer. Cada apartado se pone su
+   propio papel opaco y se despega de ella.
+
+   El papel se estira hasta el borde de la ventana con márgenes negativos:
+   recortado al ancho del contenido, la trama seguiría entrando por los lados y
+   se vería una banda de puntos pegada al bloque. 50vw a cada lado cubre
+   cualquier pantalla, y el padding devuelve el contenido a su sitio. */
+.ev-papel {
+  position: relative;
+  background: var(--background);
+  margin-left: -50vw;
+  margin-right: -50vw;
+  padding-left: 50vw;
+  padding-right: 50vw;
+}
+
+/* El divisor entre apartados. Va dentro del papel para que la línea llegue solo
+   hasta donde llega el contenido, no de borde a borde de la ventana. */
+.ev-divisor {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 0 0 36px;
 }

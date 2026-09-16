@@ -108,13 +108,15 @@ function Mock({ p }: { p: Pieza }) {
 const SOLAS: Pieza[] = [
   {
     src: "/proyectos/espacio-vacio/mockup-1.webp",
-    ratio: 1.25,
+    ratio: 1.1681,
+    corte: { ancho: 107.01, izq: 0.0, arriba: 0.0 },
     alt: "Pantallas de la app de Espacio vacío en perspectiva",
     sy: 56,
   },
   {
     src: "/proyectos/espacio-vacio/mockup-2.webp",
-    ratio: 1.4289,
+    ratio: 1.3836,
+    corte: { ancho: 111.11, izq: -5.56, arriba: -4.15 },
     alt: "La app abierta sobre el perfil de una usuaria",
     clase: "ev-mock-solapado",
     sy: 70,

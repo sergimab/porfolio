@@ -56,6 +56,10 @@ export default function EspacioVacioLanding() {
             ancho. El dato de la asignatura y la escuela tampoco está aquí, vive
             en la ficha de arriba, que es donde el resto de proyectos pone el
             contexto. */}
+        {/* De aquí abajo, todo sobre papel opaco: el fondo de la página lleva
+            una trama animada y donde cae sobre un texto o sobre una lámina
+            compite con lo que hay que leer. */}
+        <div className="ev-papel">
         <div className="project-text">
           <p>
             <LangText
@@ -79,13 +83,18 @@ export default function EspacioVacioLanding() {
 
         <EscenaInicio />
 
-        <PaletaCromatica />
+          <hr className="ev-divisor" />
+          <PaletaCromatica />
 
-        <Tipografia />
+          <hr className="ev-divisor" />
+          <Tipografia />
 
-        <Marca />
+          <hr className="ev-divisor" />
+          <Marca />
 
-        <Mockups />
+          <hr className="ev-divisor" />
+          <Mockups />
+        </div>
       </div>
     </main>
   );
