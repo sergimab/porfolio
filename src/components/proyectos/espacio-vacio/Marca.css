@@ -278,15 +278,23 @@
    era la que peor se veía. */
 .ev-mock-fila {
   display: grid;
-  grid-template-columns: 0.74fr 1.26fr;
-  align-items: center;
+  grid-template-columns: 1.08fr 0.92fr;
+  /* Alineados por ABAJO y no centrados: los dos posts y el móvil tienen altos
+     distintos, y lo que los ata visualmente es la línea del suelo. Centrados,
+     cada uno flotaba a su altura y la fila parecía tres piezas sueltas. */
+  align-items: end;
   gap: 18px;
   margin-top: 26px;
 }
+/* Los dos posts, uno al lado del otro y también a ras de suelo. */
 .ev-mock-columna {
   display: flex;
-  flex-direction: column;
-  gap: 18px;
+  align-items: end;
+  gap: 14px;
+}
+.ev-mock-columna > * {
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 @media (max-width: 760px) {

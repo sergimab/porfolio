@@ -91,23 +91,22 @@ const SOLAS: Pieza[] = [
   },
 ];
 
-// La fila del medio: el 4 y el 5 apilados a la izquierda y el 3 a su derecha,
-// más grande. El 3 lleva el móvil de pie, así que necesita más alto que los dos
-// cuadrados; dándoles a todos el mismo ancho, el móvil salía diminuto.
+// La fila del medio: el 4 y el 5 uno junto a otro a la izquierda y el 3 a su
+// derecha, más grande. Los tres apoyados en la misma línea de suelo.
 const APILADOS: Pieza[] = [
   {
     src: "/proyectos/espacio-vacio/mockup-4.webp",
     ratio: 1,
     alt: "Piezas de la campaña en redes sociales",
-    sx: -34,
+    sx: -28,
     sy: 30,
   },
   {
     src: "/proyectos/espacio-vacio/mockup-5.webp",
     ratio: 1,
     alt: "Perfil de Instagram de Espacio vacío",
-    sx: -34,
-    sy: 30,
+    sx: -14,
+    sy: 34,
     retraso: 120,
   },
 ];
