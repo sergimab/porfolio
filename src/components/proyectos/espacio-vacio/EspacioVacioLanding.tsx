@@ -3,6 +3,7 @@ import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
 import LangText from "@/components/shared/LangText";
 import EscenaInicio from "./EscenaInicio";
 import PaletaCromatica from "./PaletaCromatica";
+import Tipografia from "./Tipografia";
 
 // Espacio vacío: la campaña de concienciación sobre la adicción a las redes
 // sociales, de la asignatura Proyectos Experimentales de la ESD Madrid.
@@ -77,6 +78,8 @@ export default function EspacioVacioLanding() {
         <EscenaInicio />
 
         <PaletaCromatica />
+
+        <Tipografia />
       </div>
     </main>
   );
