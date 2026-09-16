@@ -2,6 +2,7 @@ import BackCapsule from "@/components/shared/BackCapsule";
 import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
 import LangText from "@/components/shared/LangText";
 import ToolIcons from "@/components/shared/ToolIcons";
+import Branding from "./Branding";
 
 // Rebranding de Yelmo Cines: el proyecto de Proyectos LAB de la ESD Madrid, en
 // el que a cada uno le tocaba una marca de cine y había que resolverla en tres
@@ -59,6 +60,8 @@ export default function YelmoLanding() {
           </p>
           <ToolIcons tools={["Photoshop", "Illustrator", "After Effects", "Figma"]} />
         </div>
+
+        <Branding />
       </div>
     </main>
   );
