@@ -2,42 +2,22 @@ import LangText from "@/components/shared/LangText";
 import RotuloSeccion from "@/components/shared/RotuloSeccion";
 import "./Aplicaciones.css";
 
-// Las aplicaciones de la marca, montadas como la lámina del proyecto: sobre el
-// morado con el isotipo repetido y torcido, y las piezas superpuestas entre sí
-// —las palomitas arriba, el mupi a la derecha, las entradas cruzando por
-// delante, la fachada abajo y las butacas cerrando—.
+// Las aplicaciones de la marca, con la composición tal cual está montada en el
+// archivo del proyecto.
 //
-// Cada pieza va colocada en PORCENTAJES sobre una caja de proporción fija: así
-// la composición se mantiene igual a cualquier ancho, que es lo que la hace una
-// lámina y no cuatro fotos seguidas.
+// Las posiciones NO están puestas a ojo: salen del SVG de la composición, que
+// coloca cada imagen con su traslación y su escala sobre un lienzo de
+// 1920 × 2958,5. Aquí eso se pasa a porcentajes de ese mismo lienzo —ver el
+// CSS—, así que la lámina se ve igual a cualquier ancho.
 const RUTA = "/proyectos/yelmo/branding/aplicaciones";
 
+// El orden es el del archivo, que es también el de delante atrás.
 const PIEZAS = [
-  {
-    archivo: "palomitas.webp",
-    clase: "es-palomitas",
-    alt: "Cajas de palomitas con la marca Yelmo",
-  },
-  {
-    archivo: "mupi.webp",
-    clase: "es-mupi",
-    alt: "Mupi digital con la promoción del menú de cine",
-  },
-  {
-    archivo: "moviles.webp",
-    clase: "es-moviles",
-    alt: "Entradas digitales en el móvil",
-  },
-  {
-    archivo: "fachada.webp",
-    clase: "es-fachada",
-    alt: "Rótulo de Yelmo luxury en la fachada del cine",
-  },
-  {
-    archivo: "asientos.webp",
-    clase: "es-asientos",
-    alt: "Butacas de sala con la marca",
-  },
+  { archivo: "fachada.webp", clase: "es-fachada", alt: "Rótulo de Yelmo luxury en la fachada del cine" },
+  { archivo: "palomitas.webp", clase: "es-palomitas", alt: "Cajas de palomitas con la marca Yelmo" },
+  { archivo: "mupi.webp", clase: "es-mupi", alt: "Mupi digital con la promoción del menú de cine" },
+  { archivo: "entradas.webp", clase: "es-entradas", alt: "Entradas digitales en el móvil" },
+  { archivo: "asientos.webp", clase: "es-asientos", alt: "Butacas de sala con la marca" },
 ];
 
 export default function Aplicaciones() {
@@ -56,6 +36,9 @@ export default function Aplicaciones() {
           // eslint-disable-next-line @next/next/no-img-element
           <img key={p.archivo} className={`ym-app ${p.clase}`} src={`${RUTA}/${p.archivo}`} alt={p.alt} />
         ))}
+        {/* Los cuatro copos sueltos, que en el archivo van por delante de todo. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className="ym-copos" src={`${RUTA}/copos.svg`} alt="" aria-hidden="true" />
       </div>
     </section>
   );

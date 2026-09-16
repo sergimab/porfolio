@@ -1,56 +1,84 @@
 /* La lámina de aplicaciones.
-   Caja de proporción fija con el isotipo repetido y torcido detrás. Las piezas
-   van encima en porcentajes, así que se superponen igual a cualquier ancho. */
+
+   El lienzo es el del archivo de la composición —1920 × 2958,5— y cada pieza
+   lleva su sitio en porcentajes de ese lienzo, sacados de la traslación y la
+   escala que trae el SVG. Por eso la composición no se desmonta al cambiar el
+   ancho de la ventana: todo se mide contra la misma caja. */
 .ym-lamina-apps {
   position: relative;
-  aspect-ratio: 950 / 1470;
+  aspect-ratio: 1920 / 2958.5;
   margin-top: 8px;
   overflow: hidden;
   border-radius: 4px;
-  /* Sin papel propio: las piezas y la trama se apoyan en el de la página. */
-  background-image: url("/proyectos/yelmo/branding/aplicaciones/trama-y.svg");
-  /* La tesela mide 160 y se pide a 9 % del ancho: la trama crece con la lámina
-     en vez de hacerse minúscula en pantallas grandes. */
-  background-size: 9% auto;
 }
 
-.ym-app {
+/* ── El fondo ──
+   El isotipo repetido, muy flojo, corriéndose en diagonal sin parar. Va en un
+   pseudo-elemento y no en el fondo de la caja para poder bajarle la opacidad
+   sin tocar la de las piezas.
+
+   Se mueve la POSICIÓN del fondo, no el elemento: el patrón es infinito, así
+   que al recorrer una tesela justa el ciclo empalma consigo mismo y el salto no
+   se ve. */
+.ym-lamina-apps::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/proyectos/yelmo/branding/aplicaciones/trama-y.svg");
+  background-size: 130px auto;
+  opacity: 0.1;
+  animation: ym-trama 14s linear infinite;
+}
+@keyframes ym-trama {
+  to {
+    background-position: 130px 130px;
+  }
+}
+/* Quieta para quien pide menos movimiento. */
+@media (prefers-reduced-motion: reduce) {
+  .ym-lamina-apps::before {
+    animation: none;
+  }
+}
+
+.ym-app,
+.ym-copos {
   position: absolute;
   display: block;
   height: auto;
 }
 
-/* El orden de arriba abajo es también el de delante atrás: cada pieza tapa un
-   poco a la anterior, que es lo que las cose en una sola composición. */
+/* Las cinco piezas, en el orden y el sitio del archivo. */
+.es-fachada {
+  left: -7.18%;
+  top: 61.75%;
+  width: 88.41%;
+}
 .es-palomitas {
-  top: 3%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 92%;
-  z-index: 2;
+  left: -0.84%;
+  top: -1%;
+  width: 78.13%;
 }
 .es-mupi {
-  top: 30%;
-  right: -4%;
-  width: 46%;
-  z-index: 1;
+  left: 47.56%;
+  top: 31.27%;
+  width: 59.85%;
 }
-.es-moviles {
-  top: 45%;
-  left: -8%;
-  width: 80%;
-  z-index: 2;
+.es-entradas {
+  left: -6.67%;
+  top: 35.49%;
+  width: 84.94%;
 }
-.es-fachada {
-  bottom: 7%;
-  left: -6%;
-  width: 74%;
-  z-index: 1;
-}
-/* Las butacas cierran por abajo, de lado a lado. */
 .es-asientos {
-  bottom: 0;
   left: 0;
+  top: 63.49%;
   width: 100%;
-  z-index: 2;
+}
+
+/* Los copos van por delante de todo. */
+.ym-copos {
+  left: 0;
+  top: 0;
+  width: 100%;
+  opacity: 0.7;
 }
