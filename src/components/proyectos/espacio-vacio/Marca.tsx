@@ -251,14 +251,24 @@ export default function Marca() {
         </h2>
         {/* Sin fondo: la trama se pinta sobre el papel de la página, así que en
             claro sale oscura y en oscuro sale clara. */}
-        <div className="ev-lamina-entera">
+        <div className="ev-lamina-entera es-estampado">
           {/* Un patrón SVG en vez de una imagen repetida: el motivo es el mismo
               isotipo, se define una vez y el navegador lo repite sin descargar
               nada. El ejemplar a color va encima del hueco que le tocaría a uno
               de la trama, no en medio de ninguna parte: ese es el guiño de la
               lámina, que en todo el estampado hay un solo isotipo de la marca y
               el resto son marcas de recorte vacías. */}
-          <svg className="ev-estampado" viewBox="0 0 1200 660" aria-hidden="true">
+          {/* `slice`: la trama LLENA la caja y lo que sobra se recorta, en vez
+              de encogerse hasta caber y dejar franjas vacías. Un estampado no
+              tiene encuadre que respetar —sigue en todas direcciones—, así que
+              la caja puede tener la forma que quiera: apaisada en ancho,
+              cuadrada en móvil. */}
+          <svg
+            className="ev-estampado"
+            viewBox="0 0 1200 660"
+            preserveAspectRatio="xMidYMid slice"
+            aria-hidden="true"
+          >
             <defs>
               {/* MEDIO SALTO, no cuadrícula. Las columnas se alinean —todas
                   caen en la misma vertical— y lo que se descoloca es el alto:
