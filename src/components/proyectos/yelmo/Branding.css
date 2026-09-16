@@ -7,6 +7,31 @@
   margin-bottom: 56px;
 }
 
+/* ── La portada ──
+   Las dos piezas centradas y con aire de sobra a los lados: es una apertura, no
+   una lámina, así que no lleva caja ni borde. */
+.ym-portada {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  margin-bottom: 72px;
+  padding: 24px 0 8px;
+}
+.ym-firma {
+  margin: 0;
+  font-size: 12.5px;
+  letter-spacing: 0.01em;
+  color: #00ffe2;
+  text-align: center;
+}
+/* El turquesa de la marca está pensado para fondo oscuro; sobre el papel claro
+   de la página se queda en nada, así que ahí se oscurece lo justo para leerse
+   sin dejar de ser el mismo color. */
+:root[data-theme="light"] .ym-firma {
+  color: #0e8f84;
+}
+
 /* El papel opaco de cada lámina: el fondo de la página lleva una trama animada
    y por detrás de un dibujo de un píxel se confunde con él. */
 .ym-lamina {
