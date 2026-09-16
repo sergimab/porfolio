@@ -15,19 +15,29 @@
   border: 1px solid currentColor;
   font-size: 15px;
   font-weight: 500;
+  /* Papel propio: el rótulo es una caja de una línea con hilo de un píxel, y
+     la trama animada del fondo pasando por dentro la convertía en un recuadro
+     con ruido. */
+  background: var(--background);
 }
 
+/* Las láminas llevan SIEMPRE papel opaco, también las que no tienen fondo de
+   marca: son cajas de guías de un píxel y de trazos finos, y la trama animada
+   pasando por detrás se confundía con el propio dibujo. El papel es el de la
+   página, así que en claro sigue viéndose blanca y en oscuro, oscura. */
 .ev-lamina-partida {
   display: grid;
   grid-template-columns: 1fr 1fr;
   aspect-ratio: 16 / 9;
   overflow: hidden;
   border-radius: 4px;
+  background: var(--background);
 }
 .ev-lamina-entera {
   aspect-ratio: 16 / 9;
   border-radius: 4px;
   overflow: hidden;
+  background: var(--background);
 }
 
 .ev-lamina-mitad,
@@ -53,7 +63,10 @@
   color: #fff;
 }
 [data-theme="dark"] .es-fondo {
-  background: none;
+  /* El papel de la página, no `none`: sin fondo la trama animada se colaba por
+     detrás de las guías. Es el mismo color que tendría el hueco, así que se
+     sigue leyendo como una lámina sin recuadro. */
+  background: var(--background);
   color: inherit;
 }
 
@@ -101,6 +114,33 @@
 
 .es-isotipo-color {
   height: 62%;
+}
+
+/* ── El área de seguridad ──
+   Las dos piezas, una al lado de la otra y compartiendo línea de centro.
+
+   El ancho va en PORCENTAJE y no lo pone el contenido: son dos SVG sin ancho
+   intrínseco —solo traen viewBox—, así que dentro de un contenedor flexible se
+   quedan en cero. Era lo que hacía que la lámina saliera vacía: el bloque medía
+   0 × 0 y solo se veía el rótulo. */
+.ev-seguridad {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7%;
+  width: 100%;
+  height: 100%;
+}
+.ev-seguridad-pieza {
+  /* El reparto sale de las proporciones reales: el logotipo es 470 × 206 y el
+     isotipo 176 × 176, y con estos anchos las dos cajas quedan del mismo alto,
+     que es lo que hace que las unidades de las esquinas se lean iguales. */
+  width: 57%;
+  height: auto;
+  flex: 0 0 auto;
+}
+.ev-seguridad-pieza.es-cuadrada {
+  width: 25%;
 }
 
 /* ── Las guías ── */
@@ -342,10 +382,20 @@
   padding-right: 50vw;
 }
 
-/* El divisor entre apartados. Va dentro del papel para que la línea llegue solo
-   hasta donde llega el contenido, no de borde a borde de la ventana. */
+/* El divisor entre apartados. Llega solo hasta donde llega el contenido, no de
+   borde a borde de la ventana.
+
+   Va en `currentColor` rebajado y no en `--border`: ese token es casi el mismo
+   color que el papel —a cuatro puntos de distancia en oscuro—, así que la línea
+   estaba pero no se veía, y con la trama animada por encima menos todavía. Y
+   con su propio papel, para que la trama no la cruce.
+
+   Margen a los DOS lados: antes solo tenía hueco por abajo, así que la línea se
+   pegaba al apartado anterior y no se leía como separación sino como el
+   subrayado de lo de arriba. */
 .ev-divisor {
   border: 0;
-  border-top: 1px solid var(--border);
-  margin: 0 0 36px;
+  border-top: 1px solid color-mix(in srgb, currentColor 28%, transparent);
+  margin: 30px 0 6px;
+  background: var(--background);
 }

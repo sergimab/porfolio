@@ -27,6 +27,24 @@
   border: 1px solid currentColor;
   font-size: 15px;
   font-weight: 500;
+  background: var(--background);
+}
+
+/* Cada bloque de la lámina se pone su papel: la muestra grande con el nombre y
+   las razones, la tabla de pesos y el muestrario. Aquí casi todo son letras
+   sueltas y filetes de un píxel, que es lo que peor aguanta la trama animada
+   del fondo pasando por detrás.
+   El padding se compensa con margen negativo a los lados para que los bloques
+   sigan alineados donde estaban: el papel asoma por fuera, el texto no se
+   mueve. Se come parte del hueco de 48 px entre columnas, que sobra. */
+.ev-tipo-izq,
+.ev-tipo-pesos,
+.ev-tipo-muestrario {
+  background: var(--background);
+  padding: 16px;
+  margin-left: -16px;
+  margin-right: -16px;
+  border-radius: 3px;
 }
 
 .ev-tipo-rejilla {
