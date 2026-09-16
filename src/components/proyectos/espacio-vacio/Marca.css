@@ -283,7 +283,7 @@
      DOS separaciones distintas —una holgada entre el móvil y el par, y una
      corta entre los dos posts, que van pegados—, y una rejilla solo sabe de un
      hueco para todos. */
-  grid-template-columns: 1.52fr 0.48fr;
+  grid-template-columns: 1.34fr 0.66fr;
   /* Alineados por ABAJO y no centrados: las tres piezas tienen altos distintos,
      y lo que las ata visualmente es la línea del suelo. Centradas, cada una
      flotaba a su altura y la fila parecía tres piezas sueltas. */
@@ -300,7 +300,10 @@
 .ev-mock-columna {
   display: flex;
   align-items: end;
-  gap: 4px;
+  /* Cero: las piezas ya vienen recortadas al contenido, así que este hueco es
+     el que se ve de verdad. Antes había que dejar 4 px porque los archivos
+     traían su propio aire y el hueco real era mucho mayor. */
+  gap: 0;
 }
 .ev-mock-columna > * {
   flex: 1 1 0;
@@ -317,20 +320,10 @@
   }
 }
 
-/* El móvil de la fila: caja VERTICAL, que es lo que le da el tamaño. El archivo
-   es apaisado y el aparato ocupa su franja central, así que en una caja
-   cuadrada salía pequeño por mucho ancho que se le diera; en una vertical, y
-   con recorte, el móvil llena el alto y sube por encima de los dos posts. */
-.ev-mock-fila .ev-mock-recorte {
-  align-self: end;
-}
-
-/* La pieza a la que se le recorta el aire del archivo. `cover` en vez de
-   `contain`: con contain la imagen entera cabe en la caja y el aire se conserva;
-   con cover llena la caja y lo que sobra —que es justo ese aire— se queda
-   fuera. */
-.ev-mock-recorte img {
-  object-fit: cover;
+/* Las piezas recortadas llevan la imagen ampliada y desplazada dentro, así que
+   la caja tiene que esconder lo que sobra. */
+.ev-mock {
+  overflow: hidden;
 }
 
 /* Las tres últimas, apiladas y separadas. */

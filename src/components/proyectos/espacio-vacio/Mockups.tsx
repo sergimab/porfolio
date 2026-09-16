@@ -21,6 +21,16 @@ type Pieza = {
   // el borde de la pantalla y se queda invisible para siempre: era lo que
   // dejaba el montaje entero en blanco.
   ratio: number;
+  // Recorte exacto del aire transparente que el archivo lleva alrededor, medido
+  // sobre su canal alfa a resolución completa. Son porcentajes para la imagen
+  // dentro de su caja: cuánto se amplía y cuánto se desplaza.
+  //
+  // Va así y no con object-fit: cover porque cover centra y escala hasta
+  // cubrir, o sea que solo puede recortar por un eje y siempre a partes
+  // iguales. Aquí el aire no es simétrico ni está en un solo lado, y lo que se
+  // busca es que dos piezas queden PEGADAS: con cover siempre sobraba un margen
+  // que no había manera de quitar desde fuera.
+  corte?: { ancho: number; izq: number; arriba: number };
   // De dónde viene, en píxeles, y cuánto tarda en arrancar.
   sx?: number;
   sy?: number;
@@ -69,7 +79,23 @@ function Mock({ p }: { p: Pieza }) {
       }}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={p.src} alt={p.alt} loading="lazy" />
+      <img
+        src={p.src}
+        alt={p.alt}
+        loading="lazy"
+        style={
+          p.corte
+            ? {
+                position: "absolute",
+                width: `${p.corte.ancho}%`,
+                height: "auto",
+                left: `${p.corte.izq}%`,
+                top: `${p.corte.arriba}%`,
+                maxWidth: "none",
+              }
+            : undefined
+        }
+      />
     </div>
   );
 }
@@ -96,14 +122,18 @@ const SOLAS: Pieza[] = [
 const APILADOS: Pieza[] = [
   {
     src: "/proyectos/espacio-vacio/mockup-4.webp",
-    ratio: 1,
+    ratio: 0.6937,
+    corte: { ancho: 174.06, izq: -37.77, arriba: -11.11 },
+
     alt: "Piezas de la campaña en redes sociales",
     sx: -26,
     sy: 30,
   },
   {
     src: "/proyectos/espacio-vacio/mockup-5.webp",
-    ratio: 1,
+    ratio: 0.6937,
+    corte: { ancho: 174.06, izq: -37.77, arriba: -11.11 },
+
     alt: "Perfil de Instagram de Espacio vacío",
     sx: -14,
     sy: 34,
@@ -120,8 +150,8 @@ const APILADOS: Pieza[] = [
 // lado.
 const GRANDE: Pieza = {
   src: "/proyectos/espacio-vacio/mockup-3.webp",
-  ratio: 0.47,
-  clase: "ev-mock-recorte",
+  ratio: 0.4916,
+  corte: { ancho: 312.01, izq: -105.46, arriba: -5.29 },
   alt: "Publicación de Instagram de la campaña",
   sx: 30,
   sy: 40,
