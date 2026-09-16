@@ -1216,13 +1216,10 @@ const PANTALLAS: Pantalla[] = [
               <Desplegable texto="10 / 01 / 2024" />
               <Campo texto={c.t("Descripción", "Description")} />
               <Desplegable texto={c.t("1 hora", "1 hour")} />
-              <Boton
-                clase="es-centrado"
-                onClick={() => {
-                  c.setAbierta(null);
-                  c.ir("galeria");
-                }}
-              >
+              {/* Guardar cierra el panel y deja el cuadrante a la vista: lo
+                  normal es anotar varias cosas seguidas, y mandar a la galería
+                  obligaba a volver para la siguiente. */}
+              <Boton clase="es-centrado" onClick={() => c.setAbierta(null)}>
                 {c.t("Guardar", "Save")}
               </Boton>
             </div>
