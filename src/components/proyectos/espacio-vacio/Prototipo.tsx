@@ -87,13 +87,14 @@ function Boton({
 }
 
 // Un campo del formulario. Va como <input> de verdad y no como una caja
-// dibujada: se puede escribir dentro, que es lo que uno espera al ver un campo.
+// dibujada —así hereda la forma, el cursor y el comportamiento de un campo—,
+// pero de solo lectura: esto es la demostración de una pantalla, no un
+// formulario que vaya a ninguna parte.
 function Campo({
   texto,
   valor,
   escribiendo,
   clave,
-  onCambio,
 }: {
   texto: string;
   valor?: string;
@@ -104,7 +105,6 @@ function Campo({
   // El que se está tecleando lleva el cursor: es lo que hace que se lea como
   // alguien rellenando el formulario y no como un texto que aparece de golpe.
   escribiendo?: boolean;
-  onCambio?: (v: string) => void;
 }) {
   // Mientras se teclea NO hay <input>, hay una caja igual con el texto y el
   // cursor detrás de la última letra. Es la única forma de que el cursor caiga
@@ -137,12 +137,15 @@ function Campo({
       <span className="ev-oculto">{texto}</span>
       {/* Acabada de escribir, la contraseña va en un campo de tipo password:
           las bolitas las pone el navegador, con la forma que tenga el sistema,
-          que es exactamente lo que se ve en un móvil. */}
+          que es exactamente lo que se ve en un móvil.
+          De SOLO LECTURA: esto es la demostración de una pantalla, no un
+          formulario. Escribiendo dentro se estropea el ejemplo y no se gana
+          nada, porque no hay ninguna cuenta al otro lado. */}
       <input
         type={clave ? "password" : "text"}
         placeholder={texto}
         value={valor ?? ""}
-        onChange={(e) => onCambio?.(e.target.value)}
+        readOnly
       />
     </label>
   );
@@ -155,8 +158,6 @@ function Campo({
 // se USA la pantalla, y un formulario ya lleno no cuenta nada que no contara
 // una captura.
 //
-// En cuanto alguien escribe por su cuenta, el tecleo se para y no vuelve: la
-// máquina no puede pelearse con la persona por el mismo campo.
 function CamposAuto({
   campos,
 }: {
@@ -164,8 +165,6 @@ function CamposAuto({
 }) {
   const [escrito, setEscrito] = useState<string[]>(() => campos.map(() => ""));
   const [enCurso, setEnCurso] = useState(0);
-  // Se levanta cuando escribe una persona, y ya no se baja.
-  const tomado = useRef(false);
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -184,7 +183,7 @@ function CamposAuto({
     let letra = 0;
     let reloj: ReturnType<typeof setTimeout>;
     const paso = () => {
-      if (!vivo || tomado.current || campo >= campos.length) return;
+      if (!vivo || campo >= campos.length) return;
       letra += 1;
       // El índice se copia a una constante ANTES de tocar `campo`: la función
       // que actualiza el estado no se ejecuta al programarla, sino cuando React
@@ -204,12 +203,13 @@ function CamposAuto({
         letra = 0;
         setEnCurso(campo);
       }
-      // Ritmo irregular: a golpe fijo suena a máquina. Y entre campo y campo,
-      // la pausa de buscar el siguiente.
-      reloj = setTimeout(paso, acabado ? 420 : 38 + Math.random() * 55);
+      // Rápido, que esto es el trámite y no el asunto de la pantalla; pero con
+      // el golpe irregular, que a ritmo fijo suena a máquina. Y entre campo y
+      // campo, la pausa corta de buscar el siguiente.
+      reloj = setTimeout(paso, acabado ? 150 : 11 + Math.random() * 18);
     };
     // Un respiro antes de empezar, para que se vea la pantalla vacía primero.
-    reloj = setTimeout(paso, 650);
+    reloj = setTimeout(paso, 260);
     return () => {
       vivo = false;
       clearTimeout(reloj);
@@ -228,15 +228,6 @@ function CamposAuto({
           valor={escrito[i]}
           clave={c.clave}
           escribiendo={i === enCurso && escrito[i] !== c.valor}
-          onCambio={(v) => {
-            // Alguien ha escrito: se para el tecleo y manda lo que ponga.
-            tomado.current = true;
-            setEscrito((antes) => {
-              const copia = [...antes];
-              copia[i] = v;
-              return copia;
-            });
-          }}
         />
       ))}
     </div>
@@ -506,15 +497,39 @@ export default function Prototipo() {
   // que se tomó, así que hace falta la pila entera.
   const [camino, setCamino] = useState<string[]>(["carga"]);
   const [horas, setHoras] = useState(3);
+  // La carga tiene dos momentos: el isotipo quieto esperando, y la animación
+  // corriendo desde que se pulsa comenzar hasta que entra la bienvenida.
+  const [arrancando, setArrancando] = useState(false);
+  const video = useRef<HTMLVideoElement>(null);
   const actual = PORID.get(camino[camino.length - 1]) ?? PANTALLAS[0];
 
   const ir = useCallback((id: string) => {
     // Volver al principio es empezar de cero, no apilar otra vuelta.
+    if (id === "carga") setArrancando(false);
     setCamino((antes) => (id === "carga" ? ["carga"] : [...antes, id]));
   }, []);
+
+  // Comenzar: se pone en marcha la animación del isotipo y, al acabarla, entra
+  // la bienvenida. La pantalla de carga de una app es exactamente eso —la marca
+  // mientras arranca—, así que la animación ES la transición, no un adorno
+  // delante de ella.
+  const comenzar = useCallback(() => setArrancando(true), []);
   const atras = useCallback(() => {
     setCamino((antes) => (antes.length > 1 ? antes.slice(0, -1) : antes));
   }, []);
+
+  useEffect(() => {
+    if (!arrancando) return;
+    // El vídeo se pone en marcha AQUÍ y no en el manejador del botón: cuando se
+    // pulsa todavía no existe —lo monta este mismo cambio de estado—, así que
+    // allí la referencia está vacía y la llamada se perdía. Por eso el vídeo se
+    // quedaba quieto en el primer fotograma, que además es blanco.
+    video.current?.play().catch(() => {});
+    // Y red de seguridad: si no llega a reproducirse, o el aviso de que ha
+    // terminado no llega, la bienvenida entra igual pasada su duración.
+    const reloj = setTimeout(() => ir("bienvenida"), 4600);
+    return () => clearTimeout(reloj);
+  }, [arrancando, ir]);
 
   const ctx: Ctx = { ir, t, horas, setHoras };
 
@@ -534,15 +549,30 @@ export default function Prototipo() {
                 <Cabecera atras={actual.atras ? atras : undefined} t={t} />
               )}
 
-              {/* La pantalla de carga: el isotipo quieto en el centro y nada
-                  más. */}
-              {actual.id === "carga" && (
-                <svg className="ev-app-carga" viewBox="0 0 71.55 71" aria-hidden="true">
-                  {CUARTOS.map((d, i) => (
-                    <path key={i} d={d} fill="#252221" />
-                  ))}
-                </svg>
-              )}
+              {/* La pantalla de carga: el isotipo quieto esperando y, al
+                  comenzar, la animación en su sitio.
+                  El vídeo viene con fondo casi blanco —#FDFDFD— sobre una
+                  pantalla blanca: con `multiply` ese blanco desaparece y no se
+                  ve el recuadro. */}
+              {actual.id === "carga" &&
+                (arrancando ? (
+                  <video
+                    ref={video}
+                    className="ev-app-carga es-video"
+                    src="/proyectos/espacio-vacio/app/isotipo.mp4"
+                    muted
+                    playsInline
+                    preload="auto"
+                    aria-hidden="true"
+                    onEnded={() => ir("bienvenida")}
+                  />
+                ) : (
+                  <svg className="ev-app-carga" viewBox="0 0 71.55 71" aria-hidden="true">
+                    {CUARTOS.map((d, i) => (
+                      <path key={i} d={d} fill="#252221" />
+                    ))}
+                  </svg>
+                ))}
 
               <div className={`ev-app-cuerpo${actual.id === "casillas" ? " es-alto" : ""}`}>
                 {actual.cuerpo(ctx)}
@@ -569,9 +599,10 @@ export default function Prototipo() {
               <button
                 type="button"
                 className="es-principal"
-                onClick={() => ir("bienvenida")}
+                onClick={comenzar}
+                disabled={arrancando}
               >
-                {t("Comenzar", "Start")}
+                {t(arrancando ? "Arrancando…" : "Comenzar", arrancando ? "Starting…" : "Start")}
               </button>
             )}
             <button type="button" onClick={atras} disabled={camino.length < 2}>

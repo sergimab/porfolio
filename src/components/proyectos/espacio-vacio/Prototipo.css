@@ -393,6 +393,15 @@
   height: auto;
   pointer-events: none;
 }
+/* La animación ocupa más porque el isotipo solo llena la parte central de su
+   fotograma: a este ancho la pieza acaba del mismo tamaño que la quieta, y el
+   relevo entre una y otra no da un salto.
+   `multiply` borra el fondo casi blanco del vídeo contra el blanco de la
+   pantalla, así que no se ve el recuadro. */
+.ev-app-carga.es-video {
+  width: 62cqw;
+  mix-blend-mode: multiply;
+}
 
 /* Etiqueta solo para lectores de pantalla. */
 .ev-oculto {
