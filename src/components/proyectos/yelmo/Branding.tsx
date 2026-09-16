@@ -1,6 +1,6 @@
 import LangText from "@/components/shared/LangText";
 import RotuloSeccion from "@/components/shared/RotuloSeccion";
-import { RUTA, PIEZAS, TINTAS, GRADACIONES, SUBMARCAS } from "./marca";
+import { RUTA, TINTAS, GRADACIONES, SUBMARCAS } from "./marca";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import Construccion from "./Construccion";
@@ -55,15 +55,6 @@ export default function Branding() {
             servidor— y se le pasa al componente, que es quien lo anima: así la
             fuente sigue siendo el archivo de la carpeta del proyecto. */}
         <Construccion markup={construccion} />
-      </section>
-
-      {/* ── El isotipo ───────────────────────────────────────────────────── */}
-      <section className="ym-seccion">
-        <RotuloSeccion es="Logotipo e isotipo" en="Logotype and icon" />
-        <div className="ym-lamina es-marca ym-dos">
-          <Pieza archivo={PIEZAS.logotipo.archivo} ratio={PIEZAS.logotipo.ratio} ancho="58%" tinta="linear-gradient(90deg, #00FFE2, #2D1E73)" />
-          <Pieza archivo={PIEZAS.isotipo.archivo} ratio={PIEZAS.isotipo.ratio} ancho="12%" tinta="linear-gradient(0deg, #00FFE2, #AB5EEC)" />
-        </div>
       </section>
 
       {/* ── La paleta ────────────────────────────────────────────────────── */}

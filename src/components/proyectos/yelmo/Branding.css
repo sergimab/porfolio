@@ -7,33 +7,6 @@
   margin-bottom: 56px;
 }
 
-/* El papel opaco de cada lámina: el fondo de la página lleva una trama animada
-   y por detrás de un dibujo de un píxel se confunde con él. */
-.ym-lamina {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8%;
-  padding: 6%;
-  aspect-ratio: 16 / 9;
-  border-radius: 4px;
-  background: var(--background);
-  overflow: hidden;
-}
-/* Las láminas de marca van sobre el morado corporativo en los DOS modos del
-   sitio: no es un neutro que haya que adaptar, es un color de la marca, y el
-   logotipo está dibujado para verse encima de él. */
-.ym-lamina.es-marca {
-  background: #3c1f71;
-}
-.ym-lamina-pieza {
-  max-width: 100%;
-  max-height: 100%;
-}
-.ym-dos {
-  gap: 10%;
-}
-
 /* ── Las piezas ──
    El archivo recorta y el color lo pone el fondo, así que la misma pieza sirve
    en morado, en turquesa o con el degradado de su submarca. */
@@ -197,9 +170,6 @@
 }
 
 @media (max-width: 760px) {
-  .ym-lamina {
-    aspect-ratio: 4 / 3;
-  }
   .ym-submarcas,
   .ym-lineas {
     grid-template-columns: 1fr;

@@ -12,6 +12,9 @@
 
 export const RUTA = "/proyectos/yelmo/branding";
 
+// El logotipo y el isotipo sueltos. Ahora mismo no los usa ninguna lámina —la
+// de «logotipo e isotipo» se quitó—, pero las proporciones están medidas sobre
+// el dibujo y recuperarlas cuesta, así que se quedan aquí.
 export const PIEZAS = {
   logotipo: { archivo: "logotipo.svg", ratio: 1407.9 / 406.2 },
   isotipo: { archivo: "isotipo.svg", ratio: 405.2 / 481.7 },
