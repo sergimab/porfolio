@@ -403,6 +403,16 @@
   padding-right: calc(50vw - 50%);
 }
 
+/* Los programas usados, en su propia caja y contra el margen derecho. La caja
+   —fondo de la página, sin borde— la trae el propio componente; aquí solo se
+   decide dónde se pone. Va FUERA del papel del texto: dentro, al compartir
+   color, no se leía como una caja aparte. */
+.ev-herramientas {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
 /* El divisor entre apartados. Llega solo hasta donde llega el contenido, no de
    borde a borde de la ventana.
 

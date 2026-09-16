@@ -1,6 +1,7 @@
 import BackCapsule from "@/components/shared/BackCapsule";
 import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
 import LangText from "@/components/shared/LangText";
+import ToolIcons from "@/components/shared/ToolIcons";
 import EscenaInicio from "./EscenaInicio";
 import PaletaCromatica from "./PaletaCromatica";
 import Tipografia from "./Tipografia";
@@ -87,6 +88,10 @@ export default function EspacioVacioLanding() {
               en="The point is that by the end of the year you become **aware of how much time you have wasted** on those networks, and can set it against the time you put into the **things that matter far more**."
             />
           </p>
+        </div>
+
+        <div className="ev-herramientas">
+          <ToolIcons tools={["Photoshop", "Illustrator"]} />
         </div>
 
         <EscenaInicio />

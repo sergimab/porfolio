@@ -64,10 +64,8 @@ export default function AppLanding() {
 
         {/* Los mismos tres párrafos que la página de branding, y con el mismo
             papel: entrando por una o por otra, el proyecto se presenta igual.
-            Lo único añadido son los programas, a la derecha del texto y
-            alineados con su última línea, como en las páginas de Iberdrola. */}
-        <div className="ev-papel project-introrow">
-          <div className="project-text">
+            Los programas van aparte, en su propia caja. */}
+        <div className="ev-papel project-text">
           <p>
             <LangText
               es="Este proyecto tiene como punto de partida **concretar un problema social**. Nuestra elección fue tratar el tema de la **adicción a las redes sociales**, y de este problema hacer una **campaña de concienciación**."
@@ -86,7 +84,12 @@ export default function AppLanding() {
               en="The point is that by the end of the year you become **aware of how much time you have wasted** on those networks, and can set it against the time you put into the **things that matter far more**."
             />
           </p>
-          </div>
+        </div>
+
+        {/* Los programas, en su caja y a la derecha: la caja ya la trae el
+            componente —fondo de la página, sin borde—, y fuera del papel se ve
+            como tal, que es como está en las demás páginas del sitio. */}
+        <div className="ev-herramientas">
           <ToolIcons tools={["Figma"]} />
         </div>
 
