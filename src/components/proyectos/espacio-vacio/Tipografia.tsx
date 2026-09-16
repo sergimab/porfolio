@@ -37,8 +37,8 @@ const SIGNOS = ["®îŠŁåãæÖÙÜÚ¼½¾", "§{}¶!¡#$%&()"];
 export default function Tipografia() {
   return (
     <section className="ev-tipo">
-      <h2 className="ev-tipo-titulo">
-        <LangText es="Tipografía" en="Typography" />
+      <h2 className="ev-tipo-titulo ev-rotulo-fila">
+        <span className="ev-rotulo"><LangText es="Tipografía" en="Typography" /></span>
       </h2>
 
       <div className="ev-tipo-rejilla">

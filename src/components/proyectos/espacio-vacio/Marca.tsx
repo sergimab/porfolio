@@ -85,8 +85,8 @@ export default function Marca() {
     <div className="ev-marca">
       {/* ── Composición del logotipo ─────────────────────────────────────── */}
       <section className="ev-lamina">
-        <h2 className="ev-lamina-titulo">
-          <LangText es="Composición logotipo" en="Logotype construction" />
+        <h2 className="ev-lamina-titulo ev-rotulo-fila">
+          <span className="ev-rotulo"><LangText es="Composición logotipo" en="Logotype construction" /></span>
         </h2>
         <div className="ev-lamina-partida">
           <div className="ev-lamina-mitad es-fondo">
@@ -113,8 +113,8 @@ export default function Marca() {
 
       {/* ── Composición del isotipo ──────────────────────────────────────── */}
       <section className="ev-lamina">
-        <h2 className="ev-lamina-titulo">
-          <LangText es="Composición isotipo" en="Icon construction" />
+        <h2 className="ev-lamina-titulo ev-rotulo-fila">
+          <span className="ev-rotulo"><LangText es="Composición isotipo" en="Icon construction" /></span>
         </h2>
         {/* El observador va en la lámina ENTERA y no en una mitad: el grid se
             dibuja a la izquierda y el isotipo gira a la derecha, así que las dos
@@ -190,8 +190,8 @@ export default function Marca() {
 
       {/* ── Área de seguridad ────────────────────────────────────────────── */}
       <section className="ev-lamina">
-        <h2 className="ev-lamina-titulo">
-          <LangText es="Área de seguridad" en="Clear space" />
+        <h2 className="ev-lamina-titulo ev-rotulo-fila">
+          <span className="ev-rotulo"><LangText es="Área de seguridad" en="Clear space" /></span>
         </h2>
         <div className="ev-lamina-entera es-fondo">
           <div className="ev-seguridad">
@@ -265,8 +265,8 @@ export default function Marca() {
 
       {/* ── El estampado ─────────────────────────────────────────────────── */}
       <section className="ev-lamina">
-        <h2 className="ev-lamina-titulo">
-          <LangText es="Estampado" en="Pattern" />
+        <h2 className="ev-lamina-titulo ev-rotulo-fila">
+          <span className="ev-rotulo"><LangText es="Estampado" en="Pattern" /></span>
         </h2>
         {/* Sin fondo: la trama se pinta sobre el papel de la página, así que en
             claro sale oscura y en oscuro sale clara. */}

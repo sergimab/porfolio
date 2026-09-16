@@ -96,13 +96,10 @@ export default function EspacioVacioLanding() {
 
         <EscenaInicio />
 
-        <hr className="ev-divisor" />
         <PaletaCromatica />
 
-        <hr className="ev-divisor" />
         <Tipografia />
 
-        <hr className="ev-divisor" />
         <Marca />
 
         <hr className="ev-divisor" />

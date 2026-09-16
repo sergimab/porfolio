@@ -87,8 +87,8 @@ function Ficha({ m }: { m: Muestra }) {
 export default function PaletaCromatica() {
   return (
     <section className="ev-paleta">
-      <h2 className="ev-paleta-titulo">
-        <LangText es="Paleta cromática" en="Colour palette" />
+      <h2 className="ev-paleta-titulo ev-rotulo-fila">
+        <span className="ev-rotulo"><LangText es="Paleta cromática" en="Colour palette" /></span>
       </h2>
 
       {/* Los neutros, arriba y a la derecha. */}

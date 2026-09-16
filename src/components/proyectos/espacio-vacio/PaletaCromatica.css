@@ -1,3 +1,5 @@
+@import "./rotulos.css";
+
 /* La lámina de paleta cromática.
    Los dos bloques van a los lados contrarios, como en el manual: el hueco que
    queda entre ellos es parte de la composición. */
@@ -6,14 +8,7 @@
 }
 
 .ev-paleta-titulo {
-  display: inline-block;
   margin: 0 0 40px;
-  padding: 9px 16px;
-  border: 1px solid currentColor;
-  font-size: 15px;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  background: var(--background);
 }
 
 .ev-paleta-fila {

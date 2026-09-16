@@ -1,3 +1,5 @@
+@import "./rotulos.css";
+
 /* Las láminas de marca.
    Cada una es un cuadro 16:9 con su rótulo encima, como en el manual. */
 .ev-marca {
@@ -8,17 +10,10 @@
   margin-bottom: 40px;
 }
 
+/* El rótulo y su línea están en rotulos.css, que comparten los tres apartados.
+   Aquí solo su sitio. */
 .ev-lamina-titulo {
-  display: inline-block;
   margin: 0 0 14px;
-  padding: 9px 16px;
-  border: 1px solid currentColor;
-  font-size: 15px;
-  font-weight: 500;
-  /* Papel propio: el rótulo es una caja de una línea con hilo de un píxel, y
-     la trama animada del fondo pasando por dentro la convertía en un recuadro
-     con ruido. */
-  background: var(--background);
 }
 
 /* Las láminas llevan SIEMPRE papel opaco, también las que no tienen fondo de

@@ -1,6 +1,7 @@
 /* La fuente se declara en fuente.css, que también usa la app programada de la
    otra página. */
 @import "./fuente.css";
+@import "./rotulos.css";
 
 /* Todo el apartado va escrito CON la fuente: es una muestra, así que enseñarla
    en otra tipografía sería enseñar otra cosa. */
@@ -10,13 +11,7 @@
 }
 
 .ev-tipo-titulo {
-  display: inline-block;
   margin: 0 0 48px;
-  padding: 9px 16px;
-  border: 1px solid currentColor;
-  font-size: 15px;
-  font-weight: 500;
-  background: var(--background);
 }
 
 /* Cada bloque de la lámina se pone su papel: la muestra grande con el nombre y
