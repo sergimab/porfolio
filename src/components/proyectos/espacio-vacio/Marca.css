@@ -372,14 +372,23 @@
    El papel se estira hasta el borde de la ventana con márgenes negativos:
    recortado al ancho del contenido, la trama seguiría entrando por los lados y
    se vería una banda de puntos pegada al bloque. 50vw a cada lado cubre
-   cualquier pantalla, y el padding devuelve el contenido a su sitio. */
+   cualquier pantalla, y el padding devuelve el contenido a su sitio.
+
+   El ancho se FIJA en 100vw. Antes solo se tiraba del margen —-50vw a cada
+   lado— y eso no da una caja de un ancho de ventana: da una de ancho del padre
+   MÁS 100vw, o sea que sobresalía medio ancho de ventana por cada lado y la
+   página se podía arrastrar en horizontal en móvil. Con el ancho fijado, el
+   margen solo la centra y el padding devuelve el contenido a la columna:
+   `50%` mide sobre el padre, así que `50vw - 50%` es exactamente lo que
+   sobresale por ese lado. */
 .ev-papel {
   position: relative;
   background: var(--background);
-  margin-left: -50vw;
-  margin-right: -50vw;
-  padding-left: 50vw;
-  padding-right: 50vw;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  padding-left: calc(50vw - 50%);
+  padding-right: calc(50vw - 50%);
 }
 
 /* El divisor entre apartados. Llega solo hasta donde llega el contenido, no de
