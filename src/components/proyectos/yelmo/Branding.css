@@ -37,6 +37,12 @@
 }
 
 /* ── La paleta ── */
+/* El texto, centrado bajo su disco: con el disco ya centrado, los datos
+   alineados a la izquierda tiraban del ojo hacia un lado y la muestra dejaba de
+   leerse como una sola pieza. */
+.ym-tintas li {
+  text-align: center;
+}
 .ym-tintas {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
