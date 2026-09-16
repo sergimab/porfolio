@@ -247,6 +247,54 @@
   outline-offset: 0.3cqw;
 }
 
+/* El campo mientras se teclea: la misma caja, pero con el texto puesto a mano
+   para poder colgarle el cursor JUSTO detrás de la última letra. Las medidas
+   son las del <input> —el mismo padding, el mismo borde y el mismo cuerpo— para
+   que al cambiar uno por otro no se mueva ni un pelo. */
+.ev-app-campo.es-escribiendo {
+  box-sizing: border-box;
+  padding: 2.2cqw 2.6cqw;
+  border: 0.28cqw solid #252221;
+  background: #fff;
+  font-size: 2.9cqw;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  /* El alto lo fija una línea de texto: si el campo se quedara sin contenido
+     —el primer golpe de reloj aún no ha escrito nada— encogería y la lista de
+     campos daría un salto. */
+  line-height: 1.5;
+  min-height: calc(2.9cqw * 1.5);
+}
+/* Los campos de contraseña: el punto de esta tipografía se apoya muy abajo, casi
+   en la línea base, así que la fila de puntos quedaba descolgada dentro de la
+   caja. Se sube lo justo para dejarla a media altura, que es donde la pone el
+   teclado de un móvil. */
+.ev-app-campo.es-clave input,
+.ev-app-campo.es-clave .ev-app-tecleado {
+  position: relative;
+  top: -0.9cqw;
+}
+
+.ev-app-tecleado i {
+  display: inline-block;
+  width: 0.3cqw;
+  height: 2.9cqw;
+  margin-left: 0.4cqw;
+  vertical-align: -0.4cqw;
+  background: #252221;
+  animation: ev-cursor 900ms steps(1, end) infinite;
+}
+@keyframes ev-cursor {
+  50% {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ev-app-tecleado i {
+    animation: none;
+  }
+}
+
 /* ── La ecuación de «¿Cómo funciona?» ── */
 .ev-app-ecuacion {
   margin: 7cqw 0 0;

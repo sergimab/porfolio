@@ -82,12 +82,148 @@ function Boton({
 
 // Un campo del formulario. Va como <input> de verdad y no como una caja
 // dibujada: se puede escribir dentro, que es lo que uno espera al ver un campo.
-function Campo({ texto }: { texto: string }) {
+function Campo({
+  texto,
+  valor,
+  escribiendo,
+  clave,
+  onCambio,
+}: {
+  texto: string;
+  valor?: string;
+  // Campo de contraseña: se escribe en puntos, y los puntos piden su propio
+  // ajuste vertical.
+  clave?: boolean;
+  // El que se está tecleando lleva el cursor: es lo que hace que se lea como
+  // alguien rellenando el formulario y no como un texto que aparece de golpe.
+  escribiendo?: boolean;
+  onCambio?: (v: string) => void;
+}) {
+  // Mientras se teclea NO hay <input>, hay una caja igual con el texto y el
+  // cursor detrás de la última letra. Es la única forma de que el cursor caiga
+  // donde tiene que caer: dentro de un campo, el del navegador solo se dibuja
+  // si el campo tiene el foco, y robarle el foco a quien está leyendo la página
+  // le arrastraría el desplazamiento hasta aquí. Al terminar vuelve el campo de
+  // verdad, que es el que se puede usar.
+  if (escribiendo) {
+    return (
+      <div
+        className={`ev-app-campo es-escribiendo${clave ? " es-clave" : ""}`}
+        aria-hidden="true"
+      >
+        <span className="ev-app-tecleado">
+          {valor}
+          <i />
+        </span>
+      </div>
+    );
+  }
+
   return (
-    <label className="ev-app-campo">
+    <label className={`ev-app-campo${clave ? " es-clave" : ""}`}>
       <span className="ev-oculto">{texto}</span>
-      <input type="text" placeholder={texto} />
+      <input
+        type="text"
+        placeholder={texto}
+        value={valor ?? ""}
+        onChange={(e) => onCambio?.(e.target.value)}
+      />
     </label>
+  );
+}
+
+// El formulario que se rellena solo, letra a letra.
+//
+// Se teclea de verdad —un carácter por golpe de reloj, con el cursor en el
+// campo que toca— en vez de aparecer relleno: lo que se está enseñando es cómo
+// se USA la pantalla, y un formulario ya lleno no cuenta nada que no contara
+// una captura.
+//
+// En cuanto alguien escribe por su cuenta, el tecleo se para y no vuelve: la
+// máquina no puede pelearse con la persona por el mismo campo.
+function CamposAuto({
+  campos,
+}: {
+  campos: { etiqueta: string; valor: string; clave?: boolean }[];
+}) {
+  const [escrito, setEscrito] = useState<string[]>(() => campos.map(() => ""));
+  const [enCurso, setEnCurso] = useState(0);
+  // Se levanta cuando escribe una persona, y ya no se baja.
+  const tomado = useRef(false);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      // Sin animación: los campos salen rellenos y ya está. La información es
+      // la misma; lo que se pierde es el gesto.
+      setEscrito(campos.map((c) => c.valor));
+      setEnCurso(campos.length);
+      return;
+    }
+    // `vivo` es de ESTA pasada del efecto, no un ref compartido: en desarrollo
+    // React monta, desmonta y vuelve a montar para destapar efectos mal
+    // cerrados, y un ref puesto a falso en la primera limpieza dejaba la
+    // segunda pasada muerta antes de empezar.
+    let vivo = true;
+    let campo = 0;
+    let letra = 0;
+    let reloj: ReturnType<typeof setTimeout>;
+    const paso = () => {
+      if (!vivo || tomado.current || campo >= campos.length) return;
+      letra += 1;
+      // El índice se copia a una constante ANTES de tocar `campo`: la función
+      // que actualiza el estado no se ejecuta al programarla, sino cuando React
+      // la llama, y para entonces `campo` ya habría avanzado. Leyéndolo de ahí,
+      // la última letra de cada campo acababa escrita en el campo siguiente y
+      // todos se quedaban un carácter cortos.
+      const donde = campo;
+      const hasta = campos[donde].valor.slice(0, letra);
+      setEscrito((antes) => {
+        const copia = [...antes];
+        copia[donde] = hasta;
+        return copia;
+      });
+      const acabado = letra >= campos[donde].valor.length;
+      if (acabado) {
+        campo += 1;
+        letra = 0;
+        setEnCurso(campo);
+      }
+      // Ritmo irregular: a golpe fijo suena a máquina. Y entre campo y campo,
+      // la pausa de buscar el siguiente.
+      reloj = setTimeout(paso, acabado ? 420 : 38 + Math.random() * 55);
+    };
+    // Un respiro antes de empezar, para que se vea la pantalla vacía primero.
+    reloj = setTimeout(paso, 650);
+    return () => {
+      vivo = false;
+      clearTimeout(reloj);
+    };
+    // Los campos no cambian mientras la pantalla está puesta: se monta una vez
+    // por visita, y al volver a entrar el componente se rehace entero.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <div className="ev-app-campos">
+      {campos.map((c, i) => (
+        <Campo
+          key={c.etiqueta}
+          texto={c.etiqueta}
+          valor={escrito[i]}
+          clave={c.clave}
+          escribiendo={i === enCurso && escrito[i] !== c.valor}
+          onCambio={(v) => {
+            // Alguien ha escrito: se para el tecleo y manda lo que ponga.
+            tomado.current = true;
+            setEscrito((antes) => {
+              const copia = [...antes];
+              copia[i] = v;
+              return copia;
+            });
+          }}
+        />
+      ))}
+    </div>
   );
 }
 
@@ -134,13 +270,22 @@ const PANTALLAS: Pantalla[] = [
     cuerpo: (c) => (
       <>
         <h3 className="ev-app-titulo es-suelto">{c.t("Crear cuenta", "Create account")}</h3>
-        <div className="ev-app-campos">
-          <Campo texto={c.t("Nombre completo", "Full name")} />
-          <Campo texto={c.t("Correo electrónico", "Email")} />
-          <Campo texto={c.t("Fecha de nacimiento", "Date of birth")} />
-          <Campo texto={c.t("Contraseña", "Password")} />
-          <Campo texto={c.t("Confirmar contraseña", "Confirm password")} />
-        </div>
+        {/* Los datos del ejemplo. Las contraseñas se teclean en puntos porque
+            es lo que se ve en un campo de contraseña, y así además se lee de un
+            vistazo que son dos campos distintos del mismo tipo. */}
+        <CamposAuto
+          campos={[
+            { etiqueta: c.t("Nombre completo", "Full name"), valor: "Ana García Ruiz" },
+            { etiqueta: c.t("Correo electrónico", "Email"), valor: "ana.garcia@gmail.com" },
+            { etiqueta: c.t("Fecha de nacimiento", "Date of birth"), valor: "12/04/2001" },
+            { etiqueta: c.t("Contraseña", "Password"), valor: "••••••••", clave: true },
+            {
+              etiqueta: c.t("Confirmar contraseña", "Confirm password"),
+              valor: "••••••••",
+              clave: true,
+            },
+          ]}
+        />
         <Boton clase="es-suelto" onClick={() => c.ir("quienes")}>
           {c.t("Crear cuenta", "Create account")}
         </Boton>
