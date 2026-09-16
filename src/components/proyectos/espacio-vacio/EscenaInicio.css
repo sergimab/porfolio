@@ -1,0 +1,82 @@
+/* La escena de cabecera de Espacio vacío.
+   Cuadro de proporción fija: las esferas se colocan en porcentaje de él, así
+   que la composición se conserva a cualquier ancho en vez de descuadrarse. */
+.ev-escena {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin: 8px 0 44px;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* El logotipo, al fondo. En claro va oscuro tal cual viene el archivo; en
+   oscuro se invierte, porque el color está escrito DENTRO del SVG y desde
+   fuera no hay forma de cambiarle el relleno. Invertir un dibujo de un solo
+   color es exacto: lo casi negro se vuelve casi blanco y ya está. */
+.ev-logo {
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 78%;
+  height: auto;
+  opacity: 0.9;
+  pointer-events: none;
+}
+[data-theme="dark"] .ev-logo {
+  filter: invert(1);
+}
+
+/* Las esferas, entre el logotipo y el móvil.
+   `left`/`top` son la esquina, así que el translate de la mitad las centra en
+   la coordenada medida. El desplazamiento de entrada se suma a ese centrado y
+   se va a cero según avanza el scroll. */
+.ev-esfera {
+  position: absolute;
+  z-index: 1;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  /* El turno retrasa a cada una sin tocar su recorrido: se le resta al avance
+     y se vuelve a llevar al rango 0..1. */
+  --propio: clamp(0, (var(--avance) - var(--turno)) / 0.72, 1);
+  opacity: var(--propio);
+  transform: translate(
+      calc(-50% + var(--dx) * (1 - var(--propio))),
+      calc(-50% + var(--dy) * (1 - var(--propio)))
+    )
+    scale(calc(0.6 + 0.4 * var(--propio)));
+}
+
+/* El móvil, delante de todo y centrado. El alto manda —el mockup es vertical y
+   lo que tiene que encajar en el cuadro es su altura—, así que se da el alto y
+   el ancho sale solo. */
+.ev-mockup {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  height: 96%;
+  width: auto;
+  /* Una sombra corta bajo la mano, para que no flote recortada sobre el fondo. */
+  filter: drop-shadow(0 18px 30px rgba(20, 16, 30, 0.22));
+}
+
+/* En pantallas estrechas el cuadro 16:9 deja el móvil diminuto: con la ventana
+   a 400 px de ancho, su altura de cuadro son 225 y el mockup se queda en
+   nada. Se le da más alto al cuadro y el móvil crece con él; las esferas, al ir
+   en porcentaje, se reparten solas. */
+@media (max-width: 760px) {
+  .ev-escena {
+    aspect-ratio: 4 / 5;
+  }
+  .ev-mockup {
+    height: 82%;
+  }
+  .ev-logo {
+    width: 100%;
+  }
+}
