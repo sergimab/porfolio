@@ -272,14 +272,21 @@
   z-index: 1;
 }
 
-/* La fila del 3, el 4 y el 5. El 3 manda —es el que lleva el móvil de pie— y
-   los otros dos se reparten lo que queda. */
+/* La fila del medio: el 4 y el 5 apilados a la izquierda, el 3 a su derecha y
+   más grande. La columna de la derecha se lleva más ancho porque ahí va el
+   móvil de pie: repartiendo a partes iguales, la pieza que más detalle tiene
+   era la que peor se veía. */
 .ev-mock-fila {
   display: grid;
-  grid-template-columns: 1.25fr 1fr 1fr;
+  grid-template-columns: 0.82fr 1.18fr;
   align-items: center;
-  gap: 16px;
+  gap: 18px;
   margin-top: 26px;
+}
+.ev-mock-columna {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
 @media (max-width: 760px) {

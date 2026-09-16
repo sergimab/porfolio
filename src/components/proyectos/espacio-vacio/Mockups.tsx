@@ -91,30 +91,35 @@ const SOLAS: Pieza[] = [
   },
 ];
 
-const FILA: Pieza[] = [
-  {
-    src: "/proyectos/espacio-vacio/mockup-3.webp",
-    ratio: 1.3746,
-    alt: "Publicación de Instagram de la campaña",
-    sx: -30,
-    sy: 30,
-  },
+// La fila del medio: el 4 y el 5 apilados a la izquierda y el 3 a su derecha,
+// más grande. El 3 lleva el móvil de pie, así que necesita más alto que los dos
+// cuadrados; dándoles a todos el mismo ancho, el móvil salía diminuto.
+const APILADOS: Pieza[] = [
   {
     src: "/proyectos/espacio-vacio/mockup-4.webp",
     ratio: 1,
     alt: "Piezas de la campaña en redes sociales",
-    sy: 48,
-    retraso: 110,
+    sx: -34,
+    sy: 30,
   },
   {
     src: "/proyectos/espacio-vacio/mockup-5.webp",
     ratio: 1,
     alt: "Perfil de Instagram de Espacio vacío",
-    sx: 30,
+    sx: -34,
     sy: 30,
-    retraso: 220,
+    retraso: 120,
   },
 ];
+
+const GRANDE: Pieza = {
+  src: "/proyectos/espacio-vacio/mockup-3.webp",
+  ratio: 1.3746,
+  alt: "Publicación de Instagram de la campaña",
+  sx: 34,
+  sy: 40,
+  retraso: 60,
+};
 
 const RESTO: Pieza[] = [
   {
@@ -145,9 +150,12 @@ export default function Mockups() {
       ))}
 
       <div className="ev-mock-fila">
-        {FILA.map((p) => (
-          <Mock key={p.src} p={p} />
-        ))}
+        <div className="ev-mock-columna">
+          {APILADOS.map((p) => (
+            <Mock key={p.src} p={p} />
+          ))}
+        </div>
+        <Mock p={GRANDE} />
       </div>
 
       <div className="ev-mock-resto">
