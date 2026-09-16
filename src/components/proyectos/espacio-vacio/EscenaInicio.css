@@ -67,7 +67,7 @@
   left: 50%;
   /* Despegado del suelo del cuadro: la mano entra por abajo, y dejándola a ras
      el conjunto se apoyaba en el borde en vez de flotar dentro de la escena. */
-  bottom: 7%;
+  bottom: 4%;
   transform: translateX(-35.2%);
   height: 78%;
   width: auto;
