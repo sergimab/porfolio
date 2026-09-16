@@ -212,6 +212,22 @@
 
 /* ── Añadir un momento ── */
 
+/* El panel ocupa el hueco de las cuatro categorías: el texto y «Mis momentos»
+   se quedan donde estaban y debajo cambia el contenido, así que se lee como que
+   se abre algo ahí y no como que se ha ido a otra pantalla.
+   Se puede desplazar por si el formulario no cabe en el hueco. */
+.ev-app-panel {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding: 5cqw 11.5cqw 6cqw;
+  border-top: 0.28cqw solid #252221;
+}
+.ev-app-panel::-webkit-scrollbar {
+  display: none;
+}
+
 /* El hueco de la foto: el color de la categoría, muy rebajado para el fondo y
    entero para el borde. Es lo único que distingue una anotación de otra. */
 .ev-app-hueco-foto {

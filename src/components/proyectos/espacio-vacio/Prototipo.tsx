@@ -58,12 +58,11 @@ type Ctx = {
   t: T;
   horas: number;
   setHoras: (h: number) => void;
-  // Qué categoría se está anotando. La elige la pantalla de momentos y la lee
-  // la de añadir, que es la misma para las cuatro: lo único que cambia es el
-  // color y el rótulo, y hacer cuatro pantallas iguales para eso sería
-  // copiarlas tres veces.
-  categoria: string;
-  setCategoria: (c: string) => void;
+  // La categoría que se está anotando, o nula si no hay ninguna. Añadir un
+  // momento no es otra pantalla: es un panel que se abre ENCIMA de las cuatro
+  // categorías y ocupa su sitio, con el texto y «Mis momentos» quietos arriba.
+  abierta: string | null;
+  setAbierta: (c: string | null) => void;
 };
 
 // La cabecera: el logotipo y, en las pantallas que lo piden, la flecha de
@@ -607,6 +606,9 @@ type Pantalla = {
   // apartados, y deshacer el último paso te devolvería a «Mis datos» en vez de
   // salir del perfil, que es lo que espera quien pulsa.
   atrasVa?: string;
+  // Y antes de volver, la pantalla tiene su oportunidad: si devuelve cierto, se
+  // ha ocupado ella —cerrando un panel, por ejemplo— y no se sale.
+  alVolver?: (c: Ctx) => boolean;
   // Y se vuelve con la flecha de la cabecera en vez de con el botón de abajo.
   // Lo llevan las pantallas cuyo pie ya tiene su propio botón —los formularios
   // y la última—, donde un «Atrás» abajo serían dos botones amontonados.
@@ -1170,71 +1172,75 @@ const PANTALLAS: Pantalla[] = [
     flecha: true,
     atrasVa: "home",
     plena: true,
-    cuerpo: (c) => (
-      <div className="ev-app-momentos">
-        <div className="ev-app-momentos-alto">
-          <p className="ev-app-texto es-guia">
-            {c.t(
-              "Añade en este apartado cosas importantes para ti. Como creas momentos de calidad que fomentan tu crecimiento personal o tus conexiones con las personas y el mundo real.",
-              "Add the things that matter to you here: the moments that feed your own growth or your ties to people and the real world."
-            )}
-          </p>
-          <Boton clase="es-centrado" onClick={() => c.ir("galeria")}>
-            {c.t("Mis momentos", "My moments")}
-          </Boton>
-        </div>
-        {/* Las cuatro categorías, en cuadrante. Las divisiones llegan hasta los
-            cantos de la pantalla, como en el diseño. */}
-        <div className="ev-app-cuadrante">
-          {CATEGORIAS.map((cat) => (
-            <button
-              key={cat.id}
-              type="button"
-              className="ev-app-casilla"
-              onClick={() => {
-                c.setCategoria(cat.id);
-                c.ir("momento-nuevo");
-              }}
-            >
-              <span>{c.t(cat.es, cat.en)}</span>
-              <Mas color={cat.color} />
-            </button>
-          ))}
-        </div>
-      </div>
-    ),
-  },
-  {
-    id: "momento-nuevo",
-    es: "Momentos · Añadir",
-    en: "Moments · Add",
-    atras: true,
-    flecha: true,
-    atrasVa: "momentos",
-    arranque: 30,
+    // Con el panel abierto, la flecha lo cierra en vez de salir de la pantalla:
+    // es el gesto que espera quien acaba de abrirlo.
+    alVolver: (c) => {
+      if (!c.abierta) return false;
+      c.setAbierta(null);
+      return true;
+    },
     cuerpo: (c) => {
-      const cat = CATEGORIAS.find((x) => x.id === c.categoria) ?? CATEGORIAS[0];
+      const cat = CATEGORIAS.find((x) => x.id === c.abierta);
       return (
-        <>
-          {/* El hueco de la foto, teñido del color de la categoría: es lo único
-              que distingue una anotación de otra, así que manda en la pantalla. */}
-          <div
-            className="ev-app-hueco-foto"
-            style={{
-              borderColor: cat.color,
-              background: `color-mix(in srgb, ${cat.color} 14%, #fff)`,
-            }}
-          >
-            <Mas color={cat.color} />
+        <div className="ev-app-momentos">
+          <div className="ev-app-momentos-alto">
+            <p className="ev-app-texto es-guia">
+              {c.t(
+                "Añade en este apartado cosas importantes para ti. Como creas momentos de calidad que fomentan tu crecimiento personal o tus conexiones con las personas y el mundo real.",
+                "Add the things that matter to you here: the moments that feed your own growth or your ties to people and the real world."
+              )}
+            </p>
+            <Boton clase="es-centrado" onClick={() => c.ir("galeria")}>
+              {c.t("Mis momentos", "My moments")}
+            </Boton>
           </div>
-          <span className="ev-oculto">{c.t(cat.es, cat.en)}</span>
-          <Desplegable texto="10 / 01 / 2024" />
-          <Campo texto={c.t("Descripción", "Description")} />
-          <Desplegable texto={c.t("1 hora", "1 hour")} />
-          <Boton clase="es-centrado es-guardar" onClick={() => c.ir("galeria")}>
-            {c.t("Guardar", "Save")}
-          </Boton>
-        </>
+
+          {cat ? (
+            // El panel de añadir, en el hueco de las cuatro categorías.
+            <div className="ev-app-panel">
+              <span className="ev-oculto">{c.t(cat.es, cat.en)}</span>
+              {/* El hueco de la foto, teñido del color de la categoría: es lo
+                  único que distingue una anotación de otra, así que manda. */}
+              <div
+                className="ev-app-hueco-foto"
+                style={{
+                  borderColor: cat.color,
+                  background: `color-mix(in srgb, ${cat.color} 14%, #fff)`,
+                }}
+              >
+                <Mas color={cat.color} />
+              </div>
+              <Desplegable texto="10 / 01 / 2024" />
+              <Campo texto={c.t("Descripción", "Description")} />
+              <Desplegable texto={c.t("1 hora", "1 hour")} />
+              <Boton
+                clase="es-centrado"
+                onClick={() => {
+                  c.setAbierta(null);
+                  c.ir("galeria");
+                }}
+              >
+                {c.t("Guardar", "Save")}
+              </Boton>
+            </div>
+          ) : (
+            // Las cuatro categorías, en cuadrante. Las divisiones llegan hasta
+            // los cantos de la pantalla, como en el diseño.
+            <div className="ev-app-cuadrante">
+              {CATEGORIAS.map((x) => (
+                <button
+                  key={x.id}
+                  type="button"
+                  className="ev-app-casilla"
+                  onClick={() => c.setAbierta(x.id)}
+                >
+                  <span>{c.t(x.es, x.en)}</span>
+                  <Mas color={x.color} />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       );
     },
   },
@@ -1289,7 +1295,7 @@ export default function Prototipo() {
   // que se tomó, así que hace falta la pila entera.
   const [camino, setCamino] = useState<string[]>(["carga"]);
   const [horas, setHoras] = useState(3);
-  const [categoria, setCategoria] = useState("relaciones");
+  const [abierta, setAbierta] = useState<string | null>(null);
   // La carga tiene dos momentos: el isotipo quieto esperando, y la animación
   // corriendo desde que se pulsa comenzar hasta que entra la bienvenida.
   const [arrancando, setArrancando] = useState(false);
@@ -1334,7 +1340,7 @@ export default function Prototipo() {
     return () => clearTimeout(reloj);
   }, [arrancando, ir]);
 
-  const ctx: Ctx = { ir, t, horas, setHoras, categoria, setCategoria };
+  const ctx: Ctx = { ir, t, horas, setHoras, abierta, setAbierta };
 
   return (
     <section className="ev-proto">
@@ -1352,9 +1358,11 @@ export default function Prototipo() {
                 <Cabecera
                   atras={
                     actual.flecha
-                      ? actual.atrasVa
-                        ? () => volverA(actual.atrasVa as string)
-                        : atras
+                      ? () => {
+                          if (actual.alVolver?.(ctx)) return;
+                          if (actual.atrasVa) volverA(actual.atrasVa);
+                          else atras();
+                        }
                       : undefined
                   }
                   t={t}
