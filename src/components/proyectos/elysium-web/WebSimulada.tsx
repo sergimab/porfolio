@@ -67,10 +67,11 @@ export default function WebSimulada() {
       )}
 
       {/* El hilo de vuelta al portfolio, siempre disponible: sin él, quien entra
-          aquí desde el proyecto se queda encerrado. Va discreto y por encima de
-          la galaxia. */}
-      <Link className="websim-salir" href="/proyecto/u1">
-        Volver al proyecto
+          aquí se queda encerrado. Lleva a la parrilla de UI/UX, que es de donde
+          se viene: la web ya no cuelga de una página de proyecto, es el
+          proyecto. Va discreto y por encima de la galaxia. */}
+      <Link className="websim-salir" href="/?cat=uiux">
+        Volver al portfolio
       </Link>
     </div>
   );

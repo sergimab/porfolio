@@ -45,7 +45,7 @@ export default function DisenoLanding() {
             {/* Vuelve al proyecto, no a la categoría: esta página es una parte
                 de la Web de Elysium, y saltar a la parrilla de UI/UX se saltaría
                 el escalón intermedio. */}
-            <BackCapsule category="uiux" href="/proyecto/u1" rotulo="Web de Elysium" />
+            <BackCapsule category="uiux" href="/elysium/web" rotulo="Web de Elysium" />
           </span>
 
           <div className="project-meta">

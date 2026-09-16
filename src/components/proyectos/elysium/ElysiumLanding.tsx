@@ -200,7 +200,7 @@ export default function ElysiumLanding() {
         />
 
         <CtaBanner
-          href="/proyecto/u1"
+          href="/elysium/web"
           es="Ver la web de Elysium"
           en="See the Elysium website"
           imagen="/banners/elysium-web.webp"

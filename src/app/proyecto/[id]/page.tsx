@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import BackCapsule from "@/components/shared/BackCapsule";
@@ -14,7 +15,6 @@ import NewslettersLanding from "@/components/proyectos/iberdrola/NewslettersLand
 import IconografiaLanding from "@/components/proyectos/iberdrola/IconografiaLanding";
 import ElysiumLanding from "@/components/proyectos/elysium/ElysiumLanding";
 import DiscoElysiumLanding from "@/components/proyectos/disco-elysium/DiscoElysiumLanding";
-import ElysiumWebLanding from "@/components/proyectos/elysium-web/ElysiumWebLanding";
 import EspacioVacioLanding from "@/components/proyectos/espacio-vacio/EspacioVacioLanding";
 import AppEspacioVacioLanding from "@/components/proyectos/app-espacio-vacio/AppLanding";
 
@@ -23,7 +23,6 @@ const LANDINGS: Record<string, React.ComponentType> = {
   i3: NewslettersLanding,
   i4: IconografiaLanding,
   i5: IlustracionesLanding,
-  u1: ElysiumWebLanding,
   u2: AppEspacioVacioLanding,
   d1: ElysiumLanding,
   e1: DiscoElysiumLanding,
@@ -52,8 +51,17 @@ const titles: Record<string, string> = {
   e1: "Disco Elysium",
 };
 
+// La web de Elysium no tiene página de proyecto: al pulsarla se abre la web.
+// Aquí solo se redirige, para que los enlaces de siempre —la tarjeta de la
+// home, la franja de la página de 3D— sigan valiendo sin tocarlos uno a uno.
+const REDIRECCIONES: Record<string, string> = {
+  u1: "/elysium/web",
+};
+
 export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const destino = REDIRECCIONES[id];
+  if (destino) redirect(destino);
   const Landing = LANDINGS[id];
 
   return (
