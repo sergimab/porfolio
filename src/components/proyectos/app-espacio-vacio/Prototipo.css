@@ -1,8 +1,10 @@
 @import "../espacio-vacio/fuente.css";
 
-/* El alta de la app, programada, dentro de un móvil. */
+/* El alta de la app, programada, dentro de un móvil.
+   El aire de arriba lo separa del párrafo de entrada: sin él, el aparato
+   arrancaba pegado al texto y los dos parecían el mismo bloque. */
 .ev-proto {
-  margin: 8px 0 48px;
+  margin: 64px 0 48px;
 }
 
 .ev-proto-caja {
@@ -64,14 +66,34 @@
 }
 
 /* ── La app ── */
+
+/* LA ESCALA DE LA APP, en un sitio. Todo lo de dentro sale de estos cinco
+   pasos: antes cada pantalla se había ido ajustando por su cuenta y había ocho
+   cuerpos distintos conviviendo —3, 3,2, 3,4, 3,6, 4, 4,4…—, que es lo que hacía
+   que una pantalla pareciera de otra app que la de al lado.
+   Van en `cqw`, o sea en porcentaje del ancho del móvil, para que la pantalla
+   escale entera como una pieza. */
 .ev-app {
+  --texto: 3.6cqw;      /* el cuerpo de lectura */
+  --menudo: 3.2cqw;     /* rótulos, botones y campos */
+  --rotulo: 4.2cqw;     /* las entradas de menú y las pestañas */
+  --titulo: 4.8cqw;     /* el título de cada pantalla */
+  --titulazo: 6.1cqw;   /* solo el de la bienvenida */
+
+  /* Y EL RITMO VERTICAL, también en un sitio: cada hueco es uno de estos
+     cuatro, así que todas las pantallas respiran igual. */
+  --aire-min: 2.6cqw;
+  --aire: 4cqw;
+  --aire-max: 7cqw;
+  --margen: 11.5cqw;    /* el margen lateral de la app */
+
   position: absolute;
   inset: 0;
   font-family: "Clash Grotesk", system-ui, sans-serif;
   /* El negro de la marca, no un negro cualquiera. */
   color: #252221;
-  font-size: 4cqw;
-  line-height: 1.5;
+  font-size: var(--texto);
+  line-height: 1.6;
   /* Cada pantalla entra con un desplazamiento mínimo. Corto a propósito: una
      app cambia de pantalla casi de golpe, y una transición lucida aquí se
      leería como una web, no como un móvil. */
@@ -151,10 +173,12 @@
   right: 0;
   top: 0;
   bottom: 0;
-  padding: 66cqw 11.5cqw 0;
+  padding: 66cqw var(--margen) 0;
 }
+/* La de las casillas empieza más arriba que las demás porque lleva un texto
+   largo y una rejilla, pero no tan arriba como para pegarse al logotipo. */
 .ev-app-cuerpo.es-alto {
-  padding-top: 26cqw;
+  padding-top: 32cqw;
 }
 /* Las pantallas que se pintan enteras —la home— no llevan los márgenes del
    cuerpo: sus bandas tienen que llegar hasta los cantos. */
@@ -173,26 +197,24 @@
   border: 0.28cqw solid #252221;
 }
 .ev-app-boton.es-encargar {
-  margin-top: 7cqw;
+  margin-top: var(--aire-max);
 }
 
 /* Los campos del envío van más sueltos que los del perfil: aquí no hay botón al
    lado, así que la línea puede llegar de lado a lado. */
 .ev-app-envio {
-  margin-top: 7cqw;
+  margin-top: var(--aire-max);
 }
 
 /* El aviso del pedido: solo texto, así que ni foto ni márgenes de galería. */
 .ev-app-popup-caja.es-aviso {
-  padding: 7cqw 6cqw 8cqw;
+  padding: var(--aire-max);
 }
 .ev-app-popup-caja.es-aviso .ev-app-titulo {
-  font-size: 5cqw;
-  margin-bottom: 4cqw;
+  font-size: var(--titulo);
+  margin-bottom: var(--aire);
 }
-.ev-app-popup-caja.es-aviso .ev-app-texto {
-  font-size: 3.6cqw;
-}
+
 
 /* ── Momentos ── */
 
@@ -207,7 +229,7 @@
 }
 .ev-app-momentos-alto {
   flex: 0 0 auto;
-  padding: 0 11.5cqw 8cqw;
+  padding: 0 var(--margen) var(--aire-max);
 }
 
 /* Las cuatro categorías, dos por dos, con los hilos de separación cruzando la
@@ -229,7 +251,7 @@
   background: none;
   color: inherit;
   font: inherit;
-  font-size: 4cqw;
+  font-size: var(--rotulo);
   font-weight: 500;
   text-transform: uppercase;
   text-align: center;
@@ -271,7 +293,7 @@
   min-height: 0;
   overflow-y: auto;
   scrollbar-width: none;
-  padding: 5cqw 11.5cqw 6cqw;
+  padding: var(--aire-max) var(--margen);
   border-top: 0.28cqw solid #252221;
 }
 .ev-app-panel::-webkit-scrollbar {
@@ -285,7 +307,7 @@
   align-items: center;
   justify-content: center;
   aspect-ratio: 3 / 2;
-  margin-bottom: 5cqw;
+  margin-bottom: var(--aire-max);
   border: 0.28cqw solid;
 }
 
@@ -299,7 +321,7 @@
   margin-bottom: 2.6cqw;
   padding: 2.2cqw 2.6cqw;
   border: 0.28cqw solid #252221;
-  font-size: 3.2cqw;
+  font-size: var(--menudo);
 }
 .ev-app-campo.es-desplegable svg {
   width: 3.4cqw;
@@ -316,7 +338,7 @@
 
 /* ── La galería ── */
 .ev-app-mes {
-  margin-bottom: 8cqw;
+  margin-bottom: var(--aire-max);
 }
 /* Tres columnas y cada anotación en la suya: es lo que le da el aire de collage
    en vez de rejilla cerrada. Las filas se cierran solas. */
@@ -377,7 +399,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8cqw;
+  padding: var(--margen);
   box-sizing: border-box;
   background: rgba(37, 34, 33, 0.45);
   animation: ev-popup 180ms ease-out both;
@@ -397,7 +419,7 @@
   max-height: 100%;
   overflow-y: auto;
   scrollbar-width: none;
-  padding: 5cqw;
+  padding: var(--aire);
   box-sizing: border-box;
   background: #fff;
   border: 0.28cqw solid #252221;
@@ -409,11 +431,11 @@
   display: block;
   width: 100%;
   height: auto;
-  margin-bottom: 4cqw;
+  margin-bottom: var(--aire);
 }
 .ev-app-popup-caja p {
-  margin: 0 0 2.4cqw;
-  font-size: 4cqw;
+  margin: 0 0 var(--aire-min);
+  font-size: var(--texto);
 }
 .ev-app-popup-fecha {
   font-weight: 500;
@@ -423,7 +445,7 @@
   align-items: center;
   gap: 1.6cqw;
   margin-bottom: 1.6cqw;
-  font-size: 3.6cqw;
+  font-size: var(--texto);
 }
 .ev-app-momento img {
   display: block;
@@ -437,7 +459,7 @@
 .ev-app-pestanas {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 6cqw;
+  margin-bottom: var(--aire-max);
 }
 .ev-app-pestana {
   padding: 0 0 1cqw;
@@ -446,7 +468,7 @@
   background: none;
   color: inherit;
   font: inherit;
-  font-size: 4cqw;
+  font-size: var(--rotulo);
   font-weight: 600;
   text-transform: uppercase;
   cursor: pointer;
@@ -484,14 +506,14 @@
 }
 
 .ev-app-periodo {
-  margin: 0 0 7cqw;
+  margin: 0 0 var(--aire-max);
   font-size: 5.4cqw;
   font-weight: 600;
   text-transform: uppercase;
 }
 
 .ev-app-titulo.es-recuento {
-  margin-bottom: 4cqw;
+  margin-bottom: var(--aire);
 }
 
 /* El recuento: el número dentro de su color y el nombre al lado. */
@@ -503,9 +525,9 @@
 .ev-app-cuentas li {
   display: flex;
   align-items: center;
-  gap: 3cqw;
-  margin-bottom: 3cqw;
-  font-size: 3.6cqw;
+  gap: var(--aire-min);
+  margin-bottom: var(--aire-min);
+  font-size: var(--texto);
 }
 .ev-app-cuenta-n {
   flex: 0 0 auto;
@@ -517,7 +539,7 @@
   padding: 0 1.2cqw;
   border-radius: 50%;
   box-sizing: border-box;
-  font-size: 3.2cqw;
+  font-size: var(--menudo);
   font-weight: 700;
 }
 /* Los espacios vacíos no llevan color: van en una caja cuadrada, que es
@@ -531,14 +553,14 @@
 
 /* La ficha: el nombre en grande y debajo la edad y el correo, apretados. */
 .ev-app-ficha {
-  margin-bottom: 5cqw;
+  margin-bottom: var(--aire-max);
 }
 .ev-app-ficha p {
   margin: 0;
-  font-size: 3.4cqw;
+  font-size: var(--texto);
 }
 .ev-app-ficha-nombre {
-  font-size: 4.8cqw !important;
+  font-size: var(--titulo) !important;
   font-weight: 600;
   text-transform: uppercase;
   margin-bottom: 0.6cqw !important;
@@ -555,7 +577,7 @@
 /* En «Mis datos» es un sello pequeño arriba, no la pieza principal. */
 .ev-app-retrato.es-sello {
   width: 25cqw;
-  margin-bottom: 5cqw;
+  margin-bottom: var(--aire-max);
 }
 
 /* El hueco para la cara: la misma caja que ocupará el retrato, con el óvalo de
@@ -579,7 +601,7 @@
 /* La fila de botones de estas pantallas va pegada al contenido, no separada
    como la de la bienvenida. */
 .ev-app-fila.es-pegada {
-  margin-top: 6cqw;
+  margin-top: var(--aire-max);
 }
 
 /* ── Mis datos ── */
@@ -587,8 +609,8 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 4cqw;
-  margin-bottom: 4.4cqw;
+  gap: var(--aire);
+  margin-bottom: var(--aire);
 }
 .ev-app-dato-campo {
   flex: 1 1 auto;
@@ -599,7 +621,7 @@
   align-items: center;
   gap: 1.6cqw;
   margin: 0 0 1.4cqw;
-  font-size: 3.2cqw;
+  font-size: var(--menudo);
   font-weight: 600;
   text-transform: uppercase;
 }
@@ -614,7 +636,7 @@
   margin: 0;
   padding-bottom: 1.2cqw;
   border-bottom: 0.2cqw solid #252221;
-  font-size: 3.4cqw;
+  font-size: var(--texto);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -627,7 +649,7 @@
   background: #fff;
   color: inherit;
   font: inherit;
-  font-size: 3cqw;
+  font-size: var(--menudo);
   font-weight: 600;
   cursor: pointer;
   transition: background 140ms ease, color 140ms ease;
@@ -638,7 +660,7 @@
   color: #fff;
 }
 .ev-app-boton.es-guardar {
-  margin-top: 6cqw;
+  margin-top: var(--aire-max);
 }
 
 /* ── La guía ──
@@ -656,18 +678,18 @@
   display: none;
 }
 
-/* Los textos de la guía, un punto por debajo del cuerpo normal: son bloques
-   largos y a cuerpo grande no cabrían sin partir la lectura en dos pantallas. */
+/* Los textos largos de la guía llevan algo más de aire entre párrafos, pero el
+   mismo cuerpo que el resto: son para leer, y encogerlos era lo que hacía que
+   unas pantallas se vieran de otro tamaño que las demás. */
 .ev-app-texto.es-guia {
-  font-size: 3.2cqw;
-  margin-bottom: 4cqw;
+  margin-bottom: var(--aire);
 }
 /* Un segundo rótulo dentro de la misma pantalla necesita aire por arriba. */
 .ev-app-titulo.es-segundo {
-  margin-top: 6cqw;
+  margin-top: var(--aire-max);
 }
 .ev-app-boton.es-vincular {
-  margin-top: 10cqw;
+  margin-top: var(--aire-max);
 }
 
 /* La lista de la portada de la guía: los botones centrados y del ancho de su
@@ -687,7 +709,7 @@
 }
 .ev-app-boton.es-menu {
   padding: 2.4cqw 3.2cqw;
-  font-size: 3cqw;
+  font-size: var(--menudo);
 }
 
 /* ── La home ──
@@ -730,7 +752,7 @@
   background: none;
   color: inherit;
   font: inherit;
-  font-size: 4.4cqw;
+  font-size: var(--rotulo);
   font-weight: 500;
   letter-spacing: 0.02em;
   text-transform: uppercase;
@@ -772,7 +794,7 @@ button.ev-app-banda:focus-visible {
 
 .ev-app-titulo {
   margin: 0 0 3cqw;
-  font-size: 6.1cqw;
+  font-size: var(--titulazo);
   font-weight: 700;
   line-height: 1.12;
   letter-spacing: 0.005em;
@@ -783,9 +805,9 @@ button.ev-app-banda:focus-visible {
    bienvenida. */
 .ev-app-titulo.es-suelto,
 .ev-app-titulo.es-centrado {
-  font-size: 4.8cqw;
+  font-size: var(--titulo);
   font-weight: 600;
-  margin-bottom: 4.4cqw;
+  margin-bottom: var(--aire);
 }
 /* El de «Crear cuenta», un peso por debajo: encabeza una lista de campos, no un
    texto, y ahí pesa menos. */
@@ -797,15 +819,13 @@ button.ev-app-banda:focus-visible {
 }
 
 .ev-app-texto {
-  margin: 0 0 3.4cqw;
+  margin: 0 0 var(--aire);
 }
 .ev-app-texto.es-fuerte {
   font-weight: 600;
-  margin-top: 5cqw;
+  margin-top: var(--aire);
 }
-.ev-app-texto.es-arriba {
-  font-size: 3.2cqw;
-}
+
 
 /* ── Botones ── */
 .ev-app-boton {
@@ -815,7 +835,7 @@ button.ev-app-banda:focus-visible {
   background: #fff;
   color: inherit;
   font: inherit;
-  font-size: 3.2cqw;
+  font-size: var(--menudo);
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -841,11 +861,11 @@ button.ev-app-banda:focus-visible {
   left: 11.5cqw;
 }
 .ev-app-boton.es-suelto {
-  margin-top: 6cqw;
+  margin-top: var(--aire-max);
 }
 .ev-app-boton.es-centrado {
   display: block;
-  margin: 6cqw auto 0;
+  margin: var(--aire-max) auto 0;
 }
 
 .ev-app-fila {
@@ -871,7 +891,7 @@ button.ev-app-banda:focus-visible {
 .ev-app-campos {
   display: flex;
   flex-direction: column;
-  gap: 2.6cqw;
+  gap: var(--aire-min);
 }
 .ev-app-campo input {
   width: 100%;
@@ -882,7 +902,7 @@ button.ev-app-banda:focus-visible {
   background: #fff;
   color: inherit;
   font: inherit;
-  font-size: 3.2cqw;
+  font-size: var(--menudo);
   text-transform: uppercase;
   letter-spacing: 0.02em;
 }
@@ -904,14 +924,14 @@ button.ev-app-banda:focus-visible {
   padding: 2.2cqw 2.6cqw;
   border: 0.28cqw solid #252221;
   background: #fff;
-  font-size: 3.2cqw;
+  font-size: var(--menudo);
   text-transform: uppercase;
   letter-spacing: 0.02em;
   /* El alto lo fija una línea de texto: si el campo se quedara sin contenido
      —el primer golpe de reloj aún no ha escrito nada— encogería y la lista de
      campos daría un salto. */
   line-height: 1.5;
-  min-height: calc(3.2cqw * 1.5);
+  min-height: calc(var(--menudo) * 1.5);
 }
 /* Los campos de contraseña: el punto de esta tipografía se apoya muy abajo, casi
    en la línea base, así que la fila de puntos quedaba descolgada dentro de la
@@ -926,7 +946,7 @@ button.ev-app-banda:focus-visible {
 .ev-app-tecleado i {
   display: inline-block;
   width: 0.3cqw;
-  height: 3.2cqw;
+  height: var(--menudo);
   margin-left: 0.4cqw;
   vertical-align: -0.4cqw;
   background: #252221;
@@ -945,7 +965,7 @@ button.ev-app-banda:focus-visible {
 
 /* ── La ecuación de «¿Cómo funciona?» ── */
 .ev-app-ecuacion {
-  margin: 7cqw 0 0;
+  margin: var(--aire-max) 0 0;
   text-align: center;
   font-weight: 600;
   line-height: 2;
@@ -958,7 +978,7 @@ button.ev-app-banda:focus-visible {
 .ev-app-horas {
   display: flex;
   gap: 1.6cqw;
-  margin-top: 5cqw;
+  margin-top: var(--aire);
 }
 .ev-app-hora {
   width: 6cqw;
@@ -969,7 +989,7 @@ button.ev-app-banda:focus-visible {
   background: #fff;
   color: inherit;
   font: inherit;
-  font-size: 2.9cqw;
+  font-size: var(--menudo);
   line-height: 1;
   cursor: pointer;
   transition: background 140ms ease, color 140ms ease;
@@ -986,15 +1006,15 @@ button.ev-app-banda:focus-visible {
 .ev-app-rejilla {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  margin-top: 6cqw;
+  margin-top: var(--aire-max);
   /* Un solo hilo entre casillas: el borde exterior lo pone la propia rejilla y
      cada celda solo dibuja dos lados, para que no salgan líneas dobles. */
   border: 0.28cqw solid #252221;
 }
 .ev-app-rejilla span {
-  padding: 5cqw 0;
+  padding: var(--aire) 0;
   text-align: center;
-  font-size: 2.9cqw;
+  font-size: var(--menudo);
   border-bottom: 0.28cqw solid #252221;
 }
 .ev-app-rejilla span:nth-child(odd) {
@@ -1006,7 +1026,7 @@ button.ev-app-banda:focus-visible {
 
 /* ── Los cuatro asuntos del diario ── */
 .ev-app-asuntos {
-  margin: 7cqw 0 0;
+  margin: var(--aire-max) 0 0;
   padding: 0;
   list-style: none;
 }
@@ -1014,8 +1034,8 @@ button.ev-app-banda:focus-visible {
   display: flex;
   align-items: center;
   gap: 2.4cqw;
-  margin-bottom: 2.2cqw;
-  font-size: 3.2cqw;
+  margin-bottom: var(--aire-min);
+  font-size: var(--texto);
   font-weight: 600;
 }
 .ev-app-punto {
@@ -1045,6 +1065,20 @@ button.ev-app-banda:focus-visible {
 .ev-app-carga.es-video {
   width: 62cqw;
   mix-blend-mode: multiply;
+}
+
+/* El botón de comenzar dentro de la pantalla: debajo del isotipo, centrado.
+   Solo se enseña en estrecho; en ancho manda el de los mandos. */
+.ev-app-arranque {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  right: 0;
+  /* El isotipo está centrado y mide 26 de ancho, así que su borde de abajo cae
+     en la mitad más trece: el botón se cuelga de ahí con su propio aire. */
+  top: calc(50% + 13cqw + var(--aire-max));
+  display: none;
+  justify-content: center;
 }
 
 /* Etiqueta solo para lectores de pantalla. */
@@ -1132,6 +1166,14 @@ button.ev-app-banda:focus-visible {
   .ev-proto-mandos {
     flex: 0 0 auto;
     width: 100%;
+  }
+  /* Y comenzar se mete en la pantalla: los mandos quedan debajo del aparato, a
+     veces fuera de la vista, y ahí nadie encontraba por dónde arrancar. */
+  .ev-app-arranque {
+    display: flex;
+  }
+  .ev-proto-botones button.es-principal {
+    display: none;
   }
   .ev-proto-donde,
   .ev-proto-botones {

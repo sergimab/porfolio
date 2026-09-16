@@ -1600,6 +1600,19 @@ export default function Prototipo() {
                   </svg>
                 ))}
 
+              {/* En estrecho, el botón de comenzar va DENTRO de la pantalla,
+                  debajo del isotipo: allí los mandos quedan debajo del aparato y
+                  a veces fuera de la vista, así que nadie sabía cómo arrancar.
+                  En ancho se esconde y manda el de los mandos, que es el mismo
+                  botón. */}
+              {actual.id === "carga" && !arrancando && (
+                <div className="ev-app-arranque">
+                  <Boton clase="" onClick={comenzar}>
+                    {t("Comenzar", "Start")}
+                  </Boton>
+                </div>
+              )}
+
               <div
                 className={`ev-app-cuerpo${actual.id === "casillas" ? " es-alto" : ""}${
                   actual.centrado ? " es-centro" : ""
