@@ -1,44 +1,11 @@
 import LangText from "@/components/shared/LangText";
 import RotuloSeccion from "@/components/shared/RotuloSeccion";
-import { RUTA, TINTAS, GRADACIONES, SUBMARCAS } from "./marca";
+import { RUTA, TINTAS, GRADACIONES } from "./marca";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import LaminaGuias from "./LaminaGuias";
 import Tipografia from "./Tipografia";
 import "./Branding.css";
-
-// Una pieza de la marca, recortada con su archivo y pintada con lo que se le
-// pase: un color plano o un degradado. Ver marca.ts para por qué va como
-// máscara y no como imagen.
-function Pieza({
-  archivo,
-  ratio,
-  tinta,
-  ancho,
-}: {
-  archivo: string;
-  ratio: number;
-  tinta: string;
-  ancho: string;
-}) {
-  return (
-    <span
-      className="ym-pieza"
-      style={{
-        ["--ym-archivo" as string]: `url(${RUTA}/${archivo})`,
-        ["--ym-tinta" as string]: tinta,
-        ["--ym-ratio" as string]: String(ratio),
-        width: ancho,
-      }}
-      aria-hidden="true"
-    />
-  );
-}
-
-const MORADO = "#3C1F71";
-
-// Un degradado de abajo arriba a partir de la lista de paradas de la submarca.
-const degradar = (paradas: string[]) => `linear-gradient(0deg, ${paradas.join(", ")})`;
 
 // Los SVG que van incrustados se leen una vez, al construir la página.
 //
@@ -164,41 +131,6 @@ export default function Branding() {
         />
       </section>
 
-      {/* ── La inclusión dinámica ────────────────────────────────────────── */}
-      <section className="ym-seccion">
-        <RotuloSeccion es="Inclusión dinámica" en="Dynamic inclusion" />
-        <p className="ym-entradilla">
-          <LangText
-            es="Cada línea se queda con la marca y cambia de color. El degradado va del tono vivo abajo al profundo arriba, y de ahí salen las tintas de cada una."
-            en="Each line keeps the brand and changes colour. The gradient runs from the bright tone at the bottom to the deep one at the top, and each line's inks come from it."
-          />
-        </p>
-        <ul className="ym-lineas">
-          {SUBMARCAS.map((s) => (
-            <li key={s.id}>
-              <h3 className="ym-linea-nombre">{s.nombre}</h3>
-              <div className="ym-linea-pieza">
-                <Pieza archivo={s.archivo} ratio={s.ratio} ancho="100%" tinta={degradar(s.degradadoPieza ?? s.degradado)} />
-              </div>
-              <span className="ym-barra es-linea" style={{ background: `linear-gradient(90deg, ${s.degradado.join(", ")})` }} />
-              <ul className="ym-linea-tintas">
-                {s.tintas.map((t) => (
-                  <li key={t.hex}>
-                    <span className="ym-bolita" style={{ background: t.hex }} />
-                    <p className="ym-valores">
-                      CMYK: {t.cmyk}
-                      <br />
-                      RGB: {t.rgb}
-                      <br />
-                      WEB: {t.hex}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ))}
-        </ul>
-      </section>
     </div>
   );
 }
