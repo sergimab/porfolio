@@ -21,9 +21,14 @@ type Pieza = {
   // el borde de la pantalla y se queda invisible para siempre: era lo que
   // dejaba el montaje entero en blanco.
   ratio: number;
-  // Recorte exacto del aire transparente que el archivo lleva alrededor, medido
-  // sobre su canal alfa a resolución completa. Son porcentajes para la imagen
-  // dentro de su caja: cuánto se amplía y cuánto se desplaza.
+  // Recorte del aire transparente que el archivo lleva alrededor, medido sobre
+  // su canal alfa a resolución completa. Son porcentajes para la imagen dentro
+  // de su caja: cuánto se amplía y cuánto se desplaza.
+  //
+  // El contorno se mide con un umbral de alfa MUY BAJO, para que la sombra
+  // paralela cuente como parte de la pieza, y encima se deja un 3 % de colchón.
+  // Ajustando al contorno opaco, el recorte partía la sombra por la mitad y el
+  // corte se veía como una línea recta donde debía haber un degradado.
   //
   // Va así y no con object-fit: cover porque cover centra y escala hasta
   // cubrir, o sea que solo puede recortar por un eje y siempre a partes
@@ -122,8 +127,8 @@ const SOLAS: Pieza[] = [
 const APILADOS: Pieza[] = [
   {
     src: "/proyectos/espacio-vacio/mockup-4.webp",
-    ratio: 0.6937,
-    corte: { ancho: 174.06, izq: -37.77, arriba: -11.11 },
+    ratio: 0.7251,
+    corte: { ancho: 153.49, izq: -28.78, arriba: -7.68 },
 
     alt: "Piezas de la campaña en redes sociales",
     sx: -26,
@@ -131,8 +136,8 @@ const APILADOS: Pieza[] = [
   },
   {
     src: "/proyectos/espacio-vacio/mockup-5.webp",
-    ratio: 0.6937,
-    corte: { ancho: 174.06, izq: -37.77, arriba: -11.11 },
+    ratio: 0.7251,
+    corte: { ancho: 153.49, izq: -28.78, arriba: -7.68 },
 
     alt: "Perfil de Instagram de Espacio vacío",
     sx: -14,
@@ -150,8 +155,8 @@ const APILADOS: Pieza[] = [
 // lado.
 const GRANDE: Pieza = {
   src: "/proyectos/espacio-vacio/mockup-3.webp",
-  ratio: 0.4916,
-  corte: { ancho: 312.01, izq: -105.46, arriba: -5.29 },
+  ratio: 0.5404,
+  corte: { ancho: 257.73, izq: -77.06, arriba: -1.25 },
   alt: "Publicación de Instagram de la campaña",
   sx: 30,
   sy: 40,
