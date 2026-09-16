@@ -18,19 +18,16 @@
   margin-bottom: 72px;
   padding: 24px 0 8px;
 }
-/* Las piezas que existen en dos versiones, una por modo del sitio: se enseña
-   la que toca y la otra se queda fuera. Es para los archivos cuyo color vive
-   dentro del SVG y no se puede cambiar desde aquí. */
-.ym-trazos.es-claro,
-.ym-construccion.es-claro {
+/* El logotipo de trazos existe en dos versiones, una por modo del sitio: se
+   enseña la que toca y la otra se queda fuera. Su color vive dentro del SVG y
+   desde aquí no se puede cambiar. */
+.ym-trazos.es-claro {
   display: none;
 }
-:root[data-theme="light"] .ym-trazos.es-oscuro,
-:root[data-theme="light"] .ym-construccion.es-oscuro {
+:root[data-theme="light"] .ym-trazos.es-oscuro {
   display: none;
 }
-:root[data-theme="light"] .ym-trazos.es-claro,
-:root[data-theme="light"] .ym-construccion.es-claro {
+:root[data-theme="light"] .ym-trazos.es-claro {
   display: block;
 }
 
@@ -58,13 +55,6 @@
    logotipo está dibujado para verse encima de él. */
 .ym-lamina.es-marca {
   background: #3c1f71;
-}
-/* La construcción no lleva lámina: se apoya en el papel de la página. */
-.ym-construccion {
-  display: block;
-  width: min(760px, 100%);
-  height: auto;
-  margin: 12px auto 0;
 }
 .ym-lamina-pieza {
   max-width: 100%;

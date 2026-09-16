@@ -1,0 +1,67 @@
+/* La lámina de construcción: sin caja, sobre el papel de la página. */
+.ym-construccion {
+  width: min(760px, 100%);
+  margin: 12px auto 0;
+}
+.ym-construccion svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* Las guías, del color del texto de la página —claras sobre oscuro y oscuras
+   sobre claro—, en vez del turquesa que traen escrito dentro. El selector es
+   más específico que el `<style>` del propio archivo, que es lo que le deja
+   ganar. */
+.ym-construccion svg [class] {
+  stroke: currentColor;
+}
+/* Y el trazo, más fino de lo que viene: a 2 px la guía pesaba tanto como la
+   letra que está midiendo. */
+.ym-construccion svg .es-guia {
+  stroke-width: 1px;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.75;
+}
+
+/* ── Dibujándose ──
+   Las guías primero, de izquierda a derecha y cada una trazándose entera; las
+   letras después, cuando el andamio ya está puesto. */
+.ym-construccion .es-guia {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+.ym-construccion.es-visible .es-guia {
+  animation: ym-trazar 700ms cubic-bezier(0.33, 1, 0.68, 1) both;
+}
+@keyframes ym-trazar {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.ym-construccion .es-letra {
+  opacity: 0;
+}
+.ym-construccion.es-visible .es-letra {
+  animation: ym-aparece 800ms ease-out 900ms both;
+}
+@keyframes ym-aparece {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Con el movimiento reducido no hay nada que dibujar: la lámina está y ya. */
+@media (prefers-reduced-motion: reduce) {
+  .ym-construccion .es-guia,
+  .ym-construccion .es-letra {
+    animation: none;
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  .ym-construccion .es-guia {
+    opacity: 0.75;
+  }
+}

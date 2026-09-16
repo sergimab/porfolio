@@ -1,6 +1,9 @@
 import LangText from "@/components/shared/LangText";
 import RotuloSeccion from "@/components/shared/RotuloSeccion";
 import { RUTA, PIEZAS, TINTAS, GRADACIONES, SUBMARCAS } from "./marca";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import Construccion from "./Construccion";
 import "./Branding.css";
 
 // Una pieza de la marca, recortada con su archivo y pintada con lo que se le
@@ -35,6 +38,12 @@ const MORADO = "#3C1F71";
 
 // Un degradado de abajo arriba a partir de la lista de paradas de la submarca.
 const degradar = (paradas: string[]) => `linear-gradient(0deg, ${paradas.join(", ")})`;
+
+// El archivo se lee una vez, al construir la página.
+const construccion = readFileSync(
+  join(process.cwd(), "public/proyectos/yelmo/branding/composicion-logo-alt.svg"),
+  "utf8"
+);
 
 export default function Branding() {
   return (
@@ -73,27 +82,10 @@ export default function Branding() {
       {/* ── El logotipo ──────────────────────────────────────────────────── */}
       <section className="ym-seccion">
         <RotuloSeccion es="Construcción del logotipo" en="Logotype construction" />
-        {/* La construcción, directamente sobre el papel de la página: sin caja
-            ni fondo propio. Va como imagen y no como máscara porque el color
-            forma parte del dibujo.
-
-            Dos archivos, uno por modo: las guías dejan el turquesa de la marca
-            y se pintan del color del texto de la página —claras sobre oscuro y
-            oscuras sobre claro—, que es lo que hace que se lean igual de bien
-            en los dos. El logotipo no se toca. */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          className="ym-construccion es-oscuro"
-          src={`${RUTA}/construccion-oscuro.svg`}
-          alt="Construcción del logotipo de Yelmo sobre su retícula de círculos"
-        />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          className="ym-construccion es-claro"
-          src={`${RUTA}/construccion-claro.svg`}
-          alt=""
-          aria-hidden="true"
-        />
+        {/* La construcción, dibujándose al llegar. El SVG se lee aquí —en el
+            servidor— y se le pasa al componente, que es quien lo anima: así la
+            fuente sigue siendo el archivo de la carpeta del proyecto. */}
+        <Construccion markup={construccion} />
       </section>
 
       {/* ── El isotipo ───────────────────────────────────────────────────── */}
