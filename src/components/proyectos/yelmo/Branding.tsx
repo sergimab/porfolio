@@ -5,6 +5,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import LaminaGuias from "./LaminaGuias";
 import Tipografia from "./Tipografia";
+import Aplicaciones from "./Aplicaciones";
 import "./Branding.css";
 
 // Los SVG que van incrustados se leen una vez, al construir la página.
@@ -121,6 +122,8 @@ export default function Branding() {
         </ul>
       </section>
 
+      {/* ── Las aplicaciones ─────────────────────────────────────────────── */}
+      <Aplicaciones />
     </div>
   );
 }
