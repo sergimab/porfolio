@@ -37,6 +37,6 @@
     /* Y se aparta de la palabra en vez de montarse sobre ella: el rasgo de la
        cursiva barre hacia la derecha y con el texto pequeño tapaba la primera
        letra. */
-    margin-right: 5px;
+    margin-right: 1px;
   }
 }

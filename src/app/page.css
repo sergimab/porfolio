@@ -250,8 +250,10 @@
     -webkit-text-stroke-width: 4px;
     /* Y en vez de meterse bajo la palabra, se APARTA de ella: el rasgo de la
        cursiva barre hacia la derecha y, con el texto pequeño, se comía la
-       primera letra por mucho que el contorno le abriera hueco. */
-    margin-right: 8px;
+       primera letra por mucho que el contorno le abriera hueco. Lo justo para
+       que no la toque: apartándola más, las dos dejaban de leerse como una
+       misma palabra. */
+    margin-right: 0;
   }
   .project-hero-rest { font-size: 20px; }
 }
