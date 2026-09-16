@@ -1,0 +1,18 @@
+/* La fuente del proyecto, servida desde el propio sitio.
+   Un solo archivo para todos los pesos: es la versión VARIABLE, así que el
+   navegador interpola cualquiera entre 200 y 700 a partir de 47 KB en vez de
+   descargarse un archivo por peso.
+   `swap`: hasta que llega, el texto se lee con la fuente del sistema en vez de
+   quedarse invisible.
+
+   Vive aparte porque la usan dos sitios que no se llaman entre sí: la muestra
+   tipográfica de la página de marca y la app programada de la página de UI/UX.
+   Declararla en el CSS de una de ellas dejaba a la otra sin fuente según por
+   qué página se entrara. */
+@font-face {
+  font-family: "Clash Grotesk";
+  src: url("/fonts/ClashGrotesk-Variable.woff2") format("woff2-variations");
+  font-weight: 200 700;
+  font-style: normal;
+  font-display: swap;
+}

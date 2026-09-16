@@ -2,6 +2,7 @@ import Link from "next/link";
 import BackCapsule from "@/components/shared/BackCapsule";
 import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
 import LangText from "@/components/shared/LangText";
+import ToolIcons from "@/components/shared/ToolIcons";
 import Prototipo from "./Prototipo";
 import "./Marca.css";
 
@@ -43,25 +44,16 @@ export default function AppLanding() {
 
         <ProjectHeroTitle es="App Espacio vacío" en="Empty space app" />
 
-        <div className="ev-papel project-text">
-          <p>
+        {/* La entradilla destacada con los programas al lado, como en el resto
+            de páginas de proyecto. */}
+        <div className="project-introrow ev-papel">
+          <p className="project-intro">
             <LangText
-              es="La app es el centro de la campaña: es donde la persona **ve cuánto tiempo se le va** en las redes sociales y lo pone al lado del que dedica a lo que de verdad le importa."
-              en="The app is the heart of the campaign: it's where you **see how much time is going** into social media and set it against the time you give to what actually matters."
+              es="La app es el centro de la campaña: es donde la persona ve cuánto tiempo se le va en las redes sociales y lo pone al lado del que dedica a lo que de verdad le importa. El alta son diez pantallas, y está aquí entera y navegable."
+              en="The app is the heart of the campaign: it's where you see how much time is going into social media and set it against the time you give to what actually matters. Onboarding is ten screens, and here it is in full, playable."
             />
           </p>
-          <p>
-            <LangText
-              es="El alta es la parte más delicada del recorrido. Antes de enseñar un solo dato hay que explicar de qué va esto, pedir un compromiso —cuánto tiempo te gustaría dedicarle al día— y enseñar cómo se traduce ese compromiso en las casillas que irán desapareciendo de tu foto. Son **diez pantallas** para que, al llegar a la primera de verdad, ya se entienda el trato."
-              en="Onboarding is the delicate part. Before showing a single figure you have to explain what this is, ask for a commitment —how long you'd like to spend each day— and show how that turns into the slots that will disappear from your photo. **Ten screens**, so that by the time you reach the real first screen the deal is already clear."
-            />
-          </p>
-          <p>
-            <LangText
-              es="Abajo está el alta entera, **navegable**: se pasa pulsando los botones de la propia app, igual que el prototipo."
-              en="Below is the whole onboarding, **playable**: you move through it by tapping the app's own buttons, just like the prototype."
-            />
-          </p>
+          <ToolIcons tools={["Figma"]} />
         </div>
 
         <Prototipo />

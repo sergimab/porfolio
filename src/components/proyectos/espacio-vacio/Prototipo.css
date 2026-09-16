@@ -1,16 +1,8 @@
-/* El alta de la app dentro de un móvil, navegable. */
-.ev-proto {
-  margin: 56px 0 48px;
-}
+@import "./fuente.css";
 
-.ev-proto-titulo {
-  display: inline-block;
-  margin: 0 0 32px;
-  padding: 9px 16px;
-  border: 1px solid currentColor;
-  font-size: 15px;
-  font-weight: 500;
-  background: var(--background);
+/* El alta de la app, programada, dentro de un móvil. */
+.ev-proto {
+  margin: 8px 0 48px;
 }
 
 .ev-proto-caja {
@@ -22,14 +14,11 @@
 
 /* ── El móvil ──
    Marco en CSS y no una imagen: se ve nítido a cualquier tamaño, pesa cero y
-   —lo que importa aquí— el hueco de la pantalla es EXACTO, así que la captura
-   no queda ni desplazada ni recortada dentro de él. */
+   —lo que importa aquí— el hueco de la pantalla es exacto. */
 .ev-movil {
   position: relative;
   flex: 0 0 auto;
   width: 300px;
-  /* La proporción sale del archivo: 860 × 1864. El marco añade su grosor por
-     los cuatro lados. */
   padding: 10px;
   border-radius: 44px;
   background: #1b1b1d;
@@ -39,101 +28,297 @@
 
 .ev-pantalla {
   position: relative;
+  /* La proporción del diseño de Figma: 860 × 1864. */
   aspect-ratio: 860 / 1864;
   border-radius: 34px;
   overflow: hidden;
   /* Blanco fijo, no el papel de la página: es la pantalla de la app, y la app
-     es blanca en los dos modos. */
+     es blanca en los dos modos del sitio. */
   background: #fff;
+  /* LA PIEZA CLAVE de todo el apartado: al declararlo contenedor de consulta,
+     `cqw` pasa a medir el uno por ciento del ancho del MÓVIL y no de la
+     ventana. Todo lo de dentro va en esa unidad, así que la pantalla escala
+     entera —tipografía, márgenes, botones— igual que una app al cambiar de
+     dispositivo. Con píxeles habría que reescribir cada medida en cada tamaño;
+     con porcentajes, el texto no escalaría con lo demás. */
+  container-type: inline-size;
 }
 
-/* Las capturas, todas puestas y solo una a la vista. El fundido es corto: lo
-   que se quiere es que no haya parpadeo, no una transición lucida —una app
-   cambia de pantalla de golpe. */
-.ev-captura {
+/* ── La app ── */
+.ev-app {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  transition: opacity 180ms linear;
-  user-select: none;
+  font-family: "Clash Grotesk", system-ui, sans-serif;
+  /* El negro de la marca, no un negro cualquiera. */
+  color: #252221;
+  font-size: 3.5cqw;
+  line-height: 1.5;
+  /* Cada pantalla entra con un desplazamiento mínimo. Corto a propósito: una
+     app cambia de pantalla casi de golpe, y una transición lucida aquí se
+     leería como una web, no como un móvil. */
+  animation: ev-app-entra 220ms ease-out both;
 }
-.ev-captura.es-visible {
-  opacity: 1;
+@keyframes ev-app-entra {
+  from {
+    opacity: 0;
+    transform: translateX(3%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ev-app {
+    animation: none;
+  }
 }
 
-/* La animación del isotipo sobre la pantalla de carga.
-   `multiply` borra su fondo casi blanco contra el blanco de la pantalla, así
-   que no se ve el recuadro del vídeo. Y va donde va el isotipo en la pantalla:
-   centrado en el hueco que deja el logotipo de arriba. */
-.ev-carga {
+/* La cabecera: la flecha de volver a la izquierda y el logotipo centrado. El
+   logotipo va centrado en la PANTALLA, no en el hueco que deja la flecha, así
+   que se posiciona por su cuenta. */
+.ev-app-cabecera {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 22cqw;
+}
+.ev-app-logo {
+  position: absolute;
+  left: 50%;
+  top: 15.4cqw;
+  transform: translateX(-50%);
+  width: 20.5cqw;
+  height: auto;
+}
+.ev-app-atras {
+  position: absolute;
+  left: 7cqw;
+  top: 14.4cqw;
+  width: 7cqw;
+  height: 7cqw;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+.ev-app-atras svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* El cuerpo. Arranca a la misma altura en casi todas las pantallas —es lo que
+   hace que la secuencia se lea como una sola— y solo la de las casillas, que
+   trae un texto largo y una rejilla, empieza más arriba. */
+.ev-app-cuerpo {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  padding: 66cqw 11.5cqw 0;
+}
+.ev-app-cuerpo.es-alto {
+  padding-top: 26cqw;
+}
+
+.ev-app-titulo {
+  margin: 0 0 3cqw;
+  font-size: 6.1cqw;
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+}
+/* Los títulos de una línea de las pantallas de texto van en el cuerpo normal,
+   no en negrita: es lo que tienen en el diseño. */
+.ev-app-titulo.es-suelto {
+  font-size: 4.3cqw;
+  font-weight: 400;
+  margin-bottom: 4.4cqw;
+}
+.ev-app-titulo.es-centrado {
+  text-align: center;
+  font-size: 4.3cqw;
+  font-weight: 400;
+}
+
+.ev-app-texto {
+  margin: 0 0 3.4cqw;
+}
+.ev-app-texto.es-fuerte {
+  font-weight: 600;
+  margin-top: 5cqw;
+}
+.ev-app-texto.es-arriba {
+  font-size: 2.9cqw;
+}
+
+/* ── Botones ── */
+.ev-app-boton {
+  display: inline-block;
+  padding: 2.6cqw 3.4cqw;
+  border: 0.35cqw solid #252221;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+  font-size: 2.9cqw;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 140ms ease, color 140ms ease;
+}
+.ev-app-boton:hover,
+.ev-app-boton:focus-visible {
+  background: #252221;
+  color: #fff;
+}
+/* El de avanzar vive abajo a la derecha en toda la secuencia de instrucciones:
+   la misma posición pantalla tras pantalla es lo que deja el pulgar quieto. */
+.ev-app-boton.es-pie {
+  position: absolute;
+  right: 11.5cqw;
+  bottom: 33cqw;
+}
+.ev-app-boton.es-suelto {
+  margin-top: 6cqw;
+}
+.ev-app-boton.es-centrado {
+  display: block;
+  margin: 6cqw auto 0;
+}
+
+.ev-app-fila {
+  display: flex;
+  gap: 4cqw;
+  /* Los dos botones caen al 51 % del alto, como en el diseño: entre la
+     pregunta y ellos hay un hueco a propósito. */
+  margin-top: 11cqw;
+}
+
+/* ── Formularios ── */
+.ev-app-campos {
+  display: flex;
+  flex-direction: column;
+  gap: 2.6cqw;
+}
+.ev-app-campo input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 2.2cqw 2.6cqw;
+  border: 0.28cqw solid #252221;
+  border-radius: 0;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+  font-size: 2.9cqw;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.ev-app-campo input::placeholder {
+  color: #252221;
+  opacity: 1;
+}
+.ev-app-campo input:focus {
+  outline: 0.28cqw solid #a484ff;
+  outline-offset: 0.3cqw;
+}
+
+/* ── La ecuación de «¿Cómo funciona?» ── */
+.ev-app-ecuacion {
+  margin: 7cqw 0 0;
+  text-align: center;
+  font-weight: 600;
+  line-height: 2;
+}
+.ev-app-ecuacion span {
+  display: block;
+}
+
+/* ── Las horas, que ahora se eligen de verdad ── */
+.ev-app-horas {
+  display: flex;
+  gap: 1.6cqw;
+  margin-top: 5cqw;
+}
+.ev-app-hora {
+  width: 5.4cqw;
+  height: 5.4cqw;
+  padding: 0;
+  border: 0.28cqw solid #252221;
+  border-radius: 50%;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+  font-size: 2.6cqw;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 140ms ease, color 140ms ease;
+}
+.ev-app-hora:hover {
+  background: #eee;
+}
+.ev-app-hora.es-elegida {
+  background: #252221;
+  color: #fff;
+}
+
+/* ── La rejilla de casillas ── */
+.ev-app-rejilla {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 6cqw;
+  /* Un solo hilo entre casillas: el borde exterior lo pone la propia rejilla y
+     cada celda solo dibuja dos lados, para que no salgan líneas dobles. */
+  border: 0.28cqw solid #252221;
+}
+.ev-app-rejilla span {
+  padding: 5cqw 0;
+  text-align: center;
+  font-size: 2.6cqw;
+  border-bottom: 0.28cqw solid #252221;
+}
+.ev-app-rejilla span:nth-child(odd) {
+  border-right: 0.28cqw solid #252221;
+}
+.ev-app-rejilla span:nth-last-child(-n + 2) {
+  border-bottom: 0;
+}
+
+/* ── Los cuatro asuntos del diario ── */
+.ev-app-asuntos {
+  margin: 7cqw 0 0;
+  padding: 0;
+  list-style: none;
+}
+.ev-app-asuntos li {
+  display: flex;
+  align-items: center;
+  gap: 2.4cqw;
+  margin-bottom: 2.2cqw;
+  font-size: 2.9cqw;
+  font-weight: 600;
+}
+.ev-app-punto {
+  width: 2.6cqw;
+  height: 2.6cqw;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+
+/* La animación del isotipo, sobre la pantalla de carga. */
+.ev-app-carga {
   position: absolute;
   z-index: 2;
   left: 50%;
   top: 46%;
   transform: translate(-50%, -50%);
   width: 62%;
-  opacity: 0;
   pointer-events: none;
   mix-blend-mode: multiply;
 }
-.ev-carga.es-visible {
-  opacity: 1;
-}
 
-/* ── Las zonas pulsables ──
-   Invisibles por defecto: la gracia es pulsar el botón de la app, no un botón
-   que hemos pintado encima. Se encienden con el mando «Ver zonas» y, al pasar
-   el ratón, se marca la que está debajo. */
-.ev-zona {
-  position: absolute;
-  z-index: 4;
-  margin: 0;
-  padding: 0;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  background: transparent;
-  cursor: pointer;
-  /* Un pelo de margen alrededor del botón medido: el dedo —y el ratón— no
-     apuntan al píxel. */
-  outline-offset: 2px;
-}
-.ev-zona:hover,
-.ev-zona:focus-visible {
-  border-color: #ff5c5c;
-  background: rgba(255, 92, 92, 0.12);
-}
-.ev-pantalla.es-pistas .ev-zona {
-  border-color: rgba(255, 92, 92, 0.85);
-  background: rgba(255, 92, 92, 0.1);
-  animation: ev-zona-late 1800ms ease-in-out infinite;
-}
-@keyframes ev-zona-late {
-  50% {
-    background: rgba(255, 92, 92, 0.22);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .ev-pantalla.es-pistas .ev-zona {
-    animation: none;
-  }
-}
-
-/* La flecha de volver de la cabecera de la app: está en el mismo sitio en todas
-   las pantallas que la llevan, así que su zona se escribe aquí y no en cada
-   una. */
-.ev-zona.es-atras {
-  left: 7.5%;
-  top: 5.4%;
-  width: 12%;
-  height: 3.6%;
-}
-
-/* El nombre de cada zona solo para quien navegue con lector de pantalla o con
-   el teclado: encima no se ve nada, pero se anuncia a dónde lleva. */
-.ev-zona-texto {
+/* Etiqueta solo para lectores de pantalla. */
+.ev-oculto {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -179,8 +364,7 @@
   cursor: pointer;
   transition: background 160ms ease, color 160ms ease, opacity 160ms ease;
 }
-.ev-proto-botones button:hover:not(:disabled),
-.ev-proto-botones button.es-activo {
+.ev-proto-botones button:hover:not(:disabled) {
   background: var(--foreground);
   color: var(--background);
 }
@@ -198,8 +382,8 @@
 
 @media (max-width: 760px) {
   /* En vertical el móvil va arriba y los mandos debajo: uno al lado del otro,
-     a 375 px el aparato se quedaría en la mitad de ancho y no se leería nada de
-     lo que hay dentro, que es justo lo que se viene a ver. */
+     a 375 px el aparato se quedaría en media columna y no se leería nada de lo
+     que hay dentro, que es justo lo que se viene a ver. */
   .ev-proto-caja {
     flex-direction: column;
     gap: 24px;
@@ -211,9 +395,7 @@
     max-width: none;
     width: 100%;
   }
-  .ev-proto-donde {
-    justify-content: center;
-  }
+  .ev-proto-donde,
   .ev-proto-botones {
     justify-content: center;
   }

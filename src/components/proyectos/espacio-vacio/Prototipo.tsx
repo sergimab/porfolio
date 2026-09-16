@@ -1,160 +1,344 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import LangText from "@/components/shared/LangText";
+import { useLang } from "@/components/shared/useLang";
 import "./Prototipo.css";
 
-// El alta de la app, navegable de verdad.
+// El alta de la app, dentro de un móvil y navegable.
 //
-// Las pantallas son las de Figma exportadas a PNG, pero NO van como una galería:
-// van dentro de un móvil y se pasan pulsando sus propios botones, que es como se
-// usa una app. Enseñar una rejilla de diez capturas cuenta qué se dibujó;
-// esto cuenta cómo se recorre, que es lo que hay que juzgar de un diseño de
-// producto.
+// Las pantallas están PROGRAMADAS, no son capturas de Figma: el texto es texto
+// —se puede seleccionar, lo lee un lector de pantalla y cambia de idioma con el
+// resto del sitio—, los botones son botones de verdad y todo se dibuja nítido a
+// cualquier tamaño. Una captura pesa más, se ve borrosa al ampliar y obliga a
+// poner zonas invisibles encima para fingir que se puede pulsar.
 //
-// Las zonas pulsables están MEDIDAS sobre los archivos —buscando las cajas
-// oscuras de cada botón en el mapa de grises— y van en porcentaje de la
-// pantalla, así que siguen encima de su botón a cualquier tamaño.
+// Las medidas van en `cqw`: uno por ciento del ANCHO DEL MÓVIL, que es un
+// contenedor de consulta. Así la pantalla escala como una sola pieza —igual que
+// una app cambiando de tamaño de dispositivo— en vez de descuadrarse cuando el
+// móvil se hace pequeño en el teléfono.
 
-const BASE = "/proyectos/espacio-vacio/app";
+// Los cuatro asuntos que se registran a mano, cada uno con su color de la
+// paleta: los mismos que la marca da a los cuartos del isotipo.
+const ASUNTOS = [
+  { color: "#FF5C5C", es: "Relaciones personales", en: "Personal relationships" },
+  { color: "#A484FF", es: "Aficiones", en: "Hobbies" },
+  { color: "#A1F08D", es: "Hábitos saludables", en: "Healthy habits" },
+  { color: "#FFAE11", es: "Logros", en: "Achievements" },
+];
 
-// Una zona pulsable: el rectángulo del botón y a dónde lleva.
-type Zona = {
-  x: number;
-  y: number;
-  ancho: number;
-  alto: number;
-  va: string;
-  es: string;
-  en: string;
+// Lo que dura la animación del isotipo, más un respiro.
+const CARGA = 4400;
+
+// Traductor corto. Aquí no sirve <LangText>, que solo admite cadenas: dentro de
+// la app hay textos con un dato metido en medio y marcadores de posición de los
+// campos, que son atributos.
+type T = (es: string, en: string) => string;
+
+type Ctx = {
+  ir: (id: string) => void;
+  t: T;
+  horas: number;
+  setHoras: (h: number) => void;
 };
+
+function Cabecera({ atras, t }: { atras?: () => void; t: T }) {
+  return (
+    <header className="ev-app-cabecera">
+      {atras && (
+        <button type="button" className="ev-app-atras" onClick={atras}>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M15 4 7 12l8 8" fill="none" stroke="currentColor" strokeWidth="2.2" />
+          </svg>
+          <span className="ev-oculto">{t("Volver", "Back")}</span>
+        </button>
+      )}
+      {/* El logotipo, del mismo archivo que usa todo el proyecto. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        className="ev-app-logo"
+        src="/proyectos/espacio-vacio/espacio-vacio-logo.svg"
+        alt="Espacio vacío"
+      />
+    </header>
+  );
+}
+
+// Un botón de la app: contorno fino y rótulo en versalitas, como en el diseño.
+function Boton({
+  onClick,
+  children,
+  clase,
+}: {
+  onClick: () => void;
+  children: React.ReactNode;
+  clase?: string;
+}) {
+  return (
+    <button type="button" className={`ev-app-boton${clase ? ` ${clase}` : ""}`} onClick={onClick}>
+      {children}
+    </button>
+  );
+}
+
+// Un campo del formulario. Va como <input> de verdad y no como una caja
+// dibujada: se puede escribir dentro, que es lo que uno espera al ver un campo.
+function Campo({ texto }: { texto: string }) {
+  return (
+    <label className="ev-app-campo">
+      <span className="ev-oculto">{texto}</span>
+      <input type="text" placeholder={texto} />
+    </label>
+  );
+}
 
 type Pantalla = {
   id: string;
-  archivo: string;
   es: string;
   en: string;
-  zonas: Zona[];
-  // La flecha de volver de la cabecera. La llevan todas menos las dos primeras.
   atras?: boolean;
+  cuerpo: (c: Ctx) => React.ReactNode;
 };
-
-// El botón SIGUIENTE cae en el mismo sitio en toda la secuencia de
-// instrucciones, así que se escribe una vez.
-const SIGUIENTE = (va: string): Zona => ({
-  x: 54.9,
-  y: 80.5,
-  ancho: 35.3,
-  alto: 4.3,
-  va,
-  es: "Siguiente",
-  en: "Next",
-});
 
 const PANTALLAS: Pantalla[] = [
   {
     id: "carga",
-    archivo: "01-loading.webp",
     es: "Carga",
     en: "Splash",
-    // Sin zonas: pasa sola cuando termina la animación del isotipo.
-    zonas: [],
+    // Solo el logotipo y la animación; pasa sola.
+    cuerpo: () => null,
   },
   {
     id: "bienvenida",
-    archivo: "02-bienvenida.webp",
     es: "Bienvenida",
     en: "Welcome",
-    // La única bifurcación del alta: cuenta nueva o entrar con la de siempre.
-    zonas: [
-      { x: 11.2, y: 51.3, ancho: 35.3, alto: 4.5, va: "crear", es: "Soy nuevo", en: "I'm new" },
-      { x: 53.5, y: 51.3, ancho: 35.3, alto: 4.5, va: "entrar", es: "Tengo cuenta", en: "I have an account" },
-    ],
+    cuerpo: (c) => (
+      <>
+        <h3 className="ev-app-titulo">
+          {c.t("Bienvenido a Espacio Vacío", "Welcome to Empty Space")}
+        </h3>
+        <p className="ev-app-texto">
+          {c.t("¿Eres nuevo usuario, o ya tienes cuenta?", "Are you new here, or do you already have an account?")}
+        </p>
+        <div className="ev-app-fila">
+          <Boton onClick={() => c.ir("crear")}>{c.t("Soy nuevo", "I'm new")}</Boton>
+          <Boton onClick={() => c.ir("entrar")}>{c.t("Tengo cuenta", "I have an account")}</Boton>
+        </div>
+      </>
+    ),
   },
   {
     id: "crear",
-    archivo: "03-crear-cuenta.webp",
     es: "Crear cuenta",
     en: "Sign up",
     atras: true,
-    zonas: [
-      { x: 12.6, y: 73.2, ancho: 35.3, alto: 4.3, va: "quienes", es: "Crear cuenta", en: "Create account" },
-    ],
+    cuerpo: (c) => (
+      <>
+        <h3 className="ev-app-titulo es-suelto">{c.t("Crear cuenta", "Create account")}</h3>
+        <div className="ev-app-campos">
+          <Campo texto={c.t("Nombre completo", "Full name")} />
+          <Campo texto={c.t("Correo electrónico", "Email")} />
+          <Campo texto={c.t("Fecha de nacimiento", "Date of birth")} />
+          <Campo texto={c.t("Contraseña", "Password")} />
+          <Campo texto={c.t("Confirmar contraseña", "Confirm password")} />
+        </div>
+        <Boton clase="es-suelto" onClick={() => c.ir("quienes")}>
+          {c.t("Crear cuenta", "Create account")}
+        </Boton>
+      </>
+    ),
   },
   {
     id: "entrar",
-    archivo: "04-entrar.webp",
     es: "Entrar",
     en: "Log in",
     atras: true,
-    zonas: [
-      { x: 12.1, y: 51.7, ancho: 35.3, alto: 4.5, va: "quienes", es: "Entrar", en: "Log in" },
-    ],
+    cuerpo: (c) => (
+      <>
+        <h3 className="ev-app-titulo es-suelto">{c.t("Entrar", "Log in")}</h3>
+        <div className="ev-app-campos">
+          <Campo texto={c.t("Correo electrónico", "Email")} />
+          <Campo texto={c.t("Contraseña", "Password")} />
+        </div>
+        <Boton clase="es-suelto" onClick={() => c.ir("quienes")}>
+          {c.t("Entrar", "Log in")}
+        </Boton>
+      </>
+    ),
   },
   {
     id: "quienes",
-    archivo: "05-quienes-somos.webp",
     es: "¿Quiénes somos?",
     en: "Who we are",
     atras: true,
-    zonas: [SIGUIENTE("comofunciona")],
+    cuerpo: (c) => (
+      <>
+        <h3 className="ev-app-titulo es-suelto">{c.t("¿Quiénes somos?", "Who we are")}</h3>
+        <p className="ev-app-texto">
+          {c.t(
+            "En un mundo cada vez más conectado, pasamos horas consumiendo contenido sin sentido y perdiendo la oportunidad de vivir momentos significativos y reales.",
+            "In an ever more connected world, we spend hours consuming meaningless content and missing the chance to live real, meaningful moments."
+          )}
+        </p>
+        <p className="ev-app-texto">
+          {c.t(
+            "Nuestra misión es reconectar con lo que realmente importa. Redescubre la satisfacción de invertir tiempo en experiencias valiosas.",
+            "Our mission is to reconnect with what really matters. Rediscover how good it feels to put your time into things worth doing."
+          )}
+        </p>
+        <Boton clase="es-pie" onClick={() => c.ir("comofunciona")}>
+          {c.t("Siguiente", "Next")}
+        </Boton>
+      </>
+    ),
   },
   {
     id: "comofunciona",
-    archivo: "06-como-funciona.webp",
     es: "¿Cómo funciona?",
     en: "How it works",
     atras: true,
-    zonas: [SIGUIENTE("pregunta")],
+    cuerpo: (c) => (
+      <>
+        <h3 className="ev-app-titulo es-suelto">{c.t("¿Cómo funciona?", "How it works")}</h3>
+        <p className="ev-app-texto">
+          {c.t(
+            "Sube una foto de tu cara a la aplicación y vincula el tiempo que usas en redes sociales. Esto quedará registrado en un calendario diario.",
+            "Upload a photo of your face and link it to the time you spend on social media. It all gets logged in a daily calendar."
+          )}
+        </p>
+        {/* La ecuación de la que va todo: el tiempo se convierte en trozos de
+            tu cara que se van. */}
+        <p className="ev-app-ecuacion">
+          <span>{c.t("Tiempo en redes sociales", "Time on social media")}</span>
+          <span>=</span>
+          <span>{c.t("Casillas que desaparecerán de tu foto", "Slots that will vanish from your photo")}</span>
+        </p>
+        <Boton clase="es-pie" onClick={() => c.ir("pregunta")}>
+          {c.t("Siguiente", "Next")}
+        </Boton>
+      </>
+    ),
   },
   {
     id: "pregunta",
-    archivo: "07-pregunta.webp",
     es: "La pregunta",
     en: "The question",
     atras: true,
-    zonas: [SIGUIENTE("casillas")],
+    cuerpo: (c) => (
+      <>
+        <h3 className="ev-app-titulo">{c.t("Una pregunta importante", "One important question")}</h3>
+        <p className="ev-app-texto es-fuerte">
+          {c.t(
+            "¿Cuánto es el tiempo idóneo que te gustaría invertir en redes sociales cada día?",
+            "How much time would you ideally like to spend on social media each day?"
+          )}
+        </p>
+        {/* Se elige de verdad, y lo elegido viaja a la pantalla siguiente: en
+            el prototipo esto era un número escrito a mano. */}
+        <div className="ev-app-horas">
+          {[1, 2, 3, 4, 5, 6, 7, 8].map((h) => (
+            <button
+              key={h}
+              type="button"
+              className={`ev-app-hora${h === c.horas ? " es-elegida" : ""}`}
+              onClick={() => c.setHoras(h)}
+              aria-pressed={h === c.horas}
+            >
+              {h}
+            </button>
+          ))}
+        </div>
+        <Boton clase="es-pie" onClick={() => c.ir("casillas")}>
+          {c.t("Siguiente", "Next")}
+        </Boton>
+      </>
+    ),
   },
   {
     id: "casillas",
-    archivo: "08-casillas.webp",
     es: "Las casillas",
     en: "The slots",
     atras: true,
-    zonas: [SIGUIENTE("diario")],
+    cuerpo: (c) => (
+      <>
+        <p className="ev-app-texto es-arriba">
+          {c.t("Has elegido como tiempo idóneo diario ", "You've set ")}
+          <b>{c.horas}h</b>
+          {c.t(
+            ". Cada día se dividirá en 6 casillas, las cuales estarán divididas en ",
+            " a day as your ideal. Each day is split into 6 slots of "
+          )}
+          <b>{c.t("45 min", "45 min")}</b>
+          {c.t(
+            " de consumo. Cada 45 min que pases consumiendo redes, desaparecerá una casilla, si excedes el máximo, esa porción de tu foto desaparecerá.",
+            " each. Every 45 minutes you spend on social media, one slot goes; go over the limit and that part of your photo disappears."
+          )}
+        </p>
+        <div className="ev-app-rejilla">
+          {Array.from({ length: 6 }, (_, i) => (
+            <span key={i}>{c.t("45 min / día", "45 min / day")}</span>
+          ))}
+        </div>
+        <Boton clase="es-pie" onClick={() => c.ir("diario")}>
+          {c.t("Siguiente", "Next")}
+        </Boton>
+      </>
+    ),
   },
   {
     id: "diario",
-    archivo: "09-diario.webp",
     es: "Tu diario",
     en: "Your diary",
     atras: true,
-    zonas: [SIGUIENTE("listo")],
+    cuerpo: (c) => (
+      <>
+        <h3 className="ev-app-titulo es-suelto">{c.t("Somos tu diario", "We're your diary")}</h3>
+        <p className="ev-app-texto">
+          {c.t(
+            "Añade en este apartado cosas importantes para ti. Como creas momentos de calidad que fomentan tu crecimiento personal o tus conexiones con las personas y el mundo real.",
+            "Add the things that matter to you here: the moments that feed your own growth or your ties to people and the real world."
+          )}
+        </p>
+        <ul className="ev-app-asuntos">
+          {ASUNTOS.map((a) => (
+            <li key={a.es}>
+              <span className="ev-app-punto" style={{ background: a.color }} aria-hidden="true" />
+              {c.t(a.es, a.en)}
+            </li>
+          ))}
+        </ul>
+        <Boton clase="es-pie" onClick={() => c.ir("listo")}>
+          {c.t("Siguiente", "Next")}
+        </Boton>
+      </>
+    ),
   },
   {
     id: "listo",
-    archivo: "10-listo.webp",
     es: "¿Listo?",
     en: "Ready?",
     atras: true,
-    zonas: [
-      { x: 32.6, y: 36.5, ancho: 35.3, alto: 4.5, va: "carga", es: "Vamos", en: "Let's go" },
-    ],
+    cuerpo: (c) => (
+      <>
+        <h3 className="ev-app-titulo es-centrado">{c.t("¿Listo para empezar?", "Ready to start?")}</h3>
+        <Boton clase="es-centrado" onClick={() => c.ir("carga")}>
+          {c.t("Vamos", "Let's go")}
+        </Boton>
+      </>
+    ),
   },
 ];
 
 const PORID = new Map(PANTALLAS.map((p) => [p.id, p]));
 
-// Lo que dura la animación del isotipo, más un respiro. Si algún día se
-// reexporta el vídeo con otra duración, hay que tocarlo aquí.
-const CARGA = 4400;
-
 export default function Prototipo() {
-  // El camino recorrido, no la pantalla suelta: la flecha de volver tiene que
-  // deshacer lo que se hizo —y del alta se puede llegar por dos ramas—, así que
-  // hace falta la pila entera y no un índice.
+  const lang = useLang();
+  const t = useCallback<T>((es, en) => (lang === "en" ? en : es), [lang]);
+
+  // El camino recorrido y no la pantalla suelta: del alta se sale por dos
+  // ramas —crear cuenta o entrar— y la flecha de volver tiene que deshacer la
+  // que se tomó, así que hace falta la pila entera.
   const [camino, setCamino] = useState<string[]>(["carga"]);
-  const [pistas, setPistas] = useState(false);
+  const [horas, setHoras] = useState(3);
   const actual = PORID.get(camino[camino.length - 1]) ?? PANTALLAS[0];
   const video = useRef<HTMLVideoElement>(null);
 
@@ -177,92 +361,44 @@ export default function Prototipo() {
       // el temporizador sigue y la pantalla avanza igual.
       v.play().catch(() => {});
     }
-    const t = setTimeout(() => ir("bienvenida"), CARGA);
-    return () => clearTimeout(t);
+    const reloj = setTimeout(() => ir("bienvenida"), CARGA);
+    return () => clearTimeout(reloj);
   }, [actual.id, ir]);
 
-  // Las imágenes, todas cargadas de antemano: son 200 KB entre las diez, y el
-  // parpadeo al pasar de pantalla arruinaría la sensación de estar usando algo.
-  useEffect(() => {
-    PANTALLAS.forEach((p) => {
-      const img = new Image();
-      img.src = `${BASE}/${p.archivo}`;
-    });
-  }, []);
+  const ctx: Ctx = { ir, t, horas, setHoras };
 
   return (
     <section className="ev-proto">
-      <h2 className="ev-proto-titulo">
-        <LangText es="El alta, paso a paso" en="Onboarding, step by step" />
-      </h2>
-
       <div className="ev-proto-caja">
         {/* El móvil. El marco es CSS —no una imagen— para que se vea nítido a
             cualquier tamaño y para que pese cero. */}
-        {/* Sin isla de cámara: las pantallas vienen diseñadas a sangre y el
-            logotipo de la app va justo arriba del todo, así que una isla
-            dibujada encima le caía encima y tapaba la marca. */}
         <div className="ev-movil">
-          <div className={`ev-pantalla${pistas ? " es-pistas" : ""}`}>
-            {PANTALLAS.map((p) => (
-              // Todas montadas y solo una visible: así el cambio es un fundido
-              // entre dos imágenes ya descargadas y no un hueco en blanco.
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                key={p.id}
-                className={`ev-captura${p.id === actual.id ? " es-visible" : ""}`}
-                src={`${BASE}/${p.archivo}`}
-                alt=""
-                aria-hidden={p.id !== actual.id}
-                draggable={false}
-              />
-            ))}
+          <div className="ev-pantalla">
+            {/* La clave fuerza a React a rehacer el cuerpo al cambiar de
+                pantalla, que es lo que dispara la entrada. */}
+            <div className="ev-app" key={actual.id}>
+              <Cabecera atras={actual.atras ? atras : undefined} t={t} />
 
-            {/* La animación del isotipo, encima de la pantalla de carga.
-                El vídeo viene con fondo casi blanco —#FDFDFD— y la pantalla es
-                blanca del todo: con `multiply` el blanco desaparece y solo
-                quedan las formas, así que no se ve el recuadro del vídeo. */}
-            <video
-              ref={video}
-              className={`ev-carga${actual.id === "carga" ? " es-visible" : ""}`}
-              src={`${BASE}/isotipo.mp4`}
-              muted
-              playsInline
-              preload="auto"
-              aria-hidden="true"
-            />
+              {/* La animación del isotipo de la pantalla de carga. El vídeo
+                  viene con fondo casi blanco —#FDFDFD— sobre una pantalla
+                  blanca: con `multiply` ese blanco desaparece y no se ve el
+                  recuadro. */}
+              {actual.id === "carga" && (
+                <video
+                  ref={video}
+                  className="ev-app-carga"
+                  src="/proyectos/espacio-vacio/app/isotipo.mp4"
+                  muted
+                  playsInline
+                  preload="auto"
+                  aria-hidden="true"
+                />
+              )}
 
-            {actual.atras && (
-              <button
-                type="button"
-                className="ev-zona es-atras"
-                onClick={atras}
-                title="Volver"
-              >
-                <span className="ev-zona-texto">
-                  <LangText es="Volver" en="Back" />
-                </span>
-              </button>
-            )}
-
-            {actual.zonas.map((z) => (
-              <button
-                key={z.va + z.x}
-                type="button"
-                className="ev-zona"
-                style={{
-                  left: `${z.x}%`,
-                  top: `${z.y}%`,
-                  width: `${z.ancho}%`,
-                  height: `${z.alto}%`,
-                }}
-                onClick={() => ir(z.va)}
-              >
-                <span className="ev-zona-texto">
-                  <LangText es={z.es} en={z.en} />
-                </span>
-              </button>
-            ))}
+              <div className={`ev-app-cuerpo${actual.id === "casillas" ? " es-alto" : ""}`}>
+                {actual.cuerpo(ctx)}
+              </div>
+            </div>
           </div>
         </div>
 
@@ -273,30 +409,23 @@ export default function Prototipo() {
             <span className="ev-proto-num">
               {String(PANTALLAS.indexOf(actual) + 1).padStart(2, "0")}
             </span>
-            <LangText es={actual.es} en={actual.en} />
+            {t(actual.es, actual.en)}
           </p>
 
           <div className="ev-proto-botones">
             <button type="button" onClick={atras} disabled={camino.length < 2}>
-              <LangText es="Atrás" en="Back" />
+              {t("Atrás", "Back")}
             </button>
             <button type="button" onClick={() => ir("carga")}>
-              <LangText es="Reiniciar" en="Restart" />
-            </button>
-            <button
-              type="button"
-              className={pistas ? "es-activo" : undefined}
-              onClick={() => setPistas((v) => !v)}
-            >
-              <LangText es="Ver zonas" en="Show hotspots" />
+              {t("Reiniciar", "Restart")}
             </button>
           </div>
 
           <p className="ev-proto-pie">
-            <LangText
-              es="Se recorre pulsando los botones de la propia app, como el prototipo de Figma."
-              en="You move through it by tapping the app's own buttons, like the Figma prototype."
-            />
+            {t(
+              "Está programada, no son capturas: se recorre pulsando los botones de la propia app.",
+              "It's built, not screenshots: you move through it with the app's own buttons."
+            )}
           </p>
         </div>
       </div>
