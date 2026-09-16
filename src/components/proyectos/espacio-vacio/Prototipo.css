@@ -138,6 +138,80 @@
 .ev-app-cuerpo.es-alto {
   padding-top: 26cqw;
 }
+/* Las pantallas que se pintan enteras —la home— no llevan los márgenes del
+   cuerpo: sus bandas tienen que llegar hasta los cantos. */
+.ev-app-cuerpo.es-plena {
+  padding: 0;
+}
+
+/* ── La home ──
+   Bandas apiladas con un hilo entre ellas, y las dos últimas en paralelo.
+   El reparto del alto sale del diseño y va como `flex-grow`, no en
+   porcentajes: así las cinco bandas se estiran juntas hasta llenar la pantalla
+   sea cual sea el alto del aparato, sin que sobre ni falte un hueco abajo. */
+.ev-app-home {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.ev-app-home-marca {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* La banda del logotipo es la de arriba y se lleva su propio trozo del
+     reparto, como una más. */
+  flex: 184 0 0;
+}
+.ev-app-home-marca img {
+  width: 44cqw;
+  height: auto;
+}
+
+/* Cada banda: su rótulo centrado y un hilo arriba que la separa de la de
+   encima. El hilo va ARRIBA y no abajo para que la última no cierre la
+   pantalla con una línea suelta contra el borde. */
+.ev-app-banda {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 0 0;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-top: 0.28cqw solid #252221;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 4.4cqw;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  text-align: center;
+}
+/* Solo las que llevan a algún sitio responden; las demás son un rótulo. */
+button.ev-app-banda {
+  cursor: pointer;
+  transition: background 140ms ease, color 140ms ease;
+}
+button.ev-app-banda:hover,
+button.ev-app-banda:focus-visible {
+  background: #252221;
+  color: #fff;
+}
+
+/* Las dos de abajo, en paralelo y separadas por un hilo vertical. */
+.ev-app-home-pie {
+  display: flex;
+  flex: 334 0 0;
+  min-height: 0;
+}
+.ev-app-home-pie .ev-app-banda {
+  flex: 1 1 0;
+}
+.ev-app-home-pie .ev-app-banda + .ev-app-banda {
+  border-left: 0.28cqw solid #252221;
+}
+
 /* La última pantalla es una pregunta y un botón: colgada de arriba como las
    demás quedaba todo apelotonado en el tercio alto y con media pantalla vacía
    debajo. Centrada, la pieza cae donde mira el ojo. */

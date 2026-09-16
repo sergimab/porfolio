@@ -26,6 +26,19 @@ const ASUNTOS = [
   { color: "#FFAE11", es: "Logros", en: "Achievements" },
 ];
 
+// La home: las bandas del menú, de arriba abajo. `alto` es el reparto del hueco
+// que queda bajo el logotipo, medido sobre el diseño; `va` es la pantalla a la
+// que lleva cada una, y las que aún no existen se pintan igual pero no navegan.
+const MENU: { es: string; en: string; alto: number; va?: string }[] = [
+  { es: "Calendario", en: "Calendar", alto: 184 },
+  { es: "Momentos", en: "Moments", alto: 186 },
+  { es: "Datos", en: "Data", alto: 192 },
+];
+const MENU_PIE: { es: string; en: string; va?: string }[] = [
+  { es: "Perfil", en: "Profile" },
+  { es: "Guía", en: "Guide" },
+];
+
 // Los cuatro cuartos del isotipo, los mismos trazados que en la página de
 // marca: la pieza se dibuja, no se trae como imagen.
 const CUARTOS = [
@@ -236,6 +249,35 @@ function CamposAuto({
   );
 }
 
+// Una banda del menú de la home. Cuando lleva a algún sitio es un botón; cuando
+// todavía no —el apartado está por hacer—, es solo su rótulo, para no prometer
+// una pulsación que no hace nada.
+function Banda({
+  texto,
+  alto,
+  va,
+  ir,
+}: {
+  texto: string;
+  alto?: number;
+  va?: string;
+  ir: (id: string) => void;
+}) {
+  const estilo = alto ? { flexGrow: alto } : undefined;
+  if (!va) {
+    return (
+      <div className="ev-app-banda" style={estilo}>
+        {texto}
+      </div>
+    );
+  }
+  return (
+    <button type="button" className="ev-app-banda" style={estilo} onClick={() => ir(va)}>
+      {texto}
+    </button>
+  );
+}
+
 type Pantalla = {
   id: string;
   es: string;
@@ -248,6 +290,9 @@ type Pantalla = {
   flecha?: boolean;
   // El cuerpo, centrado en el alto de la pantalla en vez de colgado de arriba.
   centrado?: boolean;
+  // La pantalla se pinta entera ella misma: sin cabecera común y sin los
+  // márgenes del cuerpo.
+  plena?: boolean;
   cuerpo: (c: Ctx) => React.ReactNode;
 };
 
@@ -491,10 +536,38 @@ const PANTALLAS: Pantalla[] = [
     cuerpo: (c) => (
       <>
         <h3 className="ev-app-titulo es-centrado">{c.t("¿Listo para empezar?", "Ready to start?")}</h3>
-        <Boton clase="es-centrado" onClick={() => c.ir("carga")}>
+        <Boton clase="es-centrado" onClick={() => c.ir("home")}>
           {c.t("Vamos", "Let's go")}
         </Boton>
       </>
+    ),
+  },
+  {
+    id: "home",
+    es: "Inicio",
+    en: "Home",
+    // Sin volver dentro de la pantalla: la home es el final del alta y en la
+    // app no se vuelve de ella a ninguna parte. Para deshacer el recorrido
+    // están los mandos de fuera del móvil.
+    // La home se pinta ella sola de borde a borde: el logotipo va dentro de su
+    // banda, no en la cabecera común, y las bandas llegan hasta los cantos de
+    // la pantalla.
+    plena: true,
+    cuerpo: (c) => (
+      <div className="ev-app-home">
+        <div className="ev-app-home-marca">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/proyectos/espacio-vacio/espacio-vacio-logo.svg" alt="Espacio vacío" />
+        </div>
+        {MENU.map((m) => (
+          <Banda key={m.es} texto={c.t(m.es, m.en)} alto={m.alto} va={m.va} ir={c.ir} />
+        ))}
+        <div className="ev-app-home-pie">
+          {MENU_PIE.map((m) => (
+            <Banda key={m.es} texto={c.t(m.es, m.en)} va={m.va} ir={c.ir} />
+          ))}
+        </div>
+      </div>
     ),
   },
 ];
@@ -558,7 +631,7 @@ export default function Prototipo() {
             <div className="ev-app" key={actual.id}>
               {/* La carga va sin cabecera: ahí la marca ya la pone la
                   animación del isotipo, y el logotipo arriba la repetía. */}
-              {actual.id !== "carga" && (
+              {actual.id !== "carga" && !actual.plena && (
                 <Cabecera atras={actual.flecha ? atras : undefined} t={t} />
               )}
 
@@ -590,7 +663,7 @@ export default function Prototipo() {
               <div
                 className={`ev-app-cuerpo${actual.id === "casillas" ? " es-alto" : ""}${
                   actual.centrado ? " es-centro" : ""
-                }`}
+                }${actual.plena ? " es-plena" : ""}`}
               >
                 {actual.cuerpo(ctx)}
                 {/* Volver, abajo y a la izquierda: enfrente del de avanzar y en
