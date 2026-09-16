@@ -43,11 +43,16 @@
      y se vuelve a llevar al rango 0..1. */
   --propio: clamp(0, (var(--avance) - var(--turno)) / 0.72, 1);
   opacity: var(--propio);
+  /* De CERO a su tamaño, no de un 60 %: así cada esfera nace en un punto en vez
+     de aparecer ya casi hecha y solo dar el último estirón, que es lo que se
+     veía antes. El centrado va en el translate y no en un transform-origin
+     porque `left`/`top` marcan la esquina; con la escala a cero el punto del
+     que nace sigue siendo el centro de su sitio. */
   transform: translate(
       calc(-50% + var(--dx) * (1 - var(--propio))),
       calc(-50% + var(--dy) * (1 - var(--propio)))
     )
-    scale(calc(0.6 + 0.4 * var(--propio)));
+    scale(var(--propio));
 }
 
 /* El móvil, delante de todo y centrado.
