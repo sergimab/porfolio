@@ -144,12 +144,29 @@
   }
 }
 
-/* Y el isotipo el último, cuando el andamio ya está puesto. */
+/* Y el isotipo el último, cuando el andamio ya está puesto.
+   Aparece y da una vuelta: el CONJUNTO gira hacia la izquierda mientras cada
+   esquina gira sobre sí misma hacia la derecha. Como las dos vueltas son
+   enteras, todo acaba exactamente donde empezó, y de paso es lo que hace que
+   el isotipo se lea como cuatro piezas sueltas sostenidas por su geometría y no
+   como un dibujo cerrado. */
 .ev-grid .ev-grid-iso {
   opacity: 0;
+  transform-box: view-box;
+  transform-origin: 35.77px 35.5px;
 }
 .ev-grid.es-visible .ev-grid-iso {
-  animation: ev-iso-entra 700ms cubic-bezier(0.22, 1, 0.36, 1) 760ms both;
+  animation: ev-iso-entra 700ms cubic-bezier(0.22, 1, 0.36, 1) 760ms both,
+    ev-iso-gira 2200ms cubic-bezier(0.62, 0, 0.3, 1) 900ms both;
+}
+/* Cada cuarto gira sobre su propio centro. `fill-box` es lo que hace que el
+   centro sea el de la esquina y no el del dibujo entero. */
+.ev-grid .ev-grid-iso path {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.ev-grid.es-visible .ev-grid-iso path {
+  animation: ev-cuarto-gira 2200ms cubic-bezier(0.62, 0, 0.3, 1) 900ms both;
 }
 @keyframes ev-iso-entra {
   from {
@@ -159,6 +176,22 @@
     opacity: 1;
   }
 }
+@keyframes ev-iso-gira {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+@keyframes ev-cuarto-gira {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 @media (prefers-reduced-motion: reduce) {
   .ev-grid .ev-guias > * {
@@ -166,8 +199,10 @@
     transform: none;
     animation: none;
   }
-  .ev-grid .ev-grid-iso {
+  .ev-grid .ev-grid-iso,
+  .ev-grid .ev-grid-iso path {
     opacity: 1;
+    transform: none;
     animation: none;
   }
 }
@@ -216,6 +251,24 @@
   .ev-lamina-partida {
     grid-template-columns: 1fr;
     aspect-ratio: 4 / 5;
+  }
+
+  /* La versión a color del isotipo se va: apilada bajo la construcción se
+     quedaba diminuta y no enseñaba nada que no se viera ya. En su lugar, el de
+     la izquierda SE ENCIENDE al terminar de girar, que cuenta lo mismo —de la
+     geometría sale la pieza, y la pieza tiene sus cuatro colores— en la mitad
+     de sitio. */
+  .ev-lamina-partida .ev-lamina-mitad:not(.es-fondo) .es-isotipo-color {
+    display: none;
+  }
+  .ev-grid.es-visible .ev-grid-iso path {
+    animation: ev-cuarto-gira 2200ms cubic-bezier(0.62, 0, 0.3, 1) 900ms both,
+      ev-cuarto-color 700ms ease-out 2900ms both;
+  }
+  @keyframes ev-cuarto-color {
+    to {
+      fill: var(--color);
+    }
   }
   .ev-lamina-entera {
     aspect-ratio: 4 / 3;

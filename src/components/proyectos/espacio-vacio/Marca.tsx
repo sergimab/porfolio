@@ -32,7 +32,17 @@ function Isotipo({ colores }: { colores?: string[] }) {
   return (
     <g>
       {CUARTOS.map((d, i) => (
-        <path key={i} d={d} fill={colores ? colores[i] : "currentColor"} />
+        <path
+          key={i}
+          d={d}
+          fill={colores ? colores[i] : "currentColor"}
+          // El color que le tocaría a este cuarto viaja siempre, aunque se
+          // pinte en el color del texto: en móvil la lámina del isotipo no
+          // enseña la versión a color aparte —no cabe—, así que la de la
+          // izquierda se enciende al terminar de girar y necesita saber cuál es
+          // el suyo.
+          style={{ ["--color" as string]: CUARTOS_COLOR[i] }}
+        />
       ))}
     </g>
   );
@@ -161,6 +171,20 @@ export default function Marca() {
                 Las dos piezas comparten unidad —34 sobre un cuadro de 176—, que
                 es lo que hace que las dos láminas se lean como una sola regla. */}
             <svg className="ev-seguridad-pieza" viewBox="0 0 470 206" aria-hidden="true">
+              {/* El logotipo se lleva a blanco con un filtro SVG y no con
+                  `filter` de CSS, y esto salió en un móvil: Safari no aplica el
+                  filtro CSS a un <image> dentro de un SVG, así que el logotipo
+                  se quedaba en su negro original sobre el fondo oscuro de la
+                  lámina y desaparecía. La matriz fuerza el color a blanco y
+                  respeta el canal alfa, y esa sí la entienden todos. */}
+              <defs>
+                <filter id="ev-a-blanco">
+                  <feColorMatrix
+                    type="matrix"
+                    values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0"
+                  />
+                </filter>
+              </defs>
               <g className="ev-guias es-quietas">
                 <rect x="0.5" y="0.5" width="469" height="205" />
                 <rect x="0.5" y="0.5" width="34" height="34" />
@@ -184,7 +208,7 @@ export default function Marca() {
                 y="34.5"
                 width="401"
                 height="137"
-                className="es-sobre-negro"
+                filter="url(#ev-a-blanco)"
               />
             </svg>
 
