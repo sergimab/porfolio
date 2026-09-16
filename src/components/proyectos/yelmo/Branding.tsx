@@ -75,13 +75,24 @@ export default function Branding() {
         <RotuloSeccion es="Construcción del logotipo" en="Logotype construction" />
         {/* La construcción, directamente sobre el papel de la página: sin caja
             ni fondo propio. Va como imagen y no como máscara porque el color
-            forma parte del dibujo —el logotipo en morado y las guías en
-            turquesa—. */}
+            forma parte del dibujo.
+
+            Dos archivos, uno por modo: las guías dejan el turquesa de la marca
+            y se pintan del color del texto de la página —claras sobre oscuro y
+            oscuras sobre claro—, que es lo que hace que se lean igual de bien
+            en los dos. El logotipo no se toca. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          className="ym-construccion"
-          src={`${RUTA}/composicion-logo-alt.svg`}
+          className="ym-construccion es-oscuro"
+          src={`${RUTA}/construccion-oscuro.svg`}
           alt="Construcción del logotipo de Yelmo sobre su retícula de círculos"
+        />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="ym-construccion es-claro"
+          src={`${RUTA}/construccion-claro.svg`}
+          alt=""
+          aria-hidden="true"
         />
       </section>
 

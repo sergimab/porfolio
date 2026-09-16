@@ -18,20 +18,26 @@
   margin-bottom: 72px;
   padding: 24px 0 8px;
 }
-/* El logotipo de trazos: el de cada modo, y el otro fuera del marcado. */
+/* Las piezas que existen en dos versiones, una por modo del sitio: se enseña
+   la que toca y la otra se queda fuera. Es para los archivos cuyo color vive
+   dentro del SVG y no se puede cambiar desde aquí. */
+.ym-trazos.es-claro,
+.ym-construccion.es-claro {
+  display: none;
+}
+:root[data-theme="light"] .ym-trazos.es-oscuro,
+:root[data-theme="light"] .ym-construccion.es-oscuro {
+  display: none;
+}
+:root[data-theme="light"] .ym-trazos.es-claro,
+:root[data-theme="light"] .ym-construccion.es-claro {
+  display: block;
+}
+
 .ym-trazos {
   display: block;
   width: min(680px, 88%);
   height: auto;
-}
-.ym-trazos.es-claro {
-  display: none;
-}
-:root[data-theme="light"] .ym-trazos.es-oscuro {
-  display: none;
-}
-:root[data-theme="light"] .ym-trazos.es-claro {
-  display: block;
 }
 
 /* El papel opaco de cada lámina: el fondo de la página lleva una trama animada
