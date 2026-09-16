@@ -111,7 +111,7 @@ export default function EspacioVacioLanding() {
             versión estrecha -movil (1304 × 220). */}
         <hr className="ev-divisor" />
         <h2 className="project-h2">
-          <DropcapTitle es="Sigue por aquí" en="Keep going" />
+          <DropcapTitle es="Páginas recomendadas" en="Recommended pages" />
         </h2>
         <CtaBanner
           href="/proyecto/u2"

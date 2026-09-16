@@ -201,6 +201,13 @@
   gap: 24px;
   flex-wrap: wrap;
 }
+/* Cuando lo de la izquierda es un bloque de párrafos y no un solo texto, se
+   lleva el ancho que sobre: si no, se queda con el que le pida su línea más
+   larga y los iconos se le pegan al lado. */
+.project-introrow > .project-text {
+  flex: 1 1 320px;
+  min-width: 0;
+}
 .project-introrow .tool-icons {
   margin-top: 0;
   margin-bottom: 2px;
