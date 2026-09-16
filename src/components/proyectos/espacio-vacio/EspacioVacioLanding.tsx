@@ -5,8 +5,8 @@ import EscenaInicio from "./EscenaInicio";
 import PaletaCromatica from "./PaletaCromatica";
 import Tipografia from "./Tipografia";
 import Marca from "./Marca";
-import Prototipo from "./Prototipo";
 import Mockups from "./Mockups";
+import Link from "next/link";
 
 // Espacio vacío: la campaña de concienciación sobre la adicción a las redes
 // sociales, de la asignatura Proyectos Experimentales de la ESD Madrid.
@@ -94,10 +94,22 @@ export default function EspacioVacioLanding() {
         <Marca />
 
         <hr className="ev-divisor" />
-        <Prototipo />
-
-        <hr className="ev-divisor" />
         <Mockups />
+
+        {/* El diseño de la app tiene página propia, en UI/UX: aquí va la marca,
+            allí el producto. */}
+        <hr className="ev-divisor" />
+        <div className="ev-papel ev-salto">
+          <p>
+            <LangText
+              es="El diseño de la app, con el alta navegable:"
+              en="The app design, with playable onboarding:"
+            />{" "}
+            <Link href="/proyecto/u2">
+              <LangText es="ver App Espacio vacío" en="see Empty space app" />
+            </Link>
+          </p>
+        </div>
       </div>
     </main>
   );
