@@ -543,8 +543,6 @@ type Pantalla = {
   // La pantalla se pinta entera ella misma: sin cabecera común y sin los
   // márgenes del cuerpo.
   plena?: boolean;
-  // El retrato asomando en la esquina de arriba.
-  alfiler?: boolean;
   // A qué altura empieza el cuerpo, en cqw. Sin él, el sitio de siempre; se
   // baja solo donde el texto es tan largo que no cabe desde ahí.
   arranque?: number;
@@ -1086,9 +1084,6 @@ const PANTALLAS: Pantalla[] = [
     flecha: true,
     atrasVa: "home",
     arranque: 30,
-    // El retrato asoma en la esquina, como el alfiler de un mapa: es la foto que
-    // se va gastando, y aquí recuerda de quién son estos números.
-    alfiler: true,
     cuerpo: (c) => <Datos t={c.t} />,
   },
 ];
@@ -1162,13 +1157,6 @@ export default function Prototipo() {
             <div className="ev-app" key={actual.id}>
               {/* La carga va sin cabecera: ahí la marca ya la pone la
                   animación del isotipo, y el logotipo arriba la repetía. */}
-              {actual.alfiler && (
-                <div className="ev-app-alfiler" aria-hidden="true">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/proyectos/espacio-vacio/app/persona.webp" alt="" />
-                </div>
-              )}
-
               {actual.id !== "carga" && !actual.plena && (
                 <Cabecera
                   atras={
