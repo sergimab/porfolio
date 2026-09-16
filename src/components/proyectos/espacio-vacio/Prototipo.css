@@ -18,7 +18,11 @@
 .ev-movil {
   position: relative;
   flex: 0 0 auto;
-  width: 300px;
+  /* El aparato manda sobre el tamaño de todo lo que lleva dentro: la pantalla
+     está medida en `cqw`, así que ensanchar el marco es lo que hace que el
+     texto de la app se lea. A 330 el cuerpo queda en unos 12 px, que es lo que
+     mide el texto pequeño del resto del sitio. */
+  width: 330px;
   padding: 10px;
   border-radius: 44px;
   background: #1b1b1d;
@@ -51,7 +55,7 @@
   font-family: "Clash Grotesk", system-ui, sans-serif;
   /* El negro de la marca, no un negro cualquiera. */
   color: #252221;
-  font-size: 3.5cqw;
+  font-size: 4cqw;
   line-height: 1.5;
   /* Cada pantalla entra con un desplazamiento mínimo. Corto a propósito: una
      app cambia de pantalla casi de golpe, y una transición lucida aquí se
@@ -70,21 +74,19 @@
   }
 }
 
-/* La cabecera: la flecha de volver a la izquierda y el logotipo centrado. El
-   logotipo va centrado en la PANTALLA, no en el hueco que deja la flecha, así
-   que se posiciona por su cuenta. */
+/* La cabecera: solo el logotipo, centrado en la pantalla. Volver ya no se hace
+   desde aquí, sino con un botón abajo. */
 .ev-app-cabecera {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 22cqw;
-  /* POR ENCIMA DEL CUERPO. El cuerpo se estira por toda la pantalla —le hace
-     falta para colgar el botón de avanzar del borde de abajo— y va después en
-     el marcado, así que sin esto quedaba delante y se tragaba las pulsaciones
-     de la flecha de volver: la flecha se veía, pero al pulsarla no pasaba nada
-     porque el clic lo recibía el cuerpo, que es transparente. */
-  z-index: 3;
+  /* Sin pulsaciones: el cuerpo se estira por toda la pantalla —le hace falta
+     para colgar los botones del borde de abajo— y va después en el marcado, así
+     que pasa por delante de la cabecera. Como aquí ya no hay nada que pulsar,
+     lo que importa es que la cabecera no se coma los clics del cuerpo. */
+  pointer-events: none;
 }
 .ev-app-logo {
   position: absolute;
@@ -94,30 +96,6 @@
   width: 20.5cqw;
   height: auto;
 }
-/* La flecha se dibuja de 7, pero la zona que responde es de 12: el icono se
-   queda donde lo puso el diseño y el dedo tiene dónde caer. Los descuentos de
-   `left` y `top` son la mitad de lo que crece la caja, para que el dibujo no se
-   mueva de sitio. */
-.ev-app-atras {
-  position: absolute;
-  left: 4.5cqw;
-  top: 11.9cqw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 12cqw;
-  height: 12cqw;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: inherit;
-  cursor: pointer;
-}
-.ev-app-atras svg {
-  width: 7cqw;
-  height: 7cqw;
-}
-
 /* El cuerpo. Arranca a la misma altura en casi todas las pantallas —es lo que
    hace que la secuencia se lea como una sola— y solo la de las casillas, que
    trae un texto largo y una rejilla, empieza más arriba. */
@@ -141,21 +119,22 @@
   letter-spacing: 0.005em;
   text-transform: uppercase;
 }
-/* Los títulos de una línea de las pantallas de texto van en el cuerpo normal,
-   no en negrita: es lo que tienen en el diseño. */
-.ev-app-titulo.es-suelto {
-  font-size: 4.3cqw;
-  font-weight: 400;
+/* Los títulos de una línea de las pantallas de texto: en semibold, para que
+   manden sobre el texto que llevan debajo sin llegar al negro del titular de
+   bienvenida. */
+.ev-app-titulo.es-suelto,
+.ev-app-titulo.es-centrado {
+  font-size: 4.8cqw;
+  font-weight: 600;
   margin-bottom: 4.4cqw;
 }
-/* El de «Crear cuenta», en el peso intermedio de la familia. */
+/* El de «Crear cuenta», un peso por debajo: encabeza una lista de campos, no un
+   texto, y ahí pesa menos. */
 .ev-app-titulo.es-medium {
   font-weight: 500;
 }
 .ev-app-titulo.es-centrado {
   text-align: center;
-  font-size: 4.3cqw;
-  font-weight: 400;
 }
 
 .ev-app-texto {
@@ -166,7 +145,7 @@
   margin-top: 5cqw;
 }
 .ev-app-texto.es-arriba {
-  font-size: 2.9cqw;
+  font-size: 3.2cqw;
 }
 
 /* ── Botones ── */
@@ -177,7 +156,7 @@
   background: #fff;
   color: inherit;
   font: inherit;
-  font-size: 2.9cqw;
+  font-size: 3.2cqw;
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -195,6 +174,12 @@
   position: absolute;
   right: 11.5cqw;
   bottom: 33cqw;
+}
+/* Volver, enfrente de avanzar. Comparte el `es-pie`, así que los dos quedan a
+   la misma altura sin repetir la medida. */
+.ev-app-boton.es-pie.es-izquierda {
+  right: auto;
+  left: 11.5cqw;
 }
 .ev-app-boton.es-suelto {
   margin-top: 6cqw;
@@ -238,7 +223,7 @@
   background: #fff;
   color: inherit;
   font: inherit;
-  font-size: 2.9cqw;
+  font-size: 3.2cqw;
   text-transform: uppercase;
   letter-spacing: 0.02em;
 }
@@ -260,14 +245,14 @@
   padding: 2.2cqw 2.6cqw;
   border: 0.28cqw solid #252221;
   background: #fff;
-  font-size: 2.9cqw;
+  font-size: 3.2cqw;
   text-transform: uppercase;
   letter-spacing: 0.02em;
   /* El alto lo fija una línea de texto: si el campo se quedara sin contenido
      —el primer golpe de reloj aún no ha escrito nada— encogería y la lista de
      campos daría un salto. */
   line-height: 1.5;
-  min-height: calc(2.9cqw * 1.5);
+  min-height: calc(3.2cqw * 1.5);
 }
 /* Los campos de contraseña: el punto de esta tipografía se apoya muy abajo, casi
    en la línea base, así que la fila de puntos quedaba descolgada dentro de la
@@ -282,7 +267,7 @@
 .ev-app-tecleado i {
   display: inline-block;
   width: 0.3cqw;
-  height: 2.9cqw;
+  height: 3.2cqw;
   margin-left: 0.4cqw;
   vertical-align: -0.4cqw;
   background: #252221;
@@ -317,15 +302,15 @@
   margin-top: 5cqw;
 }
 .ev-app-hora {
-  width: 5.4cqw;
-  height: 5.4cqw;
+  width: 6cqw;
+  height: 6cqw;
   padding: 0;
   border: 0.28cqw solid #252221;
   border-radius: 50%;
   background: #fff;
   color: inherit;
   font: inherit;
-  font-size: 2.6cqw;
+  font-size: 2.9cqw;
   line-height: 1;
   cursor: pointer;
   transition: background 140ms ease, color 140ms ease;
@@ -350,7 +335,7 @@
 .ev-app-rejilla span {
   padding: 5cqw 0;
   text-align: center;
-  font-size: 2.6cqw;
+  font-size: 2.9cqw;
   border-bottom: 0.28cqw solid #252221;
 }
 .ev-app-rejilla span:nth-child(odd) {
@@ -371,7 +356,7 @@
   align-items: center;
   gap: 2.4cqw;
   margin-bottom: 2.2cqw;
-  font-size: 2.9cqw;
+  font-size: 3.2cqw;
   font-weight: 600;
 }
 .ev-app-punto {
@@ -475,7 +460,7 @@
     gap: 24px;
   }
   .ev-movil {
-    width: min(300px, 78vw);
+    width: min(330px, 82vw);
   }
   .ev-proto-mandos {
     max-width: none;

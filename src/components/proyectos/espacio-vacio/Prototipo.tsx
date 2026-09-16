@@ -47,17 +47,11 @@ type Ctx = {
   setHoras: (h: number) => void;
 };
 
-function Cabecera({ atras, t }: { atras?: () => void; t: T }) {
+// La cabecera es solo el logotipo: volver se hace desde abajo, con un botón
+// igual que el de avanzar y en el lado contrario, que es donde cae el pulgar.
+function Cabecera() {
   return (
     <header className="ev-app-cabecera">
-      {atras && (
-        <button type="button" className="ev-app-atras" onClick={atras}>
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M15 4 7 12l8 8" fill="none" stroke="currentColor" strokeWidth="2.2" />
-          </svg>
-          <span className="ev-oculto">{t("Volver", "Back")}</span>
-        </button>
-      )}
       {/* El logotipo, del mismo archivo que usa todo el proyecto. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
@@ -545,9 +539,7 @@ export default function Prototipo() {
             <div className="ev-app" key={actual.id}>
               {/* La carga va sin cabecera: ahí la marca ya la pone la
                   animación del isotipo, y el logotipo arriba la repetía. */}
-              {actual.id !== "carga" && (
-                <Cabecera atras={actual.atras ? atras : undefined} t={t} />
-              )}
+              {actual.id !== "carga" && <Cabecera />}
 
               {/* La pantalla de carga: el isotipo quieto esperando y, al
                   comenzar, la animación en su sitio.
@@ -576,6 +568,13 @@ export default function Prototipo() {
 
               <div className={`ev-app-cuerpo${actual.id === "casillas" ? " es-alto" : ""}`}>
                 {actual.cuerpo(ctx)}
+                {/* Volver, abajo y a la izquierda: enfrente del de avanzar y en
+                    el mismo sitio en todas las pantallas. */}
+                {actual.atras && (
+                  <Boton clase="es-pie es-izquierda" onClick={atras}>
+                    {t("Atrás", "Back")}
+                  </Boton>
+                )}
               </div>
             </div>
           </div>
@@ -605,9 +604,13 @@ export default function Prototipo() {
                 {t(arrancando ? "Arrancando…" : "Comenzar", arrancando ? "Starting…" : "Start")}
               </button>
             )}
-            <button type="button" onClick={atras} disabled={camino.length < 2}>
-              {t("Atrás", "Back")}
-            </button>
+            {/* En la carga no se enseña: todavía no hay nada a lo que volver, y
+                un botón apagado ahí solo es ruido. */}
+            {actual.id !== "carga" && (
+              <button type="button" onClick={atras} disabled={camino.length < 2}>
+                {t("Atrás", "Back")}
+              </button>
+            )}
             <button type="button" onClick={() => ir("carga")}>
               {t("Reiniciar", "Restart")}
             </button>
