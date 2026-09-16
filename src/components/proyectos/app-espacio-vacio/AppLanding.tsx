@@ -95,10 +95,9 @@ export default function AppLanding() {
 
         <Apartados />
 
-        {/* Y de vuelta a la marca, que es de donde sale todo esto.
-            Falta la imagen del banner: sin ella la franja se pinta igual, solo
-            que lisa. Va a /banners/espacio-vacio.webp (2048 × 300) y su versión
-            estrecha -movil (1304 × 220). */}
+        {/* Y de vuelta a la marca, que es de donde sale todo esto. La versión
+            estrecha es la misma imagen recortada por el centro, donde está la
+            construcción del isotipo. */}
         <hr className="ev-divisor" />
         <h2 className="project-h2">
           <DropcapTitle es="Páginas recomendadas" en="Recommended pages" />
@@ -107,7 +106,9 @@ export default function AppLanding() {
           href="/proyecto/b1"
           es="Ver la marca de Espacio vacío"
           en="See the Empty space brand"
-          alt="La marca de Espacio vacío"
+          imagen="/banners/espacio-vacio.webp"
+          imagenMovil="/banners/espacio-vacio-movil.webp"
+          alt="La construcción del isotipo de Espacio vacío sobre su retícula"
         />
       </div>
     </main>
