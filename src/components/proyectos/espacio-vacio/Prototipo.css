@@ -1,0 +1,223 @@
+/* El alta de la app dentro de un móvil, navegable. */
+.ev-proto {
+  margin: 56px 0 48px;
+}
+
+.ev-proto-titulo {
+  display: inline-block;
+  margin: 0 0 32px;
+  padding: 9px 16px;
+  border: 1px solid currentColor;
+  font-size: 15px;
+  font-weight: 500;
+  background: var(--background);
+}
+
+.ev-proto-caja {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 56px;
+}
+
+/* ── El móvil ──
+   Marco en CSS y no una imagen: se ve nítido a cualquier tamaño, pesa cero y
+   —lo que importa aquí— el hueco de la pantalla es EXACTO, así que la captura
+   no queda ni desplazada ni recortada dentro de él. */
+.ev-movil {
+  position: relative;
+  flex: 0 0 auto;
+  width: 300px;
+  /* La proporción sale del archivo: 860 × 1864. El marco añade su grosor por
+     los cuatro lados. */
+  padding: 10px;
+  border-radius: 44px;
+  background: #1b1b1d;
+  box-shadow: 0 2px 0 rgba(255, 255, 255, 0.14) inset,
+    0 26px 60px rgba(10, 8, 16, 0.32);
+}
+
+.ev-pantalla {
+  position: relative;
+  aspect-ratio: 860 / 1864;
+  border-radius: 34px;
+  overflow: hidden;
+  /* Blanco fijo, no el papel de la página: es la pantalla de la app, y la app
+     es blanca en los dos modos. */
+  background: #fff;
+}
+
+/* Las capturas, todas puestas y solo una a la vista. El fundido es corto: lo
+   que se quiere es que no haya parpadeo, no una transición lucida —una app
+   cambia de pantalla de golpe. */
+.ev-captura {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 180ms linear;
+  user-select: none;
+}
+.ev-captura.es-visible {
+  opacity: 1;
+}
+
+/* La animación del isotipo sobre la pantalla de carga.
+   `multiply` borra su fondo casi blanco contra el blanco de la pantalla, así
+   que no se ve el recuadro del vídeo. Y va donde va el isotipo en la pantalla:
+   centrado en el hueco que deja el logotipo de arriba. */
+.ev-carga {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: 46%;
+  transform: translate(-50%, -50%);
+  width: 62%;
+  opacity: 0;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+.ev-carga.es-visible {
+  opacity: 1;
+}
+
+/* ── Las zonas pulsables ──
+   Invisibles por defecto: la gracia es pulsar el botón de la app, no un botón
+   que hemos pintado encima. Se encienden con el mando «Ver zonas» y, al pasar
+   el ratón, se marca la que está debajo. */
+.ev-zona {
+  position: absolute;
+  z-index: 4;
+  margin: 0;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  /* Un pelo de margen alrededor del botón medido: el dedo —y el ratón— no
+     apuntan al píxel. */
+  outline-offset: 2px;
+}
+.ev-zona:hover,
+.ev-zona:focus-visible {
+  border-color: #ff5c5c;
+  background: rgba(255, 92, 92, 0.12);
+}
+.ev-pantalla.es-pistas .ev-zona {
+  border-color: rgba(255, 92, 92, 0.85);
+  background: rgba(255, 92, 92, 0.1);
+  animation: ev-zona-late 1800ms ease-in-out infinite;
+}
+@keyframes ev-zona-late {
+  50% {
+    background: rgba(255, 92, 92, 0.22);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ev-pantalla.es-pistas .ev-zona {
+    animation: none;
+  }
+}
+
+/* La flecha de volver de la cabecera de la app: está en el mismo sitio en todas
+   las pantallas que la llevan, así que su zona se escribe aquí y no en cada
+   una. */
+.ev-zona.es-atras {
+  left: 7.5%;
+  top: 5.4%;
+  width: 12%;
+  height: 3.6%;
+}
+
+/* El nombre de cada zona solo para quien navegue con lector de pantalla o con
+   el teclado: encima no se ve nada, pero se anuncia a dónde lleva. */
+.ev-zona-texto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ── Los mandos ── */
+.ev-proto-mandos {
+  max-width: 260px;
+}
+
+.ev-proto-donde {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 0 0 20px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.ev-proto-num {
+  font-size: 13px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.5;
+}
+
+.ev-proto-botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ev-proto-botones button {
+  padding: 8px 14px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  background: var(--background);
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease, opacity 160ms ease;
+}
+.ev-proto-botones button:hover:not(:disabled),
+.ev-proto-botones button.es-activo {
+  background: var(--foreground);
+  color: var(--background);
+}
+.ev-proto-botones button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.ev-proto-pie {
+  margin: 20px 0 0;
+  font-size: 13px;
+  line-height: 1.6;
+  opacity: 0.7;
+}
+
+@media (max-width: 760px) {
+  /* En vertical el móvil va arriba y los mandos debajo: uno al lado del otro,
+     a 375 px el aparato se quedaría en la mitad de ancho y no se leería nada de
+     lo que hay dentro, que es justo lo que se viene a ver. */
+  .ev-proto-caja {
+    flex-direction: column;
+    gap: 24px;
+  }
+  .ev-movil {
+    width: min(300px, 78vw);
+  }
+  .ev-proto-mandos {
+    max-width: none;
+    width: 100%;
+  }
+  .ev-proto-donde {
+    justify-content: center;
+  }
+  .ev-proto-botones {
+    justify-content: center;
+  }
+  .ev-proto-pie {
+    text-align: center;
+  }
+}

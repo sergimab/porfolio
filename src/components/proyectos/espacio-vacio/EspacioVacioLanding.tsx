@@ -5,6 +5,7 @@ import EscenaInicio from "./EscenaInicio";
 import PaletaCromatica from "./PaletaCromatica";
 import Tipografia from "./Tipografia";
 import Marca from "./Marca";
+import Prototipo from "./Prototipo";
 import Mockups from "./Mockups";
 
 // Espacio vacío: la campaña de concienciación sobre la adicción a las redes
@@ -91,6 +92,9 @@ export default function EspacioVacioLanding() {
 
         <hr className="ev-divisor" />
         <Marca />
+
+        <hr className="ev-divisor" />
+        <Prototipo />
 
         <hr className="ev-divisor" />
         <Mockups />
