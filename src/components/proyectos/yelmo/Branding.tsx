@@ -3,7 +3,7 @@ import RotuloSeccion from "@/components/shared/RotuloSeccion";
 import { RUTA, TINTAS, GRADACIONES, SUBMARCAS } from "./marca";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import Construccion from "./Construccion";
+import LaminaGuias from "./LaminaGuias";
 import "./Branding.css";
 
 // Una pieza de la marca, recortada con su archivo y pintada con lo que se le
@@ -39,11 +39,12 @@ const MORADO = "#3C1F71";
 // Un degradado de abajo arriba a partir de la lista de paradas de la submarca.
 const degradar = (paradas: string[]) => `linear-gradient(0deg, ${paradas.join(", ")})`;
 
-// El archivo se lee una vez, al construir la página.
-const construccion = readFileSync(
-  join(process.cwd(), "public/proyectos/yelmo/branding/composicion-logo-alt.svg"),
-  "utf8"
-);
+// Los SVG que van incrustados se leen una vez, al construir la página.
+const leer = (archivo: string) =>
+  readFileSync(join(process.cwd(), "public/proyectos/yelmo/branding", archivo), "utf8");
+
+const construccion = leer("composicion-logo-alt.svg");
+const margen = leer("margen-submarca.svg");
 
 export default function Branding() {
   return (
@@ -54,7 +55,7 @@ export default function Branding() {
         {/* La construcción, dibujándose al llegar. El SVG se lee aquí —en el
             servidor— y se le pasa al componente, que es quien lo anima: así la
             fuente sigue siendo el archivo de la carpeta del proyecto. */}
-        <Construccion markup={construccion} />
+        <LaminaGuias markup={construccion} />
       </section>
 
       {/* ── La paleta ────────────────────────────────────────────────────── */}
@@ -108,6 +109,38 @@ export default function Branding() {
             </li>
           ))}
         </ul>
+
+        {/* Los cuatro iconos juntos y en fila, que es donde se ve que son una
+            misma familia. No valen ni la máscara ni un archivo único: llevan
+            detalles en negativo —el interior de la estrella, la contra de la
+            e—, así que hay una versión por modo, con el icono del color del
+            texto y esos huecos del color del papel. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="ym-iconos es-oscuro"
+          src={`${RUTA}/iconos-submarcas-oscuro.svg`}
+          alt="Los iconos de las cuatro submarcas de Yelmo"
+        />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="ym-iconos es-claro"
+          src={`${RUTA}/iconos-submarcas-claro.svg`}
+          alt=""
+          aria-hidden="true"
+        />
+
+        {/* El margen de aplicación: cuánto aire pide el icono al lado de la
+            marca. Se dibuja al llegar, como la lámina de construcción. */}
+        <LaminaGuias markup={margen} ancho={420} />
+
+        {/* Y cada línea con su icono y su color sobre el isotipo. Aquí el color
+            ES el dato, así que va tal cual sale del archivo. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="ym-submarcas-y"
+          src={`${RUTA}/submarcas-Y.svg`}
+          alt="El isotipo de Yelmo en las cuatro submarcas, cada una con su icono y su color"
+        />
       </section>
 
       {/* ── La inclusión dinámica ────────────────────────────────────────── */}

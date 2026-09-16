@@ -126,6 +126,35 @@
   background: #f6f5f8;
 }
 
+/* Los iconos, la lámina de márgenes y las cuatro Y: centrados y con aire entre
+   ellos, que son tres maneras de mirar lo mismo. */
+.ym-iconos,
+.ym-submarcas-y {
+  display: block;
+  height: auto;
+  margin: 48px auto 0;
+}
+.ym-iconos {
+  width: min(400px, 82%);
+}
+.ym-submarcas-y {
+  width: min(700px, 100%);
+}
+.ym-submarcas .ym-lamina-guias,
+.ym-seccion .ym-lamina-guias {
+  margin-top: 48px;
+}
+/* La versión de cada modo: se enseña la que toca. */
+.ym-iconos.es-claro {
+  display: none;
+}
+:root[data-theme="light"] .ym-iconos.es-oscuro {
+  display: none;
+}
+:root[data-theme="light"] .ym-iconos.es-claro {
+  display: block;
+}
+
 /* ── La inclusión dinámica ── */
 /* Dos columnas, como las submarcas: con auto-fit salían tres y la cuarta línea
    se quedaba sola en la fila de abajo. */

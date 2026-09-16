@@ -1,9 +1,10 @@
-/* La lámina de construcción: sin caja, sobre el papel de la página. */
-.ym-construccion {
-  width: min(760px, 100%);
+/* Las láminas de guías: sin caja, sobre el papel de la página. Cada una dice
+   cuánto quiere medir. */
+.ym-lamina-guias {
+  width: min(var(--ym-ancho, 760px), 100%);
   margin: 12px auto 0;
 }
-.ym-construccion svg {
+.ym-lamina-guias svg {
   display: block;
   width: 100%;
   height: auto;
@@ -14,7 +15,7 @@
    sobre claro—, en vez del turquesa que traen escrito dentro. El selector es
    más específico que el `<style>` del propio archivo, que es lo que le deja
    ganar. */
-.ym-construccion svg [class] {
+.ym-lamina-guias svg [class] {
   stroke: currentColor;
 }
 /* El grosor se queda como viene del archivo. Le puse 1 px con
@@ -27,11 +28,11 @@
 /* ── Dibujándose ──
    Las guías primero, de izquierda a derecha y cada una trazándose entera; las
    letras después, cuando el andamio ya está puesto. */
-.ym-construccion .es-guia {
+.ym-lamina-guias .es-guia {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
 }
-.ym-construccion.es-visible .es-guia {
+.ym-lamina-guias.es-visible .es-guia {
   animation: ym-trazar 700ms cubic-bezier(0.33, 1, 0.68, 1) both;
 }
 @keyframes ym-trazar {
@@ -40,10 +41,10 @@
   }
 }
 
-.ym-construccion .es-letra {
+.ym-lamina-guias .es-letra {
   opacity: 0;
 }
-.ym-construccion.es-visible .es-letra {
+.ym-lamina-guias.es-visible .es-letra {
   animation: ym-aparece 800ms ease-out 900ms both;
 }
 @keyframes ym-aparece {
@@ -54,8 +55,8 @@
 
 /* Con el movimiento reducido no hay nada que dibujar: la lámina está y ya. */
 @media (prefers-reduced-motion: reduce) {
-  .ym-construccion .es-guia,
-  .ym-construccion .es-letra {
+  .ym-lamina-guias .es-guia,
+  .ym-lamina-guias .es-letra {
     animation: none;
     stroke-dasharray: none;
     opacity: 1;

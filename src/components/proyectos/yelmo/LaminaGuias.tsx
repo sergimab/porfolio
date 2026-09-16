@@ -1,9 +1,10 @@
 "use client";
 
 import { memo, useEffect, useRef, useState } from "react";
-import "./Construccion.css";
+import "./LaminaGuias.css";
 
-// La lámina de construcción del logotipo, dibujándose al llegar.
+// Una lámina de guías —la construcción del logotipo, los márgenes de
+// aplicación— dibujándose al llegar.
 //
 // El SVG va INCRUSTADO y no como <img>: dentro de una imagen no se puede ni
 // animar cada guía por separado ni cambiarle el color, que es justo lo que hace
@@ -13,7 +14,7 @@ import "./Construccion.css";
 //
 // El marcado se lee del archivo en el servidor y llega como texto: la fuente
 // sigue siendo el SVG de la carpeta del proyecto, no una copia pegada aquí.
-export default function Construccion({ markup }: { markup: string }) {
+export default function LaminaGuias({ markup, ancho = 760 }: { markup: string; ancho?: number }) {
   const caja = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
@@ -68,7 +69,11 @@ export default function Construccion({ markup }: { markup: string }) {
   }, []);
 
   return (
-    <div ref={caja} className={`ym-construccion${visible ? " es-visible" : ""}`}>
+    <div
+      ref={caja}
+      className={`ym-lamina-guias${visible ? " es-visible" : ""}`}
+      style={{ ["--ym-ancho" as string]: `${ancho}px` }}
+    >
       <Lienzo markup={markup} />
     </div>
   );
@@ -81,7 +86,7 @@ export default function Construccion({ markup }: { markup: string }) {
 const Lienzo = memo(function Lienzo({ markup }: { markup: string }) {
   return (
     <div
-      className="ym-construccion-lienzo"
+      className="ym-lamina-guias-lienzo"
       // El SVG es un archivo del propio proyecto, no algo que llegue de fuera.
       dangerouslySetInnerHTML={{ __html: markup }}
     />
