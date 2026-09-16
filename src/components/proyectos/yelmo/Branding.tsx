@@ -1,6 +1,6 @@
 import LangText from "@/components/shared/LangText";
 import RotuloSeccion from "@/components/shared/RotuloSeccion";
-import { RUTA, TINTAS, GRADACIONES } from "./marca";
+import { RUTA, TINTAS, GRADACIONES, SUBMARCAS } from "./marca";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import LaminaGuias from "./LaminaGuias";
@@ -113,22 +113,24 @@ export default function Branding() {
 
         {/* Y cada línea con su icono y su color sobre el isotipo. Aquí el color
             ES el dato, así que va tal cual sale del archivo. */}
-        {/* Como los iconos: los detalles que el archivo dibuja en blanco pasan
-            a ser del color del papel, para que se lean como huecos y no como
-            una mancha clara. */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          className="ym-submarcas-y es-oscuro"
-          src={`${RUTA}/submarcas-Y-oscuro.svg`}
-          alt="El isotipo de Yelmo en las cuatro submarcas, cada una con su icono y su color"
-        />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          className="ym-submarcas-y es-claro"
-          src={`${RUTA}/submarcas-Y-claro.svg`}
-          alt=""
-          aria-hidden="true"
-        />
+        {/* Cada línea con su icono y su color, y debajo el nombre y la
+            gradación de la que sale ese color. Las cuatro Y vienen en un solo
+            archivo, así que cada celda enseña su cuarto: el fondo se amplía
+            hasta que una Y ocupa la casilla y se corre a la que le toca. Es lo
+            que permite ponerles nombre sin trocear el archivo. */}
+        <ul className="ym-ys">
+          {SUBMARCAS.map((s, i) => (
+            <li key={s.id}>
+              <span className="ym-y" style={{ ["--ym-i" as string]: i }} aria-hidden="true" />
+              <h3 className="ym-y-nombre">{s.nombre}</h3>
+              <span
+                className="ym-barra es-y"
+                style={{ background: `linear-gradient(90deg, ${s.degradado.join(", ")})` }}
+                aria-hidden="true"
+              />
+            </li>
+          ))}
+        </ul>
       </section>
 
     </div>

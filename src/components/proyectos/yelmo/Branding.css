@@ -100,34 +100,63 @@
   right: -22px;
 }
 
-/* Los iconos, la lámina de márgenes y las cuatro Y: centrados y con aire entre
-   ellos, que son tres maneras de mirar lo mismo. */
-.ym-iconos,
-.ym-submarcas-y {
+/* Los iconos y la lámina de márgenes: centrados y con aire entre ellos. */
+.ym-iconos {
   display: block;
   height: auto;
   margin: 48px auto 0;
-}
-.ym-iconos {
   width: min(400px, 82%);
 }
-.ym-submarcas-y {
-  width: min(700px, 100%);
+
+/* ── Las cuatro líneas ──
+   Las Y vienen en un solo archivo, una al lado de otra. Cada celda enseña la
+   suya ampliando el fondo hasta que una ocupa la casilla —959 de archivo entre
+   180 de Y, o sea 533 %— y corriéndolo al cuarto que le toca. Están repartidas
+   a la misma distancia, así que los cuatro pasos caen en 0, 33, 67 y 100. */
+.ym-ys {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px 24px;
+  margin: 56px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.ym-y {
+  display: block;
+  aspect-ratio: 180 / 219.55;
+  background-image: var(--ym-ys);
+  background-size: 533% auto;
+  background-position: calc(var(--ym-i) * 33.33%) center;
+  background-repeat: no-repeat;
+}
+.ym-ys {
+  --ym-ys: url("/proyectos/yelmo/branding/submarcas-Y-oscuro.svg");
+}
+:root[data-theme="light"] .ym-ys {
+  --ym-ys: url("/proyectos/yelmo/branding/submarcas-Y-claro.svg");
+}
+.ym-y-nombre {
+  position: relative;
+  margin: 14px 0 10px;
+  font-size: 14px;
+  font-weight: 500;
+  background: var(--background);
+}
+.ym-barra.es-y {
+  height: 26px;
+  border-radius: 2px;
 }
 .ym-seccion .ym-lamina-guias {
   margin-top: 48px;
 }
 /* La versión de cada modo: se enseña la que toca. */
-.ym-iconos.es-claro,
-.ym-submarcas-y.es-claro {
+.ym-iconos.es-claro {
   display: none;
 }
-:root[data-theme="light"] .ym-iconos.es-oscuro,
-:root[data-theme="light"] .ym-submarcas-y.es-oscuro {
+:root[data-theme="light"] .ym-iconos.es-oscuro {
   display: none;
 }
-:root[data-theme="light"] .ym-iconos.es-claro,
-:root[data-theme="light"] .ym-submarcas-y.es-claro {
+:root[data-theme="light"] .ym-iconos.es-claro {
   display: block;
 }
 
@@ -142,6 +171,13 @@
 }
 
 @media (max-width: 760px) {
+  /* Las cuatro líneas, de dos en dos: a cuatro columnas de móvil cada Y se
+     queda en un palmo y su nombre no cabe en una línea. */
+  .ym-ys {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px 20px;
+  }
+
   .ym-tintas {
     grid-template-columns: 1fr 1fr;
     gap: 20px 16px;
