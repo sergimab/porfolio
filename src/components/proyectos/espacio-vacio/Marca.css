@@ -162,14 +162,13 @@
 }
 
 /* ── El giro del isotipo de color ──
-   Los cuatro cuartos se mueven UNA POSICIÓN: el morado pasa a donde estaba el
-   naranja, el naranja a donde el rosa, y así.
-   Se consigue con dos giros opuestos de un cuarto de vuelta cada uno: el
-   conjunto gira noventa grados hacia la izquierda y, a la vez, cada cuarto gira
-   noventa sobre sí mismo hacia la derecha. Los dos se cancelan en la
-   ORIENTACIÓN —cada pieza acaba mirando igual que empezó, así que el isotipo
-   se sigue leyendo como el mismo dibujo— pero no en la POSICIÓN, que sí rota.
-   Girando solo el conjunto, las cuatro esquinas quedarían del revés. */
+   Vuelta completa y todo vuelve a su sitio: el conjunto gira una vez hacia la
+   izquierda y, a la vez, cada cuarto gira una vez sobre sí mismo hacia la
+   derecha. Al ser vueltas ENTERAS, cada color acaba en su misma esquina y
+   mirando igual que al empezar; lo que se ve es el recorrido, no un cambio.
+   Los dos giros van en sentidos contrarios a propósito: si cada cuarto no
+   girase, las esquinas darían la vuelta con el conjunto y el isotipo se
+   leería del revés a mitad de camino. */
 .ev-iso-gira {
   transform-box: view-box;
   transform-origin: 35.77px 35.5px;
@@ -189,21 +188,15 @@
     transform: rotate(0deg);
   }
   to {
-    transform: rotate(-90deg);
+    transform: rotate(-360deg);
   }
 }
-/* 450 y no 360: cada cuarto da la vuelta ENTERA que se le pide y, además, el
-   cuarto que compensa el giro del conjunto. Con 360 clavados la vuelta se ve
-   igual de bien, pero al terminar cada esquina queda girada noventa grados
-   respecto al conjunto y el isotipo aparece del revés: lo que tiene que
-   cancelarse entre los dos giros es la orientación final, no el número de
-   vueltas. */
 @keyframes ev-cuarto-gira {
   from {
     transform: rotate(0deg);
   }
   to {
-    transform: rotate(450deg);
+    transform: rotate(360deg);
   }
 }
 
