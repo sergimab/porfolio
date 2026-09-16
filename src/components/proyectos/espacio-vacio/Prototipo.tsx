@@ -32,7 +32,7 @@ const ASUNTOS = [
 const MENU: { es: string; en: string; alto: number; va?: string }[] = [
   { es: "Calendario", en: "Calendar", alto: 184 },
   { es: "Momentos", en: "Moments", alto: 186 },
-  { es: "Datos", en: "Data", alto: 192 },
+  { es: "Datos", en: "Data", alto: 192, va: "datos" },
 ];
 const MENU_PIE: { es: string; en: string; va?: string }[] = [
   { es: "Perfil", en: "Profile", va: "perfil" },
@@ -311,6 +311,189 @@ function Dato({
   );
 }
 
+
+// ── Datos ────────────────────────────────────────────────────────────────────
+// Las tres vistas del consumo: el día, el mes y el año. Cambian sin salir de la
+// pantalla, así que la vista es estado suyo y no un paso del recorrido.
+//
+// El gráfico va en SVG y sale de una tabla: la caja es el tiempo en redes y
+// cada burbuja una de las cosas que sí llenan. Todas cuelgan de la misma línea
+// de suelo con un tallo, que es lo que las pone a comparar.
+//
+// OJO CON LOS COLORES: aquí el naranja es «hábitos saludables» y el verde
+// «logros», al revés que en la lámina de marca. Se respeta lo que dice esta
+// pantalla, que es la que se está montando.
+const COLORES = {
+  habitos: "#FFAE11",
+  relaciones: "#FF5C5C",
+  aficiones: "#A484FF",
+  logros: "#A1F08D",
+};
+
+type Burbuja = { cx: number; cy: number; r: number; color: string; texto: string };
+type Vista = {
+  id: "diario" | "mensual" | "anual";
+  es: string;
+  en: string;
+  rotulo: string;
+  rotuloEn: string;
+  recuento: string;
+  recuentoEn: string;
+  // La caja del tiempo en redes: sitio, tamaño y cuántas horas. `tx`/`ty`
+  // mueven la cifra cuando el centro de la caja lo ocupa una burbuja, que es lo
+  // que pasa en la vista del año.
+  caja: { x: number; y: number; w: number; h: number; texto: string; tx?: number; ty?: number };
+  burbujas: Burbuja[];
+  cuentas: { color: string; n: string; es: string; en: string }[];
+  vacios: { n: string; es: string; en: string };
+};
+
+const VISTAS: Vista[] = [
+  {
+    id: "diario",
+    es: "Diario",
+    en: "Daily",
+    rotulo: "D.31",
+    rotuloEn: "D.31",
+    recuento: "Recuento del día:",
+    recuentoEn: "The day in numbers:",
+    caja: { x: 33, y: 12, w: 47, h: 47, texto: "4h" },
+    burbujas: [{ cx: 33, cy: 70, r: 12, color: COLORES.habitos, texto: "2h" }],
+    cuentas: [
+      { color: COLORES.habitos, n: "1", es: "Hábito saludable", en: "Healthy habit" },
+      { color: COLORES.relaciones, n: "0", es: "Relaciones personales", en: "Personal relationships" },
+      { color: COLORES.aficiones, n: "0", es: "Aficiones", en: "Hobbies" },
+      { color: COLORES.logros, n: "0", es: "Logros", en: "Achievements" },
+    ],
+    vacios: { n: "3", es: "Espacios vacíos = 1/6 de tu día", en: "Empty slots = 1/6 of your day" },
+  },
+  {
+    id: "mensual",
+    es: "Mensual",
+    en: "Monthly",
+    rotulo: "Diciembre",
+    rotuloEn: "December",
+    recuento: "Recuento del mes:",
+    recuentoEn: "The month in numbers:",
+    caja: { x: 14, y: 6, w: 69, h: 64, texto: "150h", tx: 44, ty: 36 },
+    burbujas: [
+      { cx: 20, cy: 62, r: 11, color: COLORES.habitos, texto: "9h" },
+      { cx: 41, cy: 16, r: 5.5, color: COLORES.logros, texto: "3h" },
+      { cx: 62, cy: 50, r: 12.5, color: COLORES.relaciones, texto: "15h" },
+      { cx: 83, cy: 24, r: 11.5, color: COLORES.aficiones, texto: "10h" },
+    ],
+    cuentas: [
+      { color: COLORES.habitos, n: "6", es: "Hábitos saludables", en: "Healthy habits" },
+      { color: COLORES.relaciones, n: "5", es: "Relaciones personales", en: "Personal relationships" },
+      { color: COLORES.aficiones, n: "2", es: "Aficiones", en: "Hobbies" },
+      { color: COLORES.logros, n: "1", es: "Logros", en: "Achievements" },
+    ],
+    vacios: { n: "112", es: "Espacios vacíos = 4 días de tu vida", en: "Empty slots = 4 days of your life" },
+  },
+  {
+    id: "anual",
+    es: "Anual",
+    en: "Yearly",
+    rotulo: "2023",
+    rotuloEn: "2023",
+    recuento: "Recuento del año:",
+    recuentoEn: "The year in numbers:",
+    caja: { x: 8, y: 5, w: 84, h: 69, texto: "1350h", tx: 44, ty: 29 },
+    burbujas: [
+      { cx: 22, cy: 33, r: 14, color: COLORES.habitos, texto: "120h" },
+      { cx: 40, cy: 56, r: 9, color: COLORES.logros, texto: "45h" },
+      { cx: 62, cy: 50, r: 15.5, color: COLORES.relaciones, texto: "150h" },
+      { cx: 84, cy: 20, r: 13, color: COLORES.aficiones, texto: "100h" },
+    ],
+    cuentas: [
+      { color: COLORES.habitos, n: "6", es: "Hábitos saludables", en: "Healthy habits" },
+      { color: COLORES.relaciones, n: "30", es: "Relaciones personales", en: "Personal relationships" },
+      { color: COLORES.aficiones, n: "4", es: "Aficiones", en: "Hobbies" },
+      { color: COLORES.logros, n: "3", es: "Logros", en: "Achievements" },
+    ],
+    vacios: { n: "1.008", es: "Espacios vacíos = 56 días de tu vida", en: "Empty slots = 56 days of your life" },
+  },
+];
+
+// La línea de suelo de la que cuelga todo.
+const SUELO = 94;
+
+function Grafico({ vista }: { vista: Vista }) {
+  const { caja, burbujas } = vista;
+  return (
+    <svg className="ev-app-grafico" viewBox="0 0 100 104" aria-hidden="true">
+      {/* El tallo de cada pieza sale de su centro y baja hasta el suelo. */}
+      <line x1={caja.x + caja.w / 2} y1={caja.y + caja.h} x2={caja.x + caja.w / 2} y2={SUELO} />
+      {burbujas.map((b) => (
+        <line key={`t${b.cx}`} x1={b.cx} y1={b.cy + b.r} x2={b.cx} y2={SUELO} />
+      ))}
+
+      <rect x={caja.x} y={caja.y} width={caja.w} height={caja.h} className="ev-app-caja" />
+      <text
+        x={caja.tx ?? caja.x + caja.w / 2}
+        y={caja.ty ?? caja.y + caja.h / 2}
+        className="ev-app-cifra"
+      >
+        {caja.texto}
+      </text>
+
+      {burbujas.map((b) => (
+        <g key={`b${b.cx}`}>
+          <circle cx={b.cx} cy={b.cy} r={b.r} fill={b.color} />
+          <text x={b.cx} y={b.cy} className="ev-app-cifra">
+            {b.texto}
+          </text>
+        </g>
+      ))}
+
+      <line x1="0" y1={SUELO} x2="100" y2={SUELO} className="ev-app-suelo" />
+    </svg>
+  );
+}
+
+function Datos({ t }: { t: T }) {
+  const [cual, setCual] = useState<Vista["id"]>("diario");
+  const vista = VISTAS.find((v) => v.id === cual) ?? VISTAS[0];
+  return (
+    <>
+      <div className="ev-app-pestanas">
+        {VISTAS.map((v) => (
+          <button
+            key={v.id}
+            type="button"
+            className={`ev-app-pestana${v.id === cual ? " es-puesta" : ""}`}
+            onClick={() => setCual(v.id)}
+            aria-pressed={v.id === cual}
+          >
+            {t(v.es, v.en)}
+          </button>
+        ))}
+      </div>
+
+      <Grafico vista={vista} />
+      <p className="ev-app-periodo">{t(vista.rotulo, vista.rotuloEn)}</p>
+
+      <h3 className="ev-app-titulo es-suelto es-recuento">
+        {t(vista.recuento, vista.recuentoEn)}
+      </h3>
+      <ul className="ev-app-cuentas">
+        {vista.cuentas.map((c) => (
+          <li key={c.es}>
+            <span className="ev-app-cuenta-n" style={{ background: c.color }}>
+              {c.n}
+            </span>
+            {t(c.es, c.en)}
+          </li>
+        ))}
+        <li>
+          <span className="ev-app-cuenta-n es-caja">{vista.vacios.n}</span>
+          {t(vista.vacios.es, vista.vacios.en)}
+        </li>
+      </ul>
+    </>
+  );
+}
+
 // Una banda del menú de la home. Cuando lleva a algún sitio es un botón; cuando
 // todavía no —el apartado está por hacer—, es solo su rótulo, para no prometer
 // una pulsación que no hace nada.
@@ -360,6 +543,8 @@ type Pantalla = {
   // La pantalla se pinta entera ella misma: sin cabecera común y sin los
   // márgenes del cuerpo.
   plena?: boolean;
+  // El retrato asomando en la esquina de arriba.
+  alfiler?: boolean;
   // A qué altura empieza el cuerpo, en cqw. Sin él, el sitio de siempre; se
   // baja solo donde el texto es tan largo que no cabe desde ahí.
   arranque?: number;
@@ -893,6 +1078,19 @@ const PANTALLAS: Pantalla[] = [
       </>
     ),
   },
+  {
+    id: "datos",
+    es: "Datos",
+    en: "Data",
+    atras: true,
+    flecha: true,
+    atrasVa: "home",
+    arranque: 30,
+    // El retrato asoma en la esquina, como el alfiler de un mapa: es la foto que
+    // se va gastando, y aquí recuerda de quién son estos números.
+    alfiler: true,
+    cuerpo: (c) => <Datos t={c.t} />,
+  },
 ];
 
 const PORID = new Map(PANTALLAS.map((p) => [p.id, p]));
@@ -964,6 +1162,13 @@ export default function Prototipo() {
             <div className="ev-app" key={actual.id}>
               {/* La carga va sin cabecera: ahí la marca ya la pone la
                   animación del isotipo, y el logotipo arriba la repetía. */}
+              {actual.alfiler && (
+                <div className="ev-app-alfiler" aria-hidden="true">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/proyectos/espacio-vacio/app/persona.webp" alt="" />
+                </div>
+              )}
+
               {actual.id !== "carga" && !actual.plena && (
                 <Cabecera
                   atras={

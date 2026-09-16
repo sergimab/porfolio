@@ -144,6 +144,125 @@
   padding: 0;
 }
 
+/* ── Datos ── */
+
+/* Las tres vistas. La puesta se subraya, como en el diseño: sin caja ni fondo,
+   que aquí no son botones de acción sino tres maneras de mirar lo mismo. */
+.ev-app-pestanas {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6cqw;
+}
+.ev-app-pestana {
+  padding: 0 0 1cqw;
+  border: 0;
+  border-bottom: 0.5cqw solid transparent;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 4cqw;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.ev-app-pestana.es-puesta {
+  border-bottom-color: #252221;
+}
+
+/* El gráfico. Los tallos y la caja son hilos finos; el suelo, la línea de la
+   que cuelga todo. `vector-effect` mantiene el grosor aunque el SVG se escale,
+   que es lo que impide que a tamaño grande se conviertan en trazos gordos. */
+.ev-app-grafico {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-bottom: 2cqw;
+}
+.ev-app-grafico line,
+.ev-app-caja {
+  fill: none;
+  stroke: #252221;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.ev-app-grafico .ev-app-suelo {
+  stroke-width: 1.4;
+}
+/* Las cifras van dentro de su figura, centradas en los dos ejes. */
+.ev-app-cifra {
+  font-size: 5px;
+  font-weight: 600;
+  fill: #252221;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.ev-app-periodo {
+  margin: 0 0 7cqw;
+  font-size: 5.4cqw;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.ev-app-titulo.es-recuento {
+  margin-bottom: 4cqw;
+}
+
+/* El recuento: el número dentro de su color y el nombre al lado. */
+.ev-app-cuentas {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ev-app-cuentas li {
+  display: flex;
+  align-items: center;
+  gap: 3cqw;
+  margin-bottom: 3cqw;
+  font-size: 3.6cqw;
+}
+.ev-app-cuenta-n {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 7cqw;
+  height: 7cqw;
+  padding: 0 1.2cqw;
+  border-radius: 50%;
+  box-sizing: border-box;
+  font-size: 3.2cqw;
+  font-weight: 700;
+}
+/* Los espacios vacíos no llevan color: van en una caja cuadrada, que es
+   justamente lo contrario de una burbuja llena. */
+.ev-app-cuenta-n.es-caja {
+  border: 0.28cqw solid #252221;
+  border-radius: 0;
+}
+
+/* El retrato asomando por la esquina de arriba, como el alfiler de un mapa. */
+.ev-app-alfiler {
+  position: absolute;
+  z-index: 4;
+  right: 9cqw;
+  top: 4cqw;
+  width: 13cqw;
+  height: 13cqw;
+  padding: 1cqw;
+  box-sizing: border-box;
+  border-radius: 50% 50% 50% 4%;
+  transform: rotate(45deg);
+  background: #4a86f7;
+}
+.ev-app-alfiler img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  transform: rotate(-45deg);
+}
+
 /* ── El perfil ── */
 
 /* La ficha: el nombre en grande y debajo la edad y el correo, apretados. */
