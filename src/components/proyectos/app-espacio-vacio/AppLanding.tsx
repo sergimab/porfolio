@@ -5,7 +5,9 @@ import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
 import LangText from "@/components/shared/LangText";
 import ToolIcons from "@/components/shared/ToolIcons";
 import Prototipo from "./Prototipo";
-import "./Marca.css";
+// El papel y los divisores son los mismos que los de la página de marca: las
+// dos páginas son el mismo proyecto visto desde dos categorías.
+import "../espacio-vacio/Marca.css";
 
 // App Espacio vacío: el diseño de producto del proyecto, en su propia página de
 // UI/UX.

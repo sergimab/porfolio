@@ -354,7 +354,20 @@ const CATEGORIAS = [
 // La galería: lo guardado, mes a mes. Cada anotación lleva el color de su
 // categoría, el día y la foto. `col` es la columna en la que cae, que es lo que
 // da a la página ese aire de collage en vez de rejilla cerrada.
-const GALERIA: { mes: string; mesEn: string; dias: { dia: number; color: string; img: number; col: number; ancho: number; alto: number }[] }[] = [
+type Anotacion = {
+  dia: number;
+  color: string;
+  img: number;
+  col: number;
+  ancho: number;
+  alto: number;
+  // La única que se puede abrir, de momento: es el ejemplo de cómo se ve una
+  // anotación guardada. Las demás se quedan en la miniatura porque no hay foto
+  // grande ni texto para ellas, y fingirlo sería inventarse el contenido.
+  detalle?: { foto: string; fecha: string; que: string; queEn: string; rato: string; ratoEn: string };
+};
+
+const GALERIA: { mes: string; mesEn: string; dias: Anotacion[] }[] = [
   {
     mes: "Enero",
     mesEn: "January",
@@ -374,7 +387,22 @@ const GALERIA: { mes: string; mesEn: string; dias: { dia: number; color: string;
     mesEn: "February",
     dias: [
       { dia: 4, color: COLORES.logros, img: 9, col: 1, ancho: 19, alto: 1.4 },
-      { dia: 6, color: COLORES.relaciones, img: 10, col: 2, ancho: 18, alto: 1.35 },
+      {
+        dia: 6,
+        color: COLORES.relaciones,
+        img: 10,
+        col: 2,
+        ancho: 18,
+        alto: 1.35,
+        detalle: {
+          foto: "/proyectos/app-espacio-vacio/momentos/carnet-conducir.webp",
+          fecha: "6 / 02 / 2024",
+          que: "Carnet de conducir",
+          queEn: "Driving licence",
+          rato: "30 horas",
+          ratoEn: "30 hours",
+        },
+      },
       { dia: 9, color: COLORES.aficiones, img: 11, col: 3, ancho: 19, alto: 1.4 },
       { dia: 11, color: COLORES.logros, img: 12, col: 2, ancho: 18, alto: 1.4 },
       { dia: 12, color: COLORES.aficiones, img: 13, col: 3, ancho: 18, alto: 1.35 },
@@ -609,6 +637,9 @@ type Pantalla = {
   // Y antes de volver, la pantalla tiene su oportunidad: si devuelve cierto, se
   // ha ocupado ella —cerrando un panel, por ejemplo— y no se sale.
   alVolver?: (c: Ctx) => boolean;
+  // Una capa por encima de todo: popups y cosas que no se desplazan con el
+  // contenido.
+  encima?: (c: Ctx) => React.ReactNode;
   // Y se vuelve con la flecha de la cabecera en vez de con el botón de abajo.
   // Lo llevan las pantallas cuyo pie ya tiene su propio botón —los formularios
   // y la última—, donde un «Atrás» abajo serían dos botones amontonados.
@@ -1096,7 +1127,7 @@ const PANTALLAS: Pantalla[] = [
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           className="ev-app-retrato"
-          src="/proyectos/espacio-vacio/app/persona.webp"
+          src="/proyectos/app-espacio-vacio/persona.webp"
           alt={c.t("Fotografía de perfil de Clara", "Clara's profile photo")}
         />
         <div className="ev-app-fila es-pegada">
@@ -1136,7 +1167,7 @@ const PANTALLAS: Pantalla[] = [
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           className="ev-app-retrato es-sello"
-          src="/proyectos/espacio-vacio/app/persona.webp"
+          src="/proyectos/app-espacio-vacio/persona.webp"
           alt={c.t("Fotografía de perfil de Clara", "Clara's profile photo")}
         />
         <Dato etiqueta={c.t("Nombre", "First name")} valor="Clara" t={c.t} />
@@ -1193,7 +1224,13 @@ const PANTALLAS: Pantalla[] = [
                 "Add the things that matter to you here: the moments that feed your own growth or your ties to people and the real world."
               )}
             </p>
-            <Boton clase="es-centrado" onClick={() => c.ir("galeria")}>
+            <Boton
+              clase="es-centrado"
+              onClick={() => {
+                c.setAbierta(null);
+                c.ir("galeria");
+              }}
+            >
               {c.t("Mis momentos", "My moments")}
             </Boton>
           </div>
@@ -1252,36 +1289,82 @@ const PANTALLAS: Pantalla[] = [
     flecha: true,
     atrasVa: "momentos",
     arranque: 26,
+    // Con una anotación abierta, la flecha cierra el popup en vez de salir.
+    alVolver: (c) => {
+      if (!c.abierta) return false;
+      c.setAbierta(null);
+      return true;
+    },
     cuerpo: (c) => (
       <>
         {GALERIA.map((mes) => (
-          <section key={mes.mes} className="ev-app-mes">
-            <h3 className="ev-app-titulo es-suelto">{c.t(mes.mes, mes.mesEn)}</h3>
-            <div className="ev-app-collage">
-              {mes.dias.map((d) => (
-                <figure
-                  key={d.dia}
-                  className="ev-app-momento"
-                  style={{ gridColumn: d.col }}
-                >
-                  <figcaption>
-                    <span className="ev-app-punto" style={{ background: d.color }} />
-                    {d.dia}
-                  </figcaption>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={`/proyectos/espacio-vacio/app/momentos/m${d.img}.webp`}
-                    alt=""
-                    style={{ width: `${d.ancho}cqw`, aspectRatio: `1 / ${d.alto}` }}
-                  />
-                </figure>
-              ))}
-            </div>
-          </section>
-        ))}
+            <section key={mes.mes} className="ev-app-mes">
+              <h3 className="ev-app-titulo es-suelto">{c.t(mes.mes, mes.mesEn)}</h3>
+              <div className="ev-app-collage">
+                {mes.dias.map((d) => {
+                  const pieza = (
+                    <>
+                      <figcaption>
+                        <span className="ev-app-punto" style={{ background: d.color }} />
+                        {d.dia}
+                      </figcaption>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={`/proyectos/app-espacio-vacio/momentos/m${d.img}.webp`}
+                        alt=""
+                        style={{ width: `${d.ancho}cqw`, aspectRatio: `1 / ${d.alto}` }}
+                      />
+                    </>
+                  );
+                  // La que tiene detalle se puede abrir, y se le nota: lleva un
+                  // foco que late para que se vea que ahí hay algo.
+                  return d.detalle ? (
+                    <button
+                      key={d.dia}
+                      type="button"
+                      className="ev-app-momento es-abrible"
+                      style={{ gridColumn: d.col }}
+                      onClick={() => c.setAbierta(`dia-${d.dia}`)}
+                    >
+                      {pieza}
+                    </button>
+                  ) : (
+                    <figure key={d.dia} className="ev-app-momento" style={{ gridColumn: d.col }}>
+                      {pieza}
+                    </figure>
+                  );
+                })}
+              </div>
+            </section>
+          ))}
+
       </>
     ),
+    // El popup va FUERA del cuerpo: el cuerpo se desplaza, y dentro de él la
+    // capa quedaría anclada arriba del contenido en vez de sobre lo que se está
+    // mirando.
+    encima: (c) => {
+      const abierta = GALERIA.flatMap((m) => m.dias).find(
+        (d) => d.detalle && `dia-${d.dia}` === c.abierta
+      );
+      const d = abierta?.detalle;
+      if (!d) return null;
+      // La foto grande y, debajo, lo que se guardó con ella. El fondo
+      // oscurecido cierra al pulsarlo, como cualquier popup.
+      return (
+        <div className="ev-app-popup" onClick={() => c.setAbierta(null)}>
+          <div className="ev-app-popup-caja" onClick={(e) => e.stopPropagation()}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={d.foto} alt="" />
+            <p className="ev-app-popup-fecha">{d.fecha}</p>
+            <p>{c.t(d.que, d.queEn)}</p>
+            <p>{c.t(d.rato, d.ratoEn)}</p>
+          </div>
+        </div>
+      );
+    },
   },
+
 ];
 
 const PORID = new Map(PANTALLAS.map((p) => [p.id, p]));
@@ -1379,7 +1462,7 @@ export default function Prototipo() {
                   <video
                     ref={video}
                     className="ev-app-carga es-video"
-                    src="/proyectos/espacio-vacio/app/isotipo.mp4"
+                    src="/proyectos/app-espacio-vacio/isotipo.mp4"
                     muted
                     playsInline
                     preload="auto"
@@ -1411,6 +1494,8 @@ export default function Prototipo() {
                   </Boton>
                 )}
               </div>
+
+              {actual.encima?.(ctx)}
             </div>
           </div>
         </div>

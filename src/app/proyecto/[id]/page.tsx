@@ -16,7 +16,7 @@ import ElysiumLanding from "@/components/proyectos/elysium/ElysiumLanding";
 import DiscoElysiumLanding from "@/components/proyectos/disco-elysium/DiscoElysiumLanding";
 import ElysiumWebLanding from "@/components/proyectos/elysium-web/ElysiumWebLanding";
 import EspacioVacioLanding from "@/components/proyectos/espacio-vacio/EspacioVacioLanding";
-import AppEspacioVacioLanding from "@/components/proyectos/espacio-vacio/AppLanding";
+import AppEspacioVacioLanding from "@/components/proyectos/app-espacio-vacio/AppLanding";
 
 const LANDINGS: Record<string, React.ComponentType> = {
   i1: InfografiasLanding,

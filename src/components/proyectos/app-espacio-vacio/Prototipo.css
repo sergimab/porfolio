@@ -1,4 +1,4 @@
-@import "./fuente.css";
+@import "../espacio-vacio/fuente.css";
 
 /* El alta de la app, programada, dentro de un móvil. */
 .ev-proto {
@@ -82,6 +82,9 @@
   left: 0;
   right: 0;
   height: 22cqw;
+  /* Opaca: en las pantallas que se desplazan —la galería, la guía— el contenido
+     pasa por debajo, y sin fondo se veía el logotipo encima de las fotos. */
+  background: #fff;
   /* El cuerpo se estira por toda la pantalla —le hace falta para colgar los
      botones del borde de abajo— y va después en el marcado, así que pasa por
      delante. Cuando la cabecera no tiene nada que pulsar se aparta; y cuando
@@ -279,6 +282,94 @@
 }
 .ev-app-momento {
   margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+
+/* La anotación que se puede abrir lleva foco: un halo que late alrededor de la
+   foto. Sin él, en un collage de trece miniaturas iguales no hay forma de saber
+   que una responde y las demás no. */
+.ev-app-momento.es-abrible {
+  cursor: pointer;
+}
+.ev-app-momento.es-abrible img {
+  outline: 0.6cqw solid #252221;
+  outline-offset: 0.8cqw;
+  animation: ev-foco 1800ms ease-in-out infinite;
+}
+@keyframes ev-foco {
+  50% {
+    outline-color: color-mix(in srgb, #252221 25%, transparent);
+    outline-offset: 1.6cqw;
+  }
+}
+.ev-app-momento.es-abrible:hover img,
+.ev-app-momento.es-abrible:focus-visible img {
+  animation: none;
+  outline-color: #252221;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ev-app-momento.es-abrible img {
+    animation: none;
+  }
+}
+
+/* ── El momento abierto ── */
+
+/* Cubre la pantalla entera del móvil, por encima de todo lo demás. Va fuera del
+   cuerpo —que se desplaza—, así que se queda sobre lo que se está mirando y no
+   anclado arriba del contenido. */
+.ev-app-popup {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8cqw;
+  box-sizing: border-box;
+  background: rgba(37, 34, 33, 0.45);
+  animation: ev-popup 180ms ease-out both;
+}
+@keyframes ev-popup {
+  from {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ev-app-popup {
+    animation: none;
+  }
+}
+.ev-app-popup-caja {
+  width: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding: 5cqw;
+  box-sizing: border-box;
+  background: #fff;
+  border: 0.28cqw solid #252221;
+}
+.ev-app-popup-caja::-webkit-scrollbar {
+  display: none;
+}
+.ev-app-popup-caja img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-bottom: 4cqw;
+}
+.ev-app-popup-caja p {
+  margin: 0 0 2.4cqw;
+  font-size: 4cqw;
+}
+.ev-app-popup-fecha {
+  font-weight: 500;
 }
 .ev-app-momento figcaption {
   display: flex;
