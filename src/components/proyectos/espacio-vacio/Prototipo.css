@@ -377,12 +377,13 @@
   flex: 0 0 auto;
 }
 
-/* La animación del isotipo, sobre la pantalla de carga. */
+/* La animación del isotipo, sobre la pantalla de carga. Centrada del todo: sin
+   el logotipo arriba, la pantalla es solo ella. */
 .ev-app-carga {
   position: absolute;
   z-index: 2;
   left: 50%;
-  top: 46%;
+  top: 50%;
   transform: translate(-50%, -50%);
   width: 62%;
   pointer-events: none;

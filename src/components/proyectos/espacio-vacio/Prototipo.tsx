@@ -270,19 +270,21 @@ const PANTALLAS: Pantalla[] = [
     cuerpo: (c) => (
       <>
         <h3 className="ev-app-titulo es-suelto">{c.t("Crear cuenta", "Create account")}</h3>
-        {/* Los datos del ejemplo. Las contraseñas se teclean en puntos porque
-            es lo que se ve en un campo de contraseña, y así además se lee de un
-            vistazo que son dos campos distintos del mismo tipo. */}
+        {/* Los datos son los de la pantalla de perfil del proyecto: la misma
+            usuaria de ejemplo aquí que allí. La contraseña se teclea a la vista
+            —sin puntos— porque así está en el diseño original. */}
         <CamposAuto
           campos={[
-            { etiqueta: c.t("Nombre completo", "Full name"), valor: "Ana García Ruiz" },
-            { etiqueta: c.t("Correo electrónico", "Email"), valor: "ana.garcia@gmail.com" },
-            { etiqueta: c.t("Fecha de nacimiento", "Date of birth"), valor: "12/04/2001" },
-            { etiqueta: c.t("Contraseña", "Password"), valor: "••••••••", clave: true },
+            { etiqueta: c.t("Nombre completo", "Full name"), valor: "Clara Gutiérrez García" },
+            { etiqueta: c.t("Correo electrónico", "Email"), valor: "cgutierrez@gmail.com" },
+            {
+              etiqueta: c.t("Fecha de nacimiento", "Date of birth"),
+              valor: c.t("16 de Marzo de 2003", "16 March 2003"),
+            },
+            { etiqueta: c.t("Contraseña", "Password"), valor: "Polloconarroz" },
             {
               etiqueta: c.t("Confirmar contraseña", "Confirm password"),
-              valor: "••••••••",
-              clave: true,
+              valor: "Polloconarroz",
             },
           ]}
         />
@@ -522,7 +524,11 @@ export default function Prototipo() {
             {/* La clave fuerza a React a rehacer el cuerpo al cambiar de
                 pantalla, que es lo que dispara la entrada. */}
             <div className="ev-app" key={actual.id}>
-              <Cabecera atras={actual.atras ? atras : undefined} t={t} />
+              {/* La carga va sin cabecera: ahí la marca ya la pone la
+                  animación del isotipo, y el logotipo arriba la repetía. */}
+              {actual.id !== "carga" && (
+                <Cabecera atras={actual.atras ? atras : undefined} t={t} />
+              )}
 
               {/* La animación del isotipo de la pantalla de carga. El vídeo
                   viene con fondo casi blanco —#FDFDFD— sobre una pantalla
