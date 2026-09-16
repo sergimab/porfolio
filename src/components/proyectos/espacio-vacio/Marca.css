@@ -174,8 +174,18 @@
 .ev-guias.es-diferencia {
   mix-blend-mode: difference;
 }
-.ev-guias.es-diferencia rect {
+.ev-guias.es-diferencia rect,
+.ev-guias.es-diferencia circle {
   opacity: 1;
+}
+
+/* Las circunferencias de las esquinas, macizas: mancha tenue y sin hilo, como
+   en el original. Al ir debajo del isotipo solo se ve lo que sobresale de él,
+   que es justo lo que enseña de dónde sale el radio. */
+.ev-guias circle.es-disco {
+  fill: currentColor;
+  stroke: none;
+  opacity: 0.3;
 }
 
 /* ── El grid del isotipo, dibujándose ── */
@@ -212,6 +222,22 @@
 .ev-grid.es-visible .ev-grid-iso {
   animation: ev-iso-entra 700ms cubic-bezier(0.22, 1, 0.36, 1) 760ms both;
 }
+/* Los discos entran igual, pero a su propia opacidad: la animación general
+   termina en 0.55 y, siendo mancha y no hilo, ahí tapaban el isotipo. */
+.ev-grid.es-visible .ev-guias > circle.es-disco {
+  animation-name: ev-disco-entra;
+}
+@keyframes ev-disco-entra {
+  from {
+    opacity: 0;
+    transform: scale(0.82);
+  }
+  to {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+}
+
 @keyframes ev-iso-entra {
   from {
     opacity: 0;

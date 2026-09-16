@@ -132,19 +132,35 @@ export default function Marca() {
                 Y EL ISOTIPO DENTRO, que es lo que faltaba: las cuatro
                 circunferencias son de donde salen sus esquinas, así que sin la
                 pieza encima la lámina enseñaba un andamio sin nada construido. */}
-            <svg className="ev-lamina-pieza" viewBox="-15 -15 101.55 101" aria-hidden="true">
+            <svg className="ev-lamina-pieza" viewBox="-26 -26 123.55 123" aria-hidden="true">
               <g className="ev-guias">
-                <rect x="-11" y="-11" width="93.55" height="93" rx="26" style={{ animationDelay: "0ms" }} />
-                <rect x="-4" y="-4" width="79.55" height="79" rx="22" style={{ animationDelay: "90ms" }} />
-                <rect x="0" y="0" width="71.55" height="71" style={{ animationDelay: "180ms" }} />
-                <line x1="-15" y1="35.5" x2="86.55" y2="35.5" style={{ animationDelay: "260ms" }} />
-                <line x1="35.77" y1="-15" x2="35.77" y2="86" style={{ animationDelay: "260ms" }} />
-                <line x1="0" y1="0" x2="71.55" y2="71" style={{ animationDelay: "340ms" }} />
-                <line x1="71.55" y1="0" x2="0" y2="71" style={{ animationDelay: "340ms" }} />
-                <circle cx="12.83" cy="12.83" r="12.83" style={{ animationDelay: "500ms" }} />
-                <circle cx="58.72" cy="12.83" r="12.83" style={{ animationDelay: "560ms" }} />
-                <circle cx="12.83" cy="58.17" r="12.83" style={{ animationDelay: "620ms" }} />
-                <circle cx="58.72" cy="58.17" r="12.83" style={{ animationDelay: "680ms" }} />
+                {/* La caja redondeada de la que cuelga todo, y el círculo que
+                    pasa por las cuatro esquinas de la caja del isotipo —el
+                    mismo que queda inscrito en las marcas de corte—. */}
+                <rect x="-21.4" y="-21.7" width="114.4" height="114.4" rx="36" style={{ animationDelay: "0ms" }} />
+                <circle cx="35.77" cy="35.5" r="50.6" style={{ animationDelay: "90ms" }} />
+                {/* Las marcas de corte: cuatro líneas sueltas y no un rectángulo,
+                    porque lo que las hace marcas es justamente que se pasen de
+                    largo por las esquinas. */}
+                <line x1="-24" y1="-15" x2="95.5" y2="-15" style={{ animationDelay: "180ms" }} />
+                <line x1="-24" y1="86" x2="95.5" y2="86" style={{ animationDelay: "180ms" }} />
+                <line x1="-15" y1="-24" x2="-15" y2="95" style={{ animationDelay: "180ms" }} />
+                <line x1="86.55" y1="-24" x2="86.55" y2="95" style={{ animationDelay: "180ms" }} />
+                {/* Los ejes, de lado a lado. */}
+                <line x1="-24" y1="35.5" x2="95.5" y2="35.5" style={{ animationDelay: "260ms" }} />
+                <line x1="35.77" y1="-24" x2="35.77" y2="95" style={{ animationDelay: "260ms" }} />
+                {/* La caja del isotipo y sus diagonales, que siguen hasta cruzarse
+                    con las marcas de corte. */}
+                <rect x="0" y="0" width="71.55" height="71" style={{ animationDelay: "340ms" }} />
+                <line x1="-24" y1="-23.8" x2="95.5" y2="94.8" style={{ animationDelay: "420ms" }} />
+                <line x1="95.5" y1="-23.8" x2="-24" y2="94.8" style={{ animationDelay: "420ms" }} />
+                {/* Las cuatro circunferencias de las esquinas van MACIZAS: son de
+                    donde sale el radio de la pieza, y en trazo se confundían con
+                    una guía más de las muchas que cruzan por ahí. */}
+                <circle className="es-disco" cx="12.83" cy="12.83" r="12.83" style={{ animationDelay: "500ms" }} />
+                <circle className="es-disco" cx="58.72" cy="12.83" r="12.83" style={{ animationDelay: "560ms" }} />
+                <circle className="es-disco" cx="12.83" cy="58.17" r="12.83" style={{ animationDelay: "620ms" }} />
+                <circle className="es-disco" cx="58.72" cy="58.17" r="12.83" style={{ animationDelay: "680ms" }} />
               </g>
               <g className="ev-grid-iso">
                 <Isotipo />
@@ -158,6 +174,9 @@ export default function Marca() {
                   el isotipo. */}
               <g className="ev-guias es-diferencia">
                 <rect x="12.83" y="12.83" width="45.89" height="45.34" style={{ animationDelay: "420ms" }} />
+                {/* Y el círculo inscrito en él, que cae de lleno sobre la pieza:
+                    por eso viene aquí y no con las demás. */}
+                <circle cx="35.77" cy="35.5" r="22.95" style={{ animationDelay: "740ms" }} />
               </g>
             </svg>
           </div>
