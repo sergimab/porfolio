@@ -31,7 +31,7 @@ const ASUNTOS = [
 // que lleva cada una, y las que aún no existen se pintan igual pero no navegan.
 const MENU: { es: string; en: string; alto: number; va?: string }[] = [
   { es: "Calendario", en: "Calendar", alto: 184 },
-  { es: "Momentos", en: "Moments", alto: 186 },
+  { es: "Momentos", en: "Moments", alto: 186, va: "momentos" },
   { es: "Datos", en: "Data", alto: 192, va: "datos" },
 ];
 const MENU_PIE: { es: string; en: string; va?: string }[] = [
@@ -58,6 +58,12 @@ type Ctx = {
   t: T;
   horas: number;
   setHoras: (h: number) => void;
+  // Qué categoría se está anotando. La elige la pantalla de momentos y la lee
+  // la de añadir, que es la misma para las cuatro: lo único que cambia es el
+  // color y el rótulo, y hacer cuatro pantallas iguales para eso sería
+  // copiarlas tres veces.
+  categoria: string;
+  setCategoria: (c: string) => void;
 };
 
 // La cabecera: el logotipo y, en las pantallas que lo piden, la flecha de
@@ -163,6 +169,20 @@ function Campo({
         readOnly
       />
     </label>
+  );
+}
+
+// Un campo que se despliega: se pinta como uno normal pero con el galón a la
+// derecha. No abre nada —la lista desplegada no está diseñada—, así que se
+// queda en lo que enseña el archivo.
+function Desplegable({ texto }: { texto: string }) {
+  return (
+    <div className="ev-app-campo es-desplegable">
+      {texto}
+      <svg viewBox="0 0 12 8" aria-hidden="true">
+        <path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor" strokeWidth="1.2" />
+      </svg>
+    </div>
   );
 }
 
@@ -312,14 +332,7 @@ function Dato({
 }
 
 
-// ── Datos ────────────────────────────────────────────────────────────────────
-// Las tres vistas del consumo: el día, el mes y el año. Cambian sin salir de la
-// pantalla, así que la vista es estado suyo y no un paso del recorrido.
-//
-// El gráfico va en SVG y sale de una tabla: la caja es el tiempo en redes y
-// cada burbuja una de las cosas que sí llenan. Todas cuelgan de la misma línea
-// de suelo con un tallo, que es lo que las pone a comparar.
-//
+
 // OJO CON LOS COLORES: aquí el naranja es «hábitos saludables» y el verde
 // «logros», al revés que en la lámina de marca. Se respeta lo que dice esta
 // pantalla, que es la que se está montando.
@@ -329,6 +342,66 @@ const COLORES = {
   aficiones: "#A484FF",
   logros: "#A1F08D",
 };
+
+// ── Momentos ─────────────────────────────────────────────────────────────────
+// Las cuatro cosas que se anotan a mano, con el color que les da la marca.
+const CATEGORIAS = [
+  { id: "relaciones", color: COLORES.relaciones, es: "Relaciones personales", en: "Personal relationships" },
+  { id: "aficiones", color: COLORES.aficiones, es: "Aficiones", en: "Hobbies" },
+  { id: "habitos", color: COLORES.habitos, es: "Hábitos saludables", en: "Healthy habits" },
+  { id: "logros", color: COLORES.logros, es: "Logros", en: "Achievements" },
+];
+
+// La galería: lo guardado, mes a mes. Cada anotación lleva el color de su
+// categoría, el día y la foto. `col` es la columna en la que cae, que es lo que
+// da a la página ese aire de collage en vez de rejilla cerrada.
+const GALERIA: { mes: string; mesEn: string; dias: { dia: number; color: string; img: number; col: number; ancho: number; alto: number }[] }[] = [
+  {
+    mes: "Enero",
+    mesEn: "January",
+    dias: [
+      { dia: 2, color: COLORES.aficiones, img: 1, col: 1, ancho: 22, alto: 0.75 },
+      { dia: 8, color: COLORES.logros, img: 2, col: 2, ancho: 15, alto: 1.5 },
+      { dia: 10, color: COLORES.relaciones, img: 3, col: 3, ancho: 21, alto: 1.1 },
+      { dia: 13, color: COLORES.aficiones, img: 4, col: 2, ancho: 16, alto: 1.6 },
+      { dia: 18, color: COLORES.habitos, img: 5, col: 3, ancho: 17, alto: 0.72 },
+      { dia: 19, color: COLORES.logros, img: 6, col: 1, ancho: 18, alto: 1.5 },
+      { dia: 23, color: COLORES.aficiones, img: 7, col: 2, ancho: 20, alto: 0.78 },
+      { dia: 31, color: COLORES.relaciones, img: 8, col: 3, ancho: 18, alto: 1.5 },
+    ],
+  },
+  {
+    mes: "Febrero",
+    mesEn: "February",
+    dias: [
+      { dia: 4, color: COLORES.logros, img: 9, col: 1, ancho: 19, alto: 1.4 },
+      { dia: 6, color: COLORES.relaciones, img: 10, col: 2, ancho: 18, alto: 1.35 },
+      { dia: 9, color: COLORES.aficiones, img: 11, col: 3, ancho: 19, alto: 1.4 },
+      { dia: 11, color: COLORES.logros, img: 12, col: 2, ancho: 18, alto: 1.4 },
+      { dia: 12, color: COLORES.aficiones, img: 13, col: 3, ancho: 18, alto: 1.35 },
+    ],
+  },
+];
+
+// El botón de añadir de cada categoría: el aspa dentro de su color.
+function Mas({ color }: { color: string }) {
+  return (
+    <span className="ev-app-mas" style={{ background: color }} aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 5v14M5 12h14" fill="none" stroke="#252221" strokeWidth="2" />
+      </svg>
+    </span>
+  );
+}
+
+// ── Datos ────────────────────────────────────────────────────────────────────
+// Las tres vistas del consumo: el día, el mes y el año. Cambian sin salir de la
+// pantalla, así que la vista es estado suyo y no un paso del recorrido.
+//
+// El gráfico va en SVG y sale de una tabla: la caja es el tiempo en redes y
+// cada burbuja una de las cosas que sí llenan. Todas cuelgan de la misma línea
+// de suelo con un tallo, que es lo que las pone a comparar.
+//
 
 type Burbuja = { cx: number; cy: number; r: number; color: string; texto: string };
 type Vista = {
@@ -540,9 +613,12 @@ type Pantalla = {
   flecha?: boolean;
   // El cuerpo, centrado en el alto de la pantalla en vez de colgado de arriba.
   centrado?: boolean;
-  // La pantalla se pinta entera ella misma: sin cabecera común y sin los
-  // márgenes del cuerpo.
+  // La pantalla se pinta entera ella misma: sin los márgenes del cuerpo, para
+  // que lo suyo llegue hasta los cantos.
   plena?: boolean;
+  // Y sin la cabecera común. Lo lleva la home, cuyo logotipo va dentro de su
+  // propia banda; las demás pantallas plenas sí la quieren.
+  sinCabecera?: boolean;
   // A qué altura empieza el cuerpo, en cqw. Sin él, el sitio de siempre; se
   // baja solo donde el texto es tan largo que no cabe desde ahí.
   arranque?: number;
@@ -804,10 +880,10 @@ const PANTALLAS: Pantalla[] = [
     // Sin volver dentro de la pantalla: la home es el final del alta y en la
     // app no se vuelve de ella a ninguna parte. Para deshacer el recorrido
     // están los mandos de fuera del móvil.
-    // La home se pinta ella sola de borde a borde: el logotipo va dentro de su
-    // banda, no en la cabecera común, y las bandas llegan hasta los cantos de
-    // la pantalla.
+    // La home se pinta ella sola de borde a borde y se queda sin cabecera: su
+    // logotipo va dentro de su propia banda.
     plena: true,
+    sinCabecera: true,
     cuerpo: (c) => (
       <div className="ev-app-home">
         <div className="ev-app-home-marca">
@@ -1086,6 +1162,120 @@ const PANTALLAS: Pantalla[] = [
     arranque: 30,
     cuerpo: (c) => <Datos t={c.t} />,
   },
+  {
+    id: "momentos",
+    es: "Momentos",
+    en: "Moments",
+    atras: true,
+    flecha: true,
+    atrasVa: "home",
+    plena: true,
+    cuerpo: (c) => (
+      <div className="ev-app-momentos">
+        <div className="ev-app-momentos-alto">
+          <p className="ev-app-texto es-guia">
+            {c.t(
+              "Añade en este apartado cosas importantes para ti. Como creas momentos de calidad que fomentan tu crecimiento personal o tus conexiones con las personas y el mundo real.",
+              "Add the things that matter to you here: the moments that feed your own growth or your ties to people and the real world."
+            )}
+          </p>
+          <Boton clase="es-centrado" onClick={() => c.ir("galeria")}>
+            {c.t("Mis momentos", "My moments")}
+          </Boton>
+        </div>
+        {/* Las cuatro categorías, en cuadrante. Las divisiones llegan hasta los
+            cantos de la pantalla, como en el diseño. */}
+        <div className="ev-app-cuadrante">
+          {CATEGORIAS.map((cat) => (
+            <button
+              key={cat.id}
+              type="button"
+              className="ev-app-casilla"
+              onClick={() => {
+                c.setCategoria(cat.id);
+                c.ir("momento-nuevo");
+              }}
+            >
+              <span>{c.t(cat.es, cat.en)}</span>
+              <Mas color={cat.color} />
+            </button>
+          ))}
+        </div>
+      </div>
+    ),
+  },
+  {
+    id: "momento-nuevo",
+    es: "Momentos · Añadir",
+    en: "Moments · Add",
+    atras: true,
+    flecha: true,
+    atrasVa: "momentos",
+    arranque: 30,
+    cuerpo: (c) => {
+      const cat = CATEGORIAS.find((x) => x.id === c.categoria) ?? CATEGORIAS[0];
+      return (
+        <>
+          {/* El hueco de la foto, teñido del color de la categoría: es lo único
+              que distingue una anotación de otra, así que manda en la pantalla. */}
+          <div
+            className="ev-app-hueco-foto"
+            style={{
+              borderColor: cat.color,
+              background: `color-mix(in srgb, ${cat.color} 14%, #fff)`,
+            }}
+          >
+            <Mas color={cat.color} />
+          </div>
+          <span className="ev-oculto">{c.t(cat.es, cat.en)}</span>
+          <Desplegable texto="10 / 01 / 2024" />
+          <Campo texto={c.t("Descripción", "Description")} />
+          <Desplegable texto={c.t("1 hora", "1 hour")} />
+          <Boton clase="es-centrado es-guardar" onClick={() => c.ir("galeria")}>
+            {c.t("Guardar", "Save")}
+          </Boton>
+        </>
+      );
+    },
+  },
+  {
+    id: "galeria",
+    es: "Momentos · Mis momentos",
+    en: "Moments · My moments",
+    atras: true,
+    flecha: true,
+    atrasVa: "momentos",
+    arranque: 26,
+    cuerpo: (c) => (
+      <>
+        {GALERIA.map((mes) => (
+          <section key={mes.mes} className="ev-app-mes">
+            <h3 className="ev-app-titulo es-suelto">{c.t(mes.mes, mes.mesEn)}</h3>
+            <div className="ev-app-collage">
+              {mes.dias.map((d) => (
+                <figure
+                  key={d.dia}
+                  className="ev-app-momento"
+                  style={{ gridColumn: d.col }}
+                >
+                  <figcaption>
+                    <span className="ev-app-punto" style={{ background: d.color }} />
+                    {d.dia}
+                  </figcaption>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={`/proyectos/espacio-vacio/app/momentos/m${d.img}.webp`}
+                    alt=""
+                    style={{ width: `${d.ancho}cqw`, aspectRatio: `1 / ${d.alto}` }}
+                  />
+                </figure>
+              ))}
+            </div>
+          </section>
+        ))}
+      </>
+    ),
+  },
 ];
 
 const PORID = new Map(PANTALLAS.map((p) => [p.id, p]));
@@ -1099,6 +1289,7 @@ export default function Prototipo() {
   // que se tomó, así que hace falta la pila entera.
   const [camino, setCamino] = useState<string[]>(["carga"]);
   const [horas, setHoras] = useState(3);
+  const [categoria, setCategoria] = useState("relaciones");
   // La carga tiene dos momentos: el isotipo quieto esperando, y la animación
   // corriendo desde que se pulsa comenzar hasta que entra la bienvenida.
   const [arrancando, setArrancando] = useState(false);
@@ -1143,7 +1334,7 @@ export default function Prototipo() {
     return () => clearTimeout(reloj);
   }, [arrancando, ir]);
 
-  const ctx: Ctx = { ir, t, horas, setHoras };
+  const ctx: Ctx = { ir, t, horas, setHoras, categoria, setCategoria };
 
   return (
     <section className="ev-proto">
@@ -1157,7 +1348,7 @@ export default function Prototipo() {
             <div className="ev-app" key={actual.id}>
               {/* La carga va sin cabecera: ahí la marca ya la pone la
                   animación del isotipo, y el logotipo arriba la repetía. */}
-              {actual.id !== "carga" && !actual.plena && (
+              {actual.id !== "carga" && !actual.sinCabecera && (
                 <Cabecera
                   atras={
                     actual.flecha

@@ -144,6 +144,138 @@
   padding: 0;
 }
 
+/* ── Momentos ── */
+
+/* La pantalla se pinta entera: el texto arriba, con sus márgenes, y el
+   cuadrante de categorías llegando hasta los cantos. */
+.ev-app-momentos {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-top: 30cqw;
+  box-sizing: border-box;
+}
+.ev-app-momentos-alto {
+  flex: 0 0 auto;
+  padding: 0 11.5cqw 8cqw;
+}
+
+/* Las cuatro categorías, dos por dos, con los hilos de separación cruzando la
+   pantalla de lado a lado. */
+.ev-app-cuadrante {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 0.28cqw solid #252221;
+}
+.ev-app-casilla {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5cqw;
+  padding: 4cqw 3cqw;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 4cqw;
+  font-weight: 500;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.2;
+  cursor: pointer;
+}
+/* Los hilos: el de la izquierda en las casillas de la derecha, y el de arriba
+   en las de la fila de abajo. Así no hay líneas dobles ni una suelta contra el
+   borde. */
+.ev-app-casilla:nth-child(even) {
+  border-left: 0.28cqw solid #252221;
+}
+.ev-app-casilla:nth-child(n + 3) {
+  border-top: 0.28cqw solid #252221;
+}
+
+/* El botón de añadir. */
+.ev-app-mas {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 11cqw;
+  height: 11cqw;
+  border-radius: 50%;
+}
+.ev-app-mas svg {
+  width: 6cqw;
+  height: 6cqw;
+}
+
+/* ── Añadir un momento ── */
+
+/* El hueco de la foto: el color de la categoría, muy rebajado para el fondo y
+   entero para el borde. Es lo único que distingue una anotación de otra. */
+.ev-app-hueco-foto {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 3 / 2;
+  margin-bottom: 5cqw;
+  border: 0.28cqw solid;
+}
+
+/* El campo que se despliega: la misma caja que un campo, con el galón a la
+   derecha. */
+.ev-app-campo.es-desplegable {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  margin-bottom: 2.6cqw;
+  padding: 2.2cqw 2.6cqw;
+  border: 0.28cqw solid #252221;
+  font-size: 3.2cqw;
+}
+.ev-app-campo.es-desplegable svg {
+  width: 3.4cqw;
+  height: 2.4cqw;
+  flex: 0 0 auto;
+}
+/* En estas pantallas los campos van sueltos, no dentro de la lista del alta.
+   El desplegable se queda fuera: el suyo es flexible, que es lo que manda el
+   galón a la derecha, y este `display: block` se lo comía. */
+.ev-app-campo:not(.es-escribiendo):not(.es-desplegable) {
+  display: block;
+  margin-bottom: 2.6cqw;
+}
+
+/* ── La galería ── */
+.ev-app-mes {
+  margin-bottom: 8cqw;
+}
+/* Tres columnas y cada anotación en la suya: es lo que le da el aire de collage
+   en vez de rejilla cerrada. Las filas se cierran solas. */
+.ev-app-collage {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5cqw 2cqw;
+  align-items: start;
+  justify-items: center;
+}
+.ev-app-momento {
+  margin: 0;
+}
+.ev-app-momento figcaption {
+  display: flex;
+  align-items: center;
+  gap: 1.6cqw;
+  margin-bottom: 1.6cqw;
+  font-size: 3.6cqw;
+}
+.ev-app-momento img {
+  display: block;
+  object-fit: cover;
+}
+
 /* ── Datos ── */
 
 /* Las tres vistas. La puesta se subraya, como en el diseño: sin caja ni fondo,
