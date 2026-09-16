@@ -20,7 +20,7 @@ const dosis = Dosis({
 
 // Los cuatro pesos de la auxiliar, y para qué se usa cada extremo. Los dos de en
 // medio no llevan destino porque el manual tampoco se lo da.
-const PESOS = [
+const PESOS: { peso: number; nombre: string; uso?: string; usoEn?: string }[] = [
   { peso: 700, nombre: "Bold", uso: "Títulos", usoEn: "Headings" },
   { peso: 500, nombre: "Medium" },
   { peso: 400, nombre: "Regular" },
