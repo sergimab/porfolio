@@ -1,4 +1,3 @@
-import LangText from "@/components/shared/LangText";
 import RotuloSeccion from "@/components/shared/RotuloSeccion";
 import "./Aplicaciones.css";
 
@@ -24,12 +23,6 @@ export default function Aplicaciones() {
   return (
     <section className="ym-seccion">
       <RotuloSeccion es="Aplicaciones" en="Applications" />
-      <p className="ym-entradilla">
-        <LangText
-          es="La marca puesta a trabajar: el envase de palomitas, la cartelería del hall, la entrada en el móvil, el rótulo de la fachada y la sala."
-          en="The brand at work: the popcorn box, the lobby signage, the ticket on your phone, the sign on the building and the screening room."
-        />
-      </p>
 
       <div className="ym-lamina-apps">
         {PIEZAS.map((p) => (

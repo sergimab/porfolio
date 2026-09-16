@@ -83,12 +83,6 @@ export default function Branding() {
       {/* ── Las submarcas ────────────────────────────────────────────────── */}
       <section className="ym-seccion">
         <RotuloSeccion es="Submarcas" en="Sub-brands" />
-        <p className="ym-entradilla">
-          <LangText
-            es="Cuatro líneas dentro de la misma marca. El logotipo no cambia: solo se le añade el descriptor y su icono, que sale de la misma familia de formas."
-            en="Four lines inside the same brand. The logotype does not change: it only gains the descriptor and its icon, drawn from the same family of shapes."
-          />
-        </p>
         {/* Los cuatro iconos juntos y en fila, que es donde se ve que son una
             misma familia. El archivo es de un solo color, así que va como
             máscara: recorta, y el color lo pone la página. Así vale el mismo
@@ -100,8 +94,6 @@ export default function Branding() {
             marca. Se dibuja al llegar, como la lámina de construcción. */}
         <LaminaGuias markup={margen} ancho={190} />
 
-        {/* Y cada línea con su icono y su color sobre el isotipo. Aquí el color
-            ES el dato, así que va tal cual sale del archivo. */}
         {/* Cada línea con su icono y su color, y debajo el nombre y la
             gradación de la que sale ese color. Las cuatro Y vienen en un solo
             archivo, así que cada celda enseña su cuarto: el fondo se amplía
