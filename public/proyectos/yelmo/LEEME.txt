@@ -1,0 +1,14 @@
+Rebranding Yelmo Cines — material del proyecto (/proyecto/b2)
+
+Deja aquí lo que vayas exportando, en la carpeta de su disciplina:
+
+  branding/    marca, paleta, tipografía, aplicaciones
+  web/         pantallas y piezas del prototipo
+  animacion/   vídeos y fotogramas
+
+Se sirve tal cual desde la web: un archivo en branding/logo.svg se pide como
+/proyectos/yelmo/branding/logo.svg
+
+Formatos que usa el resto del portfolio: .webp para imagen (las capturas y
+fotos), .svg para lo vectorial (marca, iconos) y .mp4 para vídeo. Si subes
+PNG o JPG, dímelo y los convierto.
