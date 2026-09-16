@@ -47,11 +47,19 @@ type Ctx = {
   setHoras: (h: number) => void;
 };
 
-// La cabecera es solo el logotipo: volver se hace desde abajo, con un botón
-// igual que el de avanzar y en el lado contrario, que es donde cae el pulgar.
-function Cabecera() {
+// La cabecera: el logotipo y, en las pantallas que lo piden, la flecha de
+// volver. Las demás vuelven con un botón abajo; ver `flecha` en cada pantalla.
+function Cabecera({ atras, t }: { atras?: () => void; t: T }) {
   return (
-    <header className="ev-app-cabecera">
+    <header className={`ev-app-cabecera${atras ? " es-pulsable" : ""}`}>
+      {atras && (
+        <button type="button" className="ev-app-atras" onClick={atras}>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M15 4 7 12l8 8" fill="none" stroke="currentColor" strokeWidth="2.2" />
+          </svg>
+          <span className="ev-oculto">{t("Volver", "Back")}</span>
+        </button>
+      )}
       {/* El logotipo, del mismo archivo que usa todo el proyecto. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
@@ -232,7 +240,14 @@ type Pantalla = {
   id: string;
   es: string;
   en: string;
+  // Se puede volver desde ella.
   atras?: boolean;
+  // Y se vuelve con la flecha de la cabecera en vez de con el botón de abajo.
+  // Lo llevan las pantallas cuyo pie ya tiene su propio botón —los formularios
+  // y la última—, donde un «Atrás» abajo serían dos botones amontonados.
+  flecha?: boolean;
+  // El cuerpo, centrado en el alto de la pantalla en vez de colgado de arriba.
+  centrado?: boolean;
   cuerpo: (c: Ctx) => React.ReactNode;
 };
 
@@ -268,6 +283,7 @@ const PANTALLAS: Pantalla[] = [
     es: "Crear cuenta",
     en: "Sign up",
     atras: true,
+    flecha: true,
     cuerpo: (c) => (
       <>
         <h3 className="ev-app-titulo es-suelto es-medium">
@@ -304,6 +320,7 @@ const PANTALLAS: Pantalla[] = [
     es: "Entrar",
     en: "Log in",
     atras: true,
+    flecha: true,
     cuerpo: (c) => (
       <>
         <h3 className="ev-app-titulo es-suelto">{c.t("Entrar", "Log in")}</h3>
@@ -469,6 +486,8 @@ const PANTALLAS: Pantalla[] = [
     es: "¿Listo?",
     en: "Ready?",
     atras: true,
+    flecha: true,
+    centrado: true,
     cuerpo: (c) => (
       <>
         <h3 className="ev-app-titulo es-centrado">{c.t("¿Listo para empezar?", "Ready to start?")}</h3>
@@ -539,7 +558,9 @@ export default function Prototipo() {
             <div className="ev-app" key={actual.id}>
               {/* La carga va sin cabecera: ahí la marca ya la pone la
                   animación del isotipo, y el logotipo arriba la repetía. */}
-              {actual.id !== "carga" && <Cabecera />}
+              {actual.id !== "carga" && (
+                <Cabecera atras={actual.flecha ? atras : undefined} t={t} />
+              )}
 
               {/* La pantalla de carga: el isotipo quieto esperando y, al
                   comenzar, la animación en su sitio.
@@ -566,11 +587,15 @@ export default function Prototipo() {
                   </svg>
                 ))}
 
-              <div className={`ev-app-cuerpo${actual.id === "casillas" ? " es-alto" : ""}`}>
+              <div
+                className={`ev-app-cuerpo${actual.id === "casillas" ? " es-alto" : ""}${
+                  actual.centrado ? " es-centro" : ""
+                }`}
+              >
                 {actual.cuerpo(ctx)}
                 {/* Volver, abajo y a la izquierda: enfrente del de avanzar y en
                     el mismo sitio en todas las pantallas. */}
-                {actual.atras && (
+                {actual.atras && !actual.flecha && (
                   <Boton clase="es-pie es-izquierda" onClick={atras}>
                     {t("Atrás", "Back")}
                   </Boton>

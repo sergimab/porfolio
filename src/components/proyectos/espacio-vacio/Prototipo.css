@@ -74,20 +74,48 @@
   }
 }
 
-/* La cabecera: solo el logotipo, centrado en la pantalla. Volver ya no se hace
-   desde aquí, sino con un botón abajo. */
+/* La cabecera: el logotipo centrado en la pantalla y, en algunas, la flecha de
+   volver a su izquierda. */
 .ev-app-cabecera {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 22cqw;
-  /* Sin pulsaciones: el cuerpo se estira por toda la pantalla —le hace falta
-     para colgar los botones del borde de abajo— y va después en el marcado, así
-     que pasa por delante de la cabecera. Como aquí ya no hay nada que pulsar,
-     lo que importa es que la cabecera no se coma los clics del cuerpo. */
+  /* El cuerpo se estira por toda la pantalla —le hace falta para colgar los
+     botones del borde de abajo— y va después en el marcado, así que pasa por
+     delante. Cuando la cabecera no tiene nada que pulsar se aparta; y cuando
+     lleva flecha, sube de capa para que el clic le llegue a ella. */
   pointer-events: none;
 }
+.ev-app-cabecera.es-pulsable {
+  pointer-events: auto;
+  z-index: 3;
+}
+/* La flecha se dibuja de 7, pero la zona que responde es de 12: el icono se
+   queda donde lo puso el diseño y el dedo tiene dónde caer. Los descuentos de
+   `left` y `top` son la mitad de lo que crece la caja, para que el dibujo no se
+   mueva de sitio. */
+.ev-app-atras {
+  position: absolute;
+  left: 4.5cqw;
+  top: 11.9cqw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 12cqw;
+  height: 12cqw;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+.ev-app-atras svg {
+  width: 7cqw;
+  height: 7cqw;
+}
+
 .ev-app-logo {
   position: absolute;
   left: 50%;
@@ -109,6 +137,15 @@
 }
 .ev-app-cuerpo.es-alto {
   padding-top: 26cqw;
+}
+/* La última pantalla es una pregunta y un botón: colgada de arriba como las
+   demás quedaba todo apelotonado en el tercio alto y con media pantalla vacía
+   debajo. Centrada, la pieza cae donde mira el ojo. */
+.ev-app-cuerpo.es-centro {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 22cqw;
 }
 
 .ev-app-titulo {
