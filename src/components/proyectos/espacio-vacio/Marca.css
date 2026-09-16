@@ -1,7 +1,5 @@
 /* Las láminas de marca.
-   Cada una es un cuadro 16:9 con su rótulo encima, como en el manual. El fondo
-   oscuro es el propio negro de la marca —#252221, no un negro cualquiera—, así
-   que las láminas se ven igual aquí que impresas. */
+   Cada una es un cuadro 16:9 con su rótulo encima, como en el manual. */
 .ev-marca {
   margin: 64px 0 48px;
 }
@@ -19,8 +17,6 @@
   font-weight: 500;
 }
 
-/* Las dos mitades de las láminas de construcción: la de trabajo a la izquierda
-   y el resultado a la derecha. */
 .ev-lamina-partida {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -42,56 +38,55 @@
   padding: 6%;
   /* min-height 0 en un hijo de rejilla: sin esto, la caja no puede encoger por
      debajo del alto de su contenido y una pieza cuadrada dentro de un cuadro
-     16:9 se sale por arriba en vez de reducirse. Es lo que cortaba el isotipo. */
+     16:9 se sale por arriba en vez de reducirse. */
   min-height: 0;
   min-width: 0;
 }
-.es-oscura {
+
+/* EL FONDO OSCURO, SOLO EN MODO CLARO.
+   Es el negro de la marca —#252221, no un negro cualquiera—, así que la lámina
+   se ve igual aquí que impresa. En oscuro no se pinta: la página ya lo es, y
+   repetirlo mete un recuadro dentro de otro casi del mismo color, que se lee
+   como un parche mal recortado. */
+.es-fondo {
   background: #252221;
   color: #fff;
 }
-.es-clara {
-  background: #fff;
-  color: #252221;
+[data-theme="dark"] .es-fondo {
+  background: none;
+  color: inherit;
 }
 
-/* Las piezas se limitan por ALTO además de por ancho: el isotipo es casi
-   cuadrado y, dándole solo el ancho de la mitad, se salía por arriba y por
-   abajo del cuadro 16:9. Con los dos topes, la que manda es la dimensión que
-   se quede corta, que es justo lo que hace falta sin saber de antemano si la
-   pieza es apaisada o cuadrada. */
+/* Los SVG traen el color escrito dentro —en un <style> del propio archivo—, así
+   que desde fuera solo se les puede dar la vuelta entera. Y hay TRES casos, no
+   dos, según con qué archivo se parta y sobre qué se ponga:
+
+   · `es-ya-blanca`   — el archivo ya viene en blanco, y siempre acaba sobre
+                        algo oscuro: la lámina en claro, el papel en oscuro. No
+                        se toca nunca. (Lo invertí al principio por simetría con
+                        las otras y se fue a negro sobre negro.)
+   · `es-sigue-papel` — archivo negro sobre el papel de la página: se invierte
+                        solo cuando el papel pasa a ser oscuro.
+   · `es-sobre-negro` — archivo negro dentro de una lámina de fondo oscuro: se
+                        invierte SIEMPRE, porque detrás hay oscuro en los dos
+                        modos. */
+[data-theme="dark"] .es-sigue-papel {
+  filter: invert(1);
+}
+.es-sobre-negro {
+  filter: invert(1);
+}
+
+/* Las piezas se topan por alto Y por ancho: manda la dimensión que se quede
+   corta, sin tener que saber de antemano si la pieza es apaisada o cuadrada. */
 .ev-lamina-pieza {
   max-width: 100%;
   max-height: 100%;
   width: auto;
   height: auto;
 }
-/* La construcción del logotipo es apaisada: manda el ancho. */
 .ev-lamina-mitad .ev-lamina-pieza.es-apaisada {
   width: 100%;
-}
-
-/* Las guías de construcción: hilo de un píxel y sin relleno. Se dibujan con
-   vector-effect para que no engorden al escalar el SVG, que es lo que las
-   convertiría en trazos gordos en pantallas grandes. */
-.ev-guias line,
-.ev-guias rect,
-.ev-guias circle {
-  fill: none;
-  stroke: rgba(255, 255, 255, 0.55);
-  stroke-width: 1;
-  vector-effect: non-scaling-stroke;
-}
-.ev-guias circle.es-relleno {
-  fill: rgba(255, 255, 255, 0.22);
-  stroke: none;
-}
-
-/* El logotipo dentro de la lámina de construcción va en gris: la lámina enseña
-   la retícula, y el logotipo a plena fuerza se la comería. */
-.ev-lamina-logo-fantasma {
-  opacity: 0.55;
-  filter: invert(1);
 }
 
 .ev-lamina-logo {
@@ -103,70 +98,116 @@
   height: 62%;
 }
 
+/* ── Las guías ── */
+
+/* Hilo de un píxel y sin relleno. Con vector-effect para que no engorden al
+   escalar el SVG, que es lo que las convertiría en trazos gordos en pantallas
+   grandes. */
+.ev-guias line,
+.ev-guias rect,
+.ev-guias circle {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.55;
+}
+
+/* ── El grid del isotipo, dibujándose ── */
+
+/* Cada guía entra desde nada, y lo hace con transform y opacidad en vez de
+   animando el trazado: con stroke-dasharray habría que saber el largo de cada
+   figura, y son doce de tres tipos distintos. Escalando desde su centro se
+   consigue el mismo «se está construyendo» sin medir nada. */
+.ev-grid .ev-guias > * {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(0.82);
+}
+.ev-grid.es-visible .ev-guias > * {
+  animation: ev-guia-entra 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes ev-guia-entra {
+  from {
+    opacity: 0;
+    transform: scale(0.82);
+  }
+  to {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+}
+
+/* Y el isotipo el último, cuando el andamio ya está puesto. */
+.ev-grid .ev-grid-iso {
+  opacity: 0;
+}
+.ev-grid.es-visible .ev-grid-iso {
+  animation: ev-iso-entra 700ms cubic-bezier(0.22, 1, 0.36, 1) 760ms both;
+}
+@keyframes ev-iso-entra {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ev-grid .ev-guias > * {
+    opacity: 0.55;
+    transform: none;
+    animation: none;
+  }
+  .ev-grid .ev-grid-iso {
+    opacity: 1;
+    animation: none;
+  }
+}
+
 /* ── Área de seguridad ── */
 
 .ev-seguridad {
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  gap: 6%;
+  justify-content: center;
+  gap: 7%;
   width: 100%;
 }
-/* El margen se declara una vez y lo usan las dos versiones: es la misma regla
-   —dejar libre alrededor una parte de la propia marca— aplicada a dos piezas
-   de proporciones distintas. */
-.ev-seguridad-caja {
-  position: relative;
-  flex: 0 1 46%;
-  padding: 7%;
-}
-.ev-seguridad-caja.es-cuadrada {
-  flex: 0 1 22%;
-}
-.ev-seguridad-marco {
-  position: absolute;
-  inset: 0;
-  border: 1px solid rgba(255, 255, 255, 0.75);
-}
-/* Y el marco interior, el que toca la propia marca: entre los dos hay
-   exactamente el margen que hay que respetar. */
-.ev-seguridad-marco::after {
-  content: "";
-  position: absolute;
-  inset: 12%;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-}
-.ev-seguridad-logo {
-  display: block;
-  width: 100%;
+.ev-seguridad-pieza {
+  max-height: 100%;
+  width: 58%;
   height: auto;
-  filter: invert(1);
 }
-.ev-seguridad-iso {
-  display: block;
-  width: 100%;
-  height: auto;
-  color: #fff;
+.ev-seguridad-pieza.es-cuadrada {
+  width: 22%;
+}
+/* Estas guías no se animan: esta lámina es una cota, no una construcción, y
+   verla montarse distrae de lo que mide. */
+.ev-guias.es-quietas > * {
+  opacity: 0.75;
 }
 
 /* ── El estampado ── */
 
-.ev-lamina-entera.es-clara {
+.ev-lamina-entera:not(.es-fondo) {
   padding: 0;
 }
 .ev-estampado {
   width: 100%;
   height: 100%;
   display: block;
-}
-.ev-trama-color {
   color: #252221;
+}
+[data-theme="dark"] .ev-estampado {
+  color: #ededed;
 }
 
 @media (max-width: 760px) {
-  /* Las láminas partidas se apilan: a 380 px de ancho, cada mitad se queda en
-     190 y la construcción deja de leerse, que es lo único que la lámina tiene
-     que hacer. */
+  /* Las láminas partidas se apilan: a 380 px de ancho cada mitad se queda en
+     190 y la construcción deja de leerse, que es lo único que tiene que hacer. */
   .ev-lamina-partida {
     grid-template-columns: 1fr;
     aspect-ratio: 4 / 5;
@@ -176,30 +217,85 @@
   }
   .ev-seguridad {
     flex-direction: column;
-    gap: 28px;
+    gap: 26px;
   }
-  .ev-seguridad-caja,
-  .ev-seguridad-caja.es-cuadrada {
-    flex: none;
-    width: 68%;
+  .ev-seguridad-pieza {
+    width: 84%;
   }
-  .ev-seguridad-caja.es-cuadrada {
+  .ev-seguridad-pieza.es-cuadrada {
     width: 34%;
   }
 }
 
 /* ── Los mockups ──
-   Apilados y a ancho completo, uno tras otro, como las mesas de trabajo del
-   archivo original. Sin marco ni fondo: los png ya vienen con el suyo. */
+   Un montaje, no una pila: las piezas se solapan y se reparten como en el
+   archivo original, y entran colocándose con el scroll. */
 .ev-mockups {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
   margin: 48px 0 8px;
 }
-.ev-mockups img {
+.ev-mock img {
   display: block;
   width: 100%;
-  height: auto;
-  border-radius: 4px;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Cada pieza entra desde un poco más abajo y algo encogida. El desplazamiento
+   de salida lo pone quien la coloca, para que unas vengan de un lado y otras de
+   otro y no se lea como un bloque entero subiendo. */
+.ev-mock {
+  opacity: 0;
+  transform: translate3d(var(--sx, 0px), var(--sy, 44px), 0) scale(var(--se, 0.96));
+  transition: opacity 760ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--retraso, 0ms);
+}
+.ev-mock.es-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .ev-mock {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* El 2 monta sobre el 1: arranca antes de que el de arriba termine, que es lo
+   que ata los dos en una sola escena en vez de dejarlos como dos láminas
+   seguidas. El margen negativo va en porcentaje del ANCHO del contenedor, así
+   que el solape se conserva igual a cualquier tamaño. */
+.ev-mock-solapado {
+  margin-top: -9%;
+  position: relative;
+  z-index: 1;
+}
+
+/* La fila del 3, el 4 y el 5. El 3 manda —es el que lleva el móvil de pie— y
+   los otros dos se reparten lo que queda. */
+.ev-mock-fila {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr 1fr;
+  align-items: center;
+  gap: 16px;
+  margin-top: 26px;
+}
+
+@media (max-width: 760px) {
+  .ev-mock-fila {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .ev-mock-solapado {
+    margin-top: 0;
+  }
+}
+
+/* Las tres últimas, apiladas y separadas. */
+.ev-mock-resto {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  margin-top: 26px;
 }

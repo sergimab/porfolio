@@ -5,20 +5,7 @@ import EscenaInicio from "./EscenaInicio";
 import PaletaCromatica from "./PaletaCromatica";
 import Tipografia from "./Tipografia";
 import Marca from "./Marca";
-
-// Las piezas acabadas, en el orden de las mesas de trabajo del archivo
-// original. Se mantienen numeradas en vez de bautizarlas por su contenido
-// porque así se puede volver al archivo y encontrarlas.
-const MOCKUPS = [
-  { src: "/proyectos/espacio-vacio/mockup-1.webp", alt: "Pantallas de la app de Espacio vacío en perspectiva" },
-  { src: "/proyectos/espacio-vacio/mockup-2.webp", alt: "La app abierta sobre el perfil de una usuaria" },
-  { src: "/proyectos/espacio-vacio/mockup-3.webp", alt: "Publicación de Instagram de la campaña" },
-  { src: "/proyectos/espacio-vacio/mockup-4.webp", alt: "Piezas de la campaña en redes sociales" },
-  { src: "/proyectos/espacio-vacio/mockup-5.webp", alt: "Perfil de Instagram de Espacio vacío" },
-  { src: "/proyectos/espacio-vacio/mockup-6.webp", alt: "Los tres carteles de la campaña y una historia de Instagram" },
-  { src: "/proyectos/espacio-vacio/mockup-7.webp", alt: "Aplicación de la marca sobre soportes" },
-  { src: "/proyectos/espacio-vacio/mockup-8.webp", alt: "Detalle de las piezas de la campaña" },
-];
+import Mockups from "./Mockups";
 
 // Espacio vacío: la campaña de concienciación sobre la adicción a las redes
 // sociales, de la asignatura Proyectos Experimentales de la ESD Madrid.
@@ -98,15 +85,7 @@ export default function EspacioVacioLanding() {
 
         <Marca />
 
-        {/* Las piezas acabadas: la app, la campaña en redes y los carteles.
-            Apilados y a ancho completo, en el mismo orden que las mesas de
-            trabajo del archivo original. */}
-        <div className="ev-mockups">
-          {MOCKUPS.map((m) => (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img key={m.src} src={m.src} alt={m.alt} loading="lazy" />
-          ))}
-        </div>
+        <Mockups />
       </div>
     </main>
   );

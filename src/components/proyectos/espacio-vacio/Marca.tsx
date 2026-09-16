@@ -1,16 +1,18 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import LangText from "@/components/shared/LangText";
 import "./Marca.css";
 
 // Las láminas de marca del manual: la construcción del logotipo, la del
 // isotipo, el área de seguridad y el estampado.
 //
-// Van dibujadas y no como capturas, y esto no es purismo: son láminas de
-// CONSTRUCCIÓN, o sea que lo que enseñan son líneas de un píxel sobre las que
-// se apoya la forma. Una captura las convierte en un gris borroso en cuanto
-// alguien amplía, que es justo cuando alguien mira una lámina de construcción.
-// Dibujadas se leen a cualquier tamaño y pesan unos pocos kilobytes.
-//
-// El isotipo se reutiliza en las cuatro, así que vive en un solo sitio.
+// EL FONDO OSCURO SOLO EN MODO CLARO. En oscuro no se pinta ninguno y las
+// láminas van directamente sobre el papel de la página. Ese fondo no es
+// decoración: existe para que se vean unas guías claras. Si la página ya es
+// oscura, repetirlo mete un recuadro dentro de otro casi del mismo color, que
+// se lee como un parche mal recortado. Todo lo de dentro va en `currentColor`,
+// así que el mismo dibujo sirve para los dos casos.
 
 // Los cuatro cuartos del isotipo, en el orden en que vienen en el archivo:
 // abajo-derecha, abajo-izquierda, arriba-izquierda y arriba-derecha.
@@ -21,9 +23,9 @@ const CUARTOS = [
   "M58.71,0c-5.86,0-10.78,3.93-12.33,9.28h15.33v16.02c5.64-1.35,9.83-6.41,9.83-12.47,0-7.09-5.75-12.83-12.83-12.83Z",
 ];
 
-// En la versión a color, cada cuarto lleva el suyo. El orden sigue al de los
-// paths, no al de lectura: morado arriba-izquierda, verde arriba-derecha,
-// naranja abajo-izquierda y rosa abajo-derecha, que es como está en el manual.
+// En la versión a color, cada cuarto lleva el suyo, siguiendo el orden de los
+// paths: rosa abajo-derecha, naranja abajo-izquierda, morado arriba-izquierda y
+// verde arriba-derecha, que es como está en el manual.
 const CUARTOS_COLOR = ["#FF5C5C", "#FFAE11", "#A484FF", "#A1F08D"];
 
 function Isotipo({ colores }: { colores?: string[] }) {
@@ -36,49 +38,62 @@ function Isotipo({ colores }: { colores?: string[] }) {
   );
 }
 
+// Avisa cuando su elemento entra en pantalla, una sola vez.
+//
+// Con IntersectionObserver y no leyendo la posición en cada scroll: aquí no
+// hace falta saber CUÁNTO se ha avanzado, solo si ya toca empezar, y para eso
+// el observador no gasta un fotograma por cada rueda del ratón.
+function useAlAparecer<T extends HTMLElement>(margen = "-18%") {
+  const ref = useRef<T>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setVisible(true);
+      return;
+    }
+    const obs = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setVisible(true);
+          obs.disconnect();
+        }
+      },
+      { rootMargin: `0px 0px ${margen} 0px` }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [margen]);
+  return { ref, visible };
+}
+
 export default function Marca() {
+  const grid = useAlAparecer<HTMLDivElement>();
+
   return (
     <div className="ev-marca">
       {/* ── Composición del logotipo ─────────────────────────────────────── */}
       <section className="ev-lamina">
-        <h2 className="ev-lamina-titulo es-sobre-oscuro">
+        <h2 className="ev-lamina-titulo">
           <LangText es="Composición logotipo" en="Logotype construction" />
         </h2>
         <div className="ev-lamina-partida">
-          <div className="ev-lamina-mitad es-oscura">
-            {/* La retícula sobre la que se apoya el logotipo. Las líneas de
-                puntos marcan las alturas —de mayúscula, de la x, la base— y los
-                cortes verticales de cada letra. */}
-            <svg className="ev-lamina-pieza es-apaisada" viewBox="0 0 470 170" aria-hidden="true">
-              <g className="ev-guias">
-                {/* Horizontales: las tres alturas de cada línea del logotipo. */}
-                {[22, 80, 88, 146].map((y) => (
-                  <line key={y} x1="10" y1={y} x2="460" y2={y} />
-                ))}
-                {/* Verticales: por donde cae el arranque y el final de cada
-                    palabra, y el desplazamiento entre las dos líneas. */}
-                {[24, 140, 256, 372, 446].map((x) => (
-                  <line key={x} x1={x} y1="8" x2={x} y2="160" />
-                ))}
-                {/* Las diagonales de la A y la V, que son las que fijan la
-                    inclinación del conjunto. */}
-                <line x1="140" y1="146" x2="186" y2="88" />
-                <line x1="186" y1="88" x2="232" y2="146" />
-              </g>
-              <image
-                href="/proyectos/espacio-vacio/espacio-vacio-logo.svg"
-                x="24"
-                y="22"
-                width="422"
-                height="126"
-                className="ev-lamina-logo-fantasma"
-              />
-            </svg>
-          </div>
-          <div className="ev-lamina-mitad es-clara">
+          <div className="ev-lamina-mitad es-fondo">
+            {/* La lámina de construcción tal cual sale del archivo original, con
+                sus cotas y sus líneas de puntos. Antes esto era una retícula
+                reconstruida a ojo desde una captura; ahora es la de verdad. */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              className="ev-lamina-logo"
+              className="ev-lamina-pieza es-apaisada"
+              src="/proyectos/espacio-vacio/composicion-logotipo.svg"
+              alt="Construcción del logotipo de Espacio vacío, con sus proporciones acotadas"
+            />
+          </div>
+          <div className="ev-lamina-mitad">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              className="ev-lamina-logo es-sigue-papel"
               src="/proyectos/espacio-vacio/espacio-vacio-logo.svg"
               alt="Logotipo de Espacio vacío"
             />
@@ -88,37 +103,43 @@ export default function Marca() {
 
       {/* ── Composición del isotipo ──────────────────────────────────────── */}
       <section className="ev-lamina">
-        <h2 className="ev-lamina-titulo es-sobre-oscuro">
+        <h2 className="ev-lamina-titulo">
           <LangText es="Composición isotipo" en="Icon construction" />
         </h2>
         <div className="ev-lamina-partida">
-          <div className="ev-lamina-mitad es-oscura">
-            {/* La geometría de la que sale el isotipo: el cuadrado exterior, el
-                superóvalo que lo redondea, los cuatro círculos de las esquinas
-                y el cuadrado interior con sus diagonales. */}
-            <svg className="ev-lamina-pieza" viewBox="-14 -14 100 100" aria-hidden="true">
+          <div
+            className={`ev-lamina-mitad es-fondo ev-grid${grid.visible ? " es-visible" : ""}`}
+            ref={grid.ref}
+          >
+            {/* La geometría de la que sale el isotipo, dibujándose al llegar.
+                Cada guía entra con su retardo, de fuera hacia dentro —primero la
+                caja, luego los ejes, al final los círculos—, que es el orden en
+                el que se construiría a mano.
+
+                Y EL ISOTIPO DENTRO, que es lo que faltaba: las cuatro
+                circunferencias son de donde salen sus esquinas, así que sin la
+                pieza encima la lámina enseñaba un andamio sin nada construido. */}
+            <svg className="ev-lamina-pieza" viewBox="-15 -15 101.55 101" aria-hidden="true">
               <g className="ev-guias">
-                <rect x="-11" y="-11" width="94" height="94" rx="26" />
-                <rect x="-4" y="-4" width="80" height="80" rx="22" />
-                <rect x="0" y="0" width="71.55" height="71" />
-                <rect x="12.8" y="12.8" width="46" height="45.4" />
-                <line x1="-14" y1="35.5" x2="86" y2="35.5" />
-                <line x1="35.8" y1="-14" x2="35.8" y2="86" />
-                <line x1="0" y1="0" x2="71.55" y2="71" />
-                <line x1="71.55" y1="0" x2="0" y2="71" />
-                <line x1="-14" y1="-14" x2="12.8" y2="12.8" />
-                <line x1="85.5" y1="-14" x2="58.7" y2="12.8" />
-                <line x1="-14" y1="85" x2="12.8" y2="58.2" />
-                <line x1="85.5" y1="85" x2="58.7" y2="58.2" />
-                {/* Los cuatro círculos de los que nace cada cuarto. */}
-                <circle cx="12.8" cy="12.8" r="12.8" className="es-relleno" />
-                <circle cx="58.7" cy="12.8" r="12.8" className="es-relleno" />
-                <circle cx="12.8" cy="58.2" r="12.8" className="es-relleno" />
-                <circle cx="58.7" cy="58.2" r="12.8" className="es-relleno" />
+                <rect x="-11" y="-11" width="93.55" height="93" rx="26" style={{ animationDelay: "0ms" }} />
+                <rect x="-4" y="-4" width="79.55" height="79" rx="22" style={{ animationDelay: "90ms" }} />
+                <rect x="0" y="0" width="71.55" height="71" style={{ animationDelay: "180ms" }} />
+                <line x1="-15" y1="35.5" x2="86.55" y2="35.5" style={{ animationDelay: "260ms" }} />
+                <line x1="35.77" y1="-15" x2="35.77" y2="86" style={{ animationDelay: "260ms" }} />
+                <line x1="0" y1="0" x2="71.55" y2="71" style={{ animationDelay: "340ms" }} />
+                <line x1="71.55" y1="0" x2="0" y2="71" style={{ animationDelay: "340ms" }} />
+                <rect x="12.83" y="12.83" width="45.89" height="45.34" style={{ animationDelay: "420ms" }} />
+                <circle cx="12.83" cy="12.83" r="12.83" style={{ animationDelay: "500ms" }} />
+                <circle cx="58.72" cy="12.83" r="12.83" style={{ animationDelay: "560ms" }} />
+                <circle cx="12.83" cy="58.17" r="12.83" style={{ animationDelay: "620ms" }} />
+                <circle cx="58.72" cy="58.17" r="12.83" style={{ animationDelay: "680ms" }} />
+              </g>
+              <g className="ev-grid-iso">
+                <Isotipo />
               </g>
             </svg>
           </div>
-          <div className="ev-lamina-mitad es-clara">
+          <div className="ev-lamina-mitad">
             <svg className="ev-lamina-pieza es-isotipo-color" viewBox="0 0 71.55 71" aria-hidden="true">
               <Isotipo colores={CUARTOS_COLOR} />
             </svg>
@@ -128,31 +149,55 @@ export default function Marca() {
 
       {/* ── Área de seguridad ────────────────────────────────────────────── */}
       <section className="ev-lamina">
-        <h2 className="ev-lamina-titulo es-sobre-oscuro">
+        <h2 className="ev-lamina-titulo">
           <LangText es="Área de seguridad" en="Clear space" />
         </h2>
-        <div className="ev-lamina-entera es-oscura">
+        <div className="ev-lamina-entera es-fondo">
           <div className="ev-seguridad">
-            {/* El margen que hay que dejar alrededor de cada versión. Se mide
-                con una parte de la propia marca —el alto de la E en el
-                logotipo, el de un cuarto en el isotipo—, que es lo que hace que
-                el margen crezca con ella en vez de ser una medida fija que deja
-                de valer al reducir. */}
-            <div className="ev-seguridad-caja">
-              <span className="ev-seguridad-marco" aria-hidden="true" />
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                className="ev-seguridad-logo"
-                src="/proyectos/espacio-vacio/espacio-vacio-logo.svg"
-                alt="Área de seguridad del logotipo"
+            {/* El margen que hay que respetar alrededor de cada versión, medido
+                con una parte de la propia marca: los cuadraditos de las esquinas
+                SON esa unidad. Medido así, el margen crece con la marca en vez
+                de ser una cifra en milímetros que deja de valer al reducir.
+                Las dos piezas comparten unidad —34 sobre un cuadro de 176—, que
+                es lo que hace que las dos láminas se lean como una sola regla. */}
+            <svg className="ev-seguridad-pieza" viewBox="0 0 470 176" aria-hidden="true">
+              <g className="ev-guias es-quietas">
+                <rect x="0.5" y="0.5" width="469" height="175" />
+                <rect x="0.5" y="0.5" width="34" height="34" />
+                <rect x="435.5" y="0.5" width="34" height="34" />
+                <rect x="0.5" y="141.5" width="34" height="34" />
+                <rect x="435.5" y="141.5" width="34" height="34" />
+                <line x1="34.5" y1="0.5" x2="34.5" y2="175.5" />
+                <line x1="435.5" y1="0.5" x2="435.5" y2="175.5" />
+                <line x1="0.5" y1="34.5" x2="469.5" y2="34.5" />
+                <line x1="0.5" y1="141.5" x2="469.5" y2="141.5" />
+              </g>
+              <image
+                href="/proyectos/espacio-vacio/espacio-vacio-logo.svg"
+                x="34.5"
+                y="34.5"
+                width="401"
+                height="107"
+                className="es-sobre-negro"
               />
-            </div>
-            <div className="ev-seguridad-caja es-cuadrada">
-              <span className="ev-seguridad-marco" aria-hidden="true" />
-              <svg className="ev-seguridad-iso" viewBox="0 0 71.55 71" aria-hidden="true">
+            </svg>
+
+            <svg className="ev-seguridad-pieza es-cuadrada" viewBox="0 0 176 176" aria-hidden="true">
+              <g className="ev-guias es-quietas">
+                <rect x="0.5" y="0.5" width="175" height="175" />
+                <rect x="0.5" y="0.5" width="34" height="34" />
+                <rect x="141.5" y="0.5" width="34" height="34" />
+                <rect x="0.5" y="141.5" width="34" height="34" />
+                <rect x="141.5" y="141.5" width="34" height="34" />
+                <line x1="34.5" y1="0.5" x2="34.5" y2="175.5" />
+                <line x1="141.5" y1="0.5" x2="141.5" y2="175.5" />
+                <line x1="0.5" y1="34.5" x2="175.5" y2="34.5" />
+                <line x1="0.5" y1="141.5" x2="175.5" y2="141.5" />
+              </g>
+              <g transform="translate(34.5 35.3) scale(1.4947)">
                 <Isotipo />
-              </svg>
-            </div>
+              </g>
+            </svg>
           </div>
         </div>
       </section>
@@ -162,21 +207,24 @@ export default function Marca() {
         <h2 className="ev-lamina-titulo">
           <LangText es="Estampado" en="Pattern" />
         </h2>
-        <div className="ev-lamina-entera es-clara">
+        {/* Sin fondo: la trama se pinta sobre el papel de la página, así que en
+            claro sale oscura y en oscuro sale clara. */}
+        <div className="ev-lamina-entera">
           {/* Un patrón SVG en vez de una imagen repetida: el motivo es el mismo
-              isotipo, así que se define una vez y el navegador lo repite sin
-              descargar nada. Y el ejemplar a color va encima, que es el guiño
-              de la lámina: en el estampado entero hay un solo isotipo de la
-              marca y el resto son marcas de recorte vacías. */}
+              isotipo, se define una vez y el navegador lo repite sin descargar
+              nada. El ejemplar a color va encima del hueco que le tocaría a uno
+              de la trama, no en medio de ninguna parte: ese es el guiño de la
+              lámina, que en todo el estampado hay un solo isotipo de la marca y
+              el resto son marcas de recorte vacías. */}
           <svg className="ev-estampado" viewBox="0 0 1200 660" aria-hidden="true">
             <defs>
               <pattern id="ev-trama" width="100" height="100" patternUnits="userSpaceOnUse">
-                <g transform="translate(14 14) scale(1)">
+                <g transform="translate(14 14)">
                   <Isotipo />
                 </g>
               </pattern>
             </defs>
-            <rect width="1200" height="660" fill="url(#ev-trama)" className="ev-trama-color" />
+            <rect width="1200" height="660" fill="url(#ev-trama)" />
             <g transform="translate(714 314)">
               <Isotipo colores={CUARTOS_COLOR} />
             </g>
