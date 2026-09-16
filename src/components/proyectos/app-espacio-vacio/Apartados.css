@@ -69,22 +69,22 @@
 }
 
 @media (max-width: 600px) {
-  /* Apiladas no caben dos rótulos largos en una línea, y la de abajo dejaría de
-     tocar la caja: pasan a columna y solo la puesta se funde con ella. */
+  /* Siguen una al lado de la otra: apiladas, la de arriba se quedaba suelta y
+     el par dejaba de leerse como un interruptor de dos posiciones. Lo que
+     encoge es el rótulo y su relleno, que es lo que hace que «Sistema de
+     diseño» quepa en una línea. */
   .ev-fichas-pestanas {
-    flex-direction: column;
     gap: 8px;
   }
   .ev-ficha-pestana {
-    width: 100%;
+    padding: 14px 8px;
+    font-size: 12.5px;
+    letter-spacing: -0.01em;
   }
   .ev-ficha-pestana[data-puesta="true"] {
     padding-bottom: 26px;
-    border-radius: 12px 12px 0 0;
   }
   .ev-fichas-caja {
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    padding: 20px 14px 16px;
+    padding: 18px 12px 14px;
   }
 }
