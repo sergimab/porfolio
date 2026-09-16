@@ -3,12 +3,14 @@ import LangText from "@/components/shared/LangText";
 import RotuloSeccion from "@/components/shared/RotuloSeccion";
 import "./Tipografia.css";
 
-// La tipografía de la marca, con las dos fuentes de verdad puestas.
+// La lámina de tipografía, con la misma composición que la de Espacio vacío: la
+// muestra grande y el nombre a la izquierda, y a la derecha los pesos y el
+// muestrario.
 //
-// Dosis viene de Google y la sirve Next con el resto del sitio; Somatic Rounded
-// no está en Google, así que va desde /fonts como la Clash Grotesk de Espacio
-// vacío. Enseñar una muestra tipográfica en otra fuente sería enseñar otra
-// cosa, así que aquí no valen las capturas.
+// Y con las fuentes de verdad, no con capturas: lo que enseña una lámina así es
+// precisamente cómo dibuja cada letra. Dosis viene de Google y la sirve Next con
+// el resto del sitio; Somatic Rounded no está en Google, así que va desde
+// /fonts.
 const dosis = Dosis({
   subsets: ["latin"],
   weight: ["300", "400", "500", "700"],
@@ -16,80 +18,102 @@ const dosis = Dosis({
   display: "swap",
 });
 
+// Los cuatro pesos de la auxiliar, y para qué se usa cada extremo. Los dos de en
+// medio no llevan destino porque el manual tampoco se lo da.
 const PESOS = [
-  { nombre: "Bold", peso: 700 },
-  { nombre: "Medium", peso: 500 },
-  { nombre: "Regular", peso: 400 },
-  { nombre: "Light", peso: 300 },
+  { peso: 700, nombre: "Bold", uso: "Títulos", usoEn: "Headings" },
+  { peso: 500, nombre: "Medium" },
+  { peso: 400, nombre: "Regular" },
+  { peso: 300, nombre: "Light", uso: "Texto corrido", usoEn: "Body copy" },
 ];
+
+const USOS = [
+  { es: "Nombre y logotipo", en: "Name and logotype" },
+  { es: "Titulares de marca", en: "Brand headlines" },
+  { es: "Geométrica y redondeada", en: "Geometric and rounded" },
+];
+
+// El muestrario, en las mismas líneas que el manual.
+const MAYUSCULAS = ["ABCDEFGHIJK", "LMNÑOPQRST", "UVWXYZ"];
+const MINUSCULAS = ["abcdefghijk", "lmnñopqrst", "uvwxyz"];
+const SIGNOS = ["®îŠŁåãæÖÙÜÚ¼½¾", "§{}¶!¡#$%&()"];
 
 export default function Tipografia() {
   return (
-    <section className={`ym-seccion ym-tipo ${dosis.variable}`}>
-      <RotuloSeccion es="Tipografía" en="Typography" />
+    <section className={`ym-tipo ${dosis.variable}`}>
+      <RotuloSeccion className="ym-tipo-titulo" es="Tipografía" en="Typography" />
 
-      <h3 className="ym-subrotulo">
-        <LangText es="Corporativa" en="Corporate" />
-      </h3>
-      <div className="ym-tipo-fila">
-        {/* El logotipo está dibujado a partir de ella, así que la muestra es la
-            propia marca escrita con la fuente. */}
-        <p className="ym-tipo-marca">yelmo</p>
-        <div className="ym-tipo-ficha">
+      <div className="ym-tipo-rejilla">
+        {/* Columna izquierda: la corporativa, con la que está dibujado el
+            logotipo. */}
+        <div className="ym-tipo-izq">
+          <p className="ym-tipo-aa es-somatic" aria-hidden="true">
+            Aa
+          </p>
+          <p className="ym-tipo-nombre es-somatic">
+            Somatic
+            <br />
+            Rounded
+          </p>
           <span className="ym-tipo-etiqueta">
-            <LangText es="Nombre" en="Name" />
+            <LangText es="Corporativa" en="Corporate" />
           </span>
-          <div className="ym-tipo-nombre">
-            <p className="ym-tipo-familia">
-              Somatic
-              <br />
-              Rounded
-            </p>
-            <p className="ym-tipo-muestra">Aa 123</p>
-          </div>
-        </div>
-      </div>
-
-      <h3 className="ym-subrotulo">
-        <LangText es="Auxiliar" en="Secondary" />
-      </h3>
-      <div className="ym-tipo-auxiliar">
-        <div>
-          <span className="ym-tipo-etiqueta">
-            <LangText es="Títulos" en="Headings" />
-          </span>
-          <div className="ym-tipo-par es-dosis">
-            <p className="ym-tipo-familia es-oscura">Dosis</p>
-            <p className="ym-tipo-muestra es-dosis">Aa 123</p>
-          </div>
-          <span className="ym-tipo-etiqueta es-pie">Dosis Font</span>
-          <ul className="ym-tipo-pesos">
-            {PESOS.map((p) => (
-              <li key={p.nombre} style={{ fontWeight: p.peso }}>
-                <span>{p.nombre}</span>
-                <span>AaBbCc 12345</span>
+          <ul className="ym-tipo-razones">
+            {USOS.map((u) => (
+              <li key={u.es}>
+                <LangText es={u.es} en={u.en} />
               </li>
             ))}
           </ul>
         </div>
 
-        <div>
-          <span className="ym-tipo-etiqueta">
-            <LangText es="Texto corrido" en="Body copy" />
-          </span>
-          <div className="ym-tipo-par es-dosis">
-            <p className="ym-tipo-familia es-ligera">Dosis Light</p>
-            <p className="ym-tipo-muestra es-dosis es-ligera">Aa 123</p>
+        {/* Columna derecha: la auxiliar, con sus pesos y su muestrario. */}
+        <div className="ym-tipo-der">
+          <div className="ym-tipo-pesos">
+            <p className="ym-tipo-nombre es-dosis">Dosis</p>
+            <span className="ym-tipo-etiqueta">
+              <LangText es="Auxiliar" en="Secondary" />
+            </span>
+            {PESOS.map((p) => (
+              <div className="ym-tipo-peso" key={p.peso}>
+                {/* El nombre del peso, la línea que lo une con su muestra y la
+                    muestra. La línea es un borde y no un guion largo: así se
+                    estira con el hueco disponible en vez de cortarse. */}
+                <span className="ym-tipo-peso-nombre" style={{ fontWeight: p.peso }}>
+                  {p.nombre}
+                </span>
+                <span className="ym-tipo-peso-linea" aria-hidden="true" />
+                <div className="ym-tipo-peso-uso">
+                  {p.uso && (
+                    <span>
+                      <LangText es={p.uso} en={p.usoEn ?? p.uso} />
+                    </span>
+                  )}
+                  <p style={{ fontWeight: p.peso }} aria-hidden="true">
+                    AaBbCc 123
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
-          <p className="ym-tipo-parrafo">
-            Lorem ipsum dolor sit amet, consecteLorem ipsum dolor sit amet,
-            consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut
-            laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam,
-            quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip
-            ex ea commodo consequa amet, consectetuer adipiscing elit, sed diam
-            nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat
-            volutpat. Ut
-          </p>
+
+          <div className="ym-tipo-muestrario" aria-hidden="true">
+            <div className="ym-tipo-abecedario">
+              {MAYUSCULAS.map((l) => (
+                <p key={l}>{l}</p>
+              ))}
+            </div>
+            <div className="ym-tipo-abecedario">
+              {MINUSCULAS.map((l) => (
+                <p key={l}>{l}</p>
+              ))}
+              <div className="ym-tipo-signos">
+                {SIGNOS.map((l) => (
+                  <p key={l}>{l}</p>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

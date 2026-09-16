@@ -9,162 +9,189 @@
   font-display: swap;
 }
 
+/* La lámina va escrita CON las fuentes: por defecto la auxiliar —que es la que
+   tiene los cuatro pesos y el juego completo de signos— y la corporativa allí
+   donde se la nombra. */
 .ym-tipo {
-  /* El morado de la marca para las muestras, y el turquesa para los filetes:
-     son los dos colores con los que está montada la lámina del manual. */
-  --ym-morado: #5025a0;
-  /* El tono fuerte de la lámina es el morado hondo, pero sobre el papel oscuro
-     del sitio no se lee: ahí sube al morado claro de la propia paleta. */
-  --ym-morado-hondo: #ab5eec;
-  --ym-turquesa: #00ffe2;
+  margin: 64px 0 48px;
+  font-family: var(--ym-dosis), system-ui, sans-serif;
 }
-:root[data-theme="light"] .ym-tipo {
-  --ym-morado-hondo: #3c1f71;
-  --ym-turquesa: #0e8f84;
+.es-somatic {
+  font-family: "Somatic Rounded", system-ui, sans-serif;
 }
 
-/* Papel opaco bajo lo que es letra suelta: el fondo de la página lleva una
-   trama animada y, por detrás de un texto fino o de un filete de un píxel, se
-   confunde con él. Es el color de la página, así que no se ve como una caja.
+.ym-tipo-titulo {
+  margin: 0 0 48px;
+}
 
-   Con `position: relative`: la trama va en un elemento posicionado, así que un
-   fondo sin posicionar se pinta por debajo de ella y los puntos seguían
-   cruzando el texto. */
-.ym-tipo-marca,
-.ym-tipo-nombre,
-.ym-tipo-etiqueta,
-.ym-tipo-par,
+/* Cada bloque se pone su papel: aquí casi todo son letras sueltas y filetes de
+   un píxel, que es lo que peor aguanta la trama animada del fondo pasando por
+   detrás. El padding se compensa con margen negativo a los lados para que los
+   bloques sigan alineados donde estaban.
+   `position: relative` porque la trama va en un elemento posicionado: sin esto
+   el papel se pinta por debajo de ella y los puntos siguen cruzando el texto. */
+.ym-tipo-izq,
 .ym-tipo-pesos,
-.ym-tipo-parrafo {
+.ym-tipo-muestrario {
   position: relative;
   background: var(--background);
+  padding: 16px;
+  margin-left: -16px;
+  margin-right: -16px;
+  border-radius: 3px;
 }
 
-/* ── La corporativa ── */
-.ym-tipo-fila {
-  display: flex;
-  align-items: center;
-  gap: 48px;
-  flex-wrap: wrap;
-}
-.ym-tipo-marca {
-  flex: 1 1 260px;
-  margin: 0;
-  font-family: "Somatic Rounded", system-ui, sans-serif;
-  font-size: clamp(56px, 9vw, 104px);
-  line-height: 1;
-  color: var(--ym-morado);
-  text-align: center;
-}
-.ym-tipo-ficha {
-  flex: 1 1 300px;
-}
-.ym-tipo-etiqueta {
-  display: block;
-  margin-bottom: 10px;
-  font-size: 12.5px;
-  color: var(--muted);
-}
-.ym-tipo-etiqueta.es-pie {
-  margin: 22px 0 8px;
-}
-/* Los dos filetes que encierran la muestra, como en la lámina. */
-.ym-tipo-nombre {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 18px 0;
-  border-top: 1px solid var(--ym-morado);
-  border-bottom: 1px solid var(--ym-morado);
-}
-.ym-tipo-familia {
-  margin: 0;
-  font-family: "Somatic Rounded", system-ui, sans-serif;
-  font-size: clamp(24px, 3.4vw, 34px);
-  line-height: 1.1;
-  color: var(--ym-turquesa);
-}
-.ym-tipo-muestra {
-  margin: 0;
-  font-family: "Somatic Rounded", system-ui, sans-serif;
-  font-size: clamp(30px, 4.4vw, 44px);
-  line-height: 1;
-  color: var(--ym-morado);
-}
-
-/* ── La auxiliar ── */
-.ym-tipo-auxiliar {
+.ym-tipo-rejilla {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 48px;
-}
-/* Todo lo que va en Dosis lo dice aquí una vez. El nombre de la familia y la
-   muestra se nombran aparte: heredan de `.ym-tipo-familia`, que fija Somatic
-   —es la corporativa—, y una muestra de Dosis escrita en Somatic no enseña
-   nada. */
-.es-dosis,
-.ym-tipo-pesos,
-.ym-tipo-parrafo,
-.ym-tipo-par .ym-tipo-familia,
-.ym-tipo-par .ym-tipo-muestra {
-  font-family: var(--ym-dosis), system-ui, sans-serif;
-}
-.ym-tipo-par {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 16px 0;
-  border-top: 1px solid var(--ym-turquesa);
-  border-bottom: 1px solid var(--ym-turquesa);
-}
-.ym-tipo-par .ym-tipo-familia {
-  color: var(--ym-morado-hondo);
-  font-weight: 700;
-}
-.ym-tipo-par .ym-tipo-familia.es-ligera,
-.ym-tipo-muestra.es-ligera {
-  font-weight: 300;
-}
-.ym-tipo-par .ym-tipo-muestra {
-  color: #a45ce8;
+  align-items: start;
 }
 
-.ym-tipo-pesos {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 6px 32px;
+/* ── Columna izquierda ── */
+
+/* La muestra grande. Escala con el ancho —no con un tamaño fijo— porque su
+   papel aquí es ser un bloque de la composición, y con píxeles se desmontaría
+   la lámina en cuanto cambiara la ventana. */
+.ym-tipo-aa {
   margin: 0;
+  font-size: clamp(88px, 16vw, 210px);
+  font-weight: 400;
+  line-height: 0.82;
+  letter-spacing: -0.02em;
+  color: #5025a0;
+}
+/* El morado de la marca se hunde contra el papel oscuro; ahí sube al claro de
+   su propia paleta. */
+:root[data-theme="dark"] .ym-tipo-aa {
+  color: #ab5eec;
+}
+
+.ym-tipo-nombre {
+  margin: 18px 0 0;
+  font-size: clamp(26px, 4.4vw, 52px);
+  font-weight: 700;
+  line-height: 1.06;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+/* La corporativa es redonda y de caja baja: en versales pierde justo lo que la
+   distingue, así que su nombre se escribe tal cual. */
+.ym-tipo-nombre.es-somatic {
+  text-transform: none;
+  font-weight: 400;
+}
+
+.ym-tipo-etiqueta {
+  display: block;
+  margin-top: 14px;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.ym-tipo-razones {
+  margin: 28px 0 0;
   padding: 0;
   list-style: none;
-  font-size: 19px;
-  color: #a45ce8;
-}
-.ym-tipo-pesos li {
-  display: contents;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.75;
 }
 
-.ym-tipo-parrafo {
-  margin: 18px 0 0;
-  font-size: 14.5px;
-  font-weight: 300;
-  line-height: 1.5;
-  text-align: justify;
-  color: var(--foreground);
+/* ── Columna derecha ── */
+
+.ym-tipo-pesos {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.ym-tipo-pesos .ym-tipo-nombre {
+  margin: 0;
+}
+.ym-tipo-pesos .ym-tipo-etiqueta {
+  margin: -14px 0 6px;
 }
 
-@media (max-width: 760px) {
-  .ym-tipo-auxiliar {
+/* Nombre del peso, la línea que lo une con su muestra, y la muestra con su
+   destino. La línea es una columna elástica: se estira con el hueco disponible
+   en vez de ser un guion de largo fijo que se corta o se sale. */
+.ym-tipo-peso {
+  display: grid;
+  grid-template-columns: auto 1fr 160px;
+  align-items: start;
+  gap: 16px;
+  font-size: 17px;
+}
+.ym-tipo-peso-nombre {
+  padding-top: 2px;
+  text-align: right;
+}
+.ym-tipo-peso-linea {
+  margin-top: 13px;
+  border-top: 1px solid currentColor;
+}
+.ym-tipo-peso-uso span {
+  display: block;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--muted);
+}
+.ym-tipo-peso-uso p {
+  margin: 2px 0 0;
+  font-size: 24px;
+  line-height: 1.15;
+}
+
+/* ── El muestrario ── */
+
+.ym-tipo-muestrario {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  margin-top: 72px;
+  font-size: 17px;
+  /* Abierto, como en la lámina: un muestrario se lee letra a letra, no como
+     palabra, y separarlas es lo que invita a mirarlas de una en una. */
+  letter-spacing: 0.28em;
+}
+.ym-tipo-abecedario p {
+  margin: 0 0 6px;
+  text-align: right;
+}
+/* Los signos van más juntos y un punto más pequeños: son catorce por línea y
+   Dosis es más ancha que la fuente para la que se pensó esta retícula, así que
+   con el mismo cuerpo que el alfabeto llegaban justos al borde del papel. */
+.ym-tipo-signos {
+  margin-top: 34px;
+  font-size: 0.82em;
+  letter-spacing: 0.02em;
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .ym-tipo-rejilla {
     grid-template-columns: 1fr;
-    gap: 40px;
+    gap: 56px;
   }
-  .ym-tipo-fila {
-    gap: 28px;
+  .ym-tipo-aa {
+    font-size: clamp(96px, 34vw, 170px);
   }
-  /* Sin justificar: en una columna estrecha, justificado abre ríos de espacio
-     entre palabras. */
-  .ym-tipo-parrafo {
-    text-align: left;
+  .ym-tipo-nombre {
+    font-size: clamp(28px, 9vw, 44px);
+  }
+  /* La muestra es «AaBbCc 123», bastante más larga que la de Espacio vacío:
+     en una columna de móvil llegaba justa al borde, así que baja de cuerpo. */
+  .ym-tipo-peso {
+    grid-template-columns: auto 1fr 124px;
+    font-size: 16px;
+  }
+  .ym-tipo-peso-uso p {
+    font-size: 20px;
+  }
+  .ym-tipo-muestrario {
+    margin-top: 48px;
+    letter-spacing: 0.18em;
   }
 }
