@@ -346,6 +346,11 @@ type Pantalla = {
   en: string;
   // Se puede volver desde ella.
   atras?: boolean;
+  // La flecha vuelve a una pantalla CONCRETA y no al paso anterior. Lo lleva el
+  // perfil: se llega a él desde la home, pero también desde sus propios
+  // apartados, y deshacer el último paso te devolvería a «Mis datos» en vez de
+  // salir del perfil, que es lo que espera quien pulsa.
+  atrasVa?: string;
   // Y se vuelve con la flecha de la cabecera en vez de con el botón de abajo.
   // Lo llevan las pantallas cuyo pie ya tiene su propio botón —los formularios
   // y la última—, donde un «Atrás» abajo serían dos botones amontonados.
@@ -819,6 +824,7 @@ const PANTALLAS: Pantalla[] = [
     en: "Profile",
     atras: true,
     flecha: true,
+    atrasVa: "home",
     arranque: 30,
     cuerpo: (c) => (
       <>
@@ -921,6 +927,16 @@ export default function Prototipo() {
     setCamino((antes) => (antes.length > 1 ? antes.slice(0, -1) : antes));
   }, []);
 
+  // Volver a una pantalla concreta. Si ya se pasó por ella, se recorta el camino
+  // hasta allí en vez de apilar otra visita: así el recorrido no crece cada vez
+  // que se entra y se sale de un apartado.
+  const volverA = useCallback((id: string) => {
+    setCamino((antes) => {
+      const i = antes.lastIndexOf(id);
+      return i >= 0 ? antes.slice(0, i + 1) : [...antes, id];
+    });
+  }, []);
+
   useEffect(() => {
     if (!arrancando) return;
     // El vídeo se pone en marcha AQUÍ y no en el manejador del botón: cuando se
@@ -949,7 +965,16 @@ export default function Prototipo() {
               {/* La carga va sin cabecera: ahí la marca ya la pone la
                   animación del isotipo, y el logotipo arriba la repetía. */}
               {actual.id !== "carga" && !actual.plena && (
-                <Cabecera atras={actual.flecha ? atras : undefined} t={t} />
+                <Cabecera
+                  atras={
+                    actual.flecha
+                      ? actual.atrasVa
+                        ? () => volverA(actual.atrasVa as string)
+                        : atras
+                      : undefined
+                  }
+                  t={t}
+                />
               )}
 
               {/* La pantalla de carga: el isotipo quieto esperando y, al
