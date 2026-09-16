@@ -47,19 +47,17 @@ export default function EspacioVacioLanding() {
 
         <ProjectHeroTitle es="Espacio vacío" en="Empty space" />
 
-        {/* El párrafo de la asignatura y la escuela ya no va aquí: ese dato
-            vive en la ficha de arriba, que es donde el resto de proyectos pone
-            el contexto. La página arranca directamente por el planteamiento. */}
-        <div className="project-introrow">
-          <p className="project-intro">
+        {/* Sin entradilla destacada: los tres párrafos van seguidos y al mismo
+            ancho. El dato de la asignatura y la escuela tampoco está aquí, vive
+            en la ficha de arriba, que es donde el resto de proyectos pone el
+            contexto. */}
+        <div className="project-text">
+          <p>
             <LangText
               es="Este proyecto tiene como punto de partida **concretar un problema social**. Nuestra elección fue tratar el tema de la **adicción a las redes sociales**, y de este problema hacer una **campaña de concienciación**."
               en="The project starts from **pinning down a social problem**. We chose to deal with **social media addiction**, and to build an **awareness campaign** out of it."
             />
           </p>
-        </div>
-
-        <div className="project-text">
           <p>
             <LangText
               es="Mediante una **app**, el usuario se podrá crear un perfil donde a lo largo del año, diariamente, irá registrando de manera **automática** el tiempo que consume en las redes sociales, y de manera **manual** las actividades importantes para él."
