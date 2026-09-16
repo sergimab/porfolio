@@ -141,7 +141,6 @@ export default function Marca() {
                 <line x1="35.77" y1="-15" x2="35.77" y2="86" style={{ animationDelay: "260ms" }} />
                 <line x1="0" y1="0" x2="71.55" y2="71" style={{ animationDelay: "340ms" }} />
                 <line x1="71.55" y1="0" x2="0" y2="71" style={{ animationDelay: "340ms" }} />
-                <rect x="12.83" y="12.83" width="45.89" height="45.34" style={{ animationDelay: "420ms" }} />
                 <circle cx="12.83" cy="12.83" r="12.83" style={{ animationDelay: "500ms" }} />
                 <circle cx="58.72" cy="12.83" r="12.83" style={{ animationDelay: "560ms" }} />
                 <circle cx="12.83" cy="58.17" r="12.83" style={{ animationDelay: "620ms" }} />
@@ -149,6 +148,16 @@ export default function Marca() {
               </g>
               <g className="ev-grid-iso">
                 <Isotipo />
+              </g>
+              {/* El cuadrado que une los centros de las cuatro circunferencias va
+                  DESPUÉS del isotipo, y no con las demás guías, porque sus cuatro
+                  esquinas caen dentro de la pieza: dibujado debajo, se le comían
+                  las esquinas y el cuadrado no llegaba a verse.
+                  Encima tampoco bastaba —hilo blanco sobre blanco—, así que se
+                  pinta por diferencia: claro sobre el fondo oscuro y oscuro sobre
+                  el isotipo. */}
+              <g className="ev-guias es-diferencia">
+                <rect x="12.83" y="12.83" width="45.89" height="45.34" style={{ animationDelay: "420ms" }} />
               </g>
             </svg>
           </div>

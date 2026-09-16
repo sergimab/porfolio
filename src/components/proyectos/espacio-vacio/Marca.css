@@ -158,6 +158,16 @@
   opacity: 0.55;
 }
 
+/* La guía que se pinta por diferencia: sobre el fondo oscuro sale clara y sobre
+   el isotipo blanco, oscura. Es lo que permite que un hilo cruce la pieza sin
+   desaparecer contra ella. */
+.ev-guias.es-diferencia {
+  mix-blend-mode: difference;
+}
+.ev-guias.es-diferencia rect {
+  opacity: 1;
+}
+
 /* ── El grid del isotipo, dibujándose ── */
 
 /* Cada guía entra desde nada, y lo hace con transform y opacidad en vez de
