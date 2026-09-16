@@ -20,10 +20,9 @@ export const PIEZAS = {
   isotipo: { archivo: "isotipo.svg", ratio: 405.2 / 481.7 },
 } as const;
 
-// La paleta corporativa: cuatro morados y el turquesa que los despierta.
+// La paleta corporativa: tres morados y el turquesa que los despierta.
 export const TINTAS = [
   { hex: "#2D1E73", rgb: "45 30 115", cmyk: "100 100 21 6" },
-  { hex: "#3C1F71", rgb: "60 31 113", cmyk: "95 100 19 6" },
   { hex: "#5025A0", rgb: "80 37 160", cmyk: "86 90 0 0" },
   { hex: "#AB5EEC", rgb: "171 94 236", cmyk: "58 67 0 0" },
   { hex: "#00FFE2", rgb: "0 255 226", cmyk: "58 0 29 0" },
