@@ -15,6 +15,7 @@ import IconografiaLanding from "@/components/proyectos/iberdrola/IconografiaLand
 import ElysiumLanding from "@/components/proyectos/elysium/ElysiumLanding";
 import DiscoElysiumLanding from "@/components/proyectos/disco-elysium/DiscoElysiumLanding";
 import ElysiumWebLanding from "@/components/proyectos/elysium-web/ElysiumWebLanding";
+import EspacioVacioLanding from "@/components/proyectos/espacio-vacio/EspacioVacioLanding";
 
 const LANDINGS: Record<string, React.ComponentType> = {
   i1: InfografiasLanding,
@@ -24,6 +25,7 @@ const LANDINGS: Record<string, React.ComponentType> = {
   u1: ElysiumWebLanding,
   d1: ElysiumLanding,
   e1: DiscoElysiumLanding,
+  b1: EspacioVacioLanding,
 };
 
 function catFromId(id: string): string {
@@ -40,7 +42,7 @@ function catFromId(id: string): string {
 
 const titles: Record<string, string> = {
   m1: "Proyecto Motion 01", m2: "Proyecto Motion 02", m3: "Proyecto Motion 03",
-  b1: "Proyecto Branding 01", b2: "Proyecto Branding 02", b3: "Proyecto Branding 03",
+  b1: "Espacio vacío", b2: "Proyecto Branding 02", b3: "Proyecto Branding 03",
   f1: "Proyecto Foto 01", f2: "Proyecto Foto 02", f3: "Proyecto Foto 03",
   i1: "Infografías", i2: "Sistema de diseño", i3: "Newsletters", i4: "Iconografía", i5: "Sistema de ilustraciones",
   u1: "Web de Elysium", u2: "Proyecto UI/UX 02", u3: "Proyecto UI/UX 03",
