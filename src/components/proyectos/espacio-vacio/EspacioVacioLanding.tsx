@@ -6,7 +6,8 @@ import PaletaCromatica from "./PaletaCromatica";
 import Tipografia from "./Tipografia";
 import Marca from "./Marca";
 import Mockups from "./Mockups";
-import Link from "next/link";
+import CtaBanner from "@/components/shared/CtaBanner";
+import DropcapTitle from "@/components/shared/DropcapTitle";
 
 // Espacio vacío: la campaña de concienciación sobre la adicción a las redes
 // sociales, de la asignatura Proyectos Experimentales de la ESD Madrid.
@@ -97,19 +98,21 @@ export default function EspacioVacioLanding() {
         <Mockups />
 
         {/* El diseño de la app tiene página propia, en UI/UX: aquí va la marca,
-            allí el producto. */}
+            allí el producto. Se pasa de una a otra con la misma franja que
+            enlaza las páginas de Elysium.
+            Falta la imagen del banner: sin ella la franja se pinta igual, solo
+            que lisa. Va a /banners/espacio-vacio-app.webp (2048 × 300) y su
+            versión estrecha -movil (1304 × 220). */}
         <hr className="ev-divisor" />
-        <div className="ev-papel ev-salto">
-          <p>
-            <LangText
-              es="El diseño de la app, con el alta navegable:"
-              en="The app design, with playable onboarding:"
-            />{" "}
-            <Link href="/proyecto/u2">
-              <LangText es="ver App Espacio vacío" en="see Empty space app" />
-            </Link>
-          </p>
-        </div>
+        <h2 className="project-h2">
+          <DropcapTitle es="Sigue por aquí" en="Keep going" />
+        </h2>
+        <CtaBanner
+          href="/proyecto/u2"
+          es="Ver el diseño de la app"
+          en="See the app design"
+          alt="El alta de la app de Espacio vacío"
+        />
       </div>
     </main>
   );

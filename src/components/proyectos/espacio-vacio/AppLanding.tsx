@@ -1,5 +1,6 @@
-import Link from "next/link";
 import BackCapsule from "@/components/shared/BackCapsule";
+import CtaBanner from "@/components/shared/CtaBanner";
+import DropcapTitle from "@/components/shared/DropcapTitle";
 import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
 import LangText from "@/components/shared/LangText";
 import ToolIcons from "@/components/shared/ToolIcons";
@@ -58,20 +59,20 @@ export default function AppLanding() {
 
         <Prototipo />
 
+        {/* Y de vuelta a la marca, que es de donde sale todo esto.
+            Falta la imagen del banner: sin ella la franja se pinta igual, solo
+            que lisa. Va a /banners/espacio-vacio.webp (2048 × 300) y su versión
+            estrecha -movil (1304 × 220). */}
         <hr className="ev-divisor" />
-
-        {/* Y de vuelta a la marca, que es de donde sale todo esto. */}
-        <div className="ev-papel ev-salto">
-          <p>
-            <LangText
-              es="La marca, la paleta y la tipografía de la app son las del proyecto de branding:"
-              en="The app's brand, palette and typography come from the branding project:"
-            />{" "}
-            <Link href="/proyecto/b1">
-              <LangText es="ver Espacio vacío" en="see Empty space" />
-            </Link>
-          </p>
-        </div>
+        <h2 className="project-h2">
+          <DropcapTitle es="Sigue por aquí" en="Keep going" />
+        </h2>
+        <CtaBanner
+          href="/proyecto/b1"
+          es="Ver la marca de Espacio vacío"
+          en="See the Empty space brand"
+          alt="La marca de Espacio vacío"
+        />
       </div>
     </main>
   );

@@ -420,13 +420,6 @@ export default function Prototipo() {
               {t("Reiniciar", "Restart")}
             </button>
           </div>
-
-          <p className="ev-proto-pie">
-            {t(
-              "Está programada, no son capturas: se recorre pulsando los botones de la propia app.",
-              "It's built, not screenshots: you move through it with the app's own buttons."
-            )}
-          </p>
         </div>
       </div>
     </section>

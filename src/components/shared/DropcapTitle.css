@@ -25,3 +25,18 @@
   letter-spacing: 0.02em;
   font-weight: 600;
 }
+
+/* En estrecho, el contorno encoge con la letra. Se pinta centrado en el perfil
+   del glifo, así que la mitad sobresale hacia fuera: cinco píxeles junto a un
+   texto pequeño dejan de ser el hueco que abren y pasan a tapar la primera
+   letra de la palabra. */
+@media (max-width: 600px) {
+  .dropcap-letter {
+    font-size: 34px;
+    -webkit-text-stroke-width: 2px;
+    /* Y se aparta de la palabra en vez de montarse sobre ella: el rasgo de la
+       cursiva barre hacia la derecha y con el texto pequeño tapaba la primera
+       letra. */
+    margin-right: 5px;
+  }
+}

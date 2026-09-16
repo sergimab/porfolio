@@ -217,7 +217,19 @@
   line-height: 1.15;
 }
 @media (max-width: 600px) {
-  .project-hero-cap  { font-size: 56px; }
+  /* El contorno y el acercamiento TAMBIÉN encogen, y no solo el cuerpo: el
+     contorno se pinta centrado en el perfil de la letra, así que la mitad sale
+     hacia fuera y se come lo que tenga a la derecha. Diez píxeles al lado de un
+     texto de 32 se leen como aire; los mismos diez al lado de uno de 20 le
+     tapaban media letra a la palabra siguiente. */
+  .project-hero-cap {
+    font-size: 56px;
+    -webkit-text-stroke-width: 4px;
+    /* Y en vez de meterse bajo la palabra, se APARTA de ella: el rasgo de la
+       cursiva barre hacia la derecha y, con el texto pequeño, se comía la
+       primera letra por mucho que el contorno le abriera hueco. */
+    margin-right: 8px;
+  }
   .project-hero-rest { font-size: 20px; }
 }
 

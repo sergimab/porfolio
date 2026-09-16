@@ -403,25 +403,6 @@
   padding-right: calc(50vw - 50%);
 }
 
-/* El salto a la otra página del proyecto —de la marca a la app y al revés—.
-   Va con el papel de los apartados, porque es texto y la trama del fondo le
-   pasaría por encima igual que a los párrafos. */
-.ev-salto {
-  margin-top: 8px;
-  font-size: 15px;
-}
-.ev-salto p {
-  margin: 0;
-}
-/* Subrayado explícito: el enlace va dentro de una frase corriente, y sin él
-   —el color es el del texto— no se distingue de lo que lo rodea. */
-.ev-salto a {
-  color: inherit;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  font-weight: 600;
-}
-
 /* El divisor entre apartados. Llega solo hasta donde llega el contenido, no de
    borde a borde de la ventana.
 
