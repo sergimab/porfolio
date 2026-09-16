@@ -1,0 +1,103 @@
+/* La lámina de paleta cromática.
+   Los dos bloques van a los lados contrarios, como en el manual: el hueco que
+   queda entre ellos es parte de la composición. */
+.ev-paleta {
+  margin: 56px 0 48px;
+}
+
+.ev-paleta-titulo {
+  display: inline-block;
+  margin: 0 0 40px;
+  padding: 9px 16px;
+  border: 1px solid currentColor;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.ev-paleta-fila {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+.ev-paleta-fila.es-derecha {
+  justify-content: flex-end;
+  margin-bottom: 72px;
+}
+.ev-paleta-fila.es-izquierda {
+  justify-content: flex-start;
+}
+
+.ev-muestra {
+  margin: 0;
+  /* Ancho fijo para que las columnas se alineen aunque un nombre de uso ocupe
+     dos líneas y otro una. */
+  width: 168px;
+}
+
+/* La etiqueta de uso va ARRIBA del disco, como en la lámina, y reserva sitio
+   para dos líneas: si no, el disco de «Relaciones personales» bajaría respecto
+   a los otros tres y la fila quedaría escalonada. */
+.ev-muestra-uso {
+  min-height: 2.6em;
+  margin: 0 0 14px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.ev-muestra-disco {
+  display: block;
+  width: 136px;
+  height: 136px;
+  margin: 0 auto;
+  border-radius: 50%;
+  /* Contorno flojo en TODOS, y no solo en el blanco como en la lámina impresa.
+     Allí el papel es siempre claro, así que basta con perfilar el blanco; aquí
+     la página también puede ser oscura, y entonces el que se pierde contra el
+     fondo es el negro. Un hilo tenue resuelve los dos casos sin tener que
+     saber qué muestra es cuál. */
+  border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+}
+/* El blanco sí lo lleva marcado, que es como está en el manual. */
+.ev-muestra-disco.es-contorno {
+  border-color: currentColor;
+}
+
+.ev-muestra-datos {
+  margin-top: 22px;
+}
+.ev-muestra-nombre {
+  margin: 0 0 14px;
+  font-size: 14px;
+}
+.ev-muestra-valores {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.75;
+  /* Tabular para que las cifras de los cuatro sistemas caigan en columna y se
+     puedan comparar de un vistazo entre muestras. */
+  font-variant-numeric: tabular-nums;
+  opacity: 0.85;
+}
+
+/* En estrecho no caben cuatro columnas, y forzarlas deja los discos diminutos.
+   Los bloques se centran y las fichas se reparten en dos columnas. */
+@media (max-width: 900px) {
+  .ev-paleta-fila.es-derecha,
+  .ev-paleta-fila.es-izquierda {
+    justify-content: center;
+    gap: 32px 24px;
+  }
+  .ev-paleta-fila.es-derecha {
+    margin-bottom: 52px;
+  }
+  .ev-muestra {
+    width: 140px;
+  }
+  .ev-muestra-disco {
+    width: 112px;
+    height: 112px;
+  }
+}

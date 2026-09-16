@@ -11,10 +11,12 @@ import "./EscenaInicio.css";
 // fijo. Por eso la composición se conserva igual en cualquier ancho en vez de
 // descuadrarse en cuanto cambia la ventana.
 //
-// `x`, `y` y `d` van en porcentaje del ancho y del alto del cuadro; `dx` y `dy`
-// son de dónde VIENE cada una, en la misma unidad. Ese desplazamiento apunta
-// hacia fuera, así que al entrar parecen converger sobre el móvil en vez de
-// deslizarse todas en la misma dirección.
+// `x`, `y` y `d` van en porcentaje del ancho y del alto del cuadro. `dx` es de
+// dónde viene cada una en horizontal, apuntando hacia fuera para que converjan
+// sobre el móvil en vez de deslizarse todas en la misma dirección.
+//
+// El vertical NO se escribe: sale de la propia altura de cada esfera —ver
+// SALIDA—, porque si se pone a mano acaba contradiciéndola.
 // Lo que sube el conjunto entero respecto a lo medido, en puntos de alto del
 // cuadro. Va aparte y se aplica a todas por igual: mover el grupo es un solo
 // número, y las posiciones de la lista siguen siendo las de la referencia en
@@ -22,15 +24,26 @@ import "./EscenaInicio.css";
 const SUBIDA = 5;
 
 const ESFERAS = [
-  { x: 61.5, y: 11.8, d: 4.4, color: "#FB4B4B", dx: 6, dy: -14 },
-  { x: 61.5, y: 28.1, d: 4.4, color: "#A78BFA", dx: -9, dy: -8 },
-  { x: 71.5, y: 28.1, d: 4.4, color: "#F5A623", dx: 4, dy: -12 },
-  { x: 81.4, y: 28.1, d: 4.4, color: "#FB4B4B", dx: 13, dy: -9 },
-  { x: 76.9, y: 43.5, d: 4.1, color: "#A8E85C", dx: 14, dy: 3 },
-  { x: 62.2, y: 57.1, d: 3.6, color: "#A8E85C", dx: 8, dy: 12 },
-  { x: 14.6, y: 71.9, d: 4.4, color: "#F5A623", dx: -13, dy: 9 },
-  { x: 23.0, y: 79.2, d: 4.0, color: "#FB4B4B", dx: -8, dy: 14 },
+  { x: 61.5, y: 11.8, d: 4.4, color: "#FF5C5C", dx: 6 },
+  { x: 61.5, y: 28.1, d: 4.4, color: "#A484FF", dx: -9 },
+  { x: 71.5, y: 28.1, d: 4.4, color: "#FFAE11", dx: 4 },
+  { x: 81.4, y: 28.1, d: 4.4, color: "#FF5C5C", dx: 13 },
+  { x: 76.9, y: 43.5, d: 4.1, color: "#A1F08D", dx: 14 },
+  { x: 62.2, y: 57.1, d: 3.6, color: "#A1F08D", dx: 8 },
+  { x: 14.6, y: 71.9, d: 4.4, color: "#FFAE11", dx: -13 },
+  { x: 23.0, y: 79.2, d: 4.0, color: "#FF5C5C", dx: -8 },
 ];
+
+// Cuánto se aleja cada esfera en vertical antes de colocarse, por cada punto
+// que esté separada del centro del cuadro.
+//
+// Con esto, la que está arriba viene BAJANDO y la que está abajo viene
+// SUBIENDO: cada una entra por su lado y se juntan hacia el medio. Sale de la
+// propia altura en vez de escribirse a mano por una razón práctica: a mano hay
+// que acordarse de darle la vuelta al signo cada vez que una esfera se mueve
+// de sitio, y basta olvidarlo una vez para que esa entre al revés que sus
+// vecinas sin que se vea el motivo en el código.
+const SALIDA = 0.55;
 
 const limitar = (v: number) => Math.min(1, Math.max(0, v));
 const suave = (t: number) => t * t * (3 - 2 * t);
@@ -106,10 +119,14 @@ export default function EscenaInicio() {
             width: `${e.d}%`,
             background: e.color,
             ["--dx" as string]: `${e.dx}%`,
-            ["--dy" as string]: `${e.dy}%`,
-            // Escalonadas: las de más arriba llegan antes. Todas a la vez se
-            // lee como un bloque que se desplaza, no como piezas colocándose.
-            ["--turno" as string]: i * 0.055,
+            // Hacia arriba las de arriba y hacia abajo las de abajo, medido
+            // desde el centro del cuadro.
+            ["--dy" as string]: `${(e.y - SUBIDA - 50) * SALIDA}%`,
+            // Escalonadas por ALTURA, no por el orden de la lista: el recorrido
+            // se lee de arriba abajo, así que las de arriba llegan antes y las
+            // de abajo cierran. Por orden de lista el escalonado saltaba de un
+            // lado a otro del cuadro sin ninguna lógica visible.
+            ["--turno" as string]: ((e.y - SUBIDA) / 100) * 0.45,
           }}
         />
       ))}
