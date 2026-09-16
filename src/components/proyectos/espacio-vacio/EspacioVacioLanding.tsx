@@ -111,9 +111,9 @@ export default function EspacioVacioLanding() {
         {/* El diseño de la app tiene página propia, en UI/UX: aquí va la marca,
             allí el producto. Se pasa de una a otra con la misma franja que
             enlaza las páginas de Elysium.
-            Falta la imagen del banner: sin ella la franja se pinta igual, solo
-            que lisa. Va a /banners/espacio-vacio-app.webp (2048 × 300) y su
-            versión estrecha -movil (1304 × 220). */}
+            La versión estrecha es la MISMA imagen recortada por el centro, como
+            las de Elysium: a ancho de móvil, la franja entera se queda en 48 px
+            de alto y los dos aparatos no se distinguen. */}
         <hr className="ev-divisor" />
         <h2 className="project-h2">
           <DropcapTitle es="Páginas recomendadas" en="Recommended pages" />
@@ -122,7 +122,9 @@ export default function EspacioVacioLanding() {
           href="/proyecto/u2"
           es="Ver el diseño de la app"
           en="See the app design"
-          alt="El alta de la app de Espacio vacío"
+          imagen="/banners/espacio-vacio-app.webp"
+          imagenMovil="/banners/espacio-vacio-app-movil.webp"
+          alt="La app de Espacio vacío abierta en dos móviles"
         />
       </div>
     </main>
