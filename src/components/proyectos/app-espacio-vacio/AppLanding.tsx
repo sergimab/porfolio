@@ -3,6 +3,7 @@ import CtaBanner from "@/components/shared/CtaBanner";
 import DropcapTitle from "@/components/shared/DropcapTitle";
 import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
 import LangText from "@/components/shared/LangText";
+import "@/components/shared/papel.css";
 import ToolIcons from "@/components/shared/ToolIcons";
 import Apartados from "./Apartados";
 // El papel y los divisores son los mismos que los de la página de marca: las
@@ -65,7 +66,7 @@ export default function AppLanding() {
         {/* Los mismos tres párrafos que la página de branding, y con el mismo
             papel: entrando por una o por otra, el proyecto se presenta igual.
             Los programas van aparte, en su propia caja. */}
-        <div className="ev-papel project-text">
+        <div className="papel-texto project-text">
           <p>
             <LangText
               es="Este proyecto tiene como punto de partida **concretar un problema social**. Nuestra elección fue tratar el tema de la **adicción a las redes sociales**, y de este problema hacer una **campaña de concienciación**."
@@ -89,7 +90,7 @@ export default function AppLanding() {
         {/* Los programas, en su caja y a la derecha: la caja ya la trae el
             componente —fondo de la página, sin borde—, y fuera del papel se ve
             como tal, que es como está en las demás páginas del sitio. */}
-        <div className="ev-herramientas">
+        <div className="caja-herramientas">
           <ToolIcons tools={["Figma"]} />
         </div>
 

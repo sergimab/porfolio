@@ -1,6 +1,7 @@
 import BackCapsule from "@/components/shared/BackCapsule";
 import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
 import LangText from "@/components/shared/LangText";
+import "@/components/shared/papel.css";
 import ToolIcons from "@/components/shared/ToolIcons";
 import EscenaInicio from "./EscenaInicio";
 import PaletaCromatica from "./PaletaCromatica";
@@ -69,7 +70,7 @@ export default function EspacioVacioLanding() {
             trama animada, y donde cae sobre un párrafo compite con lo que hay
             que leer; sobre una lámina, en cambio, no molesta y quitarla de toda
             la página era apagar el fondo entero. */}
-        <div className="ev-papel project-text">
+        <div className="papel-texto project-text">
           <p>
             <LangText
               es="Este proyecto tiene como punto de partida **concretar un problema social**. Nuestra elección fue tratar el tema de la **adicción a las redes sociales**, y de este problema hacer una **campaña de concienciación**."
@@ -90,7 +91,7 @@ export default function EspacioVacioLanding() {
           </p>
         </div>
 
-        <div className="ev-herramientas">
+        <div className="caja-herramientas">
           <ToolIcons tools={["Photoshop", "Illustrator"]} />
         </div>
 

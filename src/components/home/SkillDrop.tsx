@@ -25,7 +25,7 @@ const skills = [
 
 const projects: Record<string, { id: string; title: string; titleEn: string; cover?: string }[]> = {
   motion:     [{ id:"m1",title:"Proyecto Motion 01",titleEn:"Motion Project 01"},{id:"m2",title:"Proyecto Motion 02",titleEn:"Motion Project 02"},{id:"m3",title:"Proyecto Motion 03",titleEn:"Motion Project 03"}],
-  branding:   [{ id:"b1",title:"Espacio vacío",titleEn:"Empty space",cover:"/covers/espacio-vacio.webp"},{id:"b2",title:"Proyecto Branding 02",titleEn:"Branding Project 02"},{id:"b3",title:"Proyecto Branding 03",titleEn:"Branding Project 03"}],
+  branding:   [{ id:"b1",title:"Espacio vacío",titleEn:"Empty space",cover:"/covers/espacio-vacio.webp"},{id:"b2",title:"Rebranding Yelmo Cines",titleEn:"Yelmo Cines rebranding"},{id:"b3",title:"Proyecto Branding 03",titleEn:"Branding Project 03"}],
   fotografia: [{ id:"f1",title:"Proyecto Foto 01",titleEn:"Photo Project 01"},{id:"f2",title:"Proyecto Foto 02",titleEn:"Photo Project 02"},{id:"f3",title:"Proyecto Foto 03",titleEn:"Photo Project 03"}],
   iberdrola:  [{ id:"i2",title:"Sistema de diseño",titleEn:"Design system"},{id:"i5",title:"Sistema de ilustraciones",titleEn:"Illustration system",cover:"/covers/sistema-ilustraciones.svg"},{id:"i1",title:"Infografías",titleEn:"Infographics",cover:"/covers/infografias.webp"},{id:"i3",title:"Newsletters",titleEn:"Newsletters",cover:"/covers/newsletters.webp"},{id:"i4",title:"Iconografía",titleEn:"Iconography",cover:"/covers/iberdrola-iconografia.svg"}],
   uiux:       [{ id:"u1",title:"Web de Elysium",titleEn:"Elysium website",cover:"/covers/elysium-web.webp"},{id:"u2",title:"App Espacio vacío",titleEn:"Empty space app",cover:"/covers/espacio-vacio-app.webp"},{id:"u3",title:"Proyecto UI/UX 03",titleEn:"UI/UX Project 03"}],

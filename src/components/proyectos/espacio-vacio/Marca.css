@@ -419,43 +419,6 @@
   margin-top: 26px;
 }
 
-/* ── El papel de los apartados ──
-   El fondo de la página lleva una trama animada, y donde cae sobre un texto o
-   sobre una lámina compite con lo que hay que leer. Cada apartado se pone su
-   propio papel opaco y se despega de ella.
-
-   El papel se estira hasta el borde de la ventana con márgenes negativos:
-   recortado al ancho del contenido, la trama seguiría entrando por los lados y
-   se vería una banda de puntos pegada al bloque. 50vw a cada lado cubre
-   cualquier pantalla, y el padding devuelve el contenido a su sitio.
-
-   El ancho se FIJA en 100vw. Antes solo se tiraba del margen —-50vw a cada
-   lado— y eso no da una caja de un ancho de ventana: da una de ancho del padre
-   MÁS 100vw, o sea que sobresalía medio ancho de ventana por cada lado y la
-   página se podía arrastrar en horizontal en móvil. Con el ancho fijado, el
-   margen solo la centra y el padding devuelve el contenido a la columna:
-   `50%` mide sobre el padre, así que `50vw - 50%` es exactamente lo que
-   sobresale por ese lado. */
-.ev-papel {
-  position: relative;
-  background: var(--background);
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-  padding-left: calc(50vw - 50%);
-  padding-right: calc(50vw - 50%);
-}
-
-/* Los programas usados, en su propia caja y contra el margen derecho. La caja
-   —fondo de la página, sin borde— la trae el propio componente; aquí solo se
-   decide dónde se pone. Va FUERA del papel del texto: dentro, al compartir
-   color, no se leía como una caja aparte. */
-.ev-herramientas {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 4px;
-}
-
 /* El divisor entre apartados. Llega solo hasta donde llega el contenido, no de
    borde a borde de la ventana.
 
