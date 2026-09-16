@@ -10,6 +10,11 @@
   margin-top: 8px;
   overflow: hidden;
   border-radius: 4px;
+  /* El reloj de las animaciones de dentro es ESTA caja subiendo por la
+     pantalla, no cada pieza por su cuenta: como cada imagen mide casi lo mismo
+     que la lámina, con su propio recorrido todas terminaban antes de que la
+     lámina llegara a verse. */
+  view-timeline-name: --ym-apps;
 }
 
 /* ── El fondo ──
@@ -53,26 +58,35 @@
   left: -7.18%;
   top: 61.75%;
   width: 88.41%;
+  --ym-dx: -8%;
 }
 .es-palomitas {
-  left: -0.84%;
-  top: -1%;
-  width: 78.13%;
+  /* Centrado y algo mayor que en el archivo, que es lo que le pide la lámina
+     al abrir: (100 - 88) / 2 es su margen a cada lado. */
+  left: 6%;
+  top: -2%;
+  width: 88%;
+  --ym-dy: -6%;
+  --ym-giro: -14deg;
 }
 .es-mupi {
   left: 47.56%;
   top: 31.27%;
   width: 59.85%;
+  --ym-dx: 10%;
 }
 .es-entradas {
   left: -6.67%;
   top: 35.49%;
   width: 84.94%;
+  --ym-dx: -10%;
+  --ym-giro: 4deg;
 }
 .es-asientos {
   left: 0;
   top: 63.49%;
   width: 100%;
+  --ym-dy: 8%;
 }
 
 /* Los copos van por delante de todo. */
@@ -81,4 +95,41 @@
   top: 0;
   width: 100%;
   opacity: 0.7;
+}
+
+/* ── Colocándose al hacer scroll ──
+   Cada pieza entra desde su lado y se va poniendo en su sitio a medida que la
+   lámina sube por la pantalla; las palomitas, además, giran. No es un «aparece
+   al llegar»: el avance lo marca el propio scroll, así que si te paras a medio
+   camino, la pieza se queda a medias.
+
+   Va con `animation-timeline`, que no todos los navegadores traen todavía. Por
+   eso se declara dentro de un @supports: donde no lo hay, la lámina sale
+   montada y quieta, que es el estado final de todas formas. */
+@supports (view-timeline-name: --x) {
+  @media (prefers-reduced-motion: no-preference) {
+    .ym-app,
+    .ym-copos {
+      animation: ym-coloca linear both;
+      animation-timeline: --ym-apps;
+      /* Empieza en cuanto asoma y termina cuando la lámina ya está entrada:
+         el recorrido útil es el de la propia lectura. */
+      animation-range: entry 0% cover 35%;
+    }
+    /* Los copos entran los últimos, cuando el resto ya está en su sitio. */
+    .ym-copos {
+      animation-range: entry 15% cover 50%;
+    }
+  }
+}
+
+@keyframes ym-coloca {
+  from {
+    transform: translate(var(--ym-dx, 0), var(--ym-dy, 0)) rotate(var(--ym-giro, 0deg));
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
 }
