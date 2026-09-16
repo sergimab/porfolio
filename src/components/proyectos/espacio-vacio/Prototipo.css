@@ -144,6 +144,55 @@
   padding: 0;
 }
 
+/* ── La guía ──
+   Su portada es una lista de botones centrada, y sus apartados son pantallas de
+   texto largo.
+
+   Se pueden DESPLAZAR: el de «¿Cómo funciona?» no cabe en una pantalla ni en el
+   diseño original, así que la pantalla se comporta como la de una app y se
+   arrastra. La barra se esconde, que en un móvil tampoco se ve. */
+.ev-app-cuerpo {
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.ev-app-cuerpo::-webkit-scrollbar {
+  display: none;
+}
+
+/* Los textos de la guía, un punto por debajo del cuerpo normal: son bloques
+   largos y a cuerpo grande no cabrían sin partir la lectura en dos pantallas. */
+.ev-app-texto.es-guia {
+  font-size: 3.2cqw;
+  margin-bottom: 4cqw;
+}
+/* Un segundo rótulo dentro de la misma pantalla necesita aire por arriba. */
+.ev-app-titulo.es-segundo {
+  margin-top: 6cqw;
+}
+.ev-app-boton.es-vincular {
+  margin-top: 10cqw;
+}
+
+/* La lista de la portada de la guía: los botones centrados y del ancho de su
+   rótulo, como en el diseño. El de las instrucciones va arriba y separado del
+   grupo, que es lo que lo distingue de los cuatro apartados. */
+.ev-app-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22cqw;
+}
+.ev-app-menu-grupo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4cqw;
+}
+.ev-app-boton.es-menu {
+  padding: 2.4cqw 3.2cqw;
+  font-size: 3cqw;
+}
+
 /* ── La home ──
    Bandas apiladas con un hilo entre ellas, y las dos últimas en paralelo.
    El reparto del alto sale del diseño y va como `flex-grow`, no en

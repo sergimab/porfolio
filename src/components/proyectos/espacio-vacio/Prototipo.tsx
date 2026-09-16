@@ -36,7 +36,7 @@ const MENU: { es: string; en: string; alto: number; va?: string }[] = [
 ];
 const MENU_PIE: { es: string; en: string; va?: string }[] = [
   { es: "Perfil", en: "Profile" },
-  { es: "Guía", en: "Guide" },
+  { es: "Guía", en: "Guide", va: "guia" },
 ];
 
 // Los cuatro cuartos del isotipo, los mismos trazados que en la página de
@@ -293,6 +293,9 @@ type Pantalla = {
   // La pantalla se pinta entera ella misma: sin cabecera común y sin los
   // márgenes del cuerpo.
   plena?: boolean;
+  // A qué altura empieza el cuerpo, en cqw. Sin él, el sitio de siempre; se
+  // baja solo donde el texto es tan largo que no cabe desde ahí.
+  arranque?: number;
   cuerpo: (c: Ctx) => React.ReactNode;
 };
 
@@ -570,6 +573,158 @@ const PANTALLAS: Pantalla[] = [
       </div>
     ),
   },
+  {
+    id: "guia",
+    es: "Guía",
+    en: "Guide",
+    atras: true,
+    flecha: true,
+    centrado: true,
+    cuerpo: (c) => (
+      <div className="ev-app-menu">
+        {/* Las instrucciones del alta, otra vez: van sueltas y arriba porque no
+            son un apartado de la guía, sino el repaso entero. */}
+        <Boton clase="es-menu" onClick={() => c.ir("quienes")}>
+          {c.t("Instrucciones iniciales", "Getting started")}
+        </Boton>
+        <div className="ev-app-menu-grupo">
+          <Boton clase="es-menu" onClick={() => c.ir("g-quienes")}>
+            {c.t("¿Quiénes somos?", "Who we are")}
+          </Boton>
+          <Boton clase="es-menu" onClick={() => c.ir("g-funciona")}>
+            {c.t("¿Cómo funciona?", "How it works")}
+          </Boton>
+          <Boton clase="es-menu" onClick={() => c.ir("g-calendario")}>
+            {c.t("¿Qué es el calendario?", "What the calendar is")}
+          </Boton>
+          <Boton clase="es-menu" onClick={() => c.ir("g-redes")}>
+            {c.t("¿Cómo conecto mi app?", "How to connect my app")}
+          </Boton>
+        </div>
+      </div>
+    ),
+  },
+  {
+    id: "g-quienes",
+    es: "Guía · ¿Quiénes somos?",
+    en: "Guide · Who we are",
+    atras: true,
+    flecha: true,
+    arranque: 66,
+    cuerpo: (c) => (
+      <>
+        <h3 className="ev-app-titulo es-suelto">{c.t("¿Quiénes somos?", "Who we are")}</h3>
+        <p className="ev-app-texto es-guia">
+          {c.t(
+            "En un mundo cada vez más conectado, pasamos horas consumiendo contenido sin sentido y perdiendo la oportunidad de vivir momentos significativos y reales.",
+            "In an ever more connected world, we spend hours consuming meaningless content and missing the chance to live real, meaningful moments."
+          )}
+        </p>
+        <p className="ev-app-texto es-guia">
+          {c.t(
+            "Nuestra misión es reconectar con lo que realmente importa. Redescubre la satisfacción de invertir tiempo en experiencias valiosas.",
+            "Our mission is to reconnect with what really matters. Rediscover how good it feels to put your time into things worth doing."
+          )}
+        </p>
+      </>
+    ),
+  },
+  {
+    id: "g-funciona",
+    es: "Guía · ¿Cómo funciona?",
+    en: "Guide · How it works",
+    atras: true,
+    flecha: true,
+    // Este texto es largo de verdad: empieza más arriba y la pantalla se puede
+    // desplazar, como haría la de una app.
+    arranque: 44,
+    cuerpo: (c) => (
+      <>
+        <h3 className="ev-app-titulo es-suelto">{c.t("¿Cómo funciona?", "How it works")}</h3>
+        <p className="ev-app-texto es-guia">
+          {c.t(
+            "Tras crear una cuenta, deberás conectar tu app con el consumo de aplicaciones que calcula tu teléfono móvil, en ese preciso momento, empezará el juego.",
+            "Once you have an account, you connect the app to the screen-time your phone already measures. That is when the game starts."
+          )}
+        </p>
+        <p className="ev-app-texto es-guia">
+          {c.t(
+            "Deberás indicar el número de horas diarias de consumo de redes que consideres responsable, tras ello, nuestra app plasmará el número de horas que consumes en redes sociales. Cada día podrás ver cómo tu foto va desapareciendo a medida que consumes tu valioso tiempo consumiendo redes sociales.",
+            "You set how many hours a day on social media you consider responsible, and the app then shows the hours you actually spend. Day by day you watch your photo disappear as you spend your valuable time on social media."
+          )}
+        </p>
+        <p className="ev-app-texto es-guia">
+          {c.t(
+            "También tendrás la oportunidad de plasmar actividades útiles que realices en tu día a día, para que al final del día, el mes o el año, puedas comparar el tiempo que has consumido en redes sociales, y el tiempo útil que has empleado en hacer cosas que de verdad te llenan y te hacen crecer en la vida satisfactoriamente.",
+            "You can also log the worthwhile things you do, so that at the end of the day, the month or the year you can set the time you spent on social media against the time you put into what really fills you and makes you grow."
+          )}
+        </p>
+        <p className="ev-app-texto es-guia">
+          {c.t(
+            "Podrás encargar tu calendario cuando finalice el mes o el año, para poder tener un trocito de tu vida en la pared de tu habitación.",
+            "And you can order your calendar when the month or the year is over, to keep a little piece of your life on your bedroom wall."
+          )}
+        </p>
+      </>
+    ),
+  },
+  {
+    id: "g-calendario",
+    es: "Guía · El calendario",
+    en: "Guide · The calendar",
+    atras: true,
+    flecha: true,
+    arranque: 66,
+    cuerpo: (c) => (
+      <>
+        <h3 className="ev-app-titulo es-suelto">
+          {c.t("¿Qué es el calendario?", "What the calendar is")}
+        </h3>
+        <p className="ev-app-texto es-guia">
+          {c.t(
+            "El calendario es, como su propio nombre indica, un calendario, pero no uno cualquiera. Será el elemento que refleje si de verdad cumples tus objetivos, y si de verdad pierdes tu tiempo consumiendo contenido vacío en redes sociales o si por el contrario, eres una persona responsable y pasas tiempo de calidad haciendo cosas útiles al margen de la pantalla y la falsa dimensión en la que nos sumergen las redes sociales.",
+            "The calendar is exactly that, a calendar, but not any calendar. It is the piece that shows whether you really meet your goals: whether you are losing your time on empty content, or spending it on worthwhile things away from the screen and the false world social media pulls us into."
+          )}
+        </p>
+        <p className="ev-app-texto es-guia">
+          {c.t("¿Serás capaz de cumplir tus objetivos?", "Will you be able to meet your goals?")}
+        </p>
+      </>
+    ),
+  },
+  {
+    id: "g-redes",
+    es: "Guía · Uso de redes",
+    en: "Guide · Social media use",
+    atras: true,
+    flecha: true,
+    arranque: 66,
+    cuerpo: (c) => (
+      <>
+        <h3 className="ev-app-titulo es-suelto">{c.t("Uso de redes", "Social media use")}</h3>
+        <p className="ev-app-texto es-guia">
+          {c.t(
+            "En este espacio podrás conocer el uso que haces en redes sociales al día, al mes y al año. Para comenzar a crear tu espacio de redes, debes conectar tu aplicación con el uso de aplicaciones calculado por tu teléfono móvil.",
+            "Here you can see how much you use social media by day, by month and by year. To start building your own space, connect the app to the screen-time your phone already measures."
+          )}
+        </p>
+        <h3 className="ev-app-titulo es-suelto es-segundo">
+          {c.t("¿Cómo hacerlo?", "How to do it")}
+        </h3>
+        <p className="ev-app-texto es-guia">
+          {c.t(
+            "Para conectar la app con el uso de aplicaciones diario de tu móvil clicka sobre el siguiente botón.",
+            "To connect the app to your phone's daily screen-time, tap the button below."
+          )}
+        </p>
+        {/* Vincular no lleva a ninguna parte todavía: la pantalla de después no
+            está diseñada, y mandar a otro sitio sería inventársela. */}
+        <Boton clase="es-centrado es-vincular" onClick={() => c.ir("g-redes")}>
+          {c.t("Vincular app", "Link app")}
+        </Boton>
+      </>
+    ),
+  },
 ];
 
 const PORID = new Map(PANTALLAS.map((p) => [p.id, p]));
@@ -664,6 +819,9 @@ export default function Prototipo() {
                 className={`ev-app-cuerpo${actual.id === "casillas" ? " es-alto" : ""}${
                   actual.centrado ? " es-centro" : ""
                 }${actual.plena ? " es-plena" : ""}`}
+                style={
+                  actual.arranque ? { paddingTop: `${actual.arranque}cqw` } : undefined
+                }
               >
                 {actual.cuerpo(ctx)}
                 {/* Volver, abajo y a la izquierda: enfrente del de avanzar y en
