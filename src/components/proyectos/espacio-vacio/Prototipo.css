@@ -148,6 +148,10 @@
   font-weight: 400;
   margin-bottom: 4.4cqw;
 }
+/* El de «Crear cuenta», en el peso intermedio de la familia. */
+.ev-app-titulo.es-medium {
+  font-weight: 500;
+}
 .ev-app-titulo.es-centrado {
   text-align: center;
   font-size: 4.3cqw;
@@ -377,17 +381,17 @@
   flex: 0 0 auto;
 }
 
-/* La animación del isotipo, sobre la pantalla de carga. Centrada del todo: sin
-   el logotipo arriba, la pantalla es solo ella. */
+/* El isotipo de la pantalla de carga: quieto y centrado. La pantalla es solo
+   él, así que no hay más que centrarlo. */
 .ev-app-carga {
   position: absolute;
   z-index: 2;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 62%;
+  width: 26cqw;
+  height: auto;
   pointer-events: none;
-  mix-blend-mode: multiply;
 }
 
 /* Etiqueta solo para lectores de pantalla. */
@@ -441,6 +445,13 @@
   background: var(--foreground);
   color: var(--background);
 }
+/* El de empezar manda sobre los otros dos: va relleno, que es lo que lo
+   distingue de los mandos de servicio. */
+.ev-proto-botones button.es-principal {
+  background: var(--foreground);
+  color: var(--background);
+}
+
 .ev-proto-botones button:disabled {
   opacity: 0.35;
   cursor: default;

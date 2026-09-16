@@ -26,8 +26,14 @@ const ASUNTOS = [
   { color: "#FFAE11", es: "Logros", en: "Achievements" },
 ];
 
-// Lo que dura la animación del isotipo, más un respiro.
-const CARGA = 4400;
+// Los cuatro cuartos del isotipo, los mismos trazados que en la página de
+// marca: la pieza se dibuja, no se trae como imagen.
+const CUARTOS = [
+  "M61.72,45.7v16.02h-15.33c1.54,5.36,6.47,9.28,12.33,9.28,7.09,0,12.83-5.75,12.83-12.83,0-6.05-4.19-11.11-9.83-12.47Z",
+  "M9.28,61.72v-15.88c-5.36,1.54-9.28,6.47-9.28,12.33,0,7.09,5.75,12.83,12.83,12.83,5.86,0,10.78-3.93,12.33-9.28h-15.88Z",
+  "M9.28,9.28h15.88C23.62,3.93,18.69,0,12.83,0,5.75,0,0,5.75,0,12.83c0,5.86,3.93,10.78,9.28,12.33v-15.88Z",
+  "M58.71,0c-5.86,0-10.78,3.93-12.33,9.28h15.33v16.02c5.64-1.35,9.83-6.41,9.83-12.47,0-7.09-5.75-12.83-12.83-12.83Z",
+];
 
 // Traductor corto. Aquí no sirve <LangText>, que solo admite cadenas: dentro de
 // la app hay textos con un dato metido en medio y marcadores de posición de los
@@ -91,8 +97,9 @@ function Campo({
 }: {
   texto: string;
   valor?: string;
-  // Campo de contraseña: se escribe en puntos, y los puntos piden su propio
-  // ajuste vertical.
+  // Campo de contraseña: se oculta como en un teclado de móvil —la última
+  // letra a la vista un momento y el resto en bolitas— y acaba en bolitas del
+  // todo.
   clave?: boolean;
   // El que se está tecleando lleva el cursor: es lo que hace que se lea como
   // alguien rellenando el formulario y no como un texto que aparece de golpe.
@@ -106,13 +113,19 @@ function Campo({
   // le arrastraría el desplazamiento hasta aquí. Al terminar vuelve el campo de
   // verdad, que es el que se puede usar.
   if (escribiendo) {
+    const escrito = valor ?? "";
+    // En una contraseña, lo que se ve mientras se teclea es lo que enseña un
+    // móvil: todo en bolitas menos la letra recién pulsada.
+    const alaVista = clave
+      ? "•".repeat(Math.max(0, escrito.length - 1)) + escrito.slice(-1)
+      : escrito;
     return (
       <div
         className={`ev-app-campo es-escribiendo${clave ? " es-clave" : ""}`}
         aria-hidden="true"
       >
         <span className="ev-app-tecleado">
-          {valor}
+          {alaVista}
           <i />
         </span>
       </div>
@@ -122,8 +135,11 @@ function Campo({
   return (
     <label className={`ev-app-campo${clave ? " es-clave" : ""}`}>
       <span className="ev-oculto">{texto}</span>
+      {/* Acabada de escribir, la contraseña va en un campo de tipo password:
+          las bolitas las pone el navegador, con la forma que tenga el sistema,
+          que es exactamente lo que se ve en un móvil. */}
       <input
-        type="text"
+        type={clave ? "password" : "text"}
         placeholder={texto}
         value={valor ?? ""}
         onChange={(e) => onCambio?.(e.target.value)}
@@ -269,22 +285,26 @@ const PANTALLAS: Pantalla[] = [
     atras: true,
     cuerpo: (c) => (
       <>
-        <h3 className="ev-app-titulo es-suelto">{c.t("Crear cuenta", "Create account")}</h3>
+        <h3 className="ev-app-titulo es-suelto es-medium">
+          {c.t("Crear cuenta", "Create account")}
+        </h3>
         {/* Los datos son los de la pantalla de perfil del proyecto: la misma
             usuaria de ejemplo aquí que allí. La contraseña se teclea a la vista
             —sin puntos— porque así está en el diseño original. */}
         <CamposAuto
           campos={[
-            { etiqueta: c.t("Nombre completo", "Full name"), valor: "Clara Gutiérrez García" },
+            { etiqueta: c.t("Nombre", "First name"), valor: "Clara" },
+            { etiqueta: c.t("Apellidos", "Surname"), valor: "Gutiérrez García" },
             { etiqueta: c.t("Correo electrónico", "Email"), valor: "cgutierrez@gmail.com" },
             {
               etiqueta: c.t("Fecha de nacimiento", "Date of birth"),
               valor: c.t("16 de Marzo de 2003", "16 March 2003"),
             },
-            { etiqueta: c.t("Contraseña", "Password"), valor: "Polloconarroz" },
+            { etiqueta: c.t("Contraseña", "Password"), valor: "Polloconarroz", clave: true },
             {
               etiqueta: c.t("Confirmar contraseña", "Confirm password"),
               valor: "Polloconarroz",
+              clave: true,
             },
           ]}
         />
@@ -487,7 +507,6 @@ export default function Prototipo() {
   const [camino, setCamino] = useState<string[]>(["carga"]);
   const [horas, setHoras] = useState(3);
   const actual = PORID.get(camino[camino.length - 1]) ?? PANTALLAS[0];
-  const video = useRef<HTMLVideoElement>(null);
 
   const ir = useCallback((id: string) => {
     // Volver al principio es empezar de cero, no apilar otra vuelta.
@@ -496,21 +515,6 @@ export default function Prototipo() {
   const atras = useCallback(() => {
     setCamino((antes) => (antes.length > 1 ? antes.slice(0, -1) : antes));
   }, []);
-
-  // La pantalla de carga pasa sola: es lo que hace de verdad, y dejarla
-  // esperando un clic sería inventarse un botón que no existe.
-  useEffect(() => {
-    if (actual.id !== "carga") return;
-    const v = video.current;
-    if (v) {
-      v.currentTime = 0;
-      // El navegador puede rechazar la reproducción automática; no pasa nada,
-      // el temporizador sigue y la pantalla avanza igual.
-      v.play().catch(() => {});
-    }
-    const reloj = setTimeout(() => ir("bienvenida"), CARGA);
-    return () => clearTimeout(reloj);
-  }, [actual.id, ir]);
 
   const ctx: Ctx = { ir, t, horas, setHoras };
 
@@ -530,20 +534,14 @@ export default function Prototipo() {
                 <Cabecera atras={actual.atras ? atras : undefined} t={t} />
               )}
 
-              {/* La animación del isotipo de la pantalla de carga. El vídeo
-                  viene con fondo casi blanco —#FDFDFD— sobre una pantalla
-                  blanca: con `multiply` ese blanco desaparece y no se ve el
-                  recuadro. */}
+              {/* La pantalla de carga: el isotipo quieto en el centro y nada
+                  más. */}
               {actual.id === "carga" && (
-                <video
-                  ref={video}
-                  className="ev-app-carga"
-                  src="/proyectos/espacio-vacio/app/isotipo.mp4"
-                  muted
-                  playsInline
-                  preload="auto"
-                  aria-hidden="true"
-                />
+                <svg className="ev-app-carga" viewBox="0 0 71.55 71" aria-hidden="true">
+                  {CUARTOS.map((d, i) => (
+                    <path key={i} d={d} fill="#252221" />
+                  ))}
+                </svg>
               )}
 
               <div className={`ev-app-cuerpo${actual.id === "casillas" ? " es-alto" : ""}`}>
@@ -564,6 +562,18 @@ export default function Prototipo() {
           </p>
 
           <div className="ev-proto-botones">
+            {/* La carga no pasa sola: arranca quien mira. El botón vive fuera
+                del móvil, con los demás mandos, porque tampoco es un botón de
+                la app: la pantalla de carga no tiene ninguno. */}
+            {actual.id === "carga" && (
+              <button
+                type="button"
+                className="es-principal"
+                onClick={() => ir("bienvenida")}
+              >
+                {t("Comenzar", "Start")}
+              </button>
+            )}
             <button type="button" onClick={atras} disabled={camino.length < 2}>
               {t("Atrás", "Back")}
             </button>
