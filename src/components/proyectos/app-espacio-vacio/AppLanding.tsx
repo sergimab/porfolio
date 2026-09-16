@@ -52,8 +52,8 @@ export default function AppLanding() {
         <div className="project-introrow ev-papel">
           <p className="project-intro">
             <LangText
-              es="La app es el centro de la campaña: es donde la persona ve cuánto tiempo se le va en las redes sociales y lo pone al lado del que dedica a lo que de verdad le importa. El alta son diez pantallas, y está aquí entera y navegable."
-              en="The app is the heart of the campaign: it's where you see how much time is going into social media and set it against the time you give to what actually matters. Onboarding is ten screens, and here it is in full, playable."
+              es="La app es el centro de la campaña: es donde la persona ve cuánto tiempo se le va en las redes sociales y lo pone al lado del que dedica a lo que de verdad le importa. Está aquí entera y navegable: el alta, el calendario, los momentos, los datos, el perfil y la guía."
+              en="The app is the heart of the campaign: it's where you see how much time is going into social media and set it against the time you give to what actually matters. Here it is in full, and playable: onboarding, the calendar, the moments, the data, the profile and the guide."
             />
           </p>
           <ToolIcons tools={["Figma"]} />

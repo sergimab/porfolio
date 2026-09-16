@@ -1058,8 +1058,15 @@ button.ev-app-banda:focus-visible {
 }
 
 /* ── Los mandos ── */
+
+/* Ancho FIJO, no máximo: la columna la componen un rótulo y unos botones que
+   cambian de texto —«Comenzar» pasa a «Arrancando…»— y de número según la
+   pantalla. Si la columna se ajusta a su contenido, cada cambio mueve el
+   reparto de la fila y el móvil da un salto lateral. Con el ancho fijo, lo que
+   cambie dentro se queda dentro. */
 .ev-proto-mandos {
-  max-width: 260px;
+  flex: 0 0 260px;
+  width: 260px;
 }
 
 .ev-proto-donde {
@@ -1121,8 +1128,9 @@ button.ev-app-banda:focus-visible {
   .ev-movil {
     width: min(330px, 82vw);
   }
+  /* Apilados, la columna deja de mandar en la fila y vuelve a ocupar el ancho. */
   .ev-proto-mandos {
-    max-width: none;
+    flex: 0 0 auto;
     width: 100%;
   }
   .ev-proto-donde,
