@@ -112,9 +112,15 @@ const APILADOS: Pieza[] = [
   },
 ];
 
+// El ratio que se le da aquí NO es el del archivo: el original es apaisado
+// (1,37) y lleva mucho aire transparente a los lados, así que el móvil salía
+// pequeño dentro de su caja. Con una caja casi cuadrada y recorte, lo que se
+// pierde es ese aire y el móvil pasa a llenar el hueco. Es mejor que escalar la
+// imagen, que crecería también hacia fuera y se comería a los de al lado.
 const GRANDE: Pieza = {
   src: "/proyectos/espacio-vacio/mockup-3.webp",
-  ratio: 1.3746,
+  ratio: 1.02,
+  clase: "ev-mock-recorte",
   alt: "Publicación de Instagram de la campaña",
   sx: 34,
   sy: 40,
