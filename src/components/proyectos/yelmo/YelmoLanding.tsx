@@ -2,7 +2,6 @@ import BackCapsule from "@/components/shared/BackCapsule";
 import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
 import LangText from "@/components/shared/LangText";
 import ToolIcons from "@/components/shared/ToolIcons";
-import "@/components/shared/papel.css";
 
 // Rebranding de Yelmo Cines: el proyecto de Proyectos LAB de la ESD Madrid, en
 // el que a cada uno le tocaba una marca de cine y había que resolverla en tres
@@ -48,16 +47,16 @@ export default function YelmoLanding() {
 
         <ProjectHeroTitle es="Rebranding Yelmo Cines" en="Yelmo Cines rebranding" />
 
-        <div className="papel-texto project-text">
-          <p>
+        {/* La entradilla y los programas en la misma fila, como las páginas de
+            Iberdrola: el texto a la izquierda con su propio papel —ya lo trae
+            `.project-intro`— y los iconos en columna contra el margen derecho. */}
+        <div className="project-introrow">
+          <p className="project-intro">
             <LangText
               es="En este proyecto de la universidad se planteaba el **rebranding de una marca de cine**, y a mí me tocó **Yelmo**. La propuesta tenía que resolverse en **tres disciplinas**: prototipado web, branding y animación."
               en="This university project asked for the **rebranding of a cinema brand**, and I was given **Yelmo**. The proposal had to work across **three disciplines**: web prototyping, branding and animation."
             />
           </p>
-        </div>
-
-        <div className="caja-herramientas">
           <ToolIcons tools={["Photoshop", "Illustrator", "After Effects", "Figma"]} />
         </div>
       </div>
