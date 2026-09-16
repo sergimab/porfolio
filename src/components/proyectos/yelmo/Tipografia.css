@@ -181,6 +181,12 @@
   .ym-tipo-nombre {
     font-size: clamp(28px, 9vw, 44px);
   }
+  /* La lista de usos, un punto por debajo: a 17 px pesaba más que la entradilla
+     del proyecto, que es el texto principal de la página, y la jerarquía se
+     leía del revés. */
+  .ym-tipo-razones {
+    font-size: 15px;
+  }
   /* La muestra es «AaBbCc 123», bastante más larga que la de Espacio vacío:
      en una columna de móvil llegaba justa al borde, así que baja de cuerpo. */
   .ym-tipo-peso {

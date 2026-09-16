@@ -159,10 +159,12 @@
 
 @media (max-width: 760px) {
   /* Las cuatro líneas, de dos en dos: a cuatro columnas de móvil cada Y se
-     queda en un palmo y su nombre no cabe en una línea. */
+     queda en un palmo y su nombre no cabe en una línea. Y se acercan a la
+     lámina de márgenes, que en vertical deja mucho aire por debajo. */
   .ym-ys {
     grid-template-columns: 1fr 1fr;
     gap: 32px 20px;
+    margin-top: 32px;
   }
 
   .ym-tintas {
