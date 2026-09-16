@@ -915,12 +915,11 @@
         fill: #05ebd8;
       }
     </style>
-    <linearGradient id="Degradado_sin_nombre" data-name="Degradado sin nombre" x1="422.9" y1="437.1" x2="383.2" y2="476.8" gradientTransform="translate(0 752) scale(1 -1)" gradientUnits="userSpaceOnUse">
+    <linearGradient id="Degradado_sin_nombre" data-name="Degradado sin nombre" x1="426.7" y1="433.3" x2="390.7" y2="469.3" gradientTransform="translate(0 752) scale(1 -1)" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#00ffe2"/>
-      <stop offset="0" stop-color="#07e1d3"/>
-      <stop offset=".4" stop-color="#23799e"/>
+      <stop offset=".35" stop-color="#23799e"/>
       <stop offset=".7" stop-color="#35387d"/>
-      <stop offset=".8" stop-color="#3c1f71"/>
+      <stop offset="1" stop-color="#3c1f71"/>
     </linearGradient>
     <linearGradient id="Degradado_sin_nombre_2" data-name="Degradado sin nombre 2" x1="469" y1="294.6" x2="467.7" y2="386.5" gradientTransform="translate(0 752) scale(1 -1)" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#3c1f71"/>
