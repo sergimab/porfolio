@@ -49,7 +49,9 @@
   display: block;
   width: 86px;
   height: 86px;
-  margin-bottom: 14px;
+  /* Centrado sobre su columna: pegado a la izquierda, con el texto debajo más
+     ancho que él, cada disco se quedaba descolgado de su propio dato. */
+  margin: 0 auto 14px;
   border-radius: 50%;
 }
 .ym-valores {
@@ -68,7 +70,9 @@
 .ym-gradaciones {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 32px 40px;
+  /* Aire de sobra entre las tres: cada barra lleva un disco montado a cada
+     lado, así que el hueco visible es bastante menor que el que se declara. */
+  gap: 32px 84px;
   margin: 0;
   padding: 0 22px;
   list-style: none;
