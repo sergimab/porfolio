@@ -40,11 +40,26 @@ const MORADO = "#3C1F71";
 const degradar = (paradas: string[]) => `linear-gradient(0deg, ${paradas.join(", ")})`;
 
 // Los SVG que van incrustados se leen una vez, al construir la página.
-const leer = (archivo: string) =>
-  readFileSync(join(process.cwd(), "public/proyectos/yelmo/branding", archivo), "utf8");
+//
+// Y se les cambia el nombre a sus clases e ids: los archivos de Illustrator los
+// llaman a todos igual —`cls-1`, `Degradado_sin_nombre`—, y como el `<style>`
+// que traen dentro vale para toda la página, dos láminas juntas se pisaban los
+// colores y los degradados entre ellas. Con un prefijo por archivo cada una se
+// queda con lo suyo, y de paso se le puede hablar desde el CSS de fuera.
+const leer = (archivo: string, prefijo: string) => {
+  const bruto = readFileSync(
+    join(process.cwd(), "public/proyectos/yelmo/branding", archivo),
+    "utf8"
+  );
+  return bruto
+    .replace(/cls-(\d+)/g, `${prefijo}-cls-$1`)
+    .replace(/(id=")([^"]+)(")/g, `$1${prefijo}-$2$3`)
+    .replace(/url\(#([^)]+)\)/g, `url(#${prefijo}-$1)`)
+    .replace(/(xlink:href="#)([^"]+)(")/g, `$1${prefijo}-$2$3`);
+};
 
-const construccion = leer("composicion-logo-alt.svg");
-const margen = leer("margen-submarca.svg");
+const construccion = leer("composicion-logo-alt.svg", "ym-cons");
+const margen = leer("margen-submarca.svg", "ym-marg");
 
 export default function Branding() {
   return (
@@ -102,14 +117,6 @@ export default function Branding() {
             en="Four lines inside the same brand. The logotype does not change: it only gains the descriptor and its icon, drawn from the same family of shapes."
           />
         </p>
-        <ul className="ym-submarcas">
-          {SUBMARCAS.map((s) => (
-            <li key={s.id}>
-              <Pieza archivo={s.archivo} ratio={s.ratio} ancho="100%" tinta={MORADO} />
-            </li>
-          ))}
-        </ul>
-
         {/* Los cuatro iconos juntos y en fila, que es donde se ve que son una
             misma familia. No valen ni la máscara ni un archivo único: llevan
             detalles en negativo —el interior de la estrella, la contra de la
@@ -131,15 +138,25 @@ export default function Branding() {
 
         {/* El margen de aplicación: cuánto aire pide el icono al lado de la
             marca. Se dibuja al llegar, como la lámina de construcción. */}
-        <LaminaGuias markup={margen} ancho={420} />
+        <LaminaGuias markup={margen} ancho={190} />
 
         {/* Y cada línea con su icono y su color sobre el isotipo. Aquí el color
             ES el dato, así que va tal cual sale del archivo. */}
+        {/* Como los iconos: los detalles que el archivo dibuja en blanco pasan
+            a ser del color del papel, para que se lean como huecos y no como
+            una mancha clara. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          className="ym-submarcas-y"
-          src={`${RUTA}/submarcas-Y.svg`}
+          className="ym-submarcas-y es-oscuro"
+          src={`${RUTA}/submarcas-Y-oscuro.svg`}
           alt="El isotipo de Yelmo en las cuatro submarcas, cada una con su icono y su color"
+        />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="ym-submarcas-y es-claro"
+          src={`${RUTA}/submarcas-Y-claro.svg`}
+          alt=""
+          aria-hidden="true"
         />
       </section>
 

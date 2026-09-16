@@ -108,24 +108,6 @@
   right: -22px;
 }
 
-/* ── Las submarcas ── */
-.ym-submarcas {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px 56px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.ym-submarcas li {
-  padding: 22px 26px;
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  /* Papel claro FIJO: la marca es morada y en modo oscuro se perdía contra el
-     papel de la página. */
-  background: #f6f5f8;
-}
-
 /* Los iconos, la lámina de márgenes y las cuatro Y: centrados y con aire entre
    ellos, que son tres maneras de mirar lo mismo. */
 .ym-iconos,
@@ -140,19 +122,31 @@
 .ym-submarcas-y {
   width: min(700px, 100%);
 }
-.ym-submarcas .ym-lamina-guias,
 .ym-seccion .ym-lamina-guias {
   margin-top: 48px;
 }
 /* La versión de cada modo: se enseña la que toca. */
-.ym-iconos.es-claro {
+.ym-iconos.es-claro,
+.ym-submarcas-y.es-claro {
   display: none;
 }
-:root[data-theme="light"] .ym-iconos.es-oscuro {
+:root[data-theme="light"] .ym-iconos.es-oscuro,
+:root[data-theme="light"] .ym-submarcas-y.es-oscuro {
   display: none;
 }
-:root[data-theme="light"] .ym-iconos.es-claro {
+:root[data-theme="light"] .ym-iconos.es-claro,
+:root[data-theme="light"] .ym-submarcas-y.es-claro {
   display: block;
+}
+
+/* En la lámina de márgenes, los dos cuadrados que encajan el icono van en el
+   turquesa de la marca: son la medida que se está enseñando, y en el mismo
+   color que el resto se perdían entre las demás guías. */
+.ym-lamina-guias svg [class*="ym-marg-cls-3"] {
+  stroke: #00ffe2;
+}
+:root[data-theme="light"] .ym-lamina-guias svg [class*="ym-marg-cls-3"] {
+  stroke: #0e8f84;
 }
 
 /* ── La inclusión dinámica ── */
@@ -209,12 +203,8 @@
 }
 
 @media (max-width: 760px) {
-  .ym-submarcas,
   .ym-lineas {
     grid-template-columns: 1fr;
-    gap: 22px;
-  }
-  .ym-lineas {
     gap: 40px;
   }
   .ym-tintas {
