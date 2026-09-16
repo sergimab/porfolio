@@ -1554,6 +1554,7 @@ export default function Prototipo() {
             cualquier tamaño y para que pese cero. */}
         <div className="ev-movil">
           <div className="ev-pantalla">
+            <div className="ev-movil-notch" aria-hidden="true" />
             {/* La clave fuerza a React a rehacer el cuerpo al cambiar de
                 pantalla, que es lo que dispara la entrada. */}
             <div className="ev-app" key={actual.id}>

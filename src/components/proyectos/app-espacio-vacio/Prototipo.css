@@ -26,8 +26,6 @@
   padding: 10px;
   border-radius: 44px;
   background: #1b1b1d;
-  box-shadow: 0 2px 0 rgba(255, 255, 255, 0.14) inset,
-    0 26px 60px rgba(10, 8, 16, 0.32);
 }
 
 .ev-pantalla {
@@ -46,6 +44,23 @@
      dispositivo. Con píxeles habría que reescribir cada medida en cada tamaño;
      con porcentajes, el texto no escalaría con lo demás. */
   container-type: inline-size;
+}
+
+/* El notch, colgando del borde de arriba. Es del color del marco y se dibuja
+   por encima de la pantalla, como el del aparato de verdad. Cae por delante de
+   la app pero no de sus pulsaciones: ahí arriba no hay nada que tocar, y la
+   cabecera empieza más abajo. */
+.ev-movil-notch {
+  position: absolute;
+  z-index: 6;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  width: 42cqw;
+  height: 6.4cqw;
+  border-radius: 0 0 3.4cqw 3.4cqw;
+  background: #1b1b1d;
+  pointer-events: none;
 }
 
 /* ── La app ── */
@@ -693,8 +708,10 @@
      reparto, como una más. */
   flex: 184 0 0;
 }
+/* Del mismo tamaño que el de la cabecera de las demás pantallas: es la misma
+   marca en el mismo sitio, y a dos tamaños distintos parecían dos cosas. */
 .ev-app-home-marca img {
-  width: 44cqw;
+  width: 20.5cqw;
   height: auto;
 }
 
