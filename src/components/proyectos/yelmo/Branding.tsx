@@ -61,14 +61,26 @@ export default function Branding() {
           ancho="clamp(90px, 13vw, 150px)"
           tinta={DEGRADADO_PAPEL}
         />
-        <p className="ym-firma">
-          rebranding de cines yelmo / sergio martín barahona &amp; lorena gurillo
-        </p>
-        <Pieza
-          archivo={PIEZAS.logotipo.archivo}
-          ratio={PIEZAS.logotipo.ratio}
-          ancho="min(640px, 82%)"
-          tinta={DEGRADADO_PAPEL}
+        {/* El logotipo en su versión de trazos: cada forma lleva su propio
+            degradado, así que aquí no vale la máscara —que pinta la pieza
+            entera de una vez— y va como imagen.
+
+            Van DOS archivos, uno por modo del sitio: el color vive dentro del
+            SVG y desde fuera no se puede cambiar. Los dos salen del mismo
+            original, con el extremo oscuro del degradado llevado al papel de
+            cada tema; el turquesa se queda igual en los dos. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="ym-trazos es-oscuro"
+          src={`${RUTA}/logotipo-trazos-oscuro.svg`}
+          alt="Logotipo de Yelmo"
+        />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="ym-trazos es-claro"
+          src={`${RUTA}/logotipo-trazos-claro.svg`}
+          alt=""
+          aria-hidden="true"
         />
       </header>
 

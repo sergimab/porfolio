@@ -18,18 +18,20 @@
   margin-bottom: 72px;
   padding: 24px 0 8px;
 }
-.ym-firma {
-  margin: 0;
-  font-size: 12.5px;
-  letter-spacing: 0.01em;
-  color: #00ffe2;
-  text-align: center;
+/* El logotipo de trazos: el de cada modo, y el otro fuera del marcado. */
+.ym-trazos {
+  display: block;
+  width: min(680px, 88%);
+  height: auto;
 }
-/* El turquesa de la marca está pensado para fondo oscuro; sobre el papel claro
-   de la página se queda en nada, así que ahí se oscurece lo justo para leerse
-   sin dejar de ser el mismo color. */
-:root[data-theme="light"] .ym-firma {
-  color: #0e8f84;
+.ym-trazos.es-claro {
+  display: none;
+}
+:root[data-theme="light"] .ym-trazos.es-oscuro {
+  display: none;
+}
+:root[data-theme="light"] .ym-trazos.es-claro {
+  display: block;
 }
 
 /* El papel opaco de cada lámina: el fondo de la página lleva una trama animada
