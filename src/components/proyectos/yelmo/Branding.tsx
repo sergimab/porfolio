@@ -33,12 +33,6 @@ function Pieza({
 
 const MORADO = "#3C1F71";
 
-// El degradado de la marca con el extremo oscuro cambiado por el papel de la
-// página: el turquesa entra por abajo a la izquierda y la pieza se apaga hacia
-// arriba hasta confundirse con el fondo.
-const DEGRADADO_PAPEL =
-  "linear-gradient(28deg, #00FFE2 0%, #35C9D8 22%, #3E7FB4 48%, var(--background) 96%)";
-
 // Un degradado de abajo arriba a partir de la lista de paradas de la submarca.
 const degradar = (paradas: string[]) => `linear-gradient(0deg, ${paradas.join(", ")})`;
 
@@ -46,21 +40,13 @@ export default function Branding() {
   return (
     <div className="ym-branding">
       {/* ── La portada ───────────────────────────────────────────────────────
-          La apertura de la presentación: el isotipo, la firma y el logotipo,
-          como en la lámina que cierra el proyecto.
+          La apertura de la presentación: el logotipo grande y solo, como en la
+          lámina que cierra el proyecto.
 
           El degradado no acaba en el azul oscuro del original sino en el PAPEL
-          DE LA PÁGINA: así la pieza se desvanece contra el fondo en vez de
-          apoyarse en una caja de color, y funciona igual en claro que en
-          oscuro sin exportar dos versiones. Por eso van como máscara: el color
-          es cosa de la página, no del archivo. */}
+          DE LA PÁGINA: así la marca se desvanece contra el fondo en vez de
+          apoyarse en una caja de color. */}
       <header className="ym-portada">
-        <Pieza
-          archivo={PIEZAS.isotipo.archivo}
-          ratio={PIEZAS.isotipo.ratio}
-          ancho="clamp(90px, 13vw, 150px)"
-          tinta={DEGRADADO_PAPEL}
-        />
         {/* El logotipo en su versión de trazos: cada forma lleva su propio
             degradado, así que aquí no vale la máscara —que pinta la pieza
             entera de una vez— y va como imagen.
