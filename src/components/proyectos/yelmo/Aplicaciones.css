@@ -1,37 +1,17 @@
 /* La lámina de aplicaciones.
-   Caja de proporción fija —la de la lámina original, 2 de alto por 1,25 de
-   ancho— con el morado de la marca y el isotipo repetido y torcido detrás. Las
-   piezas van encima en porcentajes, así que se superponen igual a cualquier
-   ancho. */
+   Caja de proporción fija con el isotipo repetido y torcido detrás. Las piezas
+   van encima en porcentajes, así que se superponen igual a cualquier ancho. */
 .ym-lamina-apps {
   position: relative;
   aspect-ratio: 950 / 1470;
   margin-top: 8px;
   overflow: hidden;
   border-radius: 4px;
-  background-color: #3c1f71;
+  /* Sin papel propio: las piezas y la trama se apoyan en el de la página. */
   background-image: url("/proyectos/yelmo/branding/aplicaciones/trama-y.svg");
   /* La tesela mide 160 y se pide a 9 % del ancho: la trama crece con la lámina
      en vez de hacerse minúscula en pantallas grandes. */
   background-size: 9% auto;
-}
-
-/* Una franja turquesa arriba y otra abajo, como en la lámina. */
-.ym-lamina-apps::before,
-.ym-lamina-apps::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 2.2%;
-  background: #00ffe2;
-  z-index: 3;
-}
-.ym-lamina-apps::before {
-  top: 0;
-}
-.ym-lamina-apps::after {
-  bottom: 0;
 }
 
 .ym-app {
@@ -43,21 +23,22 @@
 /* El orden de arriba abajo es también el de delante atrás: cada pieza tapa un
    poco a la anterior, que es lo que las cose en una sola composición. */
 .es-palomitas {
-  top: 2%;
-  right: -4%;
-  width: 78%;
+  top: 3%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 92%;
   z-index: 2;
 }
 .es-mupi {
-  top: 33%;
-  right: -2%;
-  width: 40%;
+  top: 30%;
+  right: -4%;
+  width: 46%;
   z-index: 1;
 }
 .es-moviles {
-  top: 43%;
+  top: 45%;
   left: -8%;
-  width: 78%;
+  width: 80%;
   z-index: 2;
 }
 .es-fachada {

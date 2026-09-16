@@ -2,19 +2,23 @@
   <!-- La trama del fondo de las aplicaciones: el isotipo repetido y torcido,
        como en la lámina. Tesela de 160 con dos piezas en tresbolillo —una
        arriba a la izquierda y otra abajo a la derecha—, así que al repetirse no
-       se ven las filas. Va sin el punto del isotipo: a este tamaño, suelto, se
-       lee como suciedad.
+       se ven las filas. Con su punto, que es lo que hace que se lea como el
+       isotipo y no como un trazo suelto.
 
        Los dos trazados van escritos enteros, sin <defs> ni <use>: un SVG puesto
        como background-image se rasteriza aislado y ahí las referencias internas
        no siempre se resuelven. Cada grupo lleva el dibujo a su origen, lo
-       encoge a 64 de alto y lo tuerce. -->
+       encoge a 64 de alto y lo tuerce; el desplazamiento dentro de la tesela
+       deja sitio al punto, que cae arriba y a la izquierda del trazo y se
+       quedaba fuera del recorte. -->
   <g fill="#5a35a8">
-    <g transform="translate(18 14) rotate(-18) scale(0.1408) translate(-495 -322)">
+    <g transform="translate(34 18) rotate(-18) scale(0.1408) translate(-495 -322)">
       <path d="M723,322.1c-20.7-20.5-54-20.3-74.4.4l-145.7,147.1c-9.8,9.9-15.2,23.2-15.2,37v217.6c0,29.1,23.6,52.6,52.6,52.6s52.6-23.6,52.6-52.6v-195.9l130.4-131.7c20.5-20.7,20.3-54-.4-74.4Z"/>
+      <rect x="341.4" y="303.1" width="122.9" height="122.9" rx="61.4" ry="61.4"/>
     </g>
-    <g transform="translate(98 94) rotate(-18) scale(0.1408) translate(-495 -322)">
+    <g transform="translate(114 98) rotate(-18) scale(0.1408) translate(-495 -322)">
       <path d="M723,322.1c-20.7-20.5-54-20.3-74.4.4l-145.7,147.1c-9.8,9.9-15.2,23.2-15.2,37v217.6c0,29.1,23.6,52.6,52.6,52.6s52.6-23.6,52.6-52.6v-195.9l130.4-131.7c20.5-20.7,20.3-54-.4-74.4Z"/>
+      <rect x="341.4" y="303.1" width="122.9" height="122.9" rx="61.4" ry="61.4"/>
     </g>
   </g>
 </svg>
