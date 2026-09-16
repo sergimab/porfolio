@@ -15,6 +15,12 @@ import "./EscenaInicio.css";
 // son de dónde VIENE cada una, en la misma unidad. Ese desplazamiento apunta
 // hacia fuera, así que al entrar parecen converger sobre el móvil en vez de
 // deslizarse todas en la misma dirección.
+// Lo que sube el conjunto entero respecto a lo medido, en puntos de alto del
+// cuadro. Va aparte y se aplica a todas por igual: mover el grupo es un solo
+// número, y las posiciones de la lista siguen siendo las de la referencia en
+// vez de quedar retocadas una a una y sin saber ya de dónde salieron.
+const SUBIDA = 5;
+
 const ESFERAS = [
   { x: 61.5, y: 11.8, d: 4.4, color: "#FB4B4B", dx: 6, dy: -14 },
   { x: 61.5, y: 28.1, d: 4.4, color: "#A78BFA", dx: -9, dy: -8 },
@@ -96,7 +102,7 @@ export default function EscenaInicio() {
           aria-hidden="true"
           style={{
             left: `${e.x}%`,
-            top: `${e.y}%`,
+            top: `${e.y - SUBIDA}%`,
             width: `${e.d}%`,
             background: e.color,
             ["--dx" as string]: `${e.dx}%`,
