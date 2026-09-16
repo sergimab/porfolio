@@ -29,6 +29,13 @@
   border-radius: 44px;
   background: #1b1b1d;
 }
+/* En oscuro, el marco negro cae sobre un papel casi negro y el aparato se
+   deshace contra el fondo. Un hilo claro alrededor le devuelve el canto.
+   Va como sombra y no como borde para no cambiar la medida del marco: un borde
+   engordaría la caja y movería la pantalla de dentro. */
+[data-theme="dark"] .ev-movil {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35);
+}
 
 .ev-pantalla {
   position: relative;
