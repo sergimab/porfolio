@@ -104,8 +104,38 @@
     justify-content: center;
     gap: 32px 24px;
   }
+  /* Los tres neutros, en una sola fila y a la izquierda. Repartidos en dos
+     columnas como los cromáticos, el gris se quedaba solo y centrado en la
+     segunda línea, que parecía un descuadre y no una composición.
+     Aquí las fichas NO llevan ancho fijo: se reparten el que haya a partes
+     iguales (`flex: 1 1 0` con `min-width: 0`), así que los tres caben en
+     cualquier pantalla en vez de salirse. */
   .ev-paleta-fila.es-derecha {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 14px;
     margin-bottom: 52px;
+  }
+  .ev-paleta-fila.es-derecha .ev-muestra {
+    width: auto;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  /* El disco pasa a mandar por ANCHO —con la proporción cuadrada— en lugar de
+     llevar un lado fijo, que es lo que lo sacaría de su columna. */
+  .ev-paleta-fila.es-derecha .ev-muestra-disco {
+    width: 100%;
+    max-width: 112px;
+    height: auto;
+    aspect-ratio: 1;
+  }
+  /* Y los valores, un punto más pequeños: en una columna de tres, «RGB: 255 255
+     255» a 13 px se partía en dos líneas. */
+  .ev-paleta-fila.es-derecha .ev-muestra-valores {
+    font-size: 10px;
+  }
+  .ev-paleta-fila.es-derecha .ev-muestra-datos {
+    padding: 6px 3px;
   }
   .ev-muestra {
     width: 140px;
