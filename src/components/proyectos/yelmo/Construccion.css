@@ -17,13 +17,12 @@
 .ym-construccion svg [class] {
   stroke: currentColor;
 }
-/* Y el trazo, más fino de lo que viene: a 2 px la guía pesaba tanto como la
-   letra que está midiendo. */
-.ym-construccion svg .es-guia {
-  stroke-width: 1px;
-  vector-effect: non-scaling-stroke;
-  opacity: 0.75;
-}
+/* El grosor se queda como viene del archivo. Le puse 1 px con
+   `vector-effect: non-scaling-stroke` y fue un error doble: adelgazaba guías
+   que el original tiene a 2, y sobre todo ese `vector-effect` hace que el
+   patrón de guiones se mida en píxeles de pantalla en vez de en el recorrido
+   normalizado, así que las líneas se quedaban punteadas y los círculos, a
+   medio dibujar. */
 
 /* ── Dibujándose ──
    Las guías primero, de izquierda a derecha y cada una trazándose entera; las
@@ -58,10 +57,7 @@
   .ym-construccion .es-guia,
   .ym-construccion .es-letra {
     animation: none;
-    stroke-dashoffset: 0;
+    stroke-dasharray: none;
     opacity: 1;
-  }
-  .ym-construccion .es-guia {
-    opacity: 0.75;
   }
 }
