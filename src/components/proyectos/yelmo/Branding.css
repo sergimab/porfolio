@@ -8,6 +8,7 @@
 }
 
 .ym-entradilla {
+  position: relative;
   max-width: 560px;
   margin: 0 0 28px;
   font-size: 14px;
@@ -16,6 +17,7 @@
 }
 
 .ym-subrotulo {
+  position: relative;
   margin: 44px 0 20px;
   font-size: 13px;
   font-weight: 600;
@@ -50,6 +52,7 @@
   border-radius: 50%;
 }
 .ym-valores {
+  position: relative;
   margin: 0;
   font-size: 11.5px;
   line-height: 1.7;

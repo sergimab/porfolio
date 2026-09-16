@@ -23,6 +23,23 @@
   --ym-turquesa: #0e8f84;
 }
 
+/* Papel opaco bajo lo que es letra suelta: el fondo de la página lleva una
+   trama animada y, por detrás de un texto fino o de un filete de un píxel, se
+   confunde con él. Es el color de la página, así que no se ve como una caja.
+
+   Con `position: relative`: la trama va en un elemento posicionado, así que un
+   fondo sin posicionar se pinta por debajo de ella y los puntos seguían
+   cruzando el texto. */
+.ym-tipo-marca,
+.ym-tipo-nombre,
+.ym-tipo-etiqueta,
+.ym-tipo-par,
+.ym-tipo-pesos,
+.ym-tipo-parrafo {
+  position: relative;
+  background: var(--background);
+}
+
 /* ── La corporativa ── */
 .ym-tipo-fila {
   display: flex;
@@ -144,5 +161,10 @@
   }
   .ym-tipo-fila {
     gap: 28px;
+  }
+  /* Sin justificar: en una columna estrecha, justificado abre ríos de espacio
+     entre palabras. */
+  .ym-tipo-parrafo {
+    text-align: left;
   }
 }
