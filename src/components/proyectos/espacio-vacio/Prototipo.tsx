@@ -35,7 +35,7 @@ const MENU: { es: string; en: string; alto: number; va?: string }[] = [
   { es: "Datos", en: "Data", alto: 192 },
 ];
 const MENU_PIE: { es: string; en: string; va?: string }[] = [
-  { es: "Perfil", en: "Profile" },
+  { es: "Perfil", en: "Profile", va: "perfil" },
   { es: "Guía", en: "Guide", va: "guia" },
 ];
 
@@ -249,6 +249,68 @@ function CamposAuto({
   );
 }
 
+// La ficha de la persona: el nombre, la edad y el correo. La llevan igual la
+// pantalla de perfil y la de cambiar la foto, así que se escribe una vez.
+function Ficha() {
+  return (
+    <div className="ev-app-ficha">
+      <p className="ev-app-ficha-nombre">Clara Gutiérrez</p>
+      <p>22</p>
+      <p>cgutierrez@gmail.com</p>
+    </div>
+  );
+}
+
+// El hueco donde va la cara: el óvalo de guía que enseña dónde colocarla. Es un
+// dibujo, no una imagen, así que se ve nítido a cualquier tamaño.
+function Hueco() {
+  return (
+    <div className="ev-app-hueco">
+      <svg viewBox="0 0 100 130" aria-hidden="true">
+        <ellipse cx="50" cy="62" rx="35" ry="47" />
+        <ellipse cx="36" cy="62" rx="7.5" ry="4.5" />
+        <ellipse cx="64" cy="62" rx="7.5" ry="4.5" />
+      </svg>
+    </div>
+  );
+}
+
+// Una línea de «Mis datos»: el rótulo, el valor subrayado y, al lado, el botón
+// de cambiarlo. La fecha es la excepción: se despliega, así que lleva un galón
+// pegado a su rótulo en lugar de botón.
+function Dato({
+  etiqueta,
+  valor,
+  despliega,
+  t,
+}: {
+  etiqueta: string;
+  valor: string;
+  despliega?: boolean;
+  t: T;
+}) {
+  return (
+    <div className="ev-app-dato">
+      <div className="ev-app-dato-campo">
+        <p className="ev-app-dato-rotulo">
+          {etiqueta}
+          {despliega && (
+            <svg viewBox="0 0 12 8" aria-hidden="true">
+              <path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor" strokeWidth="1.2" />
+            </svg>
+          )}
+        </p>
+        <p className="ev-app-dato-valor">{valor}</p>
+      </div>
+      {!despliega && (
+        <button type="button" className="ev-app-dato-cambiar">
+          {t("cambiar", "change")}
+        </button>
+      )}
+    </div>
+  );
+}
+
 // Una banda del menú de la home. Cuando lleva a algún sitio es un botón; cuando
 // todavía no —el apartado está por hacer—, es solo su rótulo, para no prometer
 // una pulsación que no hace nada.
@@ -357,7 +419,7 @@ const PANTALLAS: Pantalla[] = [
             },
           ]}
         />
-        <Boton clase="es-suelto" onClick={() => c.ir("quienes")}>
+        <Boton clase="es-suelto" onClick={() => c.ir("foto")}>
           {c.t("Crear cuenta", "Create account")}
         </Boton>
       </>
@@ -442,8 +504,10 @@ const PANTALLAS: Pantalla[] = [
     atras: true,
     cuerpo: (c) => (
       <>
-        <h3 className="ev-app-titulo">{c.t("Una pregunta importante", "One important question")}</h3>
-        <p className="ev-app-texto es-fuerte">
+        <h3 className="ev-app-titulo es-suelto">
+          {c.t("Una pregunta importante", "One important question")}
+        </h3>
+        <p className="ev-app-texto">
           {c.t(
             "¿Cuánto es el tiempo idóneo que te gustaría invertir en redes sociales cada día?",
             "How much time would you ideally like to spend on social media each day?"
@@ -721,6 +785,104 @@ const PANTALLAS: Pantalla[] = [
             está diseñada, y mandar a otro sitio sería inventársela. */}
         <Boton clase="es-centrado es-vincular" onClick={() => c.ir("g-redes")}>
           {c.t("Vincular app", "Link app")}
+        </Boton>
+      </>
+    ),
+  },
+  {
+    id: "foto",
+    es: "Tu fotografía",
+    en: "Your photo",
+    atras: true,
+    flecha: true,
+    arranque: 30,
+    cuerpo: (c) => (
+      <>
+        <h3 className="ev-app-titulo es-suelto">{c.t("Añadir fotografía", "Add a photo")}</h3>
+        <p className="ev-app-texto es-guia">
+          {c.t(
+            "Esta es la foto que irá desapareciendo con el tiempo que pases en redes. Encaja tu cara dentro de la guía.",
+            "This is the photo that will disappear as you spend time on social media. Fit your face inside the guide."
+          )}
+        </p>
+        <Hueco />
+        <div className="ev-app-fila es-pegada">
+          <Boton onClick={() => c.ir("quienes")}>{c.t("Tomar foto", "Take photo")}</Boton>
+          <Boton onClick={() => c.ir("quienes")}>{c.t("Cargar foto", "Upload photo")}</Boton>
+        </div>
+      </>
+    ),
+  },
+  {
+    id: "perfil",
+    es: "Perfil",
+    en: "Profile",
+    atras: true,
+    flecha: true,
+    arranque: 30,
+    cuerpo: (c) => (
+      <>
+        <Ficha />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="ev-app-retrato"
+          src="/proyectos/espacio-vacio/app/persona.webp"
+          alt={c.t("Fotografía de perfil de Clara", "Clara's profile photo")}
+        />
+        <div className="ev-app-fila es-pegada">
+          <Boton onClick={() => c.ir("perfil-foto")}>{c.t("Cambiar foto", "Change photo")}</Boton>
+          <Boton onClick={() => c.ir("perfil-datos")}>{c.t("Mis datos", "My details")}</Boton>
+        </div>
+      </>
+    ),
+  },
+  {
+    id: "perfil-foto",
+    es: "Perfil · Cambiar foto",
+    en: "Profile · Change photo",
+    atras: true,
+    flecha: true,
+    arranque: 30,
+    cuerpo: (c) => (
+      <>
+        <Ficha />
+        <Hueco />
+        <div className="ev-app-fila es-pegada">
+          <Boton onClick={() => c.ir("perfil")}>{c.t("Tomar foto", "Take photo")}</Boton>
+          <Boton onClick={() => c.ir("perfil")}>{c.t("Cargar foto", "Upload photo")}</Boton>
+        </div>
+      </>
+    ),
+  },
+  {
+    id: "perfil-datos",
+    es: "Perfil · Mis datos",
+    en: "Profile · My details",
+    atras: true,
+    flecha: true,
+    arranque: 28,
+    cuerpo: (c) => (
+      <>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="ev-app-retrato es-sello"
+          src="/proyectos/espacio-vacio/app/persona.webp"
+          alt={c.t("Fotografía de perfil de Clara", "Clara's profile photo")}
+        />
+        <Dato etiqueta={c.t("Nombre", "First name")} valor="Clara" t={c.t} />
+        <Dato etiqueta={c.t("Apellidos", "Surname")} valor="Gutiérrez García" t={c.t} />
+        <Dato etiqueta={c.t("Email", "Email")} valor="cgutierrez@gmail.com" t={c.t} />
+        {/* La fecha no tiene «cambiar»: se despliega, y por eso lleva galón en
+            vez de botón. */}
+        <Dato
+          etiqueta={c.t("Fecha de nacimiento", "Date of birth")}
+          valor={c.t("16 de Marzo de 2003", "16 March 2003")}
+          despliega
+          t={c.t}
+        />
+        <Dato etiqueta={c.t("Contraseña", "Password")} valor="Polloconarroz" t={c.t} />
+        <Boton clase="es-guardar" onClick={() => c.ir("perfil")}>
+          {c.t("Guardar cambios", "Save changes")}
         </Boton>
       </>
     ),
