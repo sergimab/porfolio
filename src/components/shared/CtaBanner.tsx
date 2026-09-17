@@ -25,9 +25,11 @@ export default function CtaBanner({
   /** Imagen de escritorio. Se ve a 1024 × 150; diséñala a 2048 × 300. */
   imagen?: string;
   /**
-   * Imagen para pantallas estrechas (hasta 700px), donde la franja es mucho
-   * menos alargada. Sin ella se usa la de escritorio, recortada por los lados.
-   * Se ve a 652 × 110 como mucho; diséñala a 1304 × 220.
+   * Imagen para pantallas estrechas (hasta 700px). No es la de escritorio
+   * encogida, sino un TROZO de ella a más tamaño: el recorte centrado de
+   * 1024 × 300 —la mitad del ancho del original—, que a 327 px de pantalla deja
+   * la franja en 96 de alto en vez de en 48. Todas las del sitio van con esa
+   * misma medida, para que la franja pese igual en todas las páginas.
    */
   imagenMovil?: string;
   alt?: string;

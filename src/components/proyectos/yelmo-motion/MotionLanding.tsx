@@ -118,9 +118,9 @@ export default function MotionLanding() {
 
         {/* La marca tiene página propia, en Branding: allí está el sistema del
             que sale todo lo que aquí se mueve.
-            Como en la franja de vuelta, la versión estrecha es un recorte a la
-            misma escala —684 px del original—, encuadrado para que el logotipo
-            entre entero. */}
+            Como en la franja de vuelta, la versión estrecha es el recorte
+            central a más tamaño, con la medida que llevan todas las del
+            sitio. */}
         <section className="motion-seccion">
           <h2 className="project-h2">
             <DropcapTitle es="Páginas recomendadas" en="Recommended pages" />
