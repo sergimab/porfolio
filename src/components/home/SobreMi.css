@@ -58,6 +58,10 @@
   content: "";
   position: absolute;
   inset: 0;
+  /* Por delante también del botón: sus lados de fuera —el derecho y el de
+     abajo— son el borde de la foto, y si el botón se pintara encima ese tramo
+     del marco desaparecería. */
+  z-index: 4;
   border: 1px solid var(--foreground);
   border-radius: inherit;
   pointer-events: none;
