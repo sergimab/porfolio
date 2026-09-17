@@ -71,8 +71,25 @@ const RECURSOS = FIGURAS.map((f) => {
 // ajustar el ritmo.
 const CADENCIA = 1000;
 
+// El saludo, según la hora de QUIEN MIRA —su reloj, no el mío—. Los tramos son
+// los de uso en español, que no coinciden con los ingleses: aquí la tarde
+// empieza después de comer y la noche cuando se cena; allí la «afternoon» va del
+// mediodía a las seis y luego es «evening».
+function saludo(hora: number) {
+  if (hora >= 6 && hora < 13) return { es: "¡Buenos días!", en: "Good morning!" };
+  if (hora >= 13 && hora < 21) return { es: "¡Buenas tardes!", en: "Good afternoon!" };
+  return { es: "¡Buenas noches!", en: "Good evening!" };
+}
+
 export default function SobreMi() {
   const [actual, setActual] = useState(0);
+  // La hora no se sabe hasta que la página está en el navegador: en el servidor
+  // no hay reloj del visitante, y adivinarla allí daría un saludo que cambia
+  // solo al cargar. Hasta entonces, el título va vacío pero ocupando su sitio,
+  // así que no hay salto.
+  const [hora, setHora] = useState<number | null>(null);
+
+  useEffect(() => setHora(new Date().getHours()), []);
 
   useEffect(() => {
     // Quien pide menos movimiento se queda con una sola figura, quieta. Un
@@ -109,12 +126,14 @@ export default function SobreMi() {
       <div className="sobremi-texto">
         {/* Con la capitular script, como los demás títulos del sitio. */}
         <h2 className="sobremi-titulo">
-          <DropcapTitle es="Hola, soy Sergio" en="Hi, I'm Sergio" />
+          {hora === null ? null : (
+            <DropcapTitle es={saludo(hora).es} en={saludo(hora).en} />
+          )}
         </h2>
         <p>
           <LangText
-            es="Soy **diseñador gráfico**, formado en la **ESD Madrid**, y lo que me engancha del oficio es el momento en que una marca deja de ser un logotipo y empieza a ser una manera de hablar: el color, el ritmo, el tono, cómo se mueve."
-            en="I'm a **graphic designer**, trained at **ESD Madrid**, and what hooks me about this craft is the moment a brand stops being a logo and starts being a way of speaking: the colour, the rhythm, the tone, the way it moves."
+            es="Soy **Sergio Martín**, diseñador gráfico formado en la **ESD Madrid**, y lo que me engancha del oficio es el momento en que una marca deja de ser un logotipo y empieza a ser una manera de hablar: el color, el ritmo, el tono, cómo se mueve."
+            en="I'm **Sergio Martín**, a graphic designer trained at **ESD Madrid**, and what hooks me about this craft is the moment a brand stops being a logo and starts being a way of speaking: the colour, the rhythm, the tone, the way it moves."
           />
         </p>
         <p>

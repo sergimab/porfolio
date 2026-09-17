@@ -133,6 +133,10 @@
   margin-bottom: 0;
 }
 .sobremi-titulo {
+  /* El renglón reservado desde el principio: el saludo llega un instante
+     después —depende del reloj del visitante— y sin esto el texto daría un
+     salto al aparecer. */
+  min-height: 1.3em;
   margin: 0 0 16px;
   font-size: 22px;
   font-weight: 600;

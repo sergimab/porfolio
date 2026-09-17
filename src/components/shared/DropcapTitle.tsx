@@ -15,11 +15,19 @@ export default function DropcapTitle({ es, en }: { es: string; en: string }) {
   const texto = lang === "en" ? en : es;
   // El corte es por carácter, no por palabra: la capitular es solo la primera
   // letra y el resto va en versales, incluido lo que queda de esa palabra.
-  const inicial = texto.slice(0, 1);
-  const resto = texto.slice(1);
+  //
+  // «Primera letra», no «primer carácter»: un título como «¡Buenas tardes!»
+  // empieza por un signo, y hacer del signo la capitular la dejaba en una marca
+  // suelta en cursiva. El signo se queda delante, con el resto del texto.
+  const i = texto.search(/\p{L}/u);
+  const corte = i < 0 ? 0 : i;
+  const antes = texto.slice(0, corte);
+  const inicial = texto.slice(corte, corte + 1);
+  const resto = texto.slice(corte + 1);
 
   return (
     <span className="dropcap-title">
+      {antes ? <span className="dropcap-rest">{antes}</span> : null}
       <span className="dropcap-letter">{inicial}</span>
       <span className="dropcap-rest">{resto}</span>
     </span>
