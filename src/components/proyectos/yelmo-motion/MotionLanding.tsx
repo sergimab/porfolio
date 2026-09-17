@@ -9,7 +9,6 @@ import VideoPromo from "./VideoPromo";
 // De la carpeta de branding: es el mismo proyecto y el mismo trato para una
 // pieza muda en bucle, así que no hay por qué tener dos componentes iguales.
 import VideoMarca from "../yelmo/VideoMarca";
-import VideoVimeo from "./VideoVimeo";
 import "./MotionLanding.css";
 
 // La pata de animación del proyecto de Yelmo: el vídeo promocional y las demás
@@ -114,15 +113,16 @@ export default function MotionLanding() {
               />
             </div>
             {/* La intro de tráileres, en la misma caja que el cartel aunque el
-                vídeo sea apaisado: se centra y quedan franjas negras arriba y
-                abajo. Recortarla a vertical se llevaría dos tercios del
+                vídeo sea apaisado: se ve entera y quedan franjas negras arriba
+                y abajo. Recortarla a vertical se llevaría dos tercios del
                 encuadre, y estirarla, ni hablar. */}
             <div className="motion-vertical">
-              <VideoVimeo
-                id="855675126"
-                hash="b4af0e5d17"
-                titulo="Intro de tráileres de Yelmo Cines"
+              <VideoMarca
+                src="/proyectos/yelmo-motion/intro-traileres.mp4"
                 proporcion="9 / 16"
+                encaje="contain"
+                fondo="#000"
+                alt="Intro animada que precede a los tráileres en sala"
               />
             </div>
           </div>

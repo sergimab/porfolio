@@ -19,6 +19,7 @@ export default function VideoMarca({
   src,
   proporcion = "1920 / 573",
   fondo = "#fff",
+  encaje,
   alt,
 }: {
   src: string;
@@ -31,6 +32,13 @@ export default function VideoMarca({
    * que el marco no destelle antes de aparecer el primer fotograma.
    */
   fondo?: string;
+  /**
+   * Qué hacer cuando el vídeo y la caja no tienen la misma proporción. Por
+   * defecto la llena y se recorta por los lados; con "contain" se ve entero y
+   * quedan franjas del color del fondo, que es lo que pide una pieza apaisada
+   * metida en una caja vertical.
+   */
+  encaje?: "cover" | "contain";
   /** Qué se ve, para quien no pueda verlo. */
   alt?: string;
 }) {
@@ -65,6 +73,7 @@ export default function VideoMarca({
         loop
         playsInline
         preload="auto"
+        style={encaje ? { objectFit: encaje } : undefined}
         aria-label={alt}
       />
     </div>
