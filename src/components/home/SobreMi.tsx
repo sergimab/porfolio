@@ -9,11 +9,16 @@ import "./SobreMi.css";
 // aparecen por detrás de la figura y por delante de la calle, como si
 // estuvieran pintadas en la pared.
 //
-// Las diez figuras se pintan todas a la vez y solo cambia cuál se ve: si se
-// cambiara el `src` de una sola, la primera vuelta iría a tirones —cada archivo
-// llegaría cuando le tocase— y habría un parpadeo en cada salto. Pesan menos de
-// un kilobyte cada una, así que tenerlas las diez puestas no cuesta nada.
-const RECURSOS = Array.from({ length: 10 }, (_, i) => `/sobre-mi/recursos/recurso-${i + 1}.svg`);
+// Se pintan todas a la vez y solo cambia cuál se ve: si se cambiara el `src` de
+// una sola, la primera vuelta iría a tirones —cada archivo llegaría cuando le
+// tocase— y habría un parpadeo en cada salto. Pesan menos de un kilobyte cada
+// una, así que tenerlas todas puestas no cuesta nada.
+// La lista va escrita a mano y no contando del 1 al 10: falta la 4 —la azul y
+// amarilla, descartada— y no tendría sentido renumerar el resto de archivos
+// cada vez que caiga una.
+const RECURSOS = [1, 2, 3, 5, 6, 7, 8, 9, 10].map(
+  (n) => `/sobre-mi/recursos/recurso-${n}.svg`
+);
 
 // Lo que dura cada figura en pantalla. Es el número que hay que tocar para
 // ajustar el ritmo.
