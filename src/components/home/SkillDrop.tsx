@@ -725,12 +725,41 @@ export default function SkillDrop() {
             )}
           </form>
 
-          {/* Y por si alguien prefiere escribir por su cuenta o llamar: los
-              mismos datos que ya están en el CV, no unos nuevos. */}
-          <div className="contact-directo">
-            <a href="mailto:sergioomb96@gmail.com">sergioomb96@gmail.com</a>
-            <a href="tel:+34626173661">+34 626 17 36 61</a>
-          </div>
+        </div>
+      )}
+
+      {/* La otra puerta, en caja aparte: para quien prefiere escribir desde su
+          propio correo o llamar directamente. Son los mismos datos que ya están
+          en el CV, no unos nuevos. */}
+      {selectedPanel === "contacto" && (
+        <div className="home-panel contacto-datos">
+          <a className="contacto-dato" href="mailto:sergioomb96@gmail.com">
+            <span className="contacto-dato-icono" aria-hidden="true">
+              {/* Sobre: la solapa es una uve, no un triángulo relleno, para que
+                  el icono pese lo mismo que el trazo de la caja. */}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <rect x="2.75" y="5.25" width="18.5" height="13.5" rx="2.5" />
+                <path d="M4 7.5 12 13.2 20 7.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </span>
+            <span className="contacto-dato-texto">
+              <span className="contacto-dato-clave">{lang==="en" ? "Email" : "Correo"}</span>
+              <span className="contacto-dato-valor">sergioomb96@gmail.com</span>
+            </span>
+          </a>
+
+          <a className="contacto-dato" href="tel:+34626173661">
+            <span className="contacto-dato-icono" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <rect x="6.5" y="2.75" width="11" height="18.5" rx="2.5" />
+                <path d="M10.5 18.4h3" strokeLinecap="round" />
+              </svg>
+            </span>
+            <span className="contacto-dato-texto">
+              <span className="contacto-dato-clave">{lang==="en" ? "Phone" : "Teléfono"}</span>
+              <span className="contacto-dato-valor">+34 626 17 36 61</span>
+            </span>
+          </a>
         </div>
       )}
       </div>
