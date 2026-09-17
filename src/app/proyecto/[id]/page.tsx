@@ -18,8 +18,10 @@ import DiscoElysiumLanding from "@/components/proyectos/disco-elysium/DiscoElysi
 import EspacioVacioLanding from "@/components/proyectos/espacio-vacio/EspacioVacioLanding";
 import AppEspacioVacioLanding from "@/components/proyectos/app-espacio-vacio/AppLanding";
 import YelmoLanding from "@/components/proyectos/yelmo/YelmoLanding";
+import MotionLanding from "@/components/proyectos/yelmo-motion/MotionLanding";
 
 const LANDINGS: Record<string, React.ComponentType> = {
+  m1: MotionLanding,
   i1: InfografiasLanding,
   i3: NewslettersLanding,
   i4: IconografiaLanding,
