@@ -75,10 +75,13 @@ const CADENCIA = 1000;
 // los de uso en español, que no coinciden con los ingleses: aquí la tarde
 // empieza después de comer y la noche cuando se cena; allí la «afternoon» va del
 // mediodía a las seis y luego es «evening».
+//
+// Sin el signo de apertura: la capitular es la primera letra y delante de ella
+// no va nada, que es como está dibujado el título.
 function saludo(hora: number) {
-  if (hora >= 6 && hora < 14) return { es: "¡Buenos días!", en: "Good morning!" };
-  if (hora >= 14 && hora < 21) return { es: "¡Buenas tardes!", en: "Good afternoon!" };
-  return { es: "¡Buenas noches!", en: "Good evening!" };
+  if (hora >= 6 && hora < 14) return { es: "Buenos días!", en: "Good morning!" };
+  if (hora >= 14 && hora < 21) return { es: "Buenas tardes!", en: "Good afternoon!" };
+  return { es: "Buenas noches!", en: "Good evening!" };
 }
 
 export default function SobreMi() {
