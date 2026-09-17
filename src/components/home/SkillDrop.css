@@ -15,6 +15,14 @@
   align-items: center;
   padding: 0 24px;
 }
+/* El mismo margen lateral que la cabecera y las páginas de proyecto en pantalla
+   estrecha —ver page.css—. Se repite aquí porque esta hoja se carga después y
+   pisaría al de allí. */
+@media (max-width: 700px) {
+  .skill-drop {
+    padding: 0 32px;
+  }
+}
 
 /* El estilo del titular con capitular está en shared/DropcapTitle.css, que es
    donde vive ahora el componente. Aquí solo queda su separación con el

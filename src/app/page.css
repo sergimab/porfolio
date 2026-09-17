@@ -531,3 +531,16 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* El margen lateral de la página en pantallas estrechas. Las tres cajas que lo
+   comparten —cabecera, páginas de proyecto y la home— tienen que moverse a la
+   vez: basta con que una se quede en 24 para que los bordes dejen de caer en la
+   misma vertical. La de la home lo repite en su propia hoja, que se carga
+   después y gana a esta. */
+@media (max-width: 700px) {
+  .header-wrap,
+  .project-content-wrap {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+}
