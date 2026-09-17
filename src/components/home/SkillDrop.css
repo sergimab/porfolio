@@ -320,15 +320,14 @@
   /* Que el dato largo pueda encogerse en vez de desbordar la ficha. */
   min-width: 0;
 }
-/* «Correo» y «Teléfono» en la script de la marca, la misma de las capitulares y
-   de los títulos del CV. No va en versales ni apretada como una etiqueta: es
-   una palabra escrita a mano, y se lee mejor con su caja alta y un poco de aire
-   entre letras. El cuerpo sube a 15 porque esta letra dibuja fino y a 11 se
+/* «Correo» y «Teléfono» en la cursiva del CV. No van en versales ni apretadas
+   como una etiqueta de sistema: es la misma voz que allí presenta los datos. El cuerpo sube a 15 porque esta letra dibuja fino y a 11 se
    quedaba en un garabato. */
 .contacto-dato-clave {
-  font-family: 'Kapakana', 'Cormorant Garamond', serif;
-  font-size: 26px;
-  line-height: 1;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.1;
   letter-spacing: 0.01em;
   /* Ni el gris de las etiquetas ni el negro del texto: esta letra dibuja muy
      fino y con el gris se desdibujaba, pero a plena tinta pesaría más que el
