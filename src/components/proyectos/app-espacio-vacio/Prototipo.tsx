@@ -783,10 +783,11 @@ const PANTALLAS: Pantalla[] = [
           <Campo texto={c.t("Correo electrónico", "Email")} />
           <Campo texto={c.t("Contraseña", "Password")} />
         </div>
-        {/* Quien ya tiene cuenta entra directo a la home: las instrucciones y
-            la foto son del alta, y repetírselas cada vez que entra sería
-            hacerle pasar otra vez por lo que ya hizo. */}
-        <Boton clase="es-suelto" onClick={() => c.ir("home")}>
+        {/* Quien ya tiene cuenta se salta el alta —las instrucciones y la foto
+            son de ahí, y repetírselas sería hacerle pasar otra vez por lo que ya
+            hizo—, pero pasa por la misma carga que quien acaba de registrarse:
+            es lo que hace la app al entrar, venga uno de donde venga. */}
+        <Boton clase="es-suelto" onClick={() => c.ir("entrando")}>
           {c.t("Entrar", "Log in")}
         </Boton>
       </>
