@@ -44,7 +44,7 @@ function catFromId(id: string): string {
 }
 
 const titles: Record<string, string> = {
-  m1: "Proyecto Motion 01", m2: "Proyecto Motion 02", m3: "Proyecto Motion 03",
+  m1: "Motion Yelmo Cines", m2: "Proyecto Motion 02", m3: "Proyecto Motion 03",
   b1: "Espacio vacío", b2: "Rebranding Yelmo Cines", b3: "Proyecto Branding 03",
   f1: "Proyecto Foto 01", f2: "Proyecto Foto 02", f3: "Proyecto Foto 03",
   i1: "Infografías", i2: "Sistema de diseño", i3: "Newsletters", i4: "Iconografía", i5: "Sistema de ilustraciones",

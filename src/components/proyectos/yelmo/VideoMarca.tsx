@@ -28,7 +28,12 @@ export default function VideoMarca() {
           obs.disconnect();
         }
       },
-      { rootMargin: "0px 0px -20% 0px" }
+      // Con margen por delante: el vídeo arranca una pantalla antes de
+      // asomarse, de modo que en una conexión de móvil le dé tiempo a llenar
+      // el búfer y, cuando se llega, ya esté rodando. Antes era al revés —un
+      // -20 % que lo retrasaba hasta tenerlo bien dentro—, y en el móvil eso
+      // se notaba como un cuadro parado que tardaba en despertar.
+      { rootMargin: "100% 0px 100% 0px" }
     );
     obs.observe(el);
     return () => obs.disconnect();
@@ -37,7 +42,10 @@ export default function VideoMarca() {
   return (
     <div className="ym-video">
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-      <video ref={video} src="/proyectos/yelmo/branding/rebranding-muestra.mp4" muted loop playsInline preload="metadata" />
+      {/* `preload="auto"`: el archivo pesa 157 kB —va sin pista de sonido, que
+          aquí no pinta nada—, así que sale más barato traerlo entero de una vez
+          que pedir los metadatos y luego el resto cuando ya hace falta. */}
+      <video ref={video} src="/proyectos/yelmo/branding/rebranding-muestra.mp4" muted loop playsInline preload="auto" />
     </div>
   );
 }

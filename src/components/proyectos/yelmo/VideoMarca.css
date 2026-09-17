@@ -7,8 +7,9 @@
   aspect-ratio: 1920 / 573;
   border-radius: 16px;
   overflow: hidden;
-  /* Negro mientras carga, para que no dé un salto de color. */
-  background: #000;
+  /* Blanco mientras carga: es el fondo del propio vídeo, así que el hueco y la
+     pieza son del mismo color y no hay parpadeo al aparecer. */
+  background: #fff;
   line-height: 0;
 }
 .ym-video video {

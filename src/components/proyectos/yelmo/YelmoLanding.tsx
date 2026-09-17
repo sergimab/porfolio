@@ -2,6 +2,8 @@ import BackCapsule from "@/components/shared/BackCapsule";
 import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
 import LangText from "@/components/shared/LangText";
 import ToolIcons from "@/components/shared/ToolIcons";
+import RotuloSeccion from "@/components/shared/RotuloSeccion";
+import CtaBanner from "@/components/shared/CtaBanner";
 import Branding from "./Branding";
 
 // Rebranding de Yelmo Cines: el proyecto de Proyectos LAB de la ESD Madrid, en
@@ -62,6 +64,22 @@ export default function YelmoLanding() {
         </div>
 
         <Branding />
+
+        {/* La animación tiene página propia, en Motion: aquí está la marca,
+            allí el vídeo promocional y las demás piezas en movimiento. Se pasa
+            de una a otra con la misma franja que enlaza Espacio vacío con su
+            app.
+            Va sin imagen de momento —la franja se pinta con su retícula de
+            puntos—; en cuanto haya un fotograma del promo, entra por `imagen`
+            e `imagenMovil` como las demás. */}
+        <section className="ym-seccion">
+          <RotuloSeccion es="Páginas recomendadas" en="Recommended pages" />
+          <CtaBanner
+            href="/proyecto/m1"
+            es="Ver la animación del proyecto"
+            en="See the project's motion work"
+          />
+        </section>
       </div>
     </main>
   );
