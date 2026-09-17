@@ -143,10 +143,9 @@
 .sobremi-scroll {
   height: 100%;
   box-sizing: border-box;
-  /* El mismo respiro que la caja de los botones de arriba —«Sobre mí», «CV»,
-     «Contacto»—, incluido su ajuste de tablet, para que las dos respiren
-     igual a cualquier ancho. */
-  padding: 24px;
+  /* 16 a cualquier ancho, que es el respiro de la caja de los botones de
+     arriba. */
+  padding: 16px;
   border-radius: inherit;
   /* Lo que no cabe se lee bajando, con la barra siempre a la vista para que se
      note que hay más. */
@@ -199,13 +198,6 @@
 }
 
 /* En pantalla estrecha, uno debajo del otro y la foto a todo el ancho. */
-/* Igual que la caja de los botones, que a este ancho baja de 24 a 16. */
-@media (max-width: 1024px) {
-  .sobremi-scroll {
-    padding: 16px;
-  }
-}
-
 @media (max-width: 860px) {
   .sobremi {
     flex-direction: column;
