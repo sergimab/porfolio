@@ -153,7 +153,13 @@ export default function SobreMi() {
         {/* El texto va en su propia caja, por dentro del marco: es la que rueda,
             y así la barra de desplazamiento queda DENTRO del recuadro en vez de
             montarse sobre el hilo. */}
-        <div className="sobremi-scroll">
+        {/* La barra de desplazamiento toma el color de la figura que se esté
+            viendo en ese momento: se lo pasamos como variable y el CSS la pinta
+            con ella. */}
+        <div
+          className="sobremi-scroll"
+          style={{ ["--sm-barra" as string]: RECURSOS[actual].color }}
+        >
         {/* Con la capitular script, como los demás títulos del sitio. */}
         <h2 className="sobremi-titulo">
           {hora === null ? null : (
