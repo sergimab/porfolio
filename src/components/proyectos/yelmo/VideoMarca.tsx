@@ -11,7 +11,8 @@ import "./VideoMarca.css";
 //
 // Sin sonido y con `playsInline`: es la única manera de que un navegador deje
 // arrancar un vídeo sin que el usuario lo pida, y en iPhone de que no se abra a
-// pantalla completa.
+// pantalla completa. Y sin controles: aquí es una pieza de la lámina, no algo
+// que haya que manejar.
 export default function VideoMarca() {
   const video = useRef<HTMLVideoElement>(null);
 
@@ -22,8 +23,8 @@ export default function VideoMarca() {
       ([e]) => {
         if (e.isIntersecting) {
           el.play().catch(() => {
-            // Si el navegador se niega, el vídeo se queda en su primer
-            // fotograma con los controles a mano. No hay nada que rescatar.
+            // Si el navegador se niega, se queda en su primer fotograma. No hay
+            // nada que rescatar: sin controles, tampoco hay a qué recurrir.
           });
           obs.disconnect();
         }
@@ -37,7 +38,7 @@ export default function VideoMarca() {
   return (
     <div className="ym-video">
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-      <video ref={video} src="/proyectos/yelmo/branding/rebranding.mp4" muted playsInline preload="metadata" controls />
+      <video ref={video} src="/proyectos/yelmo/branding/rebranding.mp4" muted playsInline preload="metadata" />
     </div>
   );
 }

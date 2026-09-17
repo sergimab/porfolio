@@ -1,14 +1,20 @@
-/* El vídeo de apertura: a todo el ancho de la columna y con el fondo del propio
-   vídeo —negro— hasta que carga, para que no dé un salto de color. */
+/* El vídeo de apertura, recortado a una franja panorámica: el original es 16:9
+   y casi todo lo que pasa está en la banda central, así que a formato completo
+   sobraba negro por arriba y por abajo. El recorte se lo lleva por igual de los
+   dos lados —de ahí el `cover` centrado—, no se deforma nada. */
 .ym-video {
   margin: 8px 0 56px;
+  aspect-ratio: 1920 / 573;
   border-radius: 4px;
   overflow: hidden;
+  /* Negro mientras carga, para que no dé un salto de color. */
   background: #000;
   line-height: 0;
 }
 .ym-video video {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
