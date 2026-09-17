@@ -20,6 +20,7 @@ export default function VideoMarca({
   proporcion = "1920 / 573",
   fondo = "#fff",
   encaje,
+  cartel,
   alt,
 }: {
   src: string;
@@ -39,6 +40,12 @@ export default function VideoMarca({
    * metida en una caja vertical.
    */
   encaje?: "cover" | "contain";
+  /**
+   * Fotograma que se enseña hasta que arranca. Solo hace falta cuando la pieza
+   * empieza con un fundido: si no, el primer fotograma ya sirve de cartel y
+   * poner otro sería enseñar algo que el vídeo aún no ha contado.
+   */
+  cartel?: string;
   /** Qué se ve, para quien no pueda verlo. */
   alt?: string;
 }) {
@@ -74,6 +81,7 @@ export default function VideoMarca({
       <video
         ref={video}
         src={src}
+        poster={cartel}
         muted
         loop
         playsInline

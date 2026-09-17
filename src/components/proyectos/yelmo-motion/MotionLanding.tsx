@@ -107,6 +107,10 @@ export default function MotionLanding() {
             src="/proyectos/yelmo-motion/intro-traileres.mp4"
             proporcion="16 / 9"
             fondo="#000"
+            /* Los dos primeros segundos son el fundido de entrada, casi a
+               oscuras: hasta que arranca, la caja enseña el fotograma del
+               segundo 3, con el logotipo. */
+            cartel="/proyectos/yelmo-motion/intro-traileres-poster.webp"
             alt="Intro animada que precede a los tráileres en sala"
           />
         </section>
