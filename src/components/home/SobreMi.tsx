@@ -42,7 +42,7 @@ const FIGURAS = [
 
 // Cuánto ocupan, en porcentaje del lado de la foto. Es la medida de una figura
 // cuadrada; las demás salen de ahí.
-const TAMANO = 108;
+const TAMANO = 100;
 
 const media =
   FIGURAS.reduce((t, f) => t + Math.sqrt(f.h / f.w), 0) / FIGURAS.length;
