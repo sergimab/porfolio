@@ -69,9 +69,11 @@ export default function YelmoLanding() {
             allí el vídeo promocional y las demás piezas en movimiento. Se pasa
             de una a otra con la misma franja que enlaza Espacio vacío con su
             app.
-            La versión estrecha es un recorte de la misma imagen, centrado en el
-            fotograma del medio: a ancho de móvil, la franja entera se queda en
-            48 px de alto y los tres no se distinguen. */}
+            La versión estrecha no es la misma imagen encogida, sino un TROZO
+            de ella a la misma escala: un recorte de 684 px —lo que cabe en un
+            móvil si el dibujo se ve del tamaño al que se ve en el ordenador—,
+            centrado en el fotograma del medio. Encogida entera, la franja se
+            quedaba en 54 px de alto y no se distinguía nada. */}
         <section className="ym-seccion">
           {/* El título va con la capitular script, como el de las demás
               páginas: el rótulo-pastilla es de los apartados del proyecto, y
