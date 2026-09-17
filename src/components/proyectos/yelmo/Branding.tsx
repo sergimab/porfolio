@@ -5,6 +5,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import LaminaGuias from "./LaminaGuias";
 import VideoMarca from "./VideoMarca";
+import VideoVimeo from "./VideoVimeo";
 import Tipografia from "./Tipografia";
 import Aplicaciones from "./Aplicaciones";
 import "./Branding.css";
@@ -117,6 +118,9 @@ export default function Branding() {
           ))}
         </ul>
       </section>
+
+      {/* ── La animación, alojada en Vimeo ───────────────────────────────── */}
+      <VideoVimeo id="833402674" hash="93f570abe9" titulo="Rebranding de Yelmo Cines — animación" />
 
       {/* ── Las aplicaciones ─────────────────────────────────────────────── */}
       <Aplicaciones />
