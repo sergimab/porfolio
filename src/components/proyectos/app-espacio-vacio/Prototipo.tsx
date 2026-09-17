@@ -951,11 +951,20 @@ const PANTALLAS: Pantalla[] = [
     cuerpo: (c) => (
       <>
         <h3 className="ev-app-titulo es-centrado">{c.t("¿Listo para empezar?", "Ready to start?")}</h3>
-        <Boton clase="es-centrado" onClick={() => c.ir("home")}>
+        <Boton clase="es-centrado" onClick={() => c.ir("entrando")}>
           {c.t("Vamos", "Let's go")}
         </Boton>
       </>
     ),
+  },
+  {
+    // La segunda carga: la de verdad, la que hace la app al entrar. La primera
+    // abre la marca; esta cierra el alta. Pasa sola cuando acaba la animación.
+    id: "entrando",
+    es: "Entrando",
+    en: "Loading",
+    sinCabecera: true,
+    cuerpo: () => null,
   },
   {
     id: "home",
@@ -1508,8 +1517,12 @@ export default function Prototipo() {
   const actual = PORID.get(camino[camino.length - 1]) ?? PANTALLAS[0];
 
   const ir = useCallback((id: string) => {
-    // Volver al principio es empezar de cero, no apilar otra vuelta.
-    if (id === "carga") setArrancando(false);
+    // La animación solo corre en la segunda carga, que arranca sola al entrar;
+    // en cualquier otra pantalla se apaga. Apagarla importa: mientras está
+    // encendida hay un reloj de seguridad en marcha, y si se quedaba puesto al
+    // llegar a la home, a los cuatro segundos y medio saltaba solo a la
+    // bienvenida y deshacía el alta entera.
+    setArrancando(id === "entrando");
     setCamino((antes) => (id === "carga" ? ["carga"] : [...antes, id]));
   }, []);
 
@@ -1532,6 +1545,8 @@ export default function Prototipo() {
     });
   }, []);
 
+  const destinoCarga = actual.id === "entrando" ? "home" : "bienvenida";
+
   useEffect(() => {
     if (!arrancando) return;
     // El vídeo se pone en marcha AQUÍ y no en el manejador del botón: cuando se
@@ -1541,9 +1556,9 @@ export default function Prototipo() {
     video.current?.play().catch(() => {});
     // Y red de seguridad: si no llega a reproducirse, o el aviso de que ha
     // terminado no llega, la bienvenida entra igual pasada su duración.
-    const reloj = setTimeout(() => ir("bienvenida"), 4600);
+    const reloj = setTimeout(() => ir(destinoCarga), 4600);
     return () => clearTimeout(reloj);
-  }, [arrancando, ir]);
+  }, [arrancando, ir, destinoCarga]);
 
   const ctx: Ctx = { ir, t, horas, setHoras, abierta, setAbierta };
 
@@ -1580,6 +1595,19 @@ export default function Prototipo() {
                   El vídeo viene con fondo casi blanco —#FDFDFD— sobre una
                   pantalla blanca: con `multiply` ese blanco desaparece y no se
                   ve el recuadro. */}
+              {actual.id === "entrando" && (
+                <video
+                  ref={video}
+                  className="ev-app-carga es-video"
+                  src="/proyectos/app-espacio-vacio/isotipo.mp4"
+                  muted
+                  playsInline
+                  preload="auto"
+                  aria-hidden="true"
+                  onEnded={() => ir("home")}
+                />
+              )}
+
               {actual.id === "carga" &&
                 (arrancando ? (
                   <video
