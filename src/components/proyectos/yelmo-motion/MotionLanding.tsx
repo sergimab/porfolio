@@ -9,7 +9,6 @@ import VideoPromo from "./VideoPromo";
 // De la carpeta de branding: es el mismo proyecto y el mismo trato para una
 // pieza muda en bucle, así que no hay por qué tener dos componentes iguales.
 import VideoMarca from "../yelmo/VideoMarca";
-import VideoVimeo from "./VideoVimeo";
 import "./MotionLanding.css";
 
 // La pata de animación del proyecto de Yelmo: el vídeo promocional y las demás
@@ -20,8 +19,12 @@ import "./MotionLanding.css";
 // categoría: la marca en Branding, esto en Motion. Las dos se enlazan con la
 // franja del final.
 //
-// El promocional abre, y detrás van las piezas cortas: el cartel del menú, la
-// intro de tráileres y el cartel vertical de mupi. La estructura es la misma
+// El promocional abre, y detrás van las piezas cortas: el cartel del menú y el
+// cartel vertical de mupi.
+//
+// Falta la intro de tráileres. Estaba montada con el reproductor de Vimeo y no
+// llegaba a verse, así que se ha quitado: una caja con un error dentro es peor
+// que no tenerla. Vuelve en cuanto haya archivo, como las demás. La estructura es la misma
 // que la de la página de branding, así que se le pueden ir añadiendo más sin
 // rehacer nada.
 export default function MotionLanding() {
@@ -94,15 +97,6 @@ export default function MotionLanding() {
             proporcion="16 / 9"
             fondo="#131313"
             alt="Cartel animado del menú de palomitas y refresco"
-          />
-        </section>
-
-        <section className="motion-seccion">
-          <RotuloSeccion es="Intro de tráileres" en="Trailer intro" />
-          <VideoVimeo
-            id="855675126"
-            hash="b4af0e5d17"
-            titulo="Intro de tráileres de Yelmo Cines"
           />
         </section>
 
