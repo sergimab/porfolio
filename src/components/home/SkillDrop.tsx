@@ -266,10 +266,17 @@ export default function SkillDrop() {
       mousedown: EventListener;
       mousemove: EventListener;
       mouseup: EventListener;
+      mousewheel: EventListener;
     };
     m.element.removeEventListener("touchstart", m.mousedown);
     m.element.removeEventListener("touchmove", m.mousemove);
     m.element.removeEventListener("touchend", m.mouseup);
+    // Y lo mismo con la rueda del ratón: matter-js la escucha para hacer zoom y
+    // la corta, así que con el cursor encima del panel la página se quedaba
+    // clavada. Aquí no hay nada que ampliar; la rueda es de quien lee.
+    m.element.removeEventListener("wheel", m.mousewheel);
+    m.element.removeEventListener("mousewheel", m.mousewheel);
+    m.element.removeEventListener("DOMMouseScroll", m.mousewheel);
     const mc = MouseConstraint.create(engine, {
       mouse,
       constraint: { stiffness: 0.15, render: { visible: false } },
