@@ -733,7 +733,7 @@ export default function SkillDrop() {
           en el CV, no unos nuevos. */}
       {selectedPanel === "contacto" && (
         <div className="home-panel contacto-datos">
-          <a className="contacto-dato" href="mailto:sergioomb96@gmail.com">
+          <a className="contacto-dato" href="mailto:sergioomb96@gmail.com" draggable={false}>
             <span className="contacto-dato-icono" aria-hidden="true">
               {/* Sobre: la solapa es una uve, no un triángulo relleno, para que
                   el icono pese lo mismo que el trazo de la caja. */}
@@ -748,7 +748,7 @@ export default function SkillDrop() {
             </span>
           </a>
 
-          <a className="contacto-dato" href="tel:+34626173661">
+          <a className="contacto-dato" href="tel:+34626173661" draggable={false}>
             <span className="contacto-dato-icono" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <rect x="6.5" y="2.75" width="11" height="18.5" rx="2.5" />
