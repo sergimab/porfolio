@@ -115,11 +115,15 @@
   background: var(--foreground);
   color: var(--background);
 }
-.sobremi-pausa:hover .sobremi-pausa-texto,
-.sobremi-pausa:focus-visible .sobremi-pausa-texto {
-  max-width: 120px;
-  margin-right: 9px;
-  opacity: 1;
+/* Igual que el botón de las flechas: el nombre solo se despliega donde hay
+   ratón. En táctil se quedaba abierto después de pulsarlo. */
+@media (hover: hover) {
+  .sobremi-pausa:hover .sobremi-pausa-texto,
+  .sobremi-pausa:focus-visible .sobremi-pausa-texto {
+    max-width: 120px;
+    margin-right: 9px;
+    opacity: 1;
+  }
 }
 /* Las dos capas de la foto llenan la casilla. El redondeo va en ellas y no en
    la caja: si lo llevara la caja habría que recortar lo que se sale, y entonces

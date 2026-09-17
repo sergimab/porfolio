@@ -255,6 +255,21 @@ export default function SkillDrop() {
     Composite.add(engine.world, pillBodies.map(p => p.body));
 
     const mouse = Mouse.create(render.canvas);
+    // matter-js se apunta él solo a los eventos táctiles del lienzo y los corta
+    // todos —llama a preventDefault en cada uno— para poder arrastrar cuerpos
+    // con el dedo. Eso dejaba el panel como una trampa en el móvil: tocaras
+    // donde tocaras, la página no rodaba. Aquí el táctil lo llevamos nosotros
+    // —más abajo, distinguiendo si hay cápsula debajo o no—, así que se le
+    // quitan esas tres escuchas y se queda solo con el ratón.
+    const m = mouse as unknown as {
+      element: HTMLElement;
+      mousedown: EventListener;
+      mousemove: EventListener;
+      mouseup: EventListener;
+    };
+    m.element.removeEventListener("touchstart", m.mousedown);
+    m.element.removeEventListener("touchmove", m.mousemove);
+    m.element.removeEventListener("touchend", m.mouseup);
     const mc = MouseConstraint.create(engine, {
       mouse,
       constraint: { stiffness: 0.15, render: { visible: false } },
@@ -374,12 +389,16 @@ export default function SkillDrop() {
     };
 
     const onTouchStart = (e: TouchEvent) => {
-      e.preventDefault();
       const t = e.touches[0];
       const pos = canvasPos(t.clientX, t.clientY);
       const found = Query.point(pillsRef.current.map(p => p.body), pos);
       const hit = found[0] ?? null;
+      // Sin cápsula debajo, el dedo no es para arrastrar: se le deja al
+      // navegador para que la página ruede. Cortar el gesto aquí dejaba el
+      // panel como una trampa en el móvil —se tocaba el hueco entre cápsulas y
+      // la página se quedaba clavada—.
       if (!hit) return;
+      e.preventDefault();
       touchBody = hit;
       touchOffsetX = pos.x - hit.position.x;
       touchOffsetY = pos.y - hit.position.y;
@@ -390,8 +409,10 @@ export default function SkillDrop() {
     };
 
     const onTouchMove = (e: TouchEvent) => {
-      e.preventDefault();
+      // Solo se corta el desplazamiento mientras se lleva una cápsula en el
+      // dedo; si no, el gesto es de la página.
       if (!touchBody) return;
+      e.preventDefault();
       const t = e.touches[0];
       const pos = canvasPos(t.clientX, t.clientY);
       Body.setPosition(touchBody, { x: pos.x - touchOffsetX, y: pos.y - touchOffsetY });
@@ -400,7 +421,7 @@ export default function SkillDrop() {
     };
 
     const onTouchEnd = (e: TouchEvent) => {
-      e.preventDefault();
+      if (touchBody) e.preventDefault();
       touchBody = null;
       // En táctil no hay "salir con el ratón": si un toque llega a disparar un
       // mousemove sintético, la cápsula se quedaría encendida para siempre.

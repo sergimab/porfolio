@@ -92,11 +92,16 @@
   background: var(--foreground);
   color: var(--background);
 }
-.skill-cambio:hover .skill-cambio-texto,
-.skill-cambio:focus-visible .skill-cambio-texto {
-  max-width: 120px;
-  margin-left: 9px;
-  opacity: 1;
+/* El nombre solo se despliega donde hay ratón. En táctil no existe el «pasar
+   por encima»: el navegador se lo inventa al tocar y el botón se quedaba
+   abierto después de pulsarlo, tapando media caja. */
+@media (hover: hover) {
+  .skill-cambio:hover .skill-cambio-texto,
+  .skill-cambio:focus-visible .skill-cambio-texto {
+    max-width: 120px;
+    margin-left: 9px;
+    opacity: 1;
+  }
 }
 
 /* El menú vertical: una fila por categoría, a todo el ancho de la caja. Al
