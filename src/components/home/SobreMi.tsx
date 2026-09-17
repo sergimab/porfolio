@@ -38,7 +38,9 @@ import "./SobreMi.css";
 // como recorte —una máscara—, así que el dibujo pone la forma y aquí se pinta
 // del color que toque, sea cual sea el que traiga dentro.
 const FIGURAS: { n: number; w: number; h: number; color: string; giro?: number }[] = [
-  { n: 6, w: 259.16, h: 122.53, color: "#d97706" }, // ámbar de Motion Graphics
+  // El aro va algo torcido a la izquierda: recto se leía como una pieza puesta
+  // a plomo, y estas figuras son manchas, no elementos de la retícula.
+  { n: 6, w: 259.16, h: 122.53, color: "#d97706", giro: -8 }, // ámbar de Motion Graphics
   { n: 1, w: 128.29, h: 121.34, color: "#db2777" }, // rosa de Branding
   { n: 7, w: 215.59, h: 126.63, color: "#2563eb" }, // azul de Fotografía
   { n: 2, w: 114.79, h: 116.62, color: "#16a34a" }, // verde de Iberdrola
