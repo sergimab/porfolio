@@ -78,17 +78,22 @@
 .project-meta-row {
   display: contents;
 }
-/* Las etiquetas de la ficha —Tipo, Asignatura, Equipo— en la script de la
-   marca, como «Correo» y «Teléfono» del panel de contacto: son rótulos, no
-   datos. Van a cuerpo mayor que el valor al que acompañan, y aun así pesan
-   menos, porque esta letra dibuja mucho más fino que la del sitio.
-   La fila alinea por la base para que el rótulo y su dato se apoyen en el mismo
-   renglón pese a la diferencia de cuerpo. */
 .project-meta-key {
+  font-weight: 700;
+}
+/* El VALOR de cada fila —lo que se cuenta— en la script de la marca, y la
+   etiqueta se queda en la tipografía del sitio. Va a 19: esta letra dibuja muy
+   fino y al cuerpo del resto no se leería.
+   La fila alinea por la base para que etiqueta y valor se apoyen en el mismo
+   renglón pese a la diferencia de cuerpo. */
+/* Hijo DIRECTO, no cualquier descendiente: el texto de la etiqueta viene
+   envuelto en más spans —los que pone el componente de idioma para las
+   negritas—, y esos, al no llevar la clase, también se llevaban la script.
+   Desde fuera la etiqueta parecía correcta y por dentro estaba cambiada. */
+.project-meta-row > span:not(.project-meta-key) {
   font-family: 'Kapakana', 'Cormorant Garamond', serif;
-  font-size: 22px;
-  line-height: 1;
-  color: color-mix(in srgb, var(--foreground) 88%, transparent);
+  font-size: 19px;
+  line-height: 1.15;
 }
 .project-meta {
   align-items: baseline;
