@@ -23,6 +23,19 @@
    apilan en el orden en que están escritas —fondo, figura de turno, yo—. */
 .sobremi-foto {
   position: relative;
+  /* Suelo de recorte. Las figuras se salen por arriba y por los lados a la
+     vista, pero por debajo no asoma nada: la máscara se estira 300 % hacia los
+     lados y hacia arriba y se ancla en el borde de abajo, así que lo que caiga
+     por debajo de la foto no se pinta. Es el recorte de abajo y solo el de
+     abajo; `overflow: hidden` habría cortado los cuatro. */
+  -webkit-mask-image: linear-gradient(#000, #000);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: 300% 300%;
+  -webkit-mask-position: center bottom;
+  mask-image: linear-gradient(#000, #000);
+  mask-repeat: no-repeat;
+  mask-size: 300% 300%;
+  mask-position: center bottom;
   aspect-ratio: 1 / 1;
   /* Sin estirarse a lo alto: estirada, su alto lo pondría la fila y la
      proporción cuadrada le devolvería ESE alto como ancho, saltándose el

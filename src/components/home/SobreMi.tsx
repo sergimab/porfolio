@@ -41,20 +41,31 @@ const FIGURAS = [
 ];
 
 // Cuánto ocupan, en porcentaje del lado de la foto. Es la medida de una figura
-// cuadrada; las demás salen de ahí.
-//
-// El techo lo pone la más ancha: a partir de 70 se sale por los lados más de
-// los 24 px que la separan de la caja del texto, se mete por detrás de su papel
-// y parece cortada.
-const TAMANO = 70;
+// cuadrada; las demás salen de ahí. Pasado de 100, todas asoman un poco por
+// fuera del cuadro.
+const TAMANO = 104;
 
+// Tope de ancho: 110 % del lado de la foto, que es lo que hay hasta la caja del
+// texto —el lado más los 24 px del hueco—. Las dos o tres figuras muy
+// apaisadas lo alcanzan antes de llegar a su tamaño, y se quedan ahí: se salen
+// hasta el borde del hueco y ni un pelo más, que es donde empezarían a meterse
+// por detrás del texto y a parecer cortadas. Se baja el alto con el ancho, no
+// se aplasta.
+const ANCHO_MAXIMO = 110;
+
+// La forma media, que es la vara de medir: con ella, `TAMANO` es literalmente
+// el lado de una figura cuadrada.
 const media =
   FIGURAS.reduce((t, f) => t + Math.sqrt(f.h / f.w), 0) / FIGURAS.length;
 
-const RECURSOS = FIGURAS.map((f) => ({
-  src: `/sobre-mi/recursos/recurso-${f.n}.svg`,
-  alto: `${((TAMANO * Math.sqrt(f.h / f.w)) / media).toFixed(1)}%`,
-}));
+const RECURSOS = FIGURAS.map((f) => {
+  const porArea = (TAMANO * Math.sqrt(f.h / f.w)) / media;
+  const porAncho = (ANCHO_MAXIMO * f.h) / f.w;
+  return {
+    src: `/sobre-mi/recursos/recurso-${f.n}.svg`,
+    alto: `${Math.min(porArea, porAncho).toFixed(1)}%`,
+  };
+});
 
 // Lo que dura cada figura en pantalla. Es el número que hay que tocar para
 // ajustar el ritmo.
