@@ -7,6 +7,7 @@ import BounceCards from "./BounceCards";
 import BackToTop from "@/components/layout/BackToTop";
 import DropcapTitle from "@/components/shared/DropcapTitle";
 import SobreMi from "./SobreMi";
+import MarcoHormigas from "@/components/shared/MarcoHormigas";
 import { seeded, organicGradient, CAPSULE_DRIFT_SIZE, drift } from "@/components/shared/organico";
 import "./SkillDrop.css";
 
@@ -741,6 +742,8 @@ export default function SkillDrop() {
 
       {selectedPanel === "cv" && (
         <div className="home-panel panel-cv">
+          {/* El mismo marco de guiones en marcha que «Sobre mí». */}
+          <MarcoHormigas />
           <iframe
             key={`${lang}-${theme}`}
             ref={cvIframeRef}

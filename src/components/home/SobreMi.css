@@ -168,41 +168,6 @@
   visibility: visible;
 }
 
-/* El marco de guiones en marcha. Mismo color e mismo grosor que las cajas de
-   arriba, pero partido y corriendo despacio alrededor, como las hormigas de un
-   recorte. Sin `viewBox`: así una unidad del dibujo es un píxel de pantalla y
-   el trazo no se estira con la caja; el rectángulo se mide en porcentaje y los
-   0,5 de margen son para que el hilo entre entero y no lo corte el borde.
-   El vaivén dura lo que mide un guión más su hueco —16—, así que al terminar
-   está exactamente donde empezó y el bucle no se nota. */
-.sobremi-marco {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: visible;
-}
-.sobremi-marco rect {
-  width: calc(100% - 1px);
-  height: calc(100% - 1px);
-  fill: none;
-  stroke: var(--foreground);
-  stroke-width: 1;
-  stroke-dasharray: 9 7;
-  animation: sobremi-hormigas 1.6s linear infinite;
-}
-@keyframes sobremi-hormigas {
-  to {
-    stroke-dashoffset: -16;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .sobremi-marco rect {
-    animation: none;
-  }
-}
-
 /* El texto, en su propia caja. La caja es SOLO para el texto: la foto va suelta
    al lado, que ya tiene su propio marco redondeado y meterla dentro sería
    enmarcar dos veces lo mismo.

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import LangText from "@/components/shared/LangText";
 import DropcapTitle from "@/components/shared/DropcapTitle";
+import MarcoHormigas from "@/components/shared/MarcoHormigas";
 import "./SobreMi.css";
 
 // La imagen de «Sobre mí»: la foto en dos capas —el fondo y yo recortado— y,
@@ -190,13 +191,7 @@ export default function SobreMi() {
       </div>
 
       <div className="sobremi-texto">
-        {/* El marco, dibujado y no como borde del CSS: un borde discontinuo no
-            se puede poner en marcha —los guiones son del navegador y no hay
-            manera de correrlos—, mientras que el trazo de un SVG sí, moviendo
-            su desfase. Va detrás del texto y no recibe pulsaciones. */}
-        <svg className="sobremi-marco" aria-hidden="true" focusable="false">
-          <rect x="0.5" y="0.5" rx="15.5" ry="15.5" />
-        </svg>
+        <MarcoHormigas />
 
         {/* El texto va en su propia caja, por dentro del marco: es la que rueda,
             y así la barra de desplazamiento queda DENTRO del recuadro en vez de

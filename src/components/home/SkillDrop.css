@@ -217,8 +217,11 @@
   background: none;
 }
 .panel-muted { font-size: 13px; color: var(--muted); }
+/* Sin borde propio: lo pone el marco de guiones, que se pinta por delante. Y
+   `position: relative`, que es lo que ese marco necesita para estirarse a los
+   cuatro lados. */
 .panel-cv {
-  border: 1px solid var(--foreground);
+  position: relative;
   overflow: hidden;
 }
 /* El alto del iframe del CV se fija inline (dinámico, según su contenido) */

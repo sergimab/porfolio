@@ -1,0 +1,36 @@
+/* Sin `viewBox`: así una unidad del dibujo es un píxel de pantalla y el trazo no
+   se estira con la caja. El rectángulo se mide en porcentaje y los 0,5 de margen
+   son para que el hilo entre entero y no lo corte el borde.
+
+   El vaivén dura lo que mide un guión más su hueco —16—, así que al terminar la
+   vuelta está exactamente donde empezó y el bucle no se nota. */
+.marco-hormigas {
+  position: absolute;
+  inset: 0;
+  /* Por delante de lo que haya dentro —incluido un botón recortado en una
+     esquina—, para que la línea dé la vuelta completa sin trozos comidos. */
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+.marco-hormigas rect {
+  width: calc(100% - 1px);
+  height: calc(100% - 1px);
+  fill: none;
+  stroke: var(--foreground);
+  stroke-width: 1;
+  stroke-dasharray: 9 7;
+  animation: marco-hormigas 1.6s linear infinite;
+}
+@keyframes marco-hormigas {
+  to {
+    stroke-dashoffset: -16;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marco-hormigas rect {
+    animation: none;
+  }
+}
