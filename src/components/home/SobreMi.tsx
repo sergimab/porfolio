@@ -135,32 +135,32 @@ export default function SobreMi() {
         </h2>
         <p>
           <LangText
-            es="Soy **Sergio Martín**, diseñador gráfico formado en la **ESD Madrid**, y lo que me engancha del oficio es el momento en que una marca deja de ser un logotipo y empieza a ser una manera de hablar: el color, el ritmo, el tono, cómo se mueve."
-            en="I'm **Sergio Martín**, a graphic designer trained at **ESD Madrid**, and what hooks me about this craft is the moment a brand stops being a logo and starts being a way of speaking: the colour, the rhythm, the tone, the way it moves."
+            es="Soy **Sergio Martín Barahona**, diseñador gráfico formado en la Escuela Superior de Diseño en Madrid."
+            en="I'm **Sergio Martín Barahona**, a graphic designer trained at the Escuela Superior de Diseño in Madrid."
           />
         </p>
         <p>
           <LangText
-            es="He trabajado en el universo gráfico de **Iberdrola**, donde me tocó lo que más me gusta: pensar en **sistemas** y no en piezas sueltas. Un sistema de ilustraciones, una iconografía, infografías que explican en un vistazo cosas que no caben en un párrafo, y newsletters que tenían que sonar a la misma voz número tras número. Ahí aprendí que un buen diseño no es el que sorprende una vez, sino el que **aguanta repetido**."
-            en="I've worked inside **Iberdrola**'s graphic universe, on exactly the part I like most: thinking in **systems** rather than one-off pieces. An illustration system, an icon set, infographics that explain at a glance what wouldn't fit in a paragraph, and newsletters that had to sound like the same voice issue after issue. That's where I learnt that good design isn't what surprises you once, but what **holds up repeated**."
+            es="Desde muy joven, mientras en clase me explicaban el origen de la vida o el verbo «to be», yo iba por otro lado. Me preguntaba quién habría diseñado la portada de aquel workbook, quién habría elegido esa tipografía tan fea del cartel de la sala de profesores, o por qué el cartón de leche del desayuno tenía ese logo y no otro. Años después descubrí que comunicar de forma visual tenía un nombre, y ese nombre era **diseño gráfico**."
+            en="From early on, while class was busy explaining the origin of life or the verb “to be”, my head was somewhere else. I wondered who had designed the cover of that workbook, who had picked the ugly typeface on the staff-room notice, or why the breakfast milk carton carried that logo and not another. Years later I found out that communicating visually had a name, and that name was **graphic design**."
           />
         </p>
         <p>
           <LangText
-            es="En paralelo he llevado proyectos de marca de principio a fin. El **rebranding de Yelmo Cines** lo resolví en tres frentes a la vez —identidad, animación y prototipado web—, y fue la mejor manera de comprobar algo que ya sospechaba: **branding, motion y producto son el mismo oficio mirado desde tres sitios**. Una marca que no sabes cómo se mueve ni cómo se usa está a medio terminar."
-            en="Alongside that I've run brand projects end to end. I solved the **Yelmo Cines rebrand** on three fronts at once —identity, motion and web prototyping— and it confirmed something I already suspected: **branding, motion and product are the same craft seen from three places**. A brand you can't move or use is only half finished."
+            es="En el instituto me descargué el Photoshop para editar las fotos del Tuenti, y ahí empezó todo sin que me diera cuenta. Hoy sigo editando, solo que ahora es mi profesión, creando contenido para particulares y empresas como **Iberdrola**, donde llevo los dos últimos años aprendiendo de todo, desde edición y motion hasta diseño de producto. Photoshop, Illustrator e InDesign para lo editorial, After Effects para dar movimiento, Figma para diseño de producto y Blender para todo lo que necesita una tercera dimensión, son las herramientas con las que trabajo casi a diario."
+            en="Back in secondary school I downloaded Photoshop to retouch my photos on Tuenti, and it all started there without my noticing. I'm still retouching today, except now it's my job, making content for individuals and for companies like **Iberdrola**, where I've spent the last two years learning a bit of everything, from editing and motion to product design. Photoshop, Illustrator and InDesign for editorial work, After Effects to set things moving, Figma for product design and Blender for anything that needs a third dimension: those are the tools I work with almost every day."
           />
         </p>
         <p>
           <LangText
-            es="Me interesa la tipografía cuando se pone seria, el color cuando tiene un motivo, y **el punto donde el diseño toca el código**: esta misma web la he diseñado y programado yo, y he acabado disfrutando tanto del CSS como del Illustrator."
-            en="I'm drawn to type when it gets serious, to colour when it has a reason, and to **the place where design meets code**: I designed and built this site myself, and I've ended up enjoying CSS as much as Illustrator."
+            es="Aunque el diseño gráfico en general me apasiona, lo que más me engancha es darle vida a piezas que ya existen, el motion, el diseño de producto como mi propio portfolio, y encontrar la forma más clara, accesible y atractiva de comunicar algo."
+            en="Graphic design as a whole is what I love, but what hooks me most is bringing existing pieces to life: motion, product design —this very portfolio, for instance— and finding the clearest, most accessible and most appealing way to say something."
           />
         </p>
         <p>
           <LangText
-            es="Ahora busco **proyectos nuevos y gente de la que aprender**. Me da igual que el encargo sea una marca entera o una pieza pequeña: si hay algo que resolver y alguien con quien discutirlo, me apunto. Si estás leyendo esto y tienes algo entre manos, **escríbeme** —está aquí al lado, en Contacto—."
-            en="Right now I'm looking for **new projects and people to learn from**. Whether the job is a whole brand or one small piece doesn't matter: if there's something to solve and someone to argue it out with, I'm in. If you're reading this and you've got something brewing, **drop me a line** —it's right next door, under Contact—."
+            es="Me queda muchísimo por aprender de un oficio que no para de reinventarse, y ahí sumo la **IA** como una herramienta más en la caja, no para que piense por mí, sino para moverme más rápido mientras sigo siendo yo quien decide hacia dónde va cada proyecto."
+            en="There's a huge amount left to learn in a craft that keeps reinventing itself, and there I count **AI** as one more tool in the box —not to think for me, but to move faster while I'm still the one deciding where each project goes."
           />
         </p>
       </div>
