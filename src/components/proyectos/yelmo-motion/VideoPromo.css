@@ -3,6 +3,7 @@
    es oscuro de principio a fin: así el marco no destella antes de que cargue
    el cartel. */
 .ym-promo {
+  position: relative;
   margin: 8px 0 56px;
   aspect-ratio: 16 / 9;
   border-radius: 16px;
@@ -15,4 +16,74 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* El botón de play, en el centro y sobre el cartel. Desaparece en cuanto el
+   vídeo arranca: a partir de ahí manda la barra del navegador. */
+.ym-promo-play {
+  position: absolute;
+  /* Toda la caja es el objetivo de pulsación, no solo el disco: a nadie le
+     apetece apuntar a un círculo de 72 px, y menos con el dedo. El disco es
+     dónde mirar; el botón es todo. */
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #fff;
+  cursor: pointer;
+  /* Un velo muy leve: el cartel se sigue viendo y el disco no se pierde contra
+     una zona clara del fotograma. */
+  transition: background 0.25s;
+}
+.ym-promo-play:hover,
+.ym-promo-play:focus-visible {
+  background: rgba(0, 0, 0, 0.18);
+}
+.ym-promo-play svg {
+  width: 72px;
+  height: 72px;
+  padding: 18px;
+  box-sizing: border-box;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  /* Cristal: deja ver el fotograma por debajo y separa lo justo. Donde no haya
+     `backdrop-filter`, el negro translúcido ya cumple. */
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  transition: transform 0.25s cubic-bezier(0.2, 0.6, 0.2, 1), background 0.25s;
+}
+.ym-promo-play:hover svg,
+.ym-promo-play:focus-visible svg {
+  transform: scale(1.08);
+  background: rgba(0, 0, 0, 0.5);
+}
+@media (prefers-reduced-motion: reduce) {
+  .ym-promo-play svg {
+    transition: none;
+  }
+  .ym-promo-play:hover svg,
+  .ym-promo-play:focus-visible svg {
+    transform: none;
+  }
+}
+/* El nombre del botón, para quien lo escucha en vez de verlo: el triángulo no
+   dice nada a un lector de pantalla. */
+.ym-promo-play-texto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .ym-promo-play svg {
+    width: 60px;
+    height: 60px;
+    padding: 15px;
+  }
 }
