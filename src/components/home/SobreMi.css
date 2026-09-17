@@ -50,13 +50,11 @@
    El alto lo pone cada una desde el componente —se calcula para que todas
    ocupen lo mismo, ver allí—; aquí solo va dónde caen. */
 .sobremi-capa.es-recurso {
-  /* Centradas, pero con el centro subido lo justo: 42 % en vez de 50 %. Esos 8
-     puntos son la mitad de lo que sobresale la figura más alta, así que su
-     borde de abajo aterriza JUSTO en el suelo de la foto. Ninguna se sale por
-     debajo —ahí el desbordamiento se metería en lo que viene detrás— y todas
-     siguen asomando por arriba y por los lados. */
+  /* En el centro exacto de la foto. Ya no hace falta subirlas para que no se
+     salgan por abajo: a este tamaño ninguna es más alta que la foto, así que
+     centradas caben de sobra a lo alto y solo asoman por los lados. */
   left: 50%;
-  top: 42%;
+  top: 50%;
   width: auto;
   /* Sin el tope de ancho que llevan las imágenes del sitio: con el alto puesto
      y el ancho topado, la figura no se recortaba, se APLASTABA —las anchas
