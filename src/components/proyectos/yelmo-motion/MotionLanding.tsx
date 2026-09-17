@@ -9,6 +9,7 @@ import VideoPromo from "./VideoPromo";
 // De la carpeta de branding: es el mismo proyecto y el mismo trato para una
 // pieza muda en bucle, así que no hay por qué tener dos componentes iguales.
 import VideoMarca from "../yelmo/VideoMarca";
+import VideoVimeo from "./VideoVimeo";
 import "./MotionLanding.css";
 
 // La pata de animación del proyecto de Yelmo: el vídeo promocional y las demás
@@ -19,12 +20,8 @@ import "./MotionLanding.css";
 // categoría: la marca en Branding, esto en Motion. Las dos se enlazan con la
 // franja del final.
 //
-// El promocional abre, y detrás van las piezas cortas: el cartel del menú y el
-// cartel vertical de mupi.
-//
-// Falta la intro de tráileres. Estaba montada con el reproductor de Vimeo y no
-// llegaba a verse, así que se ha quitado: una caja con un error dentro es peor
-// que no tenerla. Vuelve en cuanto haya archivo, como las demás. La estructura es la misma
+// El promocional abre, y detrás van las piezas cortas: el cartel del menú, y el
+// cartel vertical con la intro de tráileres al lado. La estructura es la misma
 // que la de la página de branding, así que se le pueden ir añadiendo más sin
 // rehacer nada.
 export default function MotionLanding() {
@@ -100,19 +97,34 @@ export default function MotionLanding() {
           />
         </section>
 
-        {/* El cartel vertical va con su ancho corto y centrado: a 9:16 y a todo
-            el ancho de la columna mediría más de metro y medio de alto y no
-            cabría de una vez en ninguna pantalla. Así se ve entero, que es
-            justo lo que pide un mupi. */}
+        {/* El cartel vertical y la intro, uno al lado del otro y de la misma
+            medida. Van con ancho corto: a 9:16 y a todo el ancho de la columna,
+            el cartel mediría más de metro y medio de alto y no cabría de una
+            vez en ninguna pantalla. Así se ve entero, que es justo lo que pide
+            un mupi. */}
         <section className="motion-seccion">
-          <RotuloSeccion es="Cartel vertical" en="Vertical poster" />
-          <div className="motion-vertical">
-            <VideoMarca
-              src="/proyectos/yelmo-motion/cartel-vertical.mp4"
-              proporcion="9 / 16"
-              fondo="#278FB2"
-              alt="Cartel vertical animado de La Sirenita, para mupi o historia de Instagram"
-            />
+          <RotuloSeccion es="Cartel vertical e intro" en="Vertical poster and intro" />
+          <div className="motion-par">
+            <div className="motion-vertical">
+              <VideoMarca
+                src="/proyectos/yelmo-motion/cartel-vertical.mp4"
+                proporcion="9 / 16"
+                fondo="#278FB2"
+                alt="Cartel vertical animado de La Sirenita, para mupi o historia de Instagram"
+              />
+            </div>
+            {/* La intro de tráileres, en la misma caja que el cartel aunque el
+                vídeo sea apaisado: se centra y quedan franjas negras arriba y
+                abajo. Recortarla a vertical se llevaría dos tercios del
+                encuadre, y estirarla, ni hablar. */}
+            <div className="motion-vertical">
+              <VideoVimeo
+                id="855675126"
+                hash="b4af0e5d17"
+                titulo="Intro de tráileres de Yelmo Cines"
+                proporcion="9 / 16"
+              />
+            </div>
           </div>
         </section>
 

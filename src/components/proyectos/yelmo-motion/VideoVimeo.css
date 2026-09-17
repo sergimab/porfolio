@@ -1,0 +1,26 @@
+/* El reproductor de Vimeo. La caja manda —su proporción la pone quien lo usa—
+   y el iframe se centra dentro, conservando la del vídeo: así una pieza
+   apaisada puede vivir en una caja vertical sin recortarse ni estirarse, con
+   franjas arriba y abajo, como en una pantalla de cine. */
+.ym-vimeo {
+  position: relative;
+  margin: 8px 0 56px;
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
+  overflow: hidden;
+  /* Negro mientras carga el reproductor, para que no dé un salto de color; y
+     es también el color de esas franjas. */
+  background: #000;
+}
+.ym-vimeo iframe {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  display: block;
+  width: 100%;
+  /* La proporción del vídeo, no la de la caja. */
+  aspect-ratio: var(--ym-vimeo-prop, 16 / 9);
+  height: auto;
+  border: 0;
+}

@@ -19,6 +19,27 @@
   margin-bottom: 0;
 }
 
+/* Las dos piezas verticales, una al lado de la otra y de la misma medida: el
+   ancho lo reparte el `flex: 1` con el tope de 340 que lleva cada caja, así que
+   ninguna manda sobre la otra. En pantalla estrecha no caben dos columnas de
+   340, así que se apilan. */
+.motion-par {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+}
+.motion-par > * {
+  flex: 1 1 0;
+}
+@media (max-width: 700px) {
+  .motion-par {
+    flex-wrap: wrap;
+  }
+  .motion-par > * {
+    flex: 1 1 100%;
+  }
+}
+
 /* El cartel vertical, a ancho de móvil y centrado: es la medida en la que una
    pieza 9:16 cabe entera en pantalla sin obligar a hacer scroll dentro del
    propio vídeo. */
