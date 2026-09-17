@@ -42,6 +42,111 @@
   overflow: hidden;
 }
 .box-skills { order: 1; }
+
+/* Botón para cambiar de las cápsulas al menú y al revés. Arriba a la izquierda,
+   dentro de la caja: es de ESA caja, no de la página. El nombre sale al pasar
+   por encima o al llegar con el teclado; en reposo va solo el icono, para no
+   competir con las cápsulas. */
+.skill-cambio {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  padding: 0 9px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--background);
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.skill-cambio svg {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+}
+.skill-cambio-texto {
+  max-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 0;
+  transition: max-width 0.25s, opacity 0.2s;
+}
+.skill-cambio:hover,
+.skill-cambio:focus-visible {
+  color: var(--foreground);
+  border-color: var(--foreground);
+}
+.skill-cambio:hover .skill-cambio-texto,
+.skill-cambio:focus-visible .skill-cambio-texto {
+  max-width: 120px;
+  opacity: 1;
+}
+
+/* El menú vertical: una fila por categoría, a todo el ancho de la caja. Al
+   pasar por encima —o al llegar con el teclado— la franja se pinta entera del
+   color de esa categoría. Sin física, sin arrastre y sin tiempo de reacción:
+   una lista de siempre. */
+.skill-lista {
+  position: absolute;
+  inset: 52px 0 0;
+  /* Las siete filas se reparten el alto que queda: la lista entera se ve de una
+     vez, sin rodar por dentro de una caja que ya es pequeña. */
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.skill-lista li {
+  flex: 1 1 0;
+  min-height: 32px;
+}
+.skill-lista button {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  padding: 0 20px;
+  border: 0;
+  border-top: 1px solid var(--border);
+  background: none;
+  color: var(--foreground);
+  font-family: inherit;
+  font-size: 15px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+}
+.skill-lista li:last-child button {
+  border-bottom: 1px solid var(--border);
+}
+.skill-lista button svg {
+  width: 18px;
+  height: 18px;
+  opacity: 0;
+  transition: opacity 0.18s;
+}
+.skill-lista button:hover,
+.skill-lista button:focus-visible,
+.skill-lista button[data-activa="true"] {
+  background: var(--fila-color);
+  color: #fff;
+  outline: none;
+}
+.skill-lista button:hover svg,
+.skill-lista button:focus-visible svg,
+.skill-lista button[data-activa="true"] svg {
+  opacity: 1;
+}
 .box-soon {
   order: 2;
   display: grid;

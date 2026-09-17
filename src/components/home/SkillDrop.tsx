@@ -65,6 +65,11 @@ export default function SkillDrop() {
   const [lang, setLang]           = useState<"es"|"en">("es");
   const [theme, setTheme]         = useState<"light"|"dark">("light");
   const [selectedPanel, setSelectedPanel] = useState<string>("contacto");
+  // Dos maneras de elegir categoría: las cápsulas que se arrastran, y un menú
+  // vertical corriente. Lo segundo no es un modo «de repuesto»: arrastrar pide
+  // ratón, pulso y ver la pantalla, y hay quien no tiene las tres cosas. La
+  // elección se recuerda, que quien la necesita la necesita siempre.
+  const [modoLista, setModoLista] = useState(false);
   const cvIframeRef = useRef<HTMLIFrameElement>(null);
   const [cvHeight, setCvHeight] = useState(900);
   const [contactForm, setContactForm] = useState({ name: "", email: "", message: "" });
@@ -90,6 +95,21 @@ export default function SkillDrop() {
   useEffect(() => {
     if (dropped) setSelectedPanel(dropped);
   }, [dropped]);
+
+  useEffect(() => {
+    try {
+      if (localStorage.getItem("skill-modo") === "lista") setModoLista(true);
+    } catch {
+      // Navegación privada o almacenamiento bloqueado: se queda en cápsulas.
+    }
+  }, []);
+
+  const cambiarModo = () => {
+    setModoLista(m => {
+      try { localStorage.setItem("skill-modo", m ? "capsulas" : "lista"); } catch {}
+      return !m;
+    });
+  };
 
   // Arriving from a project page (e.g. /?cat=iberdrola): dock that category's
   // capsule in the drop zone (as if dropped), open its projects and scroll to them.
@@ -520,8 +540,50 @@ export default function SkillDrop() {
         </div>
 
         {/* Skills box — shown first (left) on desktop */}
-        <div className="box-skills" ref={containerRef} style={{ height:`${boxH}px` }}>
+        <div className={`box-skills${modoLista ? " es-lista" : ""}`} ref={containerRef} style={{ height:`${boxH}px` }}>
+          {/* El lienzo de física se queda montado siempre, también en modo
+              lista: desmontarlo obligaría a rehacer el mundo entero al volver,
+              y ahí no se ve nada —las cápsulas son HTML, no dibujo—. */}
           <div ref={sceneRef} className="skill-scene" />
+
+          <button type="button" className="skill-cambio" onClick={cambiarModo}>
+            {/* Dos flechas en sentidos contrarios: el signo de «cambiar a la
+                otra forma», que es lo que hace. */}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M4 8h13" />
+              <polyline points="13.5 4.5 17 8 13.5 11.5" />
+              <path d="M20 16H7" />
+              <polyline points="10.5 12.5 7 16 10.5 19.5" />
+            </svg>
+            <span className="skill-cambio-texto">
+              {modoLista
+                ? (lang==="en" ? "Capsules" : "Cápsulas")
+                : (lang==="en" ? "Simple menu" : "Menú simple")}
+            </span>
+          </button>
+
+          {modoLista && (
+            <ul className="skill-lista">
+              {skills.map(skill => (
+                <li key={skill.id}>
+                  <button
+                    type="button"
+                    style={{ ["--fila-color" as string]: `hsl(${skill.hue} 70% 48%)` }}
+                    data-activa={selectedPanel === skill.id}
+                    onClick={() => { setSelectedPanel(skill.id); scrollToPanel(); }}
+                  >
+                    <span>{getLabel(skill)}</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <line x1="5" y1="12" x2="18" y2="12" />
+                      <polyline points="12.5 6.5 18 12 12.5 17.5" />
+                    </svg>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {!modoLista && (<>
 
           {pillPos.map(({ id, x, y, angle }) => {
             const skill = skills.find(s => s.id === id);
@@ -640,6 +702,7 @@ export default function SkillDrop() {
               </div>
             )}
           </div>
+          </>)}
         </div>
       </div>
 
