@@ -135,8 +135,8 @@ export default function SobreMi() {
         </h2>
         <p>
           <LangText
-            es="Soy **Sergio Martín Barahona**, diseñador gráfico formado en la Escuela Superior de Diseño en Madrid."
-            en="I'm **Sergio Martín Barahona**, a graphic designer trained at the Escuela Superior de Diseño in Madrid."
+            es="Soy **Sergio Martín Barahona**, diseñador gráfico formado en la Escuela Superior de Diseño en Madrid (ESD Madrid)."
+            en="I'm **Sergio Martín Barahona**, a graphic designer trained at the Escuela Superior de Diseño in Madrid (ESD Madrid)."
           />
         </p>
         <p>
@@ -147,8 +147,8 @@ export default function SobreMi() {
         </p>
         <p>
           <LangText
-            es="En el instituto me descargué el Photoshop para editar las fotos del Tuenti, y ahí empezó todo sin que me diera cuenta. Hoy sigo editando, solo que ahora es mi profesión, creando contenido para particulares y empresas como **Iberdrola**, donde llevo los dos últimos años aprendiendo de todo, desde edición y motion hasta diseño de producto. Photoshop, Illustrator e InDesign para lo editorial, After Effects para dar movimiento, Figma para diseño de producto y Blender para todo lo que necesita una tercera dimensión, son las herramientas con las que trabajo casi a diario."
-            en="Back in secondary school I downloaded Photoshop to retouch my photos on Tuenti, and it all started there without my noticing. I'm still retouching today, except now it's my job, making content for individuals and for companies like **Iberdrola**, where I've spent the last two years learning a bit of everything, from editing and motion to product design. Photoshop, Illustrator and InDesign for editorial work, After Effects to set things moving, Figma for product design and Blender for anything that needs a third dimension: those are the tools I work with almost every day."
+            es="Lo que empezó como un entretenimiento y algún favor a amigos y familiares terminó convirtiéndose en mi profesión. Hoy trabajo creando contenido para particulares y empresas como **Iberdrola**, donde llevo los dos últimos años aprendiendo de todo, desde edición y motion hasta diseño de producto. Photoshop, Illustrator e InDesign para lo editorial, After Effects para dar movimiento, Figma para diseño de producto y Blender para todo lo que necesita una tercera dimensión, son las herramientas con las que trabajo casi a diario."
+            en="What started as a pastime and the odd favour for friends and family ended up becoming my profession. Today I make content for individuals and for companies like **Iberdrola**, where I've spent the last two years learning a bit of everything, from editing and motion to product design. Photoshop, Illustrator and InDesign for editorial work, After Effects to set things moving, Figma for product design and Blender for anything that needs a third dimension: those are the tools I work with almost every day."
           />
         </p>
         <p>
