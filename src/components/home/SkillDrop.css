@@ -327,13 +327,13 @@
    quedaba en un garabato. */
 .contacto-dato-clave {
   font-family: 'Kapakana', 'Cormorant Garamond', serif;
-  font-size: 19px;
+  font-size: 26px;
   line-height: 1;
   letter-spacing: 0.01em;
   /* Ni el gris de las etiquetas ni el negro del texto: esta letra dibuja muy
      fino y con el gris se desdibujaba, pero a plena tinta pesaría más que el
      dato que acompaña. */
-  color: color-mix(in srgb, var(--foreground) 78%, transparent);
+  color: color-mix(in srgb, var(--foreground) 88%, transparent);
 }
 .contacto-dato-valor {
   font-size: 15px;
