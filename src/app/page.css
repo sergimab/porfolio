@@ -78,8 +78,20 @@
 .project-meta-row {
   display: contents;
 }
+/* Las etiquetas de la ficha —Tipo, Asignatura, Equipo— en la script de la
+   marca, como «Correo» y «Teléfono» del panel de contacto: son rótulos, no
+   datos. Van a cuerpo mayor que el valor al que acompañan, y aun así pesan
+   menos, porque esta letra dibuja mucho más fino que la del sitio.
+   La fila alinea por la base para que el rótulo y su dato se apoyen en el mismo
+   renglón pese a la diferencia de cuerpo. */
 .project-meta-key {
-  font-weight: 700;
+  font-family: 'Kapakana', 'Cormorant Garamond', serif;
+  font-size: 22px;
+  line-height: 1;
+  color: color-mix(in srgb, var(--foreground) 88%, transparent);
+}
+.project-meta {
+  align-items: baseline;
 }
 /* En pantallas estrechas la ficha no cabe al lado de la cápsula de vuelta, y
    un elemento flexible no encoge por debajo del ancho de su contenido: con un
