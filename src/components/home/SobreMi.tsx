@@ -120,7 +120,11 @@ export default function SobreMi() {
 
   return (
     <div className="sobremi">
-      <div className="sobremi-foto">
+      {/* Toda la foto para y arranca la rueda. El botón de la esquina sigue
+          estando —es lo que se ve y lo que responde al teclado—, pero el blanco
+          de pulsación es la imagen entera, que es lo que la mano espera cuando
+          hay algo moviéndose delante. */}
+      <div className="sobremi-foto" onClick={() => setPausado(p => !p)}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img className="sobremi-capa es-fondo" src="/sobre-mi/fondo.webp" alt="" />
         {RECURSOS.map((r, i) => (
@@ -150,7 +154,12 @@ export default function SobreMi() {
         <button
           type="button"
           className={`sobremi-pausa${pausado ? " es-pausado" : ""}`}
-          onClick={() => setPausado((p) => !p)}
+          onClick={(e) => {
+            // Sin esto el clic contaría dos veces —aquí y en la foto— y se
+            // quedaría todo igual.
+            e.stopPropagation();
+            setPausado((p) => !p);
+          }}
           aria-pressed={pausado}
           aria-label={pausado ? "Reanudar las figuras" : "Parar las figuras"}
         >

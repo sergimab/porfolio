@@ -23,6 +23,7 @@
    apilan en el orden en que están escritas —fondo, figura de turno, yo—. */
 .sobremi-foto {
   position: relative;
+  cursor: pointer;
   border-radius: 16px;
   /* Suelo de recorte. Las figuras se salen por arriba y por los lados a la
      vista, pero por debajo no asoma nada: la máscara se estira 300 % hacia los
