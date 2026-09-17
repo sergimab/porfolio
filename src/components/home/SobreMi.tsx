@@ -103,16 +103,20 @@ export default function SobreMi() {
   // solo al cargar. Hasta entonces, el título va vacío pero ocupando su sitio,
   // así que no hay salto.
   const [hora, setHora] = useState<number | null>(null);
+  // La rueda se puede parar: hay quien no quiere movimiento en pantalla
+  // mientras lee, y el botón aparece al pasar por encima de la foto.
+  const [pausado, setPausado] = useState(false);
 
   useEffect(() => setHora(new Date().getHours()), []);
 
   useEffect(() => {
     // Quien pide menos movimiento se queda con una sola figura, quieta. Un
     // parpadeo cada segundo es justo lo que molesta a quien lo pide.
+    if (pausado) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const id = setInterval(() => setActual((i) => (i + 1) % RECURSOS.length), CADENCIA);
     return () => clearInterval(id);
-  }, []);
+  }, [pausado]);
 
   return (
     <div className="sobremi">
@@ -139,6 +143,28 @@ export default function SobreMi() {
           src="/sobre-mi/figura.webp"
           alt="Sergio, de calle, con cascos y gafas de sol"
         />
+
+        {/* El botón asoma al pasar por encima de la foto, y se queda a la vista
+            mientras está parada, que si no no habría manera de volver a
+            arrancarla. */}
+        <button
+          type="button"
+          className={`sobremi-pausa${pausado ? " es-pausado" : ""}`}
+          onClick={() => setPausado((p) => !p)}
+          aria-pressed={pausado}
+          aria-label={pausado ? "Reanudar las figuras" : "Parar las figuras"}
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            {pausado ? (
+              <path d="M9 6.5 L18 12 L9 17.5 Z" fill="currentColor" />
+            ) : (
+              <>
+                <rect x="8.5" y="7" width="2.5" height="10" fill="currentColor" />
+                <rect x="13" y="7" width="2.5" height="10" fill="currentColor" />
+              </>
+            )}
+          </svg>
+        </button>
       </div>
 
       <div className="sobremi-texto">

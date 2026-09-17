@@ -47,6 +47,48 @@
   position: absolute;
   display: block;
 }
+/* El botón de parar, abajo a la derecha de la foto. Aparece al pasar por
+   encima o al llegar con el teclado, y se queda fijo mientras está parada.
+   En pantallas sin ratón no hay «pasar por encima», así que allí va siempre a
+   la vista, algo más tenue. */
+.sobremi-pausa {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s, background 0.2s;
+}
+.sobremi-pausa svg {
+  width: 18px;
+  height: 18px;
+}
+.sobremi-foto:hover .sobremi-pausa,
+.sobremi-pausa:focus-visible,
+.sobremi-pausa.es-pausado {
+  opacity: 1;
+}
+.sobremi-pausa:hover {
+  background: rgba(0, 0, 0, 0.55);
+}
+@media (hover: none) {
+  .sobremi-pausa {
+    opacity: 0.85;
+  }
+}
+
 /* Las dos capas de la foto llenan la casilla. El redondeo va en ellas y no en
    la caja: si lo llevara la caja habría que recortar lo que se sale, y entonces
    las figuras se cortarían en el borde, que es justo lo que no se quiere. */
