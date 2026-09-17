@@ -724,6 +724,13 @@ export default function SkillDrop() {
               </span>
             )}
           </form>
+
+          {/* Y por si alguien prefiere escribir por su cuenta o llamar: los
+              mismos datos que ya están en el CV, no unos nuevos. */}
+          <div className="contact-directo">
+            <a href="mailto:sergioomb96@gmail.com">sergioomb96@gmail.com</a>
+            <a href="tel:+34626173661">+34 626 17 36 61</a>
+          </div>
         </div>
       )}
       </div>

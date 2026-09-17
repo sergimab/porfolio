@@ -163,6 +163,12 @@ export default function SobreMi() {
             en="There's a huge amount left to learn in a craft that keeps reinventing itself, and there I count **AI** as one more tool in the box —not to think for me, but to move faster while I'm still the one deciding where each project goes."
           />
         </p>
+        <p>
+          <LangText
+            es="Y si después de leer todo esto piensas que encajamos, el botón de **«Contacto»** de arriba está esperando a que le des al clic."
+            en="And if after reading all this you think we'd get on, the **“Contact”** button up top is waiting for you to click it."
+          />
+        </p>
       </div>
     </div>
   );
