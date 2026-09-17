@@ -1,0 +1,9 @@
+/* Los apartados de la página de motion.
+   El rótulo de sección no trae aire por arriba —en la página de branding se lo
+   da el apartado anterior, que deja 56 abajo—, así que aquí, donde el primero
+   viene detrás de la entradilla, hay que ponérselo: si no, el título nace
+   pegado al párrafo y parece que le pertenece. Mismo 56 que separa los
+   apartados allí, para que las dos páginas del proyecto respiren igual. */
+.motion-seccion {
+  margin-top: 56px;
+}

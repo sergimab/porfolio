@@ -6,6 +6,7 @@ import DropcapTitle from "@/components/shared/DropcapTitle";
 import CtaBanner from "@/components/shared/CtaBanner";
 import RotuloSeccion from "@/components/shared/RotuloSeccion";
 import VideoPromo from "./VideoPromo";
+import "./MotionLanding.css";
 
 // La pata de animación del proyecto de Yelmo: el vídeo promocional y las demás
 // piezas en movimiento.
@@ -68,7 +69,7 @@ export default function MotionLanding() {
 
         {/* La pieza principal: el promocional de la propuesta. Va con
             controles y con cartel porque suena —ver el componente—. */}
-        <section>
+        <section className="motion-seccion">
           <RotuloSeccion es="Vídeo promocional" en="Promo video" />
           <VideoPromo
             src="/proyectos/yelmo-motion/rebranding-yelmo.mp4"
@@ -79,7 +80,7 @@ export default function MotionLanding() {
 
         {/* La marca tiene página propia, en Branding: allí está el sistema del
             que sale todo lo que aquí se mueve. */}
-        <section>
+        <section className="motion-seccion">
           <h2 className="project-h2">
             <DropcapTitle es="Páginas recomendadas" en="Recommended pages" />
           </h2>

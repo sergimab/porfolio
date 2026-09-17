@@ -15,6 +15,13 @@
      tipografía —como en la lámina de Tipografía, que va entera en la fuente de
      la marca—. */
   font-family: var(--font-geist-sans, system-ui, sans-serif);
+  /* El trazo —el contorno de la pastilla y la línea que sale de su base— va en
+     el color de la categoría de la página, que cada proyecto fija con
+     --hero-hue: rosa en Branding, naranja en Motion. Es la misma receta que la
+     cápsula de volver, con ese 55/45 que se ve igual de bien sobre el papel
+     claro que sobre el oscuro. El texto se queda en el color de lectura: el
+     que da el aire de categoría es el marco, no la palabra. */
+  --rotulo-trazo: hsl(var(--hero-hue, 142) 55% 45%);
   font-size: 15px;
   font-weight: 500;
   letter-spacing: 0.01em;
@@ -25,7 +32,7 @@
      sale el radio, y del radio, cuánto tiene que meterse la línea. */
   padding: 9px 20px;
   line-height: 22px;
-  border: 1px solid currentColor;
+  border: 1px solid var(--rotulo-trazo);
   /* Redondeo al máximo: con un radio mayor que la mitad del alto, el navegador
      lo recorta a esa mitad, que es la pastilla. */
   border-radius: 999px;
@@ -47,7 +54,7 @@
      toca la base, así que la línea nace pegada al borde en vez de arrancar en
      el aire que deja la esquina redonda. Lo que sobra queda tapado. */
   margin-left: -21px;
-  border-bottom: 1px solid currentColor;
+  border-bottom: 1px solid var(--rotulo-trazo);
   background: var(--background);
 }
 
