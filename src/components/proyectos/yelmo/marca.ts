@@ -95,7 +95,10 @@ export const SUBMARCAS: Submarca[] = [
     nombre: "macro xe",
     archivo: "submarca-macro-xe.svg",
     ratio: 1439.4 / 590.4,
-    degradado: ["#DB3262", "#1C1124"],
+    // El rojo va un punto más saturado que el del manual —#DB3262, 70 % de
+    // saturación— porque en pantalla se apagaba contra el papel: mismo tono y
+    // mismo brillo, 85 % de saturación.
+    degradado: ["#ED2254", "#1C1124"],
     tintas: [
       { hex: "#DB3262", rgb: "223 55 101", cmyk: "5 89 38 0" },
       { hex: "#1C1124", rgb: "31 17 36", cmyk: "87 91 50 74" },
