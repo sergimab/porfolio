@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import LangText from "@/components/shared/LangText";
+import DropcapTitle from "@/components/shared/DropcapTitle";
 import "./SobreMi.css";
 
 // La imagen de «Sobre mí»: la foto en dos capas —el fondo y yo recortado— y,
@@ -91,8 +92,9 @@ export default function SobreMi() {
       </div>
 
       <div className="sobremi-texto">
+        {/* Con la capitular script, como los demás títulos del sitio. */}
         <h2 className="sobremi-titulo">
-          <LangText es="Hola, soy Sergio" en="Hi, I'm Sergio" />
+          <DropcapTitle es="Hola, soy Sergio" en="Hi, I'm Sergio" />
         </h2>
         <p>
           <LangText

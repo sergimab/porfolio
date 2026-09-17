@@ -50,13 +50,16 @@
    El alto lo pone cada una desde el componente —se calcula para que todas
    ocupen lo mismo, ver allí—; aquí solo va dónde caen. */
 .sobremi-capa.es-recurso {
+  /* Pegadas al borde de abajo y centradas a lo ancho: así se salen por arriba y
+     por los lados —que es donde se quiere que asomen— y nunca por debajo, donde
+     el desbordamiento se metería en el texto que viene detrás. */
   left: 50%;
-  top: 50%;
+  bottom: 0;
   width: auto;
-  /* Traslación del propio ancho y alto: el punto de referencia es su CENTRO, y
-     así las diez quedan cuadradas entre sí por mucho que cambie el ancho de
-     cada una. */
-  transform: translate(-50%, -50%);
+  /* Traslación solo a lo ancho: el punto de referencia es su centro horizontal,
+     y así las nueve quedan cuadradas entre sí por mucho que cambie el ancho de
+     cada una. A lo alto no se mueve: se apoya en el suelo de la foto. */
+  transform: translateX(-50%);
   /* Sin desvanecido: el cambio es seco, de una figura a la siguiente. Con
      `visibility` y no con `opacity` porque una capa transparente sigue estando
      ahí —y aquí hay diez apiladas—; oculta del todo, el navegador no la pinta. */
@@ -118,6 +121,11 @@
   font-size: 22px;
   font-weight: 600;
   letter-spacing: -0.01em;
+}
+/* La capitular sobresale por arriba de su renglón; sin este aire, la línea de
+   abajo del título se le echaría encima. */
+.sobremi-titulo .dropcap-title {
+  display: inline-block;
 }
 
 /* En pantalla estrecha, uno debajo del otro y la foto a todo el ancho. */
