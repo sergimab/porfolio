@@ -224,6 +224,15 @@
   position: relative;
   overflow: hidden;
 }
+/* En móvil, el documento respira poco: su propio aire son 16 px y el marco de
+   guiones queda justo ahí al lado, así que el texto parece pegado al hilo. Con
+   este respiro de la caja se separan sin tocar el documento, que también se
+   imprime y se abre suelto. */
+@media (max-width: 700px) {
+  .panel-cv {
+    padding: 0 12px;
+  }
+}
 /* El alto del iframe del CV se fija inline (dinámico, según su contenido).
    El ancho va al revés de lo que parece: se hace MÁS ESTRECHO de lo que mide el
    panel y luego se agranda hasta llenarlo. Así el documento se maqueta a su
