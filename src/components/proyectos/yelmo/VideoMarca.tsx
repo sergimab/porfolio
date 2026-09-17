@@ -57,7 +57,12 @@ export default function VideoMarca({
           obs.disconnect();
         }
       },
-      { rootMargin: "100% 0px 100% 0px" }
+      // Arranca cuando la pieza ha entrado de verdad en pantalla, no antes: con
+      // una pantalla de margen, al llegar ya iba por la mitad, y en piezas de
+      // nueve segundos eso es perderse el principio. De que no se haga esperar
+      // se encarga el `preload="auto"`, que trae el archivo mientras se lee lo
+      // de arriba; esto solo decide cuándo empieza a rodar.
+      { rootMargin: "0px 0px -15% 0px" }
     );
     obs.observe(el);
     return () => obs.disconnect();
