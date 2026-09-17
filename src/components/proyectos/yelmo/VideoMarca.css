@@ -1,0 +1,14 @@
+/* El vídeo de apertura: a todo el ancho de la columna y con el fondo del propio
+   vídeo —negro— hasta que carga, para que no dé un salto de color. */
+.ym-video {
+  margin: 8px 0 56px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #000;
+  line-height: 0;
+}
+.ym-video video {
+  display: block;
+  width: 100%;
+  height: auto;
+}

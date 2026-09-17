@@ -4,6 +4,7 @@ import { RUTA, TINTAS, GRADACIONES, SUBMARCAS } from "./marca";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import LaminaGuias from "./LaminaGuias";
+import VideoMarca from "./VideoMarca";
 import Tipografia from "./Tipografia";
 import Aplicaciones from "./Aplicaciones";
 import "./Branding.css";
@@ -33,6 +34,9 @@ const margen = leer("margen-submarca.svg", "ym-marg");
 export default function Branding() {
   return (
     <div className="ym-branding">
+      {/* ── El vídeo de la marca, que abre el proyecto ────────────────────── */}
+      <VideoMarca />
+
       {/* ── El logotipo ──────────────────────────────────────────────────── */}
       <section className="ym-seccion">
         <RotuloSeccion es="Construcción del logotipo" en="Logotype construction" />
