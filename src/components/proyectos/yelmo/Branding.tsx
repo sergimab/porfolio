@@ -5,7 +5,6 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import LaminaGuias from "./LaminaGuias";
 import VideoMarca from "./VideoMarca";
-import VideoVimeo from "./VideoVimeo";
 import Tipografia from "./Tipografia";
 import Aplicaciones from "./Aplicaciones";
 import "./Branding.css";
@@ -36,7 +35,10 @@ export default function Branding() {
   return (
     <div className="ym-branding">
       {/* ── El vídeo de la marca, que abre el proyecto ────────────────────── */}
-      <VideoMarca />
+      <VideoMarca
+        src="/proyectos/yelmo/branding/rebranding-muestra.mp4"
+        alt="La marca de Yelmo construyendose en movimiento"
+      />
 
       {/* ── El logotipo ──────────────────────────────────────────────────── */}
       <section className="ym-seccion">
@@ -119,8 +121,16 @@ export default function Branding() {
         </ul>
       </section>
 
-      {/* ── La animación, alojada en Vimeo ───────────────────────────────── */}
-      <VideoVimeo id="833402674" hash="93f570abe9" titulo="Rebranding de Yelmo Cines — animación" />
+      {/* ── La animación de las piezas, juntas ───────────────────────────── */}
+      {/* Antes esto era el reproductor de Vimeo. Ahora el archivo se sirve
+          desde aquí: son 590 kB —sin la pista de sonido, que venía muda— y se
+          ve al momento, mientras que montar el reproductor de Vimeo eran
+          varias peticiones en cadena que en móvil se hacían esperar. */}
+      <VideoMarca
+        src="/proyectos/yelmo/branding/animacion-conjunta.mp4"
+        proporcion="16 / 9"
+        alt="Las piezas de la marca de Yelmo animadas sobre soportes"
+      />
 
       {/* ── Las aplicaciones ─────────────────────────────────────────────── */}
       <Aplicaciones />

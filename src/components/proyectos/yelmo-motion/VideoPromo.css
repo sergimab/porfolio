@@ -1,0 +1,18 @@
+/* El vídeo promocional, a todo el ancho de la columna y a formato completo.
+   Negro de fondo —y no blanco, como las piezas de branding— porque este vídeo
+   es oscuro de principio a fin: así el marco no destella antes de que cargue
+   el cartel. */
+.ym-promo {
+  margin: 8px 0 56px;
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #000;
+  line-height: 0;
+}
+.ym-promo video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

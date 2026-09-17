@@ -1,10 +1,10 @@
-/* El vídeo de apertura, recortado a una franja panorámica: el original es 16:9
-   y casi todo lo que pasa está en la banda central, así que a formato completo
-   sobraba negro por arriba y por abajo. El recorte se lo lleva por igual de los
-   dos lados —de ahí el `cover` centrado—, no se deforma nada. */
+/* Las piezas de animación de la marca. La proporción la pone cada una desde el
+   componente; la de apertura va recortada a una franja panorámica —el original
+   es 16:9 y casi todo lo que pasa está en la banda central, así que a formato
+   completo sobraba fondo por arriba y por abajo—. El recorte se lo lleva por
+   igual de los dos lados —de ahí el `cover` centrado—, no se deforma nada. */
 .ym-video {
   margin: 8px 0 56px;
-  aspect-ratio: 1920 / 573;
   border-radius: 16px;
   overflow: hidden;
   /* Blanco mientras carga: es el fondo del propio vídeo, así que el hueco y la

@@ -4,6 +4,8 @@ import LangText from "@/components/shared/LangText";
 import ToolIcons from "@/components/shared/ToolIcons";
 import DropcapTitle from "@/components/shared/DropcapTitle";
 import CtaBanner from "@/components/shared/CtaBanner";
+import RotuloSeccion from "@/components/shared/RotuloSeccion";
+import VideoPromo from "./VideoPromo";
 
 // La pata de animación del proyecto de Yelmo: el vídeo promocional y las demás
 // piezas en movimiento.
@@ -63,6 +65,17 @@ export default function MotionLanding() {
           </p>
           <ToolIcons tools={["After Effects", "Illustrator", "Photoshop"]} />
         </div>
+
+        {/* La pieza principal: el promocional de la propuesta. Va con
+            controles y con cartel porque suena —ver el componente—. */}
+        <section>
+          <RotuloSeccion es="Vídeo promocional" en="Promo video" />
+          <VideoPromo
+            src="/proyectos/yelmo-motion/rebranding-yelmo.mp4"
+            poster="/proyectos/yelmo-motion/rebranding-yelmo-poster.webp"
+            titulo="Vídeo promocional del rebranding de Yelmo Cines"
+          />
+        </section>
 
         {/* La marca tiene página propia, en Branding: allí está el sistema del
             que sale todo lo que aquí se mueve. */}
