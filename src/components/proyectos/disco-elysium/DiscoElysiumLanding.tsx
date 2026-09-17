@@ -29,11 +29,11 @@ export default function DiscoElysiumLanding() {
     <main className="project-main">
       {/* --hero-hue en el contenedor: lo heredan el cuadro de cabecera y las
           cajas de medios, para que todo vaya del color de la categoría. */}
-      <div className="project-content-wrap" style={{ ["--hero-hue" as string]: 84 }}>
+      <div className="project-content-wrap" style={{ ["--hero-hue" as string]: 1 }}>
         <div
           className="hover-trail-target project-hero-box"
-          data-trail-hue="84"
-          data-tint-color="#68A50D"
+          data-trail-hue="1"
+          data-tint-color="#DC2626"
         >
           <span className="project-back">
             <BackCapsule category="editorial" />

@@ -10,7 +10,7 @@ const CATS: Record<string, { label: string; hue: number }> = {
   iberdrola:  { label: "Iberdrola",       hue: 142 },
   uiux:       { label: "UI / UX",         hue: 175 },
   "3d":       { label: "3D",              hue: 262 },
-  editorial:  { label: "Editorial",       hue: 84  },
+  editorial:  { label: "Editorial",       hue: 1   },
 };
 
 // `category` da el color y, por defecto, el destino: la parrilla de esa

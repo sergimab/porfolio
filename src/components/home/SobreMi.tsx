@@ -44,7 +44,7 @@ const FIGURAS = [
   { n: 2, w: 114.79, h: 116.62, color: "#16a34a" }, // verde de Iberdrola
   { n: 8, w: 116.56, h: 121.17, color: "#0d9488" }, // turquesa de UI / UX
   { n: 3, w: 126.02, h: 123.43, color: "#7c3aed" }, // violeta de 3D
-  { n: 9, w: 165.0, h: 114.01, color: "#68a50d" }, // verde lima de Editorial
+  { n: 9, w: 165.0, h: 114.01, color: "#dc2626" }, // rojo de Editorial
   { n: 5, w: 115.66, h: 119.52, color: "#d97706" },
   { n: 10, w: 100.64, h: 116.13, color: "#2563eb" },
 ];

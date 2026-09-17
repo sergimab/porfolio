@@ -17,10 +17,12 @@ const skills = [
   { id: "iberdrola",  label: "Iberdrola",         labelEn: "Iberdrola",       color: "rgba(22,163,74,0.12)",  border: "rgba(22,163,74,0.6)",   hue: 142 },
   { id: "uiux",       label: "UI / UX",           labelEn: "UI / UX",         color: "rgba(13,148,136,0.12)", border: "rgba(13,148,136,0.6)",  hue: 175 },
   { id: "3d",         label: "3D",                labelEn: "3D",              color: "rgba(124,58,237,0.12)", border: "rgba(124,58,237,0.6)",  hue: 262 },
-  // El tono 84 es el hueco más ancho que quedaba en la rueda: a 52° del ámbar
-  // de Motion y a 58° del verde de Iberdrola, que son sus vecinos. Con
-  // cualquier otro se pisaba con alguna de las seis que ya había.
-  { id: "editorial",  label: "Editorial",         labelEn: "Editorial",       color: "rgba(104,165,13,0.13)", border: "rgba(104,165,13,0.6)",  hue: 84  },
+  // Rojo, y no el verde lima de antes: aquel tono quedaba a 58° del verde de
+  // Iberdrola y a esa distancia los dos verdes se confundían de un vistazo. El
+  // 1 es el punto más alejado del hueco que queda libre —a 31° del rosa de
+  // Branding por un lado y a 31° del ámbar de Motion por el otro—, así que
+  // reparte a partes iguales lo poco que hay.
+  { id: "editorial",  label: "Editorial",         labelEn: "Editorial",       color: "rgba(220,38,38,0.13)",  border: "rgba(220,38,38,0.6)",   hue: 1   },
 ];
 
 
