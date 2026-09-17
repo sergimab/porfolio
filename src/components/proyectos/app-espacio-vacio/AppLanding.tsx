@@ -45,8 +45,8 @@ export default function AppLanding() {
               <span className="project-meta-key"><LangText es="Asignatura" en="Course" /></span>
               <span>
                 <LangText
-                  es="Proyectos Experimentales · ESD Madrid"
-                  en="Experimental Projects · ESD Madrid"
+                  es="Proyectos · ESD Madrid"
+                  en="Projects · ESD Madrid"
                 />
               </span>
             </div>
