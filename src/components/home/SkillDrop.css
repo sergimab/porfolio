@@ -90,14 +90,11 @@
   background: var(--background);
   border-radius: 16px;
 }
+/* «Sobre mí» va suelto, sin caja: el recuadro de puntos era el marco de un
+   apartado vacío —el «en construcción»— y ahora que hay contenido sobra, que
+   ya se sostiene solo. */
 .panel-about {
-  border: 1px dashed var(--border);
-  padding: 40px 32px;
-}
-@media (max-width: 600px) {
-  .panel-about {
-    padding: 28px 20px;
-  }
+  padding: 8px 0 24px;
 }
 .panel-muted { font-size: 13px; color: var(--muted); }
 .panel-cv {

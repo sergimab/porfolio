@@ -14,10 +14,12 @@
   position: relative;
   /* Las figuras grandes se salen de la foto por los lados; aquí se cortan a ras
      del borde, como si estuvieran pintadas en la pared y la foto las encuadrara.
-     Sin esto se derramarían sobre el papel del panel. */
+     Sin esto se derramarían sobre el papel del panel. El radio es el mismo que
+     el de las cajas de medios del sitio. */
   overflow: hidden;
+  border-radius: 16px;
   flex: 0 0 auto;
-  width: 420px;
+  width: 340px;
   max-width: 100%;
   aspect-ratio: 1 / 1;
 }
