@@ -35,25 +35,21 @@
    anchos muy distintos —una es casi el doble de ancha que otra—, así que
    igualando el alto se ven todas del mismo tamaño. */
 .sobremi-capa.es-recurso {
-  left: 30%;
-  top: 26%;
-  height: 26%;
+  left: 50%;
+  top: 50%;
+  height: 52%;
   width: auto;
-  /* Traslación del propio ancho: así el punto de arriba es su CENTRO, y las
-     diez quedan cuadradas entre sí por mucho que cambie el ancho de cada una. */
+  /* Traslación del propio ancho y alto: el punto de referencia es su CENTRO, y
+     así las diez quedan cuadradas entre sí por mucho que cambie el ancho de
+     cada una. */
   transform: translate(-50%, -50%);
-  opacity: 0;
-  /* Un cruce corto: el salto seco de una a otra parpadea, y una transición
-     larga las mezclaría y se verían dos a la vez. */
-  transition: opacity 0.18s linear;
+  /* Sin desvanecido: el cambio es seco, de una figura a la siguiente. Con
+     `visibility` y no con `opacity` porque una capa transparente sigue estando
+     ahí —y aquí hay diez apiladas—; oculta del todo, el navegador no la pinta. */
+  visibility: hidden;
 }
 .sobremi-capa.es-recurso.es-visible {
-  opacity: 1;
-}
-@media (prefers-reduced-motion: reduce) {
-  .sobremi-capa.es-recurso {
-    transition: none;
-  }
+  visibility: visible;
 }
 
 /* El texto. Ancho de lectura corto: en una línea muy larga el ojo se pierde al
