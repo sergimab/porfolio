@@ -76,8 +76,8 @@ const CADENCIA = 1000;
 // empieza después de comer y la noche cuando se cena; allí la «afternoon» va del
 // mediodía a las seis y luego es «evening».
 function saludo(hora: number) {
-  if (hora >= 6 && hora < 13) return { es: "¡Buenos días!", en: "Good morning!" };
-  if (hora >= 13 && hora < 21) return { es: "¡Buenas tardes!", en: "Good afternoon!" };
+  if (hora >= 6 && hora < 14) return { es: "¡Buenos días!", en: "Good morning!" };
+  if (hora >= 14 && hora < 21) return { es: "¡Buenas tardes!", en: "Good afternoon!" };
   return { es: "¡Buenas noches!", en: "Good evening!" };
 }
 

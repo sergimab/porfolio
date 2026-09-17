@@ -132,15 +132,19 @@
 .sobremi-texto p:last-child {
   margin-bottom: 0;
 }
+/* El título solo pone el sitio: el tamaño, el peso y el color los lleva el
+   propio componente de la capitular, igual que en «Hablemos» del panel de
+   contacto, donde va suelto y sin envolver. Al meterlo en un h2 heredaba el
+   peso de los titulares —600— y la letra script salía más gorda que la de
+   allí: dos capitulares con la misma forma y distinto trazo. */
 .sobremi-titulo {
   /* El renglón reservado desde el principio: el saludo llega un instante
      después —depende del reloj del visitante— y sin esto el texto daría un
      salto al aparecer. */
-  min-height: 1.3em;
-  margin: 0 0 16px;
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  min-height: 40px;
+  margin: 0 0 24px;
+  font-weight: 400;
+  letter-spacing: normal;
 }
 /* La capitular sobresale por arriba de su renglón; sin este aire, la línea de
    abajo del título se le echaría encima. */
