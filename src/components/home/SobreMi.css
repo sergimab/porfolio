@@ -68,11 +68,18 @@
      centradas caben de sobra a lo alto y solo asoman por los lados. */
   left: 50%;
   top: 50%;
+  /* El ancho sale de la proporción del dibujo, que la pone cada figura. */
   width: auto;
-  /* Sin el tope de ancho que llevan las imágenes del sitio: con el alto puesto
-     y el ancho topado, la figura no se recortaba, se APLASTABA —las anchas
-     salían estrechadas hasta caber—. Aquí tienen que poder salirse. */
   max-width: none;
+  /* El archivo recorta y el color lo pone la página: así una misma figura puede
+     salir de cualquier color sin duplicar el archivo. `contain` para que el
+     recorte se ajuste a la casilla sin deformarse. */
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
   /* Traslación del propio ancho y alto: el punto de referencia es su CENTRO, y
      así las nueve quedan cuadradas entre sí por mucho que cambien sus medidas. */
   transform: translate(-50%, -50%);

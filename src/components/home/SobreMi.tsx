@@ -28,16 +28,25 @@ import "./SobreMi.css";
 // La lista va escrita a mano y no contando del 1 al 10: falta la 4 —la azul y
 // amarilla, descartada— y no tendría sentido renumerar el resto de archivos
 // cada vez que caiga una.
+//
+// El ORDEN también es a mano, y es el de la rueda. La 6, la 7, la 8 y la 9 son
+// elipses parecidas entre sí: seguidas se veían como la misma figura moviéndose
+// un poco, así que van intercaladas entre las demás, nunca dos juntas.
+//
+// Y el color lo pone la página, no el archivo: son los siete de las cápsulas de
+// categoría, repartidos de modo que dos seguidas nunca coincidan. Cada SVG entra
+// como recorte —una máscara—, así que el dibujo pone la forma y aquí se pinta
+// del color que toque, sea cual sea el que traiga dentro.
 const FIGURAS = [
-  { n: 1, w: 128.29, h: 121.34 },
-  { n: 2, w: 114.79, h: 116.62 },
-  { n: 3, w: 126.02, h: 123.43 },
-  { n: 5, w: 115.66, h: 119.52 },
-  { n: 6, w: 259.16, h: 122.53 },
-  { n: 7, w: 215.59, h: 126.63 },
-  { n: 8, w: 116.56, h: 121.17 },
-  { n: 9, w: 165.0, h: 114.01 },
-  { n: 10, w: 100.64, h: 116.13 },
+  { n: 6, w: 259.16, h: 122.53, color: "#d97706" }, // ámbar de Motion Graphics
+  { n: 1, w: 128.29, h: 121.34, color: "#db2777" }, // rosa de Branding
+  { n: 7, w: 215.59, h: 126.63, color: "#2563eb" }, // azul de Fotografía
+  { n: 2, w: 114.79, h: 116.62, color: "#16a34a" }, // verde de Iberdrola
+  { n: 8, w: 116.56, h: 121.17, color: "#0d9488" }, // turquesa de UI / UX
+  { n: 3, w: 126.02, h: 123.43, color: "#7c3aed" }, // violeta de 3D
+  { n: 9, w: 165.0, h: 114.01, color: "#68a50d" }, // verde lima de Editorial
+  { n: 5, w: 115.66, h: 119.52, color: "#d97706" },
+  { n: 10, w: 100.64, h: 116.13, color: "#2563eb" },
 ];
 
 // Cuánto ocupan, en porcentaje del lado de la foto. Es la medida de una figura
@@ -62,8 +71,11 @@ const RECURSOS = FIGURAS.map((f) => {
   const porArea = (TAMANO * Math.sqrt(f.h / f.w)) / media;
   const porAncho = (ANCHO_MAXIMO * f.h) / f.w;
   return {
-    src: `/sobre-mi/recursos/recurso-${f.n}.svg`,
+    id: f.n,
     alto: `${Math.min(porArea, porAncho).toFixed(1)}%`,
+    proporcion: `${f.w} / ${f.h}`,
+    color: f.color,
+    recorte: `url(/sobre-mi/recursos/recurso-${f.n}.svg)`,
   };
 });
 
@@ -108,13 +120,16 @@ export default function SobreMi() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img className="sobremi-capa es-fondo" src="/sobre-mi/fondo.webp" alt="" />
         {RECURSOS.map((r, i) => (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            key={r.src}
+          <span
+            key={r.id}
             className={`sobremi-capa es-recurso${i === actual ? " es-visible" : ""}`}
-            src={r.src}
-            style={{ height: r.alto }}
-            alt=""
+            style={{
+              height: r.alto,
+              aspectRatio: r.proporcion,
+              background: r.color,
+              WebkitMaskImage: r.recorte,
+              maskImage: r.recorte,
+            }}
             aria-hidden="true"
           />
         ))}
