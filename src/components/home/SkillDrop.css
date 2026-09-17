@@ -224,8 +224,18 @@
   position: relative;
   overflow: hidden;
 }
-/* El alto del iframe del CV se fija inline (dinámico, según su contenido) */
-.panel-cv iframe { width: 100%; border: none; display: block; }
+/* El alto del iframe del CV se fija inline (dinámico, según su contenido).
+   El ancho va al revés de lo que parece: se hace MÁS ESTRECHO de lo que mide el
+   panel y luego se agranda hasta llenarlo. Así el documento se maqueta a su
+   ancho natural —780 px— y lo que crece es todo por igual, letra incluida, en
+   vez de estirarse la caja y quedarse el texto pequeño. */
+.panel-cv iframe {
+  width: calc(100% / var(--cv-zoom, 1));
+  border: none;
+  display: block;
+  transform: scale(var(--cv-zoom, 1));
+  transform-origin: 0 0;
+}
 .panel-contacto {
   border: 1px solid var(--foreground);
   padding: 24px;

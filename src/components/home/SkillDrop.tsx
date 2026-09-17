@@ -75,6 +75,11 @@ export default function SkillDrop() {
   const [modoLista, setModoLista] = useState(false);
   const cvIframeRef = useRef<HTMLIFrameElement>(null);
   const [cvHeight, setCvHeight] = useState(900);
+  // El CV se ve agrandado en pantallas anchas. Su maqueta mide 780 px y el
+  // panel casi 1000, así que sobraban cien píxeles de aire a cada lado y la
+  // letra se quedaba pequeña de más. En vez de tocar el documento —que también
+  // se imprime y se abre suelto—, se amplía desde fuera.
+  const [cvZoom, setCvZoom] = useState(1);
   const [contactForm, setContactForm] = useState({ name: "", email: "", message: "" });
   const [contactStatus, setContactStatus] = useState<"idle"|"sending"|"success"|"error">("idle");
 
@@ -142,10 +147,28 @@ export default function SkillDrop() {
     return () => { cancelled = true; };
   }, []);
 
-  const handleCvLoad = useCallback(() => {
-    const doc = cvIframeRef.current?.contentWindow?.document;
-    if (doc) setCvHeight(doc.documentElement.scrollHeight);
+  // El ancho de la maqueta del CV: 780 de página y 20 de aire a cada lado. Es
+  // lo que hay que llevar de un borde al otro del panel.
+  const CV_ANCHO = 820;
+
+  const medirCv = useCallback(() => {
+    const el = cvIframeRef.current;
+    const doc = el?.contentWindow?.document;
+    if (!el || !doc) return;
+    const panel = el.parentElement?.clientWidth ?? 0;
+    // Solo se agranda, nunca se encoge: por debajo de su ancho natural la
+    // maqueta ya se adapta sola y forzarla sería empeorarla. Y con tope, que
+    // pasado cierto punto la letra se vuelve un cartel.
+    const z = panel > CV_ANCHO ? Math.min(panel / CV_ANCHO, 1.3) : 1;
+    setCvZoom(z);
+    setCvHeight(doc.documentElement.scrollHeight);
   }, []);
+
+  // Al cambiar el ancho de la ventana, el aumento cambia con él.
+  useEffect(() => {
+    window.addEventListener("resize", medirCv);
+    return () => window.removeEventListener("resize", medirCv);
+  }, [medirCv]);
 
 
   useEffect(() => {
@@ -741,7 +764,12 @@ export default function SkillDrop() {
       )}
 
       {selectedPanel === "cv" && (
-        <div className="home-panel panel-cv">
+        <div
+          className="home-panel panel-cv"
+          /* La ampliación no ocupa sitio en la maqueta —es un dibujado, no una
+             medida—, así que el alto de la caja hay que ponerlo ya crecido. */
+          style={{ height: `${Math.round(cvHeight * cvZoom)}px`, ["--cv-zoom" as string]: cvZoom }}
+        >
           {/* El mismo marco de guiones en marcha que «Sobre mí». */}
           <MarcoHormigas />
           <iframe
@@ -750,7 +778,7 @@ export default function SkillDrop() {
             src={`${lang === "en" ? "/cv-en/index.html" : "/cv/index.html"}${theme === "dark" ? "?theme=dark" : ""}`}
             title="CV"
             scrolling="no"
-            onLoad={handleCvLoad}
+            onLoad={medirCv}
             style={{ height:`${cvHeight}px` }}
           />
         </div>
