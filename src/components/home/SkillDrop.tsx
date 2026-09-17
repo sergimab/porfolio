@@ -155,7 +155,13 @@ export default function SkillDrop() {
     const el = cvIframeRef.current;
     const doc = el?.contentWindow?.document;
     if (!el || !doc) return;
-    const panel = el.parentElement?.clientWidth ?? 0;
+    // El hueco de verdad, descontando el respiro de la caja: `clientWidth` lo
+    // incluye, y con él la hoja se ampliaba hasta comerse ese margen.
+    const caja = el.parentElement;
+    if (!caja) return;
+    const cs = getComputedStyle(caja);
+    const panel =
+      caja.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
     // Solo se agranda, nunca se encoge: por debajo de su ancho natural la
     // maqueta ya se adapta sola y forzarla sería empeorarla. Y con tope, que
     // pasado cierto punto la letra se vuelve un cartel.

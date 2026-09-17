@@ -224,10 +224,14 @@
   position: relative;
   overflow: hidden;
 }
-/* En móvil, el documento respira poco: su propio aire son 16 px y el marco de
-   guiones queda justo ahí al lado, así que el texto parece pegado al hilo. Con
-   este respiro de la caja se separan sin tocar el documento, que también se
-   imprime y se abre suelto. */
+/* El documento del CV respira poco por su cuenta —16 px de aire propio— y el
+   marco de guiones queda justo ahí al lado, así que el texto parecía pegado al
+   hilo. Este respiro lo pone la caja, sin tocar el documento, que también se
+   imprime y se abre suelto. En pantalla ancha se nota más porque la hoja se ve
+   ampliada, de ahí que sea mayor. */
+.panel-cv {
+  padding: 0 20px;
+}
 @media (max-width: 700px) {
   .panel-cv {
     padding: 0 12px;
