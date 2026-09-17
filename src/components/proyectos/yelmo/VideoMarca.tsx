@@ -18,12 +18,19 @@ import "./VideoMarca.css";
 export default function VideoMarca({
   src,
   proporcion = "1920 / 573",
+  fondo = "#fff",
   alt,
 }: {
   src: string;
   /** Proporción de la caja. La de por defecto es la franja recortada del
       vídeo de apertura; una pieza a formato completo pide "16 / 9". */
   proporcion?: string;
+  /**
+   * Color del hueco mientras carga. Por defecto blanco, que es el fondo de las
+   * piezas de la construcción de la marca; una pieza oscura pide el suyo, para
+   * que el marco no destelle antes de aparecer el primer fotograma.
+   */
+  fondo?: string;
   /** Qué se ve, para quien no pueda verlo. */
   alt?: string;
 }) {
@@ -49,7 +56,7 @@ export default function VideoMarca({
   }, []);
 
   return (
-    <div className="ym-video" style={{ aspectRatio: proporcion }}>
+    <div className="ym-video" style={{ aspectRatio: proporcion, background: fondo }}>
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
       <video
         ref={video}

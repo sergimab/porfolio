@@ -1,0 +1,17 @@
+/* El reproductor de Vimeo, a todo el ancho de la columna.
+   El iframe viene con un tamaño fijo en píxeles; aquí manda la caja, con la
+   proporción del vídeo, y el iframe la llena. */
+.ym-vimeo {
+  margin: 8px 0 56px;
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
+  overflow: hidden;
+  /* Negro mientras carga el reproductor, para que no dé un salto de color. */
+  background: #000;
+}
+.ym-vimeo iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}

@@ -7,3 +7,22 @@
 .motion-seccion {
   margin-top: 56px;
 }
+
+/* Las cajas de vídeo traen su propio aire por abajo, pensado para ir sueltas
+   dentro de un apartado de la página de branding. Aquí cada una ES el apartado,
+   y ese margen se sumaba al de arriba del siguiente: 112 px entre piezas, el
+   doble de lo que separa nada más en el sitio. La separación la lleva el
+   apartado y punto. */
+.motion-seccion .ym-video,
+.motion-seccion .ym-vimeo,
+.motion-seccion .ym-promo {
+  margin-bottom: 0;
+}
+
+/* El cartel vertical, a ancho de móvil y centrado: es la medida en la que una
+   pieza 9:16 cabe entera en pantalla sin obligar a hacer scroll dentro del
+   propio vídeo. */
+.motion-vertical {
+  max-width: 340px;
+  margin-inline: auto;
+}
