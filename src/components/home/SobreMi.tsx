@@ -38,19 +38,23 @@ import "./SobreMi.css";
 // como recorte —una máscara—, así que el dibujo pone la forma y aquí se pinta
 // del color que toque, sea cual sea el que traiga dentro.
 const FIGURAS: { n: number; w: number; h: number; color: string; giro?: number }[] = [
-  // El aro va algo torcido a la izquierda: recto se leía como una pieza puesta
-  // a plomo, y estas figuras son manchas, no elementos de la retícula.
+  // Los giros. No los llevan todas: solo las que en su archivo salen a plomo
+  // —bucles con el renglón horizontal, pétalos en cruz, rayos verticales—, que
+  // son las que se leen como piezas colocadas en la retícula en vez de como
+  // manchas. Las redondas de verdad (la 1 y la 3) se quedan rectas: girar algo
+  // que es casi un círculo no se ve, y sería ensuciar el código para nada.
+  //
+  // Los dos rizos, el 6 y el 7, van torcidos en sentidos contrarios: seguidos en
+  // la rueda, con la misma inclinación parecerían la misma figura repetida.
   { n: 6, w: 259.16, h: 122.53, color: "#d97706", giro: -8 }, // ámbar de Motion Graphics
   { n: 1, w: 128.29, h: 121.34, color: "#db2777" }, // rosa de Branding
-  { n: 7, w: 215.59, h: 126.63, color: "#2563eb" }, // azul de Fotografía
-  { n: 2, w: 114.79, h: 116.62, color: "#16a34a" }, // verde de Iberdrola
-  { n: 8, w: 116.56, h: 121.17, color: "#0d9488" }, // turquesa de UI / UX
+  { n: 7, w: 215.59, h: 126.63, color: "#2563eb", giro: 7 }, // azul de Fotografía
+  { n: 2, w: 114.79, h: 116.62, color: "#16a34a", giro: -14 }, // verde de Iberdrola
+  { n: 8, w: 116.56, h: 121.17, color: "#0d9488", giro: 16 }, // turquesa de UI / UX
   { n: 3, w: 126.02, h: 123.43, color: "#7c3aed" }, // violeta de 3D
-  // El octógono va girado: de frente se leía como una caja recta y competía con
-  // el marco de la foto; unos grados a la derecha y pasa a ser una mancha.
   { n: 9, w: 165.0, h: 114.01, color: "#dc2626", giro: 10 }, // rojo de Editorial
-  { n: 5, w: 115.66, h: 119.52, color: "#d97706" },
-  { n: 10, w: 100.64, h: 116.13, color: "#2563eb" },
+  { n: 5, w: 115.66, h: 119.52, color: "#d97706", giro: -12 },
+  { n: 10, w: 100.64, h: 116.13, color: "#2563eb", giro: 9 },
 ];
 
 // Cuánto ocupan, en porcentaje del lado de la foto. Es la medida de una figura
