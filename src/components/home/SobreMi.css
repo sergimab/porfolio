@@ -145,9 +145,7 @@
 .sobremi-scroll {
   height: 100%;
   box-sizing: border-box;
-  /* Sin relleno propio: el aire lo pone la caja de fuera. Solo queda el de la
-     derecha, para que el texto no vaya pegado a la barra. */
-  padding: 0 4px 0 0;
+  padding: 16px;
   border-radius: inherit;
   /* Lo que no cabe se lee bajando, con la barra siempre a la vista para que se
      note que hay más. */
@@ -156,18 +154,45 @@
 /* La barra, dibujada y con sitio propio. Sin esto, macOS la esconde hasta que
    alguien rueda —y entonces no hay manera de saber que abajo hay más texto—.
    Va sin `scrollbar-width`: esa propiedad devuelve la barra fina del sistema y
-   anula estos estilos, así que las dos juntas no valen. */
+   anula estos estilos, así que las dos juntas no valen.
+
+   Y va de colores: los siete de las cápsulas de categoría, en su orden, dando
+   vueltas. El color no se le pone a la barra directamente —a las piezas de la
+   barra no se les puede animar nada—, sino a una variable de la caja, que la
+   barra hereda. Declararla con `@property` es lo que hace que el navegador
+   sepa que es un COLOR y pase de uno a otro degradando; sin eso daría saltos
+   secos. */
+@property --sm-barra {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #d97706;
+}
+.sobremi-scroll {
+  --sm-barra: #d97706;
+  animation: sobremi-barra 21s linear infinite;
+}
+@keyframes sobremi-barra {
+  0%   { --sm-barra: #d97706; } /* Motion Graphics */
+  14%  { --sm-barra: #db2777; } /* Branding */
+  28%  { --sm-barra: #2563eb; } /* Fotografía */
+  43%  { --sm-barra: #16a34a; } /* Iberdrola */
+  57%  { --sm-barra: #0d9488; } /* UI / UX */
+  71%  { --sm-barra: #7c3aed; } /* 3D */
+  86%  { --sm-barra: #68a50d; } /* Editorial */
+  100% { --sm-barra: #d97706; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sobremi-scroll {
+    animation: none;
+  }
+}
 .sobremi-scroll::-webkit-scrollbar {
   width: 10px;
 }
 .sobremi-scroll::-webkit-scrollbar-thumb {
   border: 3px solid transparent;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--foreground) 34%, transparent);
-  background-clip: content-box;
-}
-.sobremi-scroll::-webkit-scrollbar-thumb:hover {
-  background: color-mix(in srgb, var(--foreground) 55%, transparent);
+  background: var(--sm-barra);
   background-clip: content-box;
 }
 .sobremi-scroll::-webkit-scrollbar-track {
