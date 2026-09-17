@@ -127,6 +127,18 @@ export default function SobreMi() {
       </div>
 
       <div className="sobremi-texto">
+        {/* El marco, dibujado y no como borde del CSS: un borde discontinuo no
+            se puede poner en marcha —los guiones son del navegador y no hay
+            manera de correrlos—, mientras que el trazo de un SVG sí, moviendo
+            su desfase. Va detrás del texto y no recibe pulsaciones. */}
+        <svg className="sobremi-marco" aria-hidden="true" focusable="false">
+          <rect x="0.5" y="0.5" rx="15.5" ry="15.5" />
+        </svg>
+
+        {/* El texto va en su propia caja, por dentro del marco: es la que rueda,
+            y así la barra de desplazamiento queda DENTRO del recuadro en vez de
+            montarse sobre el hilo. */}
+        <div className="sobremi-scroll">
         {/* Con la capitular script, como los demás títulos del sitio. */}
         <h2 className="sobremi-titulo">
           {hora === null ? null : (
@@ -169,6 +181,7 @@ export default function SobreMi() {
             en="And if after reading all this you think we'd get on, the **“Contact”** button up top is waiting for you to click it."
           />
         </p>
+        </div>
       </div>
     </div>
   );
