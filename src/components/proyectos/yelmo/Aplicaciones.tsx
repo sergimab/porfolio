@@ -29,9 +29,16 @@ export default function Aplicaciones() {
           // eslint-disable-next-line @next/next/no-img-element
           <img key={p.archivo} className={`ym-app ${p.clase}`} src={`${RUTA}/${p.archivo}`} alt={p.alt} />
         ))}
-        {/* Los cuatro copos sueltos, que en el archivo van por delante de todo. */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="ym-copos" src={`${RUTA}/copos.svg`} alt="" aria-hidden="true" />
+        {/* Los cuatro copos sueltos, que en el archivo van por delante de todo.
+            Entran como recorte —máscara— y no como imagen: así el color lo pone
+            la página y pueden cambiar con el tema sin duplicar el archivo. */}
+        <span
+          className="ym-copos"
+          style={{
+            ["--ym-copos" as string]: `url(${RUTA}/copos.svg)`,
+          }}
+          aria-hidden="true"
+        />
       </div>
     </section>
   );

@@ -53,6 +53,22 @@
   height: auto;
 }
 
+/* Los copos, del color que pida el papel: morados sobre el claro y blancos
+   sobre el oscuro. El archivo solo aporta la forma —entra como máscara—, así
+   que basta con cambiar el fondo; no hay dos versiones del dibujo. */
+.ym-copos {
+  /* La proporción del lienzo de la composición, que antes traía la propia
+     imagen: sin ella, un elemento vacío no tendría alto. */
+  aspect-ratio: 1920 / 2958.5;
+  height: auto;
+  background: #5a35a8;
+  -webkit-mask: var(--ym-copos) center / contain no-repeat;
+  mask: var(--ym-copos) center / contain no-repeat;
+}
+[data-theme="dark"] .ym-copos {
+  background: #fff;
+}
+
 /* Las cinco piezas, en el orden y el sitio del archivo. */
 .es-fachada {
   left: -7.18%;
