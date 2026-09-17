@@ -19,8 +19,8 @@ import "./MotionLanding.css";
 // categoría: la marca en Branding, esto en Motion. Las dos se enlazan con la
 // franja del final.
 //
-// El promocional abre, y detrás van las piezas cortas: el cartel del menú, y el
-// cartel vertical con la intro de tráileres al lado. La estructura es la misma
+// El promocional abre, y detrás van las piezas cortas: el cartel del menú, la
+// intro de tráileres y el cartel vertical de mupi. La estructura es la misma
 // que la de la página de branding, así que se le pueden ir añadiendo más sin
 // rehacer nada.
 export default function MotionLanding() {
@@ -96,35 +96,30 @@ export default function MotionLanding() {
           />
         </section>
 
-        {/* El cartel vertical y la intro, uno al lado del otro y de la misma
-            medida. Van con ancho corto: a 9:16 y a todo el ancho de la columna,
-            el cartel mediría más de metro y medio de alto y no cabría de una
-            vez en ninguna pantalla. Así se ve entero, que es justo lo que pide
-            un mupi. */}
+
+        {/* La intro va en horizontal, que es como está rodada. Se probó a
+            encajarla a lo alto, al lado del cartel: de un 16:9 metido en un
+            9:16 solo se salva el 32 % del ancho, y en el segundo 3 el logotipo
+            de yelmo cruza el encuadre entero, así que quedaba partido. */}
         <section className="motion-seccion">
-          <RotuloSeccion es="Cartel vertical e intro" en="Vertical poster and intro" />
-          <div className="motion-par">
-            <div className="motion-vertical">
-              <VideoMarca
-                src="/proyectos/yelmo-motion/cartel-vertical.mp4"
-                proporcion="9 / 16"
-                fondo="#278FB2"
-                alt="Cartel vertical animado de La Sirenita, para mupi o historia de Instagram"
-              />
-            </div>
-            {/* La intro de tráileres, en la misma caja que el cartel aunque el
-                vídeo sea apaisado: se ve entera y quedan franjas negras arriba
-                y abajo. Recortarla a vertical se llevaría dos tercios del
-                encuadre, y estirarla, ni hablar. */}
-            <div className="motion-vertical">
-              <VideoMarca
-                src="/proyectos/yelmo-motion/intro-traileres.mp4"
-                proporcion="9 / 16"
-                encaje="contain"
-                fondo="#000"
-                alt="Intro animada que precede a los tráileres en sala"
-              />
-            </div>
+          <RotuloSeccion es="Intro de tráileres" en="Trailer intro" />
+          <VideoMarca
+            src="/proyectos/yelmo-motion/intro-traileres.mp4"
+            proporcion="16 / 9"
+            fondo="#000"
+            alt="Intro animada que precede a los tráileres en sala"
+          />
+        </section>
+
+        <section className="motion-seccion">
+          <RotuloSeccion es="Cartel vertical" en="Vertical poster" />
+          <div className="motion-vertical">
+            <VideoMarca
+              src="/proyectos/yelmo-motion/cartel-vertical.mp4"
+              proporcion="9 / 16"
+              fondo="#278FB2"
+              alt="Cartel vertical animado de La Sirenita, para mupi o historia de Instagram"
+            />
           </div>
         </section>
 

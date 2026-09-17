@@ -14,30 +14,8 @@
    doble de lo que separa nada más en el sitio. La separación la lleva el
    apartado y punto. */
 .motion-seccion .ym-video,
-.motion-seccion .ym-vimeo,
 .motion-seccion .ym-promo {
   margin-bottom: 0;
-}
-
-/* Las dos piezas verticales, una al lado de la otra y de la misma medida: el
-   ancho lo reparte el `flex: 1` con el tope de 340 que lleva cada caja, así que
-   ninguna manda sobre la otra. En pantalla estrecha no caben dos columnas de
-   340, así que se apilan. */
-.motion-par {
-  display: flex;
-  justify-content: center;
-  gap: 24px;
-}
-.motion-par > * {
-  flex: 1 1 0;
-}
-@media (max-width: 700px) {
-  .motion-par {
-    flex-wrap: wrap;
-  }
-  .motion-par > * {
-    flex: 1 1 100%;
-  }
 }
 
 /* El cartel vertical, a ancho de móvil y centrado: es la medida en la que una
