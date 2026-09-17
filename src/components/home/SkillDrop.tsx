@@ -196,6 +196,11 @@ export default function SkillDrop() {
       Bodies.rectangle(boxW+25,   boxH/2,  50,      boxH*2,  wo),
       Bodies.rectangle(boxW/2,    -25,     boxW*2,  50,      wo),
       Bodies.rectangle(boxW/2,    boxH+25, boxW*2,  50,      wo),
+      // El mordisco del botón de cambio, arriba a la izquierda: es un muro más,
+      // para que ninguna cápsula pueda esconderse detrás de él. Mide lo que el
+      // botón cerrado; cuando se abre al pasar por encima es cosa de un
+      // instante y ahí sí puede taparse algo.
+      Bodies.rectangle(24,        23,      48,      46,      wo),
     ]);
 
     const activePills = skills.filter(s => activeIds.includes(s.id));

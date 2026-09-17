@@ -54,9 +54,11 @@
   z-index: 4;
   display: flex;
   align-items: center;
-  gap: 10px;
   height: 46px;
-  padding: 0 14px;
+  /* Sin `gap`: el hueco entre el icono y el nombre lo pone el propio nombre al
+     abrirse. Con `gap` fijo, el botón cerrado arrastraba ese espacio a la
+     derecha de las flechas y quedaba descentrado. */
+  padding: 0 13px;
   /* Recortado en la esquina: arriba a la izquierda sigue el redondeo de la caja
      y por dentro dobla al revés, como si se le hubiera dado un mordisco al
      papel. El hilo por sus dos lados de dentro es lo que hace que se lea como
@@ -73,16 +75,17 @@
   transition: background 0.2s, color 0.2s;
 }
 .skill-cambio svg {
-  width: 16px;
-  height: 16px;
+  width: 21px;
+  height: 21px;
   flex: 0 0 auto;
 }
 .skill-cambio-texto {
   max-width: 0;
+  margin-left: 0;
   overflow: hidden;
   white-space: nowrap;
   opacity: 0;
-  transition: max-width 0.25s, opacity 0.2s;
+  transition: max-width 0.25s, margin-left 0.25s, opacity 0.2s;
 }
 .skill-cambio:hover,
 .skill-cambio:focus-visible {
@@ -92,6 +95,7 @@
 .skill-cambio:hover .skill-cambio-texto,
 .skill-cambio:focus-visible .skill-cambio-texto {
   max-width: 120px;
+  margin-left: 9px;
   opacity: 1;
 }
 
