@@ -155,8 +155,10 @@
   mask-position: center;
   mask-size: contain;
   /* Traslación del propio ancho y alto: el punto de referencia es su CENTRO, y
-     así las nueve quedan cuadradas entre sí por mucho que cambien sus medidas. */
-  transform: translate(-50%, -50%);
+     así las nueve quedan cuadradas entre sí por mucho que cambien sus medidas.
+     El giro va después, para que sea sobre su propio centro y no arrastre la
+     figura fuera de sitio; lo pone cada una y por defecto es cero. */
+  transform: translate(-50%, -50%) rotate(var(--sm-giro, 0deg));
   /* Sin desvanecido: el cambio es seco, de una figura a la siguiente. Con
      `visibility` y no con `opacity` porque una capa transparente sigue estando
      ahí —y aquí hay diez apiladas—; oculta del todo, el navegador no la pinta. */

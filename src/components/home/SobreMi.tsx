@@ -37,14 +37,16 @@ import "./SobreMi.css";
 // categoría, repartidos de modo que dos seguidas nunca coincidan. Cada SVG entra
 // como recorte —una máscara—, así que el dibujo pone la forma y aquí se pinta
 // del color que toque, sea cual sea el que traiga dentro.
-const FIGURAS = [
+const FIGURAS: { n: number; w: number; h: number; color: string; giro?: number }[] = [
   { n: 6, w: 259.16, h: 122.53, color: "#d97706" }, // ámbar de Motion Graphics
   { n: 1, w: 128.29, h: 121.34, color: "#db2777" }, // rosa de Branding
   { n: 7, w: 215.59, h: 126.63, color: "#2563eb" }, // azul de Fotografía
   { n: 2, w: 114.79, h: 116.62, color: "#16a34a" }, // verde de Iberdrola
   { n: 8, w: 116.56, h: 121.17, color: "#0d9488" }, // turquesa de UI / UX
   { n: 3, w: 126.02, h: 123.43, color: "#7c3aed" }, // violeta de 3D
-  { n: 9, w: 165.0, h: 114.01, color: "#dc2626" }, // rojo de Editorial
+  // El octógono va girado: de frente se leía como una caja recta y competía con
+  // el marco de la foto; unos grados a la derecha y pasa a ser una mancha.
+  { n: 9, w: 165.0, h: 114.01, color: "#dc2626", giro: 10 }, // rojo de Editorial
   { n: 5, w: 115.66, h: 119.52, color: "#d97706" },
   { n: 10, w: 100.64, h: 116.13, color: "#2563eb" },
 ];
@@ -75,6 +77,7 @@ const RECURSOS = FIGURAS.map((f) => {
     alto: `${Math.min(porArea, porAncho).toFixed(1)}%`,
     proporcion: `${f.w} / ${f.h}`,
     color: f.color,
+    giro: `${f.giro ?? 0}deg`,
     recorte: `url(/sobre-mi/recursos/recurso-${f.n}.svg)`,
   };
 });
@@ -135,6 +138,7 @@ export default function SobreMi() {
               height: r.alto,
               aspectRatio: r.proporcion,
               background: r.color,
+              ["--sm-giro" as string]: r.giro,
               WebkitMaskImage: r.recorte,
               maskImage: r.recorte,
             }}
