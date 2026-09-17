@@ -1,10 +1,21 @@
 /* «Sobre mí»: la imagen a la izquierda y el texto a la derecha.
-   La foto manda en el reparto —es cuadrada y tiene un tamaño natural—, y el
-   texto ocupa lo que sobra. */
+/* Las dos piezas se reparten la fila a la mitad, con la misma separación que
+   las dos cajas de arriba —la de las cápsulas y la de los apartados—: 24 px.
+   Así las cuatro cajas de la página caen en la misma retícula y sus bordes se
+   alinean en vertical. */
 .sobremi {
   display: flex;
-  align-items: center;
-  gap: 48px;
+  align-items: stretch;
+  gap: 24px;
+}
+.sobremi > * {
+  /* La mitad justa, contando el hueco. No vale `flex: 1` con base cero: con el
+     relleno contado dentro del ancho, esa base no puede bajar de lo que miden
+     relleno e hilo, así que la caja del texto salía 66 px más ancha que la foto
+     —508 contra 442— por mucho que las dos crecieran lo mismo. Diciendo la
+     medida, no hay reparto que valga. */
+  flex: 0 0 calc((100% - 24px) / 2);
+  box-sizing: border-box;
 }
 
 /* La caja de la foto. Cuadrada, que es como vienen las dos capas, y con todo
@@ -18,14 +29,12 @@
      el de las cajas de medios del sitio. */
   overflow: hidden;
   border-radius: 16px;
-  flex: 0 0 auto;
-  /* 400: es lo que mide de alto la caja del texto —tres párrafos con su título y
-     su aire—, así que los dos bloques acaban a la misma altura y la fila se lee
-     como una pareja en vez de como una foto con una nota al lado. Si el texto
-     crece o mengua mucho, este número se mueve con él. */
-  width: 400px;
-  max-width: 100%;
   aspect-ratio: 1 / 1;
+  /* Sin estirarse a lo alto: estirada, su alto lo pondría la fila y la
+     proporción cuadrada le devolvería ESE alto como ancho, saltándose el
+     reparto a la mitad —salía 442 en vez de 475—. Mandando el ancho, el alto
+     sale solo y la fila entera se ajusta a ella. */
+  align-self: flex-start;
 }
 .sobremi-capa {
   position: absolute;
@@ -65,7 +74,6 @@
    Ancho de lectura corto: en una línea muy larga el ojo se pierde al volver al
    principio del renglón. */
 .sobremi-texto {
-  max-width: 44ch;
   padding: 32px;
   border: 1px dashed var(--border);
   border-radius: 16px;
@@ -92,11 +100,15 @@
     align-items: stretch;
     gap: 28px;
   }
-  .sobremi-foto {
+  /* En columna, esa medida de «la mitad» pasaría a ser un ALTO —flex-basis
+     mide a lo largo de la fila, y aquí la fila va hacia abajo—, así que la foto
+     se quedaba en nada. Apiladas, cada una ocupa el ancho entero y su alto se
+     lo da su contenido. */
+  .sobremi > * {
+    flex: 0 0 auto;
     width: 100%;
   }
   .sobremi-texto {
-    max-width: none;
     padding: 24px;
   }
 }

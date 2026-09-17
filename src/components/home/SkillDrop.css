@@ -95,6 +95,9 @@
    ya se sostiene solo. */
 .panel-about {
   padding: 8px 0 24px;
+  /* Sin papel propio: el panel es solo una fila de dos cajas, y el relleno del
+     fondo se notaba como un rectángulo a su alrededor. */
+  background: none;
 }
 .panel-muted { font-size: 13px; color: var(--muted); }
 .panel-cv {
