@@ -57,7 +57,7 @@ body {
 
 .bio {
   grid-area: bio;
-  font-size: 8px;
+  font-size: 9.2px;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -94,14 +94,14 @@ body {
 .info-row:nth-child(even) { padding-left:  32px; }
 
 .info-label {
-  font-size: 10px;
+  font-size: 11.5px;
   font-weight: 700;
   white-space: nowrap;
 }
 
 .info-value {
   font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: 12px;
+  font-size: 13.8px;
   font-style: italic;
   font-weight: 400;
   text-align: right;
@@ -124,7 +124,7 @@ body {
   border: 1px solid var(--ink);
   border-radius: 999px;
   padding: 8px 24px;
-  font-size: 10px;
+  font-size: 11.5px;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -238,7 +238,7 @@ body {
   font-family: 'Kapakana', 'Cormorant Garamond', Georgia, serif;
   font-style: italic;
   font-weight: 400;
-  font-size: 30px;
+  font-size: 34.5px;
   line-height: 1;
   margin-right: -1px;
   position: relative;
@@ -250,7 +250,7 @@ body {
 .section-title-text .rest {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 700;
-  font-size: 13px;
+  font-size: 14.9px;
   letter-spacing: 0.02em;
   text-transform: uppercase;
   color: var(--ink);
@@ -266,7 +266,7 @@ body {
 }
 
 .exp-date {
-  font-size: 9px;
+  font-size: 10.3px;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -274,7 +274,7 @@ body {
 }
 
 .exp-role {
-  font-size: 10px;
+  font-size: 11.5px;
   margin-bottom: 8px;
 }
 
@@ -286,7 +286,7 @@ body {
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-weight: 400;
   font-style: italic;
-  font-size: 11px;
+  font-size: 12.6px;
 }
 
 .exp-bullets {
@@ -299,7 +299,7 @@ body {
 
 .exp-bullets li,
 .exp-desc {
-  font-size: 9px;
+  font-size: 10.3px;
   line-height: 1.6;
 }
 
@@ -352,7 +352,7 @@ body {
 
 .tool-label {
   font-family: 'Inter', system-ui, sans-serif;
-  font-size: 13px;
+  font-size: 14.9px;
   font-weight: 700;
   letter-spacing: 0.09em;
   fill: var(--ink);
@@ -380,7 +380,7 @@ body {
   border-radius: 999px;
   padding: 7px 18px;
   font-family: var(--sans);
-  font-size: 10px;
+  font-size: 11.5px;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -412,7 +412,7 @@ body {
 
 .lang-label,
 .contact-label {
-  font-size: 10px;
+  font-size: 11.5px;
   font-weight: 700;
   white-space: nowrap;
 }
@@ -420,7 +420,7 @@ body {
 .lang-value,
 .contact-value {
   font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: 12px;
+  font-size: 13.8px;
   font-style: italic;
   font-weight: 400;
   text-align: right;
@@ -472,7 +472,7 @@ body {
   .top-nav { height: 56px; }
   .nav-pill {
     padding: 5px 12px;
-    font-size: 8px;
+    font-size: 9.2px;
     letter-spacing: 0.09em;
   }
   .nav-pill:first-child,
