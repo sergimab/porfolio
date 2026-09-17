@@ -13,12 +13,42 @@ import "./SobreMi.css";
 // una sola, la primera vuelta iría a tirones —cada archivo llegaría cuando le
 // tocase— y habría un parpadeo en cada salto. Pesan menos de un kilobyte cada
 // una, así que tenerlas todas puestas no cuesta nada.
+// Las figuras, con la medida de su lienzo. Los anchos son muy distintos —la 6
+// es dos veces más ancha que alta y la 10 es más alta que ancha—, así que
+// igualarlas por el alto las dejaba desiguales: la ancha se comía la foto y las
+// redondas parecían pequeñas.
+//
+// Lo que se iguala es el ÁREA, que es lo que el ojo mide cuando dice «grande» o
+// «pequeña». De ahí sale el alto de cada una: cuanto más ancha es, más bajita
+// se pone, y todas ocupan lo mismo en pantalla. El número de abajo es el mando
+// del tamaño; cada figura lo reparte según su forma.
+//
 // La lista va escrita a mano y no contando del 1 al 10: falta la 4 —la azul y
 // amarilla, descartada— y no tendría sentido renumerar el resto de archivos
 // cada vez que caiga una.
-const RECURSOS = [1, 2, 3, 5, 6, 7, 8, 9, 10].map(
-  (n) => `/sobre-mi/recursos/recurso-${n}.svg`
-);
+const FIGURAS = [
+  { n: 1, w: 128.29, h: 121.34 },
+  { n: 2, w: 114.79, h: 116.62 },
+  { n: 3, w: 126.02, h: 123.43 },
+  { n: 5, w: 115.66, h: 119.52 },
+  { n: 6, w: 259.16, h: 122.53 },
+  { n: 7, w: 215.59, h: 126.63 },
+  { n: 8, w: 116.56, h: 121.17 },
+  { n: 9, w: 165.0, h: 114.01 },
+  { n: 10, w: 100.64, h: 116.13 },
+];
+
+// Cuánto ocupan, en porcentaje del lado de la foto. Es la medida de una figura
+// cuadrada; las demás salen de ahí.
+const TAMANO = 56;
+
+const media =
+  FIGURAS.reduce((t, f) => t + Math.sqrt(f.h / f.w), 0) / FIGURAS.length;
+
+const RECURSOS = FIGURAS.map((f) => ({
+  src: `/sobre-mi/recursos/recurso-${f.n}.svg`,
+  alto: `${((TAMANO * Math.sqrt(f.h / f.w)) / media).toFixed(1)}%`,
+}));
 
 // Lo que dura cada figura en pantalla. Es el número que hay que tocar para
 // ajustar el ritmo.
@@ -40,12 +70,13 @@ export default function SobreMi() {
       <div className="sobremi-foto">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img className="sobremi-capa es-fondo" src="/sobre-mi/fondo.webp" alt="" />
-        {RECURSOS.map((src, i) => (
+        {RECURSOS.map((r, i) => (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            key={src}
+            key={r.src}
             className={`sobremi-capa es-recurso${i === actual ? " es-visible" : ""}`}
-            src={src}
+            src={r.src}
+            style={{ height: r.alto }}
             alt=""
             aria-hidden="true"
           />

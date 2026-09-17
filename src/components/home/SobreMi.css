@@ -30,14 +30,11 @@
 }
 
 /* Las figuras de colores, entre las dos capas de la foto.
-   Los tres números de abajo son los mandos: dónde cae y cuánto mide. La medida
-   va por ALTO y no por ancho porque las diez tienen alturas parecidas pero
-   anchos muy distintos —una es casi el doble de ancha que otra—, así que
-   igualando el alto se ven todas del mismo tamaño. */
+   El alto lo pone cada una desde el componente —se calcula para que todas
+   ocupen lo mismo, ver allí—; aquí solo va dónde caen. */
 .sobremi-capa.es-recurso {
   left: 50%;
   top: 50%;
-  height: 52%;
   width: auto;
   /* Traslación del propio ancho y alto: el punto de referencia es su CENTRO, y
      así las diez quedan cuadradas entre sí por mucho que cambie el ancho de
