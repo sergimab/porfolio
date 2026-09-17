@@ -23,11 +23,7 @@
    apilan en el orden en que están escritas —fondo, figura de turno, yo—. */
 .sobremi-foto {
   position: relative;
-  /* Mismo marco que las cajas del sitio, para que la foto sea una caja más y no
-     una imagen suelta pegada al lado del texto. */
-  border: 1px solid var(--foreground);
   border-radius: 16px;
-  box-sizing: border-box;
   /* Suelo de recorte. Las figuras se salen por arriba y por los lados a la
      vista, pero por debajo no asoma nada: la máscara se estira 300 % hacia los
      lados y hacia arriba y se ancla en el borde de abajo, así que lo que caiga
@@ -51,6 +47,20 @@
 .sobremi-capa {
   position: absolute;
   display: block;
+}
+
+/* El marco, dibujado ENCIMA de las capas y no como borde de la caja. Un borde
+   normal lo pinta el navegador por debajo de lo que hay dentro, así que las
+   figuras que se salen por los lados lo cruzaban y se lo comían. Aquí va como
+   una tapa por delante: mismo hilo que las cajas del sitio, y las figuras pasan
+   por detrás. */
+.sobremi-foto::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--foreground);
+  border-radius: inherit;
+  pointer-events: none;
 }
 /* El botón de parar, abajo a la derecha de la foto. Es la misma pieza que el de
    las flechas de las cápsulas, girada a la otra punta: un mordisco en la
@@ -115,9 +125,7 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  /* Uno menos que la caja: por dentro del hilo la curva es más cerrada, y con
-     el mismo radio asomaría una uña de foto por fuera del marco. */
-  border-radius: 15px;
+  border-radius: 16px;
 }
 
 /* Las figuras de colores, entre las dos capas de la foto.
