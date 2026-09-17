@@ -130,7 +130,9 @@
      miden también lo mismo de alto sin tener que escribir el número. */
   position: relative;
   aspect-ratio: 1 / 1;
-  padding: 32px;
+  /* El respiro va aquí, entre el marco de guiones y el texto, igual que en la
+     caja de los botones de arriba. La caja de dentro solo rueda. */
+  padding: 16px;
   border-radius: 16px;
   /* Su propio papel: por detrás pasan la trama de puntos y las figuras que se
      salen de la foto, y el texto tiene que leerse limpio por encima. */
@@ -143,9 +145,9 @@
 .sobremi-scroll {
   height: 100%;
   box-sizing: border-box;
-  /* 16 a cualquier ancho, que es el respiro de la caja de los botones de
-     arriba. */
-  padding: 16px;
+  /* Sin relleno propio: el aire lo pone la caja de fuera. Solo queda el de la
+     derecha, para que el texto no vaya pegado a la barra. */
+  padding: 0 4px 0 0;
   border-radius: inherit;
   /* Lo que no cabe se lee bajando, con la barra siempre a la vista para que se
      note que hay más. */
@@ -220,5 +222,6 @@
   .sobremi-scroll {
     height: auto;
     overflow-y: visible;
+    padding: 0;
   }
 }
