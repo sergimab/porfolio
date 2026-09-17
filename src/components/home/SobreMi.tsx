@@ -42,7 +42,11 @@ const FIGURAS = [
 
 // Cuánto ocupan, en porcentaje del lado de la foto. Es la medida de una figura
 // cuadrada; las demás salen de ahí.
-const TAMANO = 100;
+//
+// El techo lo pone la más ancha: a partir de 70 se sale por los lados más de
+// los 24 px que la separan de la caja del texto, se mete por detrás de su papel
+// y parece cortada.
+const TAMANO = 70;
 
 const media =
   FIGURAS.reduce((t, f) => t + Math.sqrt(f.h / f.w), 0) / FIGURAS.length;
