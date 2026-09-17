@@ -126,6 +126,9 @@ export default function MotionLanding() {
             href="/proyecto/b2"
             es="Ver el rebranding de la marca"
             en="See the brand rebrand"
+            imagen="/banners/rebranding-yelmo.webp"
+            imagenMovil="/banners/rebranding-yelmo-movil.webp"
+            alt="El logotipo de Yelmo sobre la trama de la marca"
           />
         </section>
       </div>

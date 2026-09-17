@@ -10,9 +10,9 @@ import Branding from "./Branding";
 // el que a cada uno le tocaba una marca de cine y había que resolverla en tres
 // disciplinas —prototipado web, branding y animación—.
 //
-// De momento, solo la cabecera y la entradilla. Los apartados van llegando
-// después; la estructura es la misma que la de Espacio vacío para que se le
-// pueda ir añadiendo sin rehacer nada.
+// Aquí vive la pata de branding; la de animación tiene su propia página en
+// Motion, y las dos se enlazan con la franja del final. La estructura es la
+// misma que la de Espacio vacío.
 export default function YelmoLanding() {
   return (
     <main className="project-main">
@@ -69,9 +69,9 @@ export default function YelmoLanding() {
             allí el vídeo promocional y las demás piezas en movimiento. Se pasa
             de una a otra con la misma franja que enlaza Espacio vacío con su
             app.
-            Va sin imagen de momento —la franja se pinta con su retícula de
-            puntos—; en cuanto haya un fotograma del promo, entra por `imagen`
-            e `imagenMovil` como las demás. */}
+            La versión estrecha es un recorte de la misma imagen, centrado en el
+            fotograma del medio: a ancho de móvil, la franja entera se queda en
+            48 px de alto y los tres no se distinguen. */}
         <section className="ym-seccion">
           {/* El título va con la capitular script, como el de las demás
               páginas: el rótulo-pastilla es de los apartados del proyecto, y
@@ -83,6 +83,9 @@ export default function YelmoLanding() {
             href="/proyecto/m1"
             es="Ver la animación del proyecto"
             en="See the project's motion work"
+            imagen="/banners/motion-yelmo.webp"
+            imagenMovil="/banners/motion-yelmo-movil.webp"
+            alt="Tres fotogramas de la animación: manos sobre discos de color"
           />
         </section>
       </div>
