@@ -23,12 +23,6 @@
    apilan en el orden en que están escritas —fondo, figura de turno, yo—. */
 .sobremi-foto {
   position: relative;
-  /* Las figuras grandes se salen de la foto por los lados; aquí se cortan a ras
-     del borde, como si estuvieran pintadas en la pared y la foto las encuadrara.
-     Sin esto se derramarían sobre el papel del panel. El radio es el mismo que
-     el de las cajas de medios del sitio. */
-  overflow: hidden;
-  border-radius: 16px;
   aspect-ratio: 1 / 1;
   /* Sin estirarse a lo alto: estirada, su alto lo pondría la fila y la
      proporción cuadrada le devolvería ESE alto como ancho, saltándose el
@@ -40,12 +34,16 @@
   position: absolute;
   display: block;
 }
+/* Las dos capas de la foto llenan la casilla. El redondeo va en ellas y no en
+   la caja: si lo llevara la caja habría que recortar lo que se sale, y entonces
+   las figuras se cortarían en el borde, que es justo lo que no se quiere. */
 .sobremi-capa.es-fondo,
 .sobremi-capa.es-figura {
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: contain;
+  border-radius: 16px;
 }
 
 /* Las figuras de colores, entre las dos capas de la foto.
@@ -74,11 +72,40 @@
    Ancho de lectura corto: en una línea muy larga el ojo se pierde al volver al
    principio del renglón. */
 .sobremi-texto {
+  /* Cuadrada, como la foto: las dos miden lo mismo de ancho, así que con esto
+     miden también lo mismo de alto sin tener que escribir el número. */
+  aspect-ratio: 1 / 1;
   padding: 32px;
   border: 1px dashed var(--border);
   border-radius: 16px;
+  /* Su propio papel: por detrás pasan la trama de puntos y las figuras que se
+     salen de la foto, y el texto tiene que leerse limpio por encima. */
+  background: var(--background);
   font-size: 15px;
   line-height: 1.65;
+  /* Lo que no cabe se lee bajando, con la barra siempre a la vista para que se
+     note que hay más. */
+  overflow-y: scroll;
+}
+/* La barra, dibujada y con sitio propio. Sin esto, macOS la esconde hasta que
+   alguien rueda —y entonces no hay manera de saber que abajo hay más texto—.
+   Va sin `scrollbar-width`: esa propiedad devuelve la barra fina del sistema y
+   anula estos estilos, así que las dos juntas no valen. */
+.sobremi-texto::-webkit-scrollbar {
+  width: 10px;
+}
+.sobremi-texto::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--foreground) 34%, transparent);
+  background-clip: content-box;
+}
+.sobremi-texto::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--foreground) 55%, transparent);
+  background-clip: content-box;
+}
+.sobremi-texto::-webkit-scrollbar-track {
+  background: transparent;
 }
 .sobremi-texto p {
   margin: 0 0 14px;
@@ -109,6 +136,10 @@
     width: 100%;
   }
   .sobremi-texto {
+    /* Apilada no hay nada con lo que igualarse, y un cuadrado a ancho de móvil
+       se quedaría corto para este texto: que crezca lo que pida. */
+    aspect-ratio: auto;
+    overflow-y: visible;
     padding: 24px;
   }
 }

@@ -7,7 +7,8 @@ import "./SobreMi.css";
 // La imagen de «Sobre mí»: la foto en dos capas —el fondo y yo recortado— y,
 // metidas entre las dos, unas figuras que se van turnando. Al ir en medio,
 // aparecen por detrás de la figura y por delante de la calle, como si
-// estuvieran pintadas en la pared.
+// estuvieran pintadas en la pared. Y son más grandes que la foto: lo que
+// sobresale se sale del cuadro, a la vista, en vez de cortarse en el borde.
 //
 // Se pintan todas a la vez y solo cambia cuál se ve: si se cambiara el `src` de
 // una sola, la primera vuelta iría a tirones —cada archivo llegaría cuando le
@@ -40,7 +41,7 @@ const FIGURAS = [
 
 // Cuánto ocupan, en porcentaje del lado de la foto. Es la medida de una figura
 // cuadrada; las demás salen de ahí.
-const TAMANO = 80;
+const TAMANO = 108;
 
 const media =
   FIGURAS.reduce((t, f) => t + Math.sqrt(f.h / f.w), 0) / FIGURAS.length;
@@ -93,24 +94,34 @@ export default function SobreMi() {
         <h2 className="sobremi-titulo">
           <LangText es="Hola, soy Sergio" en="Hi, I'm Sergio" />
         </h2>
-        {/* TEXTO DE EJEMPLO, para ver la caja con algo dentro. Se cambia por el
-            de verdad en cuanto esté escrito. */}
         <p>
           <LangText
-            es="Soy **diseñador gráfico**, y lo que más me gusta es la parte en la que una marca deja de ser un logotipo y empieza a ser una manera de hablar: el color, el ritmo, cómo se mueve."
-            en="I'm a **graphic designer**, and my favourite part is when a brand stops being a logo and starts being a way of speaking: the colour, the rhythm, the way it moves."
+            es="Soy **diseñador gráfico**, formado en la **ESD Madrid**, y lo que me engancha del oficio es el momento en que una marca deja de ser un logotipo y empieza a ser una manera de hablar: el color, el ritmo, el tono, cómo se mueve."
+            en="I'm a **graphic designer**, trained at **ESD Madrid**, and what hooks me about this craft is the moment a brand stops being a logo and starts being a way of speaking: the colour, the rhythm, the tone, the way it moves."
           />
         </p>
         <p>
           <LangText
-            es="Me formé en la **ESD Madrid** y desde entonces he andado entre el branding, la animación y el diseño de producto, que para mí son el mismo oficio mirado desde tres sitios."
-            en="I trained at **ESD Madrid** and since then I've moved between branding, motion and product design, which to me are the same craft seen from three places."
+            es="He trabajado en el universo gráfico de **Iberdrola**, donde me tocó lo que más me gusta: pensar en **sistemas** y no en piezas sueltas. Un sistema de ilustraciones, una iconografía, infografías que explican en un vistazo cosas que no caben en un párrafo, y newsletters que tenían que sonar a la misma voz número tras número. Ahí aprendí que un buen diseño no es el que sorprende una vez, sino el que **aguanta repetido**."
+            en="I've worked inside **Iberdrola**'s graphic universe, on exactly the part I like most: thinking in **systems** rather than one-off pieces. An illustration system, an icon set, infographics that explain at a glance what wouldn't fit in a paragraph, and newsletters that had to sound like the same voice issue after issue. That's where I learnt that good design isn't what surprises you once, but what **holds up repeated**."
           />
         </p>
         <p>
           <LangText
-            es="Fuera de la pantalla: música todo el rato, caminar por Madrid sin destino y una colección de camisetas que ya no cabe en el armario."
-            en="Away from the screen: music non-stop, walking around Madrid with no destination, and a T-shirt collection that no longer fits in the wardrobe."
+            es="En paralelo he llevado proyectos de marca de principio a fin. El **rebranding de Yelmo Cines** lo resolví en tres frentes a la vez —identidad, animación y prototipado web—, y fue la mejor manera de comprobar algo que ya sospechaba: **branding, motion y producto son el mismo oficio mirado desde tres sitios**. Una marca que no sabes cómo se mueve ni cómo se usa está a medio terminar."
+            en="Alongside that I've run brand projects end to end. I solved the **Yelmo Cines rebrand** on three fronts at once —identity, motion and web prototyping— and it confirmed something I already suspected: **branding, motion and product are the same craft seen from three places**. A brand you can't move or use is only half finished."
+          />
+        </p>
+        <p>
+          <LangText
+            es="Me interesa la tipografía cuando se pone seria, el color cuando tiene un motivo, y **el punto donde el diseño toca el código**: esta misma web la he diseñado y programado yo, y he acabado disfrutando tanto del CSS como del Illustrator."
+            en="I'm drawn to type when it gets serious, to colour when it has a reason, and to **the place where design meets code**: I designed and built this site myself, and I've ended up enjoying CSS as much as Illustrator."
+          />
+        </p>
+        <p>
+          <LangText
+            es="Ahora busco **proyectos nuevos y gente de la que aprender**. Me da igual que el encargo sea una marca entera o una pieza pequeña: si hay algo que resolver y alguien con quien discutirlo, me apunto. Si estás leyendo esto y tienes algo entre manos, **escríbeme** —está aquí al lado, en Contacto—."
+            en="Right now I'm looking for **new projects and people to learn from**. Whether the job is a whole brand or one small piece doesn't matter: if there's something to solve and someone to argue it out with, I'm in. If you're reading this and you've got something brewing, **drop me a line** —it's right next door, under Contact—."
           />
         </p>
       </div>
