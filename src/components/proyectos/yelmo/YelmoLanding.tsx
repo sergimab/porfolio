@@ -2,7 +2,7 @@ import BackCapsule from "@/components/shared/BackCapsule";
 import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
 import LangText from "@/components/shared/LangText";
 import ToolIcons from "@/components/shared/ToolIcons";
-import RotuloSeccion from "@/components/shared/RotuloSeccion";
+import DropcapTitle from "@/components/shared/DropcapTitle";
 import CtaBanner from "@/components/shared/CtaBanner";
 import Branding from "./Branding";
 
@@ -73,7 +73,12 @@ export default function YelmoLanding() {
             puntos—; en cuanto haya un fotograma del promo, entra por `imagen`
             e `imagenMovil` como las demás. */}
         <section className="ym-seccion">
-          <RotuloSeccion es="Páginas recomendadas" en="Recommended pages" />
+          {/* El título va con la capitular script, como el de las demás
+              páginas: el rótulo-pastilla es de los apartados del proyecto, y
+              esto no es uno más, es el pie de página. */}
+          <h2 className="project-h2">
+            <DropcapTitle es="Páginas recomendadas" en="Recommended pages" />
+          </h2>
           <CtaBanner
             href="/proyecto/m1"
             es="Ver la animación del proyecto"
