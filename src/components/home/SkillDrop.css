@@ -49,22 +49,28 @@
    competir con las cápsulas. */
 .skill-cambio {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 0;
+  left: 0;
   z-index: 4;
   display: flex;
   align-items: center;
-  gap: 8px;
-  height: 32px;
-  padding: 0 9px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
+  gap: 10px;
+  height: 46px;
+  padding: 0 14px;
+  /* Recortado en la esquina: arriba a la izquierda sigue el redondeo de la caja
+     y por dentro dobla al revés, como si se le hubiera dado un mordisco al
+     papel. El hilo por sus dos lados de dentro es lo que hace que se lea como
+     un hueco y no como una pegatina. */
+  border: 0;
+  border-right: 1px solid var(--foreground);
+  border-bottom: 1px solid var(--foreground);
+  border-radius: 15px 0 14px 0;
   background: var(--background);
-  color: var(--muted);
+  color: var(--foreground);
   font-family: inherit;
-  font-size: 12px;
+  font-size: 13px;
   cursor: pointer;
-  transition: color 0.2s, border-color 0.2s, background 0.2s;
+  transition: background 0.2s, color 0.2s;
 }
 .skill-cambio svg {
   width: 16px;
@@ -80,8 +86,8 @@
 }
 .skill-cambio:hover,
 .skill-cambio:focus-visible {
-  color: var(--foreground);
-  border-color: var(--foreground);
+  background: var(--foreground);
+  color: var(--background);
 }
 .skill-cambio:hover .skill-cambio-texto,
 .skill-cambio:focus-visible .skill-cambio-texto {
@@ -95,7 +101,7 @@
    una lista de siempre. */
 .skill-lista {
   position: absolute;
-  inset: 52px 0 0;
+  inset: 0;
   /* Las siete filas se reparten el alto que queda: la lista entera se ve de una
      vez, sin rodar por dentro de una caja que ya es pequeña. */
   display: flex;
@@ -112,12 +118,11 @@
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  justify-content: center;
   width: 100%;
   padding: 0 20px;
   border: 0;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--foreground);
   background: none;
   color: var(--foreground);
   font-family: inherit;
@@ -126,14 +131,9 @@
   cursor: pointer;
   transition: background 0.18s, color 0.18s;
 }
-.skill-lista li:last-child button {
-  border-bottom: 1px solid var(--border);
-}
-.skill-lista button svg {
-  width: 18px;
-  height: 18px;
-  opacity: 0;
-  transition: opacity 0.18s;
+/* La primera fila no lleva hilo arriba: ahí está el borde de la caja. */
+.skill-lista li:first-child button {
+  border-top: 0;
 }
 .skill-lista button:hover,
 .skill-lista button:focus-visible,
@@ -142,11 +142,8 @@
   color: #fff;
   outline: none;
 }
-.skill-lista button:hover svg,
-.skill-lista button:focus-visible svg,
-.skill-lista button[data-activa="true"] svg {
-  opacity: 1;
-}
+/* El nombre de la primera fila se queda centrado en la caja, como los demás: el
+   mordisco del botón se le monta encima por la izquierda y ahí no hay texto. */
 .box-soon {
   order: 2;
   display: grid;

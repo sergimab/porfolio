@@ -564,7 +564,12 @@ export default function SkillDrop() {
 
           {modoLista && (
             <ul className="skill-lista">
-              {skills.map(skill => (
+              {/* De más proyectos a menos: la lista es para ir al grano, así que
+                  arriba lo que más hay que enseñar. Los empates mantienen el
+                  orden de las cápsulas. */}
+              {[...skills]
+                .sort((a, b) => (projects[b.id]?.length ?? 0) - (projects[a.id]?.length ?? 0))
+                .map(skill => (
                 <li key={skill.id}>
                   <button
                     type="button"
@@ -572,11 +577,7 @@ export default function SkillDrop() {
                     data-activa={selectedPanel === skill.id}
                     onClick={() => { setSelectedPanel(skill.id); scrollToPanel(); }}
                   >
-                    <span>{getLabel(skill)}</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                      <line x1="5" y1="12" x2="18" y2="12" />
-                      <polyline points="12.5 6.5 18 12 12.5 17.5" />
-                    </svg>
+                    {getLabel(skill)}
                   </button>
                 </li>
               ))}
