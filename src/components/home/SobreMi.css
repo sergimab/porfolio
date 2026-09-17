@@ -47,41 +47,63 @@
   position: absolute;
   display: block;
 }
-/* El botón de parar, abajo a la derecha de la foto. Aparece al pasar por
-   encima o al llegar con el teclado, y se queda fijo mientras está parada.
-   En pantallas sin ratón no hay «pasar por encima», así que allí va siempre a
-   la vista, algo más tenue. */
+/* El botón de parar, abajo a la derecha de la foto. Es la misma pieza que el de
+   las flechas de las cápsulas, girada a la otra punta: un mordisco en la
+   esquina, que por fuera sigue el redondeo de la foto y por dentro dobla al
+   revés. Aparece al pasar por encima de la foto y se queda fijo mientras está
+   parada —si se escondiera no habría manera de volver a arrancarla—. */
 .sobremi-pausa {
   position: absolute;
-  right: 12px;
-  bottom: 12px;
+  right: 0;
+  bottom: 0;
   z-index: 3;
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  border: 1px solid rgba(255, 255, 255, 0.75);
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(6px);
-  color: #fff;
+  height: 46px;
+  padding: 0 13px;
+  border: 0;
+  border-top: 1px solid var(--foreground);
+  border-left: 1px solid var(--foreground);
+  border-radius: 14px 0 15px 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: inherit;
+  font-size: 13px;
   cursor: pointer;
   opacity: 0;
-  transition: opacity 0.2s, background 0.2s;
+  transition: opacity 0.2s, background 0.2s, color 0.2s;
 }
 .sobremi-pausa svg {
-  width: 18px;
-  height: 18px;
+  width: 21px;
+  height: 21px;
+  flex: 0 0 auto;
+}
+/* El nombre se despliega al pasar por encima del botón, como en el de las
+   flechas. El hueco lo pone él al abrirse, no un `gap` fijo: con `gap`, el
+   botón cerrado arrastraría ese espacio y el icono quedaría descentrado. */
+.sobremi-pausa-texto {
+  max-width: 0;
+  margin-right: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 0;
+  transition: max-width 0.25s, margin-right 0.25s, opacity 0.2s;
 }
 .sobremi-foto:hover .sobremi-pausa,
 .sobremi-pausa:focus-visible,
 .sobremi-pausa.es-pausado {
   opacity: 1;
 }
-.sobremi-pausa:hover {
-  background: rgba(0, 0, 0, 0.55);
+.sobremi-pausa:hover,
+.sobremi-pausa:focus-visible {
+  background: var(--foreground);
+  color: var(--background);
+}
+.sobremi-pausa:hover .sobremi-pausa-texto,
+.sobremi-pausa:focus-visible .sobremi-pausa-texto {
+  max-width: 120px;
+  margin-right: 9px;
+  opacity: 1;
 }
 @media (hover: none) {
   .sobremi-pausa {

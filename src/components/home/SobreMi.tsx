@@ -154,6 +154,9 @@ export default function SobreMi() {
           aria-pressed={pausado}
           aria-label={pausado ? "Reanudar las figuras" : "Parar las figuras"}
         >
+          <span className="sobremi-pausa-texto">
+            {pausado ? "Reanudar" : "Parar"}
+          </span>
           <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
             {pausado ? (
               <path d="M9 6.5 L18 12 L9 17.5 Z" fill="currentColor" />
