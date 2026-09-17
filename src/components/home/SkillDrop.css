@@ -92,10 +92,12 @@
 }
 .panel-about {
   border: 1px dashed var(--border);
-  padding: 48px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 40px 32px;
+}
+@media (max-width: 600px) {
+  .panel-about {
+    padding: 28px 20px;
+  }
 }
 .panel-muted { font-size: 13px; color: var(--muted); }
 .panel-cv {

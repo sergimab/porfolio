@@ -6,6 +6,7 @@ import type MatterTypes from "matter-js";
 import BounceCards from "./BounceCards";
 import BackToTop from "@/components/layout/BackToTop";
 import DropcapTitle from "@/components/shared/DropcapTitle";
+import SobreMi from "./SobreMi";
 import { seeded, organicGradient, CAPSULE_DRIFT_SIZE } from "@/components/shared/organico";
 import "./SkillDrop.css";
 
@@ -653,9 +654,7 @@ export default function SkillDrop() {
 
       {selectedPanel === "about" && (
         <div className="home-panel panel-about">
-          <span className="panel-muted">
-            {lang==="en" ? "About me — coming soon" : "Sobre mí — en construcción"}
-          </span>
+          <SobreMi />
         </div>
       )}
 
