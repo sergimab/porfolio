@@ -19,7 +19,11 @@
   overflow: hidden;
   border-radius: 16px;
   flex: 0 0 auto;
-  width: 340px;
+  /* 400: es lo que mide de alto la caja del texto —tres párrafos con su título y
+     su aire—, así que los dos bloques acaban a la misma altura y la fila se lee
+     como una pareja en vez de como una foto con una nota al lado. Si el texto
+     crece o mengua mucho, este número se mueve con él. */
+  width: 400px;
   max-width: 100%;
   aspect-ratio: 1 / 1;
 }
@@ -55,10 +59,16 @@
   visibility: visible;
 }
 
-/* El texto. Ancho de lectura corto: en una línea muy larga el ojo se pierde al
-   volver al principio del renglón. */
+/* El texto, en su propia caja. La caja es SOLO para el texto: la foto va suelta
+   al lado, que ya tiene su propio marco redondeado y meterla dentro sería
+   enmarcar dos veces lo mismo.
+   Ancho de lectura corto: en una línea muy larga el ojo se pierde al volver al
+   principio del renglón. */
 .sobremi-texto {
   max-width: 44ch;
+  padding: 32px;
+  border: 1px dashed var(--border);
+  border-radius: 16px;
   font-size: 15px;
   line-height: 1.65;
 }
@@ -87,5 +97,6 @@
   }
   .sobremi-texto {
     max-width: none;
+    padding: 24px;
   }
 }
