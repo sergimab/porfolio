@@ -139,10 +139,21 @@
 .skill-lista li:first-child button {
   border-top: 0;
 }
+/* En reposo la fila no enseña el degradado, pero sí lo lleva puesto: así el
+   ritmo de la animación ya va corriendo y al pasar por encima no arranca de
+   cero, aparece a mitad de camino como en las cápsulas. */
+.skill-lista button {
+  background-image: var(--fila-color);
+  background-size: var(--fila-medida);
+  background-color: transparent;
+}
+.skill-lista button:not(:hover):not(:focus-visible):not([data-activa="true"]) {
+  /* Oculto, no quitado: quitarlo reiniciaría el degradado en cada entrada. */
+  background-image: none;
+}
 .skill-lista button:hover,
 .skill-lista button:focus-visible,
 .skill-lista button[data-activa="true"] {
-  background: var(--fila-color);
   color: #fff;
   outline: none;
 }

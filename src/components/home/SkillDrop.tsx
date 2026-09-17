@@ -7,7 +7,7 @@ import BounceCards from "./BounceCards";
 import BackToTop from "@/components/layout/BackToTop";
 import DropcapTitle from "@/components/shared/DropcapTitle";
 import SobreMi from "./SobreMi";
-import { seeded, organicGradient, CAPSULE_DRIFT_SIZE } from "@/components/shared/organico";
+import { seeded, organicGradient, CAPSULE_DRIFT_SIZE, drift } from "@/components/shared/organico";
 import "./SkillDrop.css";
 
 const skills = [
@@ -580,7 +580,17 @@ export default function SkillDrop() {
                 <li key={skill.id}>
                   <button
                     type="button"
-                    style={{ ["--fila-color" as string]: `hsl(${skill.hue} 70% 48%)` }}
+                    /* El mismo degradado en movimiento que al arrastrar una
+                       cápsula: no un color plano, sino manchas del tono que
+                       derivan despacio. Va siempre en trío —degradado, tamaño y
+                       animación—, porque el movimiento no está en el degradado
+                       sino en desplazar sus capas. El ritmo sale del id, así que
+                       cada fila lleva el suyo y no se ven sincronizadas. */
+                    style={{
+                      ["--fila-color" as string]: organicGradient(skill.hue, 70, 48),
+                      ["--fila-medida" as string]: CAPSULE_DRIFT_SIZE,
+                      ...drift(skill.id),
+                    }}
                     data-activa={selectedPanel === skill.id}
                     onClick={() => { setSelectedPanel(skill.id); scrollToPanel(); }}
                   >
