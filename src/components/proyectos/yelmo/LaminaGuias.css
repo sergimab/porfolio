@@ -25,6 +25,14 @@
    normalizado, así que las líneas se quedaban punteadas y los círculos, a
    medio dibujar. */
 
+/* Mientras la lámina espera su turno no se enseña: con JavaScript en marcha
+   —eso es `es-listo`— y antes de que empiece a dibujarse, el SVG se queda
+   invisible. Si no, se veía la lámina entera un instante y luego desaparecía
+   para construirse, que es justo al revés de lo que cuenta. */
+.ym-lamina-guias.es-listo:not(.es-visible) svg {
+  visibility: hidden;
+}
+
 /* ── Dibujándose ──
    Las guías primero, de izquierda a derecha y cada una trazándose entera; las
    letras después, cuando el andamio ya está puesto. */

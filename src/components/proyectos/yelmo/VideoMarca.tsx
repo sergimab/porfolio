@@ -5,9 +5,8 @@ import "./VideoMarca.css";
 
 // El vídeo de la marca, que abre el proyecto.
 //
-// Se reproduce solo al llegar —no al cargar la página, que si no habría
-// terminado antes de que nadie lo vea— y va SIN bucle: al acabar se queda
-// parado en su último fotograma, que es el logotipo montado.
+// Se reproduce solo al llegar —no al cargar la página, que si no habría dado
+// una vuelta entera antes de que nadie lo vea— y en bucle.
 //
 // Sin sonido y con `playsInline`: es la única manera de que un navegador deje
 // arrancar un vídeo sin que el usuario lo pida, y en iPhone de que no se abra a
@@ -38,7 +37,7 @@ export default function VideoMarca() {
   return (
     <div className="ym-video">
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-      <video ref={video} src="/proyectos/yelmo/branding/rebranding.mp4" muted playsInline preload="metadata" />
+      <video ref={video} src="/proyectos/yelmo/branding/rebranding-muestra.mp4" muted loop playsInline preload="metadata" />
     </div>
   );
 }

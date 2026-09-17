@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useEffect, useLayoutEffect, useRef, useState } from "react";
 import "./LaminaGuias.css";
 
 // Una lámina de guías —la construcción del logotipo, los márgenes de
@@ -17,6 +17,19 @@ import "./LaminaGuias.css";
 export default function LaminaGuias({ markup, ancho = 760 }: { markup: string; ancho?: number }) {
   const caja = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const [listo, setListo] = useState(false);
+
+  // «Listo» quiere decir: hay JavaScript y la lámina va a animarse, así que el
+  // CSS ya puede esconderla hasta que le toque. Se pone en un efecto de LAYOUT
+  // —antes de que el navegador pinte— porque en un efecto normal daba tiempo a
+  // ver la lámina entera un instante antes de empezar a dibujarse.
+  //
+  // Y se hace con una clase en vez de esconderla siempre: si el JavaScript no
+  // llega a correr, la lámina se queda visible y completa, que es su estado
+  // final de todas formas.
+  useLayoutEffect(() => {
+    setListo(true);
+  }, []);
 
   // Las guías se trazan; las letras aparecen después. Se distinguen por el
   // relleno: las guías son las que no tienen ninguno.
@@ -71,7 +84,7 @@ export default function LaminaGuias({ markup, ancho = 760 }: { markup: string; a
   return (
     <div
       ref={caja}
-      className={`ym-lamina-guias${visible ? " es-visible" : ""}`}
+      className={`ym-lamina-guias${listo ? " es-listo" : ""}${visible ? " es-visible" : ""}`}
       style={{ ["--ym-ancho" as string]: `${ancho}px` }}
     >
       <Lienzo markup={markup} />
