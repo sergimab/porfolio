@@ -10,6 +10,20 @@ import "./ArteMiedo.css";
 import "./Motion.css";
 
 const RUTA = "/proyectos/el-arte-del-miedo-motion";
+// Las piezas del recorrido viven en la carpeta de la app y se traen de allí en
+// vez de duplicarlas aquí: son los mismos cinco archivos que corren dentro del
+// prototipo, y teniendo dos copias, el día que se reexporte una se quedaría la
+// otra vieja sin que nadie se entere.
+const RUTA_APP = "/proyectos/el-arte-del-miedo-app";
+
+// Los cinco pasos del recorrido de bienvenida, en su orden.
+const RECORRIDO = [
+  { id: "escanea", es: "Escanea", en: "Scan" },
+  { id: "descubre", es: "Descubre", en: "Discover" },
+  { id: "colecciona", es: "Colecciona", en: "Collect" },
+  { id: "analiza", es: "Analiza", en: "Analyse" },
+  { id: "descarga", es: "Descarga", en: "Download" },
+];
 
 // LAS SEIS OBRAS ANIMADAS, con la proporción de su archivo.
 //
@@ -53,6 +67,37 @@ export default function MotionLanding() {
         fondo="#000"
         alt="El isotipo de El Arte del Miedo construyéndose cuadro a cuadro"
       />
+
+      {/* ── El recorrido ───────────────────────────────────────────────── */}
+      <section className="am-seccion">
+        <RotuloSeccion es="El recorrido" en="The walkthrough" />
+        <div className="am-texto">
+          <p>
+            <LangText
+              es="Lo primero que ve el visitante al abrir la app son **cinco piezas seguidas** que le cuentan qué puede hacer dentro: escanear, descubrir, coleccionar, analizar y descargar. Se ven una detrás de otra, a pantalla completa, así que tienen que **leerse en dos segundos y sin texto**: cada una explica su verbo con una sola idea en movimiento."
+              en="The first thing you see when you open the app is **five pieces in a row** telling you what you can do inside: scan, discover, collect, analyse and download. They come one after another, full screen, so each has to **read in two seconds and without words**: one idea in motion per verb."
+            />
+          </p>
+          <p>
+            <LangText
+              es="Van todas con **la misma gramática** —el marco de canto rosa y azul, el fondo negro, la figura entrando desde el mismo sitio—, que es lo que hace que las cinco se lean como una sola secuencia y no como cinco animaciones sueltas puestas en fila."
+              en="They all share **the same grammar** — the pink-and-blue edged frame, the black ground, the shape entering from the same place — which is what makes the five read as one sequence instead of five loose animations lined up."
+            />
+          </p>
+        </div>
+
+        <div className="am-recorrido">
+          {RECORRIDO.map((v) => (
+            <figure key={v.id}>
+              {/* Todas son 400 × 700, el hueco que tienen dentro de la app. */}
+              <Pieza src={`${RUTA_APP}/${v.id}.mp4`} proporcion="400 / 700" alt={v.es} />
+              <figcaption>
+                <LangText es={v.es} en={v.en} />
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
 
       {/* ── El efecto ──────────────────────────────────────────────────── */}
       <section className="am-seccion">
@@ -119,8 +164,8 @@ export default function MotionLanding() {
         <div className="am-texto">
           <p>
             <LangText
-              es="Las otras cinco piezas de la app —las del recorrido de bienvenida— se ven donde les toca, **funcionando dentro del prototipo**, en la página del diseño de producto."
-              en="The app's other five pieces — the ones in the welcome walkthrough — are where they belong, **running inside the prototype**, on the product design page."
+              es="Las cinco del recorrido también se pueden ver **funcionando dentro del prototipo**, en su sitio y pasando con el botón de siguiente, en la página del diseño de producto."
+              en="The five walkthrough pieces can also be seen **running inside the prototype**, in place and advancing with the next button, on the product design page."
             />
           </p>
         </div>

@@ -48,6 +48,40 @@
   flex: 0 0 auto;
 }
 
+/* ── Los cinco pasos del recorrido ──
+   EN REJILLA Y NO EN COLUMNAS, al revés que las obras. Aquí sí: las cinco son
+   400 × 700, o sea exactamente iguales, así que una rejilla las alinea por
+   arriba y por abajo y se leen como lo que son, una secuencia de cinco pasos.
+   El sentido de lectura, además, importa —se ven en ese orden dentro de la
+   app—, y las columnas lo estropearían bajando por la primera antes de saltar
+   a la segunda. */
+.am-recorrido {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  margin: 28px 0 0;
+}
+.am-recorrido figure {
+  margin: 0;
+}
+.am-recorrido video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  background: #000;
+}
+.am-recorrido figcaption {
+  margin-top: 7px;
+  font-size: 11.5px;
+  line-height: 1.4;
+  text-align: center;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: var(--background);
+}
+
 /* ── Las dos piezas de la app ──
    Las dos son 400 × 700 y van a la par: una es lo que se hace y la otra lo que
    pasa después, así que tienen que verse del mismo tamaño y a la misma altura
@@ -91,6 +125,12 @@
   .am-obras {
     columns: 2;
   }
+  /* Cinco piezas verticales a 900 px se quedan en 165 de ancho y ahí ya no se
+     distingue lo que pasa dentro del marco. A tres caben tres y dos, que es
+     ragged pero legible; partirlas al medio sería peor. */
+  .am-recorrido {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 @media (max-width: 560px) {
@@ -105,5 +145,11 @@
   .am-motion-app {
     grid-template-columns: 1fr;
     max-width: 320px;
+  }
+  /* El recorrido, a dos. A una sola, cinco piezas de 700 de alto serían un
+     scroll de cuatro pantallas para enseñar cinco clips de tres segundos. */
+  .am-recorrido {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
   }
 }
