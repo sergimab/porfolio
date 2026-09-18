@@ -27,16 +27,17 @@ export default function MotionLanding() {
   return (
     <main className="project-main">
       {/* --hero-hue en el contenedor: lo heredan el cuadro de cabecera y las
-          cajas de medios, para que todo vaya del color de la categoría. El 32
-          es el naranja de Motion Graphics; sale de la cápsula, no de un color
+          cajas de medios, para que todo vaya del color de la categoría. El 217
+          es el azul de Motion Graphics; sale de la cápsula, no de un color
           elegido aquí, así que si allí cambia hay que cambiarlo también aquí.
-          El tinte es ese mismo tono con el brillo y la saturación del rosa de
-          Branding, para que las dos páginas del proyecto pesen igual. */}
-      <div className="project-content-wrap" style={{ ["--hero-hue" as string]: 32 }}>
+          (Era el 32, el ámbar, hasta que Motion y Fotografía se cambiaron el
+          color.) El tinte es ese mismo tono con el brillo y la saturación del
+          rosa de Branding, para que las dos páginas del proyecto pesen igual. */}
+      <div className="project-content-wrap" style={{ ["--hero-hue" as string]: 217 }}>
         <div
           className="hover-trail-target project-hero-box"
-          data-trail-hue="32"
-          data-tint-color="#DB8727"
+          data-trail-hue="217"
+          data-tint-color="#286DDC"
         >
           <span className="project-back">
             <BackCapsule category="motion" />

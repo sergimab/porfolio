@@ -100,21 +100,24 @@ float ruido(vec2 p) {
              mix(picadillo(i + vec2(0.0, 1.0)), picadillo(i + vec2(1.0, 1.0)), u.x), u.y);
 }
 
-// TRES capas de ruido, no más, y con la segunda y la tercera muy flojas —cada
-// una pesa un 40 % de la anterior—. Con cuatro capas a la mitad, el detalle fino
-// sobrevivía a la deformación y el botón salía veteado, como mármol o humo; lo
-// que se busca son manchas grandes y blandas. Entre capa y capa se gira un poco
-// el plano: sin ese giro las tres comparten cuadrícula y se le ve la rejilla.
+// DOS capas de ruido, y la segunda pesando un tercio de la primera. Cada capa
+// que se añade mete formas más pequeñas, y esas formas pequeñas son las que se
+// ven pasar: con tres capas el botón enseñaba demasiado dibujo moviéndose a la
+// vez. Con dos quedan pocas manchas y grandes, que es lo que se quiere —que se
+// note que el color respira, no que hay cosas cruzando—. La segunda capa no
+// sobra: es la que le quita a la primera la cara de círculo perfecto.
+// Entre capa y capa se gira el plano; sin ese giro las dos comparten cuadrícula
+// y se le ve la rejilla al ruido.
 float fbm(vec2 p) {
   float v = 0.0;
   float a = 0.5;
   mat2 giro = mat2(0.80, 0.60, -0.60, 0.80);
-  for (int i = 0; i < 3; i++) {
+  for (int i = 0; i < 2; i++) {
     v += a * ruido(p);
     p = giro * p * 1.9;
-    a *= 0.40;
+    a *= 0.34;
   }
-  return v / 0.78;
+  return v / 0.67;
 }
 
 void main() {
@@ -126,9 +129,10 @@ void main() {
   float t = uFase;
   // La energía no solo acelera: también DEFORMA más. Es lo que hace que al
   // pasar por encima parezca que el color se activa y no solo que corre.
-  // El suelo es 0,7 y no 1: con la deformación fuerte del principio el dibujo
-  // se retorcía sobre sí mismo y se veía el veteado.
-  float amp = 0.70 + uEnergia * 0.55;
+  // El suelo es bajo a propósito: cuanta más deformación, más se retuerce el
+  // dibujo sobre sí mismo y más formas distintas aparecen. A 0,5 las manchas se
+  // estiran y se mezclan, pero siguen siendo las mismas manchas.
+  float amp = 0.50 + uEnergia * 0.40;
 
   vec2 q = vec2(fbm(p + vec2(0.0, t)),
                 fbm(p + vec2(5.2, 1.3) - t * 0.8));
@@ -142,11 +146,14 @@ void main() {
   // que es lo que hace que dos colores se fundan en vez de tocarse por un
   // borde. El margen se estrecha con la energía, así que al encenderse los
   // colores se separan más en vez de quedarse en una media.
-  float k = uEnergia * 0.12;
-  float m1 = smoothstep(0.30 + k, 0.78 - k, f);
-  float m2 = smoothstep(0.34 + k, 0.86 - k, length(q) * 0.72);
-  float m3 = smoothstep(0.28 + k, 0.80 - k, r.x);
-  float m4 = smoothstep(0.46 + k, 0.92 - k, f * 1.06);
+  // Los tramos son ANCHOS y se solapan mucho: cuanto más estrecho el tramo, más
+  // marcado el borde entre un color y el siguiente, y esos bordes son justo lo
+  // que se lee como «formas». Anchos, lo que hay es un color pasando a otro.
+  float k = uEnergia * 0.10;
+  float m1 = smoothstep(0.20 + k, 0.86 - k, f);
+  float m2 = smoothstep(0.26 + k, 0.94 - k, length(q) * 0.72);
+  float m3 = smoothstep(0.18 + k, 0.90 - k, r.x);
+  float m4 = smoothstep(0.42 + k, 1.00 - k, f * 1.06);
 
   vec3 col = uColor[0];
   col = mix(col, uColor[1], m1);

@@ -15,6 +15,14 @@
   /* Las esquinas las recorta el botón con `overflow: hidden`, pero el radio se
      hereda también aquí por si alguien lo usa sin recorte. */
   border-radius: inherit;
+  transition: opacity 0.2s ease;
+}
+
+/* Apagado: el lienzo sigue montado —montarlo al encenderse obligaría a pintar
+   justo en el peor momento— y lo que se funde es su opacidad. Escondido, y con
+   la velocidad de reposo a cero, el motor lo tiene parado del todo. */
+.mesh-gradient.es-apagado {
+  opacity: 0;
 }
 
 /* Lo que va ENCIMA del degradado. Con `position: relative` entra en el apilado

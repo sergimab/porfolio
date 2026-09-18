@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
-import { organicGradient, CAPSULE_DRIFT_SIZE, drift } from "@/components/shared/organico";
+import { organicGradient, paletaOrganica, CAPSULE_DRIFT_SIZE, drift } from "@/components/shared/organico";
+import MeshGradient from "@/components/shared/MeshGradient";
 import "./BounceCards.css";
 
 // Adaptación del componente BounceCards (React Bits) al portfolio: cada card
@@ -197,8 +198,31 @@ export default function BounceCards({
             </div>
           )}
         </span>
+        {/* La banda del nombre, con el degradado de malla del shader. El aro de
+            arriba se queda con el de CSS a propósito: es un filo de dos píxeles
+            y un shader ahí costaría lo mismo que una superficie entera para algo
+            que no se llega a ver. El de CSS que hay debajo de la banda sigue
+            puesto como red, por si no hay WebGL.
+            `selectorEscucha`: manda la TARJETA, no la banda, para que el color
+            se active al pasar por encima de la portada y no solo de la franja
+            de abajo. */}
         <span className="bc-name" style={{ color: textColor, ...pintura, ...ritmo }}>
-          {title}
+          <MeshGradient
+            colores={paletaOrganica(hue, 70, 55)}
+            selectorEscucha=".bc-card"
+            /* Quieta en reposo y viva al pasar por encima. En la parrilla hay
+               cinco tarjetas a la vez y todas a la vista: moviéndose siempre,
+               aunque fuera despacio, serían cinco volcados por fotograma todo
+               el rato para algo que casi no se nota. Quietas no cuestan nada, y
+               cada una arranca el ruido por un sitio distinto, así que las cinco
+               enseñan una mancha diferente. Subir esto a 0,02 las deja
+               respirando si se prefiere. */
+            velocidadReposo={0}
+            velocidadHover={0.35}
+            suavizado={0.5}
+            escala={0.8}
+          />
+          <span className="mesh-encima">{title}</span>
         </span>
       </>
     );

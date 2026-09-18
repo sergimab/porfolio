@@ -23,6 +23,10 @@ type Props = {
   suavizado?: number;
   /** Cuántas manchas caben a lo ancho. Más alto, dibujo más menudo. */
   escala?: number;
+  /** Quién escucha al ratón, si no es el padre directo: un selector del
+   *  antepasado que manda. Por ejemplo la tarjeta entera, para que la banda del
+   *  nombre se encienda al pasar por encima de la portada y no solo de ella. */
+  selectorEscucha?: string;
   className?: string;
 };
 
@@ -43,6 +47,7 @@ export default function MeshGradient({
   velocidadHover = 0.42,
   suavizado = 0.5,
   escala = 1.5,
+  selectorEscucha,
   className,
 }: Props) {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -56,6 +61,9 @@ export default function MeshGradient({
     const lienzo = ref.current;
     if (!lienzo) return;
     const padre = lienzo.parentElement;
+    // Quien recibe el ratón. Por defecto el padre —el propio botón—, y si se ha
+    // pedido otro, el antepasado que diga el selector.
+    const mando = (selectorEscucha ? padre?.closest(selectorEscucha) : padre) ?? padre;
 
     // Quien no quiere movimiento no lo tiene: se pinta un fotograma y se queda
     // ahí, que es lo mismo que enseña en reposo.
@@ -79,12 +87,12 @@ export default function MeshGradient({
     // degradado se enciende también al entrar por el texto.
     const entra = () => { i.hover = true; remueve(i); };
     const sale = () => { i.hover = false; remueve(i); };
-    padre?.addEventListener("pointerenter", entra);
-    padre?.addEventListener("pointerleave", sale);
+    mando?.addEventListener("pointerenter", entra);
+    mando?.addEventListener("pointerleave", sale);
     // Con el teclado se enciende igual: quien tabula tiene el mismo aviso de
     // «estás aquí» que quien usa ratón.
-    padre?.addEventListener("focusin", entra);
-    padre?.addEventListener("focusout", sale);
+    mando?.addEventListener("focusin", entra);
+    mando?.addEventListener("focusout", sale);
 
     const diana = padre ?? lienzo;
     // Fuera de pantalla se apaga entero. El margen de sobra es para que llegue
@@ -101,16 +109,16 @@ export default function MeshGradient({
     cinta.observe(diana);
 
     return () => {
-      padre?.removeEventListener("pointerenter", entra);
-      padre?.removeEventListener("pointerleave", sale);
-      padre?.removeEventListener("focusin", entra);
-      padre?.removeEventListener("focusout", sale);
+      mando?.removeEventListener("pointerenter", entra);
+      mando?.removeEventListener("pointerleave", sale);
+      mando?.removeEventListener("focusin", entra);
+      mando?.removeEventListener("focusout", sale);
       ojo.disconnect();
       cinta.disconnect();
       jubila(i);
       inst.current = null;
     };
-  }, [firma, velocidadReposo, velocidadHover, suavizado, escala]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [firma, velocidadReposo, velocidadHover, suavizado, escala, selectorEscucha]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Los colores pueden cambiar sin desmontar nada —otra paleta para el mismo
   // botón—, y entonces solo hay que repintar.

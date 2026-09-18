@@ -13,9 +13,12 @@ import MeshGradient from "@/components/shared/MeshGradient";
 import "./SkillDrop.css";
 
 const skills = [
-  { id: "motion",     label: "Motion Graphics", labelEn: "Motion Graphics", color: "rgba(217,119,6,0.15)",   border: "rgba(217,119,6,0.7)",   hue: 32  },
+  // Motion y Fotografía se intercambiaron el color: el azul es de Motion y el
+  // ámbar de Fotografía. Al cambiar el tono hay que cambiar también el de la
+  // página del proyecto de Motion, que lo saca de aquí.
+  { id: "motion",     label: "Motion Graphics", labelEn: "Motion Graphics", color: "rgba(37,99,235,0.12)",  border: "rgba(37,99,235,0.6)",   hue: 217 },
   { id: "branding",   label: "Branding",         labelEn: "Branding",        color: "rgba(219,39,119,0.12)", border: "rgba(219,39,119,0.6)",  hue: 330 },
-  { id: "fotografia", label: "Fotografía",        labelEn: "Photography",     color: "rgba(37,99,235,0.12)",  border: "rgba(37,99,235,0.6)",   hue: 217 },
+  { id: "fotografia", label: "Fotografía",        labelEn: "Photography",     color: "rgba(217,119,6,0.15)",  border: "rgba(217,119,6,0.7)",   hue: 32  },
   { id: "iberdrola",  label: "Iberdrola",         labelEn: "Iberdrola",       color: "rgba(22,163,74,0.12)",  border: "rgba(22,163,74,0.6)",   hue: 142 },
   { id: "uiux",       label: "UI / UX",           labelEn: "UI / UX",         color: "rgba(13,148,136,0.12)", border: "rgba(13,148,136,0.6)",  hue: 175 },
   { id: "3d",         label: "3D",                labelEn: "3D",              color: "rgba(124,58,237,0.12)", border: "rgba(124,58,237,0.6)",  hue: 262 },
@@ -700,10 +703,16 @@ export default function SkillDrop() {
                   animation: isDragged ? undefined : `capsuleLevitate ${levitateDur}s ease-in-out ${levitateDelay}s infinite`,
                 }}>
                   <div style={{
+                    position:"relative",
+                    // El recorte de la píldora. Es esto lo que le da la forma al
+                    // lienzo del degradado, que por su cuenta es un rectángulo.
+                    overflow:"hidden",
                     width:"100%", height:"100%",
                     borderRadius:"999px",
                     border: encendida ? "none" : "1px solid var(--foreground)",
                     backgroundColor: encendida ? undefined : "var(--background)",
+                    // El degradado de CSS se queda debajo como red, por si no
+                    // hay WebGL.
                     backgroundImage: encendida ? organicGradient(skill.hue, 85, 57) : undefined,
                     backgroundSize: encendida ? CAPSULE_DRIFT_SIZE : undefined,
                     animation: encendida ? "capsuleDrift 13s ease-in-out infinite" : undefined,
@@ -713,7 +722,20 @@ export default function SkillDrop() {
                     whiteSpace:"nowrap",
                     transition:"background 0.15s, color 0.15s",
                   }}>
-                    {getLabel(skill)}
+                    {/* Aquí el encendido NO puede venir del ratón: las cápsulas
+                        llevan los eventos desactivados —quien los recibe es el
+                        lienzo de la física, que es quien sabe sobre cuál está el
+                        cursor—, así que se lo dice `encendida`. */}
+                    <MeshGradient
+                      colores={paletaOrganica(skill.hue, 85, 57)}
+                      encendido={encendida}
+                      velocidadReposo={0}
+                      velocidadHover={0.4}
+                      suavizado={0.45}
+                      escala={0.85}
+                      className={encendida ? undefined : "es-apagado"}
+                    />
+                    <span className="mesh-encima">{getLabel(skill)}</span>
                   </div>
 
                   {!encendida && (

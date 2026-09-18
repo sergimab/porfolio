@@ -4,9 +4,11 @@ import Link from "next/link";
 import "./BackCapsule.css";
 
 const CATS: Record<string, { label: string; hue: number }> = {
-  motion:     { label: "Motion Graphics", hue: 32  },
+  // Los tonos son los mismos que los de las cápsulas de la home, y de ahí
+  // salen: Motion azul y Fotografía ámbar desde que se los cambiaron.
+  motion:     { label: "Motion Graphics", hue: 217 },
   branding:   { label: "Branding",        hue: 330 },
-  fotografia: { label: "Fotografía",      hue: 217 },
+  fotografia: { label: "Fotografía",      hue: 32  },
   iberdrola:  { label: "Iberdrola",       hue: 142 },
   uiux:       { label: "UI / UX",         hue: 175 },
   "3d":       { label: "3D",              hue: 262 },
