@@ -456,10 +456,9 @@ function Cerrar({ onClick, rotulo }: { onClick: () => void; rotulo: string }) {
 // LA FICHA DE UNA OBRA, que es el contenido de toda la app: el cuadro, el miedo
 // que esconde y por qué.
 //
-// Sube desde abajo y no aparece sin más: es una hoja que se arrastra sobre lo
-// que haya —la cámara o la galería—, y ese gesto es el que dice que se puede
-// cerrar y volver. Por eso lleva también el tirador, que no hace nada pero
-// anuncia de dónde ha venido.
+// Sube desde abajo y no aparece sin más: es una hoja que entra sobre lo que
+// haya —la cámara o la galería—, y ese gesto es el que dice que se puede cerrar
+// y volver.
 function Ficha({
   c,
   id,
@@ -474,74 +473,16 @@ function Ficha({
   sentir: () => void;
 }) {
   const f = FOBIAS.find((x) => x.id === id);
-
-  // CUÁNTO SE HA BAJADO LA HOJA, en porcentaje del ancho de la pantalla —la
-  // misma unidad que todo lo demás—. Cero es cerrada; el tope, abierta.
-  const [arrastre, setArrastre] = useState(0);
-  const [tirando, setTirando] = useState(false);
-  const inicio = useRef<{ y: number; base: number } | null>(null);
-  const hoja = useRef<HTMLDivElement>(null);
-
-  // Cuánto baja la hoja, en cqw. Sale de la propia obra: los siete archivos
-  // miden unos 82 cqw de alto a todo el ancho, así que con la hoja abajo el
-  // hueco queda en 109 y el cuadro entero cabe con aire a los dos lados.
-  // Subiendo el tope, lo único que crece es el negro de alrededor.
-  const TOPE = 30;
-  const abierta = arrastre > 2;
-
-  // El arrastre SOLO empieza si la hoja está por arriba del todo. Si no, lo que
-  // el dedo está haciendo es leer, y robarle ese gesto para abrir la ficha
-  // haría imposible desplazar el texto.
-  const empezar = (e: React.PointerEvent) => {
-    if ((hoja.current?.scrollTop ?? 0) > 0) return;
-    inicio.current = { y: e.clientY, base: arrastre };
-    setTirando(true);
-    (e.target as Element).setPointerCapture?.(e.pointerId);
-  };
-  const mover = (e: React.PointerEvent) => {
-    if (!inicio.current) return;
-    const ancho = hoja.current?.parentElement?.clientWidth ?? 1;
-    // De píxeles a cqw: así el mismo gesto recorre lo mismo en un móvil
-    // pequeño que en el aparato grande del escritorio.
-    const d = ((e.clientY - inicio.current.y) / ancho) * 100;
-    setArrastre(Math.max(0, Math.min(TOPE, inicio.current.base + d)));
-  };
-  const soltar = () => {
-    if (!inicio.current) return;
-    inicio.current = null;
-    setTirando(false);
-    // Dos posiciones y nada en medio: o cerrada o abierta. Una hoja que se
-    // quedara donde la dejaste dejaría el cuadro cortado por un sitio
-    // cualquiera.
-    setArrastre((a) => (a > TOPE * 0.3 ? TOPE : 0));
-  };
-
   if (!f) return null;
-
   return (
-    <div
-      className={`am-app-ficha${tirando ? " es-tirando" : ""}${abierta ? " es-abierta" : ""}`}
-      style={{ ["--arrastre" as string]: `${arrastre}cqw` }}
-      role="dialog"
-      aria-label={f.nombre}
-    >
+    <div className="am-app-ficha" role="dialog" aria-label={f.nombre}>
       <div className="am-app-ficha-cuadro">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={`${RUTA}/cuadro-${f.id}.webp`} alt={`${f.obra}, ${f.anio}`} />
         <Cerrar onClick={cerrar} rotulo={c.t("Cerrar la ficha", "Close")} />
       </div>
 
-      <div
-        className="am-app-ficha-hoja"
-        ref={hoja}
-        onPointerDown={empezar}
-        onPointerMove={mover}
-        onPointerUp={soltar}
-        onPointerCancel={soltar}
-      >
-        {/* El tirador. Ahora sí tira: arrastrándolo hacia abajo la hoja baja y
-            el cuadro se ve entero. */}
-        <span className="am-app-ficha-tirador" aria-hidden="true" />
+      <div className="am-app-ficha-hoja">
         <h4 className="am-app-ficha-nombre">{f.nombre}</h4>
         <p className="am-app-ficha-texto">{f.fobia}</p>
         <span className="am-app-raya" aria-hidden="true" />

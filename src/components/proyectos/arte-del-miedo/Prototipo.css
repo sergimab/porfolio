@@ -19,10 +19,16 @@
 .am-movil {
   position: relative;
   flex: 0 0 auto;
-  /* El aparato manda sobre el tamaño de todo lo que lleva dentro: la pantalla
-     va medida en `cqw`, así que ensanchar el marco es lo que hace que el texto
-     de la app se lea. */
-  width: 330px;
+  /* EL ANCHO DEL APARATO ES EL TAMAÑO DE LA LETRA. Todo lo de dentro va en
+     `cqw`, o sea en porcentaje de este número, así que ensanchar el marco es lo
+     único que hace que el texto de la app se lea más grande —y encogerlo, lo
+     contrario—.
+     Estaba en 330 y ahí la letra menuda de las fichas caía a 8,6 px, que es
+     ilegible. A 420 la misma letra da 13, y el cuerpo de lectura 14,3: por
+     encima de los 13,5 del texto del portfolio, que es la referencia. Cabe de
+     sobra: la caja de las pestañas mide 932 y el aparato con sus mandos se
+     queda en 736. */
+  width: 420px;
   padding: 10px;
   border-radius: 44px;
   background: #1b1b1d;
@@ -525,6 +531,9 @@
    ancho, 116 de alto y 33 hasta el canto de abajo. */
 .am-app-barra {
   position: absolute;
+  /* Por delante del degradado del pie: el degradado está para apagar lo que
+     pasa por debajo del menú, no para apagar el menú. */
+  z-index: 4;
   left: 3.72cqw;
   right: 3.72cqw;
   bottom: 5.1cqw;
@@ -672,7 +681,7 @@
     gap: 24px;
   }
   .am-movil {
-    width: min(330px, 78vw);
+    width: min(420px, 86vw);
   }
   .am-proto-mandos {
     flex: 0 0 auto;
@@ -846,7 +855,11 @@
   transform: scale(1.03);
 }
 
-/* El degradado del pie, por debajo de la barra y por encima del contenido.
+/* El degradado del pie: POR DETRÁS de la barra y por delante del contenido.
+   Ese orden es el que importa. El degradado está para apagar lo que se mete
+   debajo del menú, no para apagar el menú: pasando por delante de la barra le
+   bajaba el contraste a los iconos y al contorno blanco, que es precisamente lo
+   que no puede perder nitidez.
    Sube bastante más que la barra a propósito: un degradado que empezara justo
    detrás de ella se vería como una línea de sombra, y lo que tiene que parecer
    es que el contenido se apaga al meterse debajo. */
@@ -992,21 +1005,17 @@
 /* ── La ficha de una obra ────────────────────────────────────────────────────
    SUBE DESDE ABAJO. No es un adorno: es lo que dice que esto se ha abierto
    ENCIMA de donde estabas y que por tanto se puede cerrar y volver. Una ficha
-   que apareciera sin más se leería como haber navegado a otro sitio.
-
-   Y LA HOJA SE ARRASTRA. El cuadro no está encima de la hoja: está DEBAJO, y la
-   hoja lo tapa. Bajándola, el hueco del cuadro crece y la obra se ve entera.
-   `--arrastre` es cuánto ha bajado, y lo escribe el componente; aquí solo se
-   dice qué se mueve con ese número: el alto del cuadro y el arranque de la
-   hoja, los dos a la vez y por la misma cantidad, que es lo que hace que la
-   hoja no despegue ni monte sobre el cuadro. */
+   que apareciera sin más se leería como haber navegado a otro sitio. */
 .am-app-ficha {
   position: absolute;
   inset: 0;
   z-index: 8;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   background: #000;
   text-align: left;
-  --foto: 79.1cqw;   /* 340 px de los 932 del diseño */
   animation: am-ficha-sube 420ms cubic-bezier(0.22, 0.8, 0.2, 1) both;
 }
 @keyframes am-ficha-sube {
@@ -1022,38 +1031,12 @@
 
 /* El cuadro, a sangre y ocupando el tercio de arriba, como en el diseño. */
 .am-app-ficha-cuadro {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: calc(var(--foto) + var(--arrastre, 0px));
-  /* Mientras se tira, sin transición: la hoja tiene que ir pegada al dedo. Al
-     soltar vuelve la transición y la hoja se encaja sola en una de las dos
-     posiciones. */
-  transition: height 320ms cubic-bezier(0.22, 0.8, 0.2, 1);
+  position: relative;
+  flex: 0 0 auto;
+  aspect-ratio: 430 / 340;
 }
-.am-app-ficha.es-tirando .am-app-ficha-cuadro,
-.am-app-ficha.es-tirando .am-app-ficha-hoja {
-  transition: none;
-}
-/* EL ZOOM. Aquí está el porqué de que la obra se vea recortada con la hoja
-   arriba y entera con la hoja abajo, y de que el paso entre las dos sea suave.
-   Lo hace la ESCALA y no el `object-fit`: cambiar de `cover` a `contain` es un
-   salto —son dos maneras distintas de encajar, y el navegador no interpola
-   entre ellas—, así que la imagen va siempre en `contain` y lo que se anima es
-   cuánto se la agranda. Con la hoja arriba se agranda vez y media, que es lo
-   que la recorta y deja ver el centro del cuadro a buen tamaño, tal y como está
-   en el diseño; con la hoja abajo vuelve a su tamaño y cabe entera. */
 .am-app-ficha-cuadro img {
-  object-fit: contain;
-  transform: scale(1.45);
-  transition: transform 320ms cubic-bezier(0.22, 0.8, 0.2, 1);
-}
-.am-app-ficha.es-abierta .am-app-ficha-cuadro img {
-  transform: scale(1);
-}
-.am-app-ficha.es-tirando .am-app-ficha-cuadro img {
-  transition: none;
+  object-fit: cover;
 }
 .am-app-ficha-cuadro img {
   width: 100%;
@@ -1062,42 +1045,11 @@
 }
 
 .am-app-ficha-hoja {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: calc(var(--foto) + var(--arrastre, 0px));
-  bottom: 0;
+  flex: 1 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0 var(--margen-app) 10cqw;
-  background: #000;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  /* El dedo sobre la hoja la arrastra en vertical; sin esto, el navegador se
-     queda con el gesto para desplazar y el arrastre no llega a empezar. */
-  touch-action: pan-y;
-  transition: top 320ms cubic-bezier(0.22, 0.8, 0.2, 1);
-}
-/* El canto de arriba, redondeado: es lo que la hace parecer una hoja puesta
-   sobre el cuadro y no el borde de un recorte. */
-.am-app-ficha-hoja {
-  border-radius: 5cqw 5cqw 0 0;
-}
-.am-app-ficha-tirador {
-  cursor: grab;
-}
-.am-app-ficha.es-tirando .am-app-ficha-tirador {
-  cursor: grabbing;
-}
-/* El tirador. No arrastra nada —esto es una demostración—, pero es la señal de
-   que la hoja ha subido desde abajo, y quitarlo dejaría el gesto sin explicar. */
-.am-app-ficha-tirador {
-  width: 12cqw;
-  height: 0.7cqw;
-  margin: 3.4cqw 0 4cqw;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.8);
+  padding: var(--u) var(--margen-app) 10cqw;
 }
 .am-app-ficha-nombre {
   margin: 0 0 calc(var(--u) * 0.9);
@@ -1108,16 +1060,18 @@
 }
 .am-app-ficha-obra {
   margin: 0 0 var(--u);
-  font-size: var(--t-texto);
+  font-size: 3.6cqw;
   font-weight: 500;
   text-align: center;
 }
-/* El texto de la ficha va más menudo que el del tutorial: allí son tres líneas
-   que se leen de un golpe y aquí hay dos párrafos largos, y a cuerpo de
-   tutorial no cabrían sin partir la ficha en tres pantallas de scroll. */
+/* El texto de la ficha va un punto más menudo que el del tutorial: allí son
+   tres líneas que se leen de un golpe y aquí hay dos párrafos largos. Un punto
+   y no tres: en el diseño está a 11 px de sus 430 —2,6 cqw—, que traducido aquí
+   se quedaba en letra de pie de foto. 3,1 es lo que hace que se lea seguido sin
+   dejar de ser el escalón pequeño de la app. */
 .am-app-ficha-texto {
   margin: 0 0 var(--u);
-  font-size: 2.6cqw;   /* 11 px del diseño */
+  font-size: 3.1cqw;
   font-weight: 300;
   line-height: 1.5;
   text-align: justify;
