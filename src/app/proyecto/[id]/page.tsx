@@ -19,6 +19,11 @@ import EspacioVacioLanding from "@/components/proyectos/espacio-vacio/EspacioVac
 import AppEspacioVacioLanding from "@/components/proyectos/app-espacio-vacio/AppLanding";
 import YelmoLanding from "@/components/proyectos/yelmo/YelmoLanding";
 import MotionLanding from "@/components/proyectos/yelmo-motion/MotionLanding";
+// «El Arte del Miedo»: un mismo proyecto en tres categorías. Las tres páginas
+// comparten componente; lo único que cambia es la disciplina que se le pasa.
+import ArteMiedoBranding from "@/components/proyectos/arte-del-miedo/BrandingLanding";
+import ArteMiedoMotion from "@/components/proyectos/arte-del-miedo/MotionLanding";
+import ArteMiedoUiux from "@/components/proyectos/arte-del-miedo/UiuxLanding";
 
 const LANDINGS: Record<string, React.ComponentType> = {
   m1: MotionLanding,
@@ -31,6 +36,9 @@ const LANDINGS: Record<string, React.ComponentType> = {
   e1: DiscoElysiumLanding,
   b1: EspacioVacioLanding,
   b2: YelmoLanding,
+  b3: ArteMiedoBranding,
+  m2: ArteMiedoMotion,
+  u3: ArteMiedoUiux,
 };
 
 function catFromId(id: string): string {
@@ -46,11 +54,11 @@ function catFromId(id: string): string {
 }
 
 const titles: Record<string, string> = {
-  m1: "Motion Yelmo Cines", m2: "Proyecto Motion 02", m3: "Proyecto Motion 03",
-  b1: "Espacio vacío", b2: "Rebranding Yelmo Cines", b3: "Proyecto Branding 03",
+  m1: "Motion Yelmo Cines", m2: "Motion El Arte del Miedo", m3: "Proyecto Motion 03",
+  b1: "Espacio vacío", b2: "Rebranding Yelmo Cines", b3: "El Arte del Miedo",
   f1: "Proyecto Foto 01", f2: "Proyecto Foto 02", f3: "Proyecto Foto 03",
   i1: "Infografías", i2: "Sistema de diseño", i3: "Newsletters", i4: "Iconografía", i5: "Sistema de ilustraciones",
-  u1: "Web de Elysium", u2: "App Espacio vacío", u3: "Proyecto UI/UX 03",
+  u1: "Web de Elysium", u2: "App Espacio vacío", u3: "App El Arte del Miedo",
   d1: "Elysium", d2: "Proyecto 3D 02", d3: "Proyecto 3D 03",
   e1: "Disco Elysium",
 };

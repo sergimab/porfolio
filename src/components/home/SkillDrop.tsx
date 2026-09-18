@@ -32,11 +32,11 @@ const skills = [
 
 
 const projects: Record<string, { id: string; title: string; titleEn: string; cover?: string }[]> = {
-  motion:     [{ id:"m1",title:"Motion Yelmo Cines",titleEn:"Yelmo Cines motion",cover:"/covers/motion-yelmo.webp"},{id:"m2",title:"Proyecto Motion 02",titleEn:"Motion Project 02"},{id:"m3",title:"Proyecto Motion 03",titleEn:"Motion Project 03"}],
-  branding:   [{ id:"b1",title:"Espacio vacío",titleEn:"Empty space",cover:"/covers/espacio-vacio.webp"},{id:"b2",title:"Rebranding Yelmo Cines",titleEn:"Yelmo Cines rebranding",cover:"/covers/rebranding-yelmo.webp"},{id:"b3",title:"Proyecto Branding 03",titleEn:"Branding Project 03"}],
+  motion:     [{ id:"m1",title:"Motion Yelmo Cines",titleEn:"Yelmo Cines motion",cover:"/covers/motion-yelmo.webp"},{id:"m2",title:"Motion El Arte del Miedo",titleEn:"The Art of Fear motion"},{id:"m3",title:"Proyecto Motion 03",titleEn:"Motion Project 03"}],
+  branding:   [{ id:"b1",title:"Espacio vacío",titleEn:"Empty space",cover:"/covers/espacio-vacio.webp"},{id:"b2",title:"Rebranding Yelmo Cines",titleEn:"Yelmo Cines rebranding",cover:"/covers/rebranding-yelmo.webp"},{id:"b3",title:"El Arte del Miedo",titleEn:"The Art of Fear"}],
   fotografia: [{ id:"f1",title:"Proyecto Foto 01",titleEn:"Photo Project 01"},{id:"f2",title:"Proyecto Foto 02",titleEn:"Photo Project 02"},{id:"f3",title:"Proyecto Foto 03",titleEn:"Photo Project 03"}],
   iberdrola:  [{ id:"i2",title:"Sistema de diseño",titleEn:"Design system"},{id:"i5",title:"Sistema de ilustraciones",titleEn:"Illustration system",cover:"/covers/sistema-ilustraciones.svg"},{id:"i1",title:"Infografías",titleEn:"Infographics",cover:"/covers/infografias.webp"},{id:"i3",title:"Newsletters",titleEn:"Newsletters",cover:"/covers/newsletters.webp"},{id:"i4",title:"Iconografía",titleEn:"Iconography",cover:"/covers/iberdrola-iconografia.svg"}],
-  uiux:       [{ id:"u1",title:"Web de Elysium",titleEn:"Elysium website",cover:"/covers/elysium-web.webp"},{id:"u2",title:"App Espacio vacío",titleEn:"Empty space app",cover:"/covers/espacio-vacio-app.webp"},{id:"u3",title:"Proyecto UI/UX 03",titleEn:"UI/UX Project 03"}],
+  uiux:       [{ id:"u1",title:"Web de Elysium",titleEn:"Elysium website",cover:"/covers/elysium-web.webp"},{id:"u2",title:"App Espacio vacío",titleEn:"Empty space app",cover:"/covers/espacio-vacio-app.webp"},{id:"u3",title:"App El Arte del Miedo",titleEn:"The Art of Fear app"}],
   "3d":       [{ id:"d1",title:"Elysium",titleEn:"Elysium",cover:"/covers/elysium-3D.webp"},{id:"d2",title:"Proyecto 3D 02",titleEn:"3D Project 02"},{id:"d3",title:"Proyecto 3D 03",titleEn:"3D Project 03"}],
   editorial:  [{ id:"e1",title:"Disco Elysium",titleEn:"Disco Elysium",cover:"/covers/elysium-editorial.webp"}],
 };
