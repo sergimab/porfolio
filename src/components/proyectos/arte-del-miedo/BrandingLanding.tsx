@@ -1,6 +1,7 @@
 import ArteMiedo from "./ArteMiedo";
 import RotuloSeccion from "@/components/shared/RotuloSeccion";
 import LangText from "@/components/shared/LangText";
+import Tipografia from "./Tipografia";
 import "./ArteMiedo.css";
 
 // La pata de branding del proyecto: de dónde sale el nombre, de dónde sale el
@@ -77,10 +78,12 @@ export default function BrandingLanding() {
             />
           </p>
         </div>
+        <Tipografia />
+
         <p className="am-pendiente">
           <LangText
-            es="Faltan la muestra de Raleway con sus pesos y los valores de los cuatro colores (negro, blanco, azul y rosa) en CMYK, RGB y HEX."
-            en="Missing: the Raleway specimen with its weights, and the four colours (black, white, blue, pink) in CMYK, RGB and HEX."
+            es="Falta la paleta: los cuatro colores (negro, blanco, azul y rosa) con sus valores en CMYK, RGB y HEX."
+            en="Missing: the palette — the four colours (black, white, blue, pink) with their CMYK, RGB and HEX values."
           />
         </p>
       </section>
