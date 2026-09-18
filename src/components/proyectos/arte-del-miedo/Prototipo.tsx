@@ -299,6 +299,25 @@ function Icono({ id }: { id: string }) {
 // números de aquí se pueden comparar con lo medido sin traducir nada.
 function Barra() {
   const r = 56.75; // el radio de las puntas, ya descontado medio trazo
+
+  // LA MUESCA ESTÁ CALCULADA, no dibujada a ojo. El botón es un círculo de 42,5
+  // de radio con el centro 5 por encima del canto de la barra, y lo que se
+  // pide de la muesca es que pase SIEMPRE a la misma distancia de él: si se
+  // abre poco, el contorno roza el botón por los flancos —que es donde más se
+  // cierra la curva— aunque por abajo parezca que sobra sitio.
+  //
+  // Con estos números la separación es de 11 px por los lados y 15 por abajo,
+  // medida punto a punto sobre la curva. La anterior dejaba 2,3: de ahí que el
+  // botón se viera pegado a la línea.
+  //
+  // Los dos números que mandan son el ANCHO —90 a cada lado del centro— y el
+  // FONDO —54—; los de control valen el 42 % del ancho, que es lo que le da a
+  // la curva el hombro suave en vez de una uve.
+  const cx = 298;
+  const w = 90;
+  const d = 54;
+  const k = 38;
+
   return (
     <svg
       className="am-app-barra-forma"
@@ -316,7 +335,13 @@ function Barra() {
         </linearGradient>
       </defs>
       <path
-        d={`M 58 1.25 L 228 1.25 C 258 1.25 268 48 298 48 C 328 48 338 1.25 368 1.25 L 538 1.25 A ${r} ${r} 0 0 1 538 114.75 L 58 114.75 A ${r} ${r} 0 0 1 58 1.25 Z`}
+        d={
+          `M 58 1.25 L ${cx - w} 1.25` +
+          ` C ${cx - w + k} 1.25 ${cx - k} ${d} ${cx} ${d}` +
+          ` C ${cx + k} ${d} ${cx + w - k} 1.25 ${cx + w} 1.25` +
+          ` L 538 1.25 A ${r} ${r} 0 0 1 538 114.75` +
+          ` L 58 114.75 A ${r} ${r} 0 0 1 58 1.25 Z`
+        }
         fill="url(#am-barra-relleno)"
         stroke="#fff"
         strokeWidth="2.5"

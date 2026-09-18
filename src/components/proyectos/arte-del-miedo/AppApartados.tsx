@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useLang } from "@/components/shared/useLang";
 import LangText from "@/components/shared/LangText";
-import Pantallas, { type Pantalla } from "./Pantallas";
 import Prototipo from "./Prototipo";
 // LAS PESTAÑAS SON LAS MISMAS QUE LAS DE LA APP DE ESPACIO VACÍO, y por eso se
 // importa su CSS en vez de copiarlo. Son la misma pieza haciendo el mismo
@@ -13,19 +12,6 @@ import Prototipo from "./Prototipo";
 // sacarlo a un componente compartido, no volver a copiarlo.
 import "../app-espacio-vacio/Apartados.css";
 import "./ArteMiedo.css";
-
-// Seis obras de la sala vistas a través de la cámara de la app. NO son seis
-// pasos de un recorrido —son la misma pantalla seis veces, con un cuadro
-// distinto cada vez—, así que van sin rótulo debajo: lo que cuenta la tira es
-// que el efecto funciona sobre cuadros muy distintos, no el orden.
-const ESCANEO: Pantalla[] = [
-  { id: "escaneo-01" },
-  { id: "escaneo-02" },
-  { id: "escaneo-03" },
-  { id: "escaneo-04" },
-  { id: "escaneo-05" },
-  { id: "escaneo-06" },
-];
 
 // Las dos caras del proyecto en la misma caja: lo que la app HACE y de qué está
 // HECHA. Van como dos posiciones de un interruptor y no como dos apartados
@@ -62,37 +48,10 @@ export default function AppApartados() {
       </div>
 
       <div className="ev-fichas-caja" data-cual={cual}>
+        {/* Solo el prototipo. Sin texto delante ni piezas detrás: la pestaña ya
+            dice qué es esto, y la app se explica sola pasando pantallas. */}
         <div hidden={cual !== "prototipo"}>
-          <h3 className="am-subrotulo">
-            <LangText es="La entrada" en="Getting in" />
-          </h3>
-          <div className="am-texto">
-            <p>
-              <LangText
-                es="La app se abre con un recorrido de **cinco pasos** que enseña de una vez lo que se puede hacer dentro —escanear, descubrir, coleccionar, analizar y descargar— y desemboca en el menú. No hay registro: la exposición dura lo que dura la visita, y pedir una cuenta para entrar sobraba."
-                en="The app opens with a **five-step** walkthrough that lays out everything you can do inside — scan, discover, collect, analyse and download — and lands on the menu. There is no sign-up: the exhibition lasts as long as the visit, and asking for an account to get in was one step too many."
-              />
-            </p>
-          </div>
           <Prototipo />
-
-          <h3 className="am-subrotulo">
-            <LangText es="El escaneo" en="Scanning" />
-          </h3>
-          <div className="am-texto">
-            <p>
-              <LangText
-                es="Es para lo que existe la app. El visitante apunta la cámara a un cuadro que **no tiene cartela** y, a través de ella, el cuadro se enciende con la **misma textura de escáner** que llevan los carteles. Debajo, seis obras de la sala vistas así: el efecto tiene que leerse igual sobre un óleo oscuro que sobre un grabado en blanco y negro."
-                en="This is what the app exists for. You point the camera at a painting with **no wall label** and, through it, the painting lights up with the **same scanner texture** the posters carry. Below, six works from the room seen that way: the effect has to read the same on a dark oil painting as on a black-and-white engraving."
-              />
-            </p>
-          </div>
-          <Pantallas
-            pantallas={ESCANEO}
-            rotulo="Seis obras de la sala vistas a través de la cámara de la app"
-            rotuloEn="Six works from the room seen through the app's camera"
-          />
-
         </div>
 
         <div hidden={cual !== "sistema"}>
