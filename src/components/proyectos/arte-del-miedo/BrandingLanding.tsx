@@ -75,16 +75,20 @@ export default function BrandingLanding() {
             al lado, las pruebas que se quedaron por el camino pasando en
             bucle. */}
         <div className="am-iconos">
-          <figure>
-            <Isotipo conRejilla />
-            <figcaption>
-              <LangText es="Final" en="Final" />
-            </figcaption>
-          </figure>
-          <figure>
+          {/* Las pruebas van primero y el definitivo después: se lee de
+              izquierda a derecha, así que ese orden cuenta el proceso en el
+              sentido en que ocurrió —se buscó, y se llegó—. Al revés parecía que
+              el bueno se degradaba en seis intentos. */}
+          <figure className="es-prueba">
             <Pruebas />
             <figcaption>
               <LangText es="Pruebas" en="Trials" />
+            </figcaption>
+          </figure>
+          <figure className="es-final">
+            <Isotipo conRejilla />
+            <figcaption>
+              <LangText es="Final" en="Final" />
             </figcaption>
           </figure>
         </div>

@@ -20,6 +20,29 @@
   flex: 0 0 auto;
   width: min(210px, 38%);
   margin: 0;
+  /* El relleno y el hilo los llevan LAS DOS, aunque en las pruebas el hilo sea
+     transparente: así las dos cuadrículas miden exactamente lo mismo y lo único
+     que las distingue es el color, no el tamaño. */
+  box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+}
+
+/* EL DEFINITIVO, DESTACADO. Marco en el color de la categoría —el mismo rosa de
+   los rótulos de esta página—, que es como el sitio dice «esto es lo que
+   importa» sin subir el tamaño ni meter un fondo. */
+.am-iconos figure.es-final {
+  border-color: hsl(var(--hero-hue, 142) 55% 45%);
+}
+.am-iconos figure.es-final figcaption {
+  color: hsl(var(--hero-hue, 142) 55% 45%);
+}
+
+/* Y las pruebas, un paso atrás: la figura en tinta rebajada. Ninguna se eligió,
+   así que no deben pesar lo mismo que la que sí. */
+.am-iconos figure.es-prueba .am-iso-figura {
+  fill: color-mix(in srgb, var(--foreground) 48%, transparent);
 }
 /* El rótulo de cada uno. Sin él, dos cuadrículas iguales al lado y una de ellas
    cambiando sola se leen como un fallo, no como una comparación.
