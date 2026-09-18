@@ -75,6 +75,9 @@ export default function ArteMiedo({ disciplina }: { disciplina: Disciplina }) {
             <BackCapsule category={disciplina} />
           </span>
 
+          {/* Sin fila de equipo: este lo hizo él solo. Va dicho porque las demás
+              páginas de la misma casa sí la llevan —Espacio vacío pone «3
+              diseñadores»— y su ausencia aquí es una decisión, no un olvido. */}
           <div className="project-meta">
             <div className="project-meta-row">
               <span className="project-meta-key"><LangText es="Tipo" en="Type" /></span>
