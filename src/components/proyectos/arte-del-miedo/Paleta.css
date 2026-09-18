@@ -10,7 +10,10 @@
   grid-template-rows: repeat(3, 1fr);
   width: min(420px, 100%);
   aspect-ratio: 1 / 1;
-  margin: 28px 0 0;
+  /* Centrado, como estaba en la lámina del manual. Al quitarle el cuadro negro
+     se quedó pegado a la izquierda, que es donde empieza el texto; suelto sobre
+     el papel pide el medio. */
+  margin: 28px auto 0;
   font-family: var(--font-raleway), system-ui, sans-serif;
 }
 

@@ -3,6 +3,7 @@ import RotuloSeccion from "@/components/shared/RotuloSeccion";
 import LangText from "@/components/shared/LangText";
 import Tipografia from "./Tipografia";
 import Paleta from "./Paleta";
+import Isotipo from "./Isotipo";
 import "./ArteMiedo.css";
 
 // La pata de branding del proyecto: de dónde sale el nombre, de dónde sale el
@@ -54,12 +55,9 @@ export default function BrandingLanding() {
             />
           </p>
         </div>
-        <p className="am-pendiente">
-          <LangText
-            es="Falta la lámina de construcción: la cuadrícula de 6 × 7 con el isotipo encima, como la de Espacio vacío."
-            en="Missing: the construction plate — the 6 × 7 grid with the icon on top, like the one in Empty space."
-          />
-        </p>
+        {/* El isotipo sobre su cuadrícula: es de lo que habla el texto, así que
+            se enseña la figura Y las líneas de las que sale. */}
+        <Isotipo conRejilla />
       </section>
 
       {/* ── Tipografía ─────────────────────────────────────────────────── */}

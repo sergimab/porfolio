@@ -1,0 +1,18 @@
+/* El isotipo. Se pinta en el color del texto de la página, así que vale igual
+   sobre papel claro que sobre oscuro sin tener que duplicar el archivo. */
+.am-iso {
+  display: block;
+  width: min(260px, 70%);
+  height: auto;
+  margin: 28px auto 0;
+}
+.am-iso-figura {
+  fill: var(--foreground);
+}
+
+/* Las líneas de construcción: el hilo más flojo que la figura, que están para
+   explicarla y no para competir con ella. */
+.am-iso-rejilla line {
+  stroke: color-mix(in srgb, var(--foreground) 26%, transparent);
+  stroke-width: 1;
+}
