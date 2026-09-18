@@ -434,10 +434,13 @@
 }
 /* Degradado orgánico de las cápsulas coloreadas: las manchas derivan cada
    una en una dirección distinta (mismo lenguaje que la cinta de las cards) */
+/* Cuatro manchas y el fondo liso: cinco posiciones por paso. Cada mancha va por
+   su lado —no todas hacia el mismo sitio—, que es lo que hace que la luz y la
+   sombra se crucen y el color parezca girar en vez de deslizarse. */
 @keyframes capsuleDrift {
-  0%, 100% { background-position: 0% 0%,   100% 0%,  50% 100%, 0 0; }
-  33%      { background-position: 70% 45%, 30% 65%,  15% 35%,  0 0; }
-  66%      { background-position: 100% 90%, 0% 100%, 85% 0%,   0 0; }
+  0%, 100% { background-position: 0% 0%,    100% 0%,   50% 100%, 0% 100%,  0 0; }
+  33%      { background-position: 70% 45%,  30% 65%,   15% 35%,  85% 40%,  0 0; }
+  66%      { background-position: 100% 90%, 0% 100%,   85% 0%,   40% 0%,   0 0; }
 }
 .panel-btn {
   display: flex; align-items: center; justify-content: center;
