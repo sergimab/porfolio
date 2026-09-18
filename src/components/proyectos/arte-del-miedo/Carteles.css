@@ -86,9 +86,18 @@
    Mismo reparto que la fila de carteles: el reparto de cada pieza es su propia
    proporción —1,5 el mockup apaisado, 1 el vídeo cuadrado—, así que los dos
    acaban con el mismo alto sin escribir ninguna medida. */
+/* Esta fila ya NO reparte por proporción como la de los carteles, y por eso se
+   alinea al centro y no arriba.
+   El reparto por proporción da el mismo alto a las dos piezas, pero tiene una
+   consecuencia: con el ancho de la columna fijo, agrandar una encoge a la otra
+   Y baja el alto de las dos. Para que el vídeo creciera de verdad había que
+   romper la regla, así que aquí el ancho va casi a medias y cada pieza se queda
+   con el alto que le pide su forma —el vídeo es cuadrado y el mockup apaisado,
+   así que el vídeo sale más alto—. Centradas, eso se lee como una composición;
+   alineadas arriba, se leería como un descuadre. */
 .am-flyers {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 20px;
   margin: 20px 0 0;
 }
@@ -118,7 +127,10 @@
   object-fit: contain;
 }
 .am-flyers-video {
-  flex: 1 1 0;
+  /* 1,5 y no 1: con el reparto por proporción el vídeo se quedaba en 378 px al
+     lado de unos flyers de 576, y era la pieza pequeña de la fila. Subiéndolo al
+     mismo reparto que el mockup, el ancho va a medias y el vídeo pasa a 473. */
+  flex: 1.5 1 0;
   min-width: 0;
 }
 /* El componente de vídeo trae su propio aire y su propio redondeo, pensados
