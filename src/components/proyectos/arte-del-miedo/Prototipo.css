@@ -146,9 +146,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* Arriba, el hueco hasta el isotipo (82 px medidos); abajo, el que queda
-     bajo el botón (63 px, o sea dos renglones y pico). */
-  padding: var(--e2) var(--margen) calc(var(--u) * 2.2);
+  /* EL BLOQUE DE ARRIBA VA MÁS ALTO QUE EN EL DISEÑO, y es a propósito. En el
+     original, el paso de cuatro líneas de texto dejaba 23 px entre la última
+     línea y el botón: el texto se leía pegado al botón y el botón parecía parte
+     del párrafo. Subiendo 78 px el isotipo, el título y el vídeo —tres huecos
+     de arriba, ninguno de los cuales se echa de menos— el peor caso pasa a
+     tener 58 px de aire, que es el mismo hueco que hay entre el vídeo y el
+     texto. O sea que el párrafo queda a la misma distancia de lo que explica y
+     de lo que viene después. */
+  padding: var(--e1) var(--margen) calc(var(--u) * 2.2);
   text-align: center;
 }
 /* Las pantallas que se pintan hasta los cantos: el arranque y la home, que
@@ -210,8 +216,7 @@
 /* Arriba de cada paso del tutorial. */
 .am-app-marca.es-cabecera {
   width: var(--iso);
-  /* 86 px medidos del pie del isotipo al alto del título. */
-  margin-bottom: var(--e2);
+  margin-bottom: var(--e1);
 }
 /* Dentro del botón redondo de la barra de la home. */
 .am-app-marca.es-boton {
@@ -248,11 +253,11 @@
    el mismo estilo puesto en una o en dos líneas, y tenerlos aquí como dos
    tamaños distintos era inventarse un escalón que no existe. */
 .am-app-titulo {
-  /* 78 px medidos de tinta a tinta, MENOS los 7 que el renglón del título deja
-     por debajo de las mayúsculas. Esa resta hay que hacerla en todos los huecos
-     que van bajo un texto: los del diseño se miden entre lo que se ve, y un
-     margen de CSS se mide entre cajas, que son más altas que su tinta. */
-  margin: 0 0 11cqw;
+  /* Los huecos que van DEBAJO de un texto llevan descontado el renglón que la
+     caja deja por debajo de las mayúsculas: los del diseño se miden entre lo
+     que se ve, y un margen de CSS se mide entre cajas, que son más altas que su
+     tinta. Aquí son 7 px de los 52. */
+  margin: 0 0 7cqw;
   font-size: var(--t-titulo);
   font-weight: 500;
   letter-spacing: 0.02em;
@@ -266,10 +271,13 @@
   margin: 0 0 var(--u);
   font-size: var(--t-texto);
   font-weight: 300;
-  /* Justificado, como en el diseño: es un párrafo corto en una columna estrecha
-     y ahí el bloque cerrado se lee como una placa. La última línea, centrada. */
-  text-align: justify;
-  text-align-last: center;
+  /* CENTRADO Y NO JUSTIFICADO. El diseño lo trae justificado, pero justificar
+     una columna de siete u ocho palabras obliga al navegador a estirar los
+     espacios para cuadrar el renglón, y en una línea corta ese estirón se ve:
+     salen calles blancas entre palabras. Centrado, el espacio entre palabras es
+     siempre el que la tipografía trae, que es el que hace que el texto se lea
+     seguido. */
+  text-align: center;
 }
 .am-app-texto:last-of-type {
   margin-bottom: 0;
@@ -452,46 +460,56 @@
   padding-top: var(--e1);
 }
 
-/* LA BARRA, con el botón del isotipo en medio.
-   Una sola pieza y no cinco botones sueltos: la barra lleva el contorno y, en
-   el centro, el botón redondo se posa sobre ella sobresaliendo por arriba. Eso
-   es lo que lo convierte en «el» botón de la app y no en uno más de la fila. */
+/* ── La barra de la home ──
+   La caja solo sitúa; el dibujo lo pone el SVG de dentro, que es quien sabe
+   hacer la muesca. Las medidas son las del diseño: de 24 a 620 de los 645 de
+   ancho, 116 de alto y 33 hasta el canto de abajo. */
 .am-app-barra {
   position: absolute;
-  /* Medido: la barra ocupa de 24 a 620 de los 645 de ancho, mide 116 de alto y
-     deja 33 hasta el canto de abajo. */
-  left: 3.7cqw;
-  right: 3.7cqw;
+  left: 3.72cqw;
+  right: 3.72cqw;
   bottom: 5.1cqw;
   height: 18cqw;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  border: 1px solid rgba(255, 255, 255, 0.75);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
-  /* El vidrio de la barra sobre lo que haya detrás: en la home no se nota, pero
-     en cuanto una pantalla lleve contenido debajo, sí. */
-  backdrop-filter: blur(6px);
 }
+.am-app-barra-forma {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Los cuatro botones, cada uno en su punto de la barra. Van colocados y no
+   repartidos automáticamente porque el centro lo ocupa la muesca: un reparto a
+   partes iguales los pondría dos de ellos debajo del botón del escáner. */
 .am-app-barra button {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
   border: 0;
   background: none;
-  color: #fff;
   padding: 0;
+  /* El gris de los iconos apagados, medido en el diseño. */
+  color: #a5a5a5;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Aunque el icono mida 41 px, el botón mide más: por debajo de 24 px de lado
+     real un objetivo es difícil de acertar con el dedo, y aquí hay sitio de
+     sobra para dárselo. */
+  width: 9cqw;
+  height: 9cqw;
+  transition: color 160ms ease;
+}
+/* El apartado en el que se está, en blanco. */
+.am-app-barra button[data-puesto="true"],
+.am-app-barra button:hover {
+  color: #fff;
 }
 .am-app-icono {
   display: block;
-  width: 6.8cqw;   /* 44 px */
-  opacity: 0.92;
-  transition: opacity 160ms ease;
-}
-.am-app-barra button:hover .am-app-icono {
-  opacity: 1;
+  width: 6.4cqw;   /* 41 px */
 }
 .am-app-icono svg {
   display: block;
@@ -499,36 +517,39 @@
   height: auto;
 }
 
-/* El botón del centro: redondo, relleno con el degradado y montado sobre la
-   barra. Sube por encima del borde de arriba, que es lo que hace que se lea
-   como posado en la muesca y no como metido en la fila. */
-/* Se nombra con el botón delante —`button.am-app-barra-centro`— y no a secas:
-   la regla de arriba que apaga el fondo de los botones de la barra va después
-   en el archivo y pesa más que una clase sola, así que el degradado se perdía y
-   el botón salía transparente. */
+/* El botón del escáner: redondo, relleno con el degradado y posado en la
+   muesca. Se nombra con el botón delante —`button.am-app-barra-centro`— porque
+   la regla de arriba pesa más que una clase sola y le ganaría la posición.
+   Ya no necesita ningún anillo negro que le abra hueco: el hueco lo abre la
+   propia muesca del dibujo, y por eso el contorno blanco sigue rodeándolo en
+   vez de cortarse a los lados. */
 .am-app-barra button.am-app-barra-centro {
-  position: absolute;
   left: 50%;
-  /* La mitad del círculo por encima del canto de la barra: así se lee como
-     posado en ella. El 7 es la mitad de su diámetro, escrito como tal para que
-     siga cuadrando si el botón cambia de tamaño. */
-  bottom: calc(100% - 5.3cqw);
+  top: auto;
+  /* 85 px de diámetro, con el centro 5 por encima del canto de la barra: así
+     quedan 37,5 dentro de la muesca, que baja 47. El hueco negro que separa el
+     botón del contorno es esa diferencia, y es lo único que hay que tocar si se
+     quiere más o menos apretado.
+     El diámetro sale de la referencia y no de la captura —allí sale 78—: la
+     captura es un render y la referencia es el dibujo. */
+  bottom: calc(100% - 5.8cqw);
   transform: translateX(-50%);
-  /* 78 px de diámetro, y de ellos 34 por debajo del canto de la barra: la mitad
-     larga queda fuera, que es lo que lo levanta por encima de la fila. */
-  width: 12.1cqw;
-  height: 12.1cqw;
+  width: 13.2cqw;
+  height: 13.2cqw;
   border-radius: 50%;
-  background: var(--tinta);
-  /* El anillo negro es el hueco que el botón se abre en la barra: del color de
-     la pantalla, así que parece que la barra está recortada por debajo. */
-  box-shadow: 0 0 0 1.2cqw #000;
+  /* Los dos colores de la marca en diagonal, el azul arriba a la izquierda y el
+     rosa abajo a la derecha, con el morado de la mezcla en medio: es el mismo
+     degradado que la lámina de la paleta. */
+  background: linear-gradient(145deg, #2f00e2 0%, #7212e2 45%, #ff1597 100%);
+  /* Un halo corto, del color de la mezcla. En el diseño el botón alumbra un
+     poco sobre el negro; pasándose, parece un botón encendido de una alarma. */
+  filter: drop-shadow(0 0 1.5cqw rgba(130, 35, 215, 0.4));
   transition: transform 180ms ease;
 }
 .am-app-barra button.am-app-barra-centro:hover {
   transform: translateX(-50%) scale(1.06);
 }
-.am-app-barra-centro .am-app-marca {
+.am-app-barra button.am-app-barra-centro .am-app-marca {
   width: 42%;
 }
 

@@ -215,33 +215,113 @@ type Pantalla = {
   cuerpo: (c: Ctx) => React.ReactNode;
 };
 
-// Los iconos de la barra de la home. Van dibujados y no como fuente de iconos
-// para que el trazo sea el mismo que el del resto de la app.
-const ICONOS: Record<string, string> = {
-  casa: "M3 10.5 12 3.5l9 7V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z",
-  galeria: "M3 5h18v14H3z M3 16l5-5 4 4 3-3 6 6",
-  datos: "M5 20V10 M12 20V4 M19 20v-7",
-  descarga: "M12 3v12 M7 11l5 5 5-5 M4 20h16",
+// LOS ICONOS DE LA BARRA, dibujados uno a uno y no traídos de una librería:
+// cada uno tiene su gesto en el diseño —la casa lleva puerta de arco, la
+// galería un sol asomando, los datos van MACIZOS y no de contorno como los
+// demás— y una librería da cuatro iconos coherentes entre sí pero distintos de
+// estos.
+//
+// Todos se dibujan dentro del mismo cuadro de 24 y con el mismo grosor de
+// trazo, que es lo que hace que pesen igual en la fila aunque uno sea una casa
+// y otro tres barras.
+const TRAZO = {
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 1.7,
+  strokeLinecap: "round" as const,
+  strokeLinejoin: "round" as const,
 };
 
-function Icono({ d, rotulo }: { d: string; rotulo: string }) {
+const ICONOS: Record<string, React.ReactNode> = {
+  casa: (
+    <>
+      <path d="M3.6 10.1 12 3.3l8.4 6.8v9.1a1.3 1.3 0 0 1-1.3 1.3H4.9a1.3 1.3 0 0 1-1.3-1.3z" {...TRAZO} />
+      {/* La puerta, un arco y no un rectángulo: es lo que distingue a esta casa
+          de la de cualquier librería de iconos. */}
+      <path d="M9.4 20.5v-4.3a2.6 2.6 0 0 1 5.2 0v4.3" {...TRAZO} />
+    </>
+  ),
+  galeria: (
+    <>
+      <rect x="3" y="4.7" width="18" height="14.6" rx="2.6" {...TRAZO} />
+      <circle cx="16.1" cy="9.4" r="1.35" {...TRAZO} />
+      <path d="M3.3 16.4 8.6 11l4.6 4.6 2.3-2.1 5.2 4.3" {...TRAZO} />
+    </>
+  ),
+  datos: (
+    // Macizas: en el diseño esta es la única de las cuatro que va rellena.
+    <g fill="currentColor">
+      <rect x="3.6" y="14.4" width="3.9" height="6.2" rx="1.2" />
+      <rect x="10.05" y="10.4" width="3.9" height="10.2" rx="1.2" />
+      <rect x="16.5" y="6.6" width="3.9" height="14" rx="1.2" />
+    </g>
+  ),
+  descarga: (
+    <>
+      <path d="M12 3.3v11.2" {...TRAZO} />
+      <path d="M7.4 10.2 12 14.8l4.6-4.6" {...TRAZO} />
+      {/* La bandeja: abierta por arriba, que es donde entra la flecha. */}
+      <path d="M4 15.6v3.4a1.6 1.6 0 0 0 1.6 1.6h12.8a1.6 1.6 0 0 0 1.6-1.6v-3.4" {...TRAZO} />
+    </>
+  ),
+};
+
+// Los cuatro destinos de la barra, en orden. `puesto` es dónde va cada uno a lo
+// largo de la barra, medido en el diseño: no es un reparto automático, porque
+// los dos huecos de en medio los ocupa la muesca del botón del escáner.
+const BARRA: { id: string; es: string; en: string; puesto: number }[] = [
+  { id: "casa", es: "Inicio", en: "Home", puesto: 13.5 },
+  { id: "galeria", es: "Colección", en: "Collection", puesto: 31.2 },
+  { id: "datos", es: "Datos", en: "Data", puesto: 68.8 },
+  { id: "descarga", es: "Descargas", en: "Downloads", puesto: 86.5 },
+];
+
+function Icono({ id }: { id: string }) {
   return (
     <span className="am-app-icono">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        {d.split(" M").map((trozo, i) => (
-          <path
-            key={i}
-            d={i === 0 ? trozo : `M${trozo}`}
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        ))}
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        {ICONOS[id]}
       </svg>
-      <span className="am-oculto">{rotulo}</span>
     </span>
+  );
+}
+
+// LA BARRA, dibujada en SVG y no con `border-radius`.
+//
+// El motivo es la MUESCA: el canto de arriba no es recto, baja en una curva
+// suave por el centro para hacerle sitio al botón del escáner, y eso una caja
+// de CSS no lo sabe hacer —se podría fingir con un círculo negro encima, pero
+// entonces el contorno blanco se cortaría en seco a los dos lados de la muesca
+// en vez de seguir rodeándola, que es justo lo que se ve en el diseño—.
+//
+// El lienzo va en las medidas del diseño (596 × 116) y la caja de fuera tiene
+// esa misma proporción, así que el dibujo escala entero sin deformarse y los
+// números de aquí se pueden comparar con lo medido sin traducir nada.
+function Barra() {
+  const r = 56.75; // el radio de las puntas, ya descontado medio trazo
+  return (
+    <svg
+      className="am-app-barra-forma"
+      viewBox="0 0 596 116"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <defs>
+        {/* El relleno no es plano: en el diseño va de un gris muy oscuro arriba
+            a uno bastante más claro abajo, que es lo que le da el bulto. */}
+        <linearGradient id="am-barra-relleno" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#1f1f1f" />
+          <stop offset="0.55" stopColor="#2c2c2c" />
+          <stop offset="1" stopColor="#444444" />
+        </linearGradient>
+      </defs>
+      <path
+        d={`M 58 1.25 L 228 1.25 C 258 1.25 268 48 298 48 C 328 48 338 1.25 368 1.25 L 538 1.25 A ${r} ${r} 0 0 1 538 114.75 L 58 114.75 A ${r} ${r} 0 0 1 58 1.25 Z`}
+        fill="url(#am-barra-relleno)"
+        stroke="#fff"
+        strokeWidth="2.5"
+      />
+    </svg>
   );
 }
 
@@ -355,31 +435,28 @@ const PANTALLAS: Pantalla[] = [
           <Logotipo />
         </div>
 
-        {/* LA BARRA, con el botón del isotipo en medio.
-            Es una sola pieza y no cinco botones sueltos: la barra se dibuja con
-            una muesca arriba en el centro, y el botón redondo se posa en esa
-            muesca sobresaliendo por encima. Eso es lo que lo convierte en «el»
-            botón de la app —el del escaneo— y no en uno más de la fila.
-            Los cuatro iconos todavía no llevan a ningún sitio; cada uno tendrá
-            su pantalla. */}
+        {/* La barra, con el botón del escáner posado en su muesca. El dibujo va
+            aparte —en SVG— y los botones encima, cada uno en el punto que
+            ocupa en el diseño. */}
         <nav className="am-app-barra" aria-label={c.t("Menú principal", "Main menu")}>
-          <button type="button">
-            <Icono d={ICONOS.casa} rotulo={c.t("Inicio", "Home")} />
-          </button>
-          <button type="button">
-            <Icono d={ICONOS.galeria} rotulo={c.t("Colección", "Collection")} />
-          </button>
+          <Barra />
+          {BARRA.map((b, i) => (
+            <button
+              key={b.id}
+              type="button"
+              style={{ left: `${b.puesto}%` }}
+              /* El primero va encendido: es donde se está. Los otros tres, en
+                 gris, que es como los tiene el diseño. */
+              data-puesto={i === 0}
+            >
+              <Icono id={b.id} />
+              <span className="am-oculto">{c.t(b.es, b.en)}</span>
+            </button>
+          ))}
 
           <button type="button" className="am-app-barra-centro">
             <Marca clase="es-boton" />
             <span className="am-oculto">{c.t("Escanear una obra", "Scan a work")}</span>
-          </button>
-
-          <button type="button">
-            <Icono d={ICONOS.datos} rotulo={c.t("Datos", "Data")} />
-          </button>
-          <button type="button">
-            <Icono d={ICONOS.descarga} rotulo={c.t("Descargas", "Downloads")} />
           </button>
         </nav>
       </>
