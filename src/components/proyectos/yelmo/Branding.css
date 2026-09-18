@@ -16,17 +16,6 @@
   background: var(--background);
 }
 
-.ym-subrotulo {
-  position: relative;
-  margin: 44px 0 20px;
-  font-size: 13px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--muted);
-  background: var(--background);
-}
-
 /* ── La paleta ── */
 /* El texto, centrado bajo su disco: con el disco ya centrado, los datos
    alineados a la izquierda tiraban del ojo hacia un lado y la muestra dejaba de
@@ -48,12 +37,23 @@
   height: 86px;
   /* Centrado sobre su columna: pegado a la izquierda, con el texto debajo más
      ancho que él, cada disco se quedaba descolgado de su propio dato. */
-  margin: 0 auto 14px;
+  /* 7 y no 14: el papel de los datos ya pone otros 7 por arriba, así que el
+     aire visible entre disco y texto sigue siendo el mismo de antes. */
+  margin: 0 auto 7px;
   border-radius: 50%;
 }
+/* El papel se CIÑE al texto: en bloque ocupaba la columna entera y, con los
+   datos centrados, sobraba una franja de papel a cada lado que no tapaba nada.
+   En línea se encoge hasta la línea más larga —«RGB: 171 94 236»— y, como la
+   celda va centrada, la caja se centra sola bajo su disco. */
 .ym-valores {
   position: relative;
+  display: inline-block;
   margin: 0;
+  padding: 7px 11px;
+  border-radius: 10px;
+  /* Menos que los 12 de las cajas grandes: aquí el aire es de 7 px y con 12 la
+     curva empezaba a morder el texto de las esquinas. */
   font-size: 11.5px;
   line-height: 1.7;
   /* Tabular para que las cifras caigan en columna entre muestras. */
@@ -71,7 +71,9 @@
   /* Aire de sobra entre las tres: cada barra lleva un disco montado a cada
      lado, así que el hueco visible es bastante menor que el que se declara. */
   gap: 32px 84px;
-  margin: 0;
+  /* El aire de arriba lo ponía el rótulo «Gradación cromática», que ya no está;
+     sin él las barras se pegaban a los discos de la paleta. */
+  margin: 56px 0 0;
   padding: 0 22px;
   list-style: none;
 }

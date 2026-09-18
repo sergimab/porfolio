@@ -1,4 +1,3 @@
-import LangText from "@/components/shared/LangText";
 import RotuloSeccion from "@/components/shared/RotuloSeccion";
 import { RUTA, TINTAS, GRADACIONES, SUBMARCAS } from "./marca";
 import { readFileSync } from "node:fs";
@@ -67,9 +66,6 @@ export default function Branding() {
           ))}
         </ul>
 
-        <h3 className="ym-subrotulo">
-          <LangText es="Gradación cromática" en="Colour gradation" />
-        </h3>
         {/* Cada gradación con sus dos extremos en un disco a los lados, como en
             el manual: la barra dice cómo pasa de uno a otro y los discos, de
             dónde a dónde. */}
