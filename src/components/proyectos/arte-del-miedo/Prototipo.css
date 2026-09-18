@@ -474,13 +474,21 @@
      por la proporción del archivo. Así el paso corto enseña la animación
      grande y el largo la enseña menor, y en los cinco el texto y el botón caen
      exactamente donde deben.
-     El tope de ancho es la columna de texto: más allá, la pieza se saldría del
-     margen de la app. */
+     EL TOPE DE ANCHO NO ES LA COLUMNA DE TEXTO, y ese fue el error: con el tope
+     en 66 —el ancho de la columna—, los pasos de texto corto pedían una pieza
+     de 469 de ancho, se les recortaba a 425, y entonces el alto ya no
+     correspondía a la proporción del archivo: el marco quedaba más alto que la
+     animación y aparecían dos bandas negras, arriba y abajo, dentro del canto
+     del degradado.
+     El tope de verdad es lo que cabe en la pantalla dejando margen, o sea 80,
+     y por debajo de eso la proporción manda: el canto va siempre pegado a la
+     pieza. Una ilustración puede ser más ancha que la columna de texto; lo que
+     no puede es tener aire muerto dentro de su marco. */
   flex: 1 1 auto;
   min-height: 0;
   width: auto;
   height: auto;
-  max-width: 66cqw;
+  max-width: 80cqw;
   align-self: center;
   /* 400 × 700, que es EXACTAMENTE el tamaño en que vienen las animaciones. No
      es casualidad ni un redondeo afortunado: el hueco medido en las capturas da
