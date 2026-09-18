@@ -10,6 +10,7 @@ import Tipografia from "./Tipografia";
 import Paleta from "./Paleta";
 import Isotipo from "./Isotipo";
 import Pruebas from "./Pruebas";
+import Carteles from "./Carteles";
 import "./ArteMiedo.css";
 
 // EL LOGOTIPO SE BUSCA EN EL DISCO, no se escribe a mano en el código.
@@ -144,12 +145,14 @@ export default function BrandingLanding() {
             />
           </p>
         </div>
-        <p className="am-pendiente">
-          <LangText
-            es="Faltan los carteles y el flyer A5, a poder ser sobre soporte real (mupi, mano) como en las demás páginas."
-            en="Missing: the posters and the A5 flyer, ideally on a real support (billboard, in hand) as on the other pages."
-          />
-        </p>
+        <Carteles />
+
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="am-flyer"
+          src="/proyectos/el-arte-del-miedo-branding/flyer-mockup.webp"
+          alt="El flyer A5 de la exposición, con el código QR que lleva a la app"
+        />
       </section>
     </ArteMiedo>
   );

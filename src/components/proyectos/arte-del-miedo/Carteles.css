@@ -1,0 +1,92 @@
+/* La fila de carteles: el mockup y el pase, del mismo alto y repartiéndose el
+   ancho según su propia proporción. Ver el comentario del componente. */
+.am-carteles {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin: 28px 0 0;
+}
+.am-carteles figure {
+  margin: 0;
+  min-width: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  /* El fondo mientras carga, para que el hueco no destelle en blanco antes de
+     aparecer la imagen. */
+  background: var(--surface);
+  line-height: 0;
+}
+
+/* 1,5 y 0,707 no son números elegidos a ojo: son el ancho partido por el alto
+   de cada pieza. Repartiendo el hueco en esa proporción, los dos altos salen
+   iguales. El mockup es 3000 × 2000 y un cartel, un A —1 : √2—. */
+.am-carteles-mockup {
+  flex: 1.5 1 0;
+  aspect-ratio: 3 / 2;
+}
+.am-carteles-pase {
+  flex: 0.7071 1 0;
+  aspect-ratio: 1 / 1.41421;
+  position: relative;
+}
+
+.am-carteles img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Los cinco carteles, apilados en la misma casilla: todos escondidos menos el
+   de turno. El fundido los cose; a corte seco, cinco imágenes seguidas
+   parpadean. */
+.am-carteles-pase img {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.55s ease;
+}
+.am-carteles-pase img.es-visible {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .am-carteles-pase img {
+    transition: none;
+  }
+}
+
+/* El mockup del flyer, debajo y a todo el ancho. */
+.am-flyer {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 20px 0 0;
+  border-radius: 12px;
+}
+
+/* En pantalla estrecha, uno debajo de otro: a 375 px, el cartel del pase se
+   quedaba en 100 px de ancho y no se leía ni el titular. */
+@media (max-width: 720px) {
+  .am-carteles {
+    flex-direction: column;
+    gap: 16px;
+  }
+  /* `flex: 0 0 auto` y no el reparto de arriba: en columna, esa base de cero
+     deja de medir el ancho y pasa a medir el ALTO —flex-basis va a lo largo de
+     la fila, y aquí la fila baja—, así que las dos cajas se quedaban en cero de
+     alto y no se veía nada. Apiladas, cada una ocupa el ancho entero y su
+     proporción le da el alto. */
+  .am-carteles figure {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+  /* Apilado, el pase se queda con un alto cómodo en vez de con el que le tocaba
+     al lado del mockup: a ancho completo, un A entero mide vez y media la
+     pantalla. */
+  .am-carteles-pase {
+    aspect-ratio: 3 / 2;
+  }
+  .am-carteles-pase img {
+    object-position: center top;
+  }
+}
