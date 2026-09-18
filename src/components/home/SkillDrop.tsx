@@ -8,7 +8,7 @@ import BackToTop from "@/components/layout/BackToTop";
 import DropcapTitle from "@/components/shared/DropcapTitle";
 import SobreMi from "./SobreMi";
 import MarcoHormigas from "@/components/shared/MarcoHormigas";
-import { seeded, organicGradient, paletaOrganica, CAPSULE_DRIFT_SIZE, drift } from "@/components/shared/organico";
+import { seeded, paletaLegible, degradadoLegible, CAPSULE_DRIFT_SIZE, drift } from "@/components/shared/organico";
 import MeshGradient from "@/components/shared/MeshGradient";
 import "./SkillDrop.css";
 
@@ -646,7 +646,7 @@ export default function SkillDrop() {
                        navegador no da WebGL, el botón sigue pintándose del color
                        de su categoría, solo que sin el fluido. */
                     style={{
-                      ["--fila-color" as string]: organicGradient(skill.hue, 70, 48),
+                      ["--fila-color" as string]: degradadoLegible(skill.hue),
                       ["--fila-medida" as string]: CAPSULE_DRIFT_SIZE,
                       ...drift(skill.id),
                     }}
@@ -657,7 +657,7 @@ export default function SkillDrop() {
                         la categoría; la casilla activa va encendida sin ratón,
                         que es la única manera de que se note en un móvil. */}
                     <MeshGradient
-                      colores={paletaOrganica(skill.hue, 70, 48)}
+                      colores={paletaLegible(skill.hue)}
                       encendido={selectedPanel === skill.id}
                       /* Cero en reposo: la casilla apagada no se ve —el lienzo
                          está a opacidad 0—, así que además de invisible se
@@ -713,7 +713,7 @@ export default function SkillDrop() {
                     backgroundColor: encendida ? undefined : "var(--background)",
                     // El degradado de CSS se queda debajo como red, por si no
                     // hay WebGL.
-                    backgroundImage: encendida ? organicGradient(skill.hue, 85, 57) : undefined,
+                    backgroundImage: encendida ? degradadoLegible(skill.hue, 85) : undefined,
                     backgroundSize: encendida ? CAPSULE_DRIFT_SIZE : undefined,
                     animation: encendida ? "capsuleDrift 13s ease-in-out infinite" : undefined,
                     display:"flex", alignItems:"center", justifyContent:"center",
@@ -727,7 +727,7 @@ export default function SkillDrop() {
                         lienzo de la física, que es quien sabe sobre cuál está el
                         cursor—, así que se lo dice `encendida`. */}
                     <MeshGradient
-                      colores={paletaOrganica(skill.hue, 85, 57)}
+                      colores={paletaLegible(skill.hue, 85)}
                       encendido={encendida}
                       velocidadReposo={0}
                       velocidadHover={0.4}
@@ -771,7 +771,7 @@ export default function SkillDrop() {
                   width:`${PILL_W}px`, height:`${PILL_H}px`,
                   borderRadius:"999px",
                   padding:"2px",
-                  backgroundImage: organicGradient(droppedSkill!.hue, 70, 55),
+                  backgroundImage: degradadoLegible(droppedSkill!.hue),
                   backgroundSize: CAPSULE_DRIFT_SIZE,
                   animation:"capsuleDrift 15s ease-in-out infinite",
                   flexShrink:0,

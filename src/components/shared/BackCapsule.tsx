@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import MeshGradient from "./MeshGradient";
+import { paletaLegible } from "./organico";
 import "./BackCapsule.css";
 
 const CATS: Record<string, { label: string; hue: number }> = {
@@ -38,11 +40,23 @@ export default function BackCapsule({
       style={{ "--cap-hue": cat.hue } as React.CSSProperties}
       aria-label={`Volver a ${texto}`}
     >
+      {/* El mismo degradado de malla que las cápsulas de la home, con la paleta
+          legible: el rótulo va en blanco encima y así da 5,1:1 en cualquier
+          punto. Se enciende al pasar por encima —el ratón lo escucha este mismo
+          enlace, que es el padre del lienzo— y en reposo se queda parado. */}
+      <MeshGradient
+        colores={paletaLegible(cat.hue)}
+        velocidadReposo={0}
+        velocidadHover={0.4}
+        suavizado={0.45}
+        escala={0.85}
+        className="back-capsule-malla"
+      />
       <svg className="back-capsule-chev" width="8" height="14" viewBox="0 0 8 14" fill="none"
         stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M6.5 1 1.5 7l5 6" />
       </svg>
-      {texto}
+      <span className="mesh-encima">{texto}</span>
     </Link>
   );
 }

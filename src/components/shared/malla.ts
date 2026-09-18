@@ -303,8 +303,11 @@ function paso(ahora: number) {
       inst.quieto = false;
       pinta(inst);
     } else if (!inst.quieto) {
-      inst.quieto = true;
-      pinta(inst);
+      // Solo se da por quieto si ha pintado de verdad. Si el elemento todavía no
+      // tenía medidas, se sigue intentando: si no, se quedaría para siempre con
+      // el fotograma en blanco que no llegó a pintarse.
+      if (pinta(inst)) inst.quieto = true;
+      else sigue = true;
     }
   }
 
@@ -320,12 +323,26 @@ function despierta() {
   bucle = requestAnimationFrame(paso);
 }
 
-function pinta(inst: Instancia) {
-  if (!gl || !lienzoGl || !sitios) return;
+// Devuelve si ha llegado a pintar. Puede que no: un lienzo cuyo elemento aún no
+// tiene medidas —está montado pero el navegador todavía no lo ha colocado, que
+// es lo que pasa con las tarjetas mientras se reparten— mide cero, y pintarlo
+// ahí lo dejaría en un píxel estirado, o sea en un color plano. Cuando pasa, se
+// dice que no y se vuelve a intentar en el siguiente fotograma.
+function pinta(inst: Instancia): boolean {
+  if (!gl || !lienzoGl || !sitios) return false;
   const d = densidad();
-  const caja = inst.lienzo.getBoundingClientRect();
-  const w = Math.max(1, Math.round(caja.width * d));
-  const h = Math.max(1, Math.round(caja.height * d));
+  // `offsetWidth`/`offsetHeight` y NO `getBoundingClientRect`: el rect devuelve
+  // el tamaño PINTADO, con las transformaciones aplicadas, y aquí casi todo lo
+  // que lleva degradado va transformado —las tarjetas entran escaladas y las
+  // cápsulas van giradas—. Midiendo así, una tarjeta a mitad de su entrada daba
+  // 35 × 10 px y el lienzo se quedaba clavado en esa medida para siempre: un
+  // pegote de color estirado en vez de un degradado. El tamaño de maquetación
+  // no depende de la transformación, que es justo lo que hace falta.
+  const anchoCss = inst.lienzo.offsetWidth;
+  const altoCss = inst.lienzo.offsetHeight;
+  if (anchoCss < 1 || altoCss < 1) return false;
+  const w = Math.max(1, Math.round(anchoCss * d));
+  const h = Math.max(1, Math.round(altoCss * d));
   if (w !== inst.ancho || h !== inst.alto) {
     inst.ancho = w;
     inst.alto = h;
@@ -351,6 +368,7 @@ function pinta(inst: Instancia) {
   gl.drawArrays(gl.TRIANGLES, 0, 3);
 
   inst.pincel.drawImage(lienzoGl, 0, lienzoGl.height - h, w, h, 0, 0, w, h);
+  return true;
 }
 
 export function registra(lienzo: HTMLCanvasElement, ajustes: Ajustes): Instancia | null {

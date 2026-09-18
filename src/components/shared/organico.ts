@@ -86,6 +86,103 @@ export function paletaOrganica(hue: number, sat: number, base: number): string[]
   ];
 }
 
+// ── La paleta LEGIBLE, para lo que lleva texto encima ──────────────────────
+//
+// EL PROBLEMA. Un degradado de varios tonos que además se mueve no tiene UN
+// contraste: tiene uno distinto en cada punto y en cada instante. Elegir el
+// color del texto a partir del color «de la categoría» —que es lo que se hacía—
+// mide contra algo que ya no está detrás de las letras. Midiendo de verdad las
+// cinco manchas de cada categoría, ninguna de las siete llegaba al 4,5:1 que
+// pide la norma en su punto peor: la mejor se quedaba en 3,7 y varias en 1,3.
+// Y no se arregla eligiendo mejor el color del texto: probadas todas las
+// luminosidades de banda, no hay ninguna en la que el blanco o la tinta valgan
+// para las siete a la vez. El tono, por sí solo, ya mueve la luminancia: un
+// cian y un azul de la misma luminosidad HSL se llevan cuatro veces en brillo.
+//
+// LA SALIDA. Igualar la LUMINANCIA de las cinco manchas y dejar que lo que se
+// mueva sea el tono. A cada mancha se le busca la luminosidad a la que su
+// luminancia da el número pedido, así que todas pesan lo mismo de luz aunque
+// una sea verde y otra azul: el degradado se sigue viendo cambiar de color —que
+// es lo que se ve— y el contraste del texto pasa a ser un número fijo y
+// conocido en toda la superficie y en todo momento.
+//
+// A 0,155 el contraste con el blanco es de 5,1:1 en cualquier punto, por encima
+// del 4,5 que pide la AA para texto normal. Subirlo aclara los colores y baja
+// el contraste; bajarlo los oscurece y lo sube.
+export const LUMINANCIA_BANDA = 0.155;
+
+// Luminancia relativa de un color HSL, tal y como la define la norma de
+// contraste: se pasa a RGB, se le quita la curva de la pantalla y se pesan los
+// tres canales según lo que aporta cada uno a lo que el ojo llama brillo —el
+// verde, casi tres cuartas partes—.
+function luminancia(h: number, s: number, l: number): number {
+  const sn = s / 100;
+  const ln = l / 100;
+  const c = (1 - Math.abs(2 * ln - 1)) * sn;
+  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+  const m = ln - c / 2;
+  let r = 0, g = 0, b = 0;
+  if (h < 60) [r, g, b] = [c, x, 0];
+  else if (h < 120) [r, g, b] = [x, c, 0];
+  else if (h < 180) [r, g, b] = [0, c, x];
+  else if (h < 240) [r, g, b] = [0, x, c];
+  else if (h < 300) [r, g, b] = [x, 0, c];
+  else [r, g, b] = [c, 0, x];
+  const recta = (v: number) => (v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4));
+  return 0.2126 * recta(r + m) + 0.7152 * recta(g + m) + 0.0722 * recta(b + m);
+}
+
+// La luminosidad HSL a la que ese tono y esa saturación dan la luminancia
+// pedida. Por tanteo partiendo el intervalo en dos: la luminancia sube siempre
+// con la luminosidad, así que veinte pasadas bastan para clavarlo.
+function luzParaLuminancia(h: number, s: number, objetivo: number): number {
+  let bajo = 0;
+  let alto = 100;
+  for (let i = 0; i < 20; i++) {
+    const medio = (bajo + alto) / 2;
+    if (luminancia(h, s, medio) < objetivo) bajo = medio;
+    else alto = medio;
+  }
+  return (bajo + alto) / 2;
+}
+
+// Las cinco manchas de una categoría, con el mismo peso de luz todas.
+// `abanico` encoge o abre el reparto de tonos alrededor del de la categoría:
+// a 1 es el de la paleta normal —90 grados—, y más bajo junta los colores.
+function capasLegibles(hue: number, sat: number, abanico: number, objetivo: number) {
+  const capas: [number, number][] = [
+    [6, 0],
+    [-42, 20],
+    [48, 14],
+    [16, 6],
+    [-16, 24],
+  ];
+  return capas.map(([dh, ds]) => {
+    const h = tono(hue + dh * abanico);
+    const s = satura(sat + ds * abanico);
+    return { h, s, l: luzParaLuminancia(h, s, objetivo) };
+  });
+}
+
+export function paletaLegible(hue: number, sat = 70, abanico = 0.7, objetivo = LUMINANCIA_BANDA): string[] {
+  return capasLegibles(hue, sat, abanico, objetivo).map(c => `hsl(${c.h},${c.s}%,${c.l.toFixed(1)}%)`);
+}
+
+// El mismo color en degradado de CSS, para lo que se ve mientras el lienzo se
+// funde y para cuando no hay WebGL. Sin esto se veía un destello del color
+// claro de la paleta normal antes de que entrara el oscuro de esta.
+export function degradadoLegible(hue: number, sat = 70, abanico = 0.7, objetivo = LUMINANCIA_BANDA): string {
+  const c = capasLegibles(hue, sat, abanico, objetivo);
+  const col = (i: number) => `hsl(${c[i].h},${c[i].s}%,${c[i].l.toFixed(1)}%)`;
+  return [
+    `radial-gradient(47% 42% at 22% 24%, ${col(1)} 0%, transparent 62%)`,
+    `radial-gradient(44% 44% at 82% 16%, ${col(2)} 0%, transparent 58%)`,
+    `radial-gradient(55% 52% at 72% 88%, ${col(3)} 0%, transparent 66%)`,
+    `radial-gradient(35% 35% at 14% 84%, ${col(4)} 0%, transparent 54%)`,
+    `linear-gradient(${col(0)}, ${col(0)})`,
+  ].join(", ");
+}
+
 // Las manchas se pintan más grandes que su caja para que al desplazarse no
 // asome el borde. Son cinco medidas porque el degradado son cinco capas, y
 // capsuleDrift mueve esas cinco: si se añade o quita una, hay que tocar las

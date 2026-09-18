@@ -1,4 +1,8 @@
 .back-capsule {
+  /* Ancla y recorte del lienzo del degradado: es esto lo que le da la forma de
+     píldora, que por su cuenta es un rectángulo. */
+  position: relative;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -14,24 +18,42 @@
   transition: color 0.2s, border-color 0.2s, background 0.2s;
 }
 
+/* La flecha, por delante del lienzo. Lleva su propio apilado porque es hermana
+   del lienzo y viene antes en el documento. */
 .back-capsule-chev {
+  position: relative;
+  z-index: 1;
   transition: transform 0.2s;
 }
 
-.back-capsule:hover {
+/* El degradado, escondido en reposo. Parado además: con la velocidad de reposo
+   a cero, una página con su cápsula de volver no gasta un solo fotograma hasta
+   que alguien pasa por encima. */
+.back-capsule-malla {
+  opacity: 0;
+}
+.back-capsule:hover .back-capsule-malla,
+.back-capsule:focus-visible .back-capsule-malla {
+  opacity: 1;
+}
+
+/* El color lo pone ahora el lienzo del shader. El degradado de CSS se queda
+   debajo como red —mismo tono, sin el fluido— por si no hay WebGL, pero SIN la
+   animación de posición que tenía: con el lienzo encima no se veía, y sin él
+   basta con el color. */
+.back-capsule:hover,
+.back-capsule:focus-visible {
   border-color: transparent;
   color: #fff;
   background: linear-gradient(
     120deg,
-    hsl(var(--cap-hue), 70%, 68%),
-    hsl(var(--cap-hue), 70%, 48%),
-    hsl(calc(var(--cap-hue) + 20), 70%, 58%),
-    hsl(var(--cap-hue), 70%, 68%)
+    hsl(var(--cap-hue), 62%, 34%),
+    hsl(var(--cap-hue), 62%, 28%),
+    hsl(calc(var(--cap-hue) + 20), 62%, 32%)
   );
-  background-size: 300% 300%;
-  animation: capsuleGradient 3.2s ease-in-out infinite;
 }
 
-.back-capsule:hover .back-capsule-chev {
+.back-capsule:hover .back-capsule-chev,
+.back-capsule:focus-visible .back-capsule-chev {
   transform: translateX(-3px);
 }

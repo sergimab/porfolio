@@ -80,9 +80,10 @@
   height: 55%;
 }
 
-/* Nombre del proyecto, siempre visible al pie de la card: banda sólida del
-   color de categoría (inline via backgroundColor); texto en la tipografía
-   normal del sitio, color elegido por contraste (ver accessibleTextColor). */
+/* Nombre del proyecto, siempre visible al pie de la tarjeta: banda con el
+   degradado de malla de su categoría y el nombre SIEMPRE en blanco. El blanco
+   vale para las siete porque la banda lleva la paleta de luminancia igualada
+   —ver `paletaLegible`—, que deja el contraste en 5,1:1 en todo el degradado. */
 /* Aro de degradado. Un borde CSS no admite degradados, así que se pinta un
    rectángulo del tamaño de la tarjeta y se le recorta el interior con una
    máscara: la de "content-box" tapa el centro y, al excluirla de la completa,

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
-import { organicGradient, paletaOrganica, CAPSULE_DRIFT_SIZE, drift } from "@/components/shared/organico";
+import { organicGradient, paletaLegible, degradadoLegible, CAPSULE_DRIFT_SIZE, drift } from "@/components/shared/organico";
 import MeshGradient from "@/components/shared/MeshGradient";
 import "./BounceCards.css";
 
@@ -17,30 +17,6 @@ type Item = { id: string; title: string; titleEn: string; cover?: string };
 // de la categoría: se elige el que da más contraste según WCAG en vez de fijar
 // siempre blanco, porque tonos como el verde de Iberdrola son demasiado claros
 // para texto blanco.
-function accessibleTextColor(hue: number, sat = 70, light = 55): string {
-  const s = sat / 100;
-  const l = light / 100;
-  const c = (1 - Math.abs(2 * l - 1)) * s;
-  const x = c * (1 - Math.abs(((hue / 60) % 2) - 1));
-  const m = l - c / 2;
-  let r = 0, g = 0, b = 0;
-  if (hue < 60) [r, g, b] = [c, x, 0];
-  else if (hue < 120) [r, g, b] = [x, c, 0];
-  else if (hue < 180) [r, g, b] = [0, c, x];
-  else if (hue < 240) [r, g, b] = [0, x, c];
-  else if (hue < 300) [r, g, b] = [x, 0, c];
-  else [r, g, b] = [c, 0, x];
-  const [R, G, B] = [r + m, g + m, b + m].map((v) => v * 255);
-  const lin = (v: number) => {
-    const u = v / 255;
-    return u <= 0.03928 ? u / 12.92 : Math.pow((u + 0.055) / 1.055, 2.4);
-  };
-  const L = 0.2126 * lin(R) + 0.7152 * lin(G) + 0.0722 * lin(B);
-  const contrastWhite = 1.05 / (L + 0.05);
-  const contrastBlack = (L + 0.05) / 0.05;
-  return contrastBlack > contrastWhite ? "#1a1712" : "#ffffff";
-}
-
 // Composición de rotaciones "desordenada" pero fija (mismo resultado entre
 // renders). Se recorre el pool por índice para dar un aspecto natural.
 // Ángulos suaves: cards casi horizontales, solo ligeramente inclinadas.
@@ -158,12 +134,17 @@ export default function BounceCards({
     });
   };
 
-  const textColor = accessibleTextColor(hue);
-  // El mismo degradado orgánico de las cápsulas, con la misma saturación y
-  // luminosidad que tenía el color plano: así el contraste del texto sobre la
-  // banda sigue siendo el que calcula accessibleTextColor.
-  const degradado = organicGradient(hue, 70, 55);
-  const pintura = { backgroundImage: degradado, backgroundSize: CAPSULE_DRIFT_SIZE };
+  // El nombre va SIEMPRE en blanco, en las siete categorías. Antes lo elegía una
+  // función que comparaba blanco y tinta contra el color plano de la banda, y de
+  // ahí venían unas tarjetas con el nombre en negro y otras en blanco: no era un
+  // descuido, era que cada categoría ganaba por un lado. Con la banda igualada
+  // de luminancia (ver paletaLegible) ya no hace falta elegir: el blanco da 5,1:1
+  // en todas y en cualquier punto del degradado.
+  const textColor = "#ffffff";
+  // El aro se queda con el degradado VIVO —es el que dice de qué categoría es la
+  // tarjeta y no lleva nada escrito encima—; la banda, con el legible.
+  const pintura = { backgroundImage: organicGradient(hue, 70, 55), backgroundSize: CAPSULE_DRIFT_SIZE };
+  const pinturaBanda = { backgroundImage: degradadoLegible(hue), backgroundSize: CAPSULE_DRIFT_SIZE };
 
   const cardInner = (item: Item) => {
     const title = lang === "en" ? item.titleEn : item.title;
@@ -206,9 +187,9 @@ export default function BounceCards({
             `selectorEscucha`: manda la TARJETA, no la banda, para que el color
             se active al pasar por encima de la portada y no solo de la franja
             de abajo. */}
-        <span className="bc-name" style={{ color: textColor, ...pintura, ...ritmo }}>
+        <span className="bc-name" style={{ color: textColor, ...pinturaBanda, ...ritmo }}>
           <MeshGradient
-            colores={paletaOrganica(hue, 70, 55)}
+            colores={paletaLegible(hue)}
             selectorEscucha=".bc-card"
             /* Quieta en reposo y viva al pasar por encima. En la parrilla hay
                cinco tarjetas a la vez y todas a la vista: moviéndose siempre,
