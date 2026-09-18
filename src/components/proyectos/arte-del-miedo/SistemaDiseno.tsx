@@ -8,6 +8,8 @@ import { raleway } from "./fuente";
 // procesador del proyecto inlina los imports y vuelve a analizar el resultado,
 // y ahí una hoja tan larga como la del prototipo se le atraganta.
 import "./Prototipo.css";
+// El rótulo de pastilla es un componente del sitio y su hoja vive con él.
+import "@/components/shared/RotuloSeccion.css";
 import "./SistemaDiseno.css";
 
 // DE QUÉ ESTÁ HECHA LA APP: la retícula, la letra, el color y las piezas.
@@ -130,13 +132,30 @@ const COLORES = [
   },
 ];
 
+// El rótulo de cada apartado: LA PASTILLA DEL SITIO, con su línea saliendo de
+// la base hasta el borde derecho. Es el mismo componente que encabeza las
+// secciones de todas las páginas de proyecto, y hereda de la página el color de
+// la categoría —el verde azulado de UI/UX— sin que haya que decírselo.
+//
+// Se escribe aquí en vez de usar <RotuloSeccion> por una sola razón: aquel pinta
+// un <h2> y esto va dentro de una pestaña, colgando del <h2> de la página. El
+// dibujo es el mismo hasta la última clase; lo que cambia es el nivel del
+// encabezado, que es lo que un lector de pantalla usa para hacerse el índice.
+function Rotulo({ children }: { children: React.ReactNode }) {
+  return (
+    <h3 className="rotulo-seccion am-sd-rotulo">
+      <span className="rotulo-seccion-caja">{children}</span>
+    </h3>
+  );
+}
+
 export default function SistemaDiseno() {
   const lang = useLang();
   const t = (es: string, en: string) => (lang === "en" ? en : es);
 
   return (
     <section className={`am-sd ${raleway.variable}`}>
-      <h3 className="am-sd-apartado">{t("Retícula", "Grid")}</h3>
+      <Rotulo>{t("Retícula", "Grid")}</Rotulo>
       <ul className="am-sd-medidas">
         {RETICULA.map((m) => (
           <li key={m.dato}>
@@ -147,7 +166,7 @@ export default function SistemaDiseno() {
         ))}
       </ul>
 
-      <h3 className="am-sd-apartado">{t("Tipografía", "Type")}</h3>
+      <Rotulo>{t("Tipografía", "Type")}</Rotulo>
       <p className="am-sd-entradilla">
         {t(
           "Raleway, la misma de la identidad, en tres pesos y tres tamaños. Las muestras están a la escala real de la app.",
@@ -158,7 +177,9 @@ export default function SistemaDiseno() {
         {TIPOS.map((x) => (
           <li key={x.nombre}>
             <span className="am-sd-lienzo es-linea">
-              <span className={x.clase}>{x.texto}</span>
+              <span className="am-sd-dentro">
+                <span className={x.clase}>{x.texto}</span>
+              </span>
             </span>
             <span className="am-sd-tipo-datos">
               <strong>{t(x.nombre, x.nombreEn)}</strong>
@@ -169,7 +190,7 @@ export default function SistemaDiseno() {
         ))}
       </ul>
 
-      <h3 className="am-sd-apartado">{t("Color", "Colour")}</h3>
+      <Rotulo>{t("Color", "Colour")}</Rotulo>
       <ul className="am-sd-tintas">
         {COLORES.map((c) => (
           <li key={c.hex}>
@@ -196,7 +217,7 @@ export default function SistemaDiseno() {
         </li>
       </ul>
 
-      <h3 className="am-sd-apartado">{t("Componentes", "Components")}</h3>
+      <Rotulo>{t("Componentes", "Components")}</Rotulo>
       <p className="am-sd-entradilla">
         {t(
           "No son dibujos de los componentes: son los componentes. Las piezas de aquí abajo comparten clases y medidas con las que hay dentro del móvil, así que si allí se retocan, aquí cambian solas.",
@@ -206,12 +227,14 @@ export default function SistemaDiseno() {
       <div className="am-sd-piezas">
         <figure className="am-sd-pieza">
           <div className="am-sd-lienzo">
-            <span className="am-app-boton">
-              <span>{t("Siguiente", "Next")}</span>
-            </span>
-            <span className="am-app-boton es-puesto">
-              <span>{t("Siento el miedo", "I feel the fear")}</span>
-            </span>
+            <div className="am-sd-dentro">
+              <span className="am-app-boton">
+                <span>{t("Siguiente", "Next")}</span>
+              </span>
+              <span className="am-app-boton es-puesto">
+                <span>{t("Siento el miedo", "I feel the fear")}</span>
+              </span>
+            </div>
           </div>
           <figcaption>
             {t(
@@ -223,12 +246,14 @@ export default function SistemaDiseno() {
 
         <figure className="am-sd-pieza">
           <div className="am-sd-lienzo">
+            <div className="am-sd-dentro">
             <span className="am-app-raya" />
             <span className="am-sd-iso">
               <Cuadricula
                 mapa={[". . . . X", "X . . X .", ". X X . .", "X . X . X", ". . . X .", ". . . . X"]}
               />
             </span>
+            </div>
           </div>
           <figcaption>
             {t(
@@ -240,6 +265,7 @@ export default function SistemaDiseno() {
 
         <figure className="am-sd-pieza">
           <div className="am-sd-lienzo es-alto">
+            <div className="am-sd-dentro">
             <ul className="am-app-listado">
               {[
                 ["Claustrofobia", 100],
@@ -254,6 +280,7 @@ export default function SistemaDiseno() {
                 </li>
               ))}
             </ul>
+            </div>
           </div>
           <figcaption>
             {t(

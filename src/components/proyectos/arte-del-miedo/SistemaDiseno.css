@@ -1,69 +1,78 @@
-/* De qué está hecha la app. Ver el comentario del componente: las muestras son
-   los componentes de verdad sobre un lienzo que hereda sus tokens. */
+/* De qué está hecha la app.
+   LA FICHA HABLA CON LA VOZ DEL PORTFOLIO Y LAS MUESTRAS CON LA DE LA APP, y esa
+   distinción es todo el apartado: los rótulos son la pastilla del sitio, los
+   textos van en su tipografía y sus grises, y las cajas se dibujan con el mismo
+   hilo —`--border`— que usan las fichas de proyecto. Lo único que va de negro y
+   en Raleway son las piezas, porque son la app.
+   Sin esa separación un sistema de diseño se lee como una página de plantilla:
+   se ve que hay datos, pero no de quién son. */
 .am-sd {
-  margin: 8px 0 0;
+  margin: 4px 0 8px;
 }
 
-.am-sd-apartado {
-  margin: 40px 0 14px;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+/* El rótulo de pastilla. El hueco de abajo es más corto que el del sitio: aquí
+   lo que viene detrás es una tabla o una tira de muestras, no un párrafo. */
+.am-sd-rotulo {
+  margin: 44px 0 18px;
+  font-size: 14px;
 }
-.am-sd-apartado:first-of-type {
-  margin-top: 8px;
+.am-sd-rotulo:first-of-type {
+  margin-top: 6px;
 }
 
 .am-sd-entradilla {
   max-width: 560px;
-  margin: 0 0 20px;
-  font-size: 13px;
+  margin: 0 0 22px;
+  font-size: 13.5px;
   line-height: 1.7;
+  /* Papel opaco: por detrás pasa la trama animada del fondo del sitio. */
+  background: var(--background);
 }
-/* El pie de cada dato. Va en el gris secundario del sitio, que es el único que
-   pasa el contraste mínimo en los dos modos. */
 .am-sd-nota {
-  font-size: 11.5px;
-  line-height: 1.5;
+  font-size: 12.5px;
+  line-height: 1.55;
   color: var(--muted);
 }
 
 /* ── La retícula ──
-   Cada medida en su fila: el número grande delante, porque es lo que se viene a
-   consultar, y el porqué detrás. */
+   Fichas que se reparten el ancho y saltan de línea cuando no caben. El borde lo
+   pone cada una y los márgenes negativos las solapan, así que entre dos vecinas
+   hay UN hilo y no dos. Es la misma construcción que la retícula del sistema de
+   Espacio vacío: son la misma clase de tabla en el mismo sitio del portfolio. */
 .am-sd-medidas {
-  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
   margin: 0;
   padding: 0;
-  display: grid;
-  gap: 1px;
-  /* El hilo que separa las filas es el fondo asomando por el hueco de la
-     cuadrícula: un borde por fila dejaría doble línea entre dos vecinas. */
-  background: color-mix(in srgb, currentColor 14%, transparent);
-  border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
-  border-radius: 12px;
-  overflow: hidden;
+  list-style: none;
 }
 .am-sd-medidas li {
-  display: grid;
-  grid-template-columns: 96px 150px 1fr;
-  gap: 16px;
-  align-items: baseline;
-  padding: 13px 16px;
+  flex: 1 1 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  margin: 0 -1px -1px 0;
   background: var(--background);
 }
 .am-sd-dato {
-  font-size: 14px;
+  font-size: 21px;
   font-weight: 600;
+  line-height: 1.15;
+  /* Cifras de ancho fijo: son medidas, y unas debajo de otras tienen que
+     alinearse por la coma y no por la forma del número. */
   font-variant-numeric: tabular-nums;
 }
 .am-sd-que {
-  font-size: 12.5px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 600;
 }
 
-/* ── La tipografía ── */
+/* ── La tipografía ──
+   Filas separadas por un hilo, con la muestra a la izquierda a su tamaño real y
+   la ficha a la derecha. Nada de cajas redondeadas: lo que se enseña es la
+   letra, y un marco de adorno alrededor compite con ella. */
 .am-sd-tipos,
 .am-sd-tintas,
 .am-sd-piezas {
@@ -71,63 +80,85 @@
   margin: 0;
   padding: 0;
 }
+.am-sd-tipos {
+  border-top: 1px solid var(--border);
+  background: var(--background);
+}
 .am-sd-tipos li {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 20px;
+  display: flex;
   align-items: center;
-  margin-bottom: 14px;
+  gap: 24px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
 }
 .am-sd-tipo-datos {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  font-size: 12.5px;
+  gap: 3px;
+  font-size: 13px;
+}
+.am-sd-tipo-datos strong {
+  font-weight: 600;
 }
 
-/* ── El color ── */
+/* ── El color ──
+   Manchas rectas, sin redondear. El redondeo es de las pastillas y las cápsulas
+   del sitio; una muestra de color es una superficie, y recortarle las esquinas
+   la convierte en un icono. */
 .am-sd-tintas {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+  gap: 20px;
+  background: var(--background);
 }
 .am-sd-tintas li {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  font-size: 12.5px;
+  gap: 4px;
+  font-size: 13px;
 }
-/* El degradado ocupa toda la fila: es el único que necesita explicarse, y con
-   el ancho de una muestra de color el texto le salía en ocho renglones. */
-.am-sd-tintas li.es-ancha {
-  grid-column: 1 / -1;
+.am-sd-tintas strong {
+  font-weight: 600;
+}
+.am-sd-tintas .am-sd-nota:first-of-type {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
 }
 .am-sd-tinta {
   display: block;
-  height: 54px;
-  margin-bottom: 4px;
-  border-radius: 10px;
-  /* Un canto tenue: el negro y el blanco de la paleta son exactamente el papel
-     de la página en cada modo, así que sin borde una de las dos muestras
-     desaparece siempre. */
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, currentColor 22%, transparent);
+  height: 64px;
+  margin-bottom: 8px;
+  /* Hilo flojo en todas y no solo en la blanca: en oscuro la que se pierde
+     contra el papel es la negra, así que no hay que saber cuál es cuál. */
+  border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
 }
 .am-sd-tinta.es-tinta {
   background: linear-gradient(115deg, #3d00e4, #ff1597);
 }
+/* El degradado ocupa la fila entera: es el único que necesita explicarse, y con
+   el ancho de una muestra el texto salía en ocho renglones. */
+.am-sd-tintas li.es-ancha {
+  grid-column: 1 / -1;
+}
+.am-sd-tintas li.es-ancha .am-sd-tinta {
+  height: 44px;
+}
 
 /* ── Los componentes ──
-   EL LIENZO. Es la pantalla del móvil sin el móvil: negro, con los mismos
-   tokens y declarado contenedor de consulta, que es lo que hace que las piezas
-   de dentro —medidas todas en `cqw`— salgan exactamente del tamaño que tienen
-   dentro del aparato. Por eso va al mismo ancho que él. */
+   Cada muestra vive en un lienzo del ancho de la pantalla del móvil y declarado
+   contenedor de consulta: es lo que hace que las medidas en `cqw` de la app den
+   aquí exactamente el mismo resultado que allí. */
 .am-sd-piezas {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 26px;
 }
 .am-sd-pieza {
   margin: 0;
+  /* Sin esto, el lienzo de 330 hace de suelo: un hueco de rejilla no baja del
+     tamaño de su contenido, así que la columna crecería hasta 330 y se saldría
+     de la caja en pantallas estrechas. */
+  min-width: 0;
 }
 .am-sd-lienzo {
   container-type: inline-size;
@@ -135,20 +166,67 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-  width: 100%;
-  max-width: 330px;
-  min-height: 120px;
-  padding: 22px 18px;
-  border-radius: 14px;
+  gap: 18px;
+  /* ANCHO FIJO, el de la pantalla del móvil: `cqw` se mide sobre el ancho del
+     lienzo, así que solo dando aquí los mismos 330 las piezas salen al tamaño
+     que tienen dentro de la app. Estirándose con la columna, cada muestra
+     saldría de un tamaño distinto. */
+  width: 330px;
+  max-width: 100%;
+  min-height: 132px;
+  /* SIN RELLENO. Es la pantalla del móvil, y allí el margen no lo pone la
+     pantalla sino lo que lleva dentro. Y hay una razón de peso además de la
+     fidelidad: las consultas de contenedor miden la CAJA DE CONTENIDO del
+     contenedor, así que cualquier relleno aquí encogería la unidad `cqw` y
+     todas las piezas saldrían más pequeñas de lo que son. Peor todavía si el
+     relleno se escribiera en `cqw`: en el propio elemento que declara el
+     contenedor, esa unidad no se mide contra él sino contra el contenedor de
+     más arriba —y si no hay ninguno, contra la ventana—, que es exactamente el
+     enredo que dejaba las muestras a un tercio de su tamaño.
+     El aire va en el forro de dentro. */
+  padding: 0;
+  box-sizing: border-box;
+  /* Negro fijo: es la pantalla de la app, que es negra en los dos modos del
+     sitio, y las piezas están pensadas contra ese negro. El hilo de alrededor,
+     en cambio, es el del portfolio: el marco es de la ficha y lo de dentro es
+     la pieza. */
   background: #000;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+  border: 1px solid var(--border);
   color: #fff;
   font-family: var(--font-raleway), system-ui, sans-serif;
 }
 .am-sd-lienzo.es-alto {
-  align-items: stretch;
   min-height: 150px;
+}
+.am-sd-lienzo.es-alto .am-sd-dentro {
+  align-items: stretch;
+}
+/* El forro: aquí sí va el aire, y el lateral es el MARGEN DE LA APP, el mismo
+   token, así que la pieza se ve con la holgura que tiene dentro de una
+   pantalla. */
+.am-sd-dentro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 24px var(--margen-app);
+}
+
+/* La muestra de tipografía: más baja que las de componentes, pero DEL MISMO
+   ANCHO. Es lo que sostiene la frase de arriba —«las muestras están a la escala
+   real de la app»—: como el tamaño de la letra se mide en porcentaje del ancho
+   del lienzo, un lienzo más estrecho la enseñaría encogida, y entonces la
+   muestra estaría mintiendo sobre el tamaño que dice tener. */
+.am-sd-lienzo.es-linea {
+  flex: 0 0 330px;
+  min-height: 0;
+  text-align: center;
+}
+.am-sd-lienzo.es-linea .am-sd-dentro {
+  padding: 16px var(--margen-app);
 }
 /* Para las piezas que en la app llegan a los cantos de la pantalla. El
    `stretch` es imprescindible y no cosmético: el lienzo centra a sus hijos, y
@@ -164,17 +242,13 @@
 .am-sd-lienzo.es-sangre .am-app-galeria {
   width: 100%;
 }
-/* Una sola línea de texto, centrada y sin aire de más. */
-.am-sd-lienzo.es-linea {
-  min-height: 0;
-  padding: 16px 18px;
-}
 .am-sd-pieza figcaption {
-  margin-top: 10px;
-  font-size: 11.5px;
+  margin-top: 11px;
+  font-size: 12.5px;
   line-height: 1.55;
   color: var(--muted);
   max-width: 330px;
+  background: var(--background);
 }
 
 /* Las muestras de tipografía, a la escala de la app. */
@@ -222,18 +296,28 @@
   cursor: default;
 }
 
-@media (max-width: 600px) {
-  /* El dato y su nombre pasan a compartir renglón y la nota baja: a 375 px, tres
-     columnas dejaban la explicación en una tira de dos palabras por línea. */
-  .am-sd-medidas li {
-    grid-template-columns: auto 1fr;
-    gap: 6px 14px;
-  }
-  .am-sd-nota {
-    grid-column: 1 / -1;
-  }
-  .am-sd-tipos li {
+@media (max-width: 760px) {
+  .am-sd-piezas {
     grid-template-columns: 1fr;
+  }
+  /* Las tintas, en dos columnas: a una, seis manchas a todo lo ancho hacían un
+     desplazamiento larguísimo para decir seis colores. */
+  .am-sd-tintas {
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .am-sd-tinta {
+    height: 52px;
+  }
+  /* En estrecho la ficha baja debajo de la muestra en vez de encogerla: la
+     muestra no se puede encoger sin dejar de enseñar el tamaño real. */
+  .am-sd-tipos li {
+    flex-direction: column;
+    align-items: flex-start;
     gap: 12px;
+  }
+  .am-sd-lienzo.es-linea {
+    flex: 0 0 auto;
+    width: 330px;
   }
 }
