@@ -74,14 +74,8 @@ export default function MotionLanding() {
         <div className="am-texto">
           <p>
             <LangText
-              es="Lo primero que ve el visitante al abrir la app son **cinco piezas seguidas** que le cuentan qué puede hacer dentro: escanear, descubrir, coleccionar, analizar y descargar. Se ven una detrás de otra, a pantalla completa, así que tienen que **leerse en dos segundos y sin texto**: cada una explica su verbo con una sola idea en movimiento."
-              en="The first thing you see when you open the app is **five pieces in a row** telling you what you can do inside: scan, discover, collect, analyse and download. They come one after another, full screen, so each has to **read in two seconds and without words**: one idea in motion per verb."
-            />
-          </p>
-          <p>
-            <LangText
-              es="Van todas con **la misma gramática** —el marco de canto rosa y azul, el fondo negro, la figura entrando desde el mismo sitio—, que es lo que hace que las cinco se lean como una sola secuencia y no como cinco animaciones sueltas puestas en fila."
-              en="They all share **the same grammar** — the pink-and-blue edged frame, the black ground, the shape entering from the same place — which is what makes the five read as one sequence instead of five loose animations lined up."
+              es="Cinco piezas seguidas cuentan qué se puede hacer dentro de la app. Van **sin una palabra**, así que cada una tiene que leerse en dos segundos: un verbo, una idea en movimiento. Y todas con **el mismo marco, el mismo fondo y la misma entrada**, que es lo que las hace una secuencia y no cinco animaciones sueltas."
+              en="Five pieces in a row tell you what the app can do. They run **without a single word**, so each has to read in two seconds: one verb, one idea in motion. And all share **the same frame, ground and entrance**, which is what makes them a sequence instead of five loose animations."
             />
           </p>
         </div>
@@ -89,8 +83,8 @@ export default function MotionLanding() {
         <div className="am-recorrido">
           {RECORRIDO.map((v) => (
             <figure key={v.id}>
-              {/* Todas son 400 × 700, el hueco que tienen dentro de la app. */}
-              <Pieza src={`${RUTA_APP}/${v.id}.mp4`} proporcion="400 / 700" alt={v.es} />
+              {/* Todas son 396 × 696, el hueco que tienen dentro de la app. */}
+              <Pieza src={`${RUTA_APP}/${v.id}.mp4`} proporcion="396 / 696" alt={v.es} />
               <figcaption>
                 <LangText es={v.es} en={v.en} />
               </figcaption>
@@ -105,14 +99,8 @@ export default function MotionLanding() {
         <div className="am-texto">
           <p>
             <LangText
-              es="Cada una de las ochenta obras se anima con **el mismo efecto**: la pintura se descompone en la **retícula de cuadrados** de la marca y vuelve a recomponerse, atravesada por el rosa y el azul del escáner. No es un filtro puesto encima —es la misma trama con la que están hechos el isotipo y los carteles—, así que lo que se ve al escanear un cuadro y lo que se ve en un cartel de la calle son **la misma cosa en dos soportes**."
-              en="Each of the eighty works is animated with **the same effect**: the painting breaks up into the brand's **grid of squares** and puts itself back together, shot through with the scanner's pink and blue. It is not a filter laid on top — it is the same weave the isotype and the posters are made of — so what you see when you scan a painting and what you see on a poster in the street are **the same thing on two surfaces**."
-            />
-          </p>
-          <p>
-            <LangText
-              es="El movimiento tiene que funcionar sobre pinturas muy distintas —un óleo oscuro del XIX, un grabado en blanco y negro, un surrealista de colores planos—, así que el efecto **no toca el color de la obra**: solo la desordena. Lo que cambia de un cuadro a otro es cuánto se desordena, no de qué color se pone."
-              en="The motion has to work on very different paintings — a dark nineteenth-century oil, a black-and-white engraving, a flat-coloured surrealist — so the effect **does not touch the work's colour**: it only unsettles it. What changes from one painting to the next is how much it unsettles, not what colour it turns."
+              es="Las ochenta obras se animan igual: la pintura se descompone en la **retícula de cuadrados** de la marca y vuelve a recomponerse. No es un filtro puesto encima, es **la misma trama del isotipo y los carteles**. Y no toca el color del cuadro —solo lo desordena—, que es lo que deja aplicarlo igual a un óleo del XIX que a un grabado en blanco y negro."
+              en="All eighty works are animated the same way: the painting breaks into the brand's **grid of squares** and puts itself back together. It is not a filter on top, it is **the same weave as the isotype and the posters**. And it never touches the painting's colour — it only unsettles it — which is what lets it work on a nineteenth-century oil and on a black-and-white engraving alike."
             />
           </p>
         </div>
@@ -140,8 +128,8 @@ export default function MotionLanding() {
         <div className="am-texto">
           <p>
             <LangText
-              es="La app es donde el efecto se usa de verdad. A la izquierda, el **escaneo**: se apunta la cámara a un cuadro que no tiene cartela y la obra se enciende dentro del encuadre. A la derecha, lo que viene después: la **ficha sube desde abajo** y cuenta qué miedo esconde."
-              en="The app is where the effect actually gets used. On the left, the **scan**: you point the camera at a painting with no wall label and the work lights up inside the frame. On the right, what comes next: the **entry rises from the bottom** and tells you what fear it hides."
+              es="Donde el efecto se usa de verdad. El **escaneo**: se apunta la cámara a un cuadro sin cartela y la obra se enciende dentro del encuadre. Y lo que viene después: la **ficha sube desde abajo** y cuenta qué miedo esconde."
+              en="Where the effect actually gets used. The **scan**: point the camera at a painting with no wall label and the work lights up inside the frame. And what comes next: the **entry rises from the bottom** and tells you what fear it hides."
             />
           </p>
         </div>
@@ -164,8 +152,8 @@ export default function MotionLanding() {
         <div className="am-texto">
           <p>
             <LangText
-              es="Las cinco del recorrido también se pueden ver **funcionando dentro del prototipo**, en su sitio y pasando con el botón de siguiente, en la página del diseño de producto."
-              en="The five walkthrough pieces can also be seen **running inside the prototype**, in place and advancing with the next button, on the product design page."
+              es="Las cinco del recorrido se pueden ver además **funcionando dentro del prototipo**, en la página del diseño de producto."
+              en="The five walkthrough pieces can also be seen **running inside the prototype**, on the product design page."
             />
           </p>
         </div>

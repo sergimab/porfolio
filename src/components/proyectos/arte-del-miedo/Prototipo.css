@@ -490,13 +490,17 @@
   height: auto;
   max-width: 80cqw;
   align-self: center;
-  /* 400 × 700, que es EXACTAMENTE el tamaño en que vienen las animaciones. No
-     es casualidad ni un redondeo afortunado: el hueco medido en las capturas da
-     423 × 741, la misma proporción, así que el marco de la pantalla se diseñó
-     al tamaño de la pieza que iba dentro. Poniendo aquí la proporción del
-     archivo, el vídeo entra clavado y no hay que recortarlo por ningún lado; y
-     además es lo que le da el ancho a partir del alto que le toque. */
-  aspect-ratio: 400 / 700;
+  /* 396 × 696, que es EXACTAMENTE el tamaño en que vienen las animaciones. No
+     es casualidad: el hueco medido en las capturas da 423 × 741, la misma
+     proporción, así que el marco de la pantalla se diseñó al tamaño de la pieza
+     que iba dentro. Poniendo aquí la proporción del archivo, el vídeo entra
+     clavado y no hay que recortarlo por ningún lado; y además es lo que le da
+     el ancho a partir del alto que le toque.
+     Los archivos venían a 400 × 700 con el canto del degradado PINTADO DENTRO,
+     los dos píxeles de fuera, así que aquí se veía doble: el del vídeo y el que
+     dibuja este marco. Se han reexportado recortando esos dos píxeles por cada
+     lado, y de ahí el 396 × 696. */
+  aspect-ratio: 396 / 696;
   display: flex;
   align-items: center;
   justify-content: center;
