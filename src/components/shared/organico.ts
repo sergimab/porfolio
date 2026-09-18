@@ -71,6 +71,21 @@ export function organicGradient(hue: number, sat: number, base: number): string 
   ].join(", ");
 }
 
+// Los mismos cinco colores, sueltos y sin degradado: es lo que se le pasa al
+// degradado de malla del shader, que no quiere un dibujo hecho sino la paleta
+// para amasarla él. Van en el mismo orden que las capas de arriba —el fondo
+// primero y las cuatro manchas después—, así que las dos versiones de una
+// categoría se parecen aunque una la pinte el CSS y la otra WebGL.
+export function paletaOrganica(hue: number, sat: number, base: number): string[] {
+  return [
+    `hsl(${tono(hue + 6)},${satura(sat)}%,${luz(base)}%)`,
+    `hsl(${tono(hue - 42)},${satura(sat + 20)}%,${luz(base + 16)}%)`,
+    `hsl(${tono(hue + 48)},${satura(sat + 14)}%,${luz(base)}%)`,
+    `hsl(${tono(hue + 16)},${satura(sat + 6)}%,${luz(base - 26)}%)`,
+    `hsl(${tono(hue - 16)},${satura(sat + 24)}%,${luz(base + 8)}%)`,
+  ];
+}
+
 // Las manchas se pintan más grandes que su caja para que al desplazarse no
 // asome el borde. Son cinco medidas porque el degradado son cinco capas, y
 // capsuleDrift mueve esas cinco: si se añade o quita una, hay que tocar las

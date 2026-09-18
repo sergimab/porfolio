@@ -8,7 +8,8 @@ import BackToTop from "@/components/layout/BackToTop";
 import DropcapTitle from "@/components/shared/DropcapTitle";
 import SobreMi from "./SobreMi";
 import MarcoHormigas from "@/components/shared/MarcoHormigas";
-import { seeded, organicGradient, CAPSULE_DRIFT_SIZE, drift } from "@/components/shared/organico";
+import { seeded, organicGradient, paletaOrganica, CAPSULE_DRIFT_SIZE, drift } from "@/components/shared/organico";
+import MeshGradient from "@/components/shared/MeshGradient";
 import "./SkillDrop.css";
 
 const skills = [
@@ -638,12 +639,9 @@ export default function SkillDrop() {
                 <li key={skill.id}>
                   <button
                     type="button"
-                    /* El mismo degradado en movimiento que al arrastrar una
-                       cápsula: no un color plano, sino manchas del tono que
-                       derivan despacio. Va siempre en trío —degradado, tamaño y
-                       animación—, porque el movimiento no está en el degradado
-                       sino en desplazar sus capas. El ritmo sale del id, así que
-                       cada fila lleva el suyo y no se ven sincronizadas. */
+                    /* El degradado de CSS se queda DEBAJO como red: si el
+                       navegador no da WebGL, el botón sigue pintándose del color
+                       de su categoría, solo que sin el fluido. */
                     style={{
                       ["--fila-color" as string]: organicGradient(skill.hue, 70, 48),
                       ["--fila-medida" as string]: CAPSULE_DRIFT_SIZE,
@@ -652,7 +650,21 @@ export default function SkillDrop() {
                     data-activa={selectedPanel === skill.id}
                     onClick={() => { setSelectedPanel(skill.id); scrollToPanel(); }}
                   >
-                    {getLabel(skill)}
+                    {/* La malla, calculada en el shader. Los colores son los de
+                        la categoría; la casilla activa va encendida sin ratón,
+                        que es la única manera de que se note en un móvil. */}
+                    <MeshGradient
+                      colores={paletaOrganica(skill.hue, 70, 48)}
+                      encendido={selectedPanel === skill.id}
+                      /* Cero en reposo: la casilla apagada no se ve —el lienzo
+                         está a opacidad 0—, así que además de invisible se
+                         queda parada y no gasta fotogramas. */
+                      velocidadReposo={0}
+                      velocidadHover={0.45}
+                      suavizado={0.5}
+                      escala={1.0}
+                    />
+                    <span className="mesh-encima">{getLabel(skill)}</span>
                   </button>
                 </li>
               ))}

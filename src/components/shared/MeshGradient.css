@@ -1,0 +1,26 @@
+/* El lienzo del degradado de malla.
+   Se estira a la caja entera de su botón y se queda en el FONDO del apilado.
+   El texto va en su propio elemento por encima; sin eso, el lienzo —que viene
+   después en el orden del documento— se pintaría encima y taparía el nombre. */
+.mesh-gradient {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* El lienzo no recibe el ratón: el que lo escucha es el botón, y si el lienzo
+     se pusiera en medio, entrar por él contaría como salir del botón. */
+  pointer-events: none;
+  /* Las esquinas las recorta el botón con `overflow: hidden`, pero el radio se
+     hereda también aquí por si alguien lo usa sin recorte. */
+  border-radius: inherit;
+}
+
+/* Lo que va ENCIMA del degradado. Con `position: relative` entra en el apilado
+   y se pone por delante del lienzo sin necesidad de subirle el z-index a nadie
+   más. */
+.mesh-encima {
+  position: relative;
+  z-index: 1;
+}

@@ -139,6 +139,13 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  /* Ancla del lienzo del degradado, que va en posición absoluta dentro. */
+  position: relative;
+  /* Y el recorte: el lienzo es un rectángulo, y es ESTO —y no el shader— lo que
+     le da la forma del botón. Aquí las casillas son rectas, pero con un radio
+     puesto el degradado sigue exactamente la esquina redonda sin que haya que
+     contárselo al shader ni repetir el número en dos sitios. */
+  overflow: hidden;
   padding: 0 20px;
   border: 0;
   border-top: 1px solid var(--foreground);
@@ -177,6 +184,32 @@
 .skill-lista button[data-activa="true"] {
   color: #fff;
   outline: none;
+}
+
+/* ── El degradado de malla ──
+   En reposo la casilla es papel con su nombre en negro; el color aparece al
+   pasar por encima. El lienzo está siempre montado y lo que se funde es su
+   opacidad, no su existencia: montarlo al entrar el ratón obligaría a compilar
+   y a pintar justo en ese instante, que es cuando peor cae.
+   Escondido, además, el motor lo tiene parado —velocidad de reposo cero—, así
+   que un menú entero en reposo no gasta un solo fotograma. */
+.skill-lista .mesh-gradient {
+  opacity: 0;
+  transition: opacity 0.22s ease;
+}
+.skill-lista button:hover .mesh-gradient,
+.skill-lista button:focus-visible .mesh-gradient,
+.skill-lista button[data-activa="true"] .mesh-gradient {
+  opacity: 1;
+}
+/* El nombre, por delante del lienzo. Y con una sombra muy tenue: el degradado
+   se mueve por debajo, así que el contraste del texto cambia según lo que esté
+   pasando en ese momento —una zona clara de la malla se come el blanco—. La
+   sombra le pone suelo sin que se lea como un efecto. */
+.skill-lista button:hover .mesh-encima,
+.skill-lista button:focus-visible .mesh-encima,
+.skill-lista button[data-activa="true"] .mesh-encima {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.32);
 }
 .box-soon {
   order: 2;
