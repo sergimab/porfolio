@@ -19,16 +19,14 @@
 .am-movil {
   position: relative;
   flex: 0 0 auto;
-  /* EL ANCHO DEL APARATO ES EL TAMAÑO DE LA LETRA. Todo lo de dentro va en
-     `cqw`, o sea en porcentaje de este número, así que ensanchar el marco es lo
-     único que hace que el texto de la app se lea más grande —y encogerlo, lo
-     contrario—.
-     Estaba en 330 y ahí la letra menuda de las fichas caía a 8,6 px, que es
-     ilegible. A 420 la misma letra da 13, y el cuerpo de lectura 14,3: por
-     encima de los 13,5 del texto del portfolio, que es la referencia. Cabe de
-     sobra: la caja de las pestañas mide 932 y el aparato con sus mandos se
-     queda en 736. */
-  width: 420px;
+  /* El mismo ancho que el móvil de la app de Espacio vacío: las dos páginas son
+     la misma clase de pieza y con aparatos de distinto tamaño no se leerían
+     como del mismo sitio.
+     OJO AL TOCARLO: todo lo de dentro va en `cqw`, o sea en porcentaje de este
+     número, así que este ancho ES el tamaño de la letra de la app. Si se
+     encoge el marco, encoge el texto; lo que hay que ajustar entonces es la
+     escala tipográfica de abajo, no el aparato. */
+  width: 330px;
   padding: 10px;
   border-radius: 44px;
   background: #1b1b1d;
@@ -62,22 +60,39 @@
      aparato. Con píxeles habría que reescribir cada medida en cada tamaño; con
      porcentajes, el texto no escalaría con lo demás. */
   container-type: inline-size;
+}
 
-  /* LOS TOKENS VIVEN AQUÍ, en la pantalla del aparato, y no en la capa de la
-     app. El motivo es práctico y costó un rato: la ficha de una obra y el fondo
-     de pantalla se abren POR ENCIMA de la app, como hermanos suyos y no como
-     hijos, así que declarados en la app no les llegaban —y sin `--tinta` el
-     botón se quedaba sin su contorno y la raya sin color—. Puestos en la
-     pantalla los tiene todo lo que hay dentro del móvil, que es lo que
-     corresponde: el sistema es del aparato, no de una de sus capas. */
+/* LOS TOKENS VIVEN AQUÍ, en la pantalla del aparato, y no en la capa de la app.
+   El motivo es práctico: la ficha de una obra y el fondo de pantalla se abren
+   POR ENCIMA de la app, como hermanos suyos y no como hijos, así que declarados
+   en la app no les llegaban —y sin `--tinta` el botón se quedaba sin su
+   contorno y la raya sin color—. Puestos en la pantalla los tiene todo lo que
+   hay dentro del móvil, que es lo que corresponde: el sistema es del aparato,
+   no de una de sus capas.
+
+   Y LOS HEREDA TAMBIÉN EL LIENZO DEL SISTEMA DE DISEÑO. Allí las muestras son
+   estos mismos componentes, con estas mismas medidas, así que tienen que leer
+   los mismos números; si el lienzo se los declarara aparte, serían una copia y
+   el sistema acabaría enseñando una app que ya no existe. */
+.am-movil-hueco,
+.am-sd-lienzo {
   --u: 4.5cqw;              /* 29 px · el renglón del texto: la unidad */
   --e1: 9cqw;               /* 58 px · dos renglones */
   --e2: 12.6cqw;            /* 81 px · entre partes de la pantalla */
   --margen: 17cqw;          /* 110 px · el margen lateral */
 
-  --t-texto: 3.4cqw;        /* 22 px · el cuerpo de lectura */
-  --t-menudo: 3.1cqw;       /* 20 px · el rótulo de los botones */
-  --t-titulo: 4.9cqw;       /* 31,6 px · ESCANEA, DESCUBRE, ¿TODO LISTO?… */
+  /* LA ESCALA TIPOGRÁFICA VA POR ENCIMA DE LA MEDIDA DEL DISEÑO, y es una
+     decisión, no un descuido. Las maquetas son de 645 px de ancho y aquí el
+     aparato mide 330: todo se ve a la mitad, y a la mitad el cuerpo de lectura
+     del diseño —22 px— se queda en 11,2, que es letra de pie de foto.
+     Así que la proporción entre los tamaños se respeta —el título sigue siendo
+     vez y media el texto, y el texto vez y pico el menudo— pero el conjunto
+     sube un 12 %, hasta dejar el cuerpo de lectura en 12,5 px: el mismo que
+     usa la app de Espacio vacío en su móvil del mismo ancho. Lo que manda aquí
+     es que se lea, y la referencia es la pieza hermana. */
+  --t-texto: 3.8cqw;        /* 12,5 px en pantalla */
+  --t-menudo: 3.4cqw;       /* 11,2 px · el rótulo de los botones */
+  --t-titulo: 5.2cqw;       /* 17,2 px · ESCANEA, DESCUBRE, ¿TODO LISTO?… */
 
   --iso: 10.2cqw;           /* 66 px · el isotipo de cabecera */
   /* EL LOGOTIPO SE MIDE POR SU TINTA, no por su archivo. El dibujo ocupa 336 de
@@ -333,12 +348,11 @@
 .am-app-texto:last-of-type {
   margin-bottom: 0;
 }
-/* El texto de un paso va entre el marco y el botón, y se lleva el hueco que
-   sobre: así el botón queda abajo del todo en las cinco pantallas aunque los
-   textos midan muy distinto —uno tiene cuatro líneas y otro una—. */
+/* El texto va colgado del marco, a dos renglones. Ya no hace falta repartir
+   huecos aquí: el que sobra se lo queda el marco, que es quien puede crecer. */
 .am-app-texto.es-paso {
-  margin-bottom: auto;
-  padding-top: var(--e1);
+  flex: 0 0 auto;
+  margin: var(--e1) 0 var(--e1);
 }
 
 /* La raya del degradado bajo el titular de la bienvenida: la marca reducida a
@@ -451,12 +465,29 @@
    mismo procedimiento. Dentro va la pieza en movimiento de cada paso. */
 .am-app-marco {
   position: relative;
-  width: 100%;
+  /* LA PIEZA SE MIDE POR EL HUECO QUE SOBRA, no al revés. Es lo que resuelve
+     que los cinco pasos tengan textos de una a cinco líneas: con un tamaño
+     fijo, o el paso largo se comía el aire del botón —a «Descubre» le quedaban
+     4 px— o el paso corto dejaba un agujero de doscientos justo encima.
+     Aquí el marco es un elemento flexible: se lleva todo el alto que quede
+     después de la cabecera, el texto y el botón, y su ANCHO sale de ese alto
+     por la proporción del archivo. Así el paso corto enseña la animación
+     grande y el largo la enseña menor, y en los cinco el texto y el botón caen
+     exactamente donde deben.
+     El tope de ancho es la columna de texto: más allá, la pieza se saldría del
+     margen de la app. */
+  flex: 1 1 auto;
+  min-height: 0;
+  width: auto;
+  height: auto;
+  max-width: 66cqw;
+  align-self: center;
   /* 400 × 700, que es EXACTAMENTE el tamaño en que vienen las animaciones. No
      es casualidad ni un redondeo afortunado: el hueco medido en las capturas da
      423 × 741, la misma proporción, así que el marco de la pantalla se diseñó
      al tamaño de la pieza que iba dentro. Poniendo aquí la proporción del
-     archivo, el vídeo entra clavado y no hay que recortarlo por ningún lado. */
+     archivo, el vídeo entra clavado y no hay que recortarlo por ningún lado; y
+     además es lo que le da el ancho a partir del alto que le toque. */
   aspect-ratio: 400 / 700;
   display: flex;
   align-items: center;
@@ -482,7 +513,13 @@
 .am-app-marco video {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  /* `contain` y no `cover`. Cuando al marco le sobra alto —le pasa a los pasos
+     de texto corto, que le dejan más hueco del que su proporción necesita— con
+     `cover` la animación se recortaría por los lados para llenarlo. Con
+     `contain` se ve entera y lo que sobra queda en negro DENTRO del marco, que
+     sobre una pantalla negra no se ve: el canto del degradado queda un pelo más
+     alto que la pieza y nada más. */
+  object-fit: contain;
   display: block;
 }
 /* El aviso de que todavía no hay pieza. Se ve dentro del propio marco, que es
@@ -681,7 +718,7 @@
     gap: 24px;
   }
   .am-movil {
-    width: min(420px, 86vw);
+    width: min(330px, 82vw);
   }
   .am-proto-mandos {
     flex: 0 0 auto;
@@ -1060,18 +1097,17 @@
 }
 .am-app-ficha-obra {
   margin: 0 0 var(--u);
-  font-size: 3.6cqw;
+  font-size: 3.9cqw;
   font-weight: 500;
   text-align: center;
 }
 /* El texto de la ficha va un punto más menudo que el del tutorial: allí son
    tres líneas que se leen de un golpe y aquí hay dos párrafos largos. Un punto
-   y no tres: en el diseño está a 11 px de sus 430 —2,6 cqw—, que traducido aquí
-   se quedaba en letra de pie de foto. 3,1 es lo que hace que se lea seguido sin
-   dejar de ser el escalón pequeño de la app. */
+   y no tres: en el diseño está a 11 px de sus 430, que traducido aquí se
+   quedaba en letra de pie de foto. */
 .am-app-ficha-texto {
   margin: 0 0 var(--u);
-  font-size: 3.1cqw;
+  font-size: 3.55cqw;   /* 11,7 px en pantalla */
   font-weight: 300;
   line-height: 1.5;
   text-align: justify;

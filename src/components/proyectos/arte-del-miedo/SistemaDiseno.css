@@ -1,0 +1,239 @@
+/* De qué está hecha la app. Ver el comentario del componente: las muestras son
+   los componentes de verdad sobre un lienzo que hereda sus tokens. */
+.am-sd {
+  margin: 8px 0 0;
+}
+
+.am-sd-apartado {
+  margin: 40px 0 14px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.am-sd-apartado:first-of-type {
+  margin-top: 8px;
+}
+
+.am-sd-entradilla {
+  max-width: 560px;
+  margin: 0 0 20px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+/* El pie de cada dato. Va en el gris secundario del sitio, que es el único que
+   pasa el contraste mínimo en los dos modos. */
+.am-sd-nota {
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* ── La retícula ──
+   Cada medida en su fila: el número grande delante, porque es lo que se viene a
+   consultar, y el porqué detrás. */
+.am-sd-medidas {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1px;
+  /* El hilo que separa las filas es el fondo asomando por el hueco de la
+     cuadrícula: un borde por fila dejaría doble línea entre dos vecinas. */
+  background: color-mix(in srgb, currentColor 14%, transparent);
+  border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.am-sd-medidas li {
+  display: grid;
+  grid-template-columns: 96px 150px 1fr;
+  gap: 16px;
+  align-items: baseline;
+  padding: 13px 16px;
+  background: var(--background);
+}
+.am-sd-dato {
+  font-size: 14px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.am-sd-que {
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+/* ── La tipografía ── */
+.am-sd-tipos,
+.am-sd-tintas,
+.am-sd-piezas {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.am-sd-tipos li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.am-sd-tipo-datos {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 12.5px;
+}
+
+/* ── El color ── */
+.am-sd-tintas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+.am-sd-tintas li {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 12.5px;
+}
+/* El degradado ocupa toda la fila: es el único que necesita explicarse, y con
+   el ancho de una muestra de color el texto le salía en ocho renglones. */
+.am-sd-tintas li.es-ancha {
+  grid-column: 1 / -1;
+}
+.am-sd-tinta {
+  display: block;
+  height: 54px;
+  margin-bottom: 4px;
+  border-radius: 10px;
+  /* Un canto tenue: el negro y el blanco de la paleta son exactamente el papel
+     de la página en cada modo, así que sin borde una de las dos muestras
+     desaparece siempre. */
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, currentColor 22%, transparent);
+}
+.am-sd-tinta.es-tinta {
+  background: linear-gradient(115deg, #3d00e4, #ff1597);
+}
+
+/* ── Los componentes ──
+   EL LIENZO. Es la pantalla del móvil sin el móvil: negro, con los mismos
+   tokens y declarado contenedor de consulta, que es lo que hace que las piezas
+   de dentro —medidas todas en `cqw`— salgan exactamente del tamaño que tienen
+   dentro del aparato. Por eso va al mismo ancho que él. */
+.am-sd-piezas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+.am-sd-pieza {
+  margin: 0;
+}
+.am-sd-lienzo {
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 330px;
+  min-height: 120px;
+  padding: 22px 18px;
+  border-radius: 14px;
+  background: #000;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+  color: #fff;
+  font-family: var(--font-raleway), system-ui, sans-serif;
+}
+.am-sd-lienzo.es-alto {
+  align-items: stretch;
+  min-height: 150px;
+}
+/* Para las piezas que en la app llegan a los cantos de la pantalla. El
+   `stretch` es imprescindible y no cosmético: el lienzo centra a sus hijos, y
+   una pieza a sangre centrada se queda del ancho de su contenido, que en una
+   banda vacía es cero. */
+.am-sd-lienzo.es-sangre {
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: 0;
+  overflow: hidden;
+  min-height: 0;
+}
+.am-sd-lienzo.es-sangre .am-app-galeria {
+  width: 100%;
+}
+/* Una sola línea de texto, centrada y sin aire de más. */
+.am-sd-lienzo.es-linea {
+  min-height: 0;
+  padding: 16px 18px;
+}
+.am-sd-pieza figcaption {
+  margin-top: 10px;
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: var(--muted);
+  max-width: 330px;
+}
+
+/* Las muestras de tipografía, a la escala de la app. */
+.am-sd-muestra-titulo {
+  font-size: 5.2cqw;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.am-sd-muestra-texto {
+  display: block;
+  font-size: 3.8cqw;
+  font-weight: 300;
+  line-height: 1.32;
+  text-align: center;
+}
+.am-sd-muestra-menudo {
+  font-size: 3.4cqw;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+
+/* El isotipo de la muestra, al tamaño que tiene de cabecera dentro de la app. */
+.am-sd-iso {
+  display: block;
+  width: 10.2cqw;
+  line-height: 0;
+}
+.am-sd-iso .am-iso-figura rect {
+  fill: #fff;
+}
+
+/* Las bandas de la colección, aquí sin foto: lo que la muestra enseña es la
+   proporción y el hilo que las separa, no los cuadros. */
+.am-sd-lienzo .am-app-galeria span {
+  display: block;
+  aspect-ratio: 3 / 1;
+  background: #262626;
+}
+
+/* El botón del sistema es un <span> y no un <button> —aquí no hace nada—, así
+   que hay que devolverle lo que el navegador le da a un botón de verdad. */
+.am-sd-lienzo .am-app-boton {
+  display: inline-flex;
+  cursor: default;
+}
+
+@media (max-width: 600px) {
+  /* El dato y su nombre pasan a compartir renglón y la nota baja: a 375 px, tres
+     columnas dejaban la explicación en una tira de dos palabras por línea. */
+  .am-sd-medidas li {
+    grid-template-columns: auto 1fr;
+    gap: 6px 14px;
+  }
+  .am-sd-nota {
+    grid-column: 1 / -1;
+  }
+  .am-sd-tipos li {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}

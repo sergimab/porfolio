@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useLang } from "@/components/shared/useLang";
 import LangText from "@/components/shared/LangText";
 import Prototipo from "./Prototipo";
+import SistemaDiseno from "./SistemaDiseno";
 // LAS PESTAÑAS SON LAS MISMAS QUE LAS DE LA APP DE ESPACIO VACÍO, y por eso se
 // importa su CSS en vez de copiarlo. Son la misma pieza haciendo el mismo
 // trabajo en la misma clase de página —el prototipo y el sistema de una app—,
@@ -55,12 +56,7 @@ export default function AppApartados() {
         </div>
 
         <div hidden={cual !== "sistema"}>
-          <p className="am-pendiente">
-            <LangText
-              es="Falta el sistema de diseño: la retícula, los estilos de texto, los colores tal y como se usan en pantalla, los botones y los iconos. Va aquí, con el mismo trato que el de Espacio vacío."
-              en="Missing: the design system — the grid, the text styles, the colours as they are used on screen, the buttons and the icons. It goes here, handled the same way as the Empty space one."
-            />
-          </p>
+          <SistemaDiseno />
         </div>
       </div>
     </div>
