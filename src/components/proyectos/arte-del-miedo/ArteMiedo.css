@@ -11,24 +11,41 @@
   margin-top: 56px;
 }
 
-/* El texto de cada sección.
-   Ancho de lectura corto: en una línea muy larga el ojo se pierde al volver al
-   principio del renglón, y estos son párrafos para leer, no pies de foto.
-   El papel opaco es obligatorio aquí: por detrás pasa la trama animada del
-   fondo y sobre un párrafo compite con lo que hay que leer. */
+/* El texto de cada sección: TEXTO CORRIDO, no un destacado.
+   La entradilla de arriba y estos párrafos hacen dos trabajos distintos —uno
+   engancha, los otros se leen— y antes se veían iguales: mismo cuerpo, mismo
+   ancho, misma pinta. Aquí se separan por lo de siempre en tipografía, que es
+   el renglón y el ancho de columna:
+
+   · la entradilla va en columna CORTA (520) y renglón apretado (1,6), que es lo
+     que hace que un párrafo se lea de un golpe de vista;
+   · esto va en columna LARGA (640), un punto más pequeño y con el renglón
+     abierto (1,8), que es lo que se agradece cuando hay que leer seguido.
+
+   El papel opaco es obligatorio: por detrás pasa la trama animada del fondo y
+   sobre un párrafo compite con lo que hay que leer. */
 .am-texto {
   position: relative;
-  max-width: 620px;
+  max-width: 640px;
   margin: 0;
   background: var(--background);
-  font-size: 15px;
-  line-height: 1.7;
+  font-size: 13.5px;
+  line-height: 1.8;
+  /* Un pelo abierto de letra: a este cuerpo, y con el renglón tan separado, sin
+     esto el texto se apelmaza. */
+  letter-spacing: 0.004em;
 }
 .am-texto p {
-  margin: 0 0 16px;
+  margin: 0 0 18px;
 }
 .am-texto p:last-child {
   margin-bottom: 0;
+}
+/* Las negritas, sin gritar. En la entradilla van a 700 porque son cuatro y
+   sostienen el titular; aquí hay varias por párrafo y a ese peso el texto se
+   veía a manchas. A 600 siguen marcando sin romper el renglón. */
+.am-texto strong {
+  font-weight: 600;
 }
 
 /* El hueco de una pieza que todavía no está. No es decoración: es un aviso de
