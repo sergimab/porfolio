@@ -45,26 +45,52 @@
   object-fit: cover;
 }
 
-/* Los cinco carteles, apilados en la misma casilla como una baraja. La posición
-   de cada uno la escribe el componente —depende de a qué distancia esté del de
-   turno—, así que aquí solo está lo que no cambia: que se apilan, cómo viajan y
-   desde dónde encogen.
-   El anclaje ABAJO es lo que hace que la pila se lea como una pila: encogiendo
-   desde el centro, las de atrás asomarían por los cuatro lados a la vez y
-   parecería un halo; encogiendo desde el borde de abajo, se quedan pegadas por
-   la base y solo asoman por arriba, que es como se ve un montón de cartas
-   puesto de pie. */
+/* EL ABANICO, EN TRES NÚMEROS. Lo que el componente dice de cada cartel es su
+   puesto en la pila —`--f`, cero el de delante—; lo que vale un puesto está
+   aquí. Cada escalón desvía el cartel un poco a la izquierda, lo tumba unos
+   grados y lo encoge, así que la escalera entera dibuja el abanico y el viaje
+   del frente al fondo sale de recorrerla de un tirón.
+   Están sueltos en variables porque en el móvil tienen que ser más cortos: el
+   cartel pasa a ocupar el ancho entero de la pantalla y un abanico de escritorio
+   se saldría de la página. */
+.am-carteles-pase {
+  /* El desvío y el giro hay que sumarlos para saber cuánto se sale la pila por
+     la izquierda: tumbar un cartel alto también lo ensancha —un A de 430 px
+     ladeado 2° gana unos 30 de caja—, así que el giro desplaza tanto como el
+     propio desliz. Con estos dos números el tercer cartel asoma unos 30 px, que
+     es justo el hueco que hay hasta el mockup. Subiéndolos, la pila se le monta
+     encima. */
+  --am-desliz: -2.5%;
+  --am-giro: -2deg;
+  --am-sube: -2.5%;
+  --am-mengua: 0.045;
+}
+
+/* Los cinco carteles, apilados en la misma casilla.
+   El giro y el encogimiento van anclados al borde de ABAJO y no al centro:
+   pivotando por el centro, el cartel se tumbaría como una aguja de reloj y las
+   cartas de atrás asomarían por los cuatro lados a la vez, que parece un halo.
+   Anclados abajo, se quedan apoyados por la base —como cartas de pie sobre una
+   mesa— y el giro se lee como que uno se ladea para dejar ver al siguiente. */
 .am-carteles-pase img {
   position: absolute;
   inset: 0;
   object-fit: contain;
   border-radius: 6px;
   transform-origin: center bottom;
-  /* Una curva con un punto de salida lento y una llegada suave: el cartel
-     arranca como si lo empujaran y se posa, en vez de deslizarse a velocidad
-     fija. Y la opacidad tarda menos que el viaje, para que la que se va ya
-     esté apagada antes de llegar al fondo y no se la vea aterrizar. */
-  transition: transform 0.75s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.45s ease;
+  transform:
+    translateX(calc(var(--f) * var(--am-desliz)))
+    translateY(calc(var(--f) * var(--am-sube)))
+    rotate(calc(var(--f) * var(--am-giro)))
+    scale(calc(1 - var(--f) * var(--am-mengua)));
+  /* Una curva con salida rápida y llegada larga: el cartel arranca como si lo
+     empujaran y se posa, en vez de deslizarse a velocidad fija.
+     La opacidad va con RETARDO, y es lo que hace que el gesto se entienda: sin
+     él, el que se va se apagaría nada más arrancar y no se le vería girar. Con
+     un quinto de segundo de ventaja, primero se aparta y después desaparece. */
+  transition:
+    transform 0.8s cubic-bezier(0.34, 0.78, 0.15, 1),
+    opacity 0.5s ease 0.2s;
 }
 @media (prefers-reduced-motion: reduce) {
   .am-carteles-pase img {
@@ -100,6 +126,13 @@
     /* Un respiro para que la pila no se pegue al borde inferior de la sección
        al quedarse sola en su renglón. */
     margin-bottom: 4px;
+    /* Y el abanico, a la mitad. Aquí el cartel ocupa el ancho entero de la
+       pantalla menos los 24 px de aire de la página, así que lo que en
+       escritorio se iba al hueco entre las dos piezas aquí se iría fuera de la
+       página, y la dejaría arrastrable de lado. El gesto es el mismo, solo que
+       más corto. */
+    --am-desliz: -1.2%;
+    --am-giro: -1deg;
   }
 }
 

@@ -23,19 +23,17 @@ const PASO = 2200;
 //
 // EL PASE ES UNA BARAJA, no un fundido. Los cinco están siempre puestos, uno
 // encima de otro, y lo que cambia es la PROFUNDIDAD de cada uno: el de delante
-// se va hacia atrás —encogiendo y subiendo, que es como se ve una pila de
-// cartas de frente— y el que venía detrás pasa a ocupar su sitio. Así no es una
-// imagen que se sustituye por otra, sino cinco piezas que existen a la vez y se
-// van colocando, que es lo que son.
+// se va hacia la izquierda girando y pasa detrás, y el que venía detrás entra a
+// ocupar su sitio enderezándose. Así no es una imagen que se sustituye por
+// otra, sino cinco piezas que existen a la vez y se van colocando, que es lo
+// que son.
 //
 // La profundidad de cada cartel se saca de su distancia al de turno, y como la
 // cuenta es circular, el que estaba delante salta de 0 a 4 de golpe: o sea,
-// hace en una sola transición el viaje del frente al fondo. Eso no es un
-// defecto del cálculo, es justo el movimiento que se busca.
-//
-// Nada se sale de la caja: el desplazamiento es hacia ARRIBA y hacia DENTRO
-// —translate negativo y escala menor que uno—, nunca hacia los lados. Si las
-// cartas se abanicaran a la derecha se comerían el aire de la columna.
+// hace en una sola transición el viaje entero del frente al fondo. Eso no es un
+// defecto del cálculo, es justo el movimiento que se busca —y por eso el
+// abanico tiene que estar escrito como una escalera de puestos y no como una
+// animación con fotogramas: el viaje sale solo—.
 export default function Carteles() {
   const [actual, setActual] = useState(0);
 
@@ -71,15 +69,16 @@ export default function Carteles() {
               // Las tres primeras se ven; de la cuarta en adelante el hueco ya
               // no daría para distinguirlas y solo ensuciarían el borde de
               // arriba, así que esperan escondidas en el fondo de la pila.
+              // AQUÍ NO SE ESCRIBE LA POSICIÓN, SOLO EL PUESTO. El desvío, el
+              // giro y el encogimiento de cada puesto están en el CSS, porque
+              // no son los mismos en una pantalla ancha que en uno estrecha
+              // —en el móvil el abanico tiene que ser más corto o se sale de la
+              // página—, y eso es cosa de una media query, no de JavaScript.
+              // Lo único que sabe el componente es a qué distancia está cada
+              // cartel del de turno.
               style={{
                 zIndex: CARTELES.length - fondo,
-                // Los dos números van juntos y no se pueden tocar por separado:
-                // encogiendo desde el borde de abajo, una carta al 95 % ya tiene
-                // el canto superior un 5 % más bajo, así que para que asome hay
-                // que subirla MÁS de lo que ha menguado. La diferencia entre el
-                // 7 y el 5 —dos puntos por puesto— es exactamente lo que se ve
-                // de cada cartel de atrás.
-                transform: `translateY(${-fondo * 7}%) scale(${1 - fondo * 0.05})`,
+                ["--f" as string]: fondo,
                 opacity: fondo < 3 ? 1 : 0,
               }}
               alt={
