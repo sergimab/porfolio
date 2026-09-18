@@ -140,13 +140,21 @@ function Boton({
   onClick,
   children,
   clase,
+  marcado,
 }: {
   onClick: () => void;
   children: React.ReactNode;
   clase?: string;
+  /** Para los botones que se quedan puestos, como el de «Siento el miedo». */
+  marcado?: boolean;
 }) {
   return (
-    <button type="button" className={`am-app-boton${clase ? ` ${clase}` : ""}`} onClick={onClick}>
+    <button
+      type="button"
+      className={`am-app-boton${clase ? ` ${clase}` : ""}`}
+      onClick={onClick}
+      aria-pressed={marcado}
+    >
       <span>{children}</span>
     </button>
   );
@@ -452,18 +460,87 @@ function Cerrar({ onClick, rotulo }: { onClick: () => void; rotulo: string }) {
 // que haya —la cámara o la galería—, y ese gesto es el que dice que se puede
 // cerrar y volver. Por eso lleva también el tirador, que no hace nada pero
 // anuncia de dónde ha venido.
-function Ficha({ c, id, cerrar }: { c: Ctx; id: string; cerrar: () => void }) {
+function Ficha({
+  c,
+  id,
+  cerrar,
+  sentida,
+  sentir,
+}: {
+  c: Ctx;
+  id: string;
+  cerrar: () => void;
+  sentida: boolean;
+  sentir: () => void;
+}) {
   const f = FOBIAS.find((x) => x.id === id);
+
+  // CUÁNTO SE HA BAJADO LA HOJA, en porcentaje del ancho de la pantalla —la
+  // misma unidad que todo lo demás—. Cero es cerrada; el tope, abierta.
+  const [arrastre, setArrastre] = useState(0);
+  const [tirando, setTirando] = useState(false);
+  const inicio = useRef<{ y: number; base: number } | null>(null);
+  const hoja = useRef<HTMLDivElement>(null);
+
+  // Cuánto baja la hoja, en cqw. Sale de la propia obra: los siete archivos
+  // miden unos 82 cqw de alto a todo el ancho, así que con la hoja abajo el
+  // hueco queda en 109 y el cuadro entero cabe con aire a los dos lados.
+  // Subiendo el tope, lo único que crece es el negro de alrededor.
+  const TOPE = 30;
+  const abierta = arrastre > 2;
+
+  // El arrastre SOLO empieza si la hoja está por arriba del todo. Si no, lo que
+  // el dedo está haciendo es leer, y robarle ese gesto para abrir la ficha
+  // haría imposible desplazar el texto.
+  const empezar = (e: React.PointerEvent) => {
+    if ((hoja.current?.scrollTop ?? 0) > 0) return;
+    inicio.current = { y: e.clientY, base: arrastre };
+    setTirando(true);
+    (e.target as Element).setPointerCapture?.(e.pointerId);
+  };
+  const mover = (e: React.PointerEvent) => {
+    if (!inicio.current) return;
+    const ancho = hoja.current?.parentElement?.clientWidth ?? 1;
+    // De píxeles a cqw: así el mismo gesto recorre lo mismo en un móvil
+    // pequeño que en el aparato grande del escritorio.
+    const d = ((e.clientY - inicio.current.y) / ancho) * 100;
+    setArrastre(Math.max(0, Math.min(TOPE, inicio.current.base + d)));
+  };
+  const soltar = () => {
+    if (!inicio.current) return;
+    inicio.current = null;
+    setTirando(false);
+    // Dos posiciones y nada en medio: o cerrada o abierta. Una hoja que se
+    // quedara donde la dejaste dejaría el cuadro cortado por un sitio
+    // cualquiera.
+    setArrastre((a) => (a > TOPE * 0.3 ? TOPE : 0));
+  };
+
   if (!f) return null;
+
   return (
-    <div className="am-app-ficha" role="dialog" aria-label={f.nombre}>
+    <div
+      className={`am-app-ficha${tirando ? " es-tirando" : ""}${abierta ? " es-abierta" : ""}`}
+      style={{ ["--arrastre" as string]: `${arrastre}cqw` }}
+      role="dialog"
+      aria-label={f.nombre}
+    >
       <div className="am-app-ficha-cuadro">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={`${RUTA}/cuadro-${f.id}.webp`} alt={`${f.obra}, ${f.anio}`} />
         <Cerrar onClick={cerrar} rotulo={c.t("Cerrar la ficha", "Close")} />
       </div>
 
-      <div className="am-app-ficha-hoja">
+      <div
+        className="am-app-ficha-hoja"
+        ref={hoja}
+        onPointerDown={empezar}
+        onPointerMove={mover}
+        onPointerUp={soltar}
+        onPointerCancel={soltar}
+      >
+        {/* El tirador. Ahora sí tira: arrastrándolo hacia abajo la hoja baja y
+            el cuadro se ve entero. */}
         <span className="am-app-ficha-tirador" aria-hidden="true" />
         <h4 className="am-app-ficha-nombre">{f.nombre}</h4>
         <p className="am-app-ficha-texto">{f.fobia}</p>
@@ -472,7 +549,11 @@ function Ficha({ c, id, cerrar }: { c: Ctx; id: string; cerrar: () => void }) {
           «{f.obra}» ({f.anio})
         </p>
         <p className="am-app-ficha-texto">{f.cuadro}</p>
-        <Boton onClick={() => {}}>
+        {/* SE QUEDA ENCENDIDO. No es un botón de «enviar»: es marcar que ese
+            miedo es tuyo, y una marca tiene que verse puesta. De ahí que el
+            estado de pulsado sea el mismo relleno que el de pasar por encima
+            —el diseño solo trae dos, contorno y macizo— y que se quede así. */}
+        <Boton clase={sentida ? "es-puesto" : undefined} onClick={sentir} marcado={sentida}>
           {c.t("Siento el miedo", "I feel the fear")}
         </Boton>
       </div>
@@ -765,6 +846,10 @@ export default function Prototipo() {
   // donde se estaba, no a un paso anterior de una pila.
   const [ficha, setFicha] = useState<string | null>(null);
   const [fondo, setFondo] = useState<string | null>(null);
+  // Los miedos que se han marcado como propios. Van en el componente de arriba
+  // y no en la ficha porque la ficha se monta y se desmonta cada vez que se
+  // abre: guardados ahí dentro, la marca se perdería al cerrarla.
+  const [sentidas, setSentidas] = useState<string[]>([]);
   const actual = PORID.get(camino[camino.length - 1]) ?? PANTALLAS[0];
 
   const ir = useCallback((id: string) => {
@@ -823,12 +908,30 @@ export default function Prototipo() {
                   esas dos se lean como algo que se abre encima y no como otro
                   apartado más. */}
               {actual.barra && !ficha && !fondo && (
-                <BarraMenu c={ctx} activo={actual.barra} />
+                <>
+                  {/* El degradado del pie: negro abajo, transparente arriba.
+                      No es decoración —es lo que hace que el contenido pase por
+                      debajo del menú sin chocar con él—: sin el degradado, una
+                      foto cortada justo detrás de la barra se lee como un
+                      recorte, y con él se lee como que sigue. */}
+                  <span className="am-app-velo" aria-hidden="true" />
+                  <BarraMenu c={ctx} activo={actual.barra} />
+                </>
               )}
             </div>
 
             {ficha && (
-              <Ficha c={ctx} id={ficha} cerrar={() => setFicha(null)} />
+              <Ficha
+                c={ctx}
+                id={ficha}
+                cerrar={() => setFicha(null)}
+                sentida={sentidas.includes(ficha)}
+                sentir={() =>
+                  setSentidas((antes) =>
+                    antes.includes(ficha) ? antes.filter((x) => x !== ficha) : [...antes, ficha]
+                  )
+                }
+              />
             )}
 
             {fondo && (

@@ -100,10 +100,14 @@
 }
 
 /* El notch, colgando del borde de arriba, del color del marco. Cae por delante
-   de la app pero no de sus pulsaciones: ahí arriba no hay nada que tocar. */
+   de la app pero no de sus pulsaciones: ahí arriba no hay nada que tocar.
+   El z-index es el más alto de toda la pantalla, y tiene que serlo: el notch es
+   del APARATO, no de la app, así que nada de lo que la app abra encima puede
+   taparlo. Estaba por debajo de las hojas, y al abrir un fondo de pantalla
+   desaparecía —el teléfono perdía la muesca—. */
 .am-movil-notch {
   position: absolute;
-  z-index: 6;
+  z-index: 20;
   left: 50%;
   top: 0;
   transform: translateX(-50%);
@@ -405,7 +409,8 @@
 }
 .am-app-boton:hover::after,
 .am-app-boton:focus-visible::after,
-.am-app-boton:active::after {
+.am-app-boton:active::after,
+.am-app-boton.es-puesto::after {
   opacity: 1;
 }
 /* Y al pulsar, se hunde un punto. Es lo único que distingue «tocando» de
@@ -805,12 +810,17 @@
   /* Sin márgenes por ningún lado. Por abajo sí queda el hueco de la barra, para
      que la última obra se pueda llegar a ver entera en vez de quedarse siempre
      medio tapada por el menú. */
-  padding: 0 0 24cqw;
+  padding: 0 0 20cqw;
 }
+/* Las líneas que separan una obra de otra son el FONDO asomando por el hueco
+   entre bandas: un blanco puesto en el contenedor y un hueco de un píxel. Se
+   hace así y no con un borde en cada banda porque un borde se suma a la altura
+   de la caja y descuadraría la proporción 3:1 de los cuadros. */
 .am-app-galeria {
   display: flex;
   flex-direction: column;
-  gap: 0.35cqw;
+  gap: 0.28cqw;
+  background: rgba(255, 255, 255, 0.92);
 }
 .am-app-galeria button {
   display: block;
@@ -834,6 +844,21 @@
 }
 .am-app-galeria button:hover img {
   transform: scale(1.03);
+}
+
+/* El degradado del pie, por debajo de la barra y por encima del contenido.
+   Sube bastante más que la barra a propósito: un degradado que empezara justo
+   detrás de ella se vería como una línea de sombra, y lo que tiene que parecer
+   es que el contenido se apaga al meterse debajo. */
+.am-app-velo {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 34cqw;
+  background: linear-gradient(transparent, #000 78%);
+  pointer-events: none;
 }
 
 /* ── El listado de fobias ── */
@@ -967,17 +992,21 @@
 /* ── La ficha de una obra ────────────────────────────────────────────────────
    SUBE DESDE ABAJO. No es un adorno: es lo que dice que esto se ha abierto
    ENCIMA de donde estabas y que por tanto se puede cerrar y volver. Una ficha
-   que apareciera sin más se leería como haber navegado a otro sitio. */
+   que apareciera sin más se leería como haber navegado a otro sitio.
+
+   Y LA HOJA SE ARRASTRA. El cuadro no está encima de la hoja: está DEBAJO, y la
+   hoja lo tapa. Bajándola, el hueco del cuadro crece y la obra se ve entera.
+   `--arrastre` es cuánto ha bajado, y lo escribe el componente; aquí solo se
+   dice qué se mueve con ese número: el alto del cuadro y el arranque de la
+   hoja, los dos a la vez y por la misma cantidad, que es lo que hace que la
+   hoja no despegue ni monte sobre el cuadro. */
 .am-app-ficha {
   position: absolute;
   inset: 0;
   z-index: 8;
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  overscroll-behavior: contain;
   background: #000;
   text-align: left;
+  --foto: 79.1cqw;   /* 340 px de los 932 del diseño */
   animation: am-ficha-sube 420ms cubic-bezier(0.22, 0.8, 0.2, 1) both;
 }
 @keyframes am-ficha-sube {
@@ -993,23 +1022,73 @@
 
 /* El cuadro, a sangre y ocupando el tercio de arriba, como en el diseño. */
 .am-app-ficha-cuadro {
-  position: relative;
-  flex: 0 0 auto;
-  aspect-ratio: 430 / 340;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: calc(var(--foto) + var(--arrastre, 0px));
+  /* Mientras se tira, sin transición: la hoja tiene que ir pegada al dedo. Al
+     soltar vuelve la transición y la hoja se encaja sola en una de las dos
+     posiciones. */
+  transition: height 320ms cubic-bezier(0.22, 0.8, 0.2, 1);
+}
+.am-app-ficha.es-tirando .am-app-ficha-cuadro,
+.am-app-ficha.es-tirando .am-app-ficha-hoja {
+  transition: none;
+}
+/* EL ZOOM. Aquí está el porqué de que la obra se vea recortada con la hoja
+   arriba y entera con la hoja abajo, y de que el paso entre las dos sea suave.
+   Lo hace la ESCALA y no el `object-fit`: cambiar de `cover` a `contain` es un
+   salto —son dos maneras distintas de encajar, y el navegador no interpola
+   entre ellas—, así que la imagen va siempre en `contain` y lo que se anima es
+   cuánto se la agranda. Con la hoja arriba se agranda vez y media, que es lo
+   que la recorta y deja ver el centro del cuadro a buen tamaño, tal y como está
+   en el diseño; con la hoja abajo vuelve a su tamaño y cabe entera. */
+.am-app-ficha-cuadro img {
+  object-fit: contain;
+  transform: scale(1.45);
+  transition: transform 320ms cubic-bezier(0.22, 0.8, 0.2, 1);
+}
+.am-app-ficha.es-abierta .am-app-ficha-cuadro img {
+  transform: scale(1);
+}
+.am-app-ficha.es-tirando .am-app-ficha-cuadro img {
+  transition: none;
 }
 .am-app-ficha-cuadro img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
   display: block;
 }
 
 .am-app-ficha-hoja {
-  flex: 1 0 auto;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(var(--foto) + var(--arrastre, 0px));
+  bottom: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 0 var(--margen-app) 10cqw;
+  background: #000;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* El dedo sobre la hoja la arrastra en vertical; sin esto, el navegador se
+     queda con el gesto para desplazar y el arrastre no llega a empezar. */
+  touch-action: pan-y;
+  transition: top 320ms cubic-bezier(0.22, 0.8, 0.2, 1);
+}
+/* El canto de arriba, redondeado: es lo que la hace parecer una hoja puesta
+   sobre el cuadro y no el borde de un recorte. */
+.am-app-ficha-hoja {
+  border-radius: 5cqw 5cqw 0 0;
+}
+.am-app-ficha-tirador {
+  cursor: grab;
+}
+.am-app-ficha.es-tirando .am-app-ficha-tirador {
+  cursor: grabbing;
 }
 /* El tirador. No arrastra nada —esto es una demostración—, pero es la señal de
    que la hoja ha subido desde abajo, y quitarlo dejaría el gesto sin explicar. */
