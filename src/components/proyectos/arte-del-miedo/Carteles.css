@@ -124,8 +124,12 @@
      El punto de anclaje es el borde DERECHO: creciendo desde ahí, la pila se
      mete hacia dentro de la página —sobre el vídeo— y nunca se sale por el lado
      de fuera, que sí dejaría la página arrastrable en horizontal. */
-  transform: scale(1.28);
+  transform: scale(1.18);
   transform-origin: center right;
+  /* Y un empujón a la derecha, hacia fuera de la columna. Se come 16 de los 24
+     px de aire que la página deja a ese lado y ni uno más: pasando de ahí, en
+     una ventana justa la página se podría arrastrar en horizontal. */
+  margin-right: -16px;
   /* Por delante del vídeo, que es sobre lo que se monta. */
   position: relative;
   z-index: 1;
@@ -165,9 +169,10 @@
     flex: 0 0 auto;
     width: 100%;
   }
-  /* Sin agrandar: apiladas, la pila ya ocupa el ancho entero y crecer por fuera
-     solo dejaría la página arrastrable de lado. */
+  /* Sin agrandar ni empujar: apiladas, la pila ya ocupa el ancho entero y
+     crecer por fuera solo dejaría la página arrastrable de lado. */
   .am-flyers-mockup {
     transform: none;
+    margin-right: 0;
   }
 }
