@@ -108,14 +108,8 @@ export default function BrandingLanding() {
       {/* ── Paleta de color ────────────────────────────────────────────── */}
       <section className="am-seccion">
         <RotuloSeccion es="Paleta de color" en="Colour palette" />
-        <div className="am-texto">
-          <p>
-            <LangText
-              es="La paleta parte de un **negro y blanco muy contrastado**, elegante y serio, y se rompe con un **azul** y un **rosa** vibrantes que aparecen en los puntos clave —el escáner, los botones, la interfaz—, dándole ese punto de energía que el negro y blanco solos no tienen."
-              en="The palette starts from **high-contrast black and white**, elegant and serious, and is broken by a vivid **blue** and **pink** that show up at the key points — the scanner, the buttons, the interface — giving it the charge that black and white alone do not have."
-            />
-          </p>
-        </div>
+        {/* Sin texto: los colores se ven, y cada muestra lleva su valor
+            escrito. */}
         <Paleta />
       </section>
 
