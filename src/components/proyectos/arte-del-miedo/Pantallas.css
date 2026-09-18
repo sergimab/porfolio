@@ -1,0 +1,68 @@
+/* La tira de pantallas de la app. Ver el comentario del componente. */
+.am-pantallas {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  /* Cada pantalla se queda encajada al soltar, en vez de a medio salir: la tira
+     es una secuencia, y parar entre dos pasos no significa nada. */
+  scroll-snap-type: x proximity;
+  /* El hueco del final es del mismo tamaño que el de entre pantallas, para que
+     la última no se pegue al borde al llegar al fondo de la tira. */
+  padding: 4px 16px 14px 0;
+  margin: 20px 0 0;
+  /* Impulso en iOS y sin rebote vertical: la tira solo se mueve de lado. */
+  overscroll-behavior-x: contain;
+}
+/* El anillo del foco, por fuera: dentro se lo comerían las propias pantallas,
+   que llegan al borde de la caja. */
+.am-pantallas:focus-visible {
+  outline: 2px solid var(--foreground);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.am-pantalla {
+  margin: 0;
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  /* El ancho NO se escribe: lo pone la proporción del archivo a partir del alto,
+     que es lo que sí es común a todas. Así una captura que venga con doce
+     píxeles de más no sale más alta que las demás ni descuadra la fila. */
+  height: auto;
+}
+.am-pantalla img {
+  display: block;
+  height: 340px;
+  width: auto;
+  border-radius: 14px;
+  /* Las capturas son negras sobre una página que puede ser blanca, así que sin
+     un canto se derraman sobre el papel y no se ve dónde acaba el teléfono. */
+  border: 1px solid color-mix(in srgb, var(--foreground) 22%, transparent);
+  background: #000;
+  /* Un arrastre sobre la tira mueve la tira; sin esto, en algunos navegadores
+     empieza a arrastrarse la imagen. */
+  user-select: none;
+}
+.am-pantalla figcaption {
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  text-align: center;
+  /* Sujeto al ancho de la pantalla que hay encima, para que un rótulo largo
+     parta en dos líneas en vez de ensanchar su casilla y abrir un hueco en la
+     fila. */
+  max-width: 160px;
+  margin: 0 auto;
+  line-height: 1.4;
+}
+
+@media (max-width: 720px) {
+  /* Más bajas: a 340 px, una tira de teléfonos se comía media pantalla de alto
+     y había que hacer scroll vertical para ver el rótulo de debajo. */
+  .am-pantalla img {
+    height: 260px;
+  }
+}

@@ -48,6 +48,26 @@
   font-weight: 600;
 }
 
+/* El escalón de debajo del rótulo de sección: el que separa las partes DENTRO
+   de un apartado. Va en el peso y el cuerpo del texto, solo que en el color
+   fuerte y con letra abierta: no compite con el rótulo de la sección —que es
+   una pastilla con su color— y se distingue de un párrafo cualquiera sin
+   necesidad de otro tamaño de letra más en la página.
+   El aire por arriba es el doble del de abajo, que es lo que hace que un título
+   pertenezca a lo que va DEBAJO y no a lo que acaba de terminar. */
+.am-subrotulo {
+  margin: 36px 0 14px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--foreground);
+}
+/* Menos el primero de una caja, que no tiene nada encima de lo que separarse. */
+.am-subrotulo:first-child {
+  margin-top: 8px;
+}
+
 /* El hueco de una pieza que todavía no está. No es decoración: es un aviso de
    que ahí falta material, y se ve en la página para que no se olvide. Cuando
    llegue la imagen, este bloque se sustituye por ella y la clase desaparece. */
