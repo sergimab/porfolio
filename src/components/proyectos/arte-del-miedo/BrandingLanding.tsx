@@ -1,3 +1,5 @@
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import ArteMiedo from "./ArteMiedo";
 import RotuloSeccion from "@/components/shared/RotuloSeccion";
 import LangText from "@/components/shared/LangText";
@@ -6,6 +8,28 @@ import Paleta from "./Paleta";
 import Isotipo from "./Isotipo";
 import Pruebas from "./Pruebas";
 import "./ArteMiedo.css";
+
+// EL LOGOTIPO SE BUSCA EN EL DISCO, no se escribe a mano en el código.
+//
+// Esta página se monta en el servidor, así que aquí se puede mirar si el
+// archivo está y decidir en consecuencia: si está, se enseña; si no, se enseña
+// el aviso de que falta. El motivo es práctico: así basta con dejar el archivo
+// en su carpeta para que aparezca en la página, sin tocar una línea.
+//
+// Se prueban varias extensiones por orden de preferencia. El SVG primero
+// porque un logotipo de trazos limpios pesa ahí una décima parte, se ve nítido
+// a cualquier tamaño y se puede pintar del color del texto —o sea, vale igual
+// en claro que en oscuro sin hacer dos versiones—.
+const CARPETA = "proyectos/el-arte-del-miedo-branding";
+const NOMBRES = ["logotipo.svg", "logotipo.webp", "logotipo.png", "logotipo.jpg"];
+
+// La búsqueda va DENTRO del componente y no en el cuerpo del módulo. Fuera se
+// haría una sola vez, al cargar el módulo, y dejar el archivo después no
+// serviría de nada hasta reiniciar el servidor: justo lo contrario de lo que se
+// busca. Aquí se comprueba al montar la página, que en producción es al
+// construirla y en desarrollo en cada recarga.
+const buscarLogotipo = () =>
+  NOMBRES.find((n) => existsSync(join(process.cwd(), "public", CARPETA, n)));
 
 // La pata de branding del proyecto: de dónde sale el nombre, de dónde sale el
 // isotipo, con qué letra y con qué colores se escribe, y en qué acaba todo eso
@@ -18,6 +42,8 @@ import "./ArteMiedo.css";
 // Las cajas de puntos que hay bajo cada sección marcan las piezas que todavía
 // no han llegado. Están a la vista a propósito: un hueco invisible se olvida.
 export default function BrandingLanding() {
+  const logotipo = buscarLogotipo();
+
   return (
     <ArteMiedo disciplina="branding">
       {/* ── El nombre ──────────────────────────────────────────────────── */}
@@ -74,12 +100,23 @@ export default function BrandingLanding() {
           </figure>
         </div>
 
-        <p className="am-pendiente">
-          <LangText
-            es="Falta el logotipo completo —«El Arte del Miedo · Exposición»—, que va justo aquí debajo de las dos cuadrículas. En cuanto esté el archivo en public/proyectos/el-arte-del-miedo-branding/, se coloca."
-            en="Missing: the full logotype — «El Arte del Miedo · Exposición» — which goes right here, under the two grids. As soon as the file is in public/proyectos/el-arte-del-miedo-branding/, it goes in."
+        {/* El logotipo completo, debajo de las dos cuadrículas: primero de dónde
+            sale la figura, después la figura ya puesta con el nombre. */}
+        {logotipo ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            className="am-logotipo"
+            src={`/${CARPETA}/${logotipo}`}
+            alt="El Arte del Miedo · Exposición"
           />
-        </p>
+        ) : (
+          <p className="am-pendiente">
+            <LangText
+              es="Falta el logotipo completo —«El Arte del Miedo · Exposición»—, que va justo aquí. Basta con dejar el archivo en public/proyectos/el-arte-del-miedo-branding/ llamado logotipo.svg (o .png): la página lo busca sola y lo coloca."
+              en="Missing: the full logotype — «El Arte del Miedo · Exposición» — which goes right here. Just drop the file into public/proyectos/el-arte-del-miedo-branding/ named logotipo.svg (or .png): the page looks for it and places it."
+            />
+          </p>
+        )}
       </section>
 
       {/* ── Tipografía ─────────────────────────────────────────────────── */}

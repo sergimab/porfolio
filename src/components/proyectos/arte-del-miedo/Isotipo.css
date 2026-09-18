@@ -48,3 +48,20 @@
   stroke: color-mix(in srgb, var(--foreground) 26%, transparent);
   stroke-width: 1;
 }
+
+/* El logotipo completo, debajo de las cuadrículas. Centrado y con un ancho de
+   lectura cómodo: es una pieza apaisada y a todo el ancho de la columna se
+   quedaría gigante al lado de dos cuadrículas pequeñas. */
+.am-logotipo {
+  display: block;
+  width: min(520px, 100%);
+  height: auto;
+  margin: 36px auto 0;
+}
+/* En papel oscuro, el archivo negro se invierte a blanco. Con el brillo a cero
+   primero: invertir a secas un negro que no es puro devuelve un gris apagado.
+   Si algún día el logotipo llega en SVG y se pinta con currentColor, esta regla
+   sobra. */
+[data-theme="dark"] .am-logotipo {
+  filter: brightness(0) invert(1);
+}
