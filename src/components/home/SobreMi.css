@@ -285,6 +285,11 @@
     /* Apilada no hay nada con lo que igualarse, y un cuadrado a ancho de móvil
        se quedaría corto para este texto: que crezca lo que pida. */
     aspect-ratio: auto;
+    /* Más aire que en escritorio. Allí los 16 son los mismos que tiene la caja
+       de los botones de arriba y las dos se leen a juego; aquí la columna es de
+       un móvil y el renglón llega al marco, así que la carta se lee apretada
+       contra el hilo. */
+    padding: 22px;
   }
   .sobremi-scroll {
     height: auto;
