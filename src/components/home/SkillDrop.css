@@ -240,7 +240,11 @@
     margin: 0 auto;
   }
   .panel-btn-tile { height: 56px; border-radius: 999px; }
-  .panel-btn { padding: 8px 16px; }
+  /* 8 a los lados y no 16: a 375 px de ancho, cada botón se queda en 85 y con
+     16 de relleno por lado sobraban 53 para el nombre. «Sobre mí» pide 64, así
+     que se partía en dos líneas y quedaba desigual con «CV» y «Contacto». Con 8
+     hay 69 y los tres van de una línea. */
+  .panel-btn { padding: 8px; }
 }
 
 /* ── Paneles inferiores (Sobre mí / CV / Contacto) ── */

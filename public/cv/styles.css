@@ -468,15 +468,21 @@ body {
 @media (max-width: 640px) {
   body { padding: 28px 16px; }
 
-  /* NAV */
+  /* NAV
+     Las tres pastillas con medidas ELÁSTICAS y no fijas. Con las de antes
+     —9,2 px, 12 de relleno y 82 de mínimo— la fila sumaba 332 px dentro de un
+     hueco de 303 en un móvil de 375, así que «2026» se salía por la derecha y
+     se quedaba cortado. Con clamp, las tres se encogen lo justo en las
+     pantallas más estrechas y mantienen su tamaño en cuanto hay sitio; los
+     topes de arriba son exactamente los valores que había. */
   .top-nav { height: 56px; }
   .nav-pill {
-    padding: 5px 12px;
-    font-size: 9.2px;
-    letter-spacing: 0.09em;
+    padding: 5px clamp(6px, 2.6vw, 12px);
+    font-size: clamp(7.6px, 2.9vw, 9.2px);
+    letter-spacing: 0.06em;
   }
   .nav-pill:first-child,
-  .nav-pill:last-child { min-width: 82px; }
+  .nav-pill:last-child { min-width: clamp(58px, 21vw, 82px); }
 
   /* HEADER: nombre arriba, bio+foto abajo */
   .header {
