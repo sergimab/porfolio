@@ -104,24 +104,34 @@
   }
 }
 
-/* El menú vertical: una fila por categoría, a todo el ancho de la caja. Al
-   pasar por encima —o al llegar con el teclado— la franja se pinta entera del
-   color de esa categoría. Sin física, sin arrastre y sin tiempo de reacción:
-   una lista de siempre. */
+/* El menú sencillo: una cuadrícula de DOS columnas. Al pasar por encima —o al
+   llegar con el teclado— la casilla se pinta entera del color de esa
+   categoría. Sin física, sin arrastre y sin tiempo de reacción.
+
+   Dos y no tres: las categorías son siete, así que a tres por fila salen dos
+   filas llenas y una con una sola casilla descolgada, y además «Motion
+   Graphics» no cabe de una línea en un tercio de la caja. A dos salen tres
+   filas de dos y la séptima abajo, cruzada de lado a lado, que cierra el bloque
+   en vez de dejar un hueco. */
 .skill-lista {
   position: absolute;
   inset: 0;
-  /* Las siete filas se reparten el alto que queda: la lista entera se ve de una
-     vez, sin rodar por dentro de una caja que ya es pequeña. */
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  /* Cuatro filas repartiéndose el alto: la cuadrícula entera se ve de una vez,
+     sin rodar por dentro de una caja que ya es pequeña. */
+  grid-template-rows: repeat(4, 1fr);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 .skill-lista li {
-  flex: 1 1 0;
   min-height: 32px;
+}
+/* La última, a lo ancho: es la que sobra del reparto de dos en dos, y dejada en
+   su columna quedaría media fila vacía al pie del bloque. */
+.skill-lista li:last-child {
+  grid-column: 1 / -1;
 }
 .skill-lista button {
   height: 100%;
@@ -140,9 +150,15 @@
   cursor: pointer;
   transition: background 0.18s, color 0.18s;
 }
-/* La primera fila no lleva hilo arriba: ahí está el borde de la caja. */
-.skill-lista li:first-child button {
+/* Los hilos son los de la cuadrícula: cada casilla los pinta por arriba y, la
+   de la derecha, también por la izquierda. La primera fila no lleva el de
+   arriba —ahí está el borde de la caja— y la columna izquierda no lleva el del
+   lado, que sería el borde también. */
+.skill-lista li:nth-child(-n + 2) button {
   border-top: 0;
+}
+.skill-lista li:nth-child(even) button {
+  border-left: 1px solid var(--foreground);
 }
 /* En reposo la fila no enseña el degradado, pero sí lo lleva puesto: así el
    ritmo de la animación ya va corriendo y al pasar por encima no arranca de
@@ -162,8 +178,6 @@
   color: #fff;
   outline: none;
 }
-/* El nombre de la primera fila se queda centrado en la caja, como los demás: el
-   mordisco del botón se le monta encima por la izquierda y ahí no hay texto. */
 .box-soon {
   order: 2;
   display: grid;
