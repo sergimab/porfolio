@@ -7,13 +7,19 @@
 }
 
 
-.ev-sd-apartado {
-  margin: 48px 0 16px;
-  font-size: 15px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  background: var(--background);
+/* EL RÓTULO DE CADA APARTADO ES LA PASTILLA DEL SITIO —el dibujo entero lo pone
+   `.rotulo-seccion`, que es el componente del portfolio—; aquí solo se ajusta
+   el hueco que deja y el cuerpo. Antes era un titulillo en versalitas, que
+   funcionaba pero podía ser el de cualquier sitio: el apartado se leía como una
+   plantilla de sistema de diseño y no como una página de este portfolio.
+   El hueco de abajo es más corto que el del sitio porque lo que viene detrás es
+   una tabla o una tira de muestras, no un párrafo. */
+.ev-sd-rotulo {
+  margin: 48px 0 18px;
+  font-size: 14px;
+}
+.ev-sd-rotulo:first-of-type {
+  margin-top: 6px;
 }
 .ev-sd-entradilla {
   max-width: 560px;
@@ -25,6 +31,13 @@
 .ev-sd-nota {
   font-size: 12.5px;
   color: var(--muted);
+}
+/* Los valores de color, en cifras de ancho fijo: son datos que se copian, y
+   unos debajo de otros tienen que alinearse por la columna y no por la forma
+   de cada número. */
+.ev-sd-nota.es-cifra {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
 }
 
 /* ── La retícula ── */

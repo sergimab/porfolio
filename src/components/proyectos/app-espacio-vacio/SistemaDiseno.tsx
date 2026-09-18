@@ -2,6 +2,8 @@
 
 import { useLang } from "@/components/shared/useLang";
 import { COLORES } from "./Prototipo";
+// El rótulo de pastilla es un componente del sitio y su hoja vive con él.
+import "@/components/shared/RotuloSeccion.css";
 import "./SistemaDiseno.css";
 
 // El sistema de diseño de la app.
@@ -50,6 +52,23 @@ const MEDIDAS = [
   { dato: "33 %", es: "Pie", en: "Footer", nota: "Donde caen atrás y siguiente", notaEn: "Where back and next sit" },
 ];
 
+// El rótulo de cada apartado: LA PASTILLA DEL SITIO, con su línea saliendo de
+// la base hasta el borde derecho. Es el mismo dibujo que encabeza las secciones
+// de todas las páginas de proyecto, y coge de la página el color de su
+// categoría sin que haya que decírselo.
+//
+// Se escribe aquí en vez de usar <RotuloSeccion> por una sola razón: aquel pinta
+// un <h2> y esto va dentro de una pestaña, colgando del <h2> de la página. El
+// dibujo es el mismo hasta la última clase; lo que cambia es el nivel del
+// encabezado, que es lo que un lector de pantalla usa para hacerse el índice.
+function Rotulo({ children }: { children: React.ReactNode }) {
+  return (
+    <h3 className="rotulo-seccion ev-sd-rotulo">
+      <span className="rotulo-seccion-caja">{children}</span>
+    </h3>
+  );
+}
+
 // Una muestra. El lienzo mide lo que la pantalla del móvil y no lleva relleno
 // lateral: es lo que hace que `cqw` dé aquí el mismo número que allí, y por
 // tanto que la pieza salga a su tamaño de verdad. El margen de la app lo pone
@@ -82,7 +101,7 @@ export default function SistemaDiseno() {
     <section className="ev-sd">
       {/* Sin rótulo propio: el apartado vive en una pestaña que ya lo nombra. */}
       {/* ── La retícula ── */}
-      <h3 className="ev-sd-apartado">{t("Retícula", "Grid")}</h3>
+      <Rotulo>{t("Retícula", "Grid")}</Rotulo>
       <ul className="ev-sd-medidas">
         {MEDIDAS.map((m) => (
           <li key={m.es}>
@@ -94,7 +113,7 @@ export default function SistemaDiseno() {
       </ul>
 
       {/* ── La tipografía ── */}
-      <h3 className="ev-sd-apartado">{t("Tipografía", "Type")}</h3>
+      <Rotulo>{t("Tipografía", "Type")}</Rotulo>
       <p className="ev-sd-entradilla">
         {t(
           "Clash Grotesk, cinco pasos. El tamaño va en porcentaje del ancho de la pantalla, no en píxeles: así la app entera escala como una pieza en cualquier aparato. Al lado, lo que mide cada paso en el móvil del prototipo.",
@@ -122,13 +141,13 @@ export default function SistemaDiseno() {
       </ul>
 
       {/* ── El color ── */}
-      <h3 className="ev-sd-apartado">{t("Color", "Colour")}</h3>
+      <Rotulo>{t("Color", "Colour")}</Rotulo>
       <ul className="ev-sd-tintas">
         {TINTAS.map((c) => (
           <li key={c.hex}>
             <span className="ev-sd-tinta" style={{ background: c.hex }} />
             <b>{t(c.es, c.en)}</b>
-            <span className="ev-sd-nota">{c.hex}</span>
+            <span className="ev-sd-nota es-cifra">{c.hex}</span>
             <span className="ev-sd-nota">{t(c.uso, c.usoEn)}</span>
           </li>
         ))}
@@ -137,7 +156,7 @@ export default function SistemaDiseno() {
       {/* ── Los componentes ──
           Todo lo de aquí abajo lleva las clases de la app: son las piezas de
           verdad, no un dibujo de ellas. */}
-      <h3 className="ev-sd-apartado">{t("Componentes", "Components")}</h3>
+      <Rotulo>{t("Componentes", "Components")}</Rotulo>
       <div className="ev-sd-piezas">
         <Muestra titulo={t("Botón", "Button")}>
           <button type="button" className="ev-app-boton">
