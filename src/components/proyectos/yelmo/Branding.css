@@ -27,7 +27,11 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 24px;
-  margin: 0;
+  /* Aire propio por encima, además de los 24 que deja el rótulo: los discos son
+     manchas grandes y macizas y pesaban demasiado cerca de la línea. El rótulo
+     no se toca —lo suyo es igual en todo el sitio—; el hueco lo pide esta
+     lámina, así que lo pone ella. */
+  margin: 32px 0 0;
   padding: 0;
   list-style: none;
 }
