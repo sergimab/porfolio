@@ -28,6 +28,14 @@
   flex: 0.7071 1 0;
   aspect-ratio: 1 / 1.41421;
   position: relative;
+  /* Al contrario que el mockup, esta casilla NO es una caja: es el sitio donde
+     se apila la baraja, y las cartas de atrás asoman unos píxeles por encima
+     del borde. Recortándolas ahí, la pila dejaría de leerse como pila. Por eso
+     tampoco lleva fondo ni redondeo propios —el redondeo va en cada cartel—:
+     no hay caja que pintar. */
+  overflow: visible;
+  background: none;
+  border-radius: 0;
 }
 
 .am-carteles img {
@@ -37,17 +45,26 @@
   object-fit: cover;
 }
 
-/* Los cinco carteles, apilados en la misma casilla: todos escondidos menos el
-   de turno. El fundido los cose; a corte seco, cinco imágenes seguidas
-   parpadean. */
+/* Los cinco carteles, apilados en la misma casilla como una baraja. La posición
+   de cada uno la escribe el componente —depende de a qué distancia esté del de
+   turno—, así que aquí solo está lo que no cambia: que se apilan, cómo viajan y
+   desde dónde encogen.
+   El anclaje ABAJO es lo que hace que la pila se lea como una pila: encogiendo
+   desde el centro, las de atrás asomarían por los cuatro lados a la vez y
+   parecería un halo; encogiendo desde el borde de abajo, se quedan pegadas por
+   la base y solo asoman por arriba, que es como se ve un montón de cartas
+   puesto de pie. */
 .am-carteles-pase img {
   position: absolute;
   inset: 0;
-  opacity: 0;
-  transition: opacity 0.55s ease;
-}
-.am-carteles-pase img.es-visible {
-  opacity: 1;
+  object-fit: contain;
+  border-radius: 6px;
+  transform-origin: center bottom;
+  /* Una curva con un punto de salida lento y una llegada suave: el cartel
+     arranca como si lo empujaran y se posa, en vez de deslizarse a velocidad
+     fija. Y la opacidad tarda menos que el viaje, para que la que se va ya
+     esté apagada antes de llegar al fondo y no se la vea aterrizar. */
+  transition: transform 0.75s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.45s ease;
 }
 @media (prefers-reduced-motion: reduce) {
   .am-carteles-pase img {
@@ -71,14 +88,18 @@
     flex: 0 0 auto;
     width: 100%;
   }
-  /* Apilado, el pase se queda con un alto cómodo en vez de con el que le tocaba
-     al lado del mockup: a ancho completo, un A entero mide vez y media la
-     pantalla. */
+  /* AQUÍ ESTABA EL RECORTE. Apilado, a esta casilla se le daba proporción
+     apaisada —3 : 2— para que no se comiera vez y media la pantalla de alto, y
+     como los carteles se pintaban a `cover`, lo que se veía de cada uno era una
+     franja: el cartel salía cortado por arriba y por abajo.
+     Un cartel cortado no es un cartel. Ahora la casilla mantiene su proporción
+     de A y el cartel entra entero; que ocupe pantalla y media es precisamente
+     lo que hace un cartel en la calle, y además la baraja necesita alto para
+     que se vea asomar la de atrás. */
   .am-carteles-pase {
-    aspect-ratio: 3 / 2;
-  }
-  .am-carteles-pase img {
-    object-position: center top;
+    /* Un respiro para que la pila no se pegue al borde inferior de la sección
+       al quedarse sola en su renglón. */
+    margin-bottom: 4px;
   }
 }
 
