@@ -2,9 +2,33 @@
    sobre papel claro que sobre oscuro sin tener que duplicar el archivo. */
 .am-iso {
   display: block;
-  width: min(260px, 70%);
+  width: 100%;
   height: auto;
-  margin: 28px auto 0;
+}
+
+/* La pareja: el definitivo a la izquierda y el muestrario de pruebas a la
+   derecha, del mismo tamaño y a la misma altura, que es lo que deja compararlos
+   de un vistazo. */
+.am-iconos {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: clamp(24px, 6vw, 64px);
+  margin: 32px 0 0;
+}
+.am-iconos figure {
+  flex: 0 0 auto;
+  width: min(210px, 38%);
+  margin: 0;
+}
+/* El rótulo de cada uno. Sin él, dos cuadrículas iguales al lado y una de ellas
+   cambiando sola se leen como un fallo, no como una comparación. */
+.am-iconos figcaption {
+  margin-top: 10px;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: var(--muted);
 }
 .am-iso-figura {
   fill: var(--foreground);

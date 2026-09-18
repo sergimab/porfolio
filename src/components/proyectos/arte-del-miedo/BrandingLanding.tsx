@@ -4,6 +4,7 @@ import LangText from "@/components/shared/LangText";
 import Tipografia from "./Tipografia";
 import Paleta from "./Paleta";
 import Isotipo from "./Isotipo";
+import Pruebas from "./Pruebas";
 import "./ArteMiedo.css";
 
 // La pata de branding del proyecto: de dónde sale el nombre, de dónde sale el
@@ -55,9 +56,23 @@ export default function BrandingLanding() {
             />
           </p>
         </div>
-        {/* El isotipo sobre su cuadrícula: es de lo que habla el texto, así que
-            se enseña la figura Y las líneas de las que sale. */}
-        <Isotipo conRejilla />
+        {/* El isotipo sobre su cuadrícula —es de lo que habla el texto, así que
+            se enseñan la figura Y las líneas de las que sale— y, al lado, las
+            pruebas que se quedaron por el camino pasando en bucle. */}
+        <div className="am-iconos">
+          <figure>
+            <Isotipo conRejilla />
+            <figcaption>
+              <LangText es="El que se quedó" en="The one that stayed" />
+            </figcaption>
+          </figure>
+          <figure>
+            <Pruebas />
+            <figcaption>
+              <LangText es="Pruebas" en="Trials" />
+            </figcaption>
+          </figure>
+        </div>
       </section>
 
       {/* ── Tipografía ─────────────────────────────────────────────────── */}

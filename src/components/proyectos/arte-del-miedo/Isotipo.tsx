@@ -20,23 +20,37 @@ const MAPA = [
 ];
 
 const COLUMNAS = 5;
-const FILAS = MAPA.length;
 
-// Las casillas llenas, sacadas del mapa.
-const LLENAS = MAPA.flatMap((fila, y) =>
-  fila
-    .split(" ")
-    .map((c, x) => (c === "X" ? { x, y } : null))
-    .filter((c): c is { x: number; y: number } => c !== null)
-);
+// Las casillas llenas de un mapa.
+const llenas = (mapa: string[]) =>
+  mapa.flatMap((fila, y) =>
+    fila
+      .split(" ")
+      .map((c, x) => (c === "X" ? { x, y } : null))
+      .filter((c): c is { x: number; y: number } => c !== null)
+  );
 
-export default function Isotipo({ conRejilla = false }: { conRejilla?: boolean }) {
+// El dibujante, suelto del mapa: lo usan tanto el isotipo definitivo como el
+// muestrario de pruebas, que son la misma figura con otras casillas.
+export function Cuadricula({
+  mapa,
+  conRejilla = false,
+  rotulo,
+  className,
+}: {
+  mapa: string[];
+  conRejilla?: boolean;
+  rotulo: string;
+  className?: string;
+}) {
+  const FILAS = mapa.length;
+  const LLENAS = llenas(mapa);
   return (
     <svg
-      className="am-iso"
+      className={`am-iso${className ? ` ${className}` : ""}`}
       viewBox={`0 0 ${COLUMNAS} ${FILAS}`}
       role="img"
-      aria-label="Isotipo de El Arte del Miedo"
+      aria-label={rotulo}
     >
       {/* La cuadrícula de la que sale, opcional: son las líneas de construcción,
           y solo interesan en la lámina que explica de dónde viene la figura.
@@ -64,4 +78,8 @@ export default function Isotipo({ conRejilla = false }: { conRejilla?: boolean }
       </g>
     </svg>
   );
+}
+
+export default function Isotipo({ conRejilla = false }: { conRejilla?: boolean }) {
+  return <Cuadricula mapa={MAPA} conRejilla={conRejilla} rotulo="Isotipo de El Arte del Miedo" />;
 }
