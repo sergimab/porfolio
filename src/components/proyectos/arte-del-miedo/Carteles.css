@@ -117,6 +117,18 @@
   margin: 0;
   min-width: 0;
   line-height: 0;
+  /* Y encima se agranda un 28 % POR FUERA de su casilla. Puede hacerlo porque no
+     tiene fondo: lo que sobresale son los propios flyers recortados, así que
+     montarse sobre el vídeo o sobre la fila de arriba se lee como una
+     composición y no como un descuadre.
+     El punto de anclaje es el borde DERECHO: creciendo desde ahí, la pila se
+     mete hacia dentro de la página —sobre el vídeo— y nunca se sale por el lado
+     de fuera, que sí dejaría la página arrastrable en horizontal. */
+  transform: scale(1.28);
+  transform-origin: center right;
+  /* Por delante del vídeo, que es sobre lo que se monta. */
+  position: relative;
+  z-index: 1;
 }
 .am-flyers-mockup img {
   display: block;
@@ -152,5 +164,10 @@
   .am-flyers-video {
     flex: 0 0 auto;
     width: 100%;
+  }
+  /* Sin agrandar: apiladas, la pila ya ocupa el ancho entero y crecer por fuera
+     solo dejaría la página arrastrable de lado. */
+  .am-flyers-mockup {
+    transform: none;
   }
 }
