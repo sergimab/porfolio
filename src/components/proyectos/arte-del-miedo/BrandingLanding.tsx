@@ -81,9 +81,9 @@ export default function BrandingLanding() {
         <Tipografia />
       </section>
 
-      {/* ── Color corp. ────────────────────────────────────────────────── */}
+      {/* ── Paleta de color ────────────────────────────────────────────── */}
       <section className="am-seccion">
-        <RotuloSeccion es="Color corp." en="Corporate colour" />
+        <RotuloSeccion es="Paleta de color" en="Colour palette" />
         <div className="am-texto">
           <p>
             <LangText
