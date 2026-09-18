@@ -27,7 +27,9 @@
   padding: 16px;
   margin-left: -16px;
   margin-right: -16px;
-  border-radius: 3px;
+  /* 12, el redondeo de las cajas de papel del sitio. A 3 px no se distinguía
+     de una esquina recta. */
+  border-radius: 12px;
 }
 
 .ev-tipo-rejilla {

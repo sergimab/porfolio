@@ -22,12 +22,15 @@
   grid-template-columns: 1fr 1fr;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  border-radius: 4px;
+  /* Mismo redondeo que las demás cajas de papel del sitio —12—. A 4 px las
+     esquinas se leían rectas y la lámina cantaba como un recorte pegado sobre
+     la página en vez de como una caja suya. */
+  border-radius: 12px;
   background: var(--background);
 }
 .ev-lamina-entera {
   aspect-ratio: 16 / 9;
-  border-radius: 4px;
+  border-radius: 12px;
   overflow: hidden;
   background: var(--background);
 }

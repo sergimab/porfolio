@@ -42,7 +42,10 @@
   /* El padding se le descuenta al margen para que el aire visible entre texto y
      disco siga siendo el mismo que antes de meter el papel. */
   padding: 6px 10px;
-  border-radius: 3px;
+  /* Redondeadas como las demás cajas de papel, pero menos —10 y no 12—: estas
+     son dos renglones cortos y con 12 la curva se comía el texto de las
+     esquinas. */
+  border-radius: 10px;
 }
 
 .ev-muestra-uso {
