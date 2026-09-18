@@ -120,14 +120,8 @@ export default function BrandingLanding() {
           dos párrafos, uno por tema, así que la partición era la suya. */}
       <section className="am-seccion">
         <RotuloSeccion es="Tipografía" en="Typography" />
-        <div className="am-texto">
-          <p>
-            <LangText
-              es="**Raleway** se encarga de la parte tipográfica: una sans serif moderna y muy legible que aguanta bien tanto un titular grande como un bloque de texto largo."
-              en="**Raleway** does the typographic work: a modern, highly legible sans serif that holds up both at headline size and across a long block of text."
-            />
-          </p>
-        </div>
+        {/* Sin texto: la lámina ya lleva escrito el nombre de la fuente y las
+            razones de por qué esta. */}
         <Tipografia />
       </section>
 
