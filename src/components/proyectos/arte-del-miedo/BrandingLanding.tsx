@@ -57,8 +57,8 @@ export default function BrandingLanding() {
           eso solo quita fondo: el dibujo seguiría igual de grande, porque su
           tamaño en pantalla lo manda el ANCHO, que es el de la columna entera.
           Para encogerlo de verdad hay que encogerlo en el vídeo, y por eso el
-          archivo está reencodado con el contenido al 62 % sobre el mismo cuadro.
-          Ese 62 es el número que hay que tocar si se quiere más o menos grande;
+          archivo está reencodado con el contenido al 48 % sobre el mismo cuadro.
+          Ese 48 es el número que hay que tocar si se quiere más o menos grande;
           la franja solo decide cuánto negro se ve alrededor. */}
       <VideoMarca
         src="/proyectos/el-arte-del-miedo-branding/logo-final.mp4"
