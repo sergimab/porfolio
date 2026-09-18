@@ -88,7 +88,7 @@ function Ficha({ m }: { m: Muestra }) {
 export default function PaletaCromatica() {
   return (
     <section className="ev-paleta">
-      <RotuloSeccion className="ev-paleta-titulo" es="Paleta cromática" en="Colour palette" />
+      <RotuloSeccion es="Paleta cromática" en="Colour palette" />
 
       {/* Los neutros, arriba y a la derecha. */}
       <div className="ev-paleta-fila es-derecha">

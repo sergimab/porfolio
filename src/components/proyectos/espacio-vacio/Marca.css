@@ -8,11 +8,6 @@
   margin-bottom: 40px;
 }
 
-/* El rótulo es un componente del portfolio: aquí solo su sitio. */
-.ev-lamina-titulo {
-  margin: 0 0 14px;
-}
-
 /* Las láminas llevan SIEMPRE papel opaco, también las que no tienen fondo de
    marca: son cajas de guías de un píxel y de trazos finos, y la trama animada
    pasando por detrás se confundía con el propio dibujo. El papel es el de la

@@ -41,7 +41,7 @@ const SIGNOS = ["®îŠŁåãæÖÙÜÚ¼½¾", "§{}¶!¡#$%&()"];
 export default function Tipografia() {
   return (
     <section className={`ym-tipo ${dosis.variable}`}>
-      <RotuloSeccion className="ym-tipo-titulo" es="Tipografía" en="Typography" />
+      <RotuloSeccion es="Tipografía" en="Typography" />
 
       <div className="ym-tipo-rejilla">
         {/* Columna izquierda: la corporativa, con la que está dibujado el

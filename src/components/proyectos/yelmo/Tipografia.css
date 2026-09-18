@@ -20,10 +20,6 @@
   font-family: "Somatic Rounded", system-ui, sans-serif;
 }
 
-.ym-tipo-titulo {
-  margin: 0 0 48px;
-}
-
 /* Cada bloque se pone su papel: aquí casi todo son letras sueltas y filetes de
    un píxel, que es lo que peor aguanta la trama animada del fondo pasando por
    detrás. El padding se compensa con margen negativo a los lados para que los

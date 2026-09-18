@@ -9,10 +9,6 @@
   font-family: "Clash Grotesk", system-ui, sans-serif;
 }
 
-.ev-tipo-titulo {
-  margin: 0 0 48px;
-}
-
 /* Cada bloque de la lámina se pone su papel: la muestra grande con el nombre y
    las razones, la tabla de pesos y el muestrario. Aquí casi todo son letras
    sueltas y filetes de un píxel, que es lo que peor aguanta la trama animada

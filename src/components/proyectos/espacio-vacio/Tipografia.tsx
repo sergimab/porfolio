@@ -38,7 +38,7 @@ const SIGNOS = ["®îŠŁåãæÖÙÜÚ¼½¾", "§{}¶!¡#$%&()"];
 export default function Tipografia() {
   return (
     <section className="ev-tipo">
-      <RotuloSeccion className="ev-tipo-titulo" es="Tipografía" en="Typography" />
+      <RotuloSeccion es="Tipografía" en="Typography" />
 
       <div className="ev-tipo-rejilla">
         {/* Columna izquierda: la muestra grande, el nombre y por qué esta. */}
