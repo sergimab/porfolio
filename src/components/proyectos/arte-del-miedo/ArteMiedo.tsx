@@ -19,13 +19,19 @@ import ToolIcons from "@/components/shared/ToolIcons";
 
 export type Disciplina = "branding" | "motion" | "uiux";
 
+// El tipo y la asignatura NO cambian entre las tres páginas: es el mismo
+// encargo, y lo que cambia es la disciplina desde la que se cuenta —y eso ya lo
+// dice la categoría de la cápsula de volver—. La asignatura es la misma que la
+// de Espacio vacío, que salió de la misma casa.
+const TIPO = { es: "Proyecto experimental", en: "Experimental project" };
+const ASIGNATURA = { es: "Proyectos · ESD Madrid", en: "Projects · ESD Madrid" };
+
 const FICHA: Record<
   Disciplina,
   {
     hue: number;
     tinte: string;
     titulo: { es: string; en: string };
-    tipo: { es: string; en: string };
     programas: string[];
   }
 > = {
@@ -35,21 +41,18 @@ const FICHA: Record<
     hue: 330,
     tinte: "#DB2777",
     titulo: { es: "El Arte del Miedo", en: "The Art of Fear" },
-    tipo: { es: "Identidad de exposición", en: "Exhibition identity" },
     programas: ["Photoshop", "Illustrator", "Blender", "After Effects"],
   },
   motion: {
     hue: 217,
     tinte: "#286DDC",
     titulo: { es: "Motion El Arte del Miedo", en: "The Art of Fear motion" },
-    tipo: { es: "Motion graphics", en: "Motion graphics" },
     programas: ["Illustrator", "After Effects"],
   },
   uiux: {
     hue: 175,
     tinte: "#0D9488",
     titulo: { es: "App El Arte del Miedo", en: "The Art of Fear app" },
-    tipo: { es: "App de exposición", en: "Exhibition app" },
     programas: ["Photoshop", "Illustrator", "Blender", "After Effects"],
   },
 };
@@ -75,7 +78,11 @@ export default function ArteMiedo({ disciplina }: { disciplina: Disciplina }) {
           <div className="project-meta">
             <div className="project-meta-row">
               <span className="project-meta-key"><LangText es="Tipo" en="Type" /></span>
-              <span><LangText es={ficha.tipo.es} en={ficha.tipo.en} /></span>
+              <span><LangText es={TIPO.es} en={TIPO.en} /></span>
+            </div>
+            <div className="project-meta-row">
+              <span className="project-meta-key"><LangText es="Asignatura" en="Course" /></span>
+              <span><LangText es={ASIGNATURA.es} en={ASIGNATURA.en} /></span>
             </div>
           </div>
         </div>
