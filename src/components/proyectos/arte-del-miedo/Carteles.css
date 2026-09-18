@@ -95,10 +95,16 @@
 /* El mockup del flyer va SIN fondo: el archivo es transparente —los flyers
    están recortados—, así que el papel de la página pasa por detrás y la pila se
    ve flotando en vez de metida en una caja. Por eso tampoco lleva redondeo: no
-   hay caja que redondear. */
+   hay caja que redondear.
+   La proporción es 2273/1491 y no 3/2: el archivo venía con 315 px de margen
+   transparente por la izquierda, 452 por la derecha y 308 por arriba —medido—,
+   así que la caja era un 3:2 con los flyers pequeños en medio. Recortado el
+   aire sobrante, la pila ocupa la caja entera y se ve un 32 % mayor sin quitarle
+   sitio al vídeo de al lado. El reparto se ajusta al mismo número para que los
+   dos sigan saliendo con el mismo alto. */
 .am-flyers-mockup {
-  flex: 1.5 1 0;
-  aspect-ratio: 3 / 2;
+  flex: 1.5245 1 0;
+  aspect-ratio: 2273 / 1491;
   margin: 0;
   min-width: 0;
   line-height: 0;
