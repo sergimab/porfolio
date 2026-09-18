@@ -66,9 +66,12 @@
   left: 50%;
   top: 0;
   transform: translateX(-50%);
-  width: 40cqw;
-  height: 6cqw;
-  border-radius: 0 0 3.2cqw 3.2cqw;
+  /* Más corto y más estrecho que antes. No es un capricho de dibujo: debajo, a
+     11 cqw del borde, empieza el isotipo de cabecera, y con el notch anterior
+     —40 de ancho y 6 de alto— los dos se rozaban. */
+  width: 30cqw;
+  height: 4.8cqw;
+  border-radius: 0 0 2.6cqw 2.6cqw;
   background: #1b1b1d;
   pointer-events: none;
 }
@@ -123,19 +126,36 @@
   font-size: var(--t-texto);
   /* 29 px de renglón sobre 22 de cuerpo: el 1,32 medido en el original. */
   line-height: 1.32;
-  /* Cada pantalla entra con un desplazamiento mínimo. Corto a propósito: una
-     app cambia de pantalla casi de golpe, y una transición lucida aquí se
-     leería como una web y no como un móvil. */
-  animation: am-app-entra 220ms ease-out both;
+}
+
+/* EL CAMBIO DE PANTALLA NO MUEVE LA PANTALLA ENTERA, y ese era el salto.
+   Antes entraba todo de golpe con un desplazamiento del 3 %: como entre un paso
+   y el siguiente el isotipo, el botón y el marco están EXACTAMENTE en el mismo
+   sitio, ese desplazamiento no se leía como que pasa una página, se leía como
+   un tirón de todo lo que debería estar quieto. Y 3 % es además demasiado poco
+   para leerse como un deslizamiento.
+   Ahora solo aparece lo que de verdad cambia —el título, la pieza en movimiento
+   y el texto—, y lo hace fundiendo, sin moverse. Lo que se repite de una
+   pantalla a la siguiente ni parpadea ni se mueve, que es lo que hace que el
+   paso se lea como un cambio de contenido y no como un respingo. */
+.am-app-titulo,
+.am-app-marco,
+.am-app-texto,
+.am-app-logotipo,
+.am-app-listo {
+  animation: am-app-entra 260ms ease-out both;
 }
 @keyframes am-app-entra {
   from {
     opacity: 0;
-    transform: translateX(3%);
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .am-app {
+  .am-app-titulo,
+  .am-app-marco,
+  .am-app-texto,
+  .am-app-logotipo,
+  .am-app-listo {
     animation: none;
   }
 }
@@ -153,8 +173,11 @@
      de arriba, ninguno de los cuales se echa de menos— el peor caso pasa a
      tener 58 px de aire, que es el mismo hueco que hay entre el vídeo y el
      texto. O sea que el párrafo queda a la misma distancia de lo que explica y
-     de lo que viene después. */
-  padding: var(--e1) var(--margen) calc(var(--u) * 2.2);
+     de lo que viene después.
+     De esos 78 px se devuelven 13 por arriba: con el isotipo arrancando en 58
+     quedaba pegado al notch del aparato. Se recuperan más abajo, quitándoselos
+     al hueco entre el título y el vídeo, que es de los que sobran. */
+  padding: 11cqw var(--margen) calc(var(--u) * 2.2);
   text-align: center;
 }
 /* Las pantallas que se pintan hasta los cantos: el arranque y la home, que
@@ -193,13 +216,19 @@
   fill: #fff;
 }
 
-/* En el arranque, encendida y sola en medio de la pantalla. El halo es la
-   misma marca desenfocada por detrás: el isotipo no cambia de forma, lo que
-   hace es alumbrar. */
+/* En el arranque, encendida y sola en medio de la pantalla. Del MISMO tamaño
+   que la de las demás pantallas: en el diseño original el arranque la trae más
+   grande —139 px contra 66—, pero teniéndolas iguales la marca no cambia de
+   cuerpo al entrar en la app, y lo que distingue al arranque es que alumbra, no
+   que sea grande.
+   El halo es la propia marca desenfocada por detrás: el isotipo no cambia de
+   forma, lo que hace es encenderse. */
 .am-app-marca.es-carga {
-  width: 26cqw;
-  filter: drop-shadow(0 0 6cqw rgba(160, 60, 255, 0.85))
-    drop-shadow(0 0 14cqw rgba(255, 21, 151, 0.45));
+  width: var(--iso);
+  /* El halo se mide sobre la marca, no sobre la pantalla: al achicarla, un halo
+     en medidas fijas se habría quedado enorme alrededor de una figura pequeña. */
+  filter: drop-shadow(0 0 3cqw rgba(160, 60, 255, 0.9))
+    drop-shadow(0 0 7cqw rgba(255, 21, 151, 0.5));
   animation: am-late 2.8s ease-in-out infinite;
 }
 @keyframes am-late {
@@ -256,8 +285,8 @@
   /* Los huecos que van DEBAJO de un texto llevan descontado el renglón que la
      caja deja por debajo de las mayúsculas: los del diseño se miden entre lo
      que se ve, y un margen de CSS se mide entre cajas, que son más altas que su
-     tinta. Aquí son 7 px de los 52. */
-  margin: 0 0 7cqw;
+     tinta. */
+  margin: 0 0 5cqw;
   font-size: var(--t-titulo);
   font-weight: 500;
   letter-spacing: 0.02em;
