@@ -56,6 +56,47 @@
      aparato. Con píxeles habría que reescribir cada medida en cada tamaño; con
      porcentajes, el texto no escalaría con lo demás. */
   container-type: inline-size;
+
+  /* LOS TOKENS VIVEN AQUÍ, en la pantalla del aparato, y no en la capa de la
+     app. El motivo es práctico y costó un rato: la ficha de una obra y el fondo
+     de pantalla se abren POR ENCIMA de la app, como hermanos suyos y no como
+     hijos, así que declarados en la app no les llegaban —y sin `--tinta` el
+     botón se quedaba sin su contorno y la raya sin color—. Puestos en la
+     pantalla los tiene todo lo que hay dentro del móvil, que es lo que
+     corresponde: el sistema es del aparato, no de una de sus capas. */
+  --u: 4.5cqw;              /* 29 px · el renglón del texto: la unidad */
+  --e1: 9cqw;               /* 58 px · dos renglones */
+  --e2: 12.6cqw;            /* 81 px · entre partes de la pantalla */
+  --margen: 17cqw;          /* 110 px · el margen lateral */
+
+  --t-texto: 3.4cqw;        /* 22 px · el cuerpo de lectura */
+  --t-menudo: 3.1cqw;       /* 20 px · el rótulo de los botones */
+  --t-titulo: 4.9cqw;       /* 31,6 px · ESCANEA, DESCUBRE, ¿TODO LISTO?… */
+
+  --iso: 10.2cqw;           /* 66 px · el isotipo de cabecera */
+  /* EL LOGOTIPO SE MIDE POR SU TINTA, no por su archivo. El dibujo ocupa 336 de
+     los 645 px de pantalla, pero dentro del archivo solo ocupa el 56 % del
+     ancho —el resto es margen transparente—, así que para que la tinta salga a
+     336 hay que pedirle al archivo 597. Ese es el número que va aquí. Se sale
+     de la columna de texto a propósito: lo que tiene que cuadrar con ella es el
+     dibujo, no el recuadro vacío que lo rodea. */
+  --logo: 92.6cqw;          /* 597 px de archivo · 336 de tinta */
+  --boton-alto: 8.4cqw;     /* 54 px */
+  --boton-ancho: 31.5cqw;   /* 203 px */
+  /* El margen de las pantallas de DENTRO de la app es más estrecho que el del
+     tutorial: allí hay un párrafo centrado, que pide columna corta, y aquí hay
+     listas y fichas, que piden ancho. */
+  --margen-app: 9.3cqw;     /* 40 px de las maquetas de 430 */
+
+  font-family: var(--font-raleway), system-ui, sans-serif;
+  color: #fff;
+  font-size: var(--t-texto);
+  /* 29 px de renglón sobre 22 de cuerpo: el 1,32 medido en el original. */
+  line-height: 1.32;
+
+  /* El degradado de la marca, escrito una vez: lo usan la raya, el canto de los
+     marcos, el contorno de los botones y el botón redondo de la barra. */
+  --tinta: linear-gradient(115deg, #3d00e4, #ff1597);
 }
 
 /* El notch, colgando del borde de arriba, del color del marco. Cae por delante
@@ -95,37 +136,8 @@
    partes grandes de la pantalla. Se escribe así, como múltiplos de --u, para
    que siga cuadrando si algún día cambia el cuerpo del texto. */
 .am-app {
-  --u: 4.5cqw;              /* 29 px · el renglón del texto: la unidad */
-  --e1: 9cqw;               /* 58 px · dos renglones */
-  --e2: 12.6cqw;            /* 81 px · entre partes de la pantalla */
-  --margen: 17cqw;          /* 110 px · el margen lateral */
-
-  --t-texto: 3.4cqw;        /* 22 px · el cuerpo de lectura */
-  --t-menudo: 3.1cqw;       /* 20 px · el rótulo de los botones */
-  --t-titulo: 4.9cqw;       /* 31,6 px · ESCANEA, DESCUBRE, ¿TODO LISTO?… */
-
-  --iso: 10.2cqw;           /* 66 px · el isotipo de cabecera */
-  /* EL LOGOTIPO SE MIDE POR SU TINTA, no por su archivo. El dibujo ocupa 336 de
-     los 645 px de pantalla, pero dentro del archivo solo ocupa el 56 % del
-     ancho —el resto es margen transparente—, así que para que la tinta salga a
-     336 hay que pedirle al archivo 597. Ese es el número que va aquí. Se sale
-     de la columna de texto a propósito: lo que tiene que cuadrar con ella es el
-     dibujo, no el recuadro vacío que lo rodea. */
-  --logo: 92.6cqw;          /* 597 px de archivo · 336 de tinta */
-  --boton-alto: 8.4cqw;     /* 54 px */
-  --boton-ancho: 31.5cqw;   /* 203 px */
-
-  /* El degradado de la marca, escrito una vez: lo usan la raya, el canto de los
-     marcos, el contorno de los botones y el botón redondo de la barra. */
-  --tinta: linear-gradient(115deg, #3d00e4, #ff1597);
-
   position: absolute;
   inset: 0;
-  font-family: var(--font-raleway), system-ui, sans-serif;
-  color: #fff;
-  font-size: var(--t-texto);
-  /* 29 px de renglón sobre 22 de cuerpo: el 1,32 medido en el original. */
-  line-height: 1.32;
 }
 
 /* EL CAMBIO DE PANTALLA NO MUEVE LA PANTALLA ENTERA, y ese era el salto.
@@ -375,8 +387,12 @@
     linear-gradient(#000 0 0);
   mask-composite: exclude;
 }
-/* Al pasar por encima se enciende el relleno, muy flojo: el contorno ya es el
-   gesto, y rellenarlo del todo taparía el degradado del canto. */
+/* AL PASAR POR ENCIMA, EL BOTÓN SE RELLENA. Son los dos estados que trae el
+   diseño: en reposo es el contorno con el degradado, y al tocarlo es el mismo
+   degradado macizo. No son dos botones distintos —es el mismo hilo de color
+   convertido en superficie—, y por eso el relleno se hace encendiendo una capa
+   que ya está puesta debajo en vez de cambiándole el fondo: así el paso de uno a
+   otro se puede fundir. */
 .am-app-boton::after {
   content: "";
   position: absolute;
@@ -385,11 +401,20 @@
   border-radius: inherit;
   background: var(--tinta);
   opacity: 0;
-  transition: opacity 180ms ease;
+  transition: opacity 200ms ease;
 }
 .am-app-boton:hover::after,
-.am-app-boton:focus-visible::after {
-  opacity: 0.34;
+.am-app-boton:focus-visible::after,
+.am-app-boton:active::after {
+  opacity: 1;
+}
+/* Y al pulsar, se hunde un punto. Es lo único que distingue «tocando» de
+   «tocado» cuando el relleno ya está encendido en los dos. */
+.am-app-boton:active {
+  transform: scale(0.97);
+}
+.am-app-boton {
+  transition: transform 120ms ease;
 }
 .am-app-boton span {
   position: relative;
@@ -689,4 +714,357 @@
    subrayado— y separarlos más los partiría en dos cosas. */
 .am-app-titulo.es-lema {
   margin-bottom: var(--u);
+}
+
+/* ════ LAS PANTALLAS DE DENTRO DE LA APP ════════════════════════════════════
+   Todo lo que va debajo se mide igual que lo de arriba: en cqw, con el valor en
+   píxeles del diseño al lado. Las pantallas de esta parte vienen de maquetas de
+   430 px de ancho en vez de 645, así que la equivalencia es otra —1 cqw = 4,3
+   px de aquellas—; por eso los números no cuadran con los de la primera parte
+   aunque midan lo mismo en pantalla. */
+
+/* La caja que se desplaza. La app tiene apartados más largos que la pantalla
+   —el listado de fobias, la colección—, y el desplazamiento tiene que ocurrir
+   DENTRO del móvil y no arrastrar la página del portfolio. */
+.am-app-scroll {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* Por abajo, el hueco de la barra: sin él, la última fila se queda debajo del
+     menú y no hay manera de leerla. */
+  padding: 12cqw var(--margen-app) 26cqw;
+  text-align: left;
+}
+
+/* Barra de desplazamiento fina y del color de la marca, como en el diseño. */
+.am-app-scroll::-webkit-scrollbar {
+  width: 1.2cqw;
+}
+.am-app-scroll::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.am-app-encabezado,
+.am-app-pregunta {
+  margin: 0 0 var(--u);
+  font-size: var(--t-titulo);
+  font-weight: 600;
+  text-transform: uppercase;
+  line-height: 1.2;
+  text-align: center;
+}
+.am-app-pregunta {
+  margin-bottom: calc(var(--u) * 1.6);
+}
+
+/* ── La equis de salir ──
+   Arriba a la izquierda y por encima de todo. Va sobre imágenes que pueden ser
+   claras, así que lleva una sombra por detrás: sin ella, sobre un maizal
+   amarillo desaparece. */
+.am-app-cerrar {
+  position: absolute;
+  z-index: 4;
+  left: 6cqw;
+  top: 12cqw;
+  width: 9cqw;
+  height: 9cqw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  padding: 0;
+  background: none;
+  color: #fff;
+  cursor: pointer;
+  filter: drop-shadow(0 0.3cqw 1cqw rgba(0, 0, 0, 0.75));
+}
+.am-app-cerrar svg {
+  width: 62%;
+  height: auto;
+  display: block;
+}
+
+/* ── La cámara ── */
+.am-app-camara {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── La colección ──
+   Una banda por obra, a todo el ancho. El nombre va encima del cuadro, sobre un
+   velo oscuro que baja desde el pie: sin él, un nombre blanco sobre un Turner
+   en llamas no se lee. */
+.am-app-galeria {
+  display: flex;
+  flex-direction: column;
+  gap: 3cqw;
+}
+.am-app-galeria button {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 430 / 120;
+  padding: 0;
+  border: 0;
+  border-radius: 2.8cqw;
+  overflow: hidden;
+  background: #111;
+  cursor: pointer;
+  transition: transform 180ms ease;
+}
+.am-app-galeria button:hover {
+  transform: scale(1.02);
+}
+.am-app-galeria img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.am-app-galeria span {
+  position: absolute;
+  left: 3.5cqw;
+  right: 3.5cqw;
+  bottom: 2.4cqw;
+  color: #fff;
+  font-size: var(--t-menudo);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: left;
+  text-shadow: 0 0.2cqw 0.8cqw rgba(0, 0, 0, 0.9);
+}
+.am-app-galeria button::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 55%;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+  pointer-events: none;
+}
+
+/* ── El listado de fobias ── */
+.am-app-listado {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.am-app-listado li {
+  display: flex;
+  align-items: center;
+  gap: 2.5cqw;
+  /* Una fila por renglón y medio: la lista es larga y con el renglón pelado las
+     barras se tocaban entre sí. */
+  min-height: calc(var(--u) * 1.6);
+}
+.am-app-listado span {
+  /* Columna fija para los nombres: así todas las barras arrancan del mismo
+     sitio y se pueden comparar de un vistazo, que es para lo que están. Con el
+     nombre empujando, cada barra empezaría donde acabara su palabra y la lista
+     dejaría de ser un gráfico. */
+  flex: 0 0 34cqw;
+  font-size: var(--t-texto);
+  font-weight: 400;
+}
+.am-app-pista {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: block;
+}
+.am-app-listado i {
+  display: block;
+  height: 1.3cqw;
+  border-radius: 999px;
+  background: var(--tinta);
+  /* Este es el crecimiento. El retardo de cada fila lo pone el componente. */
+  transition: width 900ms cubic-bezier(0.22, 0.75, 0.2, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .am-app-listado i {
+    transition: none;
+  }
+}
+
+/* ── Las descargas ── */
+.am-app-fondos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6cqw;
+  /* A sangre por los tres lados: en el diseño los dos fondos llegan hasta los
+     cantos y hasta arriba del todo, como una portada. */
+  margin: -12cqw calc(var(--margen-app) * -1) 0;
+}
+.am-app-fondos button {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  aspect-ratio: 412 / 732;
+  overflow: hidden;
+}
+.am-app-fondos img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 260ms ease;
+}
+.am-app-fondos button:hover img {
+  transform: scale(1.04);
+}
+.am-app-texto.es-aviso {
+  margin: calc(var(--u) * 2.6) 0 0;
+  text-align: center;
+}
+
+/* Un fondo de pantalla abierto. Ver el comentario del componente: lo de detrás
+   es la misma imagen ampliada y fuera de foco. */
+.am-app-fondo {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--u) * 1.4);
+  padding: 14cqw var(--margen-app);
+  background: #000;
+  animation: am-app-entra 220ms ease-out both;
+}
+/* Un velo negro más sobre el desenfoque: el fondo de pantalla es una pieza muy
+   saturada y, aunque esté fuera de foco, sin esto compite con su propia copia
+   nítida de delante. */
+.am-app-fondo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+.am-app-fondo-velo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(5cqw) brightness(0.3);
+  /* La ampliación tapa el borde borroso que deja el desenfoque al llegar al
+     canto de la pantalla. */
+  transform: scale(1.25);
+}
+.am-app-fondo-pieza {
+  position: relative;
+  width: 72%;
+  aspect-ratio: 412 / 732;
+  border-radius: 1.6cqw;
+  overflow: hidden;
+  box-shadow: 0 2cqw 6cqw rgba(0, 0, 0, 0.6);
+}
+.am-app-fondo-pieza img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.am-app-fondo .am-app-boton {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── La ficha de una obra ────────────────────────────────────────────────────
+   SUBE DESDE ABAJO. No es un adorno: es lo que dice que esto se ha abierto
+   ENCIMA de donde estabas y que por tanto se puede cerrar y volver. Una ficha
+   que apareciera sin más se leería como haber navegado a otro sitio. */
+.am-app-ficha {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: #000;
+  text-align: left;
+  animation: am-ficha-sube 420ms cubic-bezier(0.22, 0.8, 0.2, 1) both;
+}
+@keyframes am-ficha-sube {
+  from {
+    transform: translateY(100%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .am-app-ficha {
+    animation: none;
+  }
+}
+
+/* El cuadro, a sangre y ocupando el tercio de arriba, como en el diseño. */
+.am-app-ficha-cuadro {
+  position: relative;
+  flex: 0 0 auto;
+  aspect-ratio: 430 / 340;
+}
+.am-app-ficha-cuadro img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.am-app-ficha-hoja {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 var(--margen-app) 10cqw;
+}
+/* El tirador. No arrastra nada —esto es una demostración—, pero es la señal de
+   que la hoja ha subido desde abajo, y quitarlo dejaría el gesto sin explicar. */
+.am-app-ficha-tirador {
+  width: 12cqw;
+  height: 0.7cqw;
+  margin: 3.4cqw 0 4cqw;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.8);
+}
+.am-app-ficha-nombre {
+  margin: 0 0 calc(var(--u) * 0.9);
+  font-size: var(--t-titulo);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.am-app-ficha-obra {
+  margin: 0 0 var(--u);
+  font-size: var(--t-texto);
+  font-weight: 500;
+  text-align: center;
+}
+/* El texto de la ficha va más menudo que el del tutorial: allí son tres líneas
+   que se leen de un golpe y aquí hay dos párrafos largos, y a cuerpo de
+   tutorial no cabrían sin partir la ficha en tres pantallas de scroll. */
+.am-app-ficha-texto {
+  margin: 0 0 var(--u);
+  font-size: 2.6cqw;   /* 11 px del diseño */
+  font-weight: 300;
+  line-height: 1.5;
+  text-align: justify;
+  width: 100%;
+}
+.am-app-ficha .am-app-raya {
+  margin: calc(var(--u) * 0.6) 0 calc(var(--u) * 1.2);
+}
+.am-app-ficha .am-app-boton {
+  /* Abajo del todo, y con `auto` para que se quede ahí tanto si el texto es
+     corto como si llena la ficha: en las siete obras los dos párrafos miden muy
+     distinto, y con un margen fijo el botón bailaba de una a otra. */
+  margin-top: auto;
+  padding-top: 0;
+  align-self: center;
 }

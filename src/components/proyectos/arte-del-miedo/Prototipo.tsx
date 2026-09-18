@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useLang } from "@/components/shared/useLang";
 import { Cuadricula } from "./Isotipo";
 import { raleway } from "./fuente";
+import { FOBIAS, LISTADO } from "./fobias";
 import "./Prototipo.css";
 
 // La app de la exposición, programada y navegable dentro de un móvil.
@@ -54,6 +55,10 @@ type Ctx = {
   /** Arranca la animación del logotipo, que es la que da paso a la bienvenida. */
   comenzar: () => void;
   arrancando: boolean;
+  /** Abre la ficha de una obra por encima de la pantalla en la que se esté. */
+  abrirFicha: (id: string) => void;
+  /** Abre un fondo de pantalla a tamaño completo, para guardarlo. */
+  abrirFondo: (n: string) => void;
 };
 
 // Los cinco pasos del tutorial, que son lo que la app sabe hacer. El texto es
@@ -212,6 +217,13 @@ type Pantalla = {
   plena?: boolean;
   /** Retoques propios de esa pantalla, cuando su reparto no es el de las demás. */
   clase?: string;
+  /**
+   * La pantalla lleva la barra de menú, con este apartado encendido. Se pinta
+   * en el armazón y no dentro de cada pantalla: así las cuatro la tienen
+   * exactamente igual y en el mismo sitio, que es lo que hace que al cambiar de
+   * apartado la barra no se mueva ni parpadee.
+   */
+  barra?: string;
   cuerpo: (c: Ctx) => React.ReactNode;
 };
 
@@ -269,12 +281,18 @@ const ICONOS: Record<string, React.ReactNode> = {
 // Los cuatro destinos de la barra, en orden. `puesto` es dónde va cada uno a lo
 // largo de la barra, medido en el diseño: no es un reparto automático, porque
 // los dos huecos de en medio los ocupa la muesca del botón del escáner.
-const BARRA: { id: string; es: string; en: string; puesto: number }[] = [
-  { id: "casa", es: "Inicio", en: "Home", puesto: 13.5 },
-  { id: "galeria", es: "Colección", en: "Collection", puesto: 31.2 },
-  { id: "datos", es: "Datos", en: "Data", puesto: 68.8 },
-  { id: "descarga", es: "Descargas", en: "Downloads", puesto: 86.5 },
+const BARRA: { id: string; es: string; en: string; puesto: number; va: string }[] = [
+  { id: "casa", es: "Inicio", en: "Home", puesto: 13.5, va: "home" },
+  { id: "galeria", es: "Colección", en: "Collection", puesto: 31.2, va: "galeria" },
+  { id: "datos", es: "Datos", en: "Data", puesto: 68.8, va: "datos" },
+  { id: "descarga", es: "Descargas", en: "Downloads", puesto: 86.5, va: "descargas" },
 ];
+
+// La obra que se escanea en el vídeo de la cámara. No es una cualquiera: en la
+// grabación se ve enfocar «El mundo de Christina», así que al terminar tiene que
+// abrirse SU ficha y no otra, o la app estaría contando una cosa y enseñando
+// otra.
+const OBRA_ESCANEADA = "autofobia";
 
 function Icono({ id }: { id: string }) {
   return (
@@ -347,6 +365,184 @@ function Barra() {
         strokeWidth="2.5"
       />
     </svg>
+  );
+}
+
+// La barra, con el botón del escáner posado en su muesca. Se saca a su propio
+// componente porque la llevan las cuatro pantallas de dentro de la app, y
+// copiada cuatro veces el día que se retoque una se quedarían tres viejas.
+//
+// `activo` es el apartado en el que se está, que es el único que va en blanco.
+function BarraMenu({ c, activo }: { c: Ctx; activo: string }) {
+  return (
+    <nav className="am-app-barra" aria-label={c.t("Menú principal", "Main menu")}>
+      <Barra />
+      {BARRA.map((b) => (
+        <button
+          key={b.id}
+          type="button"
+          style={{ left: `${b.puesto}%` }}
+          data-puesto={b.id === activo}
+          onClick={() => c.ir(b.va)}
+        >
+          <Icono id={b.id} />
+          <span className="am-oculto">{c.t(b.es, b.en)}</span>
+        </button>
+      ))}
+
+      <button
+        type="button"
+        className="am-app-barra-centro"
+        onClick={() => c.ir("escaneando")}
+      >
+        <Marca clase="es-boton" />
+        <span className="am-oculto">{c.t("Escanear una obra", "Scan a work")}</span>
+      </button>
+    </nav>
+  );
+}
+
+// La cámara del escáner: se apunta a un cuadro, la app lo reconoce y al acabar
+// se abre su ficha. El vídeo ocupa la pantalla entera —es lo que se ve por la
+// cámara—, así que aquí no hay interfaz ninguna salvo la salida.
+function Camara({ c }: { c: Ctx }) {
+  const video = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    video.current?.play().catch(() => {});
+    // La misma red de seguridad que en la carga: si el vídeo no llega a
+    // reproducirse, la ficha se abre igual pasada su duración.
+    const reloj = setTimeout(() => c.abrirFicha(OBRA_ESCANEADA), 9800);
+    return () => clearTimeout(reloj);
+    // Solo al montar: lo que hace falta es arrancar una vez.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  return (
+    <>
+      <video
+        ref={video}
+        className="am-app-camara"
+        src={`${RUTA}/camara.mp4`}
+        muted
+        playsInline
+        preload="auto"
+        aria-hidden="true"
+        onEnded={() => c.abrirFicha(OBRA_ESCANEADA)}
+      />
+      <Cerrar onClick={() => c.ir("home")} rotulo={c.t("Cerrar la cámara", "Close the camera")} />
+    </>
+  );
+}
+
+// La equis de salir, arriba a la izquierda y por encima de todo.
+function Cerrar({ onClick, rotulo }: { onClick: () => void; rotulo: string }) {
+  return (
+    <button type="button" className="am-app-cerrar" onClick={onClick}>
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M5 5 19 19 M19 5 5 19" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+      </svg>
+      <span className="am-oculto">{rotulo}</span>
+    </button>
+  );
+}
+
+// LA FICHA DE UNA OBRA, que es el contenido de toda la app: el cuadro, el miedo
+// que esconde y por qué.
+//
+// Sube desde abajo y no aparece sin más: es una hoja que se arrastra sobre lo
+// que haya —la cámara o la galería—, y ese gesto es el que dice que se puede
+// cerrar y volver. Por eso lleva también el tirador, que no hace nada pero
+// anuncia de dónde ha venido.
+function Ficha({ c, id, cerrar }: { c: Ctx; id: string; cerrar: () => void }) {
+  const f = FOBIAS.find((x) => x.id === id);
+  if (!f) return null;
+  return (
+    <div className="am-app-ficha" role="dialog" aria-label={f.nombre}>
+      <div className="am-app-ficha-cuadro">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={`${RUTA}/cuadro-${f.id}.webp`} alt={`${f.obra}, ${f.anio}`} />
+        <Cerrar onClick={cerrar} rotulo={c.t("Cerrar la ficha", "Close")} />
+      </div>
+
+      <div className="am-app-ficha-hoja">
+        <span className="am-app-ficha-tirador" aria-hidden="true" />
+        <h4 className="am-app-ficha-nombre">{f.nombre}</h4>
+        <p className="am-app-ficha-texto">{f.fobia}</p>
+        <span className="am-app-raya" aria-hidden="true" />
+        <p className="am-app-ficha-obra">
+          «{f.obra}» ({f.anio})
+        </p>
+        <p className="am-app-ficha-texto">{f.cuadro}</p>
+        <Boton onClick={() => {}}>
+          {c.t("Siento el miedo", "I feel the fear")}
+        </Boton>
+      </div>
+    </div>
+  );
+}
+
+// EL LISTADO DE FOBIAS, con las barras creciendo desde su origen.
+//
+// La animación no es un adorno: una barra que crece DICE que es una medida —que
+// hay un cero y un hasta aquí—, y una barra que aparece ya hecha es un dibujo.
+// Por eso crecen, y por eso lo hacen escalonadas: un retardo corto por fila
+// hace que la lista se lea de arriba abajo, que es el orden en el que están
+// ordenadas —de la más común a la menos—.
+//
+// El crecimiento se hace con una transición y no con una animación de CSS
+// porque cada barra acaba en un ancho distinto: con `@keyframes` habría que
+// escribir un juego de fotogramas por fila. Se monta a cero y, en cuanto está
+// puesta, se le da su ancho; el navegador interpola el resto.
+function Listado() {
+  const [crecidas, setCrecidas] = useState(false);
+  useEffect(() => {
+    // Dos cuadros de margen: poniéndolo en el mismo en que se monta, el
+    // navegador junta los dos estados en uno y no hay transición ninguna.
+    const id = requestAnimationFrame(() => requestAnimationFrame(() => setCrecidas(true)));
+    return () => cancelAnimationFrame(id);
+  }, []);
+  return (
+    <ul className="am-app-listado">
+      {LISTADO.map((f, i) => (
+        <li key={f.nombre}>
+          <span>{f.nombre}</span>
+          {/* La barra va dentro de una PISTA, y la pista es lo que se lleva el
+              hueco que sobra. Sin ella, el porcentaje de la barra se mediría
+              contra la fila entera —nombre incluido— y todas las de arriba se
+              salían por el lado y acababan recortadas al mismo largo, o sea que
+              dejaban de poder compararse, que es lo único que hacen. */}
+          <em className="am-app-pista">
+            <i
+              style={{
+                width: crecidas ? `${8 + f.peso * 92}%` : "0%",
+                transitionDelay: `${i * 55}ms`,
+              }}
+            />
+          </em>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+// UN FONDO DE PANTALLA A TAMAÑO COMPLETO, para guardarlo.
+//
+// Detrás va el mismo fondo, ampliado y desenfocado: no es un efecto de moda,
+// es lo que resuelve que una imagen vertical estrecha deje dos franjas vacías a
+// los lados. Rellenarlas de negro parte la pantalla en tres; rellenarlas con la
+// propia imagen fuera de foco las llena con sus mismos colores y la atención se
+// queda en el centro, que es donde está la pieza.
+function Fondo({ c, nombre, cerrar }: { c: Ctx; nombre: string; cerrar: () => void }) {
+  return (
+    <div className="am-app-fondo" role="dialog" aria-label={c.t("Fondo de pantalla", "Wallpaper")}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img className="am-app-fondo-velo" src={`${RUTA}/${nombre}.webp`} alt="" aria-hidden="true" />
+      <Cerrar onClick={cerrar} rotulo={c.t("Cerrar", "Close")} />
+      <div className="am-app-fondo-pieza">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={`${RUTA}/${nombre}.webp`} alt={c.t("Fondo de pantalla", "Wallpaper")} />
+      </div>
+      <Boton onClick={() => {}}>{c.t("Guardar", "Save")}</Boton>
+    </div>
   );
 }
 
@@ -451,6 +647,7 @@ const PANTALLAS: Pantalla[] = [
     es: "Menú principal",
     en: "Main menu",
     plena: true,
+    barra: "casa",
     cuerpo: (c) => (
       <>
         {/* La marca, sola en el centro de la pantalla: la home de esta app no
@@ -460,31 +657,86 @@ const PANTALLAS: Pantalla[] = [
           <Logotipo />
         </div>
 
-        {/* La barra, con el botón del escáner posado en su muesca. El dibujo va
-            aparte —en SVG— y los botones encima, cada uno en el punto que
-            ocupa en el diseño. */}
-        <nav className="am-app-barra" aria-label={c.t("Menú principal", "Main menu")}>
-          <Barra />
-          {BARRA.map((b, i) => (
-            <button
-              key={b.id}
-              type="button"
-              style={{ left: `${b.puesto}%` }}
-              /* El primero va encendido: es donde se está. Los otros tres, en
-                 gris, que es como los tiene el diseño. */
-              data-puesto={i === 0}
-            >
-              <Icono id={b.id} />
-              <span className="am-oculto">{c.t(b.es, b.en)}</span>
+      </>
+    ),
+  },
+
+  {
+    id: "escaneando",
+    es: "Escaneando",
+    en: "Scanning",
+    plena: true,
+    cuerpo: (c) => <Camara c={c} />,
+  },
+
+  {
+    id: "galeria",
+    es: "Colección",
+    en: "Collection",
+    plena: true,
+    barra: "galeria",
+    // LAS OBRAS, EN BANDAS Y NO EN CUADRÍCULA. Una cuadrícula de miniaturas
+    // convierte los cuadros en iconos: a ese tamaño no se distingue un Munch de
+    // un Turner, que es justo lo que aquí importa. En bandas a todo el ancho
+    // cada obra se ve, y la lista se recorre con el pulgar en un solo eje.
+    cuerpo: (c) => (
+      <div className="am-app-scroll">
+        <h4 className="am-app-encabezado">{c.t("Tu colección", "Your collection")}</h4>
+        <div className="am-app-galeria">
+          {FOBIAS.map((f) => (
+            <button key={f.id} type="button" onClick={() => c.abrirFicha(f.id)}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={`${RUTA}/cuadro-${f.id}.webp`} alt="" />
+              <span>{f.nombre}</span>
             </button>
           ))}
+        </div>
+      </div>
+    ),
+  },
 
-          <button type="button" className="am-app-barra-centro">
-            <Marca clase="es-boton" />
-            <span className="am-oculto">{c.t("Escanear una obra", "Scan a work")}</span>
-          </button>
-        </nav>
-      </>
+  {
+    id: "datos",
+    es: "Analiza",
+    en: "Analyse",
+    plena: true,
+    barra: "datos",
+    cuerpo: (c) => (
+      <div className="am-app-scroll">
+        <h4 className="am-app-pregunta">
+          {c.t(
+            "¿Qué fobias son más comunes entre los visitantes?",
+            "Which fears are the most common among visitors?"
+          )}
+        </h4>
+        <Listado />
+      </div>
+    ),
+  },
+
+  {
+    id: "descargas",
+    es: "Descargas",
+    en: "Downloads",
+    plena: true,
+    barra: "descarga",
+    cuerpo: (c) => (
+      <div className="am-app-scroll es-descargas">
+        <div className="am-app-fondos">
+          {["fondo-01", "fondo-02"].map((n) => (
+            <button key={n} type="button" onClick={() => c.abrirFondo(n)}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={`${RUTA}/${n}.webp`} alt={c.t("Fondo de pantalla", "Wallpaper")} />
+            </button>
+          ))}
+        </div>
+        <p className="am-app-texto es-aviso">
+          {c.t(
+            "Escanea más cuadros para conseguir más fondos de pantalla.",
+            "Scan more paintings to unlock more wallpapers."
+          )}
+        </p>
+      </div>
     ),
   },
 ];
@@ -499,6 +751,12 @@ export default function Prototipo() {
   // que «Atrás» deshaga los pasos en el orden en que se dieron.
   const [camino, setCamino] = useState<string[]>(["carga"]);
   const [arrancando, setArrancando] = useState(false);
+  // LA FICHA Y EL FONDO NO SON PANTALLAS, son hojas que se abren ENCIMA de la
+  // que haya. Por eso van en su propio estado y no en el camino: se llega a la
+  // ficha desde la cámara y desde la galería, y al cerrarla hay que volver a
+  // donde se estaba, no a un paso anterior de una pila.
+  const [ficha, setFicha] = useState<string | null>(null);
+  const [fondo, setFondo] = useState<string | null>(null);
   const actual = PORID.get(camino[camino.length - 1]) ?? PANTALLAS[0];
 
   const ir = useCallback((id: string) => {
@@ -507,6 +765,8 @@ export default function Prototipo() {
     // puesto al llegar a otra pantalla, a los cinco segundos saltaría solo a la
     // bienvenida y desharía el camino.
     setArrancando(false);
+    setFicha(null);
+    setFondo(null);
     setCamino((antes) => (id === "carga" ? ["carga"] : [...antes, id]));
   }, []);
   const comenzar = useCallback(() => setArrancando(true), []);
@@ -514,7 +774,20 @@ export default function Prototipo() {
     setCamino((antes) => (antes.length > 1 ? antes.slice(0, -1) : antes));
   }, []);
 
-  const ctx: Ctx = { ir, t, comenzar, arrancando };
+  // Al escanear, la ficha se abre sobre la HOME y no sobre la cámara: la
+  // cámara era el trámite para llegar aquí y volver a ella al cerrar sería
+  // volver a escanear el mismo cuadro. Desde la galería, en cambio, la ficha se
+  // abre sobre la galería y al cerrarla se vuelve a ella, que es donde se
+  // estaba mirando.
+  const abrirFicha = useCallback((id: string) => {
+    setCamino((antes) =>
+      antes[antes.length - 1] === "escaneando" ? [...antes.slice(0, -1), "home"] : antes
+    );
+    setFicha(id);
+  }, []);
+  const abrirFondo = useCallback((n: string) => setFondo(n), []);
+
+  const ctx: Ctx = { ir, t, comenzar, arrancando, abrirFicha, abrirFondo };
 
   return (
     <section className={`am-proto ${raleway.variable}`}>
@@ -534,7 +807,25 @@ export default function Prototipo() {
               >
                 {actual.cuerpo(ctx)}
               </div>
+
+              {/* La barra, FUERA del cuerpo de cada pantalla: así es la misma
+                  pieza en las cuatro y no se rehace al cambiar de apartado.
+                  Se esconde mientras hay una hoja abierta —la ficha ocupa la
+                  pantalla entera y el fondo también—, que es lo que hace que
+                  esas dos se lean como algo que se abre encima y no como otro
+                  apartado más. */}
+              {actual.barra && !ficha && !fondo && (
+                <BarraMenu c={ctx} activo={actual.barra} />
+              )}
             </div>
+
+            {ficha && (
+              <Ficha c={ctx} id={ficha} cerrar={() => setFicha(null)} />
+            )}
+
+            {fondo && (
+              <Fondo c={ctx} nombre={fondo} cerrar={() => setFondo(null)} />
+            )}
           </div>
         </div>
 
