@@ -92,21 +92,24 @@
   gap: 20px;
   margin: 20px 0 0;
 }
+/* El mockup del flyer va SIN fondo: el archivo es transparente —los flyers
+   están recortados—, así que el papel de la página pasa por detrás y la pila se
+   ve flotando en vez de metida en una caja. Por eso tampoco lleva redondeo: no
+   hay caja que redondear. */
 .am-flyers-mockup {
   flex: 1.5 1 0;
   aspect-ratio: 3 / 2;
   margin: 0;
   min-width: 0;
-  border-radius: 12px;
-  overflow: hidden;
-  background: var(--surface);
   line-height: 0;
 }
 .am-flyers-mockup img {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  /* `contain` y no `cover`: sin caja que rellenar, recortar la pila por los
+     lados sería comerse los flyers. */
+  object-fit: contain;
 }
 .am-flyers-video {
   flex: 1 1 0;
