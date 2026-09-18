@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useLang } from "@/components/shared/useLang";
 import LangText from "@/components/shared/LangText";
 import Pantallas, { type Pantalla } from "./Pantallas";
+import Prototipo from "./Prototipo";
 // LAS PESTAÑAS SON LAS MISMAS QUE LAS DE LA APP DE ESPACIO VACÍO, y por eso se
 // importa su CSS en vez de copiarlo. Son la misma pieza haciendo el mismo
 // trabajo en la misma clase de página —el prototipo y el sistema de una app—,
@@ -12,20 +13,6 @@ import Pantallas, { type Pantalla } from "./Pantallas";
 // sacarlo a un componente compartido, no volver a copiarlo.
 import "../app-espacio-vacio/Apartados.css";
 import "./ArteMiedo.css";
-
-// La entrada a la app: la marca, la bienvenida, los cinco pasos que explican
-// qué se puede hacer dentro y la salida al menú. Es el orden real de la app.
-const ENTRADA: Pantalla[] = [
-  { id: "login-1", es: "Arranque", en: "Splash" },
-  { id: "login-2", es: "Un viaje a través del arte y la mente", en: "A journey through art and the mind" },
-  { id: "login-3", es: "Escanea", en: "Scan" },
-  { id: "login-4", es: "Descubre", en: "Discover" },
-  { id: "login-5", es: "Colecciona", en: "Collect" },
-  { id: "login-6", es: "Analiza", en: "Analyse" },
-  { id: "login-7", es: "Descarga", en: "Download" },
-  { id: "login-8", es: "¿Todo listo?", en: "All set?" },
-  { id: "home", es: "Menú principal", en: "Main menu" },
-];
 
 // Seis obras de la sala vistas a través de la cámara de la app. NO son seis
 // pasos de un recorrido —son la misma pantalla seis veces, con un cuadro
@@ -87,11 +74,7 @@ export default function AppApartados() {
               />
             </p>
           </div>
-          <Pantallas
-            pantallas={ENTRADA}
-            rotulo="Pantallas de entrada a la app, en orden"
-            rotuloEn="The app's entry screens, in order"
-          />
+          <Prototipo />
 
           <h3 className="am-subrotulo">
             <LangText es="El escaneo" en="Scanning" />
@@ -110,12 +93,6 @@ export default function AppApartados() {
             rotuloEn="Six works from the room seen through the app's camera"
           />
 
-          <p className="am-pendiente">
-            <LangText
-              es="Falta el prototipo navegable —la app funcionando dentro de la página, como la de Espacio vacío—, que va justo aquí debajo."
-              en="Missing: the clickable prototype — the app running inside the page, like the Empty space one — which goes right below this."
-            />
-          </p>
         </div>
 
         <div hidden={cual !== "sistema"}>

@@ -1,0 +1,642 @@
+/* La app de la exposición, programada, dentro de un móvil.
+   El armazón —marco, mandos, medidas en cqw— repite el de la app de Espacio
+   vacío a propósito: son la misma clase de pieza y quien haya visto una tiene
+   que reconocer la otra. Lo que cambia es el interior. */
+.am-proto {
+  margin: 28px 0 8px;
+}
+
+.am-proto-caja {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 56px;
+}
+
+/* ── El móvil ──────────────────────────────────────────────────────────────
+   Marco en CSS y no una imagen: se ve nítido a cualquier tamaño, pesa cero y
+   —lo que importa aquí— el hueco de la pantalla es exacto. */
+.am-movil {
+  position: relative;
+  flex: 0 0 auto;
+  /* El aparato manda sobre el tamaño de todo lo que lleva dentro: la pantalla
+     va medida en `cqw`, así que ensanchar el marco es lo que hace que el texto
+     de la app se lea. */
+  width: 330px;
+  padding: 10px;
+  border-radius: 44px;
+  background: #1b1b1d;
+}
+/* La app es negra y el marco también, así que en modo oscuro el aparato se
+   deshace contra el papel. Un hilo claro alrededor le devuelve el canto.
+   Va como sombra y no como borde para no cambiar la medida del marco: un borde
+   engordaría la caja y movería la pantalla de dentro. */
+[data-theme="dark"] .am-movil {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.32);
+}
+
+/* Se llama «hueco del móvil» y no «pantalla» porque en esta misma página hay ya
+   una `.am-pantalla`: la de la tira de capturas de la app. Dos componentes
+   distintos con la misma clase acaban pisándose —y se pisaron: el fondo negro
+   que la tira le pone a sus capturas se lo tragaba también el logotipo de
+   aquí—, así que cada uno lleva su propio nombre. */
+.am-movil-hueco {
+  position: relative;
+  /* La proporción de las capturas: 645 × 1398. */
+  aspect-ratio: 645 / 1398;
+  border-radius: 34px;
+  overflow: hidden;
+  /* Negro fijo y no el papel de la página: es la pantalla de la app, y la app
+     es negra en los dos modos del sitio. */
+  background: #000;
+  /* LA PIEZA CLAVE del apartado: al declararlo contenedor de consulta, `cqw`
+     pasa a medir el uno por ciento del ancho del MÓVIL y no de la ventana.
+     Todo lo de dentro va en esa unidad, así que la pantalla escala entera
+     —tipografía, márgenes y botones a la vez— igual que una app al cambiar de
+     aparato. Con píxeles habría que reescribir cada medida en cada tamaño; con
+     porcentajes, el texto no escalaría con lo demás. */
+  container-type: inline-size;
+}
+
+/* El notch, colgando del borde de arriba, del color del marco. Cae por delante
+   de la app pero no de sus pulsaciones: ahí arriba no hay nada que tocar. */
+.am-movil-notch {
+  position: absolute;
+  z-index: 6;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  width: 40cqw;
+  height: 6cqw;
+  border-radius: 0 0 3.2cqw 3.2cqw;
+  background: #1b1b1d;
+  pointer-events: none;
+}
+
+/* ── La app ────────────────────────────────────────────────────────────────
+
+   EL SISTEMA, EN UN SITIO. Ninguno de estos números está puesto a ojo: salen de
+   medir las pantallas originales, que son de 645 × 1398. Se midieron las cajas
+   de tinta de cada elemento —dónde empieza y dónde acaba lo que se ve— y de ahí
+   se sacaron la escala de letra, el ritmo vertical y el margen.
+
+   VAN EN `cqw`, o sea en porcentaje del ancho del móvil, y la equivalencia es
+   siempre la misma: 1 cqw = 6,45 px del diseño. Ese es el único puente entre lo
+   medido y lo escrito, y por eso cada medida lleva al lado su valor en píxeles
+   del original: así se comprueba de un vistazo si algo se ha desviado.
+
+   EL RITMO SALE DEL RENGLÓN. Al medir los huecos aparecieron tres distancias y
+   no veinte —29, 58 y 81 px—, y la primera es exactamente el renglón del texto
+   corrido. O sea que la pantalla está construida sobre su propia línea base:
+   un renglón entre lo que va junto, dos entre bloques, y casi tres entre las
+   partes grandes de la pantalla. Se escribe así, como múltiplos de --u, para
+   que siga cuadrando si algún día cambia el cuerpo del texto. */
+.am-app {
+  --u: 4.5cqw;              /* 29 px · el renglón del texto: la unidad */
+  --e1: 9cqw;               /* 58 px · dos renglones */
+  --e2: 12.6cqw;            /* 81 px · entre partes de la pantalla */
+  --margen: 17cqw;          /* 110 px · el margen lateral */
+
+  --t-texto: 3.4cqw;        /* 22 px · el cuerpo de lectura */
+  --t-menudo: 3.1cqw;       /* 20 px · el rótulo de los botones */
+  --t-titulo: 4.9cqw;       /* 31,6 px · ESCANEA, DESCUBRE, ¿TODO LISTO?… */
+
+  --iso: 10.2cqw;           /* 66 px · el isotipo de cabecera */
+  /* EL LOGOTIPO SE MIDE POR SU TINTA, no por su archivo. El dibujo ocupa 336 de
+     los 645 px de pantalla, pero dentro del archivo solo ocupa el 56 % del
+     ancho —el resto es margen transparente—, así que para que la tinta salga a
+     336 hay que pedirle al archivo 597. Ese es el número que va aquí. Se sale
+     de la columna de texto a propósito: lo que tiene que cuadrar con ella es el
+     dibujo, no el recuadro vacío que lo rodea. */
+  --logo: 92.6cqw;          /* 597 px de archivo · 336 de tinta */
+  --boton-alto: 8.4cqw;     /* 54 px */
+  --boton-ancho: 31.5cqw;   /* 203 px */
+
+  /* El degradado de la marca, escrito una vez: lo usan la raya, el canto de los
+     marcos, el contorno de los botones y el botón redondo de la barra. */
+  --tinta: linear-gradient(115deg, #3d00e4, #ff1597);
+
+  position: absolute;
+  inset: 0;
+  font-family: var(--font-raleway), system-ui, sans-serif;
+  color: #fff;
+  font-size: var(--t-texto);
+  /* 29 px de renglón sobre 22 de cuerpo: el 1,32 medido en el original. */
+  line-height: 1.32;
+  /* Cada pantalla entra con un desplazamiento mínimo. Corto a propósito: una
+     app cambia de pantalla casi de golpe, y una transición lucida aquí se
+     leería como una web y no como un móvil. */
+  animation: am-app-entra 220ms ease-out both;
+}
+@keyframes am-app-entra {
+  from {
+    opacity: 0;
+    transform: translateX(3%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .am-app {
+    animation: none;
+  }
+}
+
+.am-app-cuerpo {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Arriba, el hueco hasta el isotipo (82 px medidos); abajo, el que queda
+     bajo el botón (63 px, o sea dos renglones y pico). */
+  padding: var(--e2) var(--margen) calc(var(--u) * 2.2);
+  text-align: center;
+}
+/* Las pantallas que se pintan hasta los cantos: el arranque y la home, que
+   llevan la barra pegada al borde de abajo. */
+.am-app-cuerpo.es-plena {
+  padding: 0;
+  justify-content: center;
+}
+
+/* Texto solo para lectores: el nombre de un botón que se ve como un icono. No
+   se puede esconder con `display:none`, que lo quita también del lector; se
+   recorta a un píxel, que es lo que sí lo deja anunciado. */
+.am-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── La marca ── */
+.am-app-marca {
+  display: block;
+  line-height: 0;
+}
+.am-app-marca .am-iso {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.am-app-marca .am-iso-figura rect {
+  fill: #fff;
+}
+
+/* En el arranque, encendida y sola en medio de la pantalla. El halo es la
+   misma marca desenfocada por detrás: el isotipo no cambia de forma, lo que
+   hace es alumbrar. */
+.am-app-marca.es-carga {
+  width: 26cqw;
+  filter: drop-shadow(0 0 6cqw rgba(160, 60, 255, 0.85))
+    drop-shadow(0 0 14cqw rgba(255, 21, 151, 0.45));
+  animation: am-late 2.8s ease-in-out infinite;
+}
+@keyframes am-late {
+  50% {
+    opacity: 0.72;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .am-app-marca.es-carga {
+    animation: none;
+  }
+}
+
+/* Arriba de cada paso del tutorial. */
+.am-app-marca.es-cabecera {
+  width: var(--iso);
+  /* 86 px medidos del pie del isotipo al alto del título. */
+  margin-bottom: var(--e2);
+}
+/* Dentro del botón redondo de la barra de la home. */
+.am-app-marca.es-boton {
+  width: 42%;
+}
+
+/* ── El logotipo ──
+   ES EL ARCHIVO DE LA PÁGINA DE MARCA, no una versión rehecha con tipos: el
+   logotipo tiene su propio dibujo —la retícula metida delante de MIEDO, los
+   cuerpos de EL y DEL, el interletrado— y componerlo a mano con la fuente da
+   otra cosa parecida, que es peor que traerlo.
+   Viene negro sobre transparente, porque así se usa sobre papel blanco en la
+   página de marca. Aquí el fondo es negro, así que se invierte: `invert(1)`
+   sobre un dibujo de un solo color lo pasa a blanco y respeta el recorte, de
+   modo que un mismo archivo sirve en las dos páginas y no hay dos que mantener.
+   El ancho —336 px de los 645 de pantalla— y el hueco de debajo están medidos
+   en el original. */
+.am-app-logotipo {
+  width: var(--logo);
+  max-width: none;
+  flex: 0 0 auto;
+  margin: 0;
+  filter: invert(1);
+}
+.am-app-logotipo img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ── Textos ──
+   Un solo tamaño de título. Al medir, el de los pasos y el de la bienvenida
+   daban la misma altura de mayúscula —23 y 22 px—, o sea que en el diseño son
+   el mismo estilo puesto en una o en dos líneas, y tenerlos aquí como dos
+   tamaños distintos era inventarse un escalón que no existe. */
+.am-app-titulo {
+  /* 78 px medidos de tinta a tinta, MENOS los 7 que el renglón del título deja
+     por debajo de las mayúsculas. Esa resta hay que hacerla en todos los huecos
+     que van bajo un texto: los del diseño se miden entre lo que se ve, y un
+     margen de CSS se mide entre cajas, que son más altas que su tinta. */
+  margin: 0 0 11cqw;
+  font-size: var(--t-titulo);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  /* Ceñido: el título es una o dos líneas de mayúsculas, y ahí el renglón del
+     texto corrido sobra. El 1,15 deja el interlineado de 47 px que tiene el
+     titular de dos líneas de la bienvenida. */
+  line-height: 1.15;
+}
+.am-app-texto {
+  margin: 0 0 var(--u);
+  font-size: var(--t-texto);
+  font-weight: 300;
+  /* Justificado, como en el diseño: es un párrafo corto en una columna estrecha
+     y ahí el bloque cerrado se lee como una placa. La última línea, centrada. */
+  text-align: justify;
+  text-align-last: center;
+}
+.am-app-texto:last-of-type {
+  margin-bottom: 0;
+}
+/* El texto de un paso va entre el marco y el botón, y se lleva el hueco que
+   sobre: así el botón queda abajo del todo en las cinco pantallas aunque los
+   textos midan muy distinto —uno tiene cuatro líneas y otro una—. */
+.am-app-texto.es-paso {
+  margin-bottom: auto;
+  padding-top: var(--e1);
+}
+
+/* La raya del degradado bajo el titular de la bienvenida: la marca reducida a
+   un trazo. 324 px de ancho sobre 645, y un renglón de aire a cada lado. */
+.am-app-raya {
+  display: block;
+  flex: 0 0 auto;
+  width: 50.2cqw;   /* 324 px */
+  height: 0.3cqw;
+  margin: 0 0 var(--u);
+  background: var(--tinta);
+}
+
+/* ── El botón ──
+   El canto lleva el degradado, no el fondo. Se hace con dos capas: el degradado
+   se pinta en la caja y se le recorta el centro con una máscara, de modo que lo
+   único que queda a la vista es el hilo del borde. Un `border-image` no vale
+   aquí porque no sigue las esquinas redondeadas. */
+.am-app-boton {
+  position: relative;
+  /* 203 × 54 px medidos en el original. El ancho va de mínimo y no fijo: el
+     botón lleva «Siguiente» en casi todas las pantallas pero «Empecemos» en
+     una, y en inglés cambian los dos. Con un ancho fijo, la palabra larga se
+     saldría; con un mínimo, todos los botones se ven iguales salvo cuando el
+     rótulo no cabe, que es cuando debe crecer. */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--boton-ancho);
+  height: var(--boton-alto);
+  padding: 0 var(--u);
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  font-size: var(--t-menudo);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  isolation: isolate;
+}
+.am-app-boton::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--tinta);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+/* Al pasar por encima se enciende el relleno, muy flojo: el contorno ya es el
+   gesto, y rellenarlo del todo taparía el degradado del canto. */
+.am-app-boton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--tinta);
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+.am-app-boton:hover::after,
+.am-app-boton:focus-visible::after {
+  opacity: 0.34;
+}
+.am-app-boton span {
+  position: relative;
+}
+/* El de avanzar, abajo del todo y despegado de lo que lleve encima. */
+.am-app-boton.es-pie {
+  margin-top: auto;
+}
+
+/* El botón de arrancar, dentro de la pantalla. Escondido salvo en estrecho:
+   ver el comentario del componente. */
+.am-app-arranque {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--e1);
+  justify-content: center;
+}
+
+/* ── El marco de la animación ──
+   Canto de un hilo con el degradado de la marca, igual que el botón y por el
+   mismo procedimiento. Dentro va la pieza en movimiento de cada paso. */
+.am-app-marco {
+  position: relative;
+  width: 100%;
+  /* 400 × 700, que es EXACTAMENTE el tamaño en que vienen las animaciones. No
+     es casualidad ni un redondeo afortunado: el hueco medido en las capturas da
+     423 × 741, la misma proporción, así que el marco de la pantalla se diseñó
+     al tamaño de la pieza que iba dentro. Poniendo aquí la proporción del
+     archivo, el vídeo entra clavado y no hay que recortarlo por ningún lado. */
+  aspect-ratio: 400 / 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.am-app-marco::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  background: var(--tinta);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+.am-app-marco video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* El aviso de que todavía no hay pieza. Se ve dentro del propio marco, que es
+   donde se va a notar su falta. */
+.am-app-marco-falta {
+  padding: 0 4cqw;
+  font-size: var(--t-menudo);
+  font-weight: 300;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+/* La pantalla del «¿Todo listo?»: el título y el botón juntos en el centro del
+   hueco, no colgados de arriba y de abajo. Es una pantalla de una sola cosa. */
+.am-app-listo {
+  margin: auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* 93 px medidos del pie del título al alto del botón: tres renglones. */
+  gap: calc(var(--u) * 3);
+}
+
+/* ── La home ──
+   El logotipo va centrado en el hueco que queda POR ENCIMA DE LA BARRA y no en
+   la pantalla entera: con la barra abajo, el centro real de lo que se ve está
+   más arriba, y centrarlo sobre los 1398 px lo dejaba visiblemente bajo.
+   El renglón de más por arriba es el que tiene el diseño: el logotipo no está
+   clavado en el centro del hueco, está un renglón por debajo.
+   Y va el DOBLE de relleno del desplazamiento que se busca: al centrar dentro
+   de una caja con relleno, lo de dentro se mueve la MITAD de lo que se añade,
+   porque el hueco sobrante se reparte entre arriba y abajo. */
+.am-app-home {
+  position: absolute;
+  inset: 0 0 23.1cqw;   /* 149 px: lo que la barra ocupa por abajo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: var(--e1);
+}
+
+/* LA BARRA, con el botón del isotipo en medio.
+   Una sola pieza y no cinco botones sueltos: la barra lleva el contorno y, en
+   el centro, el botón redondo se posa sobre ella sobresaliendo por arriba. Eso
+   es lo que lo convierte en «el» botón de la app y no en uno más de la fila. */
+.am-app-barra {
+  position: absolute;
+  /* Medido: la barra ocupa de 24 a 620 de los 645 de ancho, mide 116 de alto y
+     deja 33 hasta el canto de abajo. */
+  left: 3.7cqw;
+  right: 3.7cqw;
+  bottom: 5.1cqw;
+  height: 18cqw;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  /* El vidrio de la barra sobre lo que haya detrás: en la home no se nota, pero
+     en cuanto una pantalla lleve contenido debajo, sí. */
+  backdrop-filter: blur(6px);
+}
+.am-app-barra button {
+  border: 0;
+  background: none;
+  color: #fff;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.am-app-icono {
+  display: block;
+  width: 6.8cqw;   /* 44 px */
+  opacity: 0.92;
+  transition: opacity 160ms ease;
+}
+.am-app-barra button:hover .am-app-icono {
+  opacity: 1;
+}
+.am-app-icono svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* El botón del centro: redondo, relleno con el degradado y montado sobre la
+   barra. Sube por encima del borde de arriba, que es lo que hace que se lea
+   como posado en la muesca y no como metido en la fila. */
+/* Se nombra con el botón delante —`button.am-app-barra-centro`— y no a secas:
+   la regla de arriba que apaga el fondo de los botones de la barra va después
+   en el archivo y pesa más que una clase sola, así que el degradado se perdía y
+   el botón salía transparente. */
+.am-app-barra button.am-app-barra-centro {
+  position: absolute;
+  left: 50%;
+  /* La mitad del círculo por encima del canto de la barra: así se lee como
+     posado en ella. El 7 es la mitad de su diámetro, escrito como tal para que
+     siga cuadrando si el botón cambia de tamaño. */
+  bottom: calc(100% - 5.3cqw);
+  transform: translateX(-50%);
+  /* 78 px de diámetro, y de ellos 34 por debajo del canto de la barra: la mitad
+     larga queda fuera, que es lo que lo levanta por encima de la fila. */
+  width: 12.1cqw;
+  height: 12.1cqw;
+  border-radius: 50%;
+  background: var(--tinta);
+  /* El anillo negro es el hueco que el botón se abre en la barra: del color de
+     la pantalla, así que parece que la barra está recortada por debajo. */
+  box-shadow: 0 0 0 1.2cqw #000;
+  transition: transform 180ms ease;
+}
+.am-app-barra button.am-app-barra-centro:hover {
+  transform: translateX(-50%) scale(1.06);
+}
+.am-app-barra-centro .am-app-marca {
+  width: 42%;
+}
+
+/* ── Los mandos ── */
+.am-proto-mandos {
+  flex: 0 0 260px;
+  width: 260px;
+}
+.am-proto-donde {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 0 0 20px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.am-proto-num {
+  font-size: 13px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  /* 0,65 y no 0,5: a la mitad, el número se queda por debajo del 4,5:1 de la
+     norma contra el papel claro. */
+  opacity: 0.65;
+}
+.am-proto-botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.am-proto-botones button {
+  padding: 8px 14px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  background: var(--background);
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease, opacity 160ms ease;
+}
+.am-proto-botones button:hover:not(:disabled) {
+  background: var(--foreground);
+  color: var(--background);
+}
+.am-proto-botones button.es-principal {
+  background: var(--foreground);
+  color: var(--background);
+}
+.am-proto-botones button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+@media (max-width: 760px) {
+  /* En vertical el móvil va arriba y los mandos debajo: uno al lado del otro, a
+     375 px el aparato se quedaría en media columna y no se leería nada de lo
+     que hay dentro, que es justo lo que se viene a ver. */
+  .am-proto-caja {
+    flex-direction: column;
+    gap: 24px;
+  }
+  .am-movil {
+    width: min(330px, 78vw);
+  }
+  .am-proto-mandos {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+  /* Y comenzar se mete en la pantalla: los mandos quedan debajo del aparato, a
+     veces fuera de la vista, y ahí no se encuentra por dónde arrancar. */
+  .am-app-arranque {
+    display: flex;
+  }
+  .am-proto-botones button.es-principal {
+    display: none;
+  }
+  .am-proto-donde,
+  .am-proto-botones {
+    justify-content: center;
+  }
+}
+
+/* La animación de carga: el logotipo construyéndose. Viene de un cuadro
+   apaisado —1920 × 1080— sobre una pantalla vertical, así que va `contain` y
+   centrada: se ve entera en la banda de en medio y el negro del vídeo empalma
+   con el negro de la pantalla, de modo que no se nota dónde acaba uno y empieza
+   la otra. */
+.am-app-carga {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+
+/* ── La bienvenida ──
+   Es la única pantalla que no sigue el reparto de las demás, y por eso lleva
+   sus propias medidas: no tiene isotipo de cabecera sino el logotipo entero, y
+   entre él y el lema hay un hueco grande —255 px de tinta a tinta— que es lo
+   que la hace respirar como una portada y no como un paso más. */
+.am-app-cuerpo.es-bienvenida {
+  padding-top: 16.4cqw;   /* 106 px, para que la tinta del logotipo empiece en 151 */
+}
+.es-bienvenida .am-app-logotipo {
+  margin-bottom: 31.6cqw; /* 204 px de caja = los 255 medidos de tinta a tinta */
+}
+/* El lema y la raya van pegados, a un renglón: son la misma unidad —un titular
+   subrayado— y separarlos más los partiría en dos cosas. */
+.am-app-titulo.es-lema {
+  margin-bottom: var(--u);
+}

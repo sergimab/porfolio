@@ -40,7 +40,13 @@ export function Cuadricula({
 }: {
   mapa: string[];
   conRejilla?: boolean;
-  rotulo: string;
+  /**
+   * El nombre que anuncia el lector de pantalla. Sin él, la figura se marca
+   * como decorativa y el lector la salta, que es lo que corresponde cuando la
+   * marca sale repetida dentro de una pantalla —en la app aparece en casi
+   * todas, y nombrarla cada vez sería ruido—.
+   */
+  rotulo?: string;
   className?: string;
 }) {
   const FILAS = mapa.length;
@@ -49,8 +55,10 @@ export function Cuadricula({
     <svg
       className={`am-iso${className ? ` ${className}` : ""}`}
       viewBox={`0 0 ${COLUMNAS} ${FILAS}`}
-      role="img"
-      aria-label={rotulo}
+      role={rotulo ? "img" : undefined}
+      aria-label={rotulo || undefined}
+      aria-hidden={rotulo ? undefined : true}
+      focusable="false"
     >
       {/* La cuadrícula de la que sale, opcional: son las líneas de construcción,
           y solo interesan en la lámina que explica de dónde viene la figura.
