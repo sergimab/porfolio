@@ -675,19 +675,27 @@ const PANTALLAS: Pantalla[] = [
     en: "Collection",
     plena: true,
     barra: "galeria",
-    // LAS OBRAS, EN BANDAS Y NO EN CUADRÍCULA. Una cuadrícula de miniaturas
-    // convierte los cuadros en iconos: a ese tamaño no se distingue un Munch de
-    // un Turner, que es justo lo que aquí importa. En bandas a todo el ancho
-    // cada obra se ve, y la lista se recorre con el pulgar en un solo eje.
+    // LAS OBRAS, EN BANDAS A SANGRE. Una cuadrícula de miniaturas convertiría
+    // los cuadros en iconos: a ese tamaño no se distingue un Munch de un
+    // Turner, que es justo lo que aquí importa. A todo el ancho y pegadas unas
+    // a otras, la pantalla es la colección entera y se recorre con el pulgar en
+    // un solo eje.
+    //
+    // SIN NOMBRES Y SIN TÍTULO. Lo que hay que reconocer es el cuadro, y un
+    // rótulo encima lo tapa y además responde antes de que te dé tiempo a
+    // mirarlo. El nombre de la fobia está donde toca, dentro de la ficha.
     cuerpo: (c) => (
-      <div className="am-app-scroll">
-        <h4 className="am-app-encabezado">{c.t("Tu colección", "Your collection")}</h4>
+      <div className="am-app-scroll es-galeria">
         <div className="am-app-galeria">
           {FOBIAS.map((f) => (
-            <button key={f.id} type="button" onClick={() => c.abrirFicha(f.id)}>
+            <button
+              key={f.id}
+              type="button"
+              onClick={() => c.abrirFicha(f.id)}
+              aria-label={`${f.obra}, ${f.anio}`}
+            >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={`${RUTA}/cuadro-${f.id}.webp`} alt="" />
-              <span>{f.nombre}</span>
             </button>
           ))}
         </div>

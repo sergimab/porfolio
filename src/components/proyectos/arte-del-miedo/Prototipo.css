@@ -797,56 +797,43 @@
 }
 
 /* ── La colección ──
-   Una banda por obra, a todo el ancho. El nombre va encima del cuadro, sobre un
-   velo oscuro que baja desde el pie: sin él, un nombre blanco sobre un Turner
-   en llamas no se lee. */
+   Bandas a sangre, una por obra, pegadas unas a otras. El hilo de negro que las
+   separa es de un píxel del diseño: lo justo para que dos cuadros contiguos no
+   se lean como uno solo, y no tanto como para que la pantalla parezca una
+   lista de tarjetas. Ni redondeo ni márgenes: la colección ES la pantalla. */
+.am-app-scroll.es-galeria {
+  /* Sin márgenes por ningún lado. Por abajo sí queda el hueco de la barra, para
+     que la última obra se pueda llegar a ver entera en vez de quedarse siempre
+     medio tapada por el menú. */
+  padding: 0 0 24cqw;
+}
 .am-app-galeria {
   display: flex;
   flex-direction: column;
-  gap: 3cqw;
+  gap: 0.35cqw;
 }
 .am-app-galeria button {
-  position: relative;
   display: block;
   width: 100%;
-  aspect-ratio: 430 / 120;
+  /* 3 : 1, medido en la referencia. Es una proporción muy apaisada a propósito:
+     recorta los cuadros por arriba y por abajo, que es lo que permite enseñar
+     seis de un vistazo sin que ninguno se quede en una miniatura. */
+  aspect-ratio: 3 / 1;
   padding: 0;
   border: 0;
-  border-radius: 2.8cqw;
-  overflow: hidden;
-  background: #111;
+  background: #000;
   cursor: pointer;
-  transition: transform 180ms ease;
-}
-.am-app-galeria button:hover {
-  transform: scale(1.02);
+  overflow: hidden;
 }
 .am-app-galeria img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 260ms ease;
 }
-.am-app-galeria span {
-  position: absolute;
-  left: 3.5cqw;
-  right: 3.5cqw;
-  bottom: 2.4cqw;
-  color: #fff;
-  font-size: var(--t-menudo);
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  text-align: left;
-  text-shadow: 0 0.2cqw 0.8cqw rgba(0, 0, 0, 0.9);
-}
-.am-app-galeria button::after {
-  content: "";
-  position: absolute;
-  inset: auto 0 0;
-  height: 55%;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-  pointer-events: none;
+.am-app-galeria button:hover img {
+  transform: scale(1.03);
 }
 
 /* ── El listado de fobias ── */
