@@ -13,7 +13,7 @@ import "./Isotipo.css";
 const MAPA = [
   ". . . . X",
   "X . . X .",
-  ". X X X .",
+  ". X X . .",
   "X . X . X",
   ". . . X .",
   ". . . . X",
