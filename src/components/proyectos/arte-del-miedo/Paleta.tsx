@@ -54,8 +54,8 @@ export default function Paleta() {
         <MeshGradient
           colores={["#FF1597", "#3D00E4", "#FF1597", "#2A00A0", "#FF5CC0"]}
           anclado
-          velocidadReposo={0.05}
-          velocidadHover={0.05}
+          velocidadReposo={0.28}
+          velocidadHover={0.28}
           escala={5}
         />
       </span>
