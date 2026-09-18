@@ -32,6 +32,23 @@
   background: var(--background);
 }
 
+/* Dos láminas ACHATADAS: las demás enseñan piezas cuadradas y llenan el 16:9,
+   pero estas dos guardan cosas muy apaisadas —la construcción del logotipo a
+   2,83 de proporción, y el logotipo y el isotipo uno al lado del otro— y el
+   ancho se agota mucho antes que el alto. En 16:9 la pieza ocupaba menos de un
+   tercio del cuadro y lo demás era papel vacío. Cada una lleva la suya porque
+   el sitio que les sobra no es el mismo: la partida tiene la mitad de ancho
+   para cada pieza, así que se queda más plana.
+
+   Los números salen de medir: con estos, lo dibujado ocupa dos tercios largos
+   del alto útil y el aire de arriba y abajo se parece al de los lados. */
+.ev-lamina-partida.es-logotipo {
+  aspect-ratio: 10 / 3;
+}
+.ev-lamina-entera.es-seguridad {
+  aspect-ratio: 12 / 5;
+}
+
 .ev-lamina-mitad,
 .ev-lamina-entera {
   display: flex;
@@ -99,8 +116,11 @@
   width: 100%;
 }
 
+/* El logotipo acabado, en la mitad derecha. Ancho y no alto: con la lámina más
+   plana, al 74 % se quedaba en 108 px contra los 152 de la construcción de al
+   lado y las dos mitades pesaban distinto. */
 .ev-lamina-logo {
-  width: 74%;
+  width: 88%;
   height: auto;
 }
 
@@ -246,6 +266,16 @@
     grid-template-columns: 1fr;
     aspect-ratio: 4 / 5;
   }
+  /* Apilada sigue guardando dos piezas apaisadas, una encima de otra: con el
+     4:5 de las demás sobraban más de cien píxeles de papel debajo del
+     logotipo. Aquí el alto lo pone lo que hay dentro, como en el área de
+     seguridad. Va repetido dentro de la consulta porque su regla de arriba
+     lleva dos clases y una consulta de medios no añade peso: sin esto ganaría
+     la de escritorio. */
+  .ev-lamina-partida.es-logotipo {
+    aspect-ratio: auto;
+    padding: 2% 0;
+  }
 
   /* La versión a color del isotipo se va: apilada bajo la construcción se
      quedaba diminuta y no enseñaba nada que no se viera ya. En su lugar, el de
@@ -282,9 +312,21 @@
   .ev-lamina-entera.es-estampado {
     aspect-ratio: 1 / 1;
   }
+  /* En vertical, el alto lo pone lo que hay dentro y no una proporción fija.
+     Con el 4:3 de las demás, las dos piezas apiladas más el hueco entre ellas
+     sumaban MÁS de lo que cabía y se quedaban pegadas al borde del cuadro, sin
+     el margen que la lámina tiene por los lados. Soltando la proporción, el
+     relleno vuelve a ser el mismo por los cuatro lados. */
+  .ev-lamina-entera.es-seguridad {
+    aspect-ratio: auto;
+    padding: 7% 6%;
+  }
   .ev-seguridad {
     flex-direction: column;
     gap: 26px;
+    /* Sin proporción que rellenar, la caja se ciñe a las piezas: si siguiera
+       estirada al 100 % arrastraría el alto de la lámina de vuelta. */
+    height: auto;
   }
   .ev-seguridad-pieza {
     width: 84%;

@@ -87,7 +87,7 @@ export default function Marca() {
       {/* ── Composición del logotipo ─────────────────────────────────────── */}
       <section className="ev-lamina">
         <RotuloSeccion className="ev-lamina-titulo" es="Composición logotipo" en="Logotype construction" />
-        <div className="ev-lamina-partida">
+        <div className="ev-lamina-partida es-logotipo">
           <div className="ev-lamina-mitad es-fondo">
             {/* La lámina de construcción tal cual sale del archivo original, con
                 sus cotas y sus líneas de puntos. Antes esto era una retícula
@@ -188,7 +188,7 @@ export default function Marca() {
       {/* ── Área de seguridad ────────────────────────────────────────────── */}
       <section className="ev-lamina">
         <RotuloSeccion className="ev-lamina-titulo" es="Área de seguridad" en="Clear space" />
-        <div className="ev-lamina-entera es-fondo">
+        <div className="ev-lamina-entera es-seguridad es-fondo">
           <div className="ev-seguridad">
             {/* El margen que hay que respetar alrededor de cada versión, medido
                 con una parte de la propia marca: los cuadraditos de las esquinas
