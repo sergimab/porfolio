@@ -34,6 +34,11 @@
    importa» sin subir el tamaño ni meter un fondo. */
 .am-iconos figure.es-final {
   border-color: hsl(var(--hero-hue, 142) 55% 45%);
+  /* Papel opaco, como todas las cajas con hilo del sitio: por detrás pasa la
+     trama animada del fondo y, dentro de un recuadro, se leería como parte del
+     dibujo. Es el papel de la página, así que en claro sale claro y en oscuro
+     sale oscuro sin escribir dos colores. */
+  background: var(--background);
 }
 .am-iconos figure.es-final figcaption {
   color: hsl(var(--hero-hue, 142) 55% 45%);
