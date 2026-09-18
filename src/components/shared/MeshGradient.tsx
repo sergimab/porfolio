@@ -23,6 +23,10 @@ type Props = {
   suavizado?: number;
   /** Cuántas manchas caben a lo ancho. Más alto, dibujo más menudo. */
   escala?: number;
+  /** Ancla el dibujo a la VENTANA en vez de a la caja: la caja pasa a ser una
+   *  ventana a un degradado que se queda quieto en la pantalla, y al rodar la
+   *  página por ese hueco va pasando otra parte del color. */
+  anclado?: boolean;
   /** Quién escucha al ratón, si no es el padre directo: un selector del
    *  antepasado que manda. Por ejemplo la tarjeta entera, para que la banda del
    *  nombre se encienda al pasar por encima de la portada y no solo de ella. */
@@ -47,6 +51,7 @@ export default function MeshGradient({
   velocidadHover = 0.42,
   suavizado = 0.5,
   escala = 1.5,
+  anclado = false,
   selectorEscucha,
   className,
 }: Props) {
@@ -76,6 +81,7 @@ export default function MeshGradient({
       velocidadHover: quieto ? 0 : velocidadHover,
       suavizado,
       escala,
+      anclado,
     });
     // Sin WebGL no hay nada que hacer y no pasa nada: debajo del lienzo sigue
     // estando el degradado de CSS del botón, con los mismos colores.
@@ -118,7 +124,7 @@ export default function MeshGradient({
       jubila(i);
       inst.current = null;
     };
-  }, [firma, velocidadReposo, velocidadHover, suavizado, escala, selectorEscucha]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [firma, velocidadReposo, velocidadHover, suavizado, escala, anclado, selectorEscucha]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Los colores pueden cambiar sin desmontar nada —otra paleta para el mismo
   // botón—, y entonces solo hay que repintar.

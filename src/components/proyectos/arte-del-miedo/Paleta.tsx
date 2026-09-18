@@ -1,3 +1,4 @@
+import MeshGradient from "@/components/shared/MeshGradient";
 import { raleway } from "./fuente";
 import "./Paleta.css";
 
@@ -38,10 +39,26 @@ export default function Paleta() {
         </span>
       ))}
 
+      {/* La mezcla va con el shader y no con un degradado de CSS, y ANCLADA a la
+          ventana: el color no pertenece a esta casilla, pertenece a la
+          pantalla. La casilla es un hueco por el que se le ve, así que al rodar
+          la página el cuadro se mueve con ella y el color se queda donde
+          estaba —por el hueco va pasando otra parte—. Y además deriva solo, muy
+          despacio, así que también cambia con la página quieta.
+          El degradado de CSS que hay debajo sigue puesto: si no hay WebGL, la
+          casilla se ve igual de rosa y azul, solo que quieta. */}
       <span
         className="am-paleta-celda es-mezcla"
         style={{ gridColumn: MEZCLA.col, gridRow: MEZCLA.fila }}
-      />
+      >
+        <MeshGradient
+          colores={["#FF1597", "#3D00E4", "#FF1597", "#2A00A0", "#FF5CC0"]}
+          anclado
+          velocidadReposo={0.05}
+          velocidadHover={0.05}
+          escala={5}
+        />
+      </span>
     </div>
   );
 }
