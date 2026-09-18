@@ -55,15 +55,6 @@
   }
 }
 
-/* El mockup del flyer, debajo y a todo el ancho. */
-.am-flyer {
-  display: block;
-  width: 100%;
-  height: auto;
-  margin: 20px 0 0;
-  border-radius: 12px;
-}
-
 /* En pantalla estrecha, uno debajo de otro: a 375 px, el cartel del pase se
    quedaba en 100 px de ancho y no se leía ni el titular. */
 @media (max-width: 720px) {
@@ -88,5 +79,57 @@
   }
   .am-carteles-pase img {
     object-position: center top;
+  }
+}
+
+/* ── El flyer y el recorrido por la sala ──
+   Mismo reparto que la fila de carteles: el reparto de cada pieza es su propia
+   proporción —1,5 el mockup apaisado, 1 el vídeo cuadrado—, así que los dos
+   acaban con el mismo alto sin escribir ninguna medida. */
+.am-flyers {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin: 20px 0 0;
+}
+.am-flyers-mockup {
+  flex: 1.5 1 0;
+  aspect-ratio: 3 / 2;
+  margin: 0;
+  min-width: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--surface);
+  line-height: 0;
+}
+.am-flyers-mockup img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.am-flyers-video {
+  flex: 1 1 0;
+  min-width: 0;
+}
+/* El componente de vídeo trae su propio aire y su propio redondeo, pensados
+   para cuando abre una página él solo. Aquí va dentro de una fila, así que el
+   hueco lo pone la fila y el radio se iguala al de las demás cajas. */
+.am-flyers-video .ym-video {
+  margin: 0;
+  border-radius: 12px;
+}
+
+@media (max-width: 720px) {
+  .am-flyers {
+    flex-direction: column;
+    gap: 16px;
+  }
+  /* Igual que arriba: en columna esa base de cero mediría el ALTO y las cajas
+     se quedarían en nada. */
+  .am-flyers-mockup,
+  .am-flyers-video {
+    flex: 0 0 auto;
+    width: 100%;
   }
 }

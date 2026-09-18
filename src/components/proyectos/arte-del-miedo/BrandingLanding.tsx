@@ -147,12 +147,26 @@ export default function BrandingLanding() {
         </div>
         <Carteles />
 
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          className="am-flyer"
-          src="/proyectos/el-arte-del-miedo-branding/flyer-mockup.webp"
-          alt="El flyer A5 de la exposición, con el código QR que lleva a la app"
-        />
+        {/* El flyer y, a su lado, el recorrido por la sala. Mismo truco que la
+            fila de arriba: el mockup es 3:2 y el vídeo cuadrado, así que con un
+            reparto de 1,5 contra 1 los dos acaban con el mismo alto. */}
+        <div className="am-flyers">
+          <figure className="am-flyers-mockup">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/proyectos/el-arte-del-miedo-branding/flyer-mockup.webp"
+              alt="El flyer A5 de la exposición, con el código QR que lleva a la app"
+            />
+          </figure>
+          <div className="am-flyers-video">
+            <VideoMarca
+              src="/proyectos/el-arte-del-miedo-branding/sala-expo.mp4"
+              proporcion="1 / 1"
+              fondo="#12121c"
+              alt="Recorrido por la sala de la exposición, con las obras iluminadas y sin cartelas"
+            />
+          </div>
+        </div>
       </section>
     </ArteMiedo>
   );
