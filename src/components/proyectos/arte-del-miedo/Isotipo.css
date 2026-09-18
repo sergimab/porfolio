@@ -22,11 +22,19 @@
   margin: 0;
 }
 /* El rótulo de cada uno. Sin él, dos cuadrículas iguales al lado y una de ellas
-   cambiando sola se leen como un fallo, no como una comparación. */
+   cambiando sola se leen como un fallo, no como una comparación.
+   En la cursiva del sitio —la misma del currículum y de los valores de la ficha
+   de proyecto—, que es la que el portfolio usa para los pies y las anotaciones:
+   dice «esto no es contenido, es una nota sobre el contenido». */
 .am-iconos figcaption {
   margin-top: 10px;
-  font-size: 12px;
-  letter-spacing: 0.02em;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  /* Más cuerpo que la sans a la que sustituye: esta cursiva tiene la caja baja
+     pequeña y a 12 px se quedaba en nada. */
+  font-size: 17px;
+  line-height: 1.25;
+  letter-spacing: 0.01em;
   text-align: center;
   color: var(--muted);
 }

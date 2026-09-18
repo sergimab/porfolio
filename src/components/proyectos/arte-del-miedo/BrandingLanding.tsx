@@ -63,7 +63,7 @@ export default function BrandingLanding() {
           <figure>
             <Isotipo conRejilla />
             <figcaption>
-              <LangText es="El que se quedó" en="The one that stayed" />
+              <LangText es="Final" en="Final" />
             </figcaption>
           </figure>
           <figure>
@@ -73,6 +73,13 @@ export default function BrandingLanding() {
             </figcaption>
           </figure>
         </div>
+
+        <p className="am-pendiente">
+          <LangText
+            es="Falta el logotipo completo —«El Arte del Miedo · Exposición»—, que va justo aquí debajo de las dos cuadrículas. En cuanto esté el archivo en public/proyectos/el-arte-del-miedo-branding/, se coloca."
+            en="Missing: the full logotype — «El Arte del Miedo · Exposición» — which goes right here, under the two grids. As soon as the file is in public/proyectos/el-arte-del-miedo-branding/, it goes in."
+          />
+        </p>
       </section>
 
       {/* ── Tipografía ─────────────────────────────────────────────────── */}
