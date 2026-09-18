@@ -1,0 +1,109 @@
+/* Las piezas en movimiento de la página de motion. */
+
+/* ── Las seis obras ──────────────────────────────────────────────────────────
+   EN COLUMNAS Y NO EN REJILLA. Los seis archivos vienen todos a 450 de ancho
+   pero con alturas muy distintas —de 299 a 553—, porque cada uno respeta la
+   proporción de su cuadro. En una rejilla, cada fila se alinearía por arriba y
+   dejaría los pies desiguales, que es el descuadre clásico de una galería de
+   piezas heterogéneas. Repartidas en columnas, cada una entra debajo de la
+   anterior y los huecos se cierran solos.
+   El precio es que el orden de lectura baja por la primera columna antes de
+   saltar a la segunda. Aquí no importa: es un muestrario, no una secuencia. */
+.am-obras {
+  columns: 3;
+  column-gap: 18px;
+  margin: 28px 0 0;
+}
+.am-obras figure {
+  /* Que una pieza no se parta entre el pie de una columna y la cabeza de la
+     siguiente, que es lo que hace `columns` si se le deja. */
+  break-inside: avoid;
+  margin: 0 0 18px;
+}
+.am-obras video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  /* Negro mientras carga: las piezas son oscuras y el hueco en blanco
+     destellaría antes del primer fotograma. */
+  background: #000;
+}
+.am-obras figcaption {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 7px;
+  font-size: 11.5px;
+  line-height: 1.4;
+  color: var(--muted);
+  /* Papel opaco: por detrás pasa la trama animada del fondo del sitio. */
+  background: var(--background);
+}
+.am-obras-anio {
+  /* Cifras de ancho fijo: son años, y unos debajo de otros tienen que
+     alinearse por la columna. */
+  font-variant-numeric: tabular-nums;
+  flex: 0 0 auto;
+}
+
+/* ── Las dos piezas de la app ──
+   Las dos son 400 × 700 y van a la par: una es lo que se hace y la otra lo que
+   pasa después, así que tienen que verse del mismo tamaño y a la misma altura
+   para que se lean como las dos mitades de un gesto. */
+.am-motion-app {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  /* Ni a todo el ancho de la columna ni pegadas a los lados: dos piezas
+     verticales estiradas a 1000 px de ancho serían dos torres. Con este tope y
+     centradas se quedan al tamaño de un móvil, que es lo que son. */
+  max-width: 560px;
+  margin: 28px auto 24px;
+}
+.am-motion-app figure {
+  margin: 0;
+}
+.am-motion-app video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  background: #000;
+}
+.am-motion-app figcaption {
+  margin-top: 8px;
+  font-size: 11.5px;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--muted);
+  background: var(--background);
+}
+
+/* Un banner detrás de otro necesita aire entre ellos: pegados se leen como una
+   sola franja partida. */
+.am-seccion .cta-banner + .cta-banner {
+  margin-top: 14px;
+}
+
+@media (max-width: 900px) {
+  .am-obras {
+    columns: 2;
+  }
+}
+
+@media (max-width: 560px) {
+  /* A una columna: a 375 px, dos piezas de 450 de ancho se quedan en 165 y el
+     efecto —que es de trama fina— deja de verse, que es justo lo que la
+     sección viene a enseñar. */
+  .am-obras {
+    columns: 1;
+  }
+  /* Las dos de la app también se apilan: en dos columnas, cada una se queda en
+     160 px de ancho y no se lee ni lo que pone en la ficha. */
+  .am-motion-app {
+    grid-template-columns: 1fr;
+    max-width: 320px;
+  }
+}
