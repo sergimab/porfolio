@@ -1,8 +1,10 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import ArteMiedo from "./ArteMiedo";
-// De la carpeta de Yelmo: es el mismo trato para una pieza muda en bucle que
-// abre un proyecto, así que no hay por qué tener dos componentes iguales.
+// De la carpeta de Yelmo: es el mismo trato para una pieza muda en bucle, así
+// que no hay por qué tener dos componentes iguales. Aquí ya no abre la página
+// —esa cabecera se ha ido a motion, que es donde la animación es el trabajo y
+// no el escaparate— pero sigue haciendo falta para el recorrido por la sala.
 import VideoMarca from "../yelmo/VideoMarca";
 import RotuloSeccion from "@/components/shared/RotuloSeccion";
 import LangText from "@/components/shared/LangText";
@@ -51,25 +53,6 @@ export default function BrandingLanding() {
 
   return (
     <ArteMiedo disciplina="branding">
-      {/* ── La cabecera ────────────────────────────────────────────────── */}
-      {/* El isotipo construyéndose, a todo el ancho y en bucle, como abre la
-          página de Yelmo.
-          DOS COSAS LA HACEN MÁS PEQUEÑA, y hay que entender por qué son dos. La
-          franja se recorta a 1920/620 —el original es 16:9 y toda la animación
-          cabe en la banda central, así que a cuadro entero sobraba negro—, pero
-          eso solo quita fondo: el dibujo seguiría igual de grande, porque su
-          tamaño en pantalla lo manda el ANCHO, que es el de la columna entera.
-          Para encogerlo de verdad hay que encogerlo en el vídeo, y por eso el
-          archivo está reencodado con el contenido al 48 % sobre el mismo cuadro.
-          Ese 48 es el número que hay que tocar si se quiere más o menos grande;
-          la franja solo decide cuánto negro se ve alrededor. */}
-      <VideoMarca
-        src="/proyectos/el-arte-del-miedo-branding/logo-final.mp4"
-        proporcion="1920 / 620"
-        fondo="#000"
-        alt="El isotipo de El Arte del Miedo construyéndose cuadro a cuadro"
-      />
-
       {/* ── El icono ───────────────────────────────────────────────────── */}
       <section className="am-seccion">
         <RotuloSeccion es="El icono" en="The icon" />

@@ -55,15 +55,19 @@ export default function MotionLanding() {
   return (
     <ArteMiedo disciplina="motion">
       {/* ── La cabecera ────────────────────────────────────────────────── */}
-      {/* La misma pieza que abre la página de marca, y a propósito: allí es la
-          presentación del proyecto y aquí es el trabajo. Es la única animación
-          del encargo que no va dentro de una pantalla, así que en una página de
-          motion no puede estar en otro sitio que en el primero.
+      {/* La marca construyéndose. Es la única animación del encargo que no va
+          dentro de una pantalla, así que en una página de motion no puede estar
+          en otro sitio que en el primero —y por eso ya no está también en la de
+          marca, donde repetía sin añadir nada—.
           La franja se recorta a 1920/620 porque el archivo es 16:9 y toda la
-          construcción cabe en la banda central. */}
+          construcción cabe en la banda central. En móvil la caja se hace
+          CUADRADA: medida, la pieza ocupa solo el 11 % del ancho del cuadro y
+          está centrada, así que el recorte de una caja cuadrada se lleva
+          lados vacíos y el logotipo pasa de 42 a 75 px. */}
       <VideoMarca
         src="/proyectos/el-arte-del-miedo-branding/logo-final.mp4"
         proporcion="1920 / 620"
+        proporcionMovil="1 / 1"
         fondo="#000"
         alt="El isotipo de El Arte del Miedo construyéndose cuadro a cuadro"
       />

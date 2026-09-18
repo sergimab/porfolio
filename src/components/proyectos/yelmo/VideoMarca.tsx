@@ -18,6 +18,7 @@ import "./VideoMarca.css";
 export default function VideoMarca({
   src,
   proporcion = "1920 / 573",
+  proporcionMovil,
   fondo = "#fff",
   encaje,
   cartel,
@@ -27,6 +28,14 @@ export default function VideoMarca({
   /** Proporción de la caja. La de por defecto es la franja recortada del
       vídeo de apertura; una pieza a formato completo pide "16 / 9". */
   proporcion?: string;
+  /**
+   * Otra proporción para pantallas estrechas. Hace falta cuando la de
+   * escritorio es una franja muy apaisada: a 375 px de ancho, una franja de
+   * 1920 × 620 se queda en 121 de alto y lo que pasa dentro no se ve. Dándole
+   * una caja más cuadrada, el recorte se lleva los lados —que en una pieza
+   * centrada están vacíos— y lo que importa sale al doble de tamaño.
+   */
+  proporcionMovil?: string;
   /**
    * Color del hueco mientras carga. Por defecto blanco, que es el fondo de las
    * piezas de la construcción de la marca; una pieza oscura pide el suyo, para
@@ -76,7 +85,19 @@ export default function VideoMarca({
   }, []);
 
   return (
-    <div className="ym-video" style={{ aspectRatio: proporcion, background: fondo }}>
+    // Las dos proporciones van como variables y no como `aspect-ratio` directo:
+    // un estilo en línea gana a cualquier regla de la hoja, así que escrito ahí
+    // no habría manera de cambiarlo en estrecho desde una media query.
+    <div
+      className="ym-video"
+      style={
+        {
+          ["--proporcion"]: proporcion,
+          ["--proporcion-movil"]: proporcionMovil ?? proporcion,
+          background: fondo,
+        } as React.CSSProperties
+      }
+    >
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
       <video
         ref={video}

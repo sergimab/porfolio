@@ -4,6 +4,7 @@
    completo sobraba fondo por arriba y por abajo—. El recorte se lo lleva por
    igual de los dos lados —de ahí el `cover` centrado—, no se deforma nada. */
 .ym-video {
+  aspect-ratio: var(--proporcion);
   margin: 8px 0 56px;
   border-radius: 16px;
   overflow: hidden;
@@ -18,4 +19,12 @@
   height: 100%;
   object-fit: cover;
   object-position: center;
+}
+
+/* En estrecho, la proporción que traiga la pieza para móvil —si no trae
+   ninguna, la misma de siempre—. */
+@media (max-width: 700px) {
+  .ym-video {
+    aspect-ratio: var(--proporcion-movil);
+  }
 }
