@@ -57,7 +57,16 @@ const FICHA: Record<
   },
 };
 
-export default function ArteMiedo({ disciplina }: { disciplina: Disciplina }) {
+// `children` es lo que cada disciplina cuenta por su cuenta: va debajo de la
+// entradilla, que es común. Así la cabecera y el párrafo de arriba se escriben
+// una vez y cada página añade sus secciones sin repetir nada.
+export default function ArteMiedo({
+  disciplina,
+  children,
+}: {
+  disciplina: Disciplina;
+  children?: React.ReactNode;
+}) {
   const ficha = FICHA[disciplina];
 
   return (
@@ -101,6 +110,8 @@ export default function ArteMiedo({ disciplina }: { disciplina: Disciplina }) {
           </p>
           <ToolIcons tools={ficha.programas} />
         </div>
+
+        {children}
       </div>
     </main>
   );

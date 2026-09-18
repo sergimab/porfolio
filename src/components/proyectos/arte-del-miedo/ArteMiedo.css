@@ -1,0 +1,49 @@
+/* Las secciones de «El Arte del Miedo». Mismas medidas que las de Yelmo —56 px
+   entre una y otra, el rótulo con su aire de siempre— para que las páginas de
+   los dos proyectos se lean como del mismo sitio. */
+.am-seccion {
+  margin-bottom: 56px;
+}
+/* La primera pide más aire por arriba: viene pegada a la entradilla y a los
+   iconos de los programas, y sin este hueco el primer rótulo se leía como parte
+   de ese bloque en vez de como el comienzo de otra cosa. */
+.am-seccion:first-of-type {
+  margin-top: 56px;
+}
+
+/* El texto de cada sección.
+   Ancho de lectura corto: en una línea muy larga el ojo se pierde al volver al
+   principio del renglón, y estos son párrafos para leer, no pies de foto.
+   El papel opaco es obligatorio aquí: por detrás pasa la trama animada del
+   fondo y sobre un párrafo compite con lo que hay que leer. */
+.am-texto {
+  position: relative;
+  max-width: 620px;
+  margin: 0;
+  background: var(--background);
+  font-size: 15px;
+  line-height: 1.7;
+}
+.am-texto p {
+  margin: 0 0 16px;
+}
+.am-texto p:last-child {
+  margin-bottom: 0;
+}
+
+/* El hueco de una pieza que todavía no está. No es decoración: es un aviso de
+   que ahí falta material, y se ve en la página para que no se olvide. Cuando
+   llegue la imagen, este bloque se sustituye por ella y la clase desaparece. */
+.am-pendiente {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 24px;
+  padding: 28px 24px;
+  border: 1px dashed color-mix(in srgb, currentColor 32%, transparent);
+  border-radius: 12px;
+  background: var(--background);
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+}
