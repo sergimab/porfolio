@@ -436,11 +436,21 @@
    una en una dirección distinta (mismo lenguaje que la cinta de las cards) */
 /* Cuatro manchas y el fondo liso: cinco posiciones por paso. Cada mancha va por
    su lado —no todas hacia el mismo sitio—, que es lo que hace que la luz y la
-   sombra se crucen y el color parezca girar en vez de deslizarse. */
+   sombra se crucen y el color parezca girar en vez de deslizarse.
+
+   Cinco paradas y no tres, y cada mancha cruzando de extremo a extremo: con el
+   dibujo al 250 % ese viaje es de caja y media, así que un color ENTRA por un
+   borde, cruza la pieza y se va por el contrario antes de volver. Con tres
+   paradas y recorridos cortos el mismo color no se iba nunca del todo y se veía
+   temblar en el sitio.
+
+   `ease-in-out` en cada tramo hace lo demás: llega despacio, se queda un rato
+   y arranca despacio, en vez de barrer a velocidad constante. */
 @keyframes capsuleDrift {
-  0%, 100% { background-position: 0% 0%,    100% 0%,   50% 100%, 0% 100%,  0 0; }
-  33%      { background-position: 70% 45%,  30% 65%,   15% 35%,  85% 40%,  0 0; }
-  66%      { background-position: 100% 90%, 0% 100%,   85% 0%,   40% 0%,   0 0; }
+  0%, 100% { background-position: 0% 0%,    100% 0%,   50% 100%, 0% 100%,   0 0; }
+  25%      { background-position: 100% 30%, 20% 80%,   0% 20%,   70% 100%,  0 0; }
+  50%      { background-position: 60% 100%, 100% 100%, 100% 60%, 100% 10%,  0 0; }
+  75%      { background-position: 0% 70%,   40% 0%,    30% 0%,   30% 50%,   0 0; }
 }
 .panel-btn {
   display: flex; align-items: center; justify-content: center;

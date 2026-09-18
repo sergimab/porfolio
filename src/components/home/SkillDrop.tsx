@@ -694,7 +694,7 @@ export default function SkillDrop() {
                     backgroundColor: encendida ? undefined : "var(--background)",
                     backgroundImage: encendida ? organicGradient(skill.hue, 85, 57) : undefined,
                     backgroundSize: encendida ? CAPSULE_DRIFT_SIZE : undefined,
-                    animation: encendida ? "capsuleDrift 2.4s ease-in-out infinite" : undefined,
+                    animation: encendida ? "capsuleDrift 13s ease-in-out infinite" : undefined,
                     display:"flex", alignItems:"center", justifyContent:"center",
                     fontSize:"13px", fontWeight: encendida ? 500 : 400,
                     color: encendida ? "#fff" : "var(--foreground)",
@@ -739,7 +739,7 @@ export default function SkillDrop() {
                   padding:"2px",
                   backgroundImage: organicGradient(droppedSkill!.hue, 70, 55),
                   backgroundSize: CAPSULE_DRIFT_SIZE,
-                  animation:"capsuleDrift 3.6s ease-in-out infinite",
+                  animation:"capsuleDrift 15s ease-in-out infinite",
                   flexShrink:0,
                 }}>
                   <div style={{
