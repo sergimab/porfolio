@@ -62,9 +62,14 @@ export default function BrandingLanding() {
         </p>
       </section>
 
-      {/* ── Tipografía y color ─────────────────────────────────────────── */}
+      {/* ── Tipografía ─────────────────────────────────────────────────── */}
+      {/* Esto y el color iban juntos bajo un solo rótulo, «Tipografía y color».
+          Se han separado al darle a la paleta su propio título: con los dos
+          rótulos seguidos, el de arriba anunciaba dos cosas y el de abajo solo
+          una, y no se sabía dónde acababa cada apartado. El texto ya venía en
+          dos párrafos, uno por tema, así que la partición era la suya. */}
       <section className="am-seccion">
-        <RotuloSeccion es="Tipografía y color" en="Type and colour" />
+        <RotuloSeccion es="Tipografía" en="Typography" />
         <div className="am-texto">
           <p>
             <LangText
@@ -72,6 +77,14 @@ export default function BrandingLanding() {
               en="**Raleway** does the typographic work: a modern, highly legible sans serif that holds up both at headline size and across a long block of text."
             />
           </p>
+        </div>
+        <Tipografia />
+      </section>
+
+      {/* ── Color corp. ────────────────────────────────────────────────── */}
+      <section className="am-seccion">
+        <RotuloSeccion es="Color corp." en="Corporate colour" />
+        <div className="am-texto">
           <p>
             <LangText
               es="La paleta parte de un **negro y blanco muy contrastado**, elegante y serio, y se rompe con un **azul** y un **rosa** vibrantes que aparecen en los puntos clave —el escáner, los botones, la interfaz—, dándole ese punto de energía que el negro y blanco solos no tienen."
@@ -79,7 +92,6 @@ export default function BrandingLanding() {
             />
           </p>
         </div>
-        <Tipografia />
         <Paleta />
       </section>
 

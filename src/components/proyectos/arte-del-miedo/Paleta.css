@@ -1,84 +1,38 @@
-/* La lámina de color.
-   Negra en los dos modos del sitio: no es una caja de la interfaz que tenga que
-   adaptarse, es una LÁMINA del manual, y el manual es negro. Igual que las
-   láminas de Espacio vacío llevan su fondo propio. */
+/* Los colores, sobre el papel de la página y sin lámina ni marco: lo único que
+   queda es la forma de la marca hecha con sus propios colores.
+
+   Tres por tres casillas CUADRADAS: la proporción 1/1 en la caja, con tres
+   columnas y tres filas iguales, hace que cada casilla salga cuadrada sola. Así
+   no hay ni una medida en píxeles que rehacer al cambiar de pantalla. */
 .am-paleta {
-  margin: 32px 0 0;
-  font-family: var(--font-raleway), system-ui, sans-serif;
-}
-
-/* El marco de un píxel, del rosa al azul de la marca.
-   Va como un RELLENO de un píxel sobre un fondo en degradado, y no como
-   `border`: un borde no admite degradados, y las soluciones con máscara se
-   complican en cuanto hay esquinas redondeadas. Esto es un rectángulo pintado
-   con el degradado del que solo se ve el filo. */
-.am-paleta-marco {
-  padding: 1px;
-  border-radius: 12px;
-  background: linear-gradient(170deg, #ff1597 0%, #ff1597 22%, #3d00e4 78%, #3d00e4 100%);
-}
-
-.am-paleta-lamina {
-  position: relative;
-  /* Apaisada, como la lámina impresa. El alto manda sobre todo lo de dentro:
-     las casillas se miden con él, así que la composición se conserva entera a
-     cualquier ancho en vez de descuadrarse. */
-  aspect-ratio: 16 / 9;
-  border-radius: 11px;
-  background: #050505;
-  color: #fff;
-  overflow: hidden;
-}
-
-/* La pestaña del rótulo, colgada de la esquina de arriba a la izquierda. No
-   lleva hilo arriba ni a la izquierda: esos dos ya son el marco. */
-.am-paleta-pestana {
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: 1.6% 2.4%;
-  border-right: 1px solid #ff1597;
-  border-bottom: 1px solid #ff1597;
-  font-size: clamp(7px, 1.05vw, 14px);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-/* La cuadrícula: cinco columnas por seis filas de CUADRADOS.
-   Se dimensiona por el ALTO —86 % de la lámina— y la proporción 5/6 le da el
-   ancho, así que cada casilla sale cuadrada sola, sin escribir ni una medida en
-   píxeles. Con el ancho como referencia habría que rehacer las cuentas en cada
-   tamaño de pantalla. */
-.am-paleta-rejilla {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  height: 86%;
-  aspect-ratio: 5 / 6;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(6, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  width: min(420px, 100%);
+  aspect-ratio: 1 / 1;
+  margin: 28px 0 0;
+  font-family: var(--font-raleway), system-ui, sans-serif;
 }
 
 .am-paleta-celda {
   position: relative;
-  /* Hilo tenue en todas: en la lámina se ven las costuras entre una muestra y
-     la siguiente, y sin él dos colores contiguos se funden en una mancha. */
-  outline: 1px solid rgba(255, 255, 255, 0.34);
+  /* Hilo tenue: el blanco sobre el papel claro se perdería sin él, y entre dos
+     muestras contiguas marca la costura en vez de dejarlas fundidas. */
+  outline: 1px solid color-mix(in srgb, var(--foreground) 22%, transparent);
   outline-offset: -1px;
 }
 
-/* El hex, abajo a la izquierda de su muestra, como en la lámina. */
+/* El hex, abajo a la izquierda de su muestra. */
 .am-paleta-hex {
   position: absolute;
-  left: 8%;
+  left: 9%;
   bottom: 8%;
-  font-size: clamp(6.5px, 1vw, 13px);
+  font-size: clamp(9px, 2.6vw, 12px);
   letter-spacing: 0.01em;
   white-space: nowrap;
+  color: #fff;
 }
-/* Sobre el blanco, el rótulo en tinta: en blanco sobre blanco no se leería. */
+/* Sobre el blanco, en tinta: blanco sobre blanco no se leería. */
 .am-paleta-celda.es-clara .am-paleta-hex {
   color: #050505;
 }
@@ -92,62 +46,4 @@
     radial-gradient(46% 44% at 10% 16%, #ff1597 0%, rgba(255, 21, 151, 0) 72%),
     radial-gradient(56% 50% at 26% 94%, #ff1597 0%, rgba(255, 21, 151, 0) 74%),
     linear-gradient(135deg, #ff1597 0%, #ff1597 42%, #3d00e4 100%);
-}
-
-/* Las casillas vacías: cuadrados de la misma trama sin rellenar. Hilo más
-   flojo que el de las muestras para que se lean como el fondo de la cuadrícula
-   y no como una muestra más. */
-.am-paleta-celda.es-vacia {
-  outline-color: rgba(255, 255, 255, 0.5);
-}
-
-/* El pie, pegado al borde de abajo: la referencia del proyecto, como en las
-   láminas de entrega. */
-.am-paleta-pie {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  padding: 1.6% 2.4%;
-  font-size: clamp(6.5px, 1vw, 13px);
-  letter-spacing: 0.01em;
-}
-/* El del medio, centrado de verdad respecto a la lámina y no respecto a lo que
-   le dejen los otros dos: son de largos muy distintos y, repartiendo el hueco,
-   el título se iba a un lado. */
-.am-paleta-pie span:nth-child(2) {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-/* En pantalla estrecha la lámina se hace menos apaisada: a 16:9 en un móvil se
-   queda en 180 px de alto, y con ella la cuadrícula y los rótulos, que dejarían
-   de leerse. Más alta, las casillas vuelven a tener tamaño. */
-@media (max-width: 760px) {
-  .am-paleta-lamina {
-    aspect-ratio: 4 / 5;
-  }
-  .am-paleta-rejilla {
-    /* Y ocupa menos alto: en una lámina vertical, al 86 % la cuadrícula se
-       comía la pestaña y el pie. */
-    height: 74%;
-  }
-  .am-paleta-pestana,
-  .am-paleta-pie {
-    padding: 3% 4%;
-    font-size: 10px;
-  }
-  .am-paleta-hex {
-    font-size: 9px;
-  }
-  /* El título del medio se quita: entre los otros dos no le queda sitio y se
-     montaba encima. Sigue estando en el titular de la página. */
-  .am-paleta-pie span:nth-child(2) {
-    display: none;
-  }
 }
