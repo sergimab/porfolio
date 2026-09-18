@@ -1131,7 +1131,11 @@ button.ev-app-banda:focus-visible {
   font-size: 13px;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
-  opacity: 0.5;
+  /* 0,65 y no 0,5: a la mitad, el número se quedaba en 3,2:1 contra el papel
+     claro —por debajo del 4,5 de la norma— y era el único texto del sitio que
+     seguía flojo después de arreglar el gris secundario. A 0,65 da 5,1:1 en
+     claro y 7,0:1 en oscuro, y sigue leyéndose como un dato de segunda fila. */
+  opacity: 0.65;
 }
 
 .ev-proto-botones {

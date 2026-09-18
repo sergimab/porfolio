@@ -3,7 +3,14 @@
 :root {
   --background: #F2EEE2;
   --foreground: #1C1A16;
-  --muted: #8a8680;
+  /* El gris de lo secundario. Tiene que ser DISTINTO en cada modo: es el único
+     token que se lee sobre el papel, y el papel cambia de color. El de antes
+     —#8a8680— servía en oscuro (4,8:1) pero sobre el papel claro se quedaba en
+     3,1:1, por debajo del 4,5 que pide la norma. Era la ÚNICA causa de todos
+     los fallos de contraste del sitio: la hora, el idioma apagado, el pie, las
+     etiquetas de los programas, los valores de las tintas... trece sitios en
+     una sola página, todos el mismo color. */
+  --muted: #6d6962;
   --border: #d9d4c5;
   --surface: #e8e3d5;
 }
@@ -11,7 +18,9 @@
 [data-theme="dark"] {
   --background: #1C1A16;
   --foreground: #F2EEE2;
-  --muted: #8a8680;
+  /* Sobre papel oscuro el gris tiene que ACLARARSE, no oscurecerse. Aquí el de
+     antes ya cumplía justo (4,8:1); este deja algo más de margen: 5,1:1. */
+  --muted: #8f8b85;
   --border: #2e2b24;
   --surface: #252219;
 }

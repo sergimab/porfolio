@@ -154,3 +154,10 @@
   .pcard-band-cap  { font-size: 21px; }
   .pcard-band-rest { font-size: 11px; }
 }
+
+/* Movimiento reducido: la banda deja de derivar y se queda con su color. */
+@media (prefers-reduced-motion: reduce) {
+  .pcard-band {
+    animation: none;
+  }
+}

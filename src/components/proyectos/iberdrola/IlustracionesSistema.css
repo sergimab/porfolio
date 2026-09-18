@@ -63,6 +63,9 @@
   gap: 16px;
 }
 .ilu-block-title {
+  /* El margen, escrito: antes lo ponía el navegador por ser un h3 y al pasar a
+     h2 habría cambiado solo. Este es el que tenía. */
+  margin: 15px 0;
   font-size: 15px;
   font-weight: 600;
   color: var(--foreground);
@@ -265,4 +268,24 @@
   0%, 40%   { transform: translateX(100%); }     /* fuera, a la derecha */
   50%, 90%  { transform: translateX(0); }        /* entra y permanece visible */
   100%      { transform: translateX(-100%); }    /* sale por la izquierda */
+}
+/* Movimiento reducido: el carrusel de la pareja NO se para, se desmonta. Parar
+   la animación dejaría una escena encima de la otra y la de abajo no se vería
+   nunca: sería perder contenido, no quitar movimiento. Apiladas en dos filas se
+   ven las dos, que es lo que el carrusel enseña por turnos. */
+@media (prefers-reduced-motion: reduce) {
+  .hero-pair .ilu-frame {
+    animation: none;
+  }
+  @media (max-width: 760px) {
+    .hero-pair {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      overflow: visible;
+    }
+    .hero-pair .ilu-frame {
+      grid-area: auto;
+      transform: none;
+    }
+  }
 }

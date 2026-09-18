@@ -529,3 +529,31 @@ textarea.contact-input { resize: vertical; }
 .panel-btn[data-active="true"] .panel-btn-label {
   color: var(--background);
 }
+
+/* ── Movimiento reducido ──
+   La home tiene cuatro bucles infinitos a la vez: las cápsulas levitan, su aro
+   se enciende y se apaga, la flecha de la zona de arrastre empuja y el color
+   deriva. Para quien el movimiento le marea o le distrae, eso es una página que
+   no para nunca y que no se puede parar.
+
+   Con `!important` porque `capsuleLevitate` y `capsuleDrift` van escritas en el
+   atributo `style` desde el componente —las duraciones salen del id de cada
+   pieza, así que no pueden vivir en la hoja— y una regla normal no le gana a un
+   estilo en línea.
+
+   Lo que se para se queda en una postura válida, no a medias: la cápsula sin
+   levitar está en su sitio, el aro apagado es su estado de reposo y el color
+   sin derivar es el degradado quieto. `dropExit` NO se toca: no es un bucle,
+   es la salida de una cápsula al soltarla, y sin ella desaparecería de golpe. */
+@media (prefers-reduced-motion: reduce) {
+  [style*="capsuleLevitate"],
+  [style*="capsuleGlow"],
+  [style*="capsuleDrift"],
+  [style*="capsuleGradient"] {
+    animation: none !important;
+  }
+  .dz-arrow,
+  .skill-lista button {
+    animation: none !important;
+  }
+}

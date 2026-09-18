@@ -122,7 +122,7 @@ export default function Header() {
       {lang === "es" ? "Hola, soy " : "Hi, it's "}
       <span style={{ fontWeight: 500 }}>
         S{typedName}
-        <span style={{ display:"inline-block", width:"1.5px", height:"0.9em", background:"var(--foreground)", marginLeft:"1px", verticalAlign:"text-bottom", animation:"blink 1s step-end infinite" }} aria-hidden="true" />
+        <span className="header-caret" style={{ display:"inline-block", width:"1.5px", height:"0.9em", background:"var(--foreground)", marginLeft:"1px", verticalAlign:"text-bottom", animation:"blink 1s step-end infinite" }} aria-hidden="true" />
       </span>{" "}
       👋
     </span>
@@ -229,14 +229,20 @@ export default function Header() {
         <div style={{
           display: "flex", alignItems: "center", justifyContent: "center", gap: "2px",
           border: "1px solid var(--foreground)", borderRadius: "999px",
-          width: "60px", height: "30px",
+          width: "64px", height: "32px",
         }}>
           <button
             onClick={() => changeLang("es")}
             aria-label="Español"
             style={{
               background: "none", border: "none", cursor: "pointer",
-              padding: "0",
+              // Relleno para que el blanco al que se apunta llegue a 24 x 24,
+              // que es el mínimo de la norma. Las letras siguen midiendo lo
+              // mismo; lo que crece es la zona que responde al dedo, que en un
+              // móvil eran 16 x 20 y se fallaba.
+              padding: "4px 5px",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              minWidth: "24px", minHeight: "24px",
               fontSize: "13px",
               color: lang === "es" ? "var(--foreground)" : "var(--muted)",
               fontWeight: lang === "es" ? 500 : 400,
@@ -251,7 +257,9 @@ export default function Header() {
             aria-label="English"
             style={{
               background: "none", border: "none", cursor: "pointer",
-              padding: "0",
+              padding: "4px 5px",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              minWidth: "24px", minHeight: "24px",
               fontSize: "13px",
               color: lang === "en" ? "var(--foreground)" : "var(--muted)",
               fontWeight: lang === "en" ? 500 : 400,

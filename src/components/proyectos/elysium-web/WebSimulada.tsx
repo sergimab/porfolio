@@ -44,7 +44,10 @@ export default function WebSimulada() {
   // material sin ajustar. Poniendo el atributo, todo lo de dentro resuelve sus
   // colores para oscuro, que es justo para lo que está.
   return (
-    <div className="websim" data-theme="dark">
+    // `main` y no un div: es TODO el contenido de esta página, y sin un punto
+    // de referencia así quien navega por regiones con el lector de pantalla no
+    // tiene manera de saltar aquí.
+    <main className="websim" data-theme="dark">
       {pantalla === "inicio" && (
         <PantallaInicio onStart={() => setPantalla("eras")} />
       )}
@@ -73,6 +76,6 @@ export default function WebSimulada() {
       <Link className="websim-salir" href="/?cat=uiux">
         Volver al portfolio
       </Link>
-    </div>
+    </main>
   );
 }

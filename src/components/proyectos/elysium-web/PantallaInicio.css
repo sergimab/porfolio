@@ -70,6 +70,14 @@
 /* El cartel: cristal esmerilado sobre la galaxia. El fondo semitransparente es
    imprescindible además del desenfoque — solo con blur, las estrellas se
    emborronan pero el conjunto sigue igual de claro y el texto no despega. */
+.inicio-titulo {
+  /* Solo semántica: ni margen ni renglón propios, para que el cartel se reparta
+     igual que antes de meterlo. */
+  margin: 0;
+  line-height: 0;
+  display: contents;
+}
+
 .inicio-cartel {
   position: relative;
   /* Ni a sangre ni pegado a los bordes: el cartel deja un margen a los lados

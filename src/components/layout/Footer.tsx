@@ -61,7 +61,9 @@ export default function Footer() {
         © {year} Sharkastic
       </span>
 
-      <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+      {/* El hueco baja de 16 a 8 porque cada icono se lleva ahora 4 px de
+          relleno por lado: el aire visible entre ellos queda igual. */}
+      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
         {socials.map(s => (
           <a
             key={s.id}
@@ -69,7 +71,14 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={s.id}
-            style={{ color: "var(--muted)", display: "flex", transition: "color 0.15s" }}
+            /* El icono sigue midiendo 16, pero el blanco al que se apunta pasa
+               a 24 x 24, que es el mínimo de la norma: con 16 x 16 en un móvil
+               se falla más de lo que se acierta. */
+            style={{
+              color: "var(--muted)", display: "flex", alignItems: "center",
+              justifyContent: "center", width: "24px", height: "24px",
+              transition: "color 0.15s",
+            }}
             onMouseEnter={(e) => (e.currentTarget.style.color = "var(--foreground)")}
             onMouseLeave={(e) => (e.currentTarget.style.color = "var(--muted)")}
           >

@@ -168,7 +168,12 @@ export default function BounceCards({
         <span className="bc-medio">
           {item.cover ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img className="bc-img" src={item.cover} alt={title} />
+            /* Sin alt: el nombre del proyecto va escrito justo debajo, en la
+               banda, así que repetirlo en la imagen hace que un lector de
+               pantalla lo diga dos veces seguidas. La portada no añade nada que
+               el nombre no diga ya. */
+            // eslint-disable-next-line jsx-a11y/alt-text
+            <img className="bc-img" src={item.cover} alt="" />
           ) : (
             <div className="bc-img bc-placeholder" aria-hidden="true">
               <svg viewBox="0 0 200 160">

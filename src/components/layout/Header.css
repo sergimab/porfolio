@@ -13,3 +13,14 @@
   .header-toggles  { gap: 8px; }
   .header-greeting { display: none; }
 }
+
+/* Movimiento reducido: el cursor del saludo deja de parpadear y se queda a la
+   vista. El `!important` es necesario y no un atajo: la animación va escrita en
+   el atributo `style` del propio elemento, y una regla de hoja no le gana de
+   otra manera. */
+@media (prefers-reduced-motion: reduce) {
+  .header-caret {
+    animation: none !important;
+    opacity: 1;
+  }
+}

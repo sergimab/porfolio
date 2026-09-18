@@ -193,10 +193,14 @@ export default function IlustracionesSistema() {
       <div className="ilu-box" data-tab={tab}>
       {CONTENT[tab].map((b, i) => (
         <section className="ilu-block" key={`${tab}-${i}`}>
-          <h3 className="ilu-block-title">
+          {/* h2 y no h3: en esta página no hay ningún encabezado entre el
+              título y estos bloques, así que con h3 el índice saltaba un nivel
+              —de 1 a 3— y quien recorre la página por encabezados se encuentra
+              un escalón que no lleva a ninguna parte. */}
+          <h2 className="ilu-block-title">
             {lang === "en" ? b.titleEn : b.title}{" "}
             <span className="ilu-block-style">- {lang === "en" ? b.styleEn : b.style}</span>
-          </h3>
+          </h2>
           <div className="ilu-divider" />
 
           {b.iso ? (

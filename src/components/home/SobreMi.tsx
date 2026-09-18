@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import LangText from "@/components/shared/LangText";
 import DropcapTitle from "@/components/shared/DropcapTitle";
 import MarcoHormigas from "@/components/shared/MarcoHormigas";
+import { useLang } from "@/components/shared/useLang";
 import "./SobreMi.css";
 
 // La imagen de «Sobre mí»: la foto en dos capas —el fondo y yo recortado— y,
@@ -107,6 +108,7 @@ function saludo(hora: number) {
 }
 
 export default function SobreMi() {
+  const lang = useLang();
   const [actual, setActual] = useState(0);
   // La hora no se sabe hasta que la página está en el navegador: en el servidor
   // no hay reloj del visitante, y adivinarla allí daría un saludo que cambia
@@ -202,6 +204,14 @@ export default function SobreMi() {
         <div
           className="sobremi-scroll"
           style={{ ["--sm-barra" as string]: RECURSOS[actual].color }}
+          /* Alcanzable con el teclado. Es una caja que RUEDA y dentro no hay
+             nada enfocable —es texto corrido—, así que sin esto quien no usa
+             ratón no tenía forma de bajar por la carta: no podía meter el foco
+             dentro para usar las flechas. El rótulo es para que al llegar se
+             anuncie qué es y no un hueco sin nombre. */
+          tabIndex={0}
+          role="region"
+          aria-label={lang === "en" ? "About me, scrollable text" : "Sobre mí, texto desplazable"}
         >
         {/* Con la capitular script, como los demás títulos del sitio. */}
         <h2 className="sobremi-titulo">
