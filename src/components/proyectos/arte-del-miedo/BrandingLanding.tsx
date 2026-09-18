@@ -51,14 +51,18 @@ export default function BrandingLanding() {
       {/* ── La cabecera ────────────────────────────────────────────────── */}
       {/* El isotipo construyéndose, a todo el ancho y en bucle, como abre la
           página de Yelmo.
-          Va recortado a una FRANJA y no a formato completo: el original es 16:9
-          y toda la animación cabe en 540 px de los 1080 —medido—, así que a
-          cuadro entero sobraba fondo negro por arriba y por abajo. A 1920/760 el
-          dibujo se queda con 110 px de aire por cada lado, que es lo justo para
-          que respire sin que la franja se coma media pantalla. */}
+          DOS COSAS LA HACEN MÁS PEQUEÑA, y hay que entender por qué son dos. La
+          franja se recorta a 1920/620 —el original es 16:9 y toda la animación
+          cabe en la banda central, así que a cuadro entero sobraba negro—, pero
+          eso solo quita fondo: el dibujo seguiría igual de grande, porque su
+          tamaño en pantalla lo manda el ANCHO, que es el de la columna entera.
+          Para encogerlo de verdad hay que encogerlo en el vídeo, y por eso el
+          archivo está reencodado con el contenido al 62 % sobre el mismo cuadro.
+          Ese 62 es el número que hay que tocar si se quiere más o menos grande;
+          la franja solo decide cuánto negro se ve alrededor. */}
       <VideoMarca
         src="/proyectos/el-arte-del-miedo-branding/logo-final.mp4"
-        proporcion="1920 / 760"
+        proporcion="1920 / 620"
         fondo="#000"
         alt="El isotipo de El Arte del Miedo construyéndose cuadro a cuadro"
       />
