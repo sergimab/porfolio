@@ -152,4 +152,18 @@
     grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
+  /* LA QUINTA, CENTRADA. Cinco piezas en dos columnas dejan una sola en el
+     último renglón, y arrimada a la izquierda se lee como un descuadre —o peor,
+     como si faltara la sexta—. Ocupando el renglón entero y centrada se lee
+     como lo que es: la última de una serie impar.
+     La condición es la que describe ese caso y no «la quinta»: última Y en
+     posición impar. Así sigue valiendo si algún día son siete piezas, y no hace
+     nada si son seis. */
+  .am-recorrido figure:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    justify-self: center;
+    /* La mitad del ancho menos la mitad del hueco: exactamente lo que mide una
+       columna, para que no salga más grande que sus hermanas. */
+    width: calc(50% - 5px);
+  }
 }

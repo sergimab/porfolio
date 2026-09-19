@@ -11,12 +11,16 @@ import { useEffect, useRef, useState } from "react";
 // ventilador y una batería. Aquí el archivo ni siquiera se pide —`preload` a
 // «none» y sin `src`— hasta que la pieza se acerca a la pantalla.
 //
-// El margen del observador es de media pantalla POR DELANTE: lo justo para que
-// al llegar ya esté rodando, y no tanto como para acabar bajándolas todas en
-// cuanto se pasa de largo. Es un compromiso distinto del de las piezas de
-// apertura del sitio, que arrancan al entrar de verdad porque son largas y
-// perderse el principio se nota; estas duran seis segundos y van en bucle, así
-// que da igual por dónde se las coja.
+// El margen del observador es de una pantalla POR DELANTE: lo justo para que al
+// llegar ya esté rodando, y no tanto como para acabar bajándolas todas en
+// cuanto se pasa de largo. Estaba en media y en el móvil se quedaba corto —a
+// velocidad de pulgar daba tiempo a ver el hueco en negro antes de que
+// apareciera la pieza—, que es el único síntoma que tiene un vídeo que aún no
+// ha llegado.
+// Es un compromiso distinto del de las piezas de apertura del sitio, que
+// arrancan al entrar de verdad porque son largas y perderse el principio se
+// nota; estas duran seis segundos y van en bucle, así que da igual por dónde se
+// las coja.
 //
 // Muda, en bucle, `playsInline` y sin controles: es una lámina, no algo que
 // haya que manejar.
@@ -48,7 +52,7 @@ export default function Pieza({
         setPedida(true);
         obs.disconnect();
       },
-      { rootMargin: "50% 0px" }
+      { rootMargin: "100% 0px" }
     );
     obs.observe(el);
     return () => obs.disconnect();
