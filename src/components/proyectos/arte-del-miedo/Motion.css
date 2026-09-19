@@ -29,17 +29,28 @@
      destellaría antes del primer fotograma. */
   background: #000;
 }
+/* EL PIE DE CADA PIEZA, EN LA VOZ DEL SITIO. La cursiva del portfolio —la misma
+   del currículum, de los valores de la ficha de proyecto y de los pies del
+   isotipo— es la que el sitio usa para las anotaciones: dice «esto no es
+   contenido, es una nota sobre el contenido».
+   Y SIN PAPEL. Lo llevaban, y por eso se veían como rectángulos de canto recto
+   cortando la trama del fondo. El papel es para los párrafos, donde la trama
+   compite con lo que hay que leer; un pie de dos palabras no lo necesita, y así
+   lo hacen los demás pies del proyecto. */
 .am-obras figcaption {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 10px;
-  margin-top: 7px;
-  font-size: 11.5px;
-  line-height: 1.4;
+  margin-top: 8px;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-style: italic;
+  /* Más cuerpo que la sans a la que sustituye: esta cursiva tiene la caja baja
+     pequeña y a 11,5 px se quedaba en nada. */
+  font-size: 15px;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
   color: var(--muted);
-  /* Papel opaco: por detrás pasa la trama animada del fondo del sitio. */
-  background: var(--background);
 }
 .am-obras-anio {
   /* Cifras de ancho fijo: son años, y unos debajo de otros tienen que
@@ -72,14 +83,14 @@
   background: #000;
 }
 .am-recorrido figcaption {
-  margin-top: 7px;
-  font-size: 11.5px;
-  line-height: 1.4;
+  margin-top: 8px;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
   text-align: center;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
   color: var(--muted);
-  background: var(--background);
 }
 
 /* ── Las dos piezas de la app ──
@@ -108,11 +119,13 @@
 }
 .am-motion-app figcaption {
   margin-top: 8px;
-  font-size: 11.5px;
-  line-height: 1.4;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
   text-align: center;
   color: var(--muted);
-  background: var(--background);
 }
 
 /* Un banner detrás de otro necesita aire entre ellos: pegados se leen como una

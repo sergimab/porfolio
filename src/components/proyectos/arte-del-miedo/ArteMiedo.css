@@ -26,15 +26,20 @@
    un día hay que contar más, lo que toca es partirlo en apartados, no alargar
    el párrafo.
 
-   EL PAPEL RESPIRA. Por detrás pasa la trama animada del fondo y sobre un
-   párrafo compite con lo que hay que leer, así que el bloque es opaco; pero
-   pegado al texto el papel se veía como un recorte a ras de letra. El relleno
-   le da aire y el margen negativo lo devuelve a su sitio, de modo que el texto
-   sigue alineado con el rótulo de arriba y lo que sobresale es solo el papel. */
+   EL PAPEL RESPIRA, Y ES UNA CAJA DEL SITIO. Por detrás pasa la trama animada
+   del fondo y sobre un párrafo compite con lo que hay que leer, así que el
+   bloque es opaco; pero pegado al texto el papel se veía como un recorte a ras
+   de letra. El relleno le da aire y el margen negativo lo devuelve a su sitio,
+   de modo que el texto sigue alineado con el rótulo de arriba y lo que
+   sobresale es solo el papel.
+   Y el redondeo es el de las demás cajas de papel del portfolio —12—, que es lo
+   que hace que se lea como una caja de la página y no como un rectángulo
+   recortado y pegado encima. */
 .am-texto {
   position: relative;
   margin: -10px -18px;
   padding: 10px 18px;
+  border-radius: 12px;
   background: var(--background);
   font-size: 13.5px;
   line-height: 1.8;
