@@ -118,42 +118,6 @@
   margin-bottom: -15%;
 }
 
-/* EL DEGRADADO QUE APAGA EL REFLEJO. El vaso deja debajo un halo naranja que en
-   la foto del mockup tiene sentido y en la página compite con la pieza. En vez
-   de retocar el archivo —que es suyo y no se toca—, se funde por abajo con el
-   color del fondo: opaco del todo en el borde inferior y transparente antes de
-   llegar a la base del vaso, de modo que lo que desaparece es el reflejo y no
-   la copa.
-   Sin eventos, que es una lámina de pintura y no debe comerse el ratón. */
-.se-grande::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  /* MEDIDO SOBRE EL ARCHIVO, no puesto a ojo: el halo naranja del vaso vive
-     entre el 63 % y el 71 % del alto de la imagen. El velo arranca en el 58 %
-     —de ahí el 42 de altura— para llegar al halo ya con cuerpo, y a la altura
-     del halo cubre entre un 70 y un 90 %. Más abajo quedan el pie del vaso y la
-     base de la caja, que se funden en vez de desaparecer: el degradado es para
-     apagar el reflejo, no para borrarle los pies a la pieza. */
-  height: 42%;
-  pointer-events: none;
-  /* SE DESVANECE POR ARRIBA Y TAMBIÉN POR ABAJO. La primera versión llegaba
-     opaca hasta el borde de la caja, y como por detrás pasa la trama del fondo,
-     ahí donde el velo terminaba quedaba una raya horizontal: el canto de un
-     rectángulo de papel sobre un fondo con dibujo. Cerrando el degradado por
-     los dos lados no hay canto en ninguna parte, y el velo solo pesa donde
-     tiene que pesar, que es la banda del halo. */
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    color-mix(in srgb, var(--background) 88%, transparent) 20%,
-    color-mix(in srgb, var(--background) 92%, transparent) 46%,
-    color-mix(in srgb, var(--background) 45%, transparent) 76%,
-    transparent 100%
-  );
-}
 /* LAS COLUMNAS VAN EN PROPORCIÓN A LAS PIEZAS, y no a mitades. Las tarjetas son
    apaisadas —1,17 a 1— y las acreditaciones verticales —0,76 a 1—: repartido a
    partes iguales, la vertical saldría un tercio más alta que la otra y la fila
