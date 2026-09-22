@@ -88,11 +88,12 @@
      animación vuelve a empezar. La duración la pone el componente, que una
      tira de ocho imágenes y otra de nueve no tardan lo mismo en recorrerse al
      mismo paso. */
-  animation: ot-desfile 60s linear infinite;
-  /* Que el teléfono se la lleve a su propia capa y no repinte la tira entera en
-     cada fotograma. Una tira de tres mil píxeles de ancho moviéndose sin esto
-     va a tirones en cuanto el móvil es modesto. */
-  will-change: transform;
+  animation: ot-desfile var(--ot-dur, 60s) linear infinite;
+  /* SIN `will-change`, y no por olvido. Pedía una capa de dibujo propia para
+     cada tira, y son dos de tres mil píxeles de ancho: en un teléfono con poca
+     memoria de vídeo, el navegador se ve obligado a reservar las dos a la vez y
+     puede rendirse con una. El movimiento es un `transform`, que ya se lleva a
+     su capa cuando hace falta y solo mientras hace falta. */
 }
 
 .ot-carrusel figure {
@@ -151,6 +152,13 @@
    imágenes ancladas al borde. */
 
 @media (max-width: 700px) {
+  /* MÁS RÁPIDO EN EL TELÉFONO, y no es capricho: la tira va al mismo paso, pero
+     en una pantalla de 375 px cabe la mitad de tira que en un escritorio, así
+     que a la misma velocidad parece que se arrastra. Un 40 % menos de tiempo
+     devuelve la sensación de que pasa al mismo ritmo. */
+  .ot-carrusel-tira {
+    animation-duration: calc(var(--ot-dur, 60s) * 0.6);
+  }
   .ot-carrusel img {
     height: 240px;
   }

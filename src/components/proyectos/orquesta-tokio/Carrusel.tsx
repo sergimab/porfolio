@@ -28,7 +28,10 @@ export default function Carrusel({
 }) {
   return (
     <div className={`ot-carrusel${modificador ? ` ${modificador}` : ""}`}>
-      <div className="ot-carrusel-tira" style={{ animationDuration: `${segundos}s` }}>
+      {/* La duración va como variable y no como `animation-duration` a pelo: un
+          estilo en línea le gana a la hoja de estilos, y en el móvil la tira
+          tiene que ir más rápida. */}
+      <div className="ot-carrusel-tira" style={{ ["--ot-dur" as string]: `${segundos}s` }}>
         {[0, 1].map((copia) =>
           fotos.map((f) => (
             <figure key={`${copia}-${f.src}`} aria-hidden={copia === 1}>
