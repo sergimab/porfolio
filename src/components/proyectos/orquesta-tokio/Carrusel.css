@@ -29,6 +29,9 @@
    reinicio cae en un fotograma idéntico al anterior y no se ve el corte. Este
    es el motivo de que el componente pinte la lista duplicada: no es un descuido.
 
+   SIN DEGRADADOS NI PAUSA AL PASAR EL CURSOR, los dos por decisión suya. La
+   tira se corta a hueso contra el borde de la ventana y no se detiene nunca.
+
    Va a sangre, de borde a borde de la ventana, y por eso el contenedor se sale
    de la columna con los márgenes negativos: una tira que se corta a mitad de
    columna se lee como una imagen recortada, y a sangre se lee como lo que es,
@@ -47,12 +50,6 @@
   /* Lineal y no suavizada: cualquier aceleración delataría el punto donde la
      animación vuelve a empezar. */
   animation: ot-desfile 60s linear infinite;
-}
-
-/* Al pasar por encima se para, que es lo mínimo para poder mirar una foto que
-   está en movimiento. */
-.ot-carrusel:hover .ot-carrusel-tira {
-  animation-play-state: paused;
 }
 
 .ot-carrusel figure {
@@ -82,28 +79,6 @@
   }
 }
 
-/* Los degradados de los lados: las fotos no se cortan de golpe contra el borde
-   de la ventana, se van. Son del color del fondo, así que valen en claro y en
-   oscuro sin hacer dos versiones. */
-.ot-carrusel::before,
-.ot-carrusel::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 88px;
-  z-index: 2;
-  pointer-events: none;
-}
-.ot-carrusel::before {
-  left: 0;
-  background: linear-gradient(to right, var(--background), transparent);
-}
-.ot-carrusel::after {
-  right: 0;
-  background: linear-gradient(to left, var(--background), transparent);
-}
-
 /* Quien tenga pedido en el sistema que no se mueva nada, ve la tira quieta y
    puede recorrerla con el dedo o con la rueda. */
 @media (prefers-reduced-motion: reduce) {
@@ -122,10 +97,6 @@
   .ot-carrusel-tira {
     gap: 10px;
   }
-  .ot-carrusel::before,
-  .ot-carrusel::after {
-    width: 44px;
-  }
   @keyframes ot-desfile {
     from {
       transform: translateX(0);
@@ -137,12 +108,11 @@
 }
 
 /* ── El afiche ───────────────────────────────────────────────────────────────
-   Debajo del carrusel y centrado, en columna estrecha: es la pieza final, y un
-   cartel estirado a todo el ancho de la página se lee como un banner y no como
-   un impreso. */
+   Debajo del carrusel y a todo el ancho de la columna. Es apaisado y con mucha
+   escena dentro, con once personas sobre el escenario, así que en columna
+   estrecha no se distinguiría ni quién es quién. */
 .ot-afiche {
-  margin: 36px auto 0;
-  max-width: 520px;
+  margin: 36px 0 0;
 }
 .ot-afiche img {
   display: block;
