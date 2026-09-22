@@ -71,7 +71,7 @@ export default function SalaEquisLanding() {
             es la propia entradilla enseñada en imagen, no un apartado aparte. */}
         <Alterna
           laminas={LOGOS}
-          proporcion="63 / 32"
+          proporcion="38 / 10"
           segundos={2.6}
           fondo="#000"
           className="se-logos"
@@ -109,7 +109,7 @@ export default function SalaEquisLanding() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               className="se-mockup-grande"
-              src={`${CARPETA}/palomitas.webp`}
+              src={`${CARPETA}/palomitas-mockup.webp`}
               alt="La caja de palomitas y el vaso de cerveza de Equix"
             />
             <div className="se-mockups-par">

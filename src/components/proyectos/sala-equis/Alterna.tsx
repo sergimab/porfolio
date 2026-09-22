@@ -60,7 +60,10 @@ export default function Alterna({
   return (
     <div
       className={`se-alterna${className ? ` ${className}` : ""}`}
-      style={{ aspectRatio: proporcion, background: fondo, padding: relleno }}
+      // La proporción va como variable y no como `aspect-ratio` directo: un
+      // estilo en línea le gana a la hoja de estilos, así que puesta a pelo no
+      // habría manera de cambiarla en el móvil desde el CSS.
+      style={{ ["--se-prop" as string]: proporcion, background: fondo, padding: relleno }}
     >
       {laminas.map((l, n) => (
         // eslint-disable-next-line @next/next/no-img-element
