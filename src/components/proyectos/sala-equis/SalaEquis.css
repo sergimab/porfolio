@@ -133,23 +133,42 @@
   margin-bottom: -21%;
 }
 
-/* CADA PIEZA EN SU RENGLÓN, y ya no dos en una fila.
-   El archivo de las tarjetas lleva un quinto de margen transparente a cada
-   lado, que es la sombra proyectada y no se recorta; en media columna, la
-   pieza visible se quedaba en unos 285 px. A todo el ancho se va a más de 500,
-   que es casi el doble.
-   Las acreditaciones no necesitan esa anchura —son verticales— así que se
-   quedan centradas y con tope. */
+/* LAS DOS EN UNA FILA, con el reparto muy desigual.
+   No es un capricho de composición: el archivo de las tarjetas lleva un quinto
+   de margen transparente a cada lado —la sombra proyectada, que no se recorta—
+   mientras que el de las acreditaciones viene a hueso. Repartiendo a partes
+   iguales, la pieza de la izquierda se veía la mitad de grande que la de la
+   derecha aun ocupando lo mismo. Con este reparto, las dos piezas se ven de un
+   tamaño parecido.
+   Alineadas por arriba, que es lo que las deja pegadas a lo de encima. */
+.se-mockups-par {
+  display: grid;
+  grid-template-columns: 1.55fr 0.85fr;
+  gap: 14px;
+  align-items: start;
+}
+/* Los márgenes en negativo se comen el hueco transparente del propio archivo:
+   arriba y abajo en las tarjetas, y solo arriba en las acreditaciones, que
+   vienen a hueso y por eso pueden subir hasta tocar la pieza de encima. */
 .se-mockup-tarjetas {
-  /* El margen en negativo se come el hueco transparente de arriba y de abajo
-     del propio archivo, un 12 y un 14 % de su alto. En porcentaje del ancho,
-     que es contra lo que se miden los márgenes, salen estos dos números. */
   margin-top: -8%;
   margin-bottom: -9%;
 }
-.se-mockups img.se-mockup-staff {
-  width: min(100%, 420px);
-  margin-inline: auto;
+.se-mockup-staff {
+  margin-top: -7%;
+}
+
+@media (max-width: 700px) {
+  /* A una columna: a 375 px, las tarjetas en dos tercios de caja se quedan en
+     200 de ancho y de la pieza visible no queda casi nada. */
+  .se-mockups-par {
+    grid-template-columns: 1fr;
+  }
+  .se-mockup-staff {
+    width: min(100%, 320px);
+    margin-inline: auto;
+    margin-top: 0;
+  }
 }
 
 .se-mockups img {

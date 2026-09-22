@@ -120,25 +120,27 @@ export default function SalaEquisLanding() {
                 alt="La caja de palomitas y el vaso de cerveza de Equix"
               />
             </div>
-            {/* Las tarjetas, en su propio renglón y a todo el ancho. Compartiendo
-                fila con las acreditaciones se quedaban en nada: el archivo
-                lleva un quinto de margen transparente a cada lado —la sombra
-                proyectada, que no se recorta—, así que de media columna la
-                pieza visible era poco más de un tercio. */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              className="se-mockup-tarjetas"
-              src={`${CARPETA}/tarjetas.webp`}
-              alt="Las dos caras de la tarjeta de Equix"
-              loading="lazy"
-            />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              className="se-mockup-staff"
-              src={`${CARPETA}/staff.webp`}
-              alt="Las acreditaciones del equipo con su cordón"
-              loading="lazy"
-            />
+            {/* Las dos juntas, y el reparto muy desigual a propósito: el archivo
+                de las tarjetas lleva un quinto de margen transparente a cada
+                lado —la sombra, que no se recorta—, así que necesita casi el
+                doble de columna que las acreditaciones para que la pieza se vea
+                del mismo tamaño. */}
+            <div className="se-mockups-par">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                className="se-mockup-tarjetas"
+                src={`${CARPETA}/tarjetas.webp`}
+                alt="Las dos caras de la tarjeta de Equix"
+                loading="lazy"
+              />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                className="se-mockup-staff"
+                src={`${CARPETA}/staff.webp`}
+                alt="Las acreditaciones del equipo con su cordón"
+                loading="lazy"
+              />
+            </div>
           </div>
         </section>
       </div>
