@@ -102,6 +102,12 @@
    de pieza. */
 .se-mockups {
   display: grid;
+  /* La columna, ACOTADA A CERO POR ABAJO. Sin decírselo, una casilla de rejilla
+     se ensancha hasta que le quepa el contenido a su tamaño natural, y aquí
+     dentro hay archivos de mil píxeles: la fila de abajo mide en porcentajes
+     del renglón, y si el renglón lo decide el contenido, la cuenta se muerde la
+     cola y sale la página desbordada. */
+  grid-template-columns: minmax(0, 1fr);
   gap: 18px;
   margin: 28px 0 0;
 }
@@ -133,41 +139,60 @@
   margin-bottom: -21%;
 }
 
-/* LAS DOS EN UNA FILA, con el reparto muy desigual.
-   No es un capricho de composición: el archivo de las tarjetas lleva un quinto
-   de margen transparente a cada lado —la sombra proyectada, que no se recorta—
-   mientras que el de las acreditaciones viene a hueso: de dos columnas iguales,
-   una enseña pieza en el 59 % de su ancho y la otra en el 100 %.
-   Aquí manda el encargo antes que la aritmética: las acreditaciones se quieren
-   grandes, así que se llevan la columna ancha aunque sean las que menos la
-   necesitan. Las tarjetas se quedan en 378 de caja y 222 de pieza.
-   Alineadas por arriba, que es lo que las deja pegadas a lo de encima. */
+/* LAS DOS EN UNA FILA Y SUPERPUESTAS.
+   Las tarjetas se quedan con su ancho de siempre —el 73 % del renglón, que es
+   lo que hace falta para que la pieza se vea a 373, porque el archivo gasta un
+   41 % en sombra transparente que no se recorta— y las acreditaciones crecen
+   por su cuenta metiéndose por encima, en vez de robarle columna a la otra. Es
+   lo único que permite agrandar una sin encoger la otra cuando el renglón mide
+   lo que mide.
+   Las medidas van en porcentaje del renglón y suman 100 contando el solape
+   —73 + 50 − 23—, así que la fila no se sale por ningún lado. Y en flex con
+   `flex: none`, para que nadie reparta nada por su cuenta.
+   Las acreditaciones van después en el orden del documento, que es lo que las
+   pinta por encima; al revés se verían por debajo de las tarjetas. */
 .se-mockups-par {
-  display: grid;
-  grid-template-columns: 1fr 1.25fr;
-  gap: 14px;
-  align-items: start;
+  display: flex;
+  align-items: flex-start;
+  /* Sin esto la fila mide lo que miden las dos imágenes juntas a tamaño
+     natural: una casilla de rejilla se ensancha por defecto hasta caber su
+     contenido, y ahí dentro hay dos archivos de mil píxeles. Con el mínimo a
+     cero, la fila se atiene al ancho del apartado y los porcentajes de abajo
+     miden contra lo que tienen que medir. */
+  min-width: 0;
 }
-/* Los márgenes en negativo se comen el hueco transparente del propio archivo:
-   arriba y abajo en las tarjetas, y solo arriba en las acreditaciones, que
-   vienen a hueso y por eso pueden subir hasta tocar la pieza de encima. */
-.se-mockup-tarjetas {
+/* Con `img` delante: la regla de ancho de todas las piezas del apartado es más
+   específica que una clase suelta y, sin esto, las manda a las dos al 100 %. */
+.se-mockups img.se-mockup-tarjetas {
+  flex: none;
+  width: 73%;
+  /* Se comen el hueco transparente del propio archivo, un 12 % de su alto por
+     arriba y un 14 % por abajo. */
   margin-top: -8%;
   margin-bottom: -9%;
 }
-.se-mockup-staff {
+.se-mockups img.se-mockup-staff {
+  flex: none;
+  width: 50%;
+  margin-left: -23%;
+  /* Sube a tocar la pieza de encima: su archivo viene a hueso, así que por
+     arriba no hay transparencia que la frene. */
   margin-top: -7%;
 }
 
 @media (max-width: 700px) {
-  /* A una columna: a 375 px, las tarjetas en dos tercios de caja se quedan en
-     200 de ancho y de la pieza visible no queda casi nada. */
+  /* En el teléfono se apilan y se acabó el solape: a 327 px de ancho, dos
+     piezas superpuestas son una sola mancha. */
   .se-mockups-par {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items: center;
   }
-  .se-mockup-staff {
+  .se-mockups img.se-mockup-tarjetas {
+    width: 100%;
+  }
+  .se-mockups img.se-mockup-staff {
     width: min(100%, 340px);
-    margin-inline: auto;
+    margin-left: 0;
     margin-top: 0;
   }
 }
