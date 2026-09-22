@@ -10,7 +10,7 @@ const CATS: Record<string, { label: string; hue: number }> = {
   // salen: Motion azul y Fotografía ámbar desde que se los cambiaron.
   motion:     { label: "Motion Graphics", hue: 217 },
   branding:   { label: "Branding",        hue: 330 },
-  fotografia: { label: "Fotografía",      hue: 32  },
+  fotografia: { label: "Fotografía",      hue: 38  },
   iberdrola:  { label: "Iberdrola",       hue: 142 },
   uiux:       { label: "UI / UX",         hue: 175 },
   "3d":       { label: "3D",              hue: 262 },

@@ -18,7 +18,15 @@ const skills = [
   // página del proyecto de Motion, que lo saca de aquí.
   { id: "motion",     label: "Motion Graphics", labelEn: "Motion Graphics", color: "rgba(37,99,235,0.12)",  border: "rgba(37,99,235,0.6)",   hue: 217 },
   { id: "branding",   label: "Branding",         labelEn: "Branding",        color: "rgba(219,39,119,0.12)", border: "rgba(219,39,119,0.6)",  hue: 330 },
-  { id: "fotografia", label: "Fotografía",        labelEn: "Photography",     color: "rgba(217,119,6,0.15)",  border: "rgba(217,119,6,0.7)",   hue: 32  },
+  // Ámbar dorado y no el ocre de antes. El ocre era el mismo tono pero más
+  // oscuro y menos saturado, y un color así, rebajado al 15 % sobre un fondo
+  // crema —que ya es un beige—, no llega a leerse como color: queda a medio
+  // camino entre los dos y ensucia. Subiendo el brillo y la saturación, la
+  // cápsula se lee dorada de verdad, y el trazo sube al 85 % porque este tono
+  // es más claro y al 70 se quedaba en nada.
+  // El tono se mueve solo 6 grados, de 32 a 38, que es lo que permite el hueco:
+  // el rojo de Editorial está en el 1 y hay que dejarle sus 31 grados largos.
+  { id: "fotografia", label: "Fotografía",        labelEn: "Photography",     color: "rgba(245,158,11,0.17)", border: "rgba(245,158,11,0.85)", hue: 38  },
   { id: "iberdrola",  label: "Iberdrola",         labelEn: "Iberdrola",       color: "rgba(22,163,74,0.12)",  border: "rgba(22,163,74,0.6)",   hue: 142 },
   { id: "uiux",       label: "UI / UX",           labelEn: "UI / UX",         color: "rgba(13,148,136,0.12)", border: "rgba(13,148,136,0.6)",  hue: 175 },
   { id: "3d",         label: "3D",                labelEn: "3D",              color: "rgba(124,58,237,0.12)", border: "rgba(124,58,237,0.6)",  hue: 262 },

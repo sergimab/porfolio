@@ -47,12 +47,12 @@ const POSTS = [
 // cuenta de qué va. Lo que venga después —las fotos del cliente, el cartel
 // montado, las versiones— se añade en secciones debajo, igual que en las demás.
 //
-// El 32 es el naranja de Fotografía. Sale de la lista de categorías de la home,
+// El 38 es el ámbar de Fotografía. Sale de la lista de categorías de la home,
 // así que si allí cambia, esta página cambia con él; y el tinte es el mismo
 // color en hexadecimal, que es lo que pide la caja de la cabecera para el
 // rastro del cursor.
-const HUE = 32;
-const TINTE = "#D97706";
+const HUE = 38;
+const TINTE = "#F59E0B";
 
 export default function AficheLanding() {
   const afiche = NOMBRES.find((n) => existsSync(join(process.cwd(), "public", CARPETA, n)));
