@@ -90,27 +90,15 @@
   gap: 18px;
   margin: 28px 0 0;
 }
-/* MÁS ANCHA QUE LA COLUMNA, que es lo que la hace la pieza grande del apartado
-   y no una más. Se sale por los dos lados hasta donde deja la ventana, con un
-   tope para que en una pantalla muy ancha no se estire sin fin, y dejando un
-   respiro a cada lado para que no llegue a tocar el borde.
-   Y el selector lleva delante el nombre de la etiqueta porque si no, la regla
-   de ancho de todas las piezas del apartado —que es más específica— le gana a
-   esta y la deja en el ancho de la columna CON los márgenes negativos ya
-   puestos, o sea descentrada hacia la izquierda. */
+/* LA GRANDE DEL APARTADO, a todo el ancho de la columna y sin recortar.
+   El archivo es cuadrado y trae mucho margen transparente alrededor, así que
+   la pieza en sí ocupa poco más de la mitad de lo que mide la caja. Aun con
+   eso, a este tamaño se ve más grande que ninguna otra de la página; llevarla
+   más allá del ancho de la columna significaría, al ser cuadrada, más de mil
+   píxeles de alto, o sea una pantalla entera de scroll para un bote de
+   palomitas. */
 .se-mockups img.se-mockup-grande {
-  width: min(100vw - 48px, 1180px);
-  max-width: none;
-  margin-inline: calc(50% - min(50vw - 24px, 590px));
-}
-
-@media (max-width: 700px) {
-  /* En el teléfono no hay ancho que ganar: la columna ya es casi la ventana, y
-     salirse solo serviría para comerse los márgenes de la página. */
-  .se-mockups img.se-mockup-grande {
-    width: 100%;
-    margin-inline: 0;
-  }
+  width: 100%;
 }
 /* LAS COLUMNAS VAN EN PROPORCIÓN A LAS PIEZAS, y no a mitades. Las tarjetas son
    apaisadas —1,17 a 1— y las acreditaciones verticales —0,76 a 1—: repartido a
