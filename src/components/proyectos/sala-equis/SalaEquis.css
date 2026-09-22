@@ -133,28 +133,25 @@
   margin-bottom: -21%;
 }
 
-/* LAS COLUMNAS VAN EN PROPORCIÓN A LAS PIEZAS, y no a mitades. Las tarjetas son
-   apaisadas —1,17 a 1— y las acreditaciones verticales —0,76 a 1—: repartido a
-   partes iguales, la vertical saldría un tercio más alta que la otra y la fila
-   se leería escalonada. Dándole a cada una el ancho que pide su proporción, las
-   dos acaban con el mismo alto. */
-.se-mockups-par {
-  display: grid;
-  /* Casi a partes iguales, y ya no en proporción a cada pieza. Igualando los
-     altos, las acreditaciones se quedaban en 335 de ancho, que para una imagen
-     vertical con una foto de carné dentro es poco. Ahora la vertical sale más
-     alta que la apaisada, y eso no descuadra la fila porque van centradas entre
-     sí: lo que se lee es un par, no un renglón. */
-  grid-template-columns: 1fr 0.95fr;
-  gap: 18px;
-  /* ALINEADAS POR ARRIBA, no por el centro. Las dos ya no miden lo mismo de
-     alto —la vertical saca 177 px a la apaisada—, así que centradas dejaban a
-     las tarjetas flotando casi noventa píxeles por debajo del renglón, y ese
-     hueco se leía como una separación enorme con las palomitas cuando en
-     realidad la fila empezaba pegada. Por arriba, las dos arrancan donde
-     termina la pieza de encima. */
-  align-items: start;
+/* CADA PIEZA EN SU RENGLÓN, y ya no dos en una fila.
+   El archivo de las tarjetas lleva un quinto de margen transparente a cada
+   lado, que es la sombra proyectada y no se recorta; en media columna, la
+   pieza visible se quedaba en unos 285 px. A todo el ancho se va a más de 500,
+   que es casi el doble.
+   Las acreditaciones no necesitan esa anchura —son verticales— así que se
+   quedan centradas y con tope. */
+.se-mockup-tarjetas {
+  /* El margen en negativo se come el hueco transparente de arriba y de abajo
+     del propio archivo, un 12 y un 14 % de su alto. En porcentaje del ancho,
+     que es contra lo que se miden los márgenes, salen estos dos números. */
+  margin-top: -8%;
+  margin-bottom: -9%;
 }
+.se-mockups img.se-mockup-staff {
+  width: min(100%, 420px);
+  margin-inline: auto;
+}
+
 .se-mockups img {
   display: block;
   width: 100%;
@@ -169,11 +166,6 @@
   .se-luz-fila {
     grid-template-columns: 1fr;
     gap: 18px;
-  }
-  /* A una columna: a 375 px, las acreditaciones en media caja se quedan en 160
-     de ancho y ahí ya no se distingue ni la foto del carné. */
-  .se-mockups-par {
-    grid-template-columns: 1fr;
   }
   /* En el teléfono la franja se hace un poco más alta. A 327 px de ancho, con
      la proporción de escritorio la banda se queda en 86 de alto y el logotipo
