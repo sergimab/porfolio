@@ -1,0 +1,110 @@
+/* «Rebranding Sala Equis». Mismas medidas de sección que los demás proyectos
+   del sitio, para que las páginas se lean como de la misma casa. */
+.se-seccion {
+  margin-bottom: 56px;
+}
+.se-seccion:first-of-type {
+  margin-top: 56px;
+}
+
+/* El texto de cada apartado: corrido, a todo el ancho y corto, sobre papel
+   opaco. Por detrás pasa la trama animada del fondo y sobre un párrafo compite
+   con lo que hay que leer; el relleno le da aire al papel y el margen negativo
+   lo devuelve a su sitio, de modo que el texto sigue alineado con el rótulo y
+   lo único que sobresale es el papel. Redondeo de 12, el de las demás cajas de
+   papel del portfolio. */
+.se-texto {
+  position: relative;
+  margin: 4px -18px 0;
+  padding: 10px 18px;
+  border-radius: 12px;
+  background: var(--background);
+  font-size: 13.5px;
+  line-height: 1.8;
+  letter-spacing: 0.004em;
+}
+.se-texto p {
+  margin: 0 0 18px;
+}
+.se-texto p:last-child {
+  margin-bottom: 0;
+}
+/* A 600 y no a 700: hay varias negritas por párrafo y al peso fuerte el texto
+   se ve a manchas. */
+.se-texto strong {
+  font-weight: 600;
+}
+
+/* ── La pila de láminas que se relevan ───────────────────────────────────────
+   La caja pone la proporción y el color; las láminas van todas encima, en
+   absoluto, y lo único que se mueve es su opacidad. */
+.se-alterna {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+.se-alterna img {
+  position: absolute;
+  /* El `inset` mira al borde de dentro del relleno, que es lo que permite darle
+     aire a un logotipo sin recortarlo. */
+  inset: 0;
+  margin: auto;
+  width: calc(100% - 2 * var(--se-aire, 0px));
+  height: calc(100% - 2 * var(--se-aire, 0px));
+  /* `contain` y no `cover`: aquí no se recorta nada. Lo que se enseña es una
+     lámina entera, y de un logotipo recortado no queda logotipo. */
+  object-fit: contain;
+  transition: opacity 0.8s ease;
+}
+
+/* EL RELEVO DE LOS DOS LOGOTIPOS. Va sobre negro porque es donde vive la marca
+   nueva —todas sus aplicaciones son luz sobre oscuro— y porque el logotipo
+   viejo, invertido, necesita ese negro para que la inversión tenga sentido.
+   El aire por dentro es generoso a propósito: un logotipo pegado al borde de su
+   caja se lee como un recorte, no como una marca. */
+.se-logos {
+  --se-aire: 13%;
+  margin: 28px 0 0;
+}
+
+/* Las seis proyecciones, más grandes y sin tanto aire: aquí la lámina ES la
+   imagen, no una marca dentro de una caja. */
+.se-luces {
+  margin: 28px 0 0;
+}
+
+/* ── Los mockups ─────────────────────────────────────────────────────────────
+   Las tarjetas a todo el ancho arriba —es la pieza que mejor se lee de lejos— y
+   debajo las otras dos a la par. Las acreditaciones son apaisadas y las
+   palomitas cuadradas, así que en una fila de dos el reparto va 1,4 contra 1
+   para que las dos acaben con el mismo alto y la fila no salga escalonada. */
+.se-mockups {
+  display: grid;
+  gap: 18px;
+  margin: 28px 0 0;
+}
+.se-mockups-par {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 18px;
+  align-items: center;
+}
+.se-mockups img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+@media (max-width: 700px) {
+  /* A una columna: a 375 px, las acreditaciones en media caja se quedan en 160
+     de ancho y ahí ya no se distingue ni la foto del carné. */
+  .se-mockups-par {
+    grid-template-columns: 1fr;
+  }
+  .se-logos {
+    --se-aire: 9%;
+  }
+}
