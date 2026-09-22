@@ -165,9 +165,19 @@ export function paletaClara(hue: number): string[] {
 // Solo entran aquí los tonos que SON rojos de partida, del 340 al 15. El rosa
 // de Branding está en el 330 y se queda fuera a propósito: su abanico sube
 // hacia el coral, que es otra cosa y ahí sí funciona.
+// Y LO MISMO PARA EL ROSA, por la misma razón corrida un paso. La mancha más
+// abierta de Branding caía en el 4, o sea en rojo, y con eso la cápsula rosa y
+// la roja acababan enseñando el mismo color y se confundían. Dándole la vuelta
+// al abanico, el rosa se abre hacia la fucsia y el morado, que es de donde no
+// tiene competencia: Branding se queda entre el 300 y el 334, y Editorial del
+// 332 para arriba.
+//
+// Por eso la regla no es «los rojos» sino todo el arco del rosa al rojo, del
+// 300 al 15: es el tramo donde subir de tono lleva al color de al lado, y
+// bajarlo lleva a la sombra propia.
 const TOPE_ROJO = 8;
 function sinLadrillo(base: number, h: number): number {
-  const esRojo = base >= 340 || base <= 15;
+  const esRojo = base >= 300 || base <= 15;
   if (!esRojo) return h;
   // La distancia respecto al tono de partida, medida por el camino corto, que
   // es lo que evita que un 355 y un 5 parezcan estar a 350 grados.
