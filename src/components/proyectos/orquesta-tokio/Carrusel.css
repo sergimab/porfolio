@@ -138,30 +138,17 @@
   }
 }
 
-/* QUIEN TENGA PEDIDO EN EL SISTEMA QUE NO SE MUEVA NADA, ve la tira quieta.
-   Ojo con esto al probar en un teléfono: «Reducir movimiento» de iOS o de
-   Android entra por aquí, y entonces el carrusel no se mueve y parece roto
-   cuando en realidad está obedeciendo.
-   Quieta no puede quedarse en un pegote, así que se vuelve un carrusel de los
-   de toda la vida: se arrastra con el dedo, cada imagen se ancla al borde para
-   que no queden a medias, y el desplazamiento conserva la inercia del sistema.
-   La segunda copia se esconde, que ahí ya no pinta nada. */
-@media (prefers-reduced-motion: reduce) {
-  .ot-carrusel-tira {
-    animation: none;
-  }
-  .ot-carrusel {
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-  }
-  .ot-carrusel figure {
-    scroll-snap-align: center;
-  }
-  .ot-carrusel figure[aria-hidden="true"] {
-    display: none;
-  }
-}
+/* AQUÍ NO SE ATIENDE «REDUCIR MOVIMIENTO», Y ES A SABIENDAS.
+   El resto del sitio respeta ese ajuste del sistema. Esta pieza no, porque aquí
+   el movimiento no es un adorno encima del contenido: ES el contenido. Parada
+   no queda una versión tranquila del carrusel, queda una fila de fotos cortada
+   por los dos bordes y sin manera evidente de ver el resto.
+   Viene de que en su teléfono la tira no se movía, y «Reducir movimiento» es lo
+   más habitual que la para: obedeciendo, el carrusel se quedaba muerto y
+   parecía roto.
+   Lo que había aquí, por si algún día se quiere volver atrás, era una regla que
+   quitaba la animación y dejaba la tira arrastrable con el dedo, con las
+   imágenes ancladas al borde. */
 
 @media (max-width: 700px) {
   .ot-carrusel img {
