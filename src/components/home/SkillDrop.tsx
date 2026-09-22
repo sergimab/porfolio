@@ -170,11 +170,12 @@ function Atajo({
 // sitio. Cada tarjeta se lleva además el tono de SU categoría, que es lo que
 // hace que la parrilla se vea de cuatro colores y no de uno.
 const RECOMENDADOS: [string, string][] = [
+  ["branding", "b1"],
   ["iberdrola", "i1"],
+  ["3d", "d1"],
   ["motion", "m1"],
   ["uiux", "u3"],
-  ["3d", "d1"],
-  ["branding", "b1"],
+  ["fotografia", "f1"],
 ];
 
 const recomendados = RECOMENDADOS.map(([cat, id]) => {
