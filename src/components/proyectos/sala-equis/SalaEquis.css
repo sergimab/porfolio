@@ -60,12 +60,10 @@
   transition: opacity 0.8s ease;
 }
 
-/* EL RELEVO DE LOS DOS LOGOTIPOS. Va sobre negro porque es donde vive la marca
-   nueva —todas sus aplicaciones son luz sobre oscuro— y porque el logotipo
-   viejo, invertido, necesita ese negro para que la inversión tenga sentido.
-   El aire por dentro es generoso a propósito: un logotipo pegado al borde de su
-   caja se lee como un recorte, no como una marca. */
-/* UNA FRANJA, Y NO UN CUADRO. Va a todo el ancho del apartado, pero baja de
+/* EL RELEVO DE LOS DOS LOGOTIPOS, EN FRANJA Y NO EN CUADRO.
+   Va sobre negro porque es donde vive la marca nueva —todas sus aplicaciones
+   son luz sobre oscuro— y porque el logotipo viejo, invertido, necesita ese
+   negro para que la inversión tenga sentido. Va a todo el ancho del apartado, pero baja de
    alto hasta quedarse en una banda: lo que hay dentro es un logotipo, o sea una
    línea de texto, y en una caja alta el negro pesaba más que la marca. */
 .se-logos {
@@ -92,12 +90,27 @@
   gap: 18px;
   margin: 28px 0 0;
 }
-/* La de arriba, a todo el ancho del apartado. Tuvo tope mientras la imagen era
-   más alta que ancha —a mil píxeles de ancho eran mil de alto, una pantalla
-   entera de scroll para un bote de palomitas—, pero la nueva es apaisada y a
-   todo el ancho se queda en algo más de cuatrocientos de alto. */
-.se-mockup-grande {
-  margin-inline: auto;
+/* MÁS ANCHA QUE LA COLUMNA, que es lo que la hace la pieza grande del apartado
+   y no una más. Se sale por los dos lados hasta donde deja la ventana, con un
+   tope para que en una pantalla muy ancha no se estire sin fin, y dejando un
+   respiro a cada lado para que no llegue a tocar el borde.
+   Y el selector lleva delante el nombre de la etiqueta porque si no, la regla
+   de ancho de todas las piezas del apartado —que es más específica— le gana a
+   esta y la deja en el ancho de la columna CON los márgenes negativos ya
+   puestos, o sea descentrada hacia la izquierda. */
+.se-mockups img.se-mockup-grande {
+  width: min(100vw - 48px, 1180px);
+  max-width: none;
+  margin-inline: calc(50% - min(50vw - 24px, 590px));
+}
+
+@media (max-width: 700px) {
+  /* En el teléfono no hay ancho que ganar: la columna ya es casi la ventana, y
+     salirse solo serviría para comerse los márgenes de la página. */
+  .se-mockups img.se-mockup-grande {
+    width: 100%;
+    margin-inline: 0;
+  }
 }
 /* LAS COLUMNAS VAN EN PROPORCIÓN A LAS PIEZAS, y no a mitades. Las tarjetas son
    apaisadas —1,17 a 1— y las acreditaciones verticales —0,76 a 1—: repartido a
