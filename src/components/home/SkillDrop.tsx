@@ -174,7 +174,7 @@ const RECOMENDADOS: [string, string][] = [
   ["iberdrola", "i1"],
   ["3d", "d1"],
   ["motion", "m1"],
-  ["branding", "b3"],
+  ["uiux", "u3"],
   ["fotografia", "f1"],
 ];
 
