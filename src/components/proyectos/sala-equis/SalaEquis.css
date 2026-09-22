@@ -65,8 +65,12 @@
    El aire por dentro es generoso a propósito: un logotipo pegado al borde de su
    caja se lee como un recorte, no como una marca. */
 .se-logos {
-  --se-aire: 19%;
-  margin: 28px 0 0;
+  --se-aire: 14%;
+  margin: 28px auto 0;
+  /* MÁS ESTRECHO QUE LA COLUMNA. Es un logotipo, no una lámina: a todo el ancho
+     del apartado, la caja negra pesaba más que la marca que hay dentro. Con el
+     tope, el negro es un fondo y no un cartel. */
+  max-width: 560px;
 }
 
 /* Las seis proyecciones, más grandes y sin tanto aire: aquí la lámina ES la
@@ -88,11 +92,11 @@
   gap: 18px;
   margin: 28px 0 0;
 }
-/* La de arriba, centrada y con tope. Ya recortada sigue siendo más alta que
-   ancha, así que a todo el ancho de la columna serían mil píxeles de alto, una
-   pantalla entera de scroll para un bote de palomitas. */
+/* La de arriba, a todo el ancho del apartado. Tuvo tope mientras la imagen era
+   más alta que ancha —a mil píxeles de ancho eran mil de alto, una pantalla
+   entera de scroll para un bote de palomitas—, pero la nueva es apaisada y a
+   todo el ancho se queda en algo más de cuatrocientos de alto. */
 .se-mockup-grande {
-  max-width: 620px;
   margin-inline: auto;
 }
 /* LAS COLUMNAS VAN EN PROPORCIÓN A LAS PIEZAS, y no a mitades. Las tarjetas son
@@ -120,6 +124,6 @@
     grid-template-columns: 1fr;
   }
   .se-logos {
-    --se-aire: 14%;
+    --se-aire: 11%;
   }
 }
