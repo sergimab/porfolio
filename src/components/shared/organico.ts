@@ -146,29 +146,6 @@ function luzParaLuminancia(h: number, s: number, objetivo: number): number {
   return (bajo + alto) / 2;
 }
 
-// LA FRANJA DEL BARRO: de 45 a 100 grados, del amarillo al verde hoja.
-//
-// Aquí todos los colores se bajan de luz hasta que el blanco encima se lee, y
-// esa bajada no trata igual a todos los tonos. Un azul oscuro sigue siendo
-// azul, y un violeta oscuro, violeta; pero un amarillo o un verde lima oscuros
-// no son un amarillo ni un lima apagados, son OTRO COLOR: caqui, oliva, ocre.
-// Por eso el abanico de Fotografía ensuciaba: su mancha más abierta caía en el
-// 72 y volvía convertida en barro.
-//
-// La salida es rebotar contra el 45 en vez de cruzarlo. Rebotar y no recortar,
-// porque recortando las manchas se amontonarían todas en el mismo tono y el
-// degradado se quedaría plano; rebotando, la que se pasaba de ámbar vuelve como
-// coral y el abanico sigue abriéndose, solo que hacia el otro lado.
-//
-// Solo se aplica a los tonos cálidos de partida, del rojo al ámbar. Un verde o
-// un lima que vivan DENTRO de esa franja son lo que son y no hay nada que
-// corregir; y los demás nunca llegan hasta allí.
-const BARRO = 45;
-function sinBarro(base: number, h: number): number {
-  if (base < 0 || base > BARRO) return h;
-  return h > BARRO ? BARRO - (h - BARRO) : h;
-}
-
 // Las cinco manchas de una categoría, con el mismo peso de luz todas.
 // `abanico` encoge o abre el reparto de tonos alrededor del de la categoría:
 // a 1 es el de la paleta normal —90 grados—, y más bajo junta los colores.
@@ -181,7 +158,7 @@ function capasLegibles(hue: number, sat: number, abanico: number, objetivo: numb
     [-16, 24],
   ];
   return capas.map(([dh, ds]) => {
-    const h = tono(sinBarro(hue, hue + dh * abanico));
+    const h = tono(hue + dh * abanico);
     const s = satura(sat + ds * abanico);
     return { h, s, l: luzParaLuminancia(h, s, objetivo) };
   });
