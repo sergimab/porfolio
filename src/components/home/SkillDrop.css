@@ -310,6 +310,112 @@
   padding: 24px;
 }
 
+/* ── La cabecera del panel de contacto ───────────────────────────────────────
+   «Hablemos» a la izquierda y las dos puertas directas a la derecha, alineadas
+   por la base del título y no por su centro, que es lo que hace que los dos
+   bloques se lean como escritos sobre el mismo renglón. */
+.contacto-cabecera {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.contacto-atajos {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  /* El título ya trae su propio hueco por abajo; esto sube los discos hasta la
+     línea de base en vez de dejarlos colgando de ella. */
+  padding-bottom: 6px;
+}
+
+/* CADA ATAJO ES UN DISCO QUE SE ABRE. En reposo mide lo que mide su icono; al
+   acercarse crece hacia la izquierda y saca el dato.
+   Se anima `max-width` y no `width` porque el contenido no tiene una medida
+   fija que poner en el `to`: son un correo y un teléfono de largos distintos, y
+   con el tope alto de sobra cada uno se abre justo lo que necesita. El precio
+   es que la velocidad de apertura no es idéntica en los dos; a esta distancia
+   no se aprecia.
+   Y se abre hacia la izquierda —`flex-direction: row-reverse` y el atajo pegado
+   al final— porque a la derecha está el borde del panel: creciendo hacia allá
+   se saldría de la caja. */
+.contacto-atajo {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  max-width: 40px;
+  padding: 0;
+  border: 1px solid var(--foreground);
+  border-radius: 999px;
+  background: var(--background);
+  color: var(--foreground);
+  text-decoration: none;
+  overflow: hidden;
+  transition: max-width 0.35s cubic-bezier(0.22, 0.7, 0.2, 1), background 0.2s, color 0.2s;
+}
+/* Se abre al pasar por encima Y AL LLEGAR CON EL TABULADOR. Lo segundo no es un
+   extra: sin ello, quien navegue con teclado se encuentra un disco que anuncia
+   un correo que no puede ver. */
+.contacto-atajo:hover,
+.contacto-atajo:focus-visible {
+  max-width: 320px;
+  background: var(--foreground);
+  color: var(--background);
+}
+.contacto-atajo-icono {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Menos 2 del trazo: así el disco mide 40 clavados por fuera, que es el
+     objetivo mínimo cómodo para un dedo. */
+  width: 38px;
+  height: 38px;
+}
+.contacto-atajo-icono svg {
+  width: 19px;
+  height: 19px;
+}
+/* El dato. `white-space: nowrap` es lo que evita que, mientras la caja se
+   abre, el texto se reparta en dos renglones y el disco pegue un salto de
+   alto. */
+.contacto-atajo-texto {
+  display: flex;
+  align-items: center;
+  padding-left: 16px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  /* EN EL TELÉFONO NO HAY «PASAR POR ENCIMA», así que los dos atajos se quedan
+     abiertos: un disco que no se abre nunca es un icono mudo. Van debajo del
+     título y a todo el ancho, uno por renglón, que es donde hay sitio para el
+     dato entero. */
+  .contacto-cabecera {
+    flex-direction: column;
+    align-items: stretch;
+    /* Aire antes del formulario. En horizontal lo ponía el hueco propio del
+       título, pero al bajar los atajos debajo son ellos los que quedan pegados
+       al primer campo. */
+    margin-bottom: 14px;
+  }
+  .contacto-atajos {
+    flex-direction: column;
+    align-items: stretch;
+    padding-bottom: 0;
+  }
+  .contacto-atajo {
+    flex-direction: row;
+    max-width: none;
+  }
+  .contacto-atajo-texto {
+    padding-left: 0;
+    padding-right: 16px;
+  }
+}
+
 /* El correo y el teléfono, en su propia caja debajo del formulario: dos fichas
    iguales, cada una con su icono, su etiqueta y su dato. La caja entera es el
    enlace, no solo el texto, así que el objetivo de pulsación es grande —que es

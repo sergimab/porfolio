@@ -226,10 +226,15 @@ export default function Header() {
           </button>
 
         {/* Language toggle */}
+        {/* LA PASTILLA SE MIDE SOLA, y antes estaba clavada a 64. Ahí dentro no
+            cabían las dos palabras con su relleno, así que se aplastaban contra
+            el borde de la pastilla y todo el aire sobrante se le quedaba a la
+            barra del medio. Sin ancho fija, el relleno de los lados es real y
+            la separación entre ES y EN la pone la barra, no lo que sobre. */}
         <div style={{
-          display: "flex", alignItems: "center", justifyContent: "center", gap: "2px",
+          display: "flex", alignItems: "center", justifyContent: "center", gap: "1px",
           border: "1px solid var(--foreground)", borderRadius: "999px",
-          width: "64px", height: "32px",
+          padding: "0 8px", height: "32px",
         }}>
           <button
             onClick={() => changeLang("es")}
@@ -240,7 +245,7 @@ export default function Header() {
               // que es el mínimo de la norma. Las letras siguen midiendo lo
               // mismo; lo que crece es la zona que responde al dedo, que en un
               // móvil eran 16 x 20 y se fallaba.
-              padding: "4px 5px",
+              padding: "4px 2px",
               display: "flex", alignItems: "center", justifyContent: "center",
               minWidth: "24px", minHeight: "24px",
               fontSize: "13px",
@@ -251,13 +256,13 @@ export default function Header() {
           >
             ES
           </button>
-          <span style={{ color: "var(--border)", fontSize: "12px" }}>/</span>
+          <span style={{ color: "var(--border)", fontSize: "12px", lineHeight: 1 }}>/</span>
           <button
             onClick={() => changeLang("en")}
             aria-label="English"
             style={{
               background: "none", border: "none", cursor: "pointer",
-              padding: "4px 5px",
+              padding: "4px 2px",
               display: "flex", alignItems: "center", justifyContent: "center",
               minWidth: "24px", minHeight: "24px",
               fontSize: "13px",
