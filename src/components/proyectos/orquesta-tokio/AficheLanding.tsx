@@ -2,6 +2,16 @@ import BackCapsule from "@/components/shared/BackCapsule";
 import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
 import LangText from "@/components/shared/LangText";
 import ToolIcons from "@/components/shared/ToolIcons";
+import RotuloSeccion from "@/components/shared/RotuloSeccion";
+import Carrusel from "./Carrusel";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+import "./Carrusel.css";
+
+// El cartel se busca en el disco igual que el logotipo del branding, así que
+// basta con dejar el archivo en su carpeta para que aparezca, sin tocar código.
+const CARPETA = "proyectos/orquesta-tokio";
+const NOMBRES = ["afiche.webp", "afiche.jpg", "afiche.png"];
 
 // «Afiche Orquesta Tokio», la primera página de Fotografía.
 //
@@ -18,6 +28,8 @@ const HUE = 32;
 const TINTE = "#D97706";
 
 export default function AficheLanding() {
+  const afiche = NOMBRES.find((n) => existsSync(join(process.cwd(), "public", CARPETA, n)));
+
   return (
     <main className="project-main">
       {/* --hero-hue en el contenedor: lo heredan el cuadro de cabecera, los
@@ -52,12 +64,32 @@ export default function AficheLanding() {
         <div className="project-introrow">
           <p className="project-intro">
             <LangText
-              es="A partir de **unas fotografías aportadas por el cliente**, se monta el **cartel promocional de la gira** de la **Orquesta Tokio**: el material de partida no se elige, se recibe, así que el trabajo consiste en **sacarle una imagen** —encuadre, luz y color— y construir con ella un afiche que funcione a distancia y en la calle."
-              en="Starting from **a set of photographs supplied by the client**, this is the **promotional poster for the Orquesta Tokio tour**: the raw material is not chosen, it arrives, so the job is to **pull an image out of it** — framing, light and colour — and build a poster that works from a distance and out in the street."
+              es="A partir de **unas fotografías aportadas por el cliente** se monta el **cartel promocional de la gira** de la **Orquesta Tokio**. El material de partida no se elige, llega dado, así que el trabajo está en **sacarle una imagen** con el encuadre, la luz y el color, y construir con ella un afiche que funcione a distancia y en la calle."
+              en="Starting from **a set of photographs supplied by the client**, this is the **promotional poster for the Orquesta Tokio tour**. The raw material is not chosen, it arrives as it is, so the job is to **pull an image out of it** through framing, light and colour, and build a poster that works from a distance and out in the street."
             />
           </p>
           <ToolIcons tools={["Photoshop", "Illustrator"]} />
         </div>
+
+        {/* ── La sesión ──────────────────────────────────────────────────── */}
+        <section className="ot-seccion">
+          <RotuloSeccion es="La sesión" en="The shoot" />
+          <Carrusel alt="Retrato de la sesión de la Orquesta Tokio sobre fondo blanco" />
+
+          {afiche ? (
+            <figure className="ot-afiche">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={`/${CARPETA}/${afiche}`} alt="El cartel promocional de la gira de la Orquesta Tokio" />
+            </figure>
+          ) : (
+            <p className="ot-pendiente">
+              <LangText
+                es="Falta el afiche, que va justo aquí. Basta con dejar el archivo en public/proyectos/orquesta-tokio/ llamado afiche.webp (o .jpg), que la página lo busca sola y lo coloca."
+                en="Missing the poster, which goes right here. Just drop the file into public/proyectos/orquesta-tokio/ named afiche.webp (or .jpg) and the page will find it and place it."
+              />
+            </p>
+          )}
+        </section>
       </div>
     </main>
   );
