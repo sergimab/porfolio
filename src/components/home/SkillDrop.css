@@ -724,9 +724,8 @@ textarea.contact-input { resize: vertical; }
    El bloque va después de las cápsulas y de los paneles, con el mismo ancho
    que ellos y su aire por arriba, para que se lea como otra sección de la
    página y no como un añadido al final.
-   El titular va centrado, al revés que el de «Hablemos»: aquel encabeza una
-   caja con marco y este encabeza una parrilla suelta, así que lo que lo ancla
-   es el eje de las tarjetas. */
+   El titular va a la izquierda, como el de «Hablemos» y como los rótulos de las
+   páginas de proyecto: en este sitio los titulares arrancan por el margen. */
 .home-recomendados {
   width: 100%;
   max-width: 1024px;
@@ -737,5 +736,4 @@ textarea.contact-input { resize: vertical; }
 .home-recomendados .dropcap-title {
   display: block;
   margin-bottom: 28px;
-  text-align: center;
 }

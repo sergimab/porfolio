@@ -174,6 +174,7 @@ const RECOMENDADOS: [string, string][] = [
   ["motion", "m1"],
   ["uiux", "u3"],
   ["3d", "d1"],
+  ["branding", "b1"],
 ];
 
 const recomendados = RECOMENDADOS.map(([cat, id]) => {
