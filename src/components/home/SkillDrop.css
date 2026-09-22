@@ -729,7 +729,11 @@ textarea.contact-input { resize: vertical; }
 .home-recomendados {
   width: 100%;
   max-width: 1024px;
-  margin: 56px auto 0;
+  /* El aire de abajo no es simetría: en el móvil las tarjetas se mueven de su
+     sitio hasta 24 px para romper la rejilla, así que la última puede colgar
+     por debajo de donde acaba el bloque y quedarse a catorce píxeles del lema.
+     Esto le devuelve el respiro. */
+  margin: 56px auto 28px;
   padding: 0 24px;
   box-sizing: border-box;
 }
