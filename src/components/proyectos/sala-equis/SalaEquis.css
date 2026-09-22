@@ -115,7 +115,7 @@
 .se-grande {
   position: relative;
   margin-top: -12%;
-  margin-bottom: -15%;
+  margin-bottom: -19%;
 }
 
 /* LAS COLUMNAS VAN EN PROPORCIÓN A LAS PIEZAS, y no a mitades. Las tarjetas son
@@ -125,7 +125,12 @@
    dos acaban con el mismo alto. */
 .se-mockups-par {
   display: grid;
-  grid-template-columns: 1.17fr 0.76fr;
+  /* Casi a partes iguales, y ya no en proporción a cada pieza. Igualando los
+     altos, las acreditaciones se quedaban en 335 de ancho, que para una imagen
+     vertical con una foto de carné dentro es poco. Ahora la vertical sale más
+     alta que la apaisada, y eso no descuadra la fila porque van centradas entre
+     sí: lo que se lee es un par, no un renglón. */
+  grid-template-columns: 1fr 0.95fr;
   gap: 18px;
   align-items: center;
 }

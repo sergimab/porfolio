@@ -9,6 +9,11 @@ export type Lamina = {
    *  blanco y aquí va sobre negro, así que se invierte en vez de pedir otro
    *  archivo que sería el mismo dibujo del revés. */
   filtro?: string;
+  /** Un ajuste de tamaño SOLO para esa lámina. Las dos se ajustan a la misma
+   *  caja, pero no tienen la misma proporción ni el mismo grosor de trazo, así
+   *  que ajustadas al milímetro una puede pesar más que la otra. Esto es para
+   *  igualarlas a ojo, que es como se igualan dos logotipos distintos. */
+  escala?: number;
 };
 
 // Una pila de láminas que se van fundiendo una en otra, en bucle.
@@ -76,6 +81,7 @@ export default function Alterna({
             opacity: n === i ? 1 : 0,
             transitionDuration: `${fundido}s`,
             filter: l.filtro,
+            transform: l.escala ? `scale(${l.escala})` : undefined,
           }}
           loading={n === 0 ? "eager" : "lazy"}
         />

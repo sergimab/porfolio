@@ -21,7 +21,7 @@ const CARPETA = "/proyectos/sala-equis";
 // nítido a cualquier tamaño y no hay una segunda versión que mantener.
 const LOGOS = [
   { src: `${CARPETA}/logo-actual.webp`, alt: "El logotipo actual de Sala Equis", filtro: "invert(1)" },
-  { src: `${CARPETA}/logo-equix.svg`, alt: "El logotipo nuevo, Equix" },
+  { src: `${CARPETA}/logo-equix.svg`, alt: "El logotipo nuevo, Equix", escala: 0.78 },
 ];
 
 // Las seis proyecciones, en el orden en que se hicieron.
