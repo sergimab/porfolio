@@ -106,12 +106,14 @@ export default function SalaEquisLanding() {
             {/* Las palomitas primero y en grande: es la pieza que se toca, la
                 que sale de la sala con quien ha entrado a ver la película, así
                 que abre el apartado en vez de ir de acompañante. */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              className="se-mockup-grande"
-              src={`${CARPETA}/palomitas-mockup.webp`}
-              alt="La caja de palomitas y el vaso de cerveza de Equix"
-            />
+            <div className="se-grande">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                className="se-mockup-grande"
+                src={`${CARPETA}/palomitas-mockup.webp`}
+                alt="La caja de palomitas y el vaso de cerveza de Equix"
+              />
+            </div>
             <div className="se-mockups-par">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={`${CARPETA}/tarjetas.webp`} alt="Las dos caras de la tarjeta de Equix" loading="lazy" />
