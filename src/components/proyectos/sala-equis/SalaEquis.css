@@ -115,7 +115,7 @@
 .se-grande {
   position: relative;
   margin-top: -12%;
-  margin-bottom: -19%;
+  margin-bottom: -21%;
 }
 
 /* LAS COLUMNAS VAN EN PROPORCIÓN A LAS PIEZAS, y no a mitades. Las tarjetas son
@@ -132,7 +132,13 @@
      sí: lo que se lee es un par, no un renglón. */
   grid-template-columns: 1fr 0.95fr;
   gap: 18px;
-  align-items: center;
+  /* ALINEADAS POR ARRIBA, no por el centro. Las dos ya no miden lo mismo de
+     alto —la vertical saca 177 px a la apaisada—, así que centradas dejaban a
+     las tarjetas flotando casi noventa píxeles por debajo del renglón, y ese
+     hueco se leía como una separación enorme con las palomitas cuando en
+     realidad la fila empezaba pegada. Por arriba, las dos arrancan donde
+     termina la pieza de encima. */
+  align-items: start;
 }
 .se-mockups img {
   display: block;
