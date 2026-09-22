@@ -719,3 +719,23 @@ textarea.contact-input { resize: vertical; }
     animation: none !important;
   }
 }
+
+/* ── Proyectos recomendados ──────────────────────────────────────────────────
+   El bloque va después de las cápsulas y de los paneles, con el mismo ancho
+   que ellos y su aire por arriba, para que se lea como otra sección de la
+   página y no como un añadido al final.
+   El titular va centrado, al revés que el de «Hablemos»: aquel encabeza una
+   caja con marco y este encabeza una parrilla suelta, así que lo que lo ancla
+   es el eje de las tarjetas. */
+.home-recomendados {
+  width: 100%;
+  max-width: 1024px;
+  margin: 56px auto 0;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+.home-recomendados .dropcap-title {
+  display: block;
+  margin-bottom: 28px;
+  text-align: center;
+}

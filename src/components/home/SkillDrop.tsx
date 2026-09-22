@@ -163,6 +163,27 @@ function Atajo({
   );
 }
 
+// LOS PROYECTOS RECOMENDADOS de la home: una selección corta que no depende de
+// arrastrar ninguna cápsula. Se nombran por categoría e id y el resto —título,
+// título en inglés y portada— se saca de la lista de arriba, así que cambiarle
+// el nombre a un proyecto o ponerle otra portada sigue siendo cosa de un solo
+// sitio. Cada tarjeta se lleva además el tono de SU categoría, que es lo que
+// hace que la parrilla se vea de cuatro colores y no de uno.
+const RECOMENDADOS: [string, string][] = [
+  ["iberdrola", "i1"],
+  ["motion", "m1"],
+  ["uiux", "u3"],
+  ["3d", "d1"],
+];
+
+const recomendados = RECOMENDADOS.map(([cat, id]) => {
+  const p = projects[cat].find(x => x.id === id);
+  const s = skills.find(x => x.id === cat);
+  // Si alguien renombra un id, mejor que falte la tarjeta a que reviente la
+  // home entera.
+  return p && s ? { ...p, hue: s.hue } : null;
+}).filter((x): x is NonNullable<typeof x> => x !== null);
+
 // Qué banda le toca a una categoría: la oscura de siempre, o la clara de las
 // que llevan el nombre en tinta. Sale de la lista de arriba, así que marcar una
 // categoría con `claro` basta para que cambien a la vez el degradado, la malla
@@ -1081,6 +1102,16 @@ export default function SkillDrop() {
       )}
 
       </div>
+
+      {/* ── Proyectos recomendados ──────────────────────────────────────────
+          Cuatro piezas a la vista sin tener que arrastrar nada. Las cápsulas
+          son un juego y están bien, pero piden una acción para enseñar el
+          primer proyecto; esto es la otra puerta, la de quien entra, mira y
+          quiere ver algo ya. */}
+      <section className="home-recomendados">
+        <DropcapTitle es="Proyectos recomendados" en="Featured projects" />
+        <BounceCards items={recomendados} lang={lang} hue={0} />
+      </section>
 
       <BackToTop />
 

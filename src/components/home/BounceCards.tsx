@@ -11,7 +11,16 @@ import "./BounceCards.css";
 // es un proyecto (portada + nombre siempre visible) enlazado a su página.
 // Mantiene el borde por categoría y el tamaño cuadrado de las cards actuales.
 
-type Item = { id: string; title: string; titleEn: string; cover?: string };
+type Item = {
+  id: string;
+  title: string;
+  titleEn: string;
+  cover?: string;
+  /** El tono de SU categoría. Lo llevan las tarjetas de una parrilla mezclada
+   *  —los proyectos recomendados, que vienen de sitios distintos—; en una
+   *  parrilla de una sola categoría no hace falta, y manda el de la parrilla. */
+  hue?: number;
+};
 
 // Color de texto accesible (blanco o casi-negro) sobre la banda hsl(hue,70%,55%)
 // de la categoría: se elige el que da más contraste según WCAG en vez de fijar
@@ -143,11 +152,12 @@ export default function BounceCards({
   const textColor = "#ffffff";
   // El aro se queda con el degradado VIVO —es el que dice de qué categoría es la
   // tarjeta y no lleva nada escrito encima—; la banda, con el legible.
-  const pintura = { backgroundImage: organicGradient(hue, 70, 55), backgroundSize: CAPSULE_DRIFT_SIZE };
-  const pinturaBanda = { backgroundImage: degradadoLegible(hue), backgroundSize: CAPSULE_DRIFT_SIZE };
-
   const cardInner = (item: Item) => {
     const title = lang === "en" ? item.titleEn : item.title;
+    // El tono es el de la tarjeta si lo trae, y si no el de la parrilla.
+    const tono = item.hue ?? hue;
+    const pintura = { backgroundImage: organicGradient(tono, 70, 55), backgroundSize: CAPSULE_DRIFT_SIZE };
+    const pinturaBanda = { backgroundImage: degradadoLegible(tono), backgroundSize: CAPSULE_DRIFT_SIZE };
     // Cada tarjeta deriva a su propio ritmo, sembrado con su id: si
     // compartieran duración, las manchas irían todas a la vez y se leería
     // como un parpadeo del bloque entero en vez de piezas con vida propia.
@@ -194,7 +204,7 @@ export default function BounceCards({
             de abajo. */}
         <span className="bc-name" style={{ color: textColor, ...pinturaBanda, ...ritmo }}>
           <MeshGradient
-            colores={paletaLegible(hue)}
+            colores={paletaLegible(tono)}
             selectorEscucha=".bc-card"
             /* Quieta en reposo y viva al pasar por encima. En la parrilla hay
                cinco tarjetas a la vez y todas a la vista: moviéndose siempre,
