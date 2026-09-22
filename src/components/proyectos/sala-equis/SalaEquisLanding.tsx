@@ -80,21 +80,27 @@ export default function SalaEquisLanding() {
         {/* ── La luz ─────────────────────────────────────────────────────── */}
         <section className="se-seccion">
           <RotuloSeccion es="La luz" en="The light" />
-          <div className="se-texto">
-            <p>
-              <LangText
-                es="El logotipo no tiene **una sola forma**. Se proyecta, y como cualquier proyección **se deforma con aquello donde cae**: se estira en una pared en diagonal, se parte en una esquina, se curva sobre un cuerpo. Todas las versiones son el mismo logotipo visto desde otro sitio, así que la marca **no es un dibujo sino una manera de aparecer**, que es exactamente lo que pasa en una sala de cine."
-                en="The logotype has **no single shape**. It is projected, and like any projection **it bends with whatever it lands on**: it stretches on an angled wall, breaks across a corner, curves over a body. Every version is the same logotype seen from somewhere else, so the brand **is not a drawing but a way of appearing**, which is exactly what happens inside a cinema."
-              />
-            </p>
+          {/* Las proyecciones a la izquierda y el texto a su derecha. En el
+              orden del documento van primero las imágenes, que es lo que las
+              pone a la izquierda y, al apilarse en el móvil, deja el texto
+              debajo de aquello de lo que habla. */}
+          <div className="se-luz-fila">
+            <Alterna
+              laminas={LUCES}
+              proporcion="3 / 2"
+              segundos={2.2}
+              fondo="#000"
+              className="se-luces"
+            />
+            <div className="se-texto">
+              <p>
+                <LangText
+                  es="El logotipo no tiene **una sola forma**. Se proyecta, y como cualquier proyección **se deforma con aquello donde cae**: se estira en una pared en diagonal, se parte en una esquina, se curva sobre un cuerpo. Todas las versiones son el mismo logotipo visto desde otro sitio, así que la marca **no es un dibujo sino una manera de aparecer**, que es exactamente lo que pasa en una sala de cine."
+                  en="The logotype has **no single shape**. It is projected, and like any projection **it bends with whatever it lands on**: it stretches on an angled wall, breaks across a corner, curves over a body. Every version is the same logotype seen from somewhere else, so the brand **is not a drawing but a way of appearing**, which is exactly what happens inside a cinema."
+                />
+              </p>
+            </div>
           </div>
-          <Alterna
-            laminas={LUCES}
-            proporcion="3 / 2"
-            segundos={2.2}
-            fondo="#000"
-            className="se-luces"
-          />
         </section>
 
         {/* ── Aplicaciones ───────────────────────────────────────────────── */}

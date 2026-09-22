@@ -71,10 +71,25 @@
   margin: 28px 0 0;
 }
 
-/* Las seis proyecciones, más grandes y sin tanto aire: aquí la lámina ES la
-   imagen, no una marca dentro de una caja. */
+/* Las seis proyecciones, sin aire por dentro: aquí la lámina ES la imagen, no
+   una marca dentro de una caja. */
 .se-luces {
-  margin: 28px 0 0;
+  margin: 0;
+}
+
+/* LAS PROYECCIONES A LA IZQUIERDA Y EL TEXTO A SU DERECHA.
+   El reparto no es a mitades: lo que manda es la imagen —es lo que hay que
+   mirar— y al texto le basta una columna estrecha, que además es donde mejor
+   se lee un párrafo. A 1,5 contra 1, la columna de texto se queda en unos
+   cincuenta caracteres por línea, que es el ancho de lectura de toda la vida.
+   Centrado en vertical: el párrafo es más corto que la imagen, y arrimado
+   arriba dejaría un vacío largo debajo. */
+.se-luz-fila {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 26px;
+  align-items: center;
+  margin-top: 28px;
 }
 
 /* ── Los mockups ─────────────────────────────────────────────────────────────
@@ -148,6 +163,13 @@
 }
 
 @media (max-width: 700px) {
+  /* En el teléfono la fila se apila. El texto queda debajo de las proyecciones,
+     que es el orden en que están escritas, o sea debajo de aquello de lo que
+     habla. */
+  .se-luz-fila {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
   /* A una columna: a 375 px, las acreditaciones en media caja se quedan en 160
      de ancho y ahí ya no se distingue ni la foto del carné. */
   .se-mockups-par {
