@@ -136,14 +136,15 @@
 /* LAS DOS EN UNA FILA, con el reparto muy desigual.
    No es un capricho de composición: el archivo de las tarjetas lleva un quinto
    de margen transparente a cada lado —la sombra proyectada, que no se recorta—
-   mientras que el de las acreditaciones viene a hueso. Repartiendo a partes
-   iguales, la pieza de la izquierda se veía la mitad de grande que la de la
-   derecha aun ocupando lo mismo. Con este reparto, las dos piezas se ven de un
-   tamaño parecido.
+   mientras que el de las acreditaciones viene a hueso: de dos columnas iguales,
+   una enseña pieza en el 59 % de su ancho y la otra en el 100 %.
+   Aquí manda el encargo antes que la aritmética: las acreditaciones se quieren
+   grandes, así que se llevan la columna ancha aunque sean las que menos la
+   necesitan. Las tarjetas se quedan en 378 de caja y 222 de pieza.
    Alineadas por arriba, que es lo que las deja pegadas a lo de encima. */
 .se-mockups-par {
   display: grid;
-  grid-template-columns: 1.55fr 0.85fr;
+  grid-template-columns: 1fr 1.25fr;
   gap: 14px;
   align-items: start;
 }
@@ -165,7 +166,7 @@
     grid-template-columns: 1fr;
   }
   .se-mockup-staff {
-    width: min(100%, 320px);
+    width: min(100%, 340px);
     margin-inline: auto;
     margin-top: 0;
   }
