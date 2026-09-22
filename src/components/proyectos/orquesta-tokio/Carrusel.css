@@ -89,6 +89,10 @@
      tira de ocho imágenes y otra de nueve no tardan lo mismo en recorrerse al
      mismo paso. */
   animation: ot-desfile 60s linear infinite;
+  /* Que el teléfono se la lleve a su propia capa y no repinte la tira entera en
+     cada fotograma. Una tira de tres mil píxeles de ancho moviéndose sin esto
+     va a tirones en cuanto el móvil es modesto. */
+  will-change: transform;
 }
 
 .ot-carrusel figure {
@@ -134,14 +138,28 @@
   }
 }
 
-/* Quien tenga pedido en el sistema que no se mueva nada, ve la tira quieta y
-   puede recorrerla con el dedo o con la rueda. */
+/* QUIEN TENGA PEDIDO EN EL SISTEMA QUE NO SE MUEVA NADA, ve la tira quieta.
+   Ojo con esto al probar en un teléfono: «Reducir movimiento» de iOS o de
+   Android entra por aquí, y entonces el carrusel no se mueve y parece roto
+   cuando en realidad está obedeciendo.
+   Quieta no puede quedarse en un pegote, así que se vuelve un carrusel de los
+   de toda la vida: se arrastra con el dedo, cada imagen se ancla al borde para
+   que no queden a medias, y el desplazamiento conserva la inercia del sistema.
+   La segunda copia se esconde, que ahí ya no pinta nada. */
 @media (prefers-reduced-motion: reduce) {
   .ot-carrusel-tira {
     animation: none;
   }
   .ot-carrusel {
     overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .ot-carrusel figure {
+    scroll-snap-align: center;
+  }
+  .ot-carrusel figure[aria-hidden="true"] {
+    display: none;
   }
 }
 

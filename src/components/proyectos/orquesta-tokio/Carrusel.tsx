@@ -33,7 +33,15 @@ export default function Carrusel({
           fotos.map((f) => (
             <figure key={`${copia}-${f.src}`} aria-hidden={copia === 1}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={f.src} alt={copia === 0 ? f.alt : ""} loading="lazy" />
+              {/* LA PRIMERA COPIA NO VA DIFERIDA Y LA SEGUNDA SÍ. Diferir una
+                  imagen que está fuera de la pantalla POR LA DERECHA, dentro de
+                  una tira con el desbordamiento oculto, es pedirle al navegador
+                  que adivine cuándo va a entrar; algunos no lo resuelven y la
+                  imagen no llega nunca, que es una tira con huecos en blanco
+                  moviéndose. Pesan treinta kilos cada una, así que la vuelta
+                  entera se pide de golpe y se acabó el problema. La segunda
+                  copia sí se difiere, que es la misma lista otra vez. */}
+              <img src={f.src} alt={copia === 0 ? f.alt : ""} loading={copia === 0 ? "eager" : "lazy"} />
             </figure>
           ))
         )}
