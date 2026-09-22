@@ -59,7 +59,7 @@ const titles: Record<string, string> = {
   m1: "Motion Yelmo Cines", m2: "Motion El Arte del Miedo",
   b1: "Espacio vacío", b2: "Rebranding Yelmo Cines", b3: "El Arte del Miedo",
   f1: "Afiche Orquesta Tokio",
-  i1: "Infografías", i3: "Newsletters", i4: "Iconografía", i5: "Sistema de ilustraciones",
+  i1: "Infografías", i2: "Sistema de diseño", i3: "Newsletters", i4: "Iconografía", i5: "Sistema de ilustraciones",
   u1: "Web de Elysium", u2: "App Espacio vacío", u3: "App El Arte del Miedo",
   d1: "Elysium",
   e1: "Disco Elysium",
