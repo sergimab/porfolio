@@ -112,7 +112,9 @@
    escena dentro, con once personas sobre el escenario, así que en columna
    estrecha no se distinguiría ni quién es quién. */
 .ot-afiche {
-  margin: 36px 0 0;
+  /* El mismo aire que llevan las piezas bajo un rótulo en el resto del sitio,
+     que ahora el cartel tiene el suyo encima. */
+  margin: 28px 0 0;
 }
 .ot-afiche img {
   display: block;

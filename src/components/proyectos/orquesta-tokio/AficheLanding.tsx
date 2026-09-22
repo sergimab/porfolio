@@ -75,6 +75,14 @@ export default function AficheLanding() {
         <section className="ot-seccion">
           <RotuloSeccion es="La sesión" en="The shoot" />
           <Carrusel alt="Retrato de la sesión de la Orquesta Tokio sobre fondo blanco" />
+        </section>
+
+        {/* ── El cartel ──────────────────────────────────────────────────── */}
+        {/* Con rótulo propio y no como un pie del carrusel: el material de
+            partida y la pieza acabada son dos cosas distintas, y el título es
+            lo que marca dónde termina una y empieza la otra. */}
+        <section className="ot-seccion">
+          <RotuloSeccion es="El cartel" en="The poster" />
 
           {afiche ? (
             <figure className="ot-afiche">
