@@ -737,3 +737,22 @@ textarea.contact-input { resize: vertical; }
   display: block;
   margin-bottom: 28px;
 }
+
+/* EL SOLAPE, AL REVÉS QUE EN LAS PARRILLAS DE CATEGORÍA.
+   Por defecto manda la última: en una pila de elementos, el que va después en
+   el documento se pinta encima, así que el abanico se lee de derecha a
+   izquierda aunque las tarjetas estén puestas de izquierda a derecha. Aquí el
+   orden lo has elegido tú, y lo primero de la lista tiene que ser lo que se ve
+   entero, así que la pila se invierte con el eje z.
+   Solo se toca el eje z, NUNCA el `position`: en el abanico las tarjetas están
+   en absoluto y apiladas en el mismo punto, y es el desplazamiento de cada una
+   lo que las reparte. Pasarlas a relativo las mete en el flujo, el
+   desplazamiento se suma a su sitio en la fila y el abanico se estira a casi el
+   doble del ancho de la ventana. Ya están posicionadas, así que el eje z las
+   atiende sin ayuda. */
+.home-recomendados .bc-card:nth-child(1) { z-index: 6; }
+.home-recomendados .bc-card:nth-child(2) { z-index: 5; }
+.home-recomendados .bc-card:nth-child(3) { z-index: 4; }
+.home-recomendados .bc-card:nth-child(4) { z-index: 3; }
+.home-recomendados .bc-card:nth-child(5) { z-index: 2; }
+.home-recomendados .bc-card:nth-child(6) { z-index: 1; }
