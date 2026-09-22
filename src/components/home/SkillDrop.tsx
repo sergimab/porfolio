@@ -8,7 +8,7 @@ import BackToTop from "@/components/layout/BackToTop";
 import DropcapTitle from "@/components/shared/DropcapTitle";
 import SobreMi from "./SobreMi";
 import MarcoHormigas from "@/components/shared/MarcoHormigas";
-import { seeded, paletaLegible, degradadoLegible, CAPSULE_DRIFT_SIZE, drift } from "@/components/shared/organico";
+import { seeded, paletaLegible, degradadoLegible, paletaClara, degradadoClaro, CAPSULE_DRIFT_SIZE, drift, TINTA_CLARA } from "@/components/shared/organico";
 import MeshGradient from "@/components/shared/MeshGradient";
 import "./SkillDrop.css";
 
@@ -18,7 +18,11 @@ const skills = [
   // página del proyecto de Motion, que lo saca de aquí.
   { id: "motion",     label: "Motion Graphics", labelEn: "Motion Graphics", color: "rgba(37,99,235,0.12)",  border: "rgba(37,99,235,0.6)",   hue: 217 },
   { id: "branding",   label: "Branding",         labelEn: "Branding",        color: "rgba(219,39,119,0.12)", border: "rgba(219,39,119,0.6)",  hue: 330 },
-  { id: "fotografia", label: "Fotografía",        labelEn: "Photography",     color: "rgba(217,119,6,0.15)",  border: "rgba(217,119,6,0.7)",   hue: 32  },
+    // LA ÚNICA CÁPSULA CLARA. Ver LUMINANCIA_CLARA en organico: el naranja es el
+  // único tono de las siete que al oscurecerse no se apaga, se convierte en
+  // marrón. Así que esta lleva la banda al revés —fondo encendido y nombre en
+  // tinta— y es la forma de que se vea naranja de verdad.
+  { id: "fotografia", label: "Fotografía",        labelEn: "Photography",     color: "rgba(217,119,6,0.15)",  border: "rgba(217,119,6,0.7)",   hue: 32, claro: true },
   { id: "iberdrola",  label: "Iberdrola",         labelEn: "Iberdrola",       color: "rgba(22,163,74,0.12)",  border: "rgba(22,163,74,0.6)",   hue: 142 },
   { id: "uiux",       label: "UI / UX",           labelEn: "UI / UX",         color: "rgba(13,148,136,0.12)", border: "rgba(13,148,136,0.6)",  hue: 175 },
   { id: "3d",         label: "3D",                labelEn: "3D",              color: "rgba(124,58,237,0.12)", border: "rgba(124,58,237,0.6)",  hue: 262 },
@@ -158,6 +162,18 @@ function Atajo({
     </div>
   );
 }
+
+// Qué banda le toca a una categoría: la oscura de siempre, o la clara de las
+// que llevan el nombre en tinta. Sale de la lista de arriba, así que marcar una
+// categoría con `claro` basta para que cambien a la vez el degradado, la malla
+// del shader y el color del texto, sin que ninguno de los tres pueda quedarse
+// atrás.
+type Pinta = { claro?: boolean };
+const pintura = (s: Pinta, hue: number, sat = 70) =>
+  s.claro ? degradadoClaro(hue) : degradadoLegible(hue, sat);
+const colores = (s: Pinta, hue: number, sat = 70) =>
+  s.claro ? paletaClara(hue) : paletaLegible(hue, sat);
+const tinta = (s: Pinta) => (s.claro ? TINTA_CLARA : "#fff");
 
 const DZ_H   = 64;
 const PILL_W = 140;
@@ -767,7 +783,8 @@ export default function SkillDrop() {
                        navegador no da WebGL, el botón sigue pintándose del color
                        de su categoría, solo que sin el fluido. */
                     style={{
-                      ["--fila-color" as string]: degradadoLegible(skill.hue),
+                      ["--fila-color" as string]: pintura(skill, skill.hue),
+                      ["--fila-tinta" as string]: tinta(skill),
                       ["--fila-medida" as string]: CAPSULE_DRIFT_SIZE,
                       ...drift(skill.id),
                     }}
@@ -778,7 +795,7 @@ export default function SkillDrop() {
                         la categoría; la casilla activa va encendida sin ratón,
                         que es la única manera de que se note en un móvil. */}
                     <MeshGradient
-                      colores={paletaLegible(skill.hue)}
+                      colores={colores(skill, skill.hue)}
                       encendido={selectedPanel === skill.id}
                       /* Cero en reposo: la casilla apagada no se ve —el lienzo
                          está a opacidad 0—, así que además de invisible se
@@ -834,12 +851,12 @@ export default function SkillDrop() {
                     backgroundColor: encendida ? undefined : "var(--background)",
                     // El degradado de CSS se queda debajo como red, por si no
                     // hay WebGL.
-                    backgroundImage: encendida ? degradadoLegible(skill.hue, 85) : undefined,
+                    backgroundImage: encendida ? pintura(skill, skill.hue, 85) : undefined,
                     backgroundSize: encendida ? CAPSULE_DRIFT_SIZE : undefined,
                     animation: encendida ? "capsuleDrift 13s ease-in-out infinite" : undefined,
                     display:"flex", alignItems:"center", justifyContent:"center",
                     fontSize:"13px", fontWeight: encendida ? 500 : 400,
-                    color: encendida ? "#fff" : "var(--foreground)",
+                    color: encendida ? tinta(skill) : "var(--foreground)",
                     whiteSpace:"nowrap",
                     transition:"background 0.15s, color 0.15s",
                   }}>
@@ -848,7 +865,7 @@ export default function SkillDrop() {
                         lienzo de la física, que es quien sabe sobre cuál está el
                         cursor—, así que se lo dice `encendida`. */}
                     <MeshGradient
-                      colores={paletaLegible(skill.hue, 85)}
+                      colores={colores(skill, skill.hue, 85)}
                       encendido={encendida}
                       velocidadReposo={0}
                       velocidadHover={0.4}
@@ -892,7 +909,7 @@ export default function SkillDrop() {
                   width:`${PILL_W}px`, height:`${PILL_H}px`,
                   borderRadius:"999px",
                   padding:"2px",
-                  backgroundImage: degradadoLegible(droppedSkill!.hue),
+                  backgroundImage: pintura(droppedSkill!, droppedSkill!.hue),
                   backgroundSize: CAPSULE_DRIFT_SIZE,
                   animation:"capsuleDrift 15s ease-in-out infinite",
                   flexShrink:0,

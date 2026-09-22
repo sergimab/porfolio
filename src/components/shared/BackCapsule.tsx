@@ -2,15 +2,18 @@
 
 import Link from "next/link";
 import MeshGradient from "./MeshGradient";
-import { paletaLegible } from "./organico";
+import { paletaLegible, paletaClara, TINTA_CLARA } from "./organico";
 import "./BackCapsule.css";
 
-const CATS: Record<string, { label: string; hue: number }> = {
+const CATS: Record<string, { label: string; hue: number; claro?: boolean }> = {
   // Los tonos son los mismos que los de las cápsulas de la home, y de ahí
   // salen: Motion azul y Fotografía ámbar desde que se los cambiaron.
   motion:     { label: "Motion Graphics", hue: 217 },
   branding:   { label: "Branding",        hue: 330 },
-  fotografia: { label: "Fotografía",      hue: 32  },
+  // Clara, igual que su cápsula de la home: ver LUMINANCIA_CLARA en organico.
+  // El naranja es el único tono que al oscurecerse se vuelve marrón, así que
+  // esta lleva el fondo encendido y el rótulo en tinta.
+  fotografia: { label: "Fotografía",      hue: 32, claro: true },
   iberdrola:  { label: "Iberdrola",       hue: 142 },
   uiux:       { label: "UI / UX",         hue: 175 },
   "3d":       { label: "3D",              hue: 262 },
@@ -37,7 +40,8 @@ export default function BackCapsule({
     <Link
       href={href ?? `/?cat=${category}`}
       className="back-capsule"
-      style={{ "--cap-hue": cat.hue } as React.CSSProperties}
+      data-claro={cat.claro ? "" : undefined}
+      style={{ "--cap-hue": cat.hue, "--cap-tinta": cat.claro ? TINTA_CLARA : "#fff" } as React.CSSProperties}
       aria-label={`Volver a ${texto}`}
     >
       {/* El mismo degradado de malla que las cápsulas de la home, con la paleta
@@ -45,7 +49,7 @@ export default function BackCapsule({
           punto. Se enciende al pasar por encima —el ratón lo escucha este mismo
           enlace, que es el padre del lienzo— y en reposo se queda parado. */}
       <MeshGradient
-        colores={paletaLegible(cat.hue)}
+        colores={cat.claro ? paletaClara(cat.hue) : paletaLegible(cat.hue)}
         velocidadReposo={0}
         velocidadHover={0.4}
         suavizado={0.45}

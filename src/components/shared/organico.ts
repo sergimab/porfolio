@@ -111,6 +111,48 @@ export function paletaOrganica(hue: number, sat: number, base: number): string[]
 // el contraste; bajarlo los oscurece y lo sube.
 export const LUMINANCIA_BANDA = 0.155;
 
+// ── Y LA BANDA CLARA, para lo que lleva el texto en tinta ───────────────────
+//
+// El naranja es el único color de la paleta que no sobrevive a la banda oscura.
+// Un azul bajado de luz sigue siendo azul y un violeta sigue siendo violeta,
+// pero un naranja bajado de luz es marrón, y un amarillo es caqui: no son el
+// mismo color apagado, son otro color. Así que para que Fotografía se vea
+// naranja de verdad no hay que tocar su tono, hay que dejar de oscurecerlo, y
+// eso solo se puede hacer si el nombre de encima va en negro en vez de en
+// blanco.
+//
+// 0,34 da 6,7:1 contra la tinta en el punto peor del degradado, por encima del
+// 4,5 de la norma. Y es 0,34 y no más arriba porque de 0,40 para allá el
+// naranja se lava: llega a ser clarito, pero deja de ser naranja y se queda en
+// arena. Este es el punto donde el color está más encendido sin que la tinta
+// baje del listón.
+export const LUMINANCIA_CLARA = 0.34;
+
+// EL ABANICO DE LA BANDA CLARA SE CIERRA a menos de la mitad del normal, y esto
+// es lo que hace que se vea naranja y no barro. Con el abanico de siempre, la
+// mancha más abierta cae 34 grados por encima del tono base, o sea en pleno
+// amarillo verdoso, y ese tono a esta luz es oliva. Cerrándolo, las cinco
+// manchas se quedan entre el 19 y el 46 —del naranja encendido al ámbar— y el
+// degradado varía dentro de la familia en vez de salirse de ella.
+// La saturación sube a 90 por lo mismo: es lo que separa un naranja de un
+// terracota.
+const ABANICO_CLARO = 0.3;
+const SATURACION_CLARA = 90;
+
+/** El degradado de una categoría de banda clara, la que lleva el texto en tinta. */
+export function degradadoClaro(hue: number): string {
+  return degradadoLegible(hue, SATURACION_CLARA, ABANICO_CLARO, LUMINANCIA_CLARA);
+}
+/** Sus cinco colores sueltos, para el shader. */
+export function paletaClara(hue: number): string[] {
+  return paletaLegible(hue, SATURACION_CLARA, ABANICO_CLARO, LUMINANCIA_CLARA);
+}
+
+// La tinta de las bandas claras. Va fija y no con la variable del tema porque
+// el degradado no cambia con el tema: es naranja claro tanto de día como de
+// noche, así que el texto de encima tiene que ser oscuro en los dos casos.
+export const TINTA_CLARA = "#171717";
+
 // Luminancia relativa de un color HSL, tal y como la define la norma de
 // contraste: se pasa a RGB, se le quita la curva de la pantalla y se pesan los
 // tres canales según lo que aporta cada uno a lo que el ojo llama brillo —el

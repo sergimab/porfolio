@@ -188,7 +188,11 @@
 .skill-lista button:hover,
 .skill-lista button:focus-visible,
 .skill-lista button[data-activa="true"] {
-  color: #fff;
+  /* Blanco salvo que la categoría diga otra cosa: la banda clara —Fotografía—
+     lleva el nombre en tinta, que sobre un naranja encendido el blanco no se
+     lee. Lo pone el componente junto con el degradado, para que el fondo y la
+     letra no puedan descuadrarse. */
+  color: var(--fila-tinta, #fff);
   outline: none;
 }
 
