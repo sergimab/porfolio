@@ -7,6 +7,31 @@
   margin-top: 56px;
 }
 
+/* TEXTO CORRIDO, no un destacado. La entradilla de arriba y estos párrafos
+   hacen dos trabajos distintos, uno engancha y el otro se lee, y se separan por
+   lo de siempre en tipografía: la entradilla va en renglón apretado, que es lo
+   que hace que se lea de un golpe de vista, y esto va un punto más pequeño y
+   con el renglón abierto, que es lo que se agradece al leer seguido.
+   A todo el ancho y corto. Un bloque estrecho pegado al margen izquierdo,
+   debajo de unas piezas que sí llegan a los dos lados, se lee como un resto. */
+.ot-texto {
+  margin-top: 6px;
+  font-size: 13.5px;
+  line-height: 1.8;
+  letter-spacing: 0.004em;
+}
+.ot-texto p {
+  margin: 0 0 18px;
+}
+.ot-texto p:last-child {
+  margin-bottom: 0;
+}
+/* Las negritas, sin gritar. Hay varias por párrafo y a 700 el texto se vería a
+   manchas; a 600 siguen marcando sin romper el renglón. */
+.ot-texto strong {
+  font-weight: 600;
+}
+
 /* El hueco de una pieza que todavía no está. Se ve en la página a propósito,
    porque un hueco invisible se olvida. */
 .ot-pendiente {
@@ -48,7 +73,9 @@
   gap: 14px;
   width: max-content;
   /* Lineal y no suavizada: cualquier aceleración delataría el punto donde la
-     animación vuelve a empezar. */
+     animación vuelve a empezar. La duración la pone el componente, que una
+     tira de ocho imágenes y otra de nueve no tardan lo mismo en recorrerse al
+     mismo paso. */
   animation: ot-desfile 60s linear infinite;
 }
 
@@ -68,13 +95,29 @@
   background: var(--surface);
 }
 
+/* La tira de los posts del año pasado. Son cuadrados y no verticales, así que
+   al mismo alto ocuparían casi el doble de ancho cada uno y pasarían de tres en
+   tres. Más bajos, caben los mismos que arriba y las dos tiras se leen como dos
+   tiras de la misma página. */
+.ot-carrusel.es-posts img {
+  height: 260px;
+}
+@media (max-width: 700px) {
+  .ot-carrusel.es-posts img {
+    height: 190px;
+  }
+}
+
 @keyframes ot-desfile {
   from {
     transform: translateX(0);
   }
   to {
-    /* La mitad de la tira —una vuelta entera de las nueve fotos— más el hueco
-       que queda entre la última copia y la primera de la siguiente. */
+    /* La mitad de la tira, o sea una vuelta entera, más medio hueco. Ese medio
+       hueco sale de la cuenta: en una tira de 2N imágenes hay 2N-1 huecos, así
+       que la mitad del ancho se queda medio hueco corta de lo que mide una
+       vuelta. Y no depende de cuántas imágenes haya, que por eso los dos
+       carruseles de la página usan este mismo desplazamiento. */
     transform: translateX(calc(-50% - 7px));
   }
 }
@@ -104,6 +147,52 @@
     to {
       transform: translateX(calc(-50% - 5px));
     }
+  }
+}
+
+/* ── Las parejas de contraluz ────────────────────────────────────────────────
+   Tres columnas de color, cada una con su contraluz arriba y el retrato que
+   sale de esa misma silueta debajo. La rejilla es lo que cuenta la relación,
+   porque la pareja se lee por la columna y las tres variantes por el renglón,
+   y eso no lo hace ni una fila de seis ni un carrusel.
+   Las seis son 4:5, así que los dos renglones salen igual de altos solos.
+
+   CADA COLUMNA ES UN ELEMENTO, y no seis sueltos en una rejilla de tres. Con
+   seis sueltos, en cuanto cambia el número de columnas el orden se descoloca y
+   la silueta de una acaba encima del retrato de otra. Agrupadas por parejas, la
+   relación aguanta en cualquier ancho, que es lo único que no puede romperse
+   aquí. */
+.ot-parejas {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 28px 0 0;
+}
+.ot-pareja {
+  display: grid;
+  gap: 14px;
+}
+.ot-parejas img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+@media (max-width: 560px) {
+  /* LA REJILLA SE VUELCA. A 375 px, tres columnas dejan cada imagen en 115 px
+     de ancho y en un contraluz a ese tamaño no se distingue la figura. Así que
+     las parejas pasan a ir una debajo de otra, y cada pareja se abre en
+     horizontal: la silueta a la izquierda y su retrato a la derecha, que es la
+     misma relación leída en el otro sentido. */
+  .ot-parejas {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .ot-pareja {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
   }
 }
 

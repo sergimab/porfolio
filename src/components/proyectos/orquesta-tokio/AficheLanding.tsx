@@ -13,6 +13,33 @@ import "./Carrusel.css";
 const CARPETA = "proyectos/orquesta-tokio";
 const NOMBRES = ["afiche.webp", "afiche.jpg", "afiche.png"];
 
+// Las nueve fotos de la sesión de este año.
+const SESION = Array.from({ length: 9 }, (_, i) => ({
+  src: `/${CARPETA}/sesion-${i + 1}.webp`,
+  alt: "Retrato de la sesión de la Orquesta Tokio sobre fondo blanco",
+}));
+
+// Las tres parejas del año pasado. Cada columna es un color, con el contraluz
+// arriba y el retrato que sale de esa misma silueta debajo.
+const PAREJAS = [
+  { color: "naranja", nombre: "naranja" },
+  { color: "magenta", nombre: "magenta" },
+  { color: "azul", nombre: "azul" },
+];
+
+// Los posts de presentación, uno por integrante, con su nombre y su papel en
+// la banda. Van en el alt porque es lo que lleva escrito cada imagen.
+const POSTS = [
+  ["nerea-brecht", "Nerea Brecht, cantante"],
+  ["marina-rey", "Mariña Rey, cantante"],
+  ["lia-garcia", "Lía García, cantante"],
+  ["berto-prado", "Berto Prado, bajista"],
+  ["nolann-peno", "Nolann Peño, saxofón"],
+  ["mario-alvarinas", "Mario Alvariñas, teclado"],
+  ["jose-manuel-vieitez", "José Manuel Vieitez, trompeta"],
+  ["manuel-alvarinas", "Manuel Alvariñas, batería"],
+].map(([archivo, alt]) => ({ src: `/${CARPETA}/anteriores/${archivo}.webp`, alt }));
+
 // «Afiche Orquesta Tokio», la primera página de Fotografía.
 //
 // De momento solo la cabecera y la entradilla, que es como empiezan todas las
@@ -74,7 +101,7 @@ export default function AficheLanding() {
         {/* ── La sesión ──────────────────────────────────────────────────── */}
         <section className="ot-seccion">
           <RotuloSeccion es="La sesión" en="The shoot" />
-          <Carrusel alt="Retrato de la sesión de la Orquesta Tokio sobre fondo blanco" />
+          <Carrusel fotos={SESION} segundos={60} />
         </section>
 
         {/* ── El cartel ──────────────────────────────────────────────────── */}
@@ -97,6 +124,43 @@ export default function AficheLanding() {
               />
             </p>
           )}
+        </section>
+
+        {/* ── Trabajos anteriores ────────────────────────────────────────── */}
+        <section className="ot-seccion">
+          <RotuloSeccion es="Trabajos anteriores" en="Earlier work" />
+          <div className="ot-texto">
+            <p>
+              <LangText
+                es="El año anterior el encargo fue otro. La orquesta pidió una serie de **posts para redes sociales** que presentaran uno a uno a los **artistas de aquella temporada**, así que se montó una ficha por integrante con su nombre y su instrumento, todas con la misma retícula y el mismo marco para que se reconocieran como serie al verlas seguidas en el perfil."
+                en="The year before, the job was a different one. The band asked for a run of **social media posts** introducing the **artists of that season** one by one, so each member got their own card with their name and their instrument, all on the same grid and inside the same frame so they would read as a series once they sat together on the profile."
+              />
+            </p>
+          </div>
+
+          {/* Las tres parejas de contraluz, antes que los posts: son el
+              arranque de la serie, el ejercicio de luz del que salen las
+              fichas que vienen después. */}
+          <div className="ot-parejas">
+            {PAREJAS.map((p) => (
+              <div className="ot-pareja" key={p.color}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`/${CARPETA}/anteriores/contraluz-${p.color}.webp`}
+                  alt={`Silueta a contraluz de la Orquesta Tokio recortada sobre un halo ${p.nombre}`}
+                  loading="lazy"
+                />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`/${CARPETA}/anteriores/retrato-${p.color}.webp`}
+                  alt={`Retrato de la Orquesta Tokio iluminado en ${p.nombre}`}
+                  loading="lazy"
+                />
+              </div>
+            ))}
+          </div>
+
+          <Carrusel fotos={POSTS} segundos={45} modificador="es-posts" />
         </section>
       </div>
     </main>
