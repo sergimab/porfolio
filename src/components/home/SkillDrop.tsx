@@ -42,6 +42,123 @@ const projects: Record<string, { id: string; title: string; titleEn: string; cov
 };
 
 
+// Un atajo de contacto: el disco con el icono del correo o del teléfono.
+//
+// DOS COMPORTAMIENTOS, Y NO POR CAPRICHO. Con ratón, acercarse ya es una
+// intención y el disco se abre solo para enseñar el dato; ahí un menú sobraría,
+// porque pulsar el enlace hace lo evidente. En el móvil no existe acercarse, y
+// además pulsar un `tel:` llama de golpe, que no siempre es lo que se quiere:
+// muchas veces lo que se busca es quedarse el número para pegarlo en otro
+// sitio. Así que allí el disco abre un menú con las dos cosas.
+//
+// La frontera es la misma que la del CSS, 600, y se mira en el momento de
+// pulsar y no al montar el componente: así no hay nada que arreglar si la
+// ventana cambia de tamaño, y el servidor y el cliente pintan lo mismo.
+function Atajo({
+  tipo, valor, href, abierto, onAbrir, onCerrar, lang,
+}: {
+  tipo: "mail" | "tel";
+  valor: string;
+  href: string;
+  abierto: boolean;
+  onAbrir: () => void;
+  onCerrar: () => void;
+  lang: "es" | "en";
+}) {
+  const caja = useRef<HTMLDivElement>(null);
+  const [copiado, setCopiado] = useState(false);
+
+  // Se cierra al pulsar fuera y con Escape, que es lo que cualquiera espera de
+  // algo que se ha abierto encima de la página.
+  useEffect(() => {
+    if (!abierto) return;
+    const fuera = (e: PointerEvent) => {
+      if (!caja.current?.contains(e.target as Node)) onCerrar();
+    };
+    const tecla = (e: KeyboardEvent) => { if (e.key === "Escape") onCerrar(); };
+    document.addEventListener("pointerdown", fuera);
+    document.addEventListener("keydown", tecla);
+    return () => {
+      document.removeEventListener("pointerdown", fuera);
+      document.removeEventListener("keydown", tecla);
+    };
+  }, [abierto, onCerrar]);
+
+  const copiar = async () => {
+    try {
+      await navigator.clipboard.writeText(valor);
+      setCopiado(true);
+      // Se cierra solo, pero no de inmediato: hay que darle tiempo a leer que
+      // se ha copiado, que es la única señal de que ha pasado algo.
+      setTimeout(() => { setCopiado(false); onCerrar(); }, 900);
+    } catch {
+      // Sin permiso para el portapapeles —o sin portapapeles— no queda nada que
+      // hacer desde aquí, así que se deja el menú abierto con el dato a la
+      // vista para poder copiarlo a mano.
+    }
+  };
+
+  const etiqueta = tipo === "mail"
+    ? (lang === "en" ? `Email: ${valor}` : `Correo: ${valor}`)
+    : (lang === "en" ? `Phone: ${valor}` : `Teléfono: ${valor}`);
+
+  const accion = tipo === "mail"
+    ? (lang === "en" ? "Write an email" : "Escribir correo")
+    : (lang === "en" ? "Call" : "Llamar");
+
+  const copia = tipo === "mail"
+    ? (lang === "en" ? "Copy email" : "Copiar correo")
+    : (lang === "en" ? "Copy number" : "Copiar teléfono");
+
+  return (
+    <div className="contacto-atajo-caja" ref={caja}>
+      <a
+        className="contacto-atajo"
+        href={href}
+        aria-label={etiqueta}
+        aria-haspopup="menu"
+        aria-expanded={abierto}
+        onClick={(e) => {
+          if (window.matchMedia("(max-width: 600px)").matches) {
+            e.preventDefault();
+            onAbrir();
+          }
+        }}
+      >
+        <span className="contacto-atajo-icono" aria-hidden="true">
+          {tipo === "mail" ? (
+            // Sobre: la solapa es una uve y no un triángulo relleno, para que
+            // el icono pese lo mismo que el trazo del disco.
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <rect x="2.75" y="5.25" width="18.5" height="13.5" rx="2.5" />
+              <path d="M4 7.5 12 13.2 20 7.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          ) : (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <rect x="6.5" y="2.75" width="11" height="18.5" rx="2.5" />
+              <path d="M10.5 18.4h3" strokeLinecap="round" />
+            </svg>
+          )}
+        </span>
+        <span className="contacto-atajo-texto" aria-hidden="true">
+          <span>{valor}</span>
+        </span>
+      </a>
+
+      {abierto && (
+        <div className="contacto-menu" role="menu">
+          <button type="button" role="menuitem" onClick={() => { onCerrar(); window.location.href = href; }}>
+            {accion}
+          </button>
+          <button type="button" role="menuitem" onClick={copiar}>
+            {copiado ? (lang === "en" ? "Copied" : "Copiado") : copia}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 const DZ_H   = 64;
 const PILL_W = 140;
 const PILL_H = 42;
@@ -86,6 +203,10 @@ export default function SkillDrop() {
   const [cvZoom, setCvZoom] = useState(1);
   const [contactForm, setContactForm] = useState({ name: "", email: "", message: "" });
   const [contactStatus, setContactStatus] = useState<"idle"|"sending"|"success"|"error">("idle");
+  // Cuál de los dos atajos de contacto tiene el menú abierto, si alguno. Vive
+  // aquí y no en cada atajo para que abrir uno cierre el otro: dos menús
+  // abiertos a la vez se solaparían, que están a diez píxeles.
+  const [atajoMenu, setAtajoMenu] = useState<"mail"|"tel"|null>(null);
 
   const handleContactSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
@@ -864,39 +985,24 @@ export default function SkillDrop() {
             <DropcapTitle es="Hablemos" en="Let's talk" />
 
             <div className="contacto-atajos">
-              <a
-                className="contacto-atajo"
+              <Atajo
+                tipo="mail"
+                valor="sergioomb96@gmail.com"
                 href="mailto:sergioomb96@gmail.com"
-                aria-label={lang === "en" ? "Email: sergioomb96@gmail.com" : "Correo: sergioomb96@gmail.com"}
-              >
-                <span className="contacto-atajo-icono" aria-hidden="true">
-                  {/* Sobre: la solapa es una uve y no un triángulo relleno,
-                      para que el icono pese lo mismo que el trazo del disco. */}
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <rect x="2.75" y="5.25" width="18.5" height="13.5" rx="2.5" />
-                    <path d="M4 7.5 12 13.2 20 7.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </span>
-                <span className="contacto-atajo-texto" aria-hidden="true">
-                  <span>sergioomb96@gmail.com</span>
-                </span>
-              </a>
-
-              <a
-                className="contacto-atajo"
+                abierto={atajoMenu === "mail"}
+                onAbrir={() => setAtajoMenu(m => (m === "mail" ? null : "mail"))}
+                onCerrar={() => setAtajoMenu(null)}
+                lang={lang}
+              />
+              <Atajo
+                tipo="tel"
+                valor="+34 626 17 36 61"
                 href="tel:+34626173661"
-                aria-label={lang === "en" ? "Phone: +34 626 17 36 61" : "Teléfono: +34 626 17 36 61"}
-              >
-                <span className="contacto-atajo-icono" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <rect x="6.5" y="2.75" width="11" height="18.5" rx="2.5" />
-                    <path d="M10.5 18.4h3" strokeLinecap="round" />
-                  </svg>
-                </span>
-                <span className="contacto-atajo-texto" aria-hidden="true">
-                  <span>+34 626 17 36 61</span>
-                </span>
-              </a>
+                abierto={atajoMenu === "tel"}
+                onAbrir={() => setAtajoMenu(m => (m === "tel" ? null : "tel"))}
+                onCerrar={() => setAtajoMenu(null)}
+                lang={lang}
+              />
             </div>
           </div>
 

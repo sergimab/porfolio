@@ -19,7 +19,13 @@
 /* El estilo del titular con capitular está en shared/DropcapTitle.css, que es
    donde vive ahora el componente. Aquí solo queda su separación con el
    formulario, que es cosa de este panel y no del titular. */
-.panel-contacto .dropcap-title {
+/* La separación con el formulario la pone ahora la fila de la cabecera, no el
+   titular. El motivo es de alineación: con el margen en el titular, el renglón
+   de la fila mide título MÁS margen, y los atajos de la derecha se alineaban
+   con el borde de abajo de ese conjunto, o sea 24 px por debajo de la palabra.
+   Puesto en la fila, los dos bloques se centran entre sí y el aire queda donde
+   tiene que estar, debajo de los dos. */
+.panel-contacto .contacto-cabecera {
   margin-bottom: 24px;
 }
 
@@ -316,7 +322,7 @@
    bloques se lean como escritos sobre el mismo renglón. */
 .contacto-cabecera {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
@@ -325,9 +331,6 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  /* El título ya trae su propio hueco por abajo; esto sube los discos hasta la
-     línea de base en vez de dejarlos colgando de ella. */
-  padding-bottom: 6px;
 }
 
 /* CADA ATAJO ES UN DISCO QUE SE ABRE. En reposo mide lo que mide su icono; al
@@ -357,9 +360,28 @@
 /* Se abre al pasar por encima Y AL LLEGAR CON EL TABULADOR. Lo segundo no es un
    extra: sin ello, quien navegue con teclado se encuentra un disco que anuncia
    un correo que no puede ver. */
-.contacto-atajo:hover,
+/* EL ABRIRSE VA DENTRO DE `hover: hover` a propósito. En una pantalla táctil no
+   hay «pasar por encima», pero al tocar, el navegador deja el estado de hover
+   pegado al elemento, así que el disco se quedaba abierto y negro detrás del
+   menú que acababa de abrir. Preguntando por el tipo de puntero, esa regla ni
+   siquiera existe en el teléfono. */
+@media (hover: hover) {
+  .contacto-atajo:hover {
+    max-width: 320px;
+    background: var(--foreground);
+    color: var(--background);
+  }
+}
+/* El foco del teclado abre igual, y este sí vale en cualquier aparato: si se
+   ha llegado con el tabulador, hay teclado. */
 .contacto-atajo:focus-visible {
   max-width: 320px;
+  background: var(--foreground);
+  color: var(--background);
+}
+/* Con el menú abierto, el disco se queda en tinta: marca cuál de los dos ha
+   abierto lo que se está viendo. */
+.contacto-atajo[aria-expanded="true"] {
   background: var(--foreground);
   color: var(--background);
 }
@@ -388,31 +410,61 @@
   white-space: nowrap;
 }
 
+/* ── El menú del teléfono ────────────────────────────────────────────────────
+   En el móvil no hay «pasar por encima», así que el disco no se abre: se pulsa,
+   y lo que sale es un menú con lo que de verdad se puede hacer con un correo o
+   con un número. Llamar o escribir por un lado, y copiarlo por otro, que es lo
+   que hace falta cuando se quiere pegar en otra parte y no marcar ahora mismo.
+
+   El envoltorio es `relative` para que el menú cuelgue de SU disco y no de la
+   esquina del panel. */
+.contacto-atajo-caja {
+  position: relative;
+  display: flex;
+}
+.contacto-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  /* Anclado por la derecha: estos discos viven en el borde derecho del panel,
+     y un menú que creciera hacia allá se saldría de la caja. */
+  right: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  min-width: 190px;
+  padding: 6px;
+  border: 1px solid var(--foreground);
+  border-radius: 14px;
+  background: var(--background);
+  /* Una sombra corta y baja: lo justo para que se lea como algo que está por
+     encima del panel y no como otra caja más dibujada dentro. */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+}
+.contacto-menu button {
+  display: block;
+  width: 100%;
+  padding: 11px 14px;
+  border: none;
+  border-radius: 9px;
+  background: none;
+  color: var(--foreground);
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+.contacto-menu button:hover,
+.contacto-menu button:focus-visible {
+  background: color-mix(in srgb, var(--foreground) 8%, transparent);
+}
+
 @media (max-width: 600px) {
-  /* EN EL TELÉFONO NO HAY «PASAR POR ENCIMA», así que los dos atajos se quedan
-     abiertos: un disco que no se abre nunca es un icono mudo. Van debajo del
-     título y a todo el ancho, uno por renglón, que es donde hay sitio para el
-     dato entero. */
+  /* LOS DISCOS SE QUEDAN COMO DISCOS, con su icono y nada más. Abiertos a todo
+     el ancho eran dos fichas más compitiendo con los campos del formulario;
+     cerrados y en la esquina del título son lo que son, un atajo. */
   .contacto-cabecera {
-    flex-direction: column;
-    align-items: stretch;
-    /* Aire antes del formulario. En horizontal lo ponía el hueco propio del
-       título, pero al bajar los atajos debajo son ellos los que quedan pegados
-       al primer campo. */
-    margin-bottom: 14px;
-  }
-  .contacto-atajos {
-    flex-direction: column;
-    align-items: stretch;
-    padding-bottom: 0;
-  }
-  .contacto-atajo {
-    flex-direction: row;
-    max-width: none;
-  }
-  .contacto-atajo-texto {
-    padding-left: 0;
-    padding-right: 16px;
+    margin-bottom: 18px;
   }
 }
 
