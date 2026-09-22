@@ -44,10 +44,7 @@
 .back-capsule:hover,
 .back-capsule:focus-visible {
   border-color: transparent;
-  /* Blanco salvo que la categoría pida tinta, que es lo que hace Fotografía con
-     su banda clara. Lo pone el componente junto al tono, para que el fondo y la
-     letra no puedan descuadrarse. */
-  color: var(--cap-tinta, #fff);
+  color: #fff;
   background: linear-gradient(
     120deg,
     hsl(var(--cap-hue), 62%, var(--cap-luz, 34%)),

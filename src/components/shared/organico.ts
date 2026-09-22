@@ -148,10 +148,32 @@ export function paletaClara(hue: number): string[] {
   return paletaLegible(hue, SATURACION_CLARA, ABANICO_CLARO, LUMINANCIA_CLARA);
 }
 
-// La tinta de las bandas claras. Va fija y no con la variable del tema porque
-// el degradado no cambia con el tema: es naranja claro tanto de día como de
-// noche, así que el texto de encima tiene que ser oscuro en los dos casos.
-export const TINTA_CLARA = "#171717";
+// ── LOS ROJOS NO SE VAN AL LADRILLO ─────────────────────────────────────────
+//
+// El mismo problema de antes, visto desde el otro lado. El abanico de una
+// categoría se abre 34 grados por encima de su tono, y para un rojo esos 34
+// grados son naranja; bajado a la luz de la banda oscura, ese naranja es
+// marrón. Por eso Editorial mezclaba rojos con marrones: no era un color de la
+// paleta, era su propia mancha más abierta.
+//
+// Un rojo tiene salida hacia el otro lado que un ámbar no tiene: bajando de
+// tono se va al granate y al vino, que siguen siendo rojo oscuro y además es
+// exactamente lo que se le pide a la sombra de un rojo. Así que en vez de
+// dejarle subir, se le da la vuelta al abanico: lo que se pasaba de rojo por
+// arriba vuelve por abajo.
+//
+// Solo entran aquí los tonos que SON rojos de partida, del 340 al 15. El rosa
+// de Branding está en el 330 y se queda fuera a propósito: su abanico sube
+// hacia el coral, que es otra cosa y ahí sí funciona.
+const TOPE_ROJO = 8;
+function sinLadrillo(base: number, h: number): number {
+  const esRojo = base >= 340 || base <= 15;
+  if (!esRojo) return h;
+  // La distancia respecto al tono de partida, medida por el camino corto, que
+  // es lo que evita que un 355 y un 5 parezcan estar a 350 grados.
+  const d = ((h - base + 540) % 360) - 180;
+  return d > TOPE_ROJO ? base - (d - TOPE_ROJO) : h;
+}
 
 // Luminancia relativa de un color HSL, tal y como la define la norma de
 // contraste: se pasa a RGB, se le quita la curva de la pantalla y se pesan los
@@ -200,7 +222,7 @@ function capasLegibles(hue: number, sat: number, abanico: number, objetivo: numb
     [-16, 24],
   ];
   return capas.map(([dh, ds]) => {
-    const h = tono(hue + dh * abanico);
+    const h = tono(sinLadrillo(hue, hue + dh * abanico));
     const s = satura(sat + ds * abanico);
     return { h, s, l: luzParaLuminancia(h, s, objetivo) };
   });

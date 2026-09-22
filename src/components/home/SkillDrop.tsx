@@ -8,7 +8,7 @@ import BackToTop from "@/components/layout/BackToTop";
 import DropcapTitle from "@/components/shared/DropcapTitle";
 import SobreMi from "./SobreMi";
 import MarcoHormigas from "@/components/shared/MarcoHormigas";
-import { seeded, paletaLegible, degradadoLegible, paletaClara, degradadoClaro, CAPSULE_DRIFT_SIZE, drift, TINTA_CLARA } from "@/components/shared/organico";
+import { seeded, paletaLegible, degradadoLegible, paletaClara, degradadoClaro, CAPSULE_DRIFT_SIZE, drift } from "@/components/shared/organico";
 import MeshGradient from "@/components/shared/MeshGradient";
 import "./SkillDrop.css";
 
@@ -173,7 +173,12 @@ const pintura = (s: Pinta, hue: number, sat = 70) =>
   s.claro ? degradadoClaro(hue) : degradadoLegible(hue, sat);
 const colores = (s: Pinta, hue: number, sat = 70) =>
   s.claro ? paletaClara(hue) : paletaLegible(hue, sat);
-const tinta = (s: Pinta) => (s.claro ? TINTA_CLARA : "#fff");
+// EL NOMBRE VA EN BLANCO EN LAS SIETE, también sobre la banda clara. Es una
+// decisión suya: sobre el naranja encendido el blanco da 2,7:1, por debajo del
+// 4,5 de la norma, y es lo que se gana a cambio de que el color no tenga que
+// oscurecerse hasta volverse marrón. Queda aquí escrito para que el día que
+// alguien mida el contraste sepa que no es un descuido.
+const tinta = () => "#fff";
 
 const DZ_H   = 64;
 const PILL_W = 140;
@@ -784,7 +789,7 @@ export default function SkillDrop() {
                        de su categoría, solo que sin el fluido. */
                     style={{
                       ["--fila-color" as string]: pintura(skill, skill.hue),
-                      ["--fila-tinta" as string]: tinta(skill),
+                      ["--fila-tinta" as string]: tinta(),
                       ["--fila-medida" as string]: CAPSULE_DRIFT_SIZE,
                       ...drift(skill.id),
                     }}
@@ -856,7 +861,7 @@ export default function SkillDrop() {
                     animation: encendida ? "capsuleDrift 13s ease-in-out infinite" : undefined,
                     display:"flex", alignItems:"center", justifyContent:"center",
                     fontSize:"13px", fontWeight: encendida ? 500 : 400,
-                    color: encendida ? tinta(skill) : "var(--foreground)",
+                    color: encendida ? tinta() : "var(--foreground)",
                     whiteSpace:"nowrap",
                     transition:"background 0.15s, color 0.15s",
                   }}>

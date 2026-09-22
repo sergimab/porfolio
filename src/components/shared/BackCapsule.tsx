@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import MeshGradient from "./MeshGradient";
-import { paletaLegible, paletaClara, TINTA_CLARA } from "./organico";
+import { paletaLegible, paletaClara } from "./organico";
 import "./BackCapsule.css";
 
 const CATS: Record<string, { label: string; hue: number; claro?: boolean }> = {
@@ -41,7 +41,7 @@ export default function BackCapsule({
       href={href ?? `/?cat=${category}`}
       className="back-capsule"
       data-claro={cat.claro ? "" : undefined}
-      style={{ "--cap-hue": cat.hue, "--cap-tinta": cat.claro ? TINTA_CLARA : "#fff" } as React.CSSProperties}
+      style={{ "--cap-hue": cat.hue } as React.CSSProperties}
       aria-label={`Volver a ${texto}`}
     >
       {/* El mismo degradado de malla que las cápsulas de la home, con la paleta
