@@ -100,23 +100,23 @@ export default function SalaEquisLanding() {
         {/* ── Aplicaciones ───────────────────────────────────────────────── */}
         <section className="se-seccion">
           <RotuloSeccion es="Aplicaciones" en="Applications" />
-          <div className="se-texto">
-            <p>
-              <LangText
-                es="La identidad sale de la pantalla y se reparte por la sala: **las tarjetas**, **las acreditaciones del equipo** y **el papel de las palomitas y el vaso**, que es lo que acaba en la mano de quien entra a ver una película."
-                en="The identity leaves the screen and spreads around the venue: **the cards**, **the staff passes** and **the popcorn box and glass**, which is what ends up in the hands of whoever comes in to watch a film."
-              />
-            </p>
-          </div>
-
+          {/* Sin texto: son mockups, y lo que hay que decir de ellos ya lo dicen
+              ellos. La sección la abre su rótulo y se lee sola. */}
           <div className="se-mockups">
+            {/* Las palomitas primero y en grande: es la pieza que se toca, la
+                que sale de la sala con quien ha entrado a ver la película, así
+                que abre el apartado en vez de ir de acompañante. */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={`${CARPETA}/tarjetas.webp`} alt="Las dos caras de la tarjeta de Equix" loading="lazy" />
+            <img
+              className="se-mockup-grande"
+              src={`${CARPETA}/palomitas.webp`}
+              alt="La caja de palomitas y el vaso de cerveza de Equix"
+            />
             <div className="se-mockups-par">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={`${CARPETA}/staff.webp`} alt="Las acreditaciones del equipo con su cordón" loading="lazy" />
+              <img src={`${CARPETA}/tarjetas.webp`} alt="Las dos caras de la tarjeta de Equix" loading="lazy" />
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={`${CARPETA}/palomitas.webp`} alt="La caja de palomitas y el vaso de cerveza de Equix" loading="lazy" />
+              <img src={`${CARPETA}/staff.webp`} alt="Las acreditaciones del equipo con su cordón" loading="lazy" />
             </div>
           </div>
         </section>

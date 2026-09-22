@@ -76,18 +76,25 @@
 }
 
 /* ── Los mockups ─────────────────────────────────────────────────────────────
-   Las tarjetas a todo el ancho arriba —es la pieza que mejor se lee de lejos— y
-   debajo las otras dos a la par. Las acreditaciones son apaisadas y las
-   palomitas cuadradas, así que en una fila de dos el reparto va 1,4 contra 1
-   para que las dos acaben con el mismo alto y la fila no salga escalonada. */
+   Las palomitas arriba y en grande, y debajo las tarjetas y las acreditaciones
+   a la par. Esas dos son casi de la misma proporción —3:2 y 1,4:1—, así que a
+   mitad y mitad salen con el mismo alto y la fila no queda escalonada. */
 .se-mockups {
   display: grid;
   gap: 18px;
   margin: 28px 0 0;
 }
+/* CENTRADA Y CON TOPE, y no a todo el ancho de la columna. La pieza es cuadrada:
+   estirada a los mil píxeles del apartado serían mil de alto, o sea una pantalla
+   entera de scroll para un bote de palomitas. A este tamaño sigue siendo, con
+   diferencia, la más grande de las tres. */
+.se-mockup-grande {
+  max-width: 680px;
+  margin-inline: auto;
+}
 .se-mockups-par {
   display: grid;
-  grid-template-columns: 1.4fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 18px;
   align-items: center;
 }
