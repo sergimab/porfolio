@@ -224,3 +224,20 @@
   border-radius: 12px;
   background: var(--surface);
 }
+
+@media (max-width: 700px) {
+  /* A SANGRE EN EL TELÉFONO. En la columna se quedaba en 327 px de ancho, y
+     dentro hay once personas sobre un escenario: a ese tamaño las caras miden
+     veinte píxeles. Saliéndose de la columna gana los 48 de los márgenes, que
+     no es mucho, pero además se lee como las dos tiras de la página, que
+     también van de borde a borde.
+     Sin redondeo, que un canto redondeado contra el filo de la pantalla no se
+     ve como una esquina, se ve como un corte mal hecho. */
+  .ot-afiche {
+    margin: 28px calc(50% - 50vw) 0;
+    width: 100vw;
+  }
+  .ot-afiche img {
+    border-radius: 0;
+  }
+}
