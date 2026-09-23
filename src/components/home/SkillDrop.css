@@ -189,7 +189,6 @@
 .skill-lista button:focus-visible,
 .skill-lista button[data-activa="true"] {
   color: var(--fila-tinta, #fff);
-  outline: none;
 }
 
 /* ── El degradado de malla ──
@@ -669,8 +668,13 @@
   border: 1px solid var(--border);
   border-radius: var(--r-pieza);
   padding: 10px 12px;
-  outline: none;
   transition: border-color 0.15s;
+}
+/* El campo marca el foco con el filo, pero un filo de 1 px es poco para quien
+   va con el tabulador: lleva además el aro del sistema. */
+.contact-input:focus-visible {
+  outline: var(--foco);
+  outline-offset: var(--foco-hueco);
 }
 .contact-input::placeholder { color: var(--muted); }
 .contact-input:focus { border-color: var(--foreground); }

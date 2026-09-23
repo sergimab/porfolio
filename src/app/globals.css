@@ -35,6 +35,14 @@
   --r-pieza: 12px;
   --r-caja: 16px;
   --r-pastilla: 999px;
+
+  /* ── EL FOCO ───────────────────────────────────────────────────────────────
+     Un solo aro para todo el sitio, del color de la tinta y separado dos
+     píxeles de la pieza para que se vea también sobre lo que ya lleva filo.
+     Antes cada componente decidía el suyo y unos cuantos no decidían nada, así
+     que recorrer el sitio con el tabulador era ir a ciegas por tramos. */
+  --foco: 2px solid var(--foreground);
+  --foco-hueco: 2px;
 }
 
 [data-theme="dark"] {
@@ -45,6 +53,15 @@
   --muted: #8f8b85;
   --border: #2e2b24;
   --surface: #252219;
+}
+
+/* EL ARO, DE SERIE. `:focus-visible` solo se enciende cuando el navegador
+   entiende que hace falta —con el tabulador sí, con el ratón no—, así que no
+   estorba a quien pincha. Lo que un componente pinte encima de esto (invertir
+   el relleno, encender su degradado) se suma, no lo sustituye. */
+:focus-visible {
+  outline: var(--foco);
+  outline-offset: var(--foco-hueco);
 }
 
 body {

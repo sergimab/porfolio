@@ -105,8 +105,8 @@ a.cta-banner:focus-visible .cta-banner-label {
   color: var(--background);
 }
 a.cta-banner:focus-visible {
-  outline: 2px solid var(--foreground);
-  outline-offset: 3px;
+  outline: var(--foco);
+  outline-offset: var(--foco-hueco);
 }
 
 @media (max-width: 700px) {

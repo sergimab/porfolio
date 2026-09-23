@@ -50,6 +50,17 @@ const RADIOS = [
   { v: "--r-pastilla", es: "Lo que tiene forma de pastilla. No es un radio, es «del todo»", en: "Anything pill-shaped. Not a radius, but «all the way»" },
 ];
 
+// Los cinco momentos de cualquier pieza que se pueda tocar. Se pintan a la vez
+// y quietos, que es la única manera de compararlos: de uno en uno y con el
+// ratón encima, nunca se ven dos juntos.
+const ESTADOS = [
+  { clase: "es-reposo", es: "Reposo", en: "Rest", de: "Filo fino y nada más", deEn: "A thin border, nothing more" },
+  { clase: "es-hover", es: "Al acercarse", en: "Hover", de: "Se rellena: papel y tinta cambian de sitio", deEn: "It fills: paper and ink swap" },
+  { clase: "es-activo", es: "Al pulsar", en: "Pressed", de: "Lo mismo, un punto más apagado", deEn: "The same, a notch duller" },
+  { clase: "es-foco", es: "Con el teclado", en: "Focus", de: "Aro de 2, separado otros 2", deEn: "A 2px ring, offset by 2" },
+  { clase: "es-apagado", es: "Desactivado", en: "Disabled", de: "Sin relleno y en gris", deEn: "Unfilled and grey" },
+];
+
 export default function Muestrario() {
   return (
     <>
@@ -201,6 +212,46 @@ export default function Muestrario() {
         </div>
       </section>
 
+      {/* ── Rejilla ─────────────────────────────────────────────────────── */}
+      <section className="sd-seccion">
+        <RotuloSeccion es="Rejilla" en="Grid" />
+        <TextoPapel>
+          <p>
+            <LangText
+              es="El contenido vive en una caja de **1072 píxeles como mucho**, centrada, con **24 de aire a cada lado** que no se tocan nunca. Ese aire es lo que hace que en un teléfono el texto no llegue pegado al filo del cristal, y por eso es lo único que no se recorta cuando falta sitio."
+              en="Content lives in a box of **1072 pixels at most**, centred, with **24 of air on each side** that is never touched. That air is what keeps text off the edge of the glass on a phone, which is why it is the one thing that never gets trimmed when space runs short."
+            />
+          </p>
+          <p>
+            <LangText
+              es="Dentro no hay una rejilla de doce columnas ni falta, porque casi nada se alinea a columnas fijas. Lo que hay son **filas que se reparten solas**: una cuadrícula que decide cuántas caben según el ancho mínimo de cada pieza. La regla al montar un apartado nuevo es esa, decir cuánto mide la pieza más estrecha y dejar que el reparto salga de ahí."
+              en="Inside there is no twelve-column grid, and none is needed, because almost nothing aligns to fixed columns. What there is are **rows that share themselves out**: a grid that works out how many fit from each piece's minimum width. That is the rule when building a new section — say how narrow a piece may get and let the split follow."
+            />
+          </p>
+          <p>
+            <LangText
+              es="Y **tres cortes de pantalla**, no más. **900** es donde una fila de tres pasa a dos, **700** donde el contenido se pone en una sola columna y **560** donde lo que se puede arrastrar deja de poder arrastrarse y se convierte en menú."
+              en="And **three breakpoints**, no more. **900** is where a row of three becomes two, **700** where content goes to a single column, and **560** where anything draggable stops being draggable and turns into a menu."
+            />
+          </p>
+        </TextoPapel>
+        <div className="sd-rejilla">
+          <span className="sd-rejilla-aire" />
+          <span className="sd-rejilla-caja">
+            <span className="sd-rejilla-pieza" />
+            <span className="sd-rejilla-pieza" />
+            <span className="sd-rejilla-pieza" />
+          </span>
+          <span className="sd-rejilla-aire" />
+        </div>
+        <span className="sd-anidado-pie">
+          <LangText
+            es="24 de aire, la caja del contenido y, dentro, las piezas repartiéndose lo que hay."
+            en="24 of air, the content box and, inside it, the pieces sharing what there is."
+          />
+        </span>
+      </section>
+
       {/* ── Trazo ───────────────────────────────────────────────────────── */}
       <section className="sd-seccion sd-atomo">
         <RotuloSeccion es="Trazo" en="Stroke" />
@@ -221,6 +272,36 @@ export default function Muestrario() {
             <span className="sd-trazo-caja" style={{ borderWidth: "1.5px" }} />
             <span>1,5 px · <LangText es="marco de la página" en="page frame" /></span>
           </div>
+        </div>
+      </section>
+
+      {/* ── Estados ─────────────────────────────────────────────────────── */}
+      <section className="sd-seccion">
+        <RotuloSeccion es="Estados" en="States" />
+        <TextoPapel>
+          <p>
+            <LangText
+              es="Todo lo que se puede tocar tiene cuatro momentos y los cuatro se dicen igual en todo el sitio. **En reposo**, filo fino y nada más. **Al acercarse**, la pieza se rellena: o se invierten papel y tinta, o se enciende el degradado de su categoría. **Al pulsar**, lo mismo un punto más apagado. Y **desactivado**, sin relleno y con el texto en gris, que es lo que hace que se lea como algo que ahora no toca."
+              en="Anything you can touch has four moments, and all four are said the same way across the site. **At rest**, a thin border and nothing else. **On hover**, the piece fills: either paper and ink swap, or its category gradient lights up. **On press**, the same a notch duller. And **disabled**, unfilled with grey text, which is what makes it read as something that does not apply right now."
+            />
+          </p>
+          <p>
+            <LangText
+              es="El quinto es el que más importa y el que más se olvida: **el foco**. Cuando alguien recorre el sitio con el tabulador, la pieza en la que está lleva un **aro de 2 píxeles del color de la tinta**, separado otros 2 para que se vea también sobre lo que ya tiene filo. Va puesto de serie para todo, así que una pieza nueva lo tiene sin hacer nada, y se enciende solo con el teclado, nunca al pinchar con el ratón."
+              en="The fifth matters most and gets forgotten most: **focus**. When someone moves through the site with the keyboard, the piece they are on carries a **2 pixel ring in the ink colour**, offset by another 2 so it shows even over something that already has a border. It is on by default for everything, so a new piece gets it for free, and it only lights up for the keyboard, never for a mouse click."
+            />
+          </p>
+        </TextoPapel>
+        <div className="sd-estados">
+          {ESTADOS.map(e => (
+            <div className="sd-estado" key={e.clase}>
+              <span className={`sd-estado-muestra ${e.clase}`}>
+                <LangText es="Botón" en="Button" />
+              </span>
+              <span className="sd-estado-nombre"><LangText es={e.es} en={e.en} /></span>
+              <span className="sd-estado-de"><LangText es={e.de} en={e.deEn} /></span>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -307,6 +388,56 @@ export default function Muestrario() {
         </div>
       </section>
 
+      {/* ── Accesibilidad ───────────────────────────────────────────────── */}
+      <section className="sd-seccion">
+        <RotuloSeccion es="Accesibilidad" en="Accessibility" />
+        <TextoPapel>
+          <p>
+            <LangText
+              es="Esto no es un apartado aparte del sistema, es lo que obliga a que varias piezas sean como son. Va junto porque suelto parecen anécdotas y junto es una decisión."
+              en="This is not a section apart from the system; it is what forces several pieces to be the way they are. It goes together because apart it reads as trivia, and together it reads as a decision."
+            />
+          </p>
+        </TextoPapel>
+        <ul className="sd-fallos">
+          <li>
+            <strong><LangText es="El contraste manda sobre el color" en="Contrast outranks colour" /></strong>
+            <LangText
+              es="Las cinco manchas de cada categoría están **igualadas de luminancia**, así que el nombre en blanco encima da 5,1:1 en cualquier punto y en cualquier momento de la animación. Fotografía llevaba un ocre que no llegaba, y se resolvió cambiando la banda, no bajando la exigencia. El gris apagado se subió por lo mismo."
+              en="Each category's five blobs are **matched in luminance**, so white text on top gives 5.1:1 at any point and any moment of the animation. Photography had an ochre that did not reach it, and it was fixed by changing the band, not by lowering the bar. The muted grey was raised for the same reason."
+            />
+          </li>
+          <li>
+            <strong><LangText es="Nada depende solo del color" en="Nothing depends on colour alone" /></strong>
+            <LangText
+              es="La categoría de un proyecto va escrita, no solo teñida. La pestaña activa además pierde el redondeo de una esquina, la ficha activa del menú invierte papel y tinta, y el proyecto en el que estás lleva su nombre en la cápsula de volver."
+              en="A project's category is written, not only tinted. The active tab also drops one corner's radius, the active menu tile swaps paper and ink, and the project you are on carries its name in the back capsule."
+            />
+          </li>
+          <li>
+            <strong><LangText es="Todo se puede hacer sin ratón" en="Everything works without a mouse" /></strong>
+            <LangText
+              es="La caja de cápsulas hay que arrastrarla, y arrastrar no es una manera de moverse que todo el mundo tenga. Por eso existe **la variante en menú**, que no es un modo de repuesto sino la misma puerta por otro lado. La galería se abre con Intro y se cierra con Escape, y al cerrarse el foco vuelve a la foto desde la que se abrió."
+              en="The capsule box has to be dragged, and dragging is not a way of moving everyone has. That is why **the menu variant** exists — not a fallback but the same door from another side. The gallery opens with Enter and closes with Escape, and on closing the focus returns to the photo it opened from."
+            />
+          </li>
+          <li>
+            <strong><LangText es="Si el sistema pide quietud, hay quietud" en="If the system asks for stillness, there is stillness" /></strong>
+            <LangText
+              es="Con el ajuste de reducir movimiento puesto, las transiciones se cortan y los bucles se paran. La única excepción del sitio es el carrusel de Tokio, donde el movimiento no es un adorno encima del contenido sino el contenido mismo, y pararlo sería dejar la mitad de las fotos sin enseñar."
+              en="With reduced motion on, transitions are cut and loops stop. The site's single exception is the Tokio carousel, where motion is not decoration over the content but the content itself, and stopping it would leave half the photos unseen."
+            />
+          </li>
+          <li>
+            <strong><LangText es="Las imágenes no dicen lo que ya está escrito" en="Images do not repeat what is already written" /></strong>
+            <LangText
+              es="La portada de una tarjeta va **sin texto alternativo a propósito**, porque el nombre del proyecto está escrito justo debajo y un lector de pantalla lo diría dos veces. Lo decorativo se marca como decorativo; lo que aporta algo, se describe."
+              en="A card's cover carries **no alt text on purpose**, because the project name is written right below it and a screen reader would say it twice. Decorative things are marked as decorative; anything that adds meaning is described."
+            />
+          </li>
+        </ul>
+      </section>
+
       {/* ── Lo que no cuadra ────────────────────────────────────────────── */}
       <section className="sd-seccion">
         <RotuloSeccion es="Lo que no cuadra" en="What does not add up" />
@@ -338,6 +469,13 @@ export default function Muestrario() {
             <LangText
               es="El texto sobre papel opaco —el que impide que la trama del fondo compita con la lectura— estaba copiado en cuatro sitios con cuatro nombres, las mismas medidas y el mismo comentario. Ahora es **un componente**, y el texto que estás leyendo va dentro de él."
               en="The text-on-opaque-paper treatment — the one that stops the background pattern competing with reading — was copied in four places under four names, same measurements and same comment. It is now **one component**, and the text you are reading sits inside it."
+            />
+          </li>
+          <li>
+            <strong><LangText es="Doce cortes de pantalla para tres sitios" en="Twelve breakpoints for three places" /></strong>
+            <LangText
+              es="El sistema dice **900, 700 y 560**, y la hoja de estilos tiene además 1024, 900, 860, 820, 768, 760, 720, 640, 600 y 520. Ninguno está mal por sí solo —cada uno salió de mirar una pieza concreta—, pero significa que dos cosas que deberían cambiar a la vez cambian con veinte píxeles de diferencia, y eso sí se ve."
+              en="The system says **900, 700 and 560**, and the stylesheets also hold 1024, 900, 860, 820, 768, 760, 720, 640, 600 and 520. None is wrong on its own — each came from looking at one piece — but it means two things that should change together change twenty pixels apart, and that does show."
             />
           </li>
           <li>

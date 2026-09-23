@@ -222,6 +222,88 @@
   max-width: 44ch;
 }
 
+/* ── La rejilla, dibujada ────────────────────────────────────────────────────
+   El aire de los lados se pinta rayado y la caja del contenido con su filo, que
+   es la manera de que se vea que son dos cosas distintas y no un margen más. */
+.sd-rejilla {
+  display: flex;
+  align-items: stretch;
+  height: 96px;
+  margin-top: 28px;
+  margin-bottom: 10px;
+}
+.sd-rejilla-aire {
+  flex: 0 0 24px;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--border) 0 1px,
+    transparent 1px 6px
+  );
+}
+.sd-rejilla-caja {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid var(--foreground);
+  border-radius: var(--r-caja);
+}
+.sd-rejilla-pieza {
+  border-radius: var(--r-pieza);
+  background: var(--surface);
+}
+
+/* ── Los cinco estados ───────────────────────────────────────────────────────
+   Se pintan con clases y no con `:hover`, para que se vean los cinco a la vez.
+   Los valores son los de verdad: si un día cambia el aro, cambia aquí. */
+.sd-estados {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 28px;
+}
+.sd-estado {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.sd-estado-muestra {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 44px;
+  border: 1px solid var(--foreground);
+  border-radius: var(--r-pastilla);
+  font-size: 13px;
+  color: var(--foreground);
+}
+.sd-estado-muestra.es-hover {
+  background: var(--foreground);
+  color: var(--background);
+}
+.sd-estado-muestra.es-activo {
+  background: color-mix(in srgb, var(--foreground) 76%, var(--background));
+  color: var(--background);
+}
+.sd-estado-muestra.es-foco {
+  outline: var(--foco);
+  outline-offset: var(--foco-hueco);
+}
+.sd-estado-muestra.es-apagado {
+  border-color: var(--border);
+  color: var(--muted);
+}
+.sd-estado-nombre {
+  color: var(--foreground);
+  font-size: 12.5px;
+}
+
 /* ── Componentes ─────────────────────────────────────────────────────────── */
 .sd-piezas {
   display: grid;
@@ -625,6 +707,10 @@
 @media (max-width: 820px) {
   .sd-tonos {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  /* Cinco pastillas en fila no caben: 3+2, que tampoco deja ninguna sola. */
+  .sd-estados {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
