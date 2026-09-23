@@ -85,6 +85,19 @@ const TOOLS: { name: string; brand: string; node: React.ReactNode }[] = [
     ),
   },
   {
+    // Mismo dibujo que los demás de Adobe: el cuadrado redondeado con las dos
+    // letras. El azul es el suyo, un punto más claro que el de Photoshop, que
+    // si no se confundirían al pasar por encima.
+    name: "Lightroom",
+    brand: "#5AC8FA",
+    node: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="1.5" y="1.5" width="21" height="21" rx="4.5" fill="none" stroke="currentColor" strokeWidth="1.4" />
+        <text x="12" y="12.4" textAnchor="middle" dominantBaseline="central" fontSize="9.5" fontWeight="600" fill="currentColor">Lr</text>
+      </svg>
+    ),
+  },
+  {
     name: "Blender",
     brand: "#F5792A",
     node: (
