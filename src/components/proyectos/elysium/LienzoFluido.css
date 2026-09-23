@@ -162,7 +162,7 @@
   color: var(--foreground);
   background: var(--papel);
   border: 1px solid var(--foreground);
-  border-radius: 8px;
+  border-radius: 12px;
   pointer-events: none;
   white-space: pre;
 }

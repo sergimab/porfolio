@@ -1,6 +1,7 @@
 import BackCapsule from "@/components/shared/BackCapsule";
 import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
 import Recomendados from "@/components/shared/Recomendados";
+import TextoPapel from "@/components/shared/TextoPapel";
 import LangText from "@/components/shared/LangText";
 import ToolIcons from "@/components/shared/ToolIcons";
 import RotuloSeccion from "@/components/shared/RotuloSeccion";
@@ -93,14 +94,14 @@ export default function SalaEquisLanding() {
               fondo="#000"
               className="se-luces"
             />
-            <div className="se-texto">
+            <TextoPapel>
               <p>
                 <LangText
                   es="El logotipo no tiene **una sola forma**. Se proyecta, y como cualquier proyección **se deforma con aquello donde cae**: se estira en una pared en diagonal, se parte en una esquina, se curva sobre un cuerpo. Todas las versiones son el mismo logotipo visto desde otro sitio, así que la marca **no es un dibujo sino una manera de aparecer**, que es exactamente lo que pasa en una sala de cine."
                   en="The logotype has **no single shape**. It is projected, and like any projection **it bends with whatever it lands on**: it stretches on an angled wall, breaks across a corner, curves over a body. Every version is the same logotype seen from somewhere else, so the brand **is not a drawing but a way of appearing**, which is exactly what happens inside a cinema."
                 />
               </p>
-            </div>
+            </TextoPapel>
           </div>
         </section>
 

@@ -31,7 +31,7 @@
   width: var(--icg-tesela);
   height: var(--icg-tesela);
   display: block;
-  border-radius: 10px;
+  border-radius: 12px;
 }
 
 @media (max-width: 1024px) {

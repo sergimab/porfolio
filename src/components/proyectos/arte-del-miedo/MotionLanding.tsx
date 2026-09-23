@@ -2,6 +2,7 @@ import ArteMiedo from "./ArteMiedo";
 import VideoMarca from "../yelmo/VideoMarca";
 import Pieza from "./Pieza";
 import RotuloSeccion from "@/components/shared/RotuloSeccion";
+import TextoPapel from "@/components/shared/TextoPapel";
 import LangText from "@/components/shared/LangText";
 import DropcapTitle from "@/components/shared/DropcapTitle";
 import Recomendados from "@/components/shared/Recomendados";
@@ -75,14 +76,14 @@ export default function MotionLanding() {
       {/* ── El recorrido ───────────────────────────────────────────────── */}
       <section className="am-seccion">
         <RotuloSeccion es="El recorrido" en="The walkthrough" />
-        <div className="am-texto">
+        <TextoPapel>
           <p>
             <LangText
               es="Cinco piezas seguidas cuentan qué se puede hacer dentro de la app. Van **sin una palabra**, así que cada una tiene que leerse en dos segundos: un verbo, una idea en movimiento. Y todas con **el mismo marco, el mismo fondo y la misma entrada**, que es lo que las hace una secuencia y no cinco animaciones sueltas."
               en="Five pieces in a row tell you what the app can do. They run **without a single word**, so each has to read in two seconds: one verb, one idea in motion. And all share **the same frame, ground and entrance**, which is what makes them a sequence instead of five loose animations."
             />
           </p>
-        </div>
+        </TextoPapel>
 
         <div className="am-recorrido">
           {RECORRIDO.map((v) => (
@@ -100,14 +101,14 @@ export default function MotionLanding() {
       {/* ── El efecto ──────────────────────────────────────────────────── */}
       <section className="am-seccion">
         <RotuloSeccion es="El efecto" en="The effect" />
-        <div className="am-texto">
+        <TextoPapel>
           <p>
             <LangText
               es="Las ochenta obras se animan igual: la pintura se descompone en la **retícula de cuadrados** de la marca y vuelve a recomponerse. No es un filtro puesto encima, es **la misma trama del isotipo y los carteles**. Y no toca el color del cuadro —solo lo desordena—, que es lo que deja aplicarlo igual a un óleo del XIX que a un grabado en blanco y negro."
               en="All eighty works are animated the same way: the painting breaks into the brand's **grid of squares** and puts itself back together. It is not a filter on top, it is **the same weave as the isotype and the posters**. And it never touches the painting's colour — it only unsettles it — which is what lets it work on a nineteenth-century oil and on a black-and-white engraving alike."
             />
           </p>
-        </div>
+        </TextoPapel>
 
         <div className="am-obras">
           {OBRAS.map((f) => (
@@ -129,14 +130,14 @@ export default function MotionLanding() {
       {/* ── Dentro de la app ───────────────────────────────────────────── */}
       <section className="am-seccion">
         <RotuloSeccion es="Dentro de la app" en="Inside the app" />
-        <div className="am-texto">
+        <TextoPapel>
           <p>
             <LangText
               es="Donde el efecto se usa de verdad. El **escaneo**: se apunta la cámara a un cuadro sin cartela y la obra se enciende dentro del encuadre. Y lo que viene después: la **ficha sube desde abajo** y cuenta qué miedo esconde."
               en="Where the effect actually gets used. The **scan**: point the camera at a painting with no wall label and the work lights up inside the frame. And what comes next: the **entry rises from the bottom** and tells you what fear it hides."
             />
           </p>
-        </div>
+        </TextoPapel>
 
         <div className="am-motion-app">
           {[
@@ -153,14 +154,14 @@ export default function MotionLanding() {
           ))}
         </div>
 
-        <div className="am-texto">
+        <TextoPapel>
           <p>
             <LangText
               es="Las cinco del recorrido se pueden ver además **funcionando dentro del prototipo**, en la página del diseño de producto."
               en="The five walkthrough pieces can also be seen **running inside the prototype**, on the product design page."
             />
           </p>
-        </div>
+        </TextoPapel>
       </section>
 
       {/* ── El pie ─────────────────────────────────────────────────────── */}

@@ -7,6 +7,7 @@ import ArteMiedo from "./ArteMiedo";
 // no el escaparate— pero sigue haciendo falta para el recorrido por la sala.
 import VideoMarca from "../yelmo/VideoMarca";
 import RotuloSeccion from "@/components/shared/RotuloSeccion";
+import TextoPapel from "@/components/shared/TextoPapel";
 import LangText from "@/components/shared/LangText";
 import DropcapTitle from "@/components/shared/DropcapTitle";
 import Recomendados from "@/components/shared/Recomendados";
@@ -122,14 +123,14 @@ export default function BrandingLanding() {
       {/* ── Aplicaciones ───────────────────────────────────────────────── */}
       <section className="am-seccion">
         <RotuloSeccion es="Aplicaciones" en="Applications" />
-        <div className="am-texto">
+        <TextoPapel>
           <p>
             <LangText
               es="Toda esta identidad se traslada a los materiales que acompañan la exposición por la ciudad: **carteles con una retícula de seis por diez** que simulan el propio efecto de escaneo, y **flyers en A5 con un código QR** que lleva directo a la descarga de la app."
               en="The whole identity carries over to the materials that take the exhibition around the city: **posters on a six-by-ten grid** that mimic the scanning effect itself, and **A5 flyers with a QR code** that goes straight to the app download."
             />
           </p>
-        </div>
+        </TextoPapel>
         <Carteles />
 
         {/* El recorrido por la sala y, a su lado, el flyer. Mismo truco que la

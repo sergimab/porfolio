@@ -434,7 +434,7 @@
   min-width: 190px;
   padding: 6px;
   border: 1px solid var(--foreground);
-  border-radius: 14px;
+  border-radius: 16px;
   background: var(--background);
   /* Una sombra corta y baja: lo justo para que se lea como algo que está por
      encima del panel y no como otra caja más dibujada dentro. */
@@ -445,7 +445,7 @@
   width: 100%;
   padding: 11px 14px;
   border: none;
-  border-radius: 9px;
+  border-radius: 12px;
   background: none;
   color: var(--foreground);
   font: inherit;
@@ -659,7 +659,7 @@
 }
 .panel-btn-tile {
   border: 1px solid var(--foreground);
-  border-radius: 10px;
+  border-radius: 12px;
 }
 .contact-input {
   font-family: inherit;
@@ -667,7 +667,7 @@
   color: var(--foreground);
   background: var(--background);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 12px;
   padding: 10px 12px;
   outline: none;
   transition: border-color 0.15s;

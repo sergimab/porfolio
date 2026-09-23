@@ -1,5 +1,6 @@
 "use client";
 
+import TextoPapel from "@/components/shared/TextoPapel";
 import LangText from "@/components/shared/LangText";
 import RotuloSeccion from "@/components/shared/RotuloSeccion";
 import DropcapTitle from "@/components/shared/DropcapTitle";
@@ -42,14 +43,14 @@ export default function Muestrario() {
       {/* ── Color ───────────────────────────────────────────────────────── */}
       <section className="sd-seccion">
         <RotuloSeccion es="Color" en="Colour" />
-        <div className="sd-texto">
+        <TextoPapel>
           <p>
             <LangText
               es="Cinco tokens y ni uno más. El sitio entero se pinta con **papel, tinta, apagado, filo y relieve**, y el modo oscuro no es otra paleta: son **los mismos cinco nombres con otros valores**, así que ninguna pieza necesita saber en qué modo está."
               en="Five tokens and not one more. The whole site is painted with **paper, ink, muted, border and surface**, and dark mode is not another palette: it is **the same five names with different values**, so no component needs to know which mode it is in."
             />
           </p>
-        </div>
+        </TextoPapel>
         <div className="sd-tokens">
           {TOKENS.map(t => (
             <div className="sd-token" key={t.v}>
@@ -64,14 +65,14 @@ export default function Muestrario() {
         </div>
 
         <h3 className="sd-subrotulo"><LangText es="Los siete colores de categoría" en="The seven category colours" /></h3>
-        <div className="sd-texto">
+        <TextoPapel>
           <p>
             <LangText
               es="Cada disciplina tiene su tono, y de ahí salen su cápsula, su tarjeta y la cabecera de sus páginas. No son colores planos: cada uno se abre en **cinco manchas que derivan**, y las cinco están igualadas de luminancia para que el nombre en blanco encima dé **5,1:1 en cualquier punto y en cualquier momento** de la animación."
               en="Each discipline has its hue, and from it come its capsule, its cards and the header of its pages. They are not flat colours: each opens into **five drifting blobs**, all matched in luminance so that white text on top gives **5.1:1 at any point and any moment** of the animation."
             />
           </p>
-        </div>
+        </TextoPapel>
         <div className="sd-tonos">
           {CATEGORIAS.map(c => (
             <div className="sd-tono" key={c.id}>
@@ -102,14 +103,14 @@ export default function Muestrario() {
       {/* ── Tipografía ──────────────────────────────────────────────────── */}
       <section className="sd-seccion">
         <RotuloSeccion es="Tipografía" en="Typography" />
-        <div className="sd-texto">
+        <TextoPapel>
           <p>
             <LangText
               es="**Tres letras con tres trabajos.** Una sans para todo lo que se lee y se usa, una cursiva para lo que es una nota sobre el contenido —pies, valores de ficha, anotaciones— y una caligráfica que solo aparece en **la capitular de los titulares**, nunca en un texto."
               en="**Three typefaces, three jobs.** A sans for everything you read and use, an italic for notes about the content — captions, meta values, annotations — and a script that only shows up in **the drop cap of titles**, never in running text."
             />
           </p>
-        </div>
+        </TextoPapel>
         <div className="sd-letras">
           <div className="sd-letra">
             <span className="sd-letra-muestra sd-sans">Aa</span>
@@ -144,14 +145,14 @@ export default function Muestrario() {
       {/* ── Espacio y forma ─────────────────────────────────────────────── */}
       <section className="sd-seccion">
         <RotuloSeccion es="Espacio y forma" en="Space and shape" />
-        <div className="sd-texto">
+        <TextoPapel>
           <p>
             <LangText
               es="Entre apartados van **56 píxeles**; entre un rótulo y su pieza, **28**; entre piezas de una misma fila, **14 o 16**. Y el redondeo tiene un sentido: **12** para las cajas de papel, **14 y 16** para las tarjetas y los marcos, y **999** para todo lo que es una pastilla."
               en="Between sections, **56 pixels**; between a label and its piece, **28**; between pieces in a row, **14 or 16**. Radii carry meaning too: **12** for paper boxes, **14 and 16** for cards and frames, **999** for anything shaped like a pill."
             />
           </p>
-        </div>
+        </TextoPapel>
         <div className="sd-radios">
           {[12, 14, 16, 999].map(r => (
             <div className="sd-radio" key={r}>
@@ -165,14 +166,14 @@ export default function Muestrario() {
       {/* ── Componentes ─────────────────────────────────────────────────── */}
       <section className="sd-seccion">
         <RotuloSeccion es="Componentes" en="Components" />
-        <div className="sd-texto">
+        <TextoPapel>
           <p>
             <LangText
               es="Los de aquí abajo **no son dibujos de los componentes, son los componentes**, traídos de la misma carpeta que los usa el resto del sitio. Cualquier retoque en ellos se ve aquí sin tocar esta página."
               en="The ones below **are not drawings of the components, they are the components**, pulled from the same folder the rest of the site uses. Any tweak to them shows up here without touching this page."
             />
           </p>
-        </div>
+        </TextoPapel>
         <div className="sd-piezas">
           <div className="sd-pieza">
             <span className="sd-pieza-nombre"><LangText es="Cápsula de volver" en="Back capsule" /></span>
@@ -196,7 +197,7 @@ export default function Muestrario() {
       {/* ── Movimiento ──────────────────────────────────────────────────── */}
       <section className="sd-seccion">
         <RotuloSeccion es="Movimiento" en="Motion" />
-        <div className="sd-texto">
+        <TextoPapel>
           <p>
             <LangText
               es="Tres duraciones para casi todo: **0,2 s** para un cambio de color, **0,3 a 0,45** para algo que se mueve o crece, y **de 7 s en adelante** para lo que respira en bucle. La curva de las dos primeras es siempre la misma, una salida suave; las de bucle van **lineales**, porque cualquier aceleración delata el punto donde la animación vuelve a empezar."
@@ -209,26 +210,26 @@ export default function Muestrario() {
               en="And one rule underneath: **if the system asks for no motion, nothing moves**. The single exception in the whole site is the Tokio gallery carousel, where motion is not decoration over the content but the content itself."
             />
           </p>
-        </div>
+        </TextoPapel>
       </section>
 
       {/* ── Lo que no cuadra ────────────────────────────────────────────── */}
       <section className="sd-seccion">
         <RotuloSeccion es="Lo que no cuadra" en="What does not add up" />
-        <div className="sd-texto">
+        <TextoPapel>
           <p>
             <LangText
               es="Poner el sistema junto sirve sobre todo para ver dónde se ha ido de las manos. Esto es lo que hay hoy, contado de la hoja de estilos y sin maquillar:"
               en="Putting the system together is above all a way to see where it got away from us. This is what there is today, counted from the stylesheet and not dressed up:"
             />
           </p>
-        </div>
+        </TextoPapel>
         <ul className="sd-fallos">
-          <li>
-            <strong><LangText es="Nueve redondeos distintos" en="Nine different radii" /></strong>
+          <li className="es-resuelto">
+            <strong><LangText es="Nueve redondeos distintos · resuelto" en="Nine different radii · fixed" /></strong>
             <LangText
-              es="El 12 sale 37 veces y el 16 otras 29, que son los dos buenos; pero además andan sueltos el 8, el 10, el 14, el 18, el 34 y el 44. Los cuatro últimos son de una pieza cada uno y no responden a ninguna regla."
-              en="12 appears 37 times and 16 another 29 — those are the two real ones; but 8, 10, 14, 18, 34 and 44 are also floating around. The last four belong to one piece each and follow no rule."
+              es="Andaban sueltos el 8, el 9, el 10, el 14 y el 99 además de los buenos. Ya no: todo lo que era 10 o menos pasó a **12** y todo lo que era 14 pasó a **16**, así que la escala son **59 doces, 38 dieciséis y 20 pastillas**. Quedan fuera a propósito los mockups de teléfono —44 y 34 son el redondeo de un aparato de verdad— y la web de Elysium, que es la interfaz de otra marca dentro del sitio."
+              en="8, 9, 10, 14 and 99 were floating around alongside the real ones. Not any more: everything at 10 or below became **12** and everything at 14 became **16**, so the scale is now **59 twelves, 38 sixteens and 20 pills**. Deliberately outside it: the phone mockups — 44 and 34 are a real device's radius — and the Elysium website, another brand's interface living inside this site."
             />
           </li>
           <li>
@@ -238,11 +239,11 @@ export default function Muestrario() {
               en="Alongside the scale sizes live a 13.5, a 12.5, an 11.5 and a 10.5. Each came from eyeballing one particular block, and each is an exception someone will have to remember."
             />
           </li>
-          <li>
-            <strong><LangText es="La caja de papel, escrita tres veces" en="The paper box, written three times" /></strong>
+          <li className="es-resuelto">
+            <strong><LangText es="La caja de papel, escrita cuatro veces · resuelto" en="The paper box, written four times · fixed" /></strong>
             <LangText
-              es="El texto sobre papel opaco —el que impide que la trama del fondo compita con la lectura— está copiado en tres proyectos con tres nombres distintos, con las mismas medidas y el mismo comentario. Debería ser un componente."
-              en="The text-on-opaque-paper treatment — the one that stops the background pattern competing with reading — is copied across three projects under three different names, same measurements and same comment. It should be one component."
+              es="El texto sobre papel opaco —el que impide que la trama del fondo compita con la lectura— estaba copiado en cuatro sitios con cuatro nombres, las mismas medidas y el mismo comentario. Ahora es **un componente**, y el texto que estás leyendo va dentro de él."
+              en="The text-on-opaque-paper treatment — the one that stops the background pattern competing with reading — was copied in four places under four names, same measurements and same comment. It is now **one component**, and the text you are reading sits inside it."
             />
           </li>
           <li>

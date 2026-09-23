@@ -24,7 +24,7 @@
   display: block;
   width: 100%;
   height: auto;
-  border-radius: 10px;
+  border-radius: 12px;
   /* Negro mientras carga: las piezas son oscuras y el hueco en blanco
      destellaría antes del primer fotograma. */
   background: #000;
@@ -79,7 +79,7 @@
   display: block;
   width: 100%;
   height: auto;
-  border-radius: 10px;
+  border-radius: 12px;
   background: #000;
 }
 .am-recorrido figcaption {

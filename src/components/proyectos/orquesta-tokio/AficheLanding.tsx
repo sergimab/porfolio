@@ -1,5 +1,6 @@
 import BackCapsule from "@/components/shared/BackCapsule";
 import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
+import TextoPapel from "@/components/shared/TextoPapel";
 import LangText from "@/components/shared/LangText";
 import ToolIcons from "@/components/shared/ToolIcons";
 import RotuloSeccion from "@/components/shared/RotuloSeccion";
@@ -129,14 +130,14 @@ export default function AficheLanding() {
         {/* ── Trabajos anteriores ────────────────────────────────────────── */}
         <section className="ot-seccion">
           <RotuloSeccion es="Trabajos anteriores" en="Earlier work" />
-          <div className="ot-texto">
+          <TextoPapel>
             <p>
               <LangText
                 es="El año anterior el encargo fue otro. La orquesta pidió una serie de **posts para redes sociales** que presentaran uno a uno a los **artistas de aquella temporada**, así que se montó una ficha por integrante con su nombre y su instrumento, todas con la misma retícula y el mismo marco para que se reconocieran como serie al verlas seguidas en el perfil."
                 en="The year before, the job was a different one. The band asked for a run of **social media posts** introducing the **artists of that season** one by one, so each member got their own card with their name and their instrument, all on the same grid and inside the same frame so they would read as a series once they sat together on the profile."
               />
             </p>
-          </div>
+          </TextoPapel>
 
           {/* Las tres parejas de contraluz, antes que los posts: son el
               arranque de la serie, el ejercicio de luz del que salen las

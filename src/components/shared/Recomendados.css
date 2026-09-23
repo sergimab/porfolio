@@ -44,11 +44,11 @@
 }
 .rec-tira::-webkit-scrollbar-track {
   background: color-mix(in srgb, var(--foreground) 8%, transparent);
-  border-radius: 99px;
+  border-radius: 999px;
 }
 .rec-tira::-webkit-scrollbar-thumb {
   background: color-mix(in srgb, var(--foreground) 34%, transparent);
-  border-radius: 99px;
+  border-radius: 999px;
 }
 .rec-tira::-webkit-scrollbar-thumb:hover {
   background: color-mix(in srgb, var(--foreground) 55%, transparent);
@@ -60,7 +60,7 @@
    habría que componer cada portada dejándole ese hueco libre. */
 .rec-card {
   display: block;
-  border-radius: 14px;
+  border-radius: 16px;
   overflow: hidden;
   background: var(--surface);
   text-decoration: none;
