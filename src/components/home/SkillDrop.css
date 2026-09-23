@@ -737,9 +737,8 @@ textarea.contact-input { resize: vertical; }
   padding: 0 24px;
   box-sizing: border-box;
 }
-.home-recomendados .dropcap-title {
-  display: block;
-  margin-bottom: 28px;
+.home-recomendados .rec-titulo {
+  margin-bottom: 22px;
 }
 
 /* EL SOLAPE, AL REVÉS QUE EN LAS PARRILLAS DE CATEGORÍA.

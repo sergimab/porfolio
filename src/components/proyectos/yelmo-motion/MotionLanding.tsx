@@ -3,7 +3,7 @@ import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
 import LangText from "@/components/shared/LangText";
 import ToolIcons from "@/components/shared/ToolIcons";
 import DropcapTitle from "@/components/shared/DropcapTitle";
-import CtaBanner from "@/components/shared/CtaBanner";
+import Recomendados from "@/components/shared/Recomendados";
 import RotuloSeccion from "@/components/shared/RotuloSeccion";
 import VideoPromo from "./VideoPromo";
 // De la carpeta de branding: es el mismo proyecto y el mismo trato para una
@@ -134,17 +134,7 @@ export default function MotionLanding() {
             central a más tamaño, con la medida que llevan todas las del
             sitio. */}
         <section className="motion-seccion">
-          <h2 className="project-h2">
-            <DropcapTitle es="Páginas recomendadas" en="Recommended pages" />
-          </h2>
-          <CtaBanner
-            href="/proyecto/b2"
-            es="Ver el rebranding de la marca"
-            en="See the brand rebrand"
-            imagen="/banners/rebranding-yelmo.webp"
-            imagenMovil="/banners/rebranding-yelmo-movil.webp"
-            alt="El logotipo de Yelmo sobre la trama de la marca"
-          />
+          <Recomendados ids={["b2"]} />
         </section>
       </div>
     </main>

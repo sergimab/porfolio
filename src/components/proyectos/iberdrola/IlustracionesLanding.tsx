@@ -2,7 +2,7 @@ import BackCapsule from "@/components/shared/BackCapsule";
 import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
 import LangText from "@/components/shared/LangText";
 import ToolIcons from "@/components/shared/ToolIcons";
-import CtaBanner from "@/components/shared/CtaBanner";
+import Recomendados from "@/components/shared/Recomendados";
 import DropcapTitle from "@/components/shared/DropcapTitle";
 import IlustracionesSistema from "./IlustracionesSistema";
 
@@ -48,17 +48,7 @@ export default function IlustracionesLanding() {
           <IlustracionesSistema />
         </div>
 
-        <h2 className="project-h2">
-          <DropcapTitle es="Páginas recomendadas" en="Recommended pages" />
-        </h2>
-        <CtaBanner
-          href="/proyecto/i1"
-          es="Ver infografías"
-          en="See infographics"
-          imagen="/banners/infografias.webp"
-          imagenMovil="/banners/infografias-movil.webp"
-          alt="Ilustración isométrica de una subestación eléctrica con puntos numerados"
-        />
+        <Recomendados ids={["i1"]} />
       </div>
     </main>
   );

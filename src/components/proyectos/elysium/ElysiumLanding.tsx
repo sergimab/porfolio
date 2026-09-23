@@ -4,7 +4,7 @@ import BackCapsule from "@/components/shared/BackCapsule";
 import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
 import LangText from "@/components/shared/LangText";
 import ToolIcons from "@/components/shared/ToolIcons";
-import CtaBanner from "@/components/shared/CtaBanner";
+import Recomendados from "@/components/shared/Recomendados";
 import DropcapTitle from "@/components/shared/DropcapTitle";
 import SimboloScroll, { GaleriaSimbolos } from "./SimboloScroll";
 import PosesFusion from "./PosesFusion";
@@ -186,27 +186,7 @@ export default function ElysiumLanding() {
         {/* ── Fin del bloque: creación del avatar ─────────────────────── */}
 
         {/* Cierre: las otras dos páginas del universo Elysium. */}
-        <h2 className="project-h2">
-          <DropcapTitle es="Páginas recomendadas" en="Recommended pages" />
-        </h2>
-
-        <CtaBanner
-          href="/proyecto/e1"
-          es="Ver diseño editorial"
-          en="See editorial design"
-          imagen="/banners/elysium-editorial.webp"
-          imagenMovil="/banners/elysium-editorial-movil.webp"
-          alt="El desplegable acordeón del álbum, abierto sobre una superficie"
-        />
-
-        <CtaBanner
-          href="/elysium/web"
-          es="Ver la web de Elysium"
-          en="See the Elysium website"
-          imagen="/banners/elysium-web.webp"
-          imagenMovil="/banners/elysium-web-movil.webp"
-          alt="La web de Elysium vista en varias pantallas"
-        />
+        <Recomendados ids={["e1", "u1"]} />
       </div>
     </main>
   );

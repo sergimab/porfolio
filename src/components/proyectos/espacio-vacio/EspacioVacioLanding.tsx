@@ -8,7 +8,7 @@ import PaletaCromatica from "./PaletaCromatica";
 import Tipografia from "./Tipografia";
 import Marca from "./Marca";
 import Mockups from "./Mockups";
-import CtaBanner from "@/components/shared/CtaBanner";
+import Recomendados from "@/components/shared/Recomendados";
 import DropcapTitle from "@/components/shared/DropcapTitle";
 
 // Espacio vacío: la campaña de concienciación sobre la adicción a las redes
@@ -113,17 +113,7 @@ export default function EspacioVacioLanding() {
             las de Elysium: a ancho de móvil, la franja entera se queda en 48 px
             de alto y los dos aparatos no se distinguen. */}
         <hr className="ev-divisor" />
-        <h2 className="project-h2">
-          <DropcapTitle es="Páginas recomendadas" en="Recommended pages" />
-        </h2>
-        <CtaBanner
-          href="/proyecto/u2"
-          es="Ver el diseño de la app"
-          en="See the app design"
-          imagen="/banners/espacio-vacio-app.webp"
-          imagenMovil="/banners/espacio-vacio-app-movil.webp"
-          alt="La app de Espacio vacío abierta en dos móviles"
-        />
+        <Recomendados ids={["u2"]} />
       </div>
     </main>
   );

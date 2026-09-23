@@ -4,7 +4,7 @@ import Pieza from "./Pieza";
 import RotuloSeccion from "@/components/shared/RotuloSeccion";
 import LangText from "@/components/shared/LangText";
 import DropcapTitle from "@/components/shared/DropcapTitle";
-import CtaBanner from "@/components/shared/CtaBanner";
+import Recomendados from "@/components/shared/Recomendados";
 import { FOBIAS } from "./fobias";
 import "./ArteMiedo.css";
 import "./Motion.css";
@@ -165,25 +165,7 @@ export default function MotionLanding() {
 
       {/* ── El pie ─────────────────────────────────────────────────────── */}
       <section className="am-seccion">
-        <h2 className="project-h2">
-          <DropcapTitle es="Páginas recomendadas" en="Recommended pages" />
-        </h2>
-        <CtaBanner
-          href="/proyecto/u3"
-          es="Ver la app de la exposición"
-          en="See the exhibition app"
-          imagen="/banners/el-arte-del-miedo-app.webp"
-          imagenMovil="/banners/el-arte-del-miedo-app-movil.webp"
-          alt="La app de El Arte del Miedo escaneando una obra de la exposición"
-        />
-        <CtaBanner
-          href="/proyecto/b3"
-          es="Ver la marca de la exposición"
-          en="See the exhibition's brand"
-          imagen="/banners/el-arte-del-miedo-branding.webp"
-          imagenMovil="/banners/el-arte-del-miedo-branding-movil.webp"
-          alt="Los carteles de la exposición pegados en un panel de la calle"
-        />
+        <Recomendados ids={["u3", "b3"]} />
       </section>
     </ArteMiedo>
   );

@@ -9,7 +9,7 @@ import VideoMarca from "../yelmo/VideoMarca";
 import RotuloSeccion from "@/components/shared/RotuloSeccion";
 import LangText from "@/components/shared/LangText";
 import DropcapTitle from "@/components/shared/DropcapTitle";
-import CtaBanner from "@/components/shared/CtaBanner";
+import Recomendados from "@/components/shared/Recomendados";
 import Tipografia from "./Tipografia";
 import Paleta from "./Paleta";
 import Isotipo from "./Isotipo";
@@ -163,17 +163,7 @@ export default function BrandingLanding() {
           son de los apartados del proyecto, y esto no es un apartado más, es la
           salida. Igual que en Yelmo y en Espacio vacío. */}
       <section className="am-seccion">
-        <h2 className="project-h2">
-          <DropcapTitle es="Páginas recomendadas" en="Recommended pages" />
-        </h2>
-        <CtaBanner
-          href="/proyecto/u3"
-          es="Ver la app de la exposición"
-          en="See the exhibition app"
-          imagen="/banners/el-arte-del-miedo-app.webp"
-          imagenMovil="/banners/el-arte-del-miedo-app-movil.webp"
-          alt="La app de El Arte del Miedo escaneando una obra de la exposición"
-        />
+        <Recomendados ids={["u3"]} />
       </section>
     </ArteMiedo>
   );

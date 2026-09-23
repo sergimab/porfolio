@@ -3,7 +3,7 @@ import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
 import LangText from "@/components/shared/LangText";
 import ToolIcons from "@/components/shared/ToolIcons";
 import DropcapTitle from "@/components/shared/DropcapTitle";
-import CtaBanner from "@/components/shared/CtaBanner";
+import Recomendados from "@/components/shared/Recomendados";
 import Branding from "./Branding";
 
 // Rebranding de Yelmo Cines: el proyecto de Proyectos LAB de la ESD Madrid, en
@@ -77,17 +77,7 @@ export default function YelmoLanding() {
           {/* El título va con la capitular script, como el de las demás
               páginas: el rótulo-pastilla es de los apartados del proyecto, y
               esto no es uno más, es el pie de página. */}
-          <h2 className="project-h2">
-            <DropcapTitle es="Páginas recomendadas" en="Recommended pages" />
-          </h2>
-          <CtaBanner
-            href="/proyecto/m1"
-            es="Ver la animación del proyecto"
-            en="See the project's motion work"
-            imagen="/banners/motion-yelmo.webp"
-            imagenMovil="/banners/motion-yelmo-movil.webp"
-            alt="Tres fotogramas de la animación: manos sobre discos de color"
-          />
+          <Recomendados ids={["m1"]} />
         </section>
       </div>
     </main>

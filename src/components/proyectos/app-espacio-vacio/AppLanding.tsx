@@ -1,5 +1,5 @@
 import BackCapsule from "@/components/shared/BackCapsule";
-import CtaBanner from "@/components/shared/CtaBanner";
+import Recomendados from "@/components/shared/Recomendados";
 import DropcapTitle from "@/components/shared/DropcapTitle";
 import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
 import LangText from "@/components/shared/LangText";
@@ -100,17 +100,7 @@ export default function AppLanding() {
             estrecha es la misma imagen recortada por el centro, donde está la
             construcción del isotipo. */}
         <hr className="ev-divisor" />
-        <h2 className="project-h2">
-          <DropcapTitle es="Páginas recomendadas" en="Recommended pages" />
-        </h2>
-        <CtaBanner
-          href="/proyecto/b1"
-          es="Ver la marca de Espacio vacío"
-          en="See the Empty space brand"
-          imagen="/banners/espacio-vacio.webp"
-          imagenMovil="/banners/espacio-vacio-movil.webp"
-          alt="La construcción del isotipo de Espacio vacío sobre su retícula"
-        />
+        <Recomendados ids={["b1"]} />
       </div>
     </main>
   );

@@ -10,40 +10,12 @@ import SobreMi from "./SobreMi";
 import MarcoHormigas from "@/components/shared/MarcoHormigas";
 import { seeded, paletaLegible, degradadoLegible, paletaClara, degradadoClaro, CAPSULE_DRIFT_SIZE, drift } from "@/components/shared/organico";
 import MeshGradient from "@/components/shared/MeshGradient";
+import Recomendados from "@/components/shared/Recomendados";
+import { CATEGORIAS, PROYECTOS } from "@/components/shared/proyectos";
 import "./SkillDrop.css";
 
-const skills = [
-  // Motion y Fotografía se intercambiaron el color: el azul es de Motion y el
-  // ámbar de Fotografía. Al cambiar el tono hay que cambiar también el de la
-  // página del proyecto de Motion, que lo saca de aquí.
-  { id: "motion",     label: "Motion Graphics", labelEn: "Motion Graphics", color: "rgba(37,99,235,0.12)",  border: "rgba(37,99,235,0.6)",   hue: 217 },
-  { id: "branding",   label: "Branding",         labelEn: "Branding",        color: "rgba(219,39,119,0.12)", border: "rgba(219,39,119,0.6)",  hue: 330 },
-    // LA ÚNICA CÁPSULA CLARA. Ver LUMINANCIA_CLARA en organico: el naranja es el
-  // único tono de las siete que al oscurecerse no se apaga, se convierte en
-  // marrón. Así que esta lleva la banda al revés —fondo encendido y nombre en
-  // tinta— y es la forma de que se vea naranja de verdad.
-  { id: "fotografia", label: "Fotografía",        labelEn: "Photography",     color: "rgba(217,119,6,0.15)",  border: "rgba(217,119,6,0.7)",   hue: 32, claro: true },
-  { id: "iberdrola",  label: "Iberdrola",         labelEn: "Iberdrola",       color: "rgba(22,163,74,0.12)",  border: "rgba(22,163,74,0.6)",   hue: 142 },
-  { id: "uiux",       label: "UI / UX",           labelEn: "UI / UX",         color: "rgba(13,148,136,0.12)", border: "rgba(13,148,136,0.6)",  hue: 175 },
-  { id: "3d",         label: "3D",                labelEn: "3D",              color: "rgba(124,58,237,0.12)", border: "rgba(124,58,237,0.6)",  hue: 262 },
-  // Rojo, y no el verde lima de antes: aquel tono quedaba a 58° del verde de
-  // Iberdrola y a esa distancia los dos verdes se confundían de un vistazo. El
-  // 1 es el punto más alejado del hueco que queda libre —a 31° del rosa de
-  // Branding por un lado y a 31° del ámbar de Motion por el otro—, así que
-  // reparte a partes iguales lo poco que hay.
-  { id: "editorial",  label: "Editorial",         labelEn: "Editorial",       color: "rgba(220,38,38,0.13)",  border: "rgba(220,38,38,0.6)",   hue: 1   },
-];
-
-
-const projects: Record<string, { id: string; title: string; titleEn: string; cover?: string }[]> = {
-  motion:     [{ id:"m1",title:"Motion Yelmo Cines",titleEn:"Yelmo Cines motion",cover:"/covers/motion-yelmo.webp"},{id:"m2",title:"Motion El Arte del Miedo",titleEn:"The Art of Fear motion",cover:"/covers/el-arte-del-miedo-motion.webp"}],
-  branding:   [{ id:"b1",title:"Espacio vacío",titleEn:"Empty space",cover:"/covers/espacio-vacio.webp"},{id:"b2",title:"Rebranding Yelmo Cines",titleEn:"Yelmo Cines rebranding",cover:"/covers/rebranding-yelmo.webp"},{id:"b3",title:"El Arte del Miedo",titleEn:"The Art of Fear",cover:"/covers/el-arte-del-miedo-branding.webp"},{id:"b4",title:"Rebranding Sala Equis",titleEn:"Sala Equis rebranding",cover:"/covers/rebranding-sala-equis.webp"}],
-  fotografia: [{ id:"f1",title:"Afiche Orquesta Tokio",titleEn:"Orquesta Tokio poster",cover:"/covers/orquesta-tokio.webp"},{id:"f2",title:"Galería Orquesta Tokio",titleEn:"Orquesta Tokio gallery"}],
-  iberdrola:  [{ id:"i2",title:"Sistema de diseño",titleEn:"Design system"},{id:"i5",title:"Sistema de ilustraciones",titleEn:"Illustration system",cover:"/covers/sistema-ilustraciones.svg"},{id:"i1",title:"Infografías",titleEn:"Infographics",cover:"/covers/infografias.webp"},{id:"i3",title:"Newsletters",titleEn:"Newsletters",cover:"/covers/newsletters.webp"},{id:"i4",title:"Iconografía",titleEn:"Iconography",cover:"/covers/iberdrola-iconografia.svg"}],
-  uiux:       [{ id:"u1",title:"Web de Elysium",titleEn:"Elysium website",cover:"/covers/elysium-web.webp"},{id:"u2",title:"App Espacio vacío",titleEn:"Empty space app",cover:"/covers/espacio-vacio-app.webp"},{id:"u3",title:"App El Arte del Miedo",titleEn:"The Art of Fear app",cover:"/covers/el-arte-del-miedo-app.webp"}],
-  "3d":       [{ id:"d1",title:"Elysium",titleEn:"Elysium",cover:"/covers/elysium-3D.webp"}],
-  editorial:  [{ id:"e1",title:"Disco Elysium",titleEn:"Disco Elysium",cover:"/covers/elysium-editorial.webp"}],
-};
+const skills = CATEGORIAS;
+const projects = PROYECTOS;
 
 
 // Un atajo de contacto: el disco con el icono del correo o del teléfono.
@@ -177,14 +149,6 @@ const RECOMENDADOS: [string, string][] = [
   ["uiux", "u3"],
   ["fotografia", "f1"],
 ];
-
-const recomendados = RECOMENDADOS.map(([cat, id]) => {
-  const p = projects[cat].find(x => x.id === id);
-  const s = skills.find(x => x.id === cat);
-  // Si alguien renombra un id, mejor que falte la tarjeta a que reviente la
-  // home entera.
-  return p && s ? { ...p, hue: s.hue } : null;
-}).filter((x): x is NonNullable<typeof x> => x !== null);
 
 // Qué banda le toca a una categoría: la oscura de siempre, o la clara de las
 // que llevan el nombre en tinta. Sale de la lista de arriba, así que marcar una
@@ -1105,15 +1069,11 @@ export default function SkillDrop() {
 
       </div>
 
-      {/* ── Proyectos recomendados ──────────────────────────────────────────
-          Cuatro piezas a la vista sin tener que arrastrar nada. Las cápsulas
+      {/* Cuatro piezas a la vista sin tener que arrastrar nada. Las cápsulas
           son un juego y están bien, pero piden una acción para enseñar el
           primer proyecto; esto es la otra puerta, la de quien entra, mira y
           quiere ver algo ya. */}
-      <section className="home-recomendados">
-        <DropcapTitle es="Proyectos recomendados" en="Featured projects" />
-        <BounceCards items={recomendados} lang={lang} hue={0} />
-      </section>
+      <Recomendados ids={RECOMENDADOS.map(([, id]) => id)} className="home-recomendados" />
 
       <BackToTop />
 

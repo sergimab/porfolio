@@ -1,7 +1,7 @@
 import ArteMiedo from "./ArteMiedo";
 import AppApartados from "./AppApartados";
 import DropcapTitle from "@/components/shared/DropcapTitle";
-import CtaBanner from "@/components/shared/CtaBanner";
+import Recomendados from "@/components/shared/Recomendados";
 import "./ArteMiedo.css";
 
 // La pata de UI/UX del proyecto: la app que hace legible la exposición.
@@ -22,17 +22,7 @@ export default function UiuxLanding() {
       {/* Y de vuelta a la marca, que es de donde sale todo esto: la textura del
           escáner que llevan estas pantallas es la misma de los carteles. */}
       <section className="am-seccion">
-        <h2 className="project-h2">
-          <DropcapTitle es="Páginas recomendadas" en="Recommended pages" />
-        </h2>
-        <CtaBanner
-          href="/proyecto/b3"
-          es="Ver la marca de la exposición"
-          en="See the exhibition's brand"
-          imagen="/banners/el-arte-del-miedo-branding.webp"
-          imagenMovil="/banners/el-arte-del-miedo-branding-movil.webp"
-          alt="Los carteles de la exposición pegados en un panel de la calle"
-        />
+        <Recomendados ids={["b3"]} />
       </section>
     </ArteMiedo>
   );
