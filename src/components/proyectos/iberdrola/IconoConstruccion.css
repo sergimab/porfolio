@@ -40,7 +40,7 @@
 /* Cada panel es una tarjeta clara: la retícula es de trazo negro y el icono
    verde, así que necesitan fondo blanco independientemente del tema. */
 .icb-panel {
-  border-radius: 15px;
+  border-radius: var(--r-caja);
   background: #ffffff;
   overflow: hidden;
   aspect-ratio: 1;

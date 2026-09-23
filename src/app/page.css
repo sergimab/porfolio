@@ -8,7 +8,7 @@
 .tagline-wrap {
   padding: 8px 16px;
   background: var(--background);
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
   box-sizing: border-box;
   display: inline-flex;
 }
@@ -40,7 +40,7 @@
 .project-hero-box {
   height: 220px;
   margin-top: -24px;
-  border-radius: 0 0 16px 16px;
+  border-radius: 0 0 var(--r-caja) var(--r-caja);
   /* El tono lo fija cada proyecto con --hero-hue (por defecto, el verde de
      Iberdrola). Así el cuadro combina con el color de su categoría. */
   border: 1.5px solid hsl(var(--hero-hue, 142) 76% 36% / 0.6);
@@ -66,7 +66,7 @@
   position: relative;
   z-index: 6;
   border: 1px solid var(--foreground);
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
   padding: 14px 20px;
   background: var(--background);
   display: grid;
@@ -146,7 +146,7 @@
   margin-top: 20px;
   background: var(--background);
   padding: 14px 18px;
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
   box-sizing: border-box;
 }
 .project-tagline {
@@ -158,7 +158,7 @@
   font-style: italic;
   background: var(--background);
   padding: 10px 16px;
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
   box-sizing: border-box;
 }
 /* Vídeo de la página de Newsletters (bajo la descripción). Fondo opaco para
@@ -167,7 +167,7 @@
   margin-top: 32px;
   width: 100%;
   border: 1.5px solid var(--foreground);
-  border-radius: 16px;
+  border-radius: var(--r-caja);
   overflow: hidden;
   background: var(--background);
   line-height: 0;
@@ -298,7 +298,7 @@
   margin-top: 32px;
   width: 100%;
   border: 1px solid var(--foreground);
-  border-radius: 16px;
+  border-radius: var(--r-caja);
   overflow: hidden;
   background: var(--background);
   line-height: 0;
@@ -331,7 +331,7 @@
 .project-text {
   margin-top: 32px;
   background: var(--background);
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
   padding: 20px 24px;
   box-sizing: border-box;
 }
@@ -352,7 +352,7 @@
 .project-h2 {
   margin-top: 64px;
   background: var(--background);
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
   padding: 16px 24px;
   box-sizing: border-box;
 }
@@ -422,7 +422,7 @@
   margin-top: 16px;
   padding: 9px 16px;
   border: 1px solid var(--foreground);
-  border-radius: 999px;
+  border-radius: var(--r-pastilla);
   /* Fondo opaco en reposo: por detrás pasa el fondo de píxeles animado y, sin
      él, se veía moverse dentro de la píldora. */
   background: var(--background);
@@ -469,7 +469,7 @@
   justify-content: space-between;
   gap: 20px;
   padding: 18px 22px;
-  border-radius: 16px;
+  border-radius: var(--r-caja);
   text-align: left;
 }
 .project-boton-texto {
@@ -514,7 +514,7 @@
 /* Solo redondeo, sin línea de borde: los mismos 16px del resto de piezas de la
    página, para que el fondo de estudio del mockup no acabe en pico. */
 .project-pila img.es-redondeada {
-  border-radius: 16px;
+  border-radius: var(--r-caja);
 }
 
 /* Dos piezas en fila, a la misma anchura. Igual que el trío pero de dos, y

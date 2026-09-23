@@ -13,7 +13,7 @@
   position: relative;
   overflow: hidden;
   border: 1px solid var(--foreground);
-  border-radius: 16px;
+  border-radius: var(--r-caja);
   background: var(--background);
   cursor: grab;
   touch-action: none; /* el arrastre lo gestionamos nosotros, no el scroll */

@@ -13,7 +13,7 @@
   align-items: center;
   gap: var(--icg-hueco);
   border: 1px solid var(--foreground);
-  border-radius: 16px;
+  border-radius: var(--r-caja);
   background: var(--background);
 }
 
@@ -31,7 +31,7 @@
   width: var(--icg-tesela);
   height: var(--icg-tesela);
   display: block;
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
 }
 
 @media (max-width: 1024px) {

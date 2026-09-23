@@ -40,7 +40,7 @@
   /* Transparente, no ausente: el aro de degradado se dibuja encima justo aquí,
      y quitando el borde la tarjeta cambiaría de tamaño. */
   border: 1px solid transparent;
-  border-radius: 16px;
+  border-radius: var(--r-caja);
   overflow: hidden;
   background: var(--background);
   text-decoration: none;
@@ -58,7 +58,7 @@
   min-height: 0;
   width: 100%;
   overflow: hidden;
-  border-radius: 15px 15px 0 0;
+  border-radius: calc(var(--r-caja) - 1px) calc(var(--r-caja) - 1px) 0 0;
 }
 .bc-img {
   position: absolute;
@@ -116,7 +116,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0 0 15px 15px;
+  border-radius: 0 0 calc(var(--r-caja) - 1px) calc(var(--r-caja) - 1px);
   padding: 4px 10px;
   box-sizing: border-box;
   /* Un título largo en una tarjeta estrecha parte en dos líneas; el recorte

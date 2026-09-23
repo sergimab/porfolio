@@ -6,7 +6,7 @@
   position: relative;
   margin: 8px 0 56px;
   aspect-ratio: 16 / 9;
-  border-radius: 16px;
+  border-radius: var(--r-caja);
   overflow: hidden;
   background: #000;
   line-height: 0;

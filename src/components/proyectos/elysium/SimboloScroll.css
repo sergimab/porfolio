@@ -51,7 +51,7 @@
    píxeles animado y sin fondo opaco se lee fatal. */
 .simbolo-texto {
   background: var(--background);
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
   padding: 18px 20px;
   box-sizing: border-box;
   max-width: 52ch;
@@ -70,7 +70,7 @@
 .simbolo-media {
   width: 100%;
   border: 1px solid var(--foreground);
-  border-radius: 16px;
+  border-radius: var(--r-caja);
   overflow: hidden;
   line-height: 0;
   box-sizing: border-box;
@@ -111,7 +111,7 @@
   width: 100%;
   max-width: 52ch;
   background: var(--background);
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
   padding: 10px 20px 14px;
   box-sizing: border-box;
   border-collapse: collapse;
@@ -195,7 +195,7 @@
 .simbolo-vitrina {
   margin-top: 28px;
   border: 1px solid var(--foreground);
-  border-radius: 16px;
+  border-radius: var(--r-caja);
   background: #000;
   padding: 18px 0 18px 20px;
   overflow: hidden;

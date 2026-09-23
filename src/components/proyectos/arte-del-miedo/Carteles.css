@@ -9,7 +9,7 @@
 .am-carteles figure {
   margin: 0;
   min-width: 0;
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
   overflow: hidden;
   /* El fondo mientras carga, para que el hueco no destelle en blanco antes de
      aparecer la imagen. */
@@ -208,7 +208,7 @@
    hueco lo pone la fila y el radio se iguala al de las demás cajas. */
 .am-flyers-video .ym-video {
   margin: 0;
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
 }
 
 @media (max-width: 720px) {

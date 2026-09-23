@@ -26,7 +26,7 @@
   box-sizing: border-box;
   padding: 12px;
   border: 1px solid transparent;
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
 }
 
 /* EL DEFINITIVO, DESTACADO. Marco en el color de la categoría —el mismo rosa de

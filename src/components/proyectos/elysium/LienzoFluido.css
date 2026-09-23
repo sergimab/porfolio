@@ -5,7 +5,7 @@
   --tinta: #0b0b0b;
   --papel: #f4f2ed;
   --punto: rgba(28, 26, 22, 0.28);
-  --radio: 16px;
+  --radio: var(--r-caja);
   margin-top: 48px;
 }
 /* En oscuro se invierte, para que el bloque no deslumbre en medio de la
@@ -80,7 +80,7 @@
   background: var(--papel);
   /* Más aire a los lados que arriba y abajo. */
   padding: 8px 22px;
-  border-radius: 999px;
+  border-radius: var(--r-pastilla);
   transition: opacity 0.5s ease;
 }
 .lienzo-pista.se-va {
@@ -162,7 +162,7 @@
   color: var(--foreground);
   background: var(--papel);
   border: 1px solid var(--foreground);
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
   pointer-events: none;
   white-space: pre;
 }

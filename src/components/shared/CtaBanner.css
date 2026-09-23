@@ -2,7 +2,7 @@
    página —1px de borde en el color de texto y 16px de radio— para que se lea
    como una más, no como un widget pegado. */
 .cta-banner {
-  --cta-radio: 16px;
+  --cta-radio: var(--r-caja);
   position: relative;
   display: block;
   width: 100%;

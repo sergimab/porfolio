@@ -24,7 +24,7 @@
 .sobremi-foto {
   position: relative;
   cursor: pointer;
-  border-radius: 16px;
+  border-radius: var(--r-caja);
   /* Suelo de recorte. Las figuras se salen por arriba y por los lados a la
      vista, pero por debajo no asoma nada: la máscara se estira 300 % hacia los
      lados y hacia arriba y se ancla en el borde de abajo, así que lo que caiga
@@ -86,7 +86,7 @@
   border: 0;
   border-top: 1px solid var(--foreground);
   border-left: 1px solid var(--foreground);
-  border-radius: 14px 0 15px 0;
+  border-radius: var(--r-pieza) 0 var(--r-pieza) 0;
   background: var(--background);
   color: var(--foreground);
   font-family: inherit;
@@ -134,7 +134,7 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  border-radius: 16px;
+  border-radius: var(--r-caja);
 }
 
 /* Las figuras de colores, entre las dos capas de la foto.
@@ -185,7 +185,7 @@
   /* El respiro va aquí, entre el marco de guiones y el texto, igual que en la
      caja de los botones de arriba. La caja de dentro solo rueda. */
   padding: 16px;
-  border-radius: 16px;
+  border-radius: var(--r-caja);
   /* Su propio papel: por detrás pasan la trama de puntos y las figuras que se
      salen de la foto, y el texto tiene que leerse limpio por encima. */
   background: var(--background);
@@ -233,7 +233,7 @@
 }
 .sobremi-scroll::-webkit-scrollbar-thumb {
   border: 3px solid transparent;
-  border-radius: 999px;
+  border-radius: var(--r-pastilla);
   background: var(--sm-barra);
   background-clip: content-box;
 }

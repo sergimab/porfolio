@@ -30,11 +30,11 @@ export default function Organismos() {
               <div className="project-meta">
                 <div className="project-meta-row">
                   <span className="project-meta-key"><LangText es="Tipo" en="Type" /></span>
-                  <span><LangText es="Cartel promocional" en="Promotional poster" /></span>
+                  <span><LangText es="Disciplina del proyecto" en="Project discipline" /></span>
                 </div>
               </div>
             </div>
-            <p className="sd-hero-titulo">Afiche Orquesta Tokio</p>
+            <p className="sd-hero-titulo"><LangText es="Nombre del proyecto" en="Project name" /></p>
             <div className="project-introrow">
               <p className="project-intro">
                 <LangText
@@ -50,11 +50,11 @@ export default function Organismos() {
         <Pieza
           nombre="Tarjeta de proyecto"
           nombreEn="Project card"
-          de="Portada de alto fijo + banda con el degradado de su categoría. La banda va DEBAJO y no encima, para que la portada se vea entera y no haya que componerla dejando hueco."
-          deEn="Fixed-height cover + a band with its category gradient. The band sits BELOW, not over, so the cover is seen whole and need not be composed around it."
+          de="Portada de alto fijo + banda con el degradado de su categoría. La banda va DEBAJO y no encima, para que la portada se vea entera y no haya que componerla dejando hueco. La foto y el nombre de aquí son genéricos, para que se mire la forma y no el proyecto."
+          deEn="Fixed-height cover + a band with its category gradient. The band sits BELOW, not over, so the cover is seen whole and need not be composed around it. The photo and name here are placeholders, so what is read is the shape and not the project."
           ancha
         >
-          <Recomendados ids={["f1"]} titulo={{ es: "", en: "" }} className="sd-sin-titulo" />
+          <Recomendados ids={[]} muestra titulo={{ es: "", en: "" }} className="sd-sin-titulo" />
         </Pieza>
       </div>
 

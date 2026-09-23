@@ -13,6 +13,28 @@
   --muted: #6d6962;
   --border: #d9d4c5;
   --surface: #e8e3d5;
+
+  /* ── LAS ESQUINAS ──────────────────────────────────────────────────────────
+     Tres, y con una regla que se puede decir en una frase: EL CONTINENTE ES MÁS
+     REDONDO QUE LO QUE CONTIENE.
+       · --r-caja (16) para lo que enmarca: la cabecera, el pie, las cajas de la
+         home, las tarjetas, los marcos de muestra.
+       · --r-pieza (12) para lo que va dentro: imágenes, campos, cajas de papel,
+         muestras de color.
+       · --r-pastilla para lo que tiene forma de pastilla, que no es un radio
+         sino «redondéalo del todo».
+     Antes había nueve medidas sueltas y ninguna regla, así que cada pieza nueva
+     elegía la suya a ojo. Los valores viven aquí para que cambiarlos sea
+     cambiarlos en un sitio, y la página del sistema de diseño los enseña.
+
+     UNA EXCEPCIÓN, y a conciencia: lo que dibuja la interfaz de otro producto.
+     Los mockups de teléfono (44 y 34) imitan el redondeo de un aparato de
+     verdad, y los prototipos de Elysium y de El arte del miedo son pantallas de
+     otra marca viviendo dentro de este sitio. Su forma es parte de lo que se
+     enseña, así que no se toca. */
+  --r-pieza: 12px;
+  --r-caja: 16px;
+  --r-pastilla: 999px;
 }
 
 [data-theme="dark"] {

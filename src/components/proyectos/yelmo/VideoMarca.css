@@ -6,7 +6,7 @@
 .ym-video {
   aspect-ratio: var(--proporcion);
   margin: 8px 0 56px;
-  border-radius: 16px;
+  border-radius: var(--r-caja);
   overflow: hidden;
   /* Blanco mientras carga: es el fondo del propio vídeo, así que el hueco y la
      pieza son del mismo color y no hay parpadeo al aparecer. */

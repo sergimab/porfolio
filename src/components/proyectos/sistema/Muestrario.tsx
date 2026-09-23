@@ -42,28 +42,17 @@ const LETRA = [
   { px: 12, es: "Rótulos y pies", en: "Labels and captions" },
 ];
 
+// Las tres esquinas. Se pintan con la variable puesta, así que si un día cambia
+// el valor, esta muestra cambia con el sitio.
+const RADIOS = [
+  { v: "--r-pieza", es: "Lo que va dentro: imágenes, campos, cajas de papel", en: "What goes inside: images, fields, paper boxes" },
+  { v: "--r-caja", es: "Lo que enmarca: cabecera, pie, tarjetas, marcos", en: "What frames: header, footer, cards, frames" },
+  { v: "--r-pastilla", es: "Lo que tiene forma de pastilla. No es un radio, es «del todo»", en: "Anything pill-shaped. Not a radius, but «all the way»" },
+];
+
 export default function Muestrario() {
   return (
     <>
-      {/* ── Cómo se lee ─────────────────────────────────────────────────── */}
-      <section className="sd-seccion">
-        <RotuloSeccion es="Cómo se lee" en="How to read this" />
-        <TextoPapel>
-          <p>
-            <LangText
-              es="El sistema está ordenado **de menos a más**, que es también el orden en que se construyó. Primero **los átomos**: un color, un cuerpo de letra, un hueco, un radio, un grosor de trazo. Nada de eso significa nada por separado. Después **las moléculas**, que son dos o tres átomos juntos haciendo un trabajo —una pastilla con su flecha ya es una cápsula de volver—. Luego **los organismos**, que montan moléculas en una pieza que funciona sola, como la cabecera de un proyecto. Y al final **las plantillas**, que son las dos formas de página que tiene el sitio."
-              en="The system is laid out **from small to large**, which is also the order it was built in. First **the atoms**: a colour, a type size, a gap, a radius, a stroke weight. None of that means anything on its own. Then **the molecules**, two or three atoms doing one job — a pill with a chevron is already a back capsule. Then **the organisms**, molecules assembled into something that works by itself, like a project header. And finally **the templates**, the two page shapes the site has."
-            />
-          </p>
-          <p>
-            <LangText
-              es="Conviene saber una cosa antes de seguir: **casi todo lo de aquí abajo está vivo**. Las muestras de color llevan puesta la variable de verdad y los componentes son los componentes, traídos de la misma carpeta que usa el resto del sitio. Lo poco que es un esquema —porque no se puede sacar de su sitio— lo dice en su ficha."
-              en="One thing worth knowing before going on: **almost everything below is live**. The colour swatches carry the real variable and the components are the components, pulled from the same folder the rest of the site uses. The few that are schematics — because they cannot be taken out of their place — say so on their card."
-            />
-          </p>
-        </TextoPapel>
-      </section>
-
       <h2 className="sd-nivel"><LangText es="Átomos" en="Atoms" /></h2>
       {/* ── Color ───────────────────────────────────────────────────────── */}
       <section className="sd-seccion">
@@ -173,18 +162,42 @@ export default function Muestrario() {
         <TextoPapel>
           <p>
             <LangText
-              es="Entre apartados van **56 píxeles**; entre un rótulo y su pieza, **28**; entre piezas de una misma fila, **14 o 16**. Y el redondeo tiene un sentido: **12** para las cajas de papel, **14 y 16** para las tarjetas y los marcos, y **999** para todo lo que es una pastilla."
-              en="Between sections, **56 pixels**; between a label and its piece, **28**; between pieces in a row, **14 or 16**. Radii carry meaning too: **12** for paper boxes, **14 and 16** for cards and frames, **999** for anything shaped like a pill."
+              es="Entre apartados van **56 píxeles**; entre un rótulo y su pieza, **28**; entre piezas de una misma fila, **14 o 16**."
+              en="Between sections, **56 pixels**; between a label and its piece, **28**; between pieces in a row, **14 or 16**."
+            />
+          </p>
+          <p>
+            <LangText
+              es="Del redondeo había nueve medidas sueltas y ninguna regla, así que cada pieza nueva elegía la suya a ojo. Ahora son **tres tokens y una frase**, que es lo que hace que se puedan aplicar sin pensar: **el continente es más redondo que lo que contiene**. Una imagen dentro de una tarjeta lleva menos radio que la tarjeta; un campo dentro de la caja de contacto, menos que la caja."
+              en="Radii were nine loose values and no rule, so every new piece picked one by eye. Now there are **three tokens and one sentence**, which is what makes them applicable without thinking: **the container is rounder than what it contains**. An image inside a card takes less radius than the card; a field inside the contact box, less than the box."
+            />
+          </p>
+          <p>
+            <LangText
+              es="Queda una excepción, y a conciencia. Lo que dibuja **la interfaz de otro producto** —los mockups de teléfono, el prototipo de Elysium, el de El arte del miedo— conserva su forma, porque ahí el redondeo no es decisión de este sitio sino parte de lo que se está enseñando."
+              en="One exception remains, deliberately. Anything drawing **another product's interface** — the phone mockups, the Elysium prototype, the one for El arte del miedo — keeps its own shape, because there the radius is not this site's decision but part of what is being shown."
             />
           </p>
         </TextoPapel>
         <div className="sd-radios">
-          {[12, 14, 16, 999].map(r => (
-            <div className="sd-radio" key={r}>
-              <span className="sd-radio-caja" style={{ borderRadius: r === 999 ? "999px" : `${r}px` }} />
-              <span>{r === 999 ? "999" : r}</span>
+          {RADIOS.map(r => (
+            <div className="sd-radio" key={r.v}>
+              <span className="sd-radio-caja" style={{ borderRadius: `var(${r.v})` }} />
+              <code>{r.v}</code>
+              <span><LangText es={r.es} en={r.en} /></span>
             </div>
           ))}
+        </div>
+        <div className="sd-anidado">
+          <span className="sd-anidado-fuera">
+            <span className="sd-anidado-dentro" />
+          </span>
+          <span className="sd-anidado-pie">
+            <LangText
+              es="Caja de 16 con una pieza de 12 dentro. Al mismo radio, la de dentro parece más cuadrada de lo que es."
+              en="A 16 box with a 12 piece inside. At the same radius, the inner one looks squarer than it is."
+            />
+          </span>
         </div>
       </section>
 

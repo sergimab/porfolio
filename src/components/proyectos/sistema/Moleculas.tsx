@@ -62,11 +62,11 @@ export default function Moleculas() {
         <div className="project-meta sd-muestra-meta">
           <div className="project-meta-row">
             <span className="project-meta-key"><LangText es="Tipo" en="Type" /></span>
-            <span><LangText es="Sistema de diseño" en="Design system" /></span>
+            <span><LangText es="Disciplina del proyecto" en="Project discipline" /></span>
           </div>
           <div className="project-meta-row">
             <span className="project-meta-key"><LangText es="Cliente" en="Client" /></span>
-            <span>Orquesta Tokio</span>
+            <span><LangText es="Nombre del cliente" en="Client name" /></span>
           </div>
         </div>
       </Pieza>

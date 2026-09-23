@@ -1146,7 +1146,7 @@ button.ev-app-banda:focus-visible {
 .ev-proto-botones button {
   padding: 8px 14px;
   border: 1px solid currentColor;
-  border-radius: 999px;
+  border-radius: var(--r-pastilla);
   background: var(--background);
   color: inherit;
   font: inherit;

@@ -17,7 +17,7 @@
   flex: 1;
   padding: 18px;
   border: 1px solid var(--foreground);
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
   background: var(--background);
   color: var(--foreground);
   font-size: 14px;
@@ -36,7 +36,7 @@
   color: var(--background);
   border-color: var(--foreground);
   border-bottom: none;
-  border-radius: 12px 12px 0 0;
+  border-radius: var(--r-pieza) var(--r-pieza) 0 0;
   padding-bottom: 34px;
   margin-bottom: -1px;
 }
@@ -44,7 +44,7 @@
 /* Caja contenedora */
 .igv-box {
   border: 1px solid var(--foreground);
-  border-radius: 16px;
+  border-radius: var(--r-caja);
   padding: 24px 20px 20px;
   background: var(--background);
 }
@@ -70,7 +70,7 @@
   width: 100%;
   padding: 14px 20px;
   border: 1px solid var(--foreground);
-  border-radius: 16px;
+  border-radius: var(--r-caja);
   background: var(--background);
   color: var(--foreground);
   font-size: 13px;
@@ -144,7 +144,7 @@
   gap: 12px;
   padding: 14px 20px;
   border: 1px solid var(--foreground);
-  border-radius: 16px;
+  border-radius: var(--r-caja);
   background: var(--foreground);
   color: var(--background);
   font-size: 13px;
@@ -153,7 +153,7 @@
   cursor: pointer;
 }
 .igv-dd[data-open="true"] .igv-dd-toggle {
-  border-radius: 16px 16px 0 0;
+  border-radius: var(--r-caja) var(--r-caja) 0 0;
 }
 .igv-dd-chevron {
   flex-shrink: 0;
@@ -170,7 +170,7 @@
   background: var(--background);
   border: 1px solid var(--foreground);
   border-top: none;
-  border-radius: 0 0 16px 16px;
+  border-radius: 0 0 var(--r-caja) var(--r-caja);
   overflow: hidden;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
 }
@@ -199,7 +199,7 @@
 .igv-frame {
   width: 100%;
   border: none;
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
   background: transparent;
   display: block;
   overflow: hidden;

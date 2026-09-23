@@ -20,12 +20,12 @@
   /* Mismo redondeo que las demás cajas de papel del sitio —12—. A 4 px las
      esquinas se leían rectas y la lámina cantaba como un recorte pegado sobre
      la página en vez de como una caja suya. */
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
   background: var(--background);
 }
 .ev-lamina-entera {
   aspect-ratio: 16 / 9;
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
   overflow: hidden;
   background: var(--background);
 }

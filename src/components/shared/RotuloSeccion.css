@@ -35,7 +35,7 @@
   border: 1px solid var(--rotulo-trazo);
   /* Redondeo al máximo: con un radio mayor que la mitad del alto, el navegador
      lo recorta a esa mitad, que es la pastilla. */
-  border-radius: 999px;
+  border-radius: var(--r-pastilla);
   background: var(--background);
   white-space: nowrap;
   /* Por delante de la línea, que es lo que le deja esconder el tramo de más. */

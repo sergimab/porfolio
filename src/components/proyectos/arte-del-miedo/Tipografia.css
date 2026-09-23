@@ -20,7 +20,7 @@
   padding: 16px;
   margin-left: -16px;
   margin-right: -16px;
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
 }
 
 .am-tipo-rejilla {

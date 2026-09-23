@@ -24,7 +24,7 @@
   display: block;
   width: 100%;
   height: auto;
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
   /* Negro mientras carga: las piezas son oscuras y el hueco en blanco
      destellaría antes del primer fotograma. */
   background: #000;
@@ -79,7 +79,7 @@
   display: block;
   width: 100%;
   height: auto;
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
   background: #000;
 }
 .am-recorrido figcaption {
@@ -114,7 +114,7 @@
   display: block;
   width: 100%;
   height: auto;
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
   background: #000;
 }
 .am-motion-app figcaption {

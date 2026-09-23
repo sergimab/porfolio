@@ -42,7 +42,7 @@
 .box-soon,
 .box-skills {
   border: 1px solid var(--foreground);
-  border-radius: 16px;
+  border-radius: var(--r-caja);
   background: var(--background);
   position: relative;
   overflow: hidden;
@@ -72,7 +72,7 @@
   border: 0;
   border-right: 1px solid var(--foreground);
   border-bottom: 1px solid var(--foreground);
-  border-radius: 15px 0 14px 0;
+  border-radius: var(--r-pieza) 0 var(--r-pieza) 0;
   background: var(--background);
   color: var(--foreground);
   font-family: inherit;
@@ -245,7 +245,7 @@
     width: 100%;
     margin: 0 auto;
   }
-  .panel-btn-tile { height: 56px; border-radius: 999px; }
+  .panel-btn-tile { height: 56px; border-radius: var(--r-pastilla); }
   /* 8 a los lados y no 16: a 375 px de ancho, cada botón se queda en 85 y con
      16 de relleno por lado sobraban 53 para el nombre. «Sobre mí» pide 64, así
      que se partía en dos líneas y quedaba desigual con «CV» y «Contacto». Con 8
@@ -267,7 +267,7 @@
   width: 100%;
   max-width: 1024px;
   background: var(--background);
-  border-radius: 16px;
+  border-radius: var(--r-caja);
 }
 /* «Sobre mí» va suelto, sin caja: el recuadro de puntos era el marco de un
    apartado vacío —el «en construcción»— y ahora que hay contenido sobra, que
@@ -350,7 +350,7 @@
   max-width: 40px;
   padding: 0;
   border: 1px solid var(--foreground);
-  border-radius: 999px;
+  border-radius: var(--r-pastilla);
   background: var(--background);
   color: var(--foreground);
   text-decoration: none;
@@ -434,7 +434,7 @@
   min-width: 190px;
   padding: 6px;
   border: 1px solid var(--foreground);
-  border-radius: 16px;
+  border-radius: var(--r-caja);
   background: var(--background);
   /* Una sombra corta y baja: lo justo para que se lea como algo que está por
      encima del panel y no como otra caja más dibujada dentro. */
@@ -445,7 +445,7 @@
   width: 100%;
   padding: 11px 14px;
   border: none;
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
   background: none;
   color: var(--foreground);
   font: inherit;
@@ -486,7 +486,7 @@
   box-sizing: border-box;
   padding: 18px 20px;
   border: 1px solid var(--foreground);
-  border-radius: 16px;
+  border-radius: var(--r-caja);
   color: var(--foreground);
   text-decoration: none;
   transition: background 0.2s, color 0.2s;
@@ -576,7 +576,7 @@
   gap: 14px;
 }
 .panel-btn.contact-submit {
-  border-radius: 999px;
+  border-radius: var(--r-pastilla);
   padding: 10px 24px;
   width: auto;
   height: auto;
@@ -659,7 +659,7 @@
 }
 .panel-btn-tile {
   border: 1px solid var(--foreground);
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
 }
 .contact-input {
   font-family: inherit;
@@ -667,7 +667,7 @@
   color: var(--foreground);
   background: var(--background);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
   padding: 10px 12px;
   outline: none;
   transition: border-color 0.15s;

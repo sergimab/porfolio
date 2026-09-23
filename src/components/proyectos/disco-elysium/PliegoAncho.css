@@ -3,7 +3,7 @@
 .pliego {
   margin-top: 32px;
   border: 1px solid var(--foreground);
-  border-radius: 16px;
+  border-radius: var(--r-caja);
   overflow: hidden;
   background: var(--background);
 }

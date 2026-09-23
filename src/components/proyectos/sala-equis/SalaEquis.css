@@ -15,7 +15,7 @@
   aspect-ratio: var(--se-prop);
   width: 100%;
   overflow: hidden;
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
   box-sizing: border-box;
 }
 .se-alterna img {
@@ -173,7 +173,7 @@
   display: block;
   width: 100%;
   height: auto;
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
 }
 
 @media (max-width: 700px) {

@@ -37,7 +37,7 @@
   width: 46px;
   height: 46px;
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
 }
 .sd-token-texto {
   display: flex;
@@ -76,7 +76,7 @@
   justify-content: center;
   height: 62px;
   overflow: hidden;
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
   color: #fff;
   font-size: 12px;
   letter-spacing: 0.04em;
@@ -107,7 +107,7 @@
   gap: 4px;
   padding: 16px;
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: var(--r-caja);
   font-size: 12px;
   color: var(--muted);
 }
@@ -157,25 +157,62 @@
 
 /* ── Radios ──────────────────────────────────────────────────────────────── */
 .sd-radios {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   gap: 16px;
   margin-top: 28px;
 }
+/* Cada token con su nombre y su trabajo al lado, como los de color: un radio sin
+   el sitio donde se usa no dice nada. */
 .sd-radio {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
-  font-family: var(--font-geist-mono), monospace;
-  font-size: 11.5px;
+  font-size: 12px;
+  line-height: 1.5;
   color: var(--muted);
 }
+.sd-radio code {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 11.5px;
+}
 .sd-radio-caja {
-  width: 72px;
+  width: 100%;
   height: 52px;
   border: 1px solid var(--foreground);
   background: var(--surface);
+}
+
+/* La regla, dibujada: una caja con una pieza dentro. Es más rápido de entender
+   que la frase. */
+.sd-anidado {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+.sd-anidado-fuera {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 210px;
+  height: 96px;
+  border: 1px solid var(--foreground);
+  border-radius: var(--r-caja);
+  background: var(--background);
+}
+.sd-anidado-dentro {
+  width: 150px;
+  height: 48px;
+  border-radius: var(--r-pieza);
+  background: var(--surface);
+}
+.sd-anidado-pie {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+  max-width: 44ch;
 }
 
 /* ── Componentes ─────────────────────────────────────────────────────────── */
@@ -185,6 +222,9 @@
   gap: 16px;
   margin-top: 28px;
 }
+/* PAPEL OPACO, igual que las cajas de texto. Con el fondo animado pasando por
+   debajo, el filo solo no basta: el nombre y la explicación de cada ficha se
+   quedaban peleando con la trama. */
 .sd-pieza {
   display: flex;
   flex-direction: column;
@@ -192,7 +232,8 @@
   gap: 12px;
   padding: 18px;
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: var(--r-caja);
+  background: var(--background);
 }
 .sd-pieza-nombre {
   font-size: 11.5px;
@@ -215,7 +256,7 @@
 .sd-fallos li {
   padding: 16px 18px;
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
   background: var(--background);
   font-size: 13px;
   line-height: 1.7;
@@ -269,7 +310,7 @@
   width: 100%;
   min-height: 74px;
   padding: 16px;
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
   /* El hueco va en el color del relieve, que es justo para lo que sirve ese
      token: marcar que ahí dentro pasa otra cosa. */
   background: var(--surface);
@@ -300,7 +341,7 @@
   width: 60px;
   height: 30px;
   border: 1px solid var(--foreground);
-  border-radius: 999px;
+  border-radius: var(--r-pastilla);
 }
 .sd-toggle-bola {
   position: absolute;
@@ -319,7 +360,7 @@
   height: 32px;
   padding: 0 10px;
   border: 1px solid var(--foreground);
-  border-radius: 999px;
+  border-radius: var(--r-pastilla);
   font-size: 13px;
 }
 .sd-toggle-idioma b { font-weight: 500; }
@@ -336,7 +377,7 @@
   padding: 9px 16px;
   border: 1px solid var(--foreground);
   border-bottom: 0;
-  border-radius: 12px 12px 0 0;
+  border-radius: var(--r-pieza) var(--r-pieza) 0 0;
   font-size: 12px;
   color: var(--muted);
 }
@@ -348,7 +389,7 @@
   grid-column: 1 / -1;
   height: 46px;
   border: 1px solid var(--foreground);
-  border-radius: 0 12px 12px 12px;
+  border-radius: 0 var(--r-pieza) var(--r-pieza) var(--r-pieza);
   background: var(--background);
 }
 
@@ -366,8 +407,11 @@
 }
 /* La tarjeta suelta no lleva rótulo encima: aquí el rótulo lo pone el marco de
    la muestra. */
+/* La ficha alinea a la izquierda, así que la sección hay que estirarla a mano o
+   la tarjeta se queda encogida a su contenido. */
 .sd-sin-titulo {
   margin-top: 0;
+  width: 100%;
 }
 .sd-sin-titulo .rec-titulo {
   display: none;
@@ -384,7 +428,7 @@
 }
 .sd-bloque {
   height: 14px;
-  border-radius: 999px;
+  border-radius: var(--r-pastilla);
   background: color-mix(in srgb, var(--foreground) 24%, transparent);
 }
 .sd-bloque.es-suave {
@@ -425,8 +469,8 @@
   border: 1.5px solid var(--foreground);
   background: var(--background);
 }
-.sd-esquema-cabecera { border-radius: 0 0 16px 16px; border-top: 0; }
-.sd-esquema-pie { border-radius: 16px 16px 0 0; border-bottom: 0; }
+.sd-esquema-cabecera { border-radius: 0 0 var(--r-caja) var(--r-caja); border-top: 0; }
+.sd-esquema-pie { border-radius: var(--r-caja) var(--r-caja) 0 0; border-bottom: 0; }
 
 .sd-esquema-capsulas,
 .sd-esquema-menu,
@@ -437,21 +481,21 @@
   gap: 8px;
   padding: 14px;
   border: 1px solid var(--foreground);
-  border-radius: 16px;
+  border-radius: var(--r-caja);
   background: var(--background);
 }
 .sd-capsula {
   align-self: flex-start;
   padding: 7px 16px;
   border: 1px solid var(--foreground);
-  border-radius: 999px;
+  border-radius: var(--r-pastilla);
   font-size: 11.5px;
 }
 .sd-soltar {
   margin-top: 4px;
   padding: 9px;
   border: 1.5px dashed var(--muted);
-  border-radius: 999px;
+  border-radius: var(--r-pastilla);
   color: var(--muted);
   font-size: 11.5px;
   text-align: center;
@@ -481,7 +525,7 @@
   flex: 1;
   padding: 26px 8px;
   border: 1px solid var(--foreground);
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
   font-size: 11.5px;
   text-align: center;
 }
@@ -497,7 +541,7 @@
 .sd-campo {
   height: 26px;
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
 }
 .sd-campo.es-alto {
   height: 52px;
@@ -522,7 +566,7 @@
   width: 92px;
   height: 52px;
   border: 1px solid var(--foreground);
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
 }
 
 /* ── Plantillas ──────────────────────────────────────────────────────────── */
@@ -538,7 +582,8 @@
   gap: 8px;
   padding: 14px;
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: var(--r-caja);
+  background: var(--background);
 }
 .sd-plantilla-nombre {
   margin-bottom: 4px;
@@ -550,7 +595,7 @@
 .sd-fila {
   padding: 12px 10px;
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
   background: var(--surface);
   font-size: 11.5px;
   text-align: center;

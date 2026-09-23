@@ -5,7 +5,7 @@
   --tirad-viaje: 1.1s;  /* lo que tarda en desplazarse de una a otra */
 
   border: 1px solid var(--foreground);
-  border-radius: 16px;
+  border-radius: var(--r-caja);
   overflow: hidden;
   background: var(--background);
   line-height: 0;

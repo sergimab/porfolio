@@ -41,7 +41,7 @@
   /* Redondeadas como las demás cajas de papel, pero menos —10 y no 12—: estas
      son dos renglones cortos y con 12 la curva se comía el texto de las
      esquinas. */
-  border-radius: 12px;
+  border-radius: var(--r-pieza);
 }
 
 .ev-muestra-uso {
