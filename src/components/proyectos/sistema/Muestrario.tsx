@@ -24,7 +24,10 @@ const TOKENS = [
   { v: "--foreground", es: "Tinta", en: "Ink", uso: { es: "El texto y los trazos. Es el contrario del papel.", en: "Text and strokes. The opposite of the paper." } },
   { v: "--muted", es: "Apagado", en: "Muted", uso: { es: "Lo secundario: la hora, los pies, las etiquetas.", en: "Secondary matter: the clock, captions, labels." } },
   { v: "--border", es: "Filo", en: "Border", uso: { es: "Las líneas que separan sin llamar la atención.", en: "Lines that separate without calling attention." } },
-  { v: "--surface", es: "Relieve", en: "Surface", uso: { es: "Un escalón sobre el papel: campos, huecos de imagen.", en: "One step above the paper: fields, image wells." } },
+  // Contado uno a uno: de sus diez usos, nueve son el hueco de una imagen. Es
+  // lo que hace de verdad, y el muestrario tiene que decir eso y no lo que nos
+  // gustaría que hiciera.
+  { v: "--surface", es: "Relieve", en: "Surface", uso: { es: "El hueco de una imagen mientras carga, para que no destelle en blanco.", en: "An image's slot while it loads, so it does not flash white." } },
 ];
 
 // La escala de letra que se usa de verdad, contada de la hoja de estilos.

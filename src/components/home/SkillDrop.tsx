@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import type MatterTypes from "matter-js";
-// import ProjectCard from "./ProjectCard"; // diseño anterior (rejilla) — guardado por si volvemos
 import BounceCards from "./BounceCards";
 import BackToTop from "@/components/layout/BackToTop";
 import DropcapTitle from "@/components/shared/DropcapTitle";
