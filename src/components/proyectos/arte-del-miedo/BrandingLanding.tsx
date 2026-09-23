@@ -163,7 +163,7 @@ export default function BrandingLanding() {
           son de los apartados del proyecto, y esto no es un apartado más, es la
           salida. Igual que en Yelmo y en Espacio vacío. */}
       <section className="am-seccion">
-        <Recomendados ids={["u3"]} />
+        <Recomendados ids={["u3", "b1", "b2", "b4"]} />
       </section>
     </ArteMiedo>
   );

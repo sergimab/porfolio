@@ -134,7 +134,7 @@ export default function MotionLanding() {
             central a más tamaño, con la medida que llevan todas las del
             sitio. */}
         <section className="motion-seccion">
-          <Recomendados ids={["b2"]} />
+          <Recomendados ids={["b2", "m2"]} />
         </section>
       </div>
     </main>

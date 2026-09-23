@@ -113,7 +113,7 @@ export default function EspacioVacioLanding() {
             las de Elysium: a ancho de móvil, la franja entera se queda en 48 px
             de alto y los dos aparatos no se distinguen. */}
         <hr className="ev-divisor" />
-        <Recomendados ids={["u2"]} />
+        <Recomendados ids={["u2", "b2", "b3", "b4"]} />
       </div>
     </main>
   );

@@ -1,5 +1,6 @@
 import BackCapsule from "@/components/shared/BackCapsule";
 import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
+import Recomendados from "@/components/shared/Recomendados";
 import LangText from "@/components/shared/LangText";
 import ToolIcons from "@/components/shared/ToolIcons";
 import InfografiasViewer from "./InfografiasViewer";
@@ -43,6 +44,8 @@ export default function InfografiasLanding() {
         </p>
 
         <InfografiasViewer />
+
+        <Recomendados ids={["i5", "i3", "i4", "i2"]} />
       </div>
     </main>
   );

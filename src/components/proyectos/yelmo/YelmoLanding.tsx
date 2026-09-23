@@ -77,7 +77,7 @@ export default function YelmoLanding() {
           {/* El título va con la capitular script, como el de las demás
               páginas: el rótulo-pastilla es de los apartados del proyecto, y
               esto no es uno más, es el pie de página. */}
-          <Recomendados ids={["m1"]} />
+          <Recomendados ids={["m1", "b1", "b3", "b4"]} />
         </section>
       </div>
     </main>

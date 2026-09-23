@@ -1,5 +1,6 @@
 import BackCapsule from "@/components/shared/BackCapsule";
 import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
+import Recomendados from "@/components/shared/Recomendados";
 import LangText from "@/components/shared/LangText";
 import ToolIcons from "@/components/shared/ToolIcons";
 import RotuloSeccion from "@/components/shared/RotuloSeccion";
@@ -143,6 +144,8 @@ export default function SalaEquisLanding() {
             </div>
           </div>
         </section>
+
+        <Recomendados ids={["b1", "b2", "b3"]} />
       </div>
     </main>
   );
