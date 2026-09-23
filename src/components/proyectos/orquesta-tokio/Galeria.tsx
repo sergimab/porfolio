@@ -23,14 +23,24 @@ export default function Galeria({
   carpeta,
   alt,
   anchas = [],
+  primeras = [],
 }: {
   total: number;
   carpeta: string;
   alt: string;
   /** Las que ocupan dos columnas en vez de una, por número de foto. */
   anchas?: number[];
+  /** Las que se adelantan al principio del muro, en este orden. Las demás van
+   *  detrás por su número. */
+  primeras?: number[];
 }) {
-  const fotos = Array.from({ length: total }, (_, i) => String(i + 1).padStart(2, "0"));
+  // El orden del muro: primero las adelantadas y después el resto. Las listas
+  // van por NÚMERO DE FOTO y no por posición, que es lo que permite reordenar
+  // el muro sin que «la ancha» deje de ser la que era.
+  const orden = [
+    ...primeras,
+    ...Array.from({ length: total }, (_, i) => i + 1).filter(n => !primeras.includes(n)),
+  ];
   const muro = useRef<HTMLDivElement>(null);
   const [abierta, setAbierta] = useState<string | null>(null);
   // De dónde se salió, para devolver el foco al cerrar: quien navega con
@@ -100,11 +110,13 @@ export default function Galeria({
           importa tanto como lo primero: un fondo borroso que además se mueve
           tira del ojo justo cuando se está mirando otra cosa. */}
       <div className={`gt-muro${abierta ? " es-al-fondo" : ""}`} ref={muro}>
-        {fotos.map((n, i) => (
+        {orden.map((num, i) => {
+          const n = String(num).padStart(2, "0");
+          return (
           <button
             key={n}
             type="button"
-            className={`gt-foto${anchas.includes(i + 1) ? " es-ancha" : ""}`}
+            className={`gt-foto${anchas.includes(num) ? " es-ancha" : ""}`}
             // Cada una flota a su aire. El desfase negativo arranca la
             // animación ya empezada, que si no las cuarenta subirían y bajarían
             // a la vez y el muro entero parecería respirar de golpe.
@@ -119,7 +131,8 @@ export default function Galeria({
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={`${carpeta}/mini/${n}.webp`} alt="" loading="lazy" />
           </button>
-        ))}
+          );
+        })}
       </div>
 
       {abierta && (
