@@ -1,0 +1,258 @@
+/* La página del sistema de diseño. Usa las mismas medidas que las demás
+   páginas de proyecto —56 entre apartados, 28 del rótulo a su pieza— porque es
+   la primera que tiene que cumplir lo que cuenta. */
+.sd-seccion {
+  margin-bottom: 56px;
+}
+.sd-seccion:first-of-type {
+  margin-top: 56px;
+}
+
+/* La caja de papel del texto. Está aquí otra vez, con otro nombre, y ese es
+   justamente uno de los fallos que la página denuncia más abajo: se deja a la
+   vista en vez de disimularlo. */
+.sd-texto {
+  position: relative;
+  margin: 4px -18px 0;
+  padding: 10px 18px;
+  border-radius: 12px;
+  background: var(--background);
+  font-size: 13.5px;
+  line-height: 1.8;
+  letter-spacing: 0.004em;
+}
+.sd-texto p {
+  margin: 0 0 14px;
+}
+.sd-texto p:last-child {
+  margin-bottom: 0;
+}
+.sd-texto strong {
+  font-weight: 600;
+}
+
+.sd-subrotulo {
+  margin: 36px 0 14px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--foreground);
+}
+
+/* ── Los tokens de color ─────────────────────────────────────────────────────
+   Cada muestra lleva la variable puesta a pelo como fondo, así que enseña el
+   valor de verdad en el modo en que se esté mirando. El filo alrededor no es
+   decoración: sin él, la muestra del papel sería invisible sobre el papel. */
+.sd-tokens {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 14px;
+  margin-top: 28px;
+}
+.sd-token {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.sd-token-muestra {
+  flex: 0 0 auto;
+  width: 46px;
+  height: 46px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.sd-token-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 13px;
+  min-width: 0;
+}
+.sd-token-texto code {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+.sd-token-uso {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* ── Los siete tonos ─────────────────────────────────────────────────────── */
+.sd-tonos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+.sd-tono {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.sd-tono-banda {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 62px;
+  overflow: hidden;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-align: center;
+  padding: 0 10px;
+}
+.sd-tono-banda .mesh-encima {
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.32);
+}
+.sd-tono-dato {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+/* ── Tipografía ──────────────────────────────────────────────────────────── */
+.sd-letras {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 16px;
+  margin-top: 28px;
+}
+.sd-letra {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.sd-letra strong {
+  font-size: 13px;
+  color: var(--foreground);
+}
+.sd-letra-muestra {
+  font-size: 40px;
+  line-height: 1.1;
+  color: var(--foreground);
+}
+.sd-sans { font-family: var(--font-geist-sans), system-ui, sans-serif; }
+.sd-serif { font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; }
+.sd-script { font-family: "Kapakana", cursive; }
+
+.sd-escala {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.sd-escala li {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+}
+.sd-escala li:last-child {
+  border-bottom: 0;
+}
+/* Cifras de ancho fijo y alineadas a la derecha: son una columna de números y
+   así se leen como tal. */
+.sd-escala-px {
+  flex: 0 0 34px;
+  text-align: right;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 12px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+/* La muestra se pinta a su tamaño real hasta 22 px; de ahí para arriba se
+   recorta, que un titular de 34 en una lista se come el renglón. */
+.sd-escala-muestra {
+  line-height: 1.3;
+}
+
+/* ── Radios ──────────────────────────────────────────────────────────────── */
+.sd-radios {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 28px;
+}
+.sd-radio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+.sd-radio-caja {
+  width: 72px;
+  height: 52px;
+  border: 1px solid var(--foreground);
+  background: var(--surface);
+}
+
+/* ── Componentes ─────────────────────────────────────────────────────────── */
+.sd-piezas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 28px;
+}
+.sd-pieza {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+.sd-pieza-nombre {
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.sd-pieza-titular {
+  font-size: 22px;
+}
+
+/* ── Lo que no cuadra ────────────────────────────────────────────────────── */
+.sd-fallos {
+  margin: 28px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 12px;
+}
+.sd-fallos li {
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--background);
+  font-size: 13px;
+  line-height: 1.7;
+}
+.sd-fallos strong {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+@media (max-width: 560px) {
+  .sd-tokens,
+  .sd-letras,
+  .sd-piezas {
+    grid-template-columns: 1fr;
+  }
+}
