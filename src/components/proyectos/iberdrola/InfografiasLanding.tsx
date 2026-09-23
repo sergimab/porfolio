@@ -45,7 +45,10 @@ export default function InfografiasLanding() {
 
         <InfografiasViewer />
 
-        <Recomendados ids={["i5", "i3", "i4", "i2"]} />
+        {/* Sin «Sistema de diseño»: su página aún no está montada, y recomendar
+            un proyecto que lleva al cartel de «Próximamente» es mandar a la
+            gente a una puerta cerrada. */}
+        <Recomendados ids={["i5", "i3", "i4"]} />
       </div>
     </main>
   );
