@@ -8,6 +8,8 @@ import BackCapsule from "@/components/shared/BackCapsule";
 import ToolIcons from "@/components/shared/ToolIcons";
 import MeshGradient from "@/components/shared/MeshGradient";
 import { CATEGORIAS } from "@/components/shared/proyectos";
+import Moleculas from "./Moleculas";
+import Organismos from "./Organismos";
 import { paletaLegible, paletaClara, degradadoLegible, degradadoClaro, CAPSULE_DRIFT_SIZE, drift } from "@/components/shared/organico";
 
 // LAS MUESTRAS SE PINTAN CON EL SISTEMA, no lo describen.
@@ -43,6 +45,26 @@ const LETRA = [
 export default function Muestrario() {
   return (
     <>
+      {/* ── Cómo se lee ─────────────────────────────────────────────────── */}
+      <section className="sd-seccion">
+        <RotuloSeccion es="Cómo se lee" en="How to read this" />
+        <TextoPapel>
+          <p>
+            <LangText
+              es="El sistema está ordenado **de menos a más**, que es también el orden en que se construyó. Primero **los átomos**: un color, un cuerpo de letra, un hueco, un radio, un grosor de trazo. Nada de eso significa nada por separado. Después **las moléculas**, que son dos o tres átomos juntos haciendo un trabajo —una pastilla con su flecha ya es una cápsula de volver—. Luego **los organismos**, que montan moléculas en una pieza que funciona sola, como la cabecera de un proyecto. Y al final **las plantillas**, que son las dos formas de página que tiene el sitio."
+              en="The system is laid out **from small to large**, which is also the order it was built in. First **the atoms**: a colour, a type size, a gap, a radius, a stroke weight. None of that means anything on its own. Then **the molecules**, two or three atoms doing one job — a pill with a chevron is already a back capsule. Then **the organisms**, molecules assembled into something that works by itself, like a project header. And finally **the templates**, the two page shapes the site has."
+            />
+          </p>
+          <p>
+            <LangText
+              es="Conviene saber una cosa antes de seguir: **casi todo lo de aquí abajo está vivo**. Las muestras de color llevan puesta la variable de verdad y los componentes son los componentes, traídos de la misma carpeta que usa el resto del sitio. Lo poco que es un esquema —porque no se puede sacar de su sitio— lo dice en su ficha."
+              en="One thing worth knowing before going on: **almost everything below is live**. The colour swatches carry the real variable and the components are the components, pulled from the same folder the rest of the site uses. The few that are schematics — because they cannot be taken out of their place — say so on their card."
+            />
+          </p>
+        </TextoPapel>
+      </section>
+
+      <h2 className="sd-nivel"><LangText es="Átomos" en="Atoms" /></h2>
       {/* ── Color ───────────────────────────────────────────────────────── */}
       <section className="sd-seccion">
         <RotuloSeccion es="Color" en="Colour" />
@@ -166,33 +188,25 @@ export default function Muestrario() {
         </div>
       </section>
 
-      {/* ── Componentes ─────────────────────────────────────────────────── */}
-      <section className="sd-seccion">
-        <RotuloSeccion es="Componentes" en="Components" />
+      {/* ── Trazo ───────────────────────────────────────────────────────── */}
+      <section className="sd-seccion sd-atomo">
+        <RotuloSeccion es="Trazo" en="Stroke" />
         <TextoPapel>
           <p>
             <LangText
-              es="Los de aquí abajo **no son dibujos de los componentes, son los componentes**, traídos de la misma carpeta que los usa el resto del sitio. Cualquier retoque en ellos se ve aquí sin tocar esta página."
-              en="The ones below **are not drawings of the components, they are the components**, pulled from the same folder the rest of the site uses. Any tweak to them shows up here without touching this page."
+              es="Dos grosores y cada uno dice una cosa. **1 px** es el filo de dentro: separa sin pesar, y lo llevan las cajas, los campos y las líneas de una tabla. **1,5 px** es el filo de fuera, el del marco que sostiene la página: la cabecera, el pie y la cápsula de volver. La diferencia es medio píxel y se nota: con 1 px, el marco se leía como una caja más de las de dentro."
+              en="Two weights, each saying something. **1 px** is the inner edge: it separates without weight, and it belongs to boxes, fields and table rules. **1.5 px** is the outer edge, the frame that holds the page: header, footer and back capsule. The difference is half a pixel and it shows: at 1 px the frame read as just another inner box."
             />
           </p>
         </TextoPapel>
-        <div className="sd-piezas">
-          <div className="sd-pieza">
-            <span className="sd-pieza-nombre"><LangText es="Cápsula de volver" en="Back capsule" /></span>
-            <BackCapsule category="uiux" />
+        <div className="sd-trazos">
+          <div className="sd-trazo">
+            <span className="sd-trazo-caja" style={{ borderWidth: "1px" }} />
+            <span>1 px · <LangText es="filo de dentro" en="inner edge" /></span>
           </div>
-          <div className="sd-pieza">
-            <span className="sd-pieza-nombre"><LangText es="Rótulo de apartado" en="Section label" /></span>
-            <RotuloSeccion es="Componentes" en="Components" />
-          </div>
-          <div className="sd-pieza">
-            <span className="sd-pieza-nombre"><LangText es="Titular con capitular" en="Drop-cap title" /></span>
-            <span className="sd-pieza-titular"><DropcapTitle es="Proyectos" en="Projects" /></span>
-          </div>
-          <div className="sd-pieza">
-            <span className="sd-pieza-nombre"><LangText es="Programas" en="Tools" /></span>
-            <ToolIcons tools={["Figma", "Photoshop", "After Effects"]} />
+          <div className="sd-trazo">
+            <span className="sd-trazo-caja" style={{ borderWidth: "1.5px" }} />
+            <span>1,5 px · <LangText es="marco de la página" en="page frame" /></span>
           </div>
         </div>
       </section>
@@ -214,6 +228,70 @@ export default function Muestrario() {
             />
           </p>
         </TextoPapel>
+      </section>
+
+      <h2 className="sd-nivel"><LangText es="Moléculas" en="Molecules" /></h2>
+
+      <section className="sd-seccion">
+        <RotuloSeccion es="Piezas de dos o tres átomos" en="Pieces of two or three atoms" />
+        <TextoPapel>
+          <p>
+            <LangText
+              es="Aquí ya hay trabajo: una pastilla con una flecha dentro **es** la cápsula de volver, y un rótulo con una línea que lo cruza **es** el que abre cada apartado. Ninguna de estas piezas decide nada por su cuenta; todas esperan a que alguien las coloque."
+              en="Here there is a job being done: a pill with a chevron **is** the back capsule, and a label with a rule across **is** what opens every section. None of these decides anything on its own; they all wait to be placed."
+            />
+          </p>
+        </TextoPapel>
+        <Moleculas />
+      </section>
+
+      <h2 className="sd-nivel"><LangText es="Organismos" en="Organisms" /></h2>
+
+      <section className="sd-seccion">
+        <RotuloSeccion es="Piezas que ya funcionan solas" en="Pieces that work on their own" />
+        <TextoPapel>
+          <p>
+            <LangText
+              es="Un organismo es un conjunto de moléculas que **ya se sostiene**: se puede poner en una página y hace su trabajo sin nada más alrededor. La cabecera de un proyecto es el ejemplo claro —lleva cápsula, ficha, titular, entradilla y programas— y se repite igual en las catorce páginas."
+              en="An organism is a set of molecules that **stands up by itself**: drop it on a page and it does its job with nothing else around. A project header is the clear example — capsule, meta, title, lead and tools — and it repeats identically across fourteen pages."
+            />
+          </p>
+        </TextoPapel>
+        <Organismos />
+      </section>
+
+      <h2 className="sd-nivel"><LangText es="Plantillas" en="Templates" /></h2>
+
+      {/* ── Plantillas ──────────────────────────────────────────────────── */}
+      <section className="sd-seccion">
+        <RotuloSeccion es="Las dos formas de página" en="The two page shapes" />
+        <TextoPapel>
+          <p>
+            <LangText
+              es="Con los organismos ya montados, el sitio entero son **dos plantillas**. La **página de proyecto** encadena cabecera, apartados y proyectos recomendados, y cada apartado es siempre lo mismo: rótulo, caja de papel y piezas. La **home** es la otra: cabecera del sitio, caja de cápsulas con su menú de paneles al lado, el panel abierto debajo y los proyectos recomendados al final."
+              en="With the organisms in place, the whole site is **two templates**. The **project page** chains header, sections and featured projects, and every section is always the same: label, paper box and pieces. The **home** is the other one: site header, capsule box with the panel menu beside it, the open panel below and featured projects at the end."
+            />
+          </p>
+        </TextoPapel>
+        <div className="sd-plantillas">
+          <div className="sd-plantilla">
+            <span className="sd-plantilla-nombre"><LangText es="Página de proyecto" en="Project page" /></span>
+            <span className="sd-fila es-cabecera"><LangText es="Cabecera de proyecto" en="Project header" /></span>
+            <span className="sd-fila"><LangText es="Rótulo + caja de papel + piezas" en="Label + paper box + pieces" /></span>
+            <span className="sd-fila"><LangText es="Rótulo + caja de papel + piezas" en="Label + paper box + pieces" /></span>
+            <span className="sd-fila es-recomendados"><LangText es="Proyectos recomendados" en="Featured projects" /></span>
+          </div>
+          <div className="sd-plantilla">
+            <span className="sd-plantilla-nombre">Home</span>
+            <span className="sd-fila es-cabecera"><LangText es="Cabecera del sitio" en="Site header" /></span>
+            <span className="sd-fila-doble">
+              <span className="sd-fila"><LangText es="Cápsulas" en="Capsules" /></span>
+              <span className="sd-fila"><LangText es="Paneles" en="Panels" /></span>
+            </span>
+            <span className="sd-fila es-alta"><LangText es="Panel abierto" en="Open panel" /></span>
+            <span className="sd-fila es-recomendados"><LangText es="Proyectos recomendados" en="Featured projects" /></span>
+          </div>
+        </div>
       </section>
 
       {/* ── Lo que no cuadra ────────────────────────────────────────────── */}

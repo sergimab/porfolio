@@ -244,3 +244,334 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ── Los niveles ─────────────────────────────────────────────────────────────
+   Átomos, moléculas, organismos y plantillas. Van más fuertes que un rótulo de
+   apartado porque son el escalón de arriba: un rótulo abre un apartado y esto
+   abre un nivel entero, con varios apartados dentro.
+   El filo grueso por arriba es lo que hace de corte: sin él, el nombre del
+   nivel se leía como un apartado más. */
+.sd-nivel {
+  margin: 0 0 28px;
+  padding-top: 26px;
+  border-top: 1.5px solid var(--foreground);
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* ── El marco de cada pieza ──────────────────────────────────────────────── */
+.sd-pieza-caja {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  width: 100%;
+  min-height: 74px;
+  padding: 16px;
+  border-radius: 12px;
+  /* El hueco va en el color del relieve, que es justo para lo que sirve ese
+     token: marcar que ahí dentro pasa otra cosa. */
+  background: var(--surface);
+}
+.sd-pieza-de {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.sd-pieza.es-ancha {
+  grid-column: 1 / -1;
+}
+.sd-muestra-titular {
+  font-size: 22px;
+}
+.sd-muestra-meta {
+  margin: 0;
+}
+
+/* Las pastillas de la cabecera, dibujadas a mano. */
+.sd-muestra-toggles {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sd-toggle-tema {
+  position: relative;
+  width: 60px;
+  height: 30px;
+  border: 1px solid var(--foreground);
+  border-radius: 999px;
+}
+.sd-toggle-bola {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--foreground);
+  border-radius: 50%;
+  background: var(--background);
+}
+.sd-toggle-idioma {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--foreground);
+  border-radius: 999px;
+  font-size: 13px;
+}
+.sd-toggle-idioma b { font-weight: 500; }
+.sd-toggle-idioma i { color: var(--border); font-style: normal; }
+.sd-toggle-idioma span { color: var(--muted); }
+
+/* Las pestañas, con la de la izquierda unida a su caja. */
+.sd-muestra-tabs {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  width: 100%;
+}
+.sd-tab {
+  padding: 9px 16px;
+  border: 1px solid var(--foreground);
+  border-bottom: 0;
+  border-radius: 12px 12px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+.sd-tab.es-activa {
+  background: var(--background);
+  color: var(--foreground);
+}
+.sd-tab-caja {
+  grid-column: 1 / -1;
+  height: 46px;
+  border: 1px solid var(--foreground);
+  border-radius: 0 12px 12px 12px;
+  background: var(--background);
+}
+
+/* ── La cabecera de proyecto, en pequeño ─────────────────────────────────── */
+.sd-hero {
+  width: 100%;
+}
+.sd-hero .project-hero-box {
+  margin-bottom: 18px;
+}
+.sd-hero-titulo {
+  margin: 0 0 12px;
+  font-size: 20px;
+  letter-spacing: 0.01em;
+}
+/* La tarjeta suelta no lleva rótulo encima: aquí el rótulo lo pone el marco de
+   la muestra. */
+.sd-sin-titulo {
+  margin-top: 0;
+}
+.sd-sin-titulo .rec-titulo {
+  display: none;
+}
+
+/* ── Los esquemas ────────────────────────────────────────────────────────────
+   Para lo que no se puede traer vivo. Van en gris apagado a propósito: tienen
+   que leerse como un plano y no como la pieza de verdad. */
+.sd-esquema {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+.sd-bloque {
+  height: 14px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--foreground) 24%, transparent);
+}
+.sd-bloque.es-suave {
+  background: color-mix(in srgb, var(--foreground) 12%, transparent);
+}
+.sd-bloque.es-pastilla {
+  height: 28px;
+  border: 1px solid color-mix(in srgb, var(--foreground) 34%, transparent);
+  background: none;
+}
+.sd-bloque.es-icono {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+.sd-bloque.es-disco {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--foreground) 34%, transparent);
+  background: none;
+}
+.sd-esquema-centro {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 auto;
+}
+.sd-esquema-dcha {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+.sd-esquema-cabecera,
+.sd-esquema-pie {
+  padding: 12px 14px;
+  border: 1.5px solid var(--foreground);
+  background: var(--background);
+}
+.sd-esquema-cabecera { border-radius: 0 0 16px 16px; border-top: 0; }
+.sd-esquema-pie { border-radius: 16px 16px 0 0; border-bottom: 0; }
+
+.sd-esquema-capsulas,
+.sd-esquema-menu,
+.sd-esquema-paneles,
+.sd-esquema-contacto {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid var(--foreground);
+  border-radius: 16px;
+  background: var(--background);
+}
+.sd-capsula {
+  align-self: flex-start;
+  padding: 7px 16px;
+  border: 1px solid var(--foreground);
+  border-radius: 999px;
+  font-size: 11.5px;
+}
+.sd-soltar {
+  margin-top: 4px;
+  padding: 9px;
+  border: 1.5px dashed var(--muted);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 11.5px;
+  text-align: center;
+}
+.sd-esquema-menu {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 0;
+  overflow: hidden;
+}
+.sd-casilla {
+  padding: 14px 10px;
+  border-top: 1px solid var(--foreground);
+  font-size: 11.5px;
+  text-align: center;
+}
+.sd-esquema-menu .sd-casilla:nth-child(-n + 2) { border-top: 0; }
+.sd-esquema-menu .sd-casilla:nth-child(even) { border-left: 1px solid var(--foreground); }
+.sd-casilla.es-viva {
+  background: var(--foreground);
+  color: var(--background);
+}
+.sd-esquema-paneles {
+  flex-direction: row;
+}
+.sd-ficha {
+  flex: 1;
+  padding: 26px 8px;
+  border: 1px solid var(--foreground);
+  border-radius: 12px;
+  font-size: 11.5px;
+  text-align: center;
+}
+.sd-ficha.es-activa {
+  background: var(--foreground);
+  color: var(--background);
+}
+.sd-esquema-fila {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.sd-campo {
+  height: 26px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.sd-campo.es-alto {
+  height: 52px;
+}
+
+/* ── Trazo ───────────────────────────────────────────────────────────────── */
+.sd-trazos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 28px;
+}
+.sd-trazo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+.sd-trazo-caja {
+  width: 92px;
+  height: 52px;
+  border: 1px solid var(--foreground);
+  border-radius: 12px;
+}
+
+/* ── Plantillas ──────────────────────────────────────────────────────────── */
+.sd-plantillas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 28px;
+}
+.sd-plantilla {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+.sd-plantilla-nombre {
+  margin-bottom: 4px;
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.sd-fila {
+  padding: 12px 10px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  font-size: 11.5px;
+  text-align: center;
+}
+.sd-fila.es-cabecera {
+  background: color-mix(in srgb, var(--foreground) 10%, transparent);
+}
+.sd-fila.es-recomendados {
+  border-style: dashed;
+}
+.sd-fila.es-alta {
+  padding: 26px 10px;
+}
+.sd-fila-doble {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+@media (max-width: 560px) {
+  .sd-plantillas {
+    grid-template-columns: 1fr;
+  }
+}
