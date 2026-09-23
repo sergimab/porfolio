@@ -64,13 +64,12 @@
   overflow: hidden;
   background: var(--surface);
   text-decoration: none;
-  transition: transform 0.28s cubic-bezier(0.22, 0.7, 0.2, 1), box-shadow 0.28s ease;
 }
+/* AL ACERCARSE SOLO SE MUEVE LA FOTO. La tarjeta no se levanta ni proyecta
+   sombra, y la banda del nombre se queda donde está: así la pieza no cambia de
+   sitio ni de tamaño, y lo único que pasa es que la portada se acerca dentro de
+   su marco. */
 @media (hover: hover) {
-  .rec-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.16);
-  }
   .rec-card:hover .rec-img img {
     transform: scale(1.05);
   }
