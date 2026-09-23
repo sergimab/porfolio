@@ -12,8 +12,26 @@ import "./Galeria.css";
 // una. Así la página entra con un mega y pico y el grande llega en el momento
 // en que hace falta, que además es cuando el navegador no tiene otra cosa que
 // hacer.
-export default function Galeria({ total, carpeta, alt }: { total: number; carpeta: string; alt: string }) {
+// La altura de la fila de la rejilla y el hueco entre piezas, en píxeles. Están
+// aquí y no solo en el CSS porque el cálculo de cuántas filas ocupa cada foto se
+// hace en JS: si se cambian ahí, hay que cambiarlos aquí.
+const FILA = 8;
+const HUECO = 14;
+
+export default function Galeria({
+  total,
+  carpeta,
+  alt,
+  anchas = [],
+}: {
+  total: number;
+  carpeta: string;
+  alt: string;
+  /** Las que ocupan dos columnas en vez de una, por número de foto. */
+  anchas?: number[];
+}) {
   const fotos = Array.from({ length: total }, (_, i) => String(i + 1).padStart(2, "0"));
+  const muro = useRef<HTMLDivElement>(null);
   const [abierta, setAbierta] = useState<string | null>(null);
   // De dónde se salió, para devolver el foco al cerrar: quien navega con
   // teclado tiene que volver a la foto que abrió, no al principio de la página.
@@ -24,6 +42,43 @@ export default function Galeria({ total, carpeta, alt }: { total: number; carpet
     volverA.current?.focus();
     volverA.current = null;
   }, []);
+
+  // EL MURO ES UNA REJILLA Y LAS ALTURAS LAS REPARTE JS, no el CSS.
+  //
+  // Antes iba en columnas, que apilan solas y no dejan huecos, pero en columnas
+  // una pieza solo puede ocupar UNA columna o TODAS: no hay manera de decir
+  // «dos de tres». Con rejilla sí, y el precio es que la rejilla alinea por
+  // filas y dejaría los pies desiguales con fotos de distinta proporción.
+  //
+  // El apaño es el de siempre para esto: filas muy bajas —ocho píxeles— y cada
+  // foto ocupando las que necesite según lo que mida de alto. Eso hay que
+  // medirlo cuando la imagen ya está en su sitio, y por eso se hace aquí.
+  useEffect(() => {
+    const el = muro.current;
+    if (!el) return;
+    const medir = () => {
+      el.querySelectorAll<HTMLElement>(".gt-foto").forEach(f => {
+        const img = f.querySelector("img");
+        if (!img || !img.naturalWidth) return;
+        // El alto que tendrá la foto en su columna, calculado con la proporción
+        // del archivo y el ancho que la rejilla le ha dado.
+        const alto = f.clientWidth * (img.naturalHeight / img.naturalWidth);
+        f.style.gridRowEnd = `span ${Math.max(1, Math.round((alto + HUECO) / (FILA + HUECO)))}`;
+      });
+    };
+    medir();
+    // Al cargar cada imagen y al cambiar el ancho de la ventana: lo primero
+    // porque la proporción no se sabe hasta que llega el archivo, y lo segundo
+    // porque el alto depende del ancho de la columna.
+    const imgs = [...el.querySelectorAll("img")];
+    imgs.forEach(i => i.addEventListener("load", medir));
+    const obs = new ResizeObserver(medir);
+    obs.observe(el);
+    return () => {
+      imgs.forEach(i => i.removeEventListener("load", medir));
+      obs.disconnect();
+    };
+  }, [total]);
 
   useEffect(() => {
     if (!abierta) return;
@@ -44,12 +99,12 @@ export default function Galeria({ total, carpeta, alt }: { total: number; carpet
       {/* El muro se difumina y SE PARA cuando hay una abierta. Lo segundo
           importa tanto como lo primero: un fondo borroso que además se mueve
           tira del ojo justo cuando se está mirando otra cosa. */}
-      <div className={`gt-muro${abierta ? " es-al-fondo" : ""}`}>
+      <div className={`gt-muro${abierta ? " es-al-fondo" : ""}`} ref={muro}>
         {fotos.map((n, i) => (
           <button
             key={n}
             type="button"
-            className="gt-foto"
+            className={`gt-foto${anchas.includes(i + 1) ? " es-ancha" : ""}`}
             // Cada una flota a su aire. El desfase negativo arranca la
             // animación ya empezada, que si no las cuarenta subirían y bajarían
             // a la vez y el muro entero parecería respirar de golpe.

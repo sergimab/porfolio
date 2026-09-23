@@ -1,13 +1,21 @@
 /* ── El muro ─────────────────────────────────────────────────────────────────
-   EN COLUMNAS Y NO EN REJILLA. Las cuarenta fotos vienen mezcladas, unas
-   apaisadas y otras verticales, y en una rejilla cada fila se alinearía por
-   arriba dejando los pies desiguales. Repartidas en columnas, cada una entra
-   debajo de la anterior y los huecos se cierran solos.
-   El precio es que el orden de lectura baja por la primera columna antes de
-   saltar a la segunda. Aquí da igual: es una galería, no una secuencia. */
+   EN REJILLA, CON FILAS DE OCHO PÍXELES. Las fotos vienen mezcladas, unas
+   apaisadas y otras verticales, así que una rejilla normal alinearía las filas
+   y dejaría los pies desiguales. Con las filas muy bajas y cada foto ocupando
+   las que necesita —el número lo calcula el componente midiendo su
+   proporción—, el muro se apila como una pared de albañil y los huecos se
+   cierran solos.
+   Iba en columnas, que hacen eso mismo sin ayuda de nadie, pero allí una pieza
+   solo puede ocupar UNA columna o TODAS: no hay manera de decir «dos de tres».
+   Y hacía falta decirlo. */
 .gt-muro {
-  columns: 3;
-  column-gap: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 8px;
+  gap: 14px;
+  /* Que las piezas de una columna suban a rellenar el hueco que deja la ancha
+     en vez de esperar su turno. */
+  grid-auto-flow: row dense;
   margin-top: 28px;
   /* El difuminado del fondo entra y sale, que aparecer de golpe se lee como un
      parpadeo. */
@@ -29,8 +37,10 @@
 .gt-foto {
   display: block;
   width: 100%;
-  break-inside: avoid;
-  margin: 0 0 14px;
+  /* El alto lo pone el número de filas que le asigna el componente, así que la
+     caja se ajusta a la foto y no al revés. */
+  height: 100%;
+  margin: 0;
   padding: 0;
   border: 0;
   border-radius: 10px;
@@ -43,10 +53,16 @@
   animation: gt-flotar var(--gt-dur, 9s) ease-in-out var(--gt-espera, 0s) infinite;
   transition: box-shadow 0.3s ease;
 }
+/* LA ANCHA: dos columnas de las tres. Es lo que no se podía hacer en columnas y
+   lo que ha traído la rejilla. */
+.gt-foto.es-ancha {
+  grid-column: span 2;
+}
 .gt-foto img {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   /* El zoom al acercarse. Un pelo de escala basta: la foto está dentro de una
      caja con el desbordamiento oculto, así que lo que se ve es que la imagen
      crece dentro de su marco, no que el marco crezca en la página. */
@@ -145,7 +161,7 @@
 
 @media (max-width: 900px) {
   .gt-muro {
-    columns: 2;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 @media (max-width: 560px) {
@@ -153,10 +169,7 @@
      la pantalla entera y recorrer cuarenta se hace eterno. A dos se ven de
      cuatro en cuatro, que es lo que se espera de una galería. */
   .gt-muro {
-    column-gap: 10px;
-  }
-  .gt-foto {
-    margin-bottom: 10px;
+    gap: 10px;
   }
   .gt-lupa {
     padding: 16px;

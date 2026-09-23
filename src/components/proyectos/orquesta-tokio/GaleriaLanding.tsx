@@ -50,7 +50,14 @@ export default function GaleriaLanding() {
           <ToolIcons tools={["Photoshop", "Lightroom"]} />
         </div>
 
-        <Galeria total={TOTAL} carpeta={CARPETA} alt="Foto de la sesión de la Orquesta Tokio" />
+        {/* La 37 —el escupefuego— va a dos columnas: es la única de las cuarenta
+            con un momento que se pierde en pequeño. */}
+        <Galeria
+          total={TOTAL}
+          carpeta={CARPETA}
+          alt="Foto de la sesión de la Orquesta Tokio"
+          anchas={[37]}
+        />
       </div>
     </main>
   );
