@@ -25,6 +25,7 @@ import ArteMiedoBranding from "@/components/proyectos/arte-del-miedo/BrandingLan
 import ArteMiedoMotion from "@/components/proyectos/arte-del-miedo/MotionLanding";
 import ArteMiedoUiux from "@/components/proyectos/arte-del-miedo/UiuxLanding";
 import SalaEquisLanding from "@/components/proyectos/sala-equis/SalaEquisLanding";
+import GaleriaTokioLanding from "@/components/proyectos/orquesta-tokio/GaleriaLanding";
 import AficheTokioLanding from "@/components/proyectos/orquesta-tokio/AficheLanding";
 
 const LANDINGS: Record<string, React.ComponentType> = {
@@ -42,6 +43,7 @@ const LANDINGS: Record<string, React.ComponentType> = {
   m2: ArteMiedoMotion,
   u3: ArteMiedoUiux,
   f1: AficheTokioLanding,
+  f2: GaleriaTokioLanding,
   b4: SalaEquisLanding,
 };
 
@@ -60,7 +62,7 @@ function catFromId(id: string): string {
 const titles: Record<string, string> = {
   m1: "Motion Yelmo Cines", m2: "Motion El Arte del Miedo",
   b1: "Espacio vacío", b2: "Rebranding Yelmo Cines", b3: "El Arte del Miedo", b4: "Rebranding Sala Equis",
-  f1: "Afiche Orquesta Tokio",
+  f1: "Afiche Orquesta Tokio", f2: "Galería Orquesta Tokio",
   i1: "Infografías", i2: "Sistema de diseño", i3: "Newsletters", i4: "Iconografía", i5: "Sistema de ilustraciones",
   u1: "Web de Elysium", u2: "App Espacio vacío", u3: "App El Arte del Miedo",
   d1: "Elysium",

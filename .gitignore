@@ -11,3 +11,8 @@
 
 # Archivos originales de los proyectos (no se despliegan)
 originales/
+
+# Los originales de la galeria de Tokio: 55 MB de JPG de los que salen los
+# webp de mini/ y grande/. Se quedan en el disco por si hay que volver a
+# convertirlos, pero no entran en el repositorio ni se publican.
+public/proyectos/orquesta-tokio-galeria/*.jpg

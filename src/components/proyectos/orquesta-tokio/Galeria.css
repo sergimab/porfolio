@@ -1,0 +1,174 @@
+/* ── El muro ─────────────────────────────────────────────────────────────────
+   EN COLUMNAS Y NO EN REJILLA. Las cuarenta fotos vienen mezcladas, unas
+   apaisadas y otras verticales, y en una rejilla cada fila se alinearía por
+   arriba dejando los pies desiguales. Repartidas en columnas, cada una entra
+   debajo de la anterior y los huecos se cierran solos.
+   El precio es que el orden de lectura baja por la primera columna antes de
+   saltar a la segunda. Aquí da igual: es una galería, no una secuencia. */
+.gt-muro {
+  columns: 3;
+  column-gap: 14px;
+  margin-top: 28px;
+  /* El difuminado del fondo entra y sale, que aparecer de golpe se lee como un
+     parpadeo. */
+  transition: filter 0.35s ease, opacity 0.35s ease;
+}
+.gt-muro.es-al-fondo {
+  filter: blur(7px);
+  opacity: 0.45;
+  /* Quieto además de borroso: un fondo desenfocado que encima se mueve tira del
+     ojo justo cuando se está mirando otra cosa. */
+  pointer-events: none;
+}
+.gt-muro.es-al-fondo .gt-foto {
+  animation-play-state: paused;
+}
+
+/* Cada foto es un botón: se abre con el ratón y también con el teclado, y así
+   el navegador le da su marco de foco sin tener que inventarlo. */
+.gt-foto {
+  display: block;
+  width: 100%;
+  break-inside: avoid;
+  margin: 0 0 14px;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: var(--surface);
+  overflow: hidden;
+  cursor: pointer;
+  /* LA FLOTACIÓN. Va en el botón y el zoom en la imagen de dentro, a propósito:
+     son dos transformaciones distintas y en el mismo elemento se pisarían, o
+     habría que escribir la flotación entera dentro de cada paso del zoom. */
+  animation: gt-flotar var(--gt-dur, 9s) ease-in-out var(--gt-espera, 0s) infinite;
+  transition: box-shadow 0.3s ease;
+}
+.gt-foto img {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* El zoom al acercarse. Un pelo de escala basta: la foto está dentro de una
+     caja con el desbordamiento oculto, así que lo que se ve es que la imagen
+     crece dentro de su marco, no que el marco crezca en la página. */
+  transition: transform 0.45s cubic-bezier(0.22, 0.7, 0.2, 1);
+}
+@media (hover: hover) {
+  .gt-foto:hover img {
+    transform: scale(1.07);
+  }
+  .gt-foto:hover {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  }
+}
+.gt-foto:focus-visible img {
+  transform: scale(1.07);
+}
+
+/* El vaivén: unos píxeles arriba y abajo y un grado escaso de giro. Es poco a
+   propósito —lo que se busca es que el muro respire, no que baile— y cada foto
+   lleva su duración, su desfase y su sentido de giro, que si no se moverían las
+   cuarenta al mismo tiempo. */
+@keyframes gt-flotar {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-9px) rotate(var(--gt-giro, 0deg));
+  }
+}
+
+/* ── La foto abierta ─────────────────────────────────────────────────────────
+   El velo ocupa la ventana entera y es él mismo el botón de cerrar: se pulsa
+   fuera y se vuelve. Lleva su propio desenfoque además del del muro, que es lo
+   que mete de verdad la foto en otro plano. */
+.gt-lupa {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  background: color-mix(in srgb, var(--background) 72%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  cursor: zoom-out;
+  animation: gt-aparecer 0.25s ease;
+}
+.gt-lupa img {
+  display: block;
+  /* Que quepa entera, sea apaisada o vertical, sin recortar y sin pasarse de su
+     tamaño real. */
+  max-width: min(100%, 1400px);
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+  cursor: default;
+  animation: gt-entrar 0.3s cubic-bezier(0.22, 0.7, 0.2, 1);
+}
+.gt-cerrar {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--foreground);
+  border-radius: 50%;
+  background: var(--background);
+  color: var(--foreground);
+  cursor: pointer;
+}
+.gt-cerrar svg {
+  width: 18px;
+  height: 18px;
+}
+.gt-cerrar:hover,
+.gt-cerrar:focus-visible {
+  background: var(--foreground);
+  color: var(--background);
+}
+
+@keyframes gt-aparecer {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes gt-entrar {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 900px) {
+  .gt-muro {
+    columns: 2;
+  }
+}
+@media (max-width: 560px) {
+  /* A dos columnas también en el teléfono, y no a una: a una, cada foto ocupa
+     la pantalla entera y recorrer cuarenta se hace eterno. A dos se ven de
+     cuatro en cuatro, que es lo que se espera de una galería. */
+  .gt-muro {
+    column-gap: 10px;
+  }
+  .gt-foto {
+    margin-bottom: 10px;
+  }
+  .gt-lupa {
+    padding: 16px;
+  }
+}
+
+/* Quien tenga pedido en el sistema que no se mueva nada, ve el muro quieto:
+   aquí la flotación SÍ es un adorno —las fotos se ven igual de bien paradas—,
+   al revés que en el carrusel de la otra página, donde el movimiento era lo que
+   enseñaba el contenido. */
+@media (prefers-reduced-motion: reduce) {
+  .gt-foto {
+    animation: none;
+  }
+}
