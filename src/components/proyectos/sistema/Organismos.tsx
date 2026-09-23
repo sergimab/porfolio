@@ -24,9 +24,9 @@ export default function Organismos() {
           deEn="Tinted box + back capsule + meta + drop-cap title + lead + made-with. It opens all fourteen project pages, and it runs on its real classes."
           ancha
         >
-          <div className="sd-hero" style={{ ["--hero-hue" as string]: 32 }}>
+          <div className="sd-hero" style={{ ["--hero-hue" as string]: 175 }}>
             <div className="project-hero-box">
-              <span className="project-back"><BackCapsule category="fotografia" /></span>
+              <span className="project-back"><BackCapsule category="uiux" /></span>
               <div className="project-meta">
                 <div className="project-meta-row">
                   <span className="project-meta-key"><LangText es="Tipo" en="Type" /></span>
@@ -50,8 +50,8 @@ export default function Organismos() {
         <Pieza
           nombre="Tarjeta de proyecto"
           nombreEn="Project card"
-          de="Portada de alto fijo + banda con el degradado de su categoría. La banda va DEBAJO y no encima, para que la portada se vea entera y no haya que componerla dejando hueco. La foto y el nombre de aquí son genéricos, para que se mire la forma y no el proyecto."
-          deEn="Fixed-height cover + a band with its category gradient. The band sits BELOW, not over, so the cover is seen whole and need not be composed around it. The photo and name here are placeholders, so what is read is the shape and not the project."
+          de="Portada de alto fijo + banda con el degradado de su categoría. La banda va DEBAJO y no encima, para que la portada se vea entera y no haya que componerla dejando hueco. El nombre es genérico y el hueco de la portada va vacío a propósito, que es lo que se ve cuando un proyecto todavía no tiene foto."
+          deEn="Fixed-height cover + a band with its category gradient. The band sits BELOW, not over, so the cover is seen whole and need not be composed around it. The name is a placeholder and the cover slot is deliberately empty, which is what shows when a project has no photo yet."
           ancha
         >
           <Recomendados ids={[]} muestra titulo={{ es: "", en: "" }} className="sd-sin-titulo" />

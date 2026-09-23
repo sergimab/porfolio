@@ -12,7 +12,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-auto-rows: 8px;
-  gap: 14px;
+  gap: 16px;
   /* Que las piezas de una columna suban a rellenar el hueco que deja la ancha
      en vez de esperar su turno. */
   grid-auto-flow: row dense;

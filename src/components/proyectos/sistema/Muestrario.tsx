@@ -162,8 +162,8 @@ export default function Muestrario() {
         <TextoPapel>
           <p>
             <LangText
-              es="Entre apartados van **56 píxeles**; entre un rótulo y su pieza, **28**; entre piezas de una misma fila, **14 o 16**."
-              en="Between sections, **56 pixels**; between a label and its piece, **28**; between pieces in a row, **14 or 16**."
+              es="Entre apartados van **56 píxeles**; entre un rótulo y su pieza, **28**; entre piezas de una misma fila, **16**. Eran 14 en unos sitios y 16 en otros, que es la clase de diferencia que nadie ve pero que obliga a mirar el código cada vez: ahora es un solo número."
+              en="Between sections, **56 pixels**; between a label and its piece, **28**; between pieces in a row, **16**. It used to be 14 in some places and 16 in others, the kind of difference nobody sees but that sends you back to the code every time: now it is one number."
             />
           </p>
           <p>

@@ -304,7 +304,7 @@
      desplazamiento larguísimo para decir seis colores. */
   .am-sd-tintas {
     grid-template-columns: 1fr 1fr;
-    gap: 14px;
+    gap: 16px;
   }
   .am-sd-tinta {
     height: 52px;

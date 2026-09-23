@@ -16,7 +16,7 @@ import "./Galeria.css";
 // aquí y no solo en el CSS porque el cálculo de cuántas filas ocupa cada foto se
 // hace en JS: si se cambian ahí, hay que cambiarlos aquí.
 const FILA = 8;
-const HUECO = 14;
+const HUECO = 16;
 
 export default function Galeria({
   total,

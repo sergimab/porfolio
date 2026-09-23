@@ -3,7 +3,7 @@
 .tool-icons {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
   margin-top: 24px;
   flex-wrap: wrap;
   background: var(--background);

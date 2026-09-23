@@ -20,15 +20,16 @@ import "./Recomendados.css";
 // el alto es fijo y el ancho, lo que toque. De cuatro en adelante pasan a medir
 // lo mismo y la fila se desplaza de lado, porque repartir seis en el ancho de
 // una página las dejaría en nada.
-// La tarjeta de muestra del muestrario: la pieza de verdad, con una foto y un
-// nombre genéricos y sin enlace. Así lo que se enseña es la forma de la
-// tarjeta, no un proyecto concreto que luego haya que ir a cambiar.
+// La tarjeta de muestra del muestrario: la pieza de verdad, sin enlace y con
+// contenido genérico. Va sin portada a propósito —así enseña de paso el hueco
+// que se dibuja cuando un proyecto todavía no tiene foto— y con el tono de
+// UI/UX, que es la categoría de la página donde se enseña.
 const MUESTRA = {
   id: "muestra",
   title: "Nombre del proyecto",
   titleEn: "Project name",
-  cover: "/sistema/muestra-cover.webp",
-  hue: 32,
+  cover: "",
+  hue: 175,
   claro: false,
 };
 

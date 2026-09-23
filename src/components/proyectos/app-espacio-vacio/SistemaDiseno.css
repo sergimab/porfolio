@@ -208,7 +208,7 @@
      scroll larguísimo para decir seis colores. */
   .ev-sd-tintas {
     grid-template-columns: 1fr 1fr;
-    gap: 14px;
+    gap: 16px;
   }
   .ev-sd-tinta {
     height: 52px;
