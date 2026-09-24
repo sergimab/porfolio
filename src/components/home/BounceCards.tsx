@@ -55,6 +55,7 @@ export default function BounceCards({
   animationStagger = 0.08,
   easeType = "elastic.out(1, 0.6)",
   enableHover = true,
+  muestra = false,
 }: {
   items: Item[];
   lang: "es" | "en";
@@ -63,6 +64,9 @@ export default function BounceCards({
   animationStagger?: number;
   easeType?: string;
   enableHover?: boolean;
+  /** Sin enlace: para el muestrario del sistema, donde las tarjetas son
+   *  genéricas y no llevan a ninguna página. */
+  muestra?: boolean;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const transformStyles = fanTransforms(items.length);
@@ -88,6 +92,16 @@ export default function BounceCards({
     }, containerRef);
     return () => ctx.revert();
   }, [animationStagger, easeType, animationDelay, items.length, isMobile]);
+
+  // Enlace de verdad o caja muerta. Lo segundo solo en el muestrario: una
+  // tarjeta de ejemplo no puede llevar a una página que no existe.
+  const Caja = muestra
+    ? ({ className, style, onMouseEnter, onMouseLeave, children }: React.ComponentProps<"span">) => (
+        <span className={className} style={style} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+          {children}
+        </span>
+      )
+    : ({ href, ...resto }: React.ComponentProps<typeof Link>) => <Link href={href} {...resto} />;
 
   const getNoRotationTransform = (t: string) => {
     if (/rotate\([\s\S]*?\)/.test(t)) return t.replace(/rotate\([\s\S]*?\)/, "rotate(0deg)");
@@ -229,7 +243,7 @@ export default function BounceCards({
     return (
       <div className="bc-grid">
         {items.map((item, idx) => (
-          <Link
+          <Caja
             key={item.id}
             href={`/proyecto/${item.id}`}
             className="bc-card"
@@ -238,7 +252,7 @@ export default function BounceCards({
             }}
           >
             {cardInner(item)}
-          </Link>
+          </Caja>
         ))}
       </div>
     );
@@ -253,7 +267,7 @@ export default function BounceCards({
         style={{ ["--bc-count" as string]: items.length }}
       >
         {items.map((item, idx) => (
-          <Link
+          <Caja
             key={item.id}
             href={`/proyecto/${item.id}`}
             className={`bc-card bc-card-${idx}`}
@@ -262,7 +276,7 @@ export default function BounceCards({
             onMouseLeave={resetSiblings}
           >
             {cardInner(item)}
-          </Link>
+          </Caja>
         ))}
       </div>
     </div>

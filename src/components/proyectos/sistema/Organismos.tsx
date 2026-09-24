@@ -6,6 +6,7 @@ import BackCapsule from "@/components/shared/BackCapsule";
 import DropcapTitle from "@/components/shared/DropcapTitle";
 import ToolIcons from "@/components/shared/ToolIcons";
 import Recomendados from "@/components/shared/Recomendados";
+import BounceCards from "@/components/home/BounceCards";
 import { CATEGORIAS } from "@/components/shared/proyectos";
 import { degradadoLegible, degradadoClaro } from "@/components/shared/organico";
 import Pieza from "./Pieza";
@@ -17,6 +18,15 @@ import Pieza from "./Pieza";
 // que se ve allí. Las que no se pueden traer enteras —la cabecera del sitio, el
 // pie, la caja de cápsulas— se cuentan en un esquema con las medidas reales, y
 // su ficha lo dice para que nadie las tome por una captura.
+
+// Tres tarjetas genéricas para la muestra, cada una con el tono de una
+// disciplina distinta: es lo que hace ver que el aro es lo que las separa.
+const CARDS = [
+  { id: "card-1", title: "Nombre del proyecto", titleEn: "Project name", hue: 175 },
+  { id: "card-2", title: "Nombre del proyecto", titleEn: "Project name", hue: 330 },
+  { id: "card-3", title: "Nombre del proyecto", titleEn: "Project name", hue: 217 },
+];
+
 export default function Organismos() {
   // La categoría de la muestra. Se puede cambiar porque la cabecera es la MISMA
   // pieza en las catorce páginas y lo único que la diferencia es el tono: verlo
@@ -75,19 +85,30 @@ export default function Organismos() {
         </Pieza>
 
         <Pieza
-          nombre="Tarjeta de proyecto · dos"
-          nombreEn="Project card · two"
-          de="Portada de alto fijo, filo del color de su categoría y banda con su degradado. La banda va DEBAJO y no encima, para que la portada se vea entera y no haya que componerla dejando hueco. Hasta tres, las tarjetas se reparten el ancho de la página."
-          deEn="Fixed-height cover, a border in its category colour and a band with its gradient. The band sits BELOW, not over, so the cover is seen whole. Up to three, cards share the page width."
+          nombre="Tarjeta de proyecto"
+          nombreEn="Project card"
+          de="La tarjeta de verdad, la que sale al elegir una disciplina en la home, con su abanico y su empuje al pasar por encima. Es cuadrada contando la banda, así que la portada es siempre 5:4, y el filo va de degradado y no de color plano porque en la parrilla hay varias juntas y el aro es lo que las distingue de un vistazo. Aquí se enseña reducida, pero es el mismo componente."
+          deEn="The real card, the one that appears when you pick a discipline on the home, with its fan and its push on hover. It is square counting the band, so the cover is always 5:4, and its border is a gradient rather than a flat colour because in the grid there are several together and the ring is what tells them apart. Shown scaled down here, but it is the same component."
+          ancha
+        >
+          <div className="sd-abanico">
+            <BounceCards items={CARDS} lang="es" hue={175} muestra animationDelay={0} />
+          </div>
+        </Pieza>
+        <Pieza
+          nombre="Banner de destacados · dos"
+          nombreEn="Featured banner · two"
+          de="Otra pieza, no la tarjeta: esto solo aparece en «Proyectos recomendados», al pie de la home y de cada página de proyecto. Es apaisado, con la portada de alto fijo, el filo del color de su categoría y la banda con su degradado debajo. Hasta tres, los banners se reparten el ancho de la página."
+          deEn="A different piece, not the card: this only appears under «Featured projects», at the foot of the home and of every project page. It is landscape, with a fixed-height cover, a border in its category colour and the gradient band below. Up to three, banners share the page width."
           ancha
         >
           <Recomendados ids={[]} muestra={2} titulo={{ es: "", en: "" }} className="sd-sin-titulo" />
         </Pieza>
 
         <Pieza
-          nombre="Tarjeta de proyecto · tres"
-          nombreEn="Project card · three"
-          de="Tres es el tope del reparto. El alto de la portada no cambia con el número, y por eso una sola y tres seguidas se leen como la misma pieza."
+          nombre="Banner de destacados · tres"
+          nombreEn="Featured banner · three"
+          de="Tres es el tope del reparto. El alto de la portada no cambia con el número, y por eso uno solo y tres seguidos se leen como la misma pieza."
           deEn="Three is the limit of the share-out. Cover height does not change with the count, which is why one card and three read as the same piece."
           ancha
         >
@@ -95,40 +116,15 @@ export default function Organismos() {
         </Pieza>
 
         <Pieza
-          nombre="Tarjeta de proyecto · más de tres"
-          nombreEn="Project card · more than three"
-          de="De cuatro en adelante todas miden lo mismo y la fila se desplaza de lado, con su barra a la vista. Repartir seis en el ancho de una página las dejaría en nada."
-          deEn="From four on, all cards are the same width and the row scrolls sideways with a visible bar. Sharing six across a page would leave them as nothing."
+          nombre="Banner de destacados · más de tres"
+          nombreEn="Featured banner · more than three"
+          de="De cuatro en adelante todos miden lo mismo y la fila se desplaza de lado, con su barra a la vista. Repartir seis en el ancho de una página los dejaría en nada."
+          deEn="From four on, all banners are the same width and the row scrolls sideways with a visible bar. Sharing six across a page would leave them as nothing."
           ancha
         >
           <Recomendados ids={[]} muestra={6} titulo={{ es: "", en: "" }} className="sd-sin-titulo" />
         </Pieza>
 
-        <Pieza
-          nombre="Tarjeta de categoría"
-          nombreEn="Category card"
-          de="La otra tarjeta: la que sale al elegir una disciplina en la home. Es cuadrada contando la banda, así que la portada es siempre 5:4, y el filo va de degradado en vez de color plano porque en la home hay siete juntas y el aro es lo que las distingue de un vistazo."
-          deEn="The other card: the one that appears when you pick a discipline on the home. It is square counting the band, so the cover is always 5:4, and its border is a gradient rather than a flat colour because on the home there are seven together and the ring is what tells them apart."
-          ancha
-        >
-          <div className="sd-cards-cat">
-            {CATEGORIAS.slice(0, 3).map(c => (
-              <span className="sd-card-cat" key={c.id}>
-                <span
-                  className="sd-card-cat-aro"
-                  style={{ backgroundImage: c.claro ? degradadoClaro(c.hue) : degradadoLegible(c.hue) }}
-                />
-                <span className="sd-card-cat-medio" />
-                <span
-                  className="sd-card-cat-banda"
-                  style={{ backgroundImage: c.claro ? degradadoClaro(c.hue) : degradadoLegible(c.hue) }}
-                >
-                  <LangText es="Nombre del proyecto" en="Project name" />
-                </span>
-              </span>
-            ))}
-          </div>
-        </Pieza>
       </div>
 
       <div className="sd-piezas">
