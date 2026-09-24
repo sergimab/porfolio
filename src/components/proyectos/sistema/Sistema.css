@@ -230,6 +230,23 @@
   transform-origin: top center;
 }
 
+/* ── El móvil, reducido ──────────────────────────────────────────────────────
+   A su tamaño son 320 de ancho por unos 640 de alto y se come la ficha entera.
+   Se reduce con `scale` y no con el ancho porque todo lo que va dentro se mide
+   en porcentaje de la pantalla: cambiarle el ancho cambiaría el tamaño de la
+   letra de lo que se estuviera enseñando. */
+.sd-movil {
+  width: 100%;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+.sd-movil .phone {
+  transform: scale(0.45);
+  transform-origin: top center;
+}
+
 /* ── La cabecera de proyecto y sus discos ────────────────────────────────── */
 .sd-hero-fila {
   display: flex;
