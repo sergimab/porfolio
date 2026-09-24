@@ -23,6 +23,7 @@ import Pieza from "./Pieza";
 // disciplina distinta: es lo que hace ver que el aro es lo que las separa.
 // Los tres repartos que tiene el banner, con lo que cambia en cada uno.
 const REPARTOS = [
+  { n: 1, es: "Uno", en: "One", de: "Uno solo se queda con el ancho entero. El alto de la portada no cambia, así que se lee como una franja ancha en vez de como una tarjeta estirada.", deEn: "A single one takes the whole width. Cover height does not change, so it reads as a wide strip rather than a stretched card." },
   { n: 2, es: "Dos", en: "Two", de: "Hasta tres, los banners se reparten el ancho de la página: el alto es fijo y el ancho, lo que toque.", deEn: "Up to three, banners share the page width: height is fixed and width is whatever is left." },
   { n: 3, es: "Tres", en: "Three", de: "Tres es el tope del reparto. El alto de la portada no cambia con el número, y por eso uno solo y tres seguidos se leen como la misma pieza.", deEn: "Three is the limit. Cover height does not change with the count, which is why one and three read as the same piece." },
   { n: 6, es: "Más de tres", en: "More than three", de: "De cuatro en adelante todos miden lo mismo y la fila se desplaza de lado, con su barra a la vista. Repartir seis en el ancho de una página los dejaría en nada.", deEn: "From four on, all are the same width and the row scrolls sideways with a visible bar. Sharing six across a page would leave them as nothing." },
@@ -41,7 +42,7 @@ export default function Organismos() {
   const [cat, setCat] = useState(CATEGORIAS.find(c => c.id === "uiux") ?? CATEGORIAS[0]);
   // Cuántos banners se enseñan. Son tres piezas distintas de mirar pero una
   // sola de código, así que van en una ficha con un conmutador y no en tres.
-  const [reparto, setReparto] = useState(2);
+  const [reparto, setReparto] = useState(1);
 
   return (
     <>
