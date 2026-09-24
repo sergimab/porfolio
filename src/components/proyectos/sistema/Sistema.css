@@ -561,6 +561,10 @@
   border: 1px solid var(--border);
   border-radius: var(--r-caja);
   background: var(--background);
+  /* SIN ESTO LA COLUMNA CRECE. El mínimo de un elemento de cuadrícula es el de
+     su contenido, así que un esquema con medidas en píxeles ensanchaba la
+     columna y con ella la página entera. */
+  min-width: 0;
 }
 .sd-pieza-nombre {
   font-size: 12px;
@@ -782,9 +786,15 @@
   align-items: center;
   gap: 8px;
   width: 100%;
+  min-width: 0;
 }
+/* Los anchos vienen puestos desde el marcado, con las medidas de la pieza de
+   verdad, pero son una MEDIDA DE PARTIDA y no un mínimo: en un teléfono el
+   esquema tiene que encogerse con su marco en vez de empujarlo a lo ancho. */
 .sd-bloque {
   height: 14px;
+  min-width: 0;
+  flex-shrink: 1;
   border-radius: var(--r-pastilla);
   background: color-mix(in srgb, var(--foreground) 24%, transparent);
 }
@@ -808,17 +818,21 @@
   border: 1px solid color-mix(in srgb, var(--foreground) 34%, transparent);
   background: none;
 }
+/* Los grupos también encogen, o los de dentro no pueden: un hijo de flex con el
+   mínimo por defecto no deja estrechar al padre. */
 .sd-esquema-centro {
   display: flex;
   align-items: center;
   gap: 8px;
   margin: 0 auto;
+  min-width: 0;
 }
 .sd-esquema-dcha {
   display: flex;
   align-items: center;
   gap: 8px;
   margin-left: auto;
+  min-width: 0;
 }
 .sd-esquema-cabecera,
 .sd-esquema-pie {
@@ -984,30 +998,46 @@
 
 @media (max-width: 700px) {
   /* Las cuadrículas de muestras que van con las columnas dichas a mano bajan a
-     dos, que es lo que cabe con una pieza legible. Los siete tonos siguen sin
-     dejar ninguno solo —parten en 4 filas de 2 menos la última de 1—, así que
-     ahí se prefiere una fila de 3+2+2 por medio de `auto-fit`. */
+     dos, que es lo que cabe con una pieza legible. */
   .sd-huecos,
   .sd-cortes,
-    .sd-estados {
+  .sd-estados {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 560px) {
+  /* A una columna lo que ya no cabe en dos con una pieza legible. */
   .sd-plantillas,
   .sd-base,
   .sd-trazos,
-  .sd-huecos,
-  /* El abanico ya viene en cuadrícula de dos desde el propio componente. */
-  .sd-abanico {
-    height: auto;
+  .sd-huecos {
+    grid-template-columns: 1fr;
   }
-  .sd-abanico .bc-fit {
-    transform: none;
+  /* Los siete tonos aguantan en dos: son cuadrados y no llevan más que su
+     nombre dentro. Siete en dos columnas dejan uno solo abajo, así que el
+     último cruza las dos y pierde el cuadrado: una banda ancha se lee como
+     una decisión y un cuadrado suelto, como un descuido. Lo mismo con los
+     cinco estados. */
+  .sd-tonos > :last-child,
+  .sd-estados > :last-child {
+    grid-column: 1 / -1;
+  }
+  .sd-tonos > :last-child .sd-tono-banda {
+    aspect-ratio: auto;
+    height: 72px;
   }
   .sd-tonos {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  /* El abanico ya se convierte solo en cuadrícula de dos dentro del propio
+     componente, así que aquí sobra el recorte y la reducción. */
+  .sd-abanico {
+    height: auto;
+    overflow: visible;
+  }
+  .sd-abanico .bc-fit {
+    transform: none;
   }
   /* La cabecera y sus discos, uno debajo de otro: en columna los discos se
      comen la mitad del ancho de la muestra. */
