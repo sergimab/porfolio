@@ -84,15 +84,12 @@ export default function Recomendados({
           const pintura = p.claro ? degradadoClaro(p.hue) : degradadoLegible(p.hue);
           const colores = p.claro ? paletaClara(p.hue) : paletaLegible(p.hue);
           const tono = { ["--rec-hue" as string]: p.hue } as React.CSSProperties;
-          const Caja = muestra
-            ? ({ children }: { children: React.ReactNode }) => (
-                <span className="rec-card" style={tono}>{children}</span>
-              )
-            : ({ children }: { children: React.ReactNode }) => (
-                <Link href={`/proyecto/${p.id}`} className="rec-card" style={tono}>{children}</Link>
-              );
-          return (
-            <Caja key={p.id}>
+          // El contenido se arma una vez y se mete en un enlace o en una caja
+          // muerta. Sin componente envoltorio: uno definido aquí dentro sería
+          // un tipo nuevo en cada render y React desmontaría y volvería a
+          // montar la tarjeta entera cada vez.
+          const dentro = (
+            <>
               <span className="rec-img">
                 {p.cover ? (
                   // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
@@ -126,7 +123,12 @@ export default function Recomendados({
                 />
                 <span className="mesh-encima">{nombre}</span>
               </span>
-            </Caja>
+            </>
+          );
+          return muestra ? (
+            <span key={p.id} className="rec-card" style={tono}>{dentro}</span>
+          ) : (
+            <Link key={p.id} href={`/proyecto/${p.id}`} className="rec-card" style={tono}>{dentro}</Link>
           );
         })}
       </div>

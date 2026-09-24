@@ -93,16 +93,6 @@ export default function BounceCards({
     return () => ctx.revert();
   }, [animationStagger, easeType, animationDelay, items.length, isMobile]);
 
-  // Enlace de verdad o caja muerta. Lo segundo solo en el muestrario: una
-  // tarjeta de ejemplo no puede llevar a una página que no existe.
-  const Caja = muestra
-    ? ({ className, style, onMouseEnter, onMouseLeave, children }: React.ComponentProps<"span">) => (
-        <span className={className} style={style} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-          {children}
-        </span>
-      )
-    : ({ href, ...resto }: React.ComponentProps<typeof Link>) => <Link href={href} {...resto} />;
-
   const getNoRotationTransform = (t: string) => {
     if (/rotate\([\s\S]*?\)/.test(t)) return t.replace(/rotate\([\s\S]*?\)/, "rotate(0deg)");
     return t === "none" ? "rotate(0deg)" : `${t} rotate(0deg)`;
@@ -243,16 +233,28 @@ export default function BounceCards({
     return (
       <div className="bc-grid">
         {items.map((item, idx) => (
-          <Caja
-            key={item.id}
-            href={`/proyecto/${item.id}`}
-            className="bc-card"
-            style={{
-              transform: `rotate(${MOBILE_ANGLE_POOL[idx % MOBILE_ANGLE_POOL.length]}deg) translateY(${MOBILE_OFFSET_POOL[idx % MOBILE_OFFSET_POOL.length]}px)`,
-            }}
-          >
-            {cardInner(item)}
-          </Caja>
+          muestra ? (
+            <span
+              key={item.id}
+              className="bc-card"
+              style={{
+                transform: `rotate(${MOBILE_ANGLE_POOL[idx % MOBILE_ANGLE_POOL.length]}deg) translateY(${MOBILE_OFFSET_POOL[idx % MOBILE_OFFSET_POOL.length]}px)`,
+              }}
+            >
+              {cardInner(item)}
+            </span>
+          ) : (
+            <Link
+              key={item.id}
+              href={`/proyecto/${item.id}`}
+              className="bc-card"
+              style={{
+                transform: `rotate(${MOBILE_ANGLE_POOL[idx % MOBILE_ANGLE_POOL.length]}deg) translateY(${MOBILE_OFFSET_POOL[idx % MOBILE_OFFSET_POOL.length]}px)`,
+              }}
+            >
+              {cardInner(item)}
+            </Link>
+          )
         ))}
       </div>
     );
@@ -267,16 +269,28 @@ export default function BounceCards({
         style={{ ["--bc-count" as string]: items.length }}
       >
         {items.map((item, idx) => (
-          <Caja
-            key={item.id}
-            href={`/proyecto/${item.id}`}
-            className={`bc-card bc-card-${idx}`}
-            style={{ transform: transformStyles[idx] }}
-            onMouseEnter={() => pushSiblings(idx)}
-            onMouseLeave={resetSiblings}
-          >
-            {cardInner(item)}
-          </Caja>
+          muestra ? (
+            <span
+              key={item.id}
+              className={`bc-card bc-card-${idx}`}
+              style={{ transform: transformStyles[idx] }}
+              onMouseEnter={() => pushSiblings(idx)}
+              onMouseLeave={resetSiblings}
+            >
+              {cardInner(item)}
+            </span>
+          ) : (
+            <Link
+              key={item.id}
+              href={`/proyecto/${item.id}`}
+              className={`bc-card bc-card-${idx}`}
+              style={{ transform: transformStyles[idx] }}
+              onMouseEnter={() => pushSiblings(idx)}
+              onMouseLeave={resetSiblings}
+            >
+              {cardInner(item)}
+            </Link>
+          )
         ))}
       </div>
     </div>
