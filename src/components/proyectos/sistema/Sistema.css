@@ -750,13 +750,11 @@
 /* La tarjeta suelta no lleva rótulo encima: aquí el rótulo lo pone el marco de
    la muestra. */
 /* La ficha alinea a la izquierda, así que la sección hay que estirarla a mano o
-   la tarjeta se queda encogida a su contenido. */
-.sd-sin-titulo {
+   la tarjeta se queda encogida a su contenido. El rótulo va con su titular de
+   verdad, que también es parte de la pieza. */
+.sd-rec {
   margin-top: 0;
   width: 100%;
-}
-.sd-sin-titulo .rec-titulo {
-  display: none;
 }
 
 /* ── Los esquemas ────────────────────────────────────────────────────────────

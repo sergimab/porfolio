@@ -127,12 +127,7 @@ export default function Organismos() {
                 </button>
               ))}
             </div>
-            <Recomendados
-              ids={[]}
-              muestra={reparto}
-              titulo={{ es: "", en: "" }}
-              className="sd-sin-titulo"
-            />
+            <Recomendados ids={[]} muestra={reparto} className="sd-rec" />
             <span className="sd-conmutador-pie">
               <LangText es={REPARTOS.find(r => r.n === reparto)!.de} en={REPARTOS.find(r => r.n === reparto)!.deEn} />
             </span>
