@@ -235,7 +235,7 @@
 /* Lienzo del motor de física (cápsulas) */
 .skill-scene { position: absolute; inset: 0; }
 
-@media (max-width: 768px) {
+@media (max-width: 700px) {
   .skill-grid { grid-template-columns: 1fr; }
   .box-skills { order: 2; }
   .box-soon   {
@@ -458,7 +458,7 @@
   background: color-mix(in srgb, var(--foreground) 8%, transparent);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 560px) {
   /* LOS DISCOS SE QUEDAN COMO DISCOS, con su icono y nada más. Abiertos a todo
      el ancho eran dos fichas más compitiendo con los campos del formulario;
      cerrados y en la esquina del título son lo que son, un atajo. */
@@ -562,7 +562,7 @@
   white-space: nowrap;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 560px) {
   .contacto-datos {
     flex-direction: column;
   }
@@ -594,7 +594,7 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
 }
-@media (max-width: 768px) {
+@media (max-width: 700px) {
   .project-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;

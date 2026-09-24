@@ -1,9 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import LangText from "@/components/shared/LangText";
 import BackCapsule from "@/components/shared/BackCapsule";
+import DropcapTitle from "@/components/shared/DropcapTitle";
 import ToolIcons from "@/components/shared/ToolIcons";
 import Recomendados from "@/components/shared/Recomendados";
+import { CATEGORIAS } from "@/components/shared/proyectos";
+import { degradadoLegible, degradadoClaro } from "@/components/shared/organico";
 import Pieza from "./Pieza";
 
 // LOS ORGANISMOS: moléculas montadas en una pieza que ya hace algo por sí sola.
@@ -14,47 +18,116 @@ import Pieza from "./Pieza";
 // pie, la caja de cápsulas— se cuentan en un esquema con las medidas reales, y
 // su ficha lo dice para que nadie las tome por una captura.
 export default function Organismos() {
+  // La categoría de la muestra. Se puede cambiar porque la cabecera es la MISMA
+  // pieza en las catorce páginas y lo único que la diferencia es el tono: verlo
+  // cambiar es entender de golpe qué parte del sistema es el color.
+  const [cat, setCat] = useState(CATEGORIAS.find(c => c.id === "uiux") ?? CATEGORIAS[0]);
+
   return (
     <>
       <div className="sd-piezas">
         <Pieza
           nombre="Cabecera de proyecto"
           nombreEn="Project header"
-          de="Caja con el tinte de la categoría + cápsula de volver + ficha + titular con capitular + entradilla + hecho con. Es la pieza que abre las catorce páginas de proyecto, y va con sus clases de verdad."
-          deEn="Tinted box + back capsule + meta + drop-cap title + lead + made-with. It opens all fourteen project pages, and it runs on its real classes."
+          de="Caja con el tinte de la categoría + cápsula de volver + ficha + titular con capitular + entradilla + hecho con. Es la pieza que abre las catorce páginas de proyecto, y va con sus clases de verdad. Los discos de al lado cambian la categoría: lo que se mueve con ella es el tinte de la caja y la cápsula de volver, nada más."
+          deEn="Tinted box + back capsule + meta + drop-cap title + lead + made-with. It opens all fourteen project pages, and it runs on its real classes. The discs beside it switch category: what moves with it is the box tint and the back capsule, nothing else."
           ancha
         >
-          <div className="sd-hero" style={{ ["--hero-hue" as string]: 175 }}>
-            <div className="project-hero-box">
-              <span className="project-back"><BackCapsule category="uiux" /></span>
-              <div className="project-meta">
-                <div className="project-meta-row">
-                  <span className="project-meta-key"><LangText es="Tipo" en="Type" /></span>
-                  <span><LangText es="Disciplina del proyecto" en="Project discipline" /></span>
+          <div className="sd-hero-fila">
+            <div className="sd-hero" style={{ ["--hero-hue" as string]: cat.hue }}>
+              <div className="project-hero-box">
+                <span className="project-back"><BackCapsule category={cat.id} /></span>
+                <div className="project-meta">
+                  <div className="project-meta-row">
+                    <span className="project-meta-key"><LangText es="Tipo" en="Type" /></span>
+                    <span><LangText es="Disciplina del proyecto" en="Project discipline" /></span>
+                  </div>
                 </div>
               </div>
+              <h4 className="sd-hero-titulo">
+                <DropcapTitle es="Nombre del proyecto" en="Project name" />
+              </h4>
+              <div className="project-introrow">
+                <p className="project-intro">
+                  <LangText
+                    es="La entradilla va en **columna corta y renglón apretado**, que es lo que hace que se lea de un golpe de vista."
+                    en="The lead sits in a **short column with tight leading**, which is what makes it read in one go."
+                  />
+                </p>
+                <ToolIcons tools={["Photoshop", "Illustrator"]} />
+              </div>
             </div>
-            <p className="sd-hero-titulo"><LangText es="Nombre del proyecto" en="Project name" /></p>
-            <div className="project-introrow">
-              <p className="project-intro">
-                <LangText
-                  es="La entradilla va en **columna corta y renglón apretado**, que es lo que hace que se lea de un golpe de vista."
-                  en="The lead sits in a **short column with tight leading**, which is what makes it read in one go."
-                />
-              </p>
-              <ToolIcons tools={["Photoshop", "Illustrator"]} />
+            <div className="sd-discos" role="group" aria-label="Categoría">
+              {CATEGORIAS.map(c => (
+                <button
+                  key={c.id}
+                  type="button"
+                  className={`sd-disco${c.id === cat.id ? " es-activo" : ""}`}
+                  style={{ backgroundImage: c.claro ? degradadoClaro(c.hue) : degradadoLegible(c.hue) }}
+                  aria-pressed={c.id === cat.id}
+                  onClick={() => setCat(c)}
+                >
+                  <span className="sr-only">{c.label}</span>
+                </button>
+              ))}
             </div>
           </div>
         </Pieza>
 
         <Pieza
-          nombre="Tarjeta de proyecto"
-          nombreEn="Project card"
-          de="Portada de alto fijo + banda con el degradado de su categoría. La banda va DEBAJO y no encima, para que la portada se vea entera y no haya que componerla dejando hueco. El nombre es genérico y el hueco de la portada va vacío a propósito, que es lo que se ve cuando un proyecto todavía no tiene foto."
-          deEn="Fixed-height cover + a band with its category gradient. The band sits BELOW, not over, so the cover is seen whole and need not be composed around it. The name is a placeholder and the cover slot is deliberately empty, which is what shows when a project has no photo yet."
+          nombre="Tarjeta de proyecto · dos"
+          nombreEn="Project card · two"
+          de="Portada de alto fijo, filo del color de su categoría y banda con su degradado. La banda va DEBAJO y no encima, para que la portada se vea entera y no haya que componerla dejando hueco. Hasta tres, las tarjetas se reparten el ancho de la página."
+          deEn="Fixed-height cover, a border in its category colour and a band with its gradient. The band sits BELOW, not over, so the cover is seen whole. Up to three, cards share the page width."
           ancha
         >
-          <Recomendados ids={[]} muestra titulo={{ es: "", en: "" }} className="sd-sin-titulo" />
+          <Recomendados ids={[]} muestra={2} titulo={{ es: "", en: "" }} className="sd-sin-titulo" />
+        </Pieza>
+
+        <Pieza
+          nombre="Tarjeta de proyecto · tres"
+          nombreEn="Project card · three"
+          de="Tres es el tope del reparto. El alto de la portada no cambia con el número, y por eso una sola y tres seguidas se leen como la misma pieza."
+          deEn="Three is the limit of the share-out. Cover height does not change with the count, which is why one card and three read as the same piece."
+          ancha
+        >
+          <Recomendados ids={[]} muestra={3} titulo={{ es: "", en: "" }} className="sd-sin-titulo" />
+        </Pieza>
+
+        <Pieza
+          nombre="Tarjeta de proyecto · más de tres"
+          nombreEn="Project card · more than three"
+          de="De cuatro en adelante todas miden lo mismo y la fila se desplaza de lado, con su barra a la vista. Repartir seis en el ancho de una página las dejaría en nada."
+          deEn="From four on, all cards are the same width and the row scrolls sideways with a visible bar. Sharing six across a page would leave them as nothing."
+          ancha
+        >
+          <Recomendados ids={[]} muestra={6} titulo={{ es: "", en: "" }} className="sd-sin-titulo" />
+        </Pieza>
+
+        <Pieza
+          nombre="Tarjeta de categoría"
+          nombreEn="Category card"
+          de="La otra tarjeta: la que sale al elegir una disciplina en la home. Es cuadrada contando la banda, así que la portada es siempre 5:4, y el filo va de degradado en vez de color plano porque en la home hay siete juntas y el aro es lo que las distingue de un vistazo."
+          deEn="The other card: the one that appears when you pick a discipline on the home. It is square counting the band, so the cover is always 5:4, and its border is a gradient rather than a flat colour because on the home there are seven together and the ring is what tells them apart."
+          ancha
+        >
+          <div className="sd-cards-cat">
+            {CATEGORIAS.slice(0, 3).map(c => (
+              <span className="sd-card-cat" key={c.id}>
+                <span
+                  className="sd-card-cat-aro"
+                  style={{ backgroundImage: c.claro ? degradadoClaro(c.hue) : degradadoLegible(c.hue) }}
+                />
+                <span className="sd-card-cat-medio" />
+                <span
+                  className="sd-card-cat-banda"
+                  style={{ backgroundImage: c.claro ? degradadoClaro(c.hue) : degradadoLegible(c.hue) }}
+                >
+                  <LangText es="Nombre del proyecto" en="Project name" />
+                </span>
+              </span>
+            ))}
+          </div>
         </Pieza>
       </div>
 

@@ -29,7 +29,7 @@
   background: var(--background);
 }
 .ev-sd-nota {
-  font-size: 12.5px;
+  font-size: 12px;
   color: var(--muted);
 }
 /* Los valores de color, en cifras de ancho fijo: son datos que se copian, y
@@ -172,7 +172,7 @@
 }
 .ev-sd-pieza figcaption {
   margin-top: 10px;
-  font-size: 12.5px;
+  font-size: 12px;
   color: var(--muted);
 }
 /* Las piezas que se miden por su ancho ocupan el forro entero. */
@@ -200,7 +200,7 @@
   padding: 5cqw 0;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 700px) {
   .ev-sd-piezas {
     grid-template-columns: 1fr;
   }

@@ -23,13 +23,13 @@
 .am-sd-entradilla {
   max-width: 560px;
   margin: 0 0 22px;
-  font-size: 13.5px;
+  font-size: 13px;
   line-height: 1.7;
   /* Papel opaco: por detrás pasa la trama animada del fondo del sitio. */
   background: var(--background);
 }
 .am-sd-nota {
-  font-size: 12.5px;
+  font-size: 12px;
   line-height: 1.55;
   color: var(--muted);
 }
@@ -244,7 +244,7 @@
 }
 .am-sd-pieza figcaption {
   margin-top: 11px;
-  font-size: 12.5px;
+  font-size: 12px;
   line-height: 1.55;
   color: var(--muted);
   max-width: 330px;
@@ -296,7 +296,7 @@
   cursor: default;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 700px) {
   .am-sd-piezas {
     grid-template-columns: 1fr;
   }

@@ -68,7 +68,7 @@
   margin-top: 8px;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 560px) {
   /* Siguen una al lado de la otra: apiladas, la de arriba se quedaba suelta y
      el par dejaba de leerse como un interruptor de dos posiciones. Lo que
      encoge es el rótulo y su relleno, que es lo que hace que «Sistema de
@@ -78,7 +78,7 @@
   }
   .ev-ficha-pestana {
     padding: 14px 8px;
-    font-size: 12.5px;
+    font-size: 12px;
     letter-spacing: -0.01em;
   }
   .ev-ficha-pestana[data-puesta="true"] {

@@ -30,7 +30,7 @@
    del glifo, así que la mitad sobresale hacia fuera: cinco píxeles junto a un
    texto pequeño dejan de ser el hueco que abren y pasan a tapar la primera
    letra de la palabra. */
-@media (max-width: 600px) {
+@media (max-width: 560px) {
   .dropcap-letter {
     font-size: 34px;
     -webkit-text-stroke-width: 2px;

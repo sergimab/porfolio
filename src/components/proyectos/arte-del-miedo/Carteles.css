@@ -100,7 +100,7 @@
 
 /* En pantalla estrecha, uno debajo de otro: a 375 px, el cartel del pase se
    quedaba en 100 px de ancho y no se leía ni el titular. */
-@media (max-width: 720px) {
+@media (max-width: 700px) {
   .am-carteles {
     flex-direction: column;
     gap: 16px;
@@ -211,7 +211,7 @@
   border-radius: var(--r-pieza);
 }
 
-@media (max-width: 720px) {
+@media (max-width: 700px) {
   .am-flyers {
     flex-direction: column;
     gap: 16px;

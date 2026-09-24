@@ -110,8 +110,10 @@ export default function Moleculas() {
         ancha
       >
         <div className="sd-muestra-tabs">
-          <span className="sd-tab es-activa"><LangText es="Holding" en="Holding" /></span>
-          <span className="sd-tab"><LangText es="Subholding" en="Subholding" /></span>
+          <span className="sd-muestra-tabs-fila">
+            <span className="sd-tab es-activa"><LangText es="Título 1" en="Title 1" /></span>
+            <span className="sd-tab"><LangText es="Título 2" en="Title 2" /></span>
+          </span>
           <span className="sd-tab-caja" />
         </div>
       </Pieza>

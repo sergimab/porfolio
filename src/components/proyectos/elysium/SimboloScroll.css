@@ -145,7 +145,7 @@
 
 /* En pantallas estrechas, texto arriba y visual debajo. El bloque sigue fijo:
    el gesto es el mismo, solo cambia la disposición. */
-@media (max-width: 860px) {
+@media (max-width: 900px) {
   .simbolo-rejilla {
     grid-template-columns: 1fr;
     gap: 24px;

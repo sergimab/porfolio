@@ -214,7 +214,7 @@
 
    No hay marcado aparte para móvil: son los mismos tres paneles, superpuestos.
    Para que se lea como uno solo hacen falta dos cosas más, abajo. */
-@media (max-width: 640px) {
+@media (max-width: 560px) {
   .icb {
     grid-template-columns: 1fr;
     gap: 0;

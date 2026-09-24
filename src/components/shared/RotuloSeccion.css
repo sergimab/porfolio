@@ -58,9 +58,9 @@
   background: var(--background);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 560px) {
   .rotulo-seccion {
-    font-size: 13.5px;
+    font-size: 13px;
   }
   .rotulo-seccion-caja {
     /* Alto 38: 20 de renglón, 8+8 de aire y los dos hilos. */

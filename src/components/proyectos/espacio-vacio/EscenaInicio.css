@@ -84,7 +84,7 @@
    a 400 px de ancho, su altura de cuadro son 225 y el mockup se queda en
    nada. Se le da más alto al cuadro y el móvil crece con él; las esferas, al ir
    en porcentaje, se reparten solas. */
-@media (max-width: 760px) {
+@media (max-width: 700px) {
   .ev-escena {
     aspect-ratio: 4 / 5;
   }

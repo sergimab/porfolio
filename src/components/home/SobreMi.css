@@ -267,7 +267,7 @@
 }
 
 /* En pantalla estrecha, uno debajo del otro y la foto a todo el ancho. */
-@media (max-width: 860px) {
+@media (max-width: 900px) {
   .sobremi {
     flex-direction: column;
     align-items: stretch;

@@ -80,7 +80,7 @@
   white-space: nowrap;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 560px) {
   .ym-promo-play svg {
     width: 60px;
     height: 60px;

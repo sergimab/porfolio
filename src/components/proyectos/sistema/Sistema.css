@@ -17,6 +17,290 @@
   color: var(--foreground);
 }
 
+/* ── Los dos colores base ────────────────────────────────────────────────────
+   A pantalla partida, cada uno con el otro por encima: es lo que hacen los dos
+   modos del sitio, y verlos así ahorra la explicación. */
+.sd-base {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 28px;
+}
+.sd-base-color {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-caja);
+}
+.sd-base-nombre {
+  font-size: 17px;
+  font-weight: 500;
+}
+.sd-base-color code {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 12px;
+  opacity: 0.75;
+}
+.sd-base-uso {
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.5;
+  opacity: 0.75;
+}
+
+/* ── Los huecos, a su tamaño ─────────────────────────────────────────────── */
+.sd-huecos {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 28px;
+}
+.sd-hueco {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+/* La barra MIDE lo que dice. Es todo lo que tiene que hacer esta pieza. */
+.sd-hueco-barra {
+  width: 100%;
+  border-radius: var(--r-pieza);
+  background: var(--surface);
+}
+.sd-hueco-px,
+.sd-corte-px,
+.sd-trazo-px,
+.sd-tiempo-px {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 13px;
+  color: var(--foreground);
+}
+
+/* La regla del redondeo, dicha una vez y en grande. */
+.sd-regla {
+  margin: 0 0 28px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--foreground);
+}
+.sd-radio-px {
+  display: block;
+  padding: 8px 10px;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ── El plano de la rejilla ──────────────────────────────────────────────────
+   Cotas, como en un plano: la medida encima de la línea que mide. */
+.sd-plano {
+  margin-top: 28px;
+  margin-bottom: 36px;
+}
+.sd-plano-cota {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.sd-plano-linea {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.sd-plano-medida {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.sd-plano-medida.es-vertical {
+  writing-mode: vertical-rl;
+}
+.sd-plano-cuerpo {
+  display: flex;
+  align-items: stretch;
+  height: 108px;
+}
+/* El aire de los lados, rayado: se ve que es hueco reservado y no un margen
+   más. */
+.sd-plano-aire {
+  flex: 0 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--border) 0 1px,
+    transparent 1px 6px
+  );
+}
+.sd-plano-caja {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-caja);
+}
+.sd-plano-pieza {
+  border-radius: var(--r-pieza);
+  background: var(--surface);
+}
+.sd-cortes {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+.sd-corte {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* ── Las tres duraciones, corriendo ──────────────────────────────────────── */
+.sd-tiempos {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 28px;
+}
+.sd-tiempo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.sd-tiempo-pista {
+  position: relative;
+  width: 100%;
+  height: 32px;
+  border-radius: var(--r-pieza);
+  background: var(--surface);
+  overflow: hidden;
+}
+/* Va de un filo al otro animando `left`, y no con un desplazamiento en
+   porcentaje: el porcentaje se resuelve contra el ancho DE LA BOLA, así que la
+   bola se iba fuera de la pista y casi no se veía. */
+.sd-tiempo-bola {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  margin-top: -7px;
+  border-radius: var(--r-pastilla);
+  background: var(--foreground);
+  animation: sd-recorrido var(--sd-dur) var(--sd-curva) infinite alternate;
+}
+@keyframes sd-recorrido {
+  from { left: 6px; }
+  to   { left: calc(100% - 20px); }
+}
+/* La regla de fondo del sitio, cumplida también aquí. */
+@media (prefers-reduced-motion: reduce) {
+  .sd-tiempo-bola { animation: none; }
+}
+
+/* ── Las tarjetas de categoría ───────────────────────────────────────────── */
+.sd-cards-cat {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+/* Cuadrada CONTANDO la banda, como la de verdad: de ahí sale que la portada sea
+   siempre 5:4 sin depender del tamaño de la tarjeta. */
+.sd-card-cat {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 1;
+  border: 1px solid transparent;
+  border-radius: var(--r-caja);
+  overflow: hidden;
+  background: var(--background);
+}
+/* El aro de degradado: un borde CSS no admite degradados, así que se pinta el
+   rectángulo entero y se le recorta el centro con una máscara. */
+.sd-card-cat-aro {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+.sd-card-cat-medio {
+  flex: 1;
+  min-height: 0;
+  background: var(--surface);
+  border-radius: calc(var(--r-caja) - 1px) calc(var(--r-caja) - 1px) 0 0;
+}
+.sd-card-cat-banda {
+  flex: none;
+  aspect-ratio: 5 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  border-radius: 0 0 calc(var(--r-caja) - 1px) calc(var(--r-caja) - 1px);
+  color: #fff;
+  font-size: 12px;
+  text-align: center;
+}
+
+/* ── La cabecera de proyecto y sus discos ────────────────────────────────── */
+.sd-hero-fila {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  width: 100%;
+}
+.sd-discos {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+.sd-disco {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--r-pastilla);
+  background-size: cover;
+  cursor: pointer;
+  /* Apagado en reposo y entero el elegido: el mismo recurso que usa el menú de
+     disciplinas de la home para decir cuál está puesto. */
+  opacity: 0.45;
+  transition: opacity 0.2s, border-color 0.2s;
+}
+.sd-disco.es-activo {
+  opacity: 1;
+  border-color: var(--foreground);
+}
+@media (hover: hover) {
+  .sd-disco:hover { opacity: 1; }
+}
+
 /* ── Los tokens de color ─────────────────────────────────────────────────────
    Cada muestra lleva la variable puesta a pelo como fondo, así que enseña el
    valor de verdad en el modo en que se esté mirando. El filo alrededor no es
@@ -48,7 +332,7 @@
 }
 .sd-token-texto code {
   font-family: var(--font-geist-mono), monospace;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
 }
 .sd-token-uso {
@@ -96,7 +380,7 @@
 }
 .sd-tono-dato {
   font-family: var(--font-geist-mono), monospace;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
 }
 
@@ -182,12 +466,15 @@
 }
 .sd-radio code {
   font-family: var(--font-geist-mono), monospace;
-  font-size: 11.5px;
+  font-size: 12px;
 }
 .sd-radio-caja {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
   width: 100%;
   height: 52px;
-  border: 1px solid var(--foreground);
+  border: 1px solid var(--border);
   background: var(--surface);
 }
 
@@ -203,55 +490,26 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 10px;
   width: 210px;
   height: 96px;
-  border: 1px solid var(--foreground);
+  border: 1px solid var(--border);
   border-radius: var(--r-caja);
   background: var(--background);
 }
 .sd-anidado-dentro {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 150px;
   height: 48px;
   border-radius: var(--r-pieza);
   background: var(--surface);
 }
-.sd-anidado-pie {
+.sd-anidado-cota {
+  font-family: var(--font-geist-mono), monospace;
   font-size: 12px;
-  line-height: 1.5;
   color: var(--muted);
-  max-width: 44ch;
-}
-
-/* ── La rejilla, dibujada ────────────────────────────────────────────────────
-   El aire de los lados se pinta rayado y la caja del contenido con su filo, que
-   es la manera de que se vea que son dos cosas distintas y no un margen más. */
-.sd-rejilla {
-  display: flex;
-  align-items: stretch;
-  height: 96px;
-  margin-top: 28px;
-  margin-bottom: 10px;
-}
-.sd-rejilla-aire {
-  flex: 0 0 24px;
-  background-image: repeating-linear-gradient(
-    -45deg,
-    var(--border) 0 1px,
-    transparent 1px 6px
-  );
-}
-.sd-rejilla-caja {
-  flex: 1 1 auto;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-  padding: 16px;
-  border: 1px solid var(--foreground);
-  border-radius: var(--r-caja);
-}
-.sd-rejilla-pieza {
-  border-radius: var(--r-pieza);
-  background: var(--surface);
 }
 
 /* ── Los cinco estados ───────────────────────────────────────────────────────
@@ -301,7 +559,7 @@
 }
 .sd-estado-nombre {
   color: var(--foreground);
-  font-size: 12.5px;
+  font-size: 12px;
 }
 
 /* ── Componentes ─────────────────────────────────────────────────────────── */
@@ -325,7 +583,7 @@
   background: var(--background);
 }
 .sd-pieza-nombre {
-  font-size: 11.5px;
+  font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted);
@@ -381,13 +639,30 @@
    abre un nivel entero, con varios apartados dentro.
    El filo grueso por arriba es lo que hace de corte: sin él, el nombre del
    nivel se leía como un apartado más. */
+/* ── LOS TRES NIVELES DE TÍTULO ───────────────────────────────────────────────
+   La página tiene tres profundidades y cada una se dice de una manera, sin
+   inventar nada que no exista ya en el sitio.
+
+     1. EL NIVEL (Átomos, Moléculas…) es el rótulo de apartado del sitio, la
+        pastilla con su línea. Es lo que abre un apartado en las catorce páginas
+        de proyecto, así que aquí abre los cuatro grandes.
+     2. EL APARTADO (Color, Tipografía…) va en la escala de letra, a 22, que es
+        el tamaño que ya tenía este nivel.
+     3. EL DETALLE (Los siete colores de categoría) es el rótulo pequeño en
+        versalitas que se usa en el resto del sitio para etiquetar.
+
+   Antes el nivel llevaba un filete de 1,5 por encima, que era el único sitio
+   del sitio donde ese trazo hacía de separador y no de marco. Fuera: ahora
+   separa la línea del rótulo, que es la pieza que existe para eso. */
 .sd-nivel {
-  margin: 0 0 28px;
-  padding-top: 26px;
-  border-top: 1.5px solid var(--foreground);
+  margin-top: 56px;
+}
+.sd-rotulo {
+  margin: 0 0 20px;
   font-size: 22px;
   font-weight: 500;
   letter-spacing: 0.02em;
+  color: var(--foreground);
 }
 
 /* ── El marco de cada pieza ──────────────────────────────────────────────── */
@@ -457,28 +732,43 @@
 .sd-toggle-idioma span { color: var(--muted); }
 
 /* Las pestañas, con la de la izquierda unida a su caja. */
+/* LAS MISMAS MEDIDAS QUE LAS DE VERDAD: separadas 16, repartiéndose el ancho a
+   partes iguales, y la activa rellena y unida a la caja de abajo. */
 .sd-muestra-tabs {
-  display: grid;
-  grid-template-columns: auto auto 1fr;
+  display: flex;
+  flex-direction: column;
   width: 100%;
 }
-.sd-tab {
-  padding: 9px 16px;
-  border: 1px solid var(--foreground);
-  border-bottom: 0;
-  border-radius: var(--r-pieza) var(--r-pieza) 0 0;
-  font-size: 12px;
-  color: var(--muted);
+.sd-muestra-tabs-fila {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  position: relative;
+  z-index: 2;
 }
-.sd-tab.es-activa {
+.sd-tab {
+  flex: 1;
+  padding: 14px;
+  border: 1px solid var(--foreground);
+  border-radius: var(--r-pieza);
   background: var(--background);
   color: var(--foreground);
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+}
+.sd-tab.es-activa {
+  background: var(--foreground);
+  color: var(--background);
+  border-bottom: 0;
+  border-radius: var(--r-pieza) var(--r-pieza) 0 0;
+  padding-bottom: 26px;
+  margin-bottom: -1px;
 }
 .sd-tab-caja {
-  grid-column: 1 / -1;
-  height: 46px;
+  height: 52px;
   border: 1px solid var(--foreground);
-  border-radius: 0 var(--r-pieza) var(--r-pieza) var(--r-pieza);
+  border-radius: 0 var(--r-caja) var(--r-caja) var(--r-caja);
   background: var(--background);
 }
 
@@ -578,7 +868,7 @@
   padding: 7px 16px;
   border: 1px solid var(--foreground);
   border-radius: var(--r-pastilla);
-  font-size: 11.5px;
+  font-size: 12px;
 }
 .sd-soltar {
   margin-top: 4px;
@@ -586,7 +876,7 @@
   border: 1.5px dashed var(--muted);
   border-radius: var(--r-pastilla);
   color: var(--muted);
-  font-size: 11.5px;
+  font-size: 12px;
   text-align: center;
 }
 .sd-esquema-menu {
@@ -598,7 +888,7 @@
 .sd-casilla {
   padding: 14px 10px;
   border-top: 1px solid var(--foreground);
-  font-size: 11.5px;
+  font-size: 12px;
   text-align: center;
 }
 .sd-esquema-menu .sd-casilla:nth-child(-n + 2) { border-top: 0; }
@@ -615,7 +905,7 @@
   padding: 26px 8px;
   border: 1px solid var(--foreground);
   border-radius: var(--r-pieza);
-  font-size: 11.5px;
+  font-size: 12px;
   text-align: center;
 }
 .sd-ficha.es-activa {
@@ -638,24 +928,24 @@
 
 /* ── Trazo ───────────────────────────────────────────────────────────────── */
 .sd-trazos {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
   margin-top: 28px;
 }
 .sd-trazo {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   gap: 8px;
-  font-size: 11.5px;
+  font-size: 12px;
+  line-height: 1.5;
   color: var(--muted);
 }
-.sd-trazo-caja {
-  width: 92px;
-  height: 52px;
-  border: 1px solid var(--foreground);
-  border-radius: var(--r-pieza);
+/* La línea, y nada más. El medio píxel se ve poniéndolas una encima de otra. */
+.sd-trazo-linea {
+  width: 100%;
+  background: var(--foreground);
 }
 
 /* ── Plantillas ──────────────────────────────────────────────────────────── */
@@ -676,7 +966,7 @@
 }
 .sd-plantilla-nombre {
   margin-bottom: 4px;
-  font-size: 11.5px;
+  font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted);
@@ -686,7 +976,7 @@
   border: 1px solid var(--border);
   border-radius: var(--r-pieza);
   background: var(--surface);
-  font-size: 11.5px;
+  font-size: 12px;
   text-align: center;
 }
 .sd-fila.es-cabecera {
@@ -704,7 +994,7 @@
   gap: 8px;
 }
 
-@media (max-width: 820px) {
+@media (max-width: 900px) {
   .sd-tonos {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
@@ -714,8 +1004,39 @@
   }
 }
 
+@media (max-width: 700px) {
+  /* Las cuadrículas de muestras que van con las columnas dichas a mano bajan a
+     dos, que es lo que cabe con una pieza legible. Los siete tonos siguen sin
+     dejar ninguno solo —parten en 4 filas de 2 menos la última de 1—, así que
+     ahí se prefiere una fila de 3+2+2 por medio de `auto-fit`. */
+  .sd-huecos,
+  .sd-cortes,
+  .sd-tiempos,
+  .sd-cards-cat,
+  .sd-estados {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 560px) {
-  .sd-plantillas {
+  .sd-plantillas,
+  .sd-base,
+  .sd-trazos,
+  .sd-huecos,
+  .sd-tiempos,
+  .sd-cards-cat {
     grid-template-columns: 1fr;
+  }
+  .sd-tonos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  /* La cabecera y sus discos, uno debajo de otro: en columna los discos se
+     comen la mitad del ancho de la muestra. */
+  .sd-hero-fila {
+    flex-direction: column;
+  }
+  .sd-discos {
+    flex-direction: row;
+    flex-wrap: wrap;
   }
 }

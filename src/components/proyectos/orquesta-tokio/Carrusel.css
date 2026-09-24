@@ -18,7 +18,7 @@
    porque un hueco invisible se olvida. */
 .ot-pendiente {
   margin: 28px auto 0;
-  max-width: 520px;
+  max-width: 560px;
   padding: 28px 24px;
   border: 1px dashed color-mix(in srgb, currentColor 32%, transparent);
   border-radius: var(--r-pieza);

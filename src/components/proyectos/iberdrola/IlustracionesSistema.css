@@ -208,10 +208,10 @@
   text-align: center;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 700px) {
   .ilu-tiles { grid-template-columns: repeat(3, 1fr); }
 }
-@media (max-width: 600px) {
+@media (max-width: 560px) {
   /* Primera fila de ilustraciones en móvil: una caja debajo de otra.
      Anulamos la cuadrícula 2×2 de escritorio y la variante con casa. */
   .ilu-hero-tech,
@@ -277,7 +277,7 @@
   .hero-pair .ilu-frame {
     animation: none;
   }
-  @media (max-width: 760px) {
+  @media (max-width: 700px) {
     .hero-pair {
       grid-template-columns: 1fr;
       gap: 24px;

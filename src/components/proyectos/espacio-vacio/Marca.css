@@ -257,7 +257,7 @@
   }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 700px) {
   /* Las láminas partidas se apilan: a 380 px de ancho cada mitad se queda en
      190 y la construcción deja de leerse, que es lo único que tiene que hacer. */
   .ev-lamina-partida {
@@ -425,7 +425,7 @@
    mucho aire dentro del propio archivo, así que en una columna de 380 px el
    aparato no llega a verse. Se le deja rebasar el ancho del contenido —hasta el
    borde de la ventana— con márgenes negativos. */
-@media (max-width: 760px) {
+@media (max-width: 700px) {
   .ev-mockups > .ev-mock:first-child,
   .ev-mock-solapado {
     width: 100vw;
@@ -435,7 +435,7 @@
   }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 700px) {
   .ev-mock-fila {
     grid-template-columns: 1fr;
     gap: 20px;

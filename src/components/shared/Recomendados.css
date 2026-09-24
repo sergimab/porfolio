@@ -58,8 +58,14 @@
    La portada, con el alto fijo, y debajo la banda con el nombre. La banda va
    DEBAJO y no encima: encima se comería la franja de abajo de la portada y
    habría que componer cada portada dejándole ese hueco libre. */
+/* EL FILO, DEL COLOR DE SU CATEGORÍA. La misma receta que la cápsula de volver
+   y el rótulo de apartado —55 de saturación y 45 de luz—, que es la que se ve
+   igual de bien sobre el papel claro que sobre el oscuro. Cierra la tarjeta por
+   arriba, que sin él quedaba abierta: la banda de abajo iba de color y la
+   portada terminaba en nada. */
 .rec-card {
   display: block;
+  border: 1px solid hsl(var(--rec-hue, 142) 55% 45%);
   border-radius: var(--r-caja);
   overflow: hidden;
   background: var(--surface);
@@ -144,7 +150,7 @@
   max-width: 100%;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 700px) {
   /* EN EL TELÉFONO SIEMPRE EN TIRA, aunque sean dos o tres: repartidas a lo
      ancho de 327 px se quedarían en 100 y de la portada no quedaría nada. */
   .rec-fila {

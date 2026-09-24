@@ -44,7 +44,7 @@
 
 /* En móvil no caben ocho en fila sin quedar diminutos, así que se permite que
    fluyan; el orden se mantiene. */
-@media (max-width: 640px) {
+@media (max-width: 560px) {
   .icg {
     --icg-tesela: 60px;
     --icg-hueco: 8px;

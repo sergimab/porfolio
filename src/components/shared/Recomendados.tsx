@@ -33,6 +33,18 @@ const MUESTRA = {
   claro: false,
 };
 
+// Una fila de muestra de n tarjetas. Los tonos van rotando por las siete
+// categorías para que se vea que el filo y la banda son los de cada una.
+function filaDeMuestra(n: number) {
+  const TONOS = [175, 217, 330, 262, 142, 32, 1];
+  return Array.from({ length: n }, (_, i) => ({
+    ...MUESTRA,
+    id: `muestra-${i}`,
+    hue: TONOS[i % TONOS.length],
+    claro: TONOS[i % TONOS.length] === 32,
+  }));
+}
+
 export default function Recomendados({
   ids,
   titulo = { es: "Proyectos recomendados", en: "Featured projects" },
@@ -42,13 +54,13 @@ export default function Recomendados({
   ids: string[];
   titulo?: { es: string; en: string };
   className?: string;
-  /** Sin enlace y con contenido genérico, para el muestrario del sistema. */
-  muestra?: boolean;
+  /** Cuántas tarjetas genéricas y sin enlace, para el muestrario del sistema. */
+  muestra?: number;
 }) {
   const lang = useLang();
   // Un id que no existe se cae de la lista en vez de tirar la página abajo.
   const proyectos = muestra
-    ? [MUESTRA]
+    ? filaDeMuestra(muestra)
     : ids.map(buscarProyecto).filter((p): p is NonNullable<typeof p> => p !== null);
   if (!proyectos.length) return null;
 
@@ -71,10 +83,13 @@ export default function Recomendados({
           // cualquier punto del degradado.
           const pintura = p.claro ? degradadoClaro(p.hue) : degradadoLegible(p.hue);
           const colores = p.claro ? paletaClara(p.hue) : paletaLegible(p.hue);
+          const tono = { ["--rec-hue" as string]: p.hue } as React.CSSProperties;
           const Caja = muestra
-            ? ({ children }: { children: React.ReactNode }) => <span className="rec-card">{children}</span>
+            ? ({ children }: { children: React.ReactNode }) => (
+                <span className="rec-card" style={tono}>{children}</span>
+              )
             : ({ children }: { children: React.ReactNode }) => (
-                <Link href={`/proyecto/${p.id}`} className="rec-card">{children}</Link>
+                <Link href={`/proyecto/${p.id}`} className="rec-card" style={tono}>{children}</Link>
               );
           return (
             <Caja key={p.id}>

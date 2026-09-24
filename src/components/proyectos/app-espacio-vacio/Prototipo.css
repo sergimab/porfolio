@@ -1170,7 +1170,7 @@ button.ev-app-banda:focus-visible {
   cursor: default;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 700px) {
   /* En vertical el móvil va arriba y los mandos debajo: uno al lado del otro,
      a 375 px el aparato se quedaría en media columna y no se leería nada de lo
      que hay dentro, que es justo lo que se viene a ver. */

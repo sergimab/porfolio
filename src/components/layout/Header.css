@@ -7,7 +7,7 @@
 .header-time     { display: flex; }
 .header-divider  { display: block; }
 .header-toggles  { display: flex; align-items: center; gap: 20px; }
-@media (max-width: 768px) {
+@media (max-width: 700px) {
   .header-time     { display: none; }
   .header-divider  { display: none; }
   .header-toggles  { gap: 8px; }
