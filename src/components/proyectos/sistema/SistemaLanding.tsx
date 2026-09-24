@@ -49,8 +49,8 @@ export default function SistemaLanding() {
         <div className="project-introrow">
           <p className="project-intro">
             <LangText
-              es="El portfolio no se maquetó página a página: se construyó con **un sistema de piezas** que se repiten. Esta página lo enseña **desde dentro del propio sitio**, así que lo que se ve aquí no son capturas, son **los componentes de verdad**: si mañana cambia un color, esta página cambia con él. Y al ponerlo todo junto salen a la luz las **incoherencias**, que es la otra mitad del trabajo."
-              en="This portfolio was not laid out page by page: it was built from **a system of repeating parts**. This page shows it **from inside the site itself**, so what you see here are not screenshots but **the real components**: change a colour tomorrow and this page changes with it. Putting it all together also surfaces the **inconsistencies**, which is the other half of the job."
+              es="Esto empezó como algo simple para enseñar unos pocos proyectos y se me fue creciendo hasta ser **un archivo de trabajos ordenado por categorías**, y con él me metí de lleno en **la programación y los sistemas de diseño**. Esta página es lo que quedó de ese camino, y va **hecha con el propio sistema**, así que lo que se ve no son capturas sino **los componentes de verdad**."
+              en="This started as something simple to show a handful of projects and kept growing into **an archive of work sorted by discipline**, and with it I went properly into **coding and design systems**. This page is what came out of that, and it is **built with the system itself**, so what you see are not screenshots but **the real components**."
             />
           </p>
           <ToolIcons tools={["Figma", "Visual Studio Code"]} />
