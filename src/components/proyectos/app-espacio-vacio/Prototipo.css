@@ -15,61 +15,17 @@
 }
 
 /* ── El móvil ──
-   Marco en CSS y no una imagen: se ve nítido a cualquier tamaño, pesa cero y
-   —lo que importa aquí— el hueco de la pantalla es exacto. */
+   El marco es el compartido —ver `shared/Movil.css`—; aquí solo va lo que
+   cambia. El ancho manda sobre el tamaño de todo lo que lleva dentro: la
+   pantalla está medida en `cqw`, así que ensancharlo es lo que hace que el
+   texto de la app se lea. A 330 el cuerpo queda en unos 12 px, que es lo que
+   mide el texto pequeño del resto del sitio. */
 .ev-movil {
-  position: relative;
-  flex: 0 0 auto;
-  /* El aparato manda sobre el tamaño de todo lo que lleva dentro: la pantalla
-     está medida en `cqw`, así que ensanchar el marco es lo que hace que el
-     texto de la app se lea. A 330 el cuerpo queda en unos 12 px, que es lo que
-     mide el texto pequeño del resto del sitio. */
-  width: 330px;
-  padding: 10px;
-  border-radius: 44px;
-  background: #1b1b1d;
-}
-/* En oscuro, el marco negro cae sobre un papel casi negro y el aparato se
-   deshace contra el fondo. Un hilo claro alrededor le devuelve el canto.
-   Va como sombra y no como borde para no cambiar la medida del marco: un borde
-   engordaría la caja y movería la pantalla de dentro. */
-[data-theme="dark"] .ev-movil {
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35);
-}
-
-.ev-pantalla {
-  position: relative;
-  /* La proporción del diseño de Figma: 860 × 1864. */
-  aspect-ratio: 860 / 1864;
-  border-radius: 34px;
-  overflow: hidden;
-  /* Blanco fijo, no el papel de la página: es la pantalla de la app, y la app
+  --movil-ancho: 330px;
+  /* La proporción del diseño de Figma, 860 × 1864, y el blanco de la app, que
      es blanca en los dos modos del sitio. */
-  background: #fff;
-  /* LA PIEZA CLAVE de todo el apartado: al declararlo contenedor de consulta,
-     `cqw` pasa a medir el uno por ciento del ancho del MÓVIL y no de la
-     ventana. Todo lo de dentro va en esa unidad, así que la pantalla escala
-     entera —tipografía, márgenes, botones— igual que una app al cambiar de
-     dispositivo. Con píxeles habría que reescribir cada medida en cada tamaño;
-     con porcentajes, el texto no escalaría con lo demás. */
-  container-type: inline-size;
-}
-
-/* El notch, colgando del borde de arriba. Es del color del marco y se dibuja
-   por encima de la pantalla, como el del aparato de verdad. Cae por delante de
-   la app pero no de sus pulsaciones: ahí arriba no hay nada que tocar, y la
-   cabecera empieza más abajo. */
-.ev-movil-notch {
-  position: absolute;
-  z-index: 6;
-  left: 50%;
-  top: 0;
-  transform: translateX(-50%);
-  width: 42cqw;
-  height: 6.4cqw;
-  border-radius: 0 0 3.4cqw 3.4cqw;
-  background: #1b1b1d;
-  pointer-events: none;
+  --movil-proporcion: 860 / 1864;
+  --movil-pantalla: #fff;
 }
 
 /* ── La app ── */
@@ -1179,7 +1135,7 @@ button.ev-app-banda:focus-visible {
     gap: 24px;
   }
   .ev-movil {
-    width: min(330px, 82vw);
+    --movil-ancho: min(330px, 82vw);
   }
   /* Apilados, la columna deja de mandar en la fila y vuelve a ocupar el ancho. */
   .ev-proto-mandos {

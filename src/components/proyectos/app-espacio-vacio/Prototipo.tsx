@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import Movil from "@/components/shared/Movil";
 import { useLang } from "@/components/shared/useLang";
 import "./Prototipo.css";
 
@@ -1566,11 +1567,9 @@ export default function Prototipo() {
   return (
     <section className="ev-proto">
       <div className="ev-proto-caja">
-        {/* El móvil. El marco es CSS —no una imagen— para que se vea nítido a
-            cualquier tamaño y para que pese cero. */}
-        <div className="ev-movil">
-          <div className="ev-pantalla">
-            <div className="ev-movil-notch" aria-hidden="true" />
+        {/* El aparato es el marco compartido; lo de esta página es lo que va
+            dentro de la pantalla. */}
+        <Movil className="ev-movil">
             {/* La clave fuerza a React a rehacer el cuerpo al cambiar de
                 pantalla, que es lo que dispara la entrada. */}
             <div className="ev-app" key={actual.id}>
@@ -1662,8 +1661,7 @@ export default function Prototipo() {
 
               {actual.encima?.(ctx)}
             </div>
-          </div>
-        </div>
+        </Movil>
 
         {/* Los mandos, FUERA del móvil: dentro serían un botón más y se
             confundirían con la interfaz que se está enseñando. */}

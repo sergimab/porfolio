@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import Movil from "@/components/shared/Movil";
 import { useLang } from "@/components/shared/useLang";
 import { Cuadricula } from "./Isotipo";
 import { raleway } from "./fuente";
@@ -826,11 +827,9 @@ export default function Prototipo() {
   return (
     <section className={`am-proto ${raleway.variable}`}>
       <div className="am-proto-caja">
-        {/* El móvil. El marco es CSS —no una imagen— para que se vea nítido a
-            cualquier tamaño, pese cero y el hueco de la pantalla sea exacto. */}
-        <div className="am-movil">
-          <div className="am-movil-hueco">
-            <div className="am-movil-notch" aria-hidden="true" />
+        {/* El aparato es el marco compartido. La pantalla conserva su clase
+            propia porque es donde viven los tokens de esta app. */}
+        <Movil className="am-movil" clasePantalla="am-movil-hueco">
             {/* La clave fuerza a React a rehacer el cuerpo al cambiar de
                 pantalla, que es lo que dispara la entrada. */}
             <div className="am-app" key={actual.id}>
@@ -878,8 +877,7 @@ export default function Prototipo() {
             {fondo && (
               <Fondo c={ctx} nombre={fondo} cerrar={() => setFondo(null)} />
             )}
-          </div>
-        </div>
+        </Movil>
 
         {/* Los mandos, FUERA del móvil: dentro serían un botón más y se
             confundirían con la interfaz que se está enseñando. */}

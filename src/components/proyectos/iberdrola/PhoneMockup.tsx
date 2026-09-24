@@ -1,14 +1,15 @@
 "use client";
 
 import { useRef } from "react";
+import Movil from "@/components/shared/Movil";
 import "./PhoneMockup.css";
 
-// Marco de móvil con una newsletter cargada en un iframe con scroll.
+// Una newsletter cargada dentro del aparato, en un iframe con scroll.
 //
-// El marco es el mismo que el del prototipo de Espacio vacío: dibujado en CSS
-// —nada de imagen— con su notch y, en modo oscuro, un hilo claro alrededor para
-// que el aparato no se deshaga contra el papel. La barra de scroll del iframe
-// se oculta inyectando CSS en su documento (mismo origen).
+// El marco es el componente compartido, el mismo que llevan los prototipos de
+// las dos apps. Lo único de aquí es lo de dentro: la barra de scroll del iframe
+// se oculta inyectando CSS en su documento, que es del mismo origen, y se
+// anulan sus enlaces para que no lleven a ningún sitio.
 export default function PhoneMockup({ src, title }: { src: string; title: string }) {
   const ref = useRef<HTMLIFrameElement>(null);
 
@@ -39,11 +40,8 @@ export default function PhoneMockup({ src, title }: { src: string; title: string
   };
 
   return (
-    <div className="phone">
-      <div className="phone-pantalla">
-        <div className="phone-notch" aria-hidden="true" />
-        <iframe ref={ref} className="phone-screen" src={src} title={title} onLoad={onLoad} />
-      </div>
-    </div>
+    <Movil className="nwl-movil">
+      <iframe ref={ref} className="phone-screen" src={src} title={title} onLoad={onLoad} />
+    </Movil>
   );
 }

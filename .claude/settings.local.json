@@ -400,7 +400,13 @@
       "Bash(cwebp -quiet -resize 900 0 -q 80 public/proyectos/orquesta-tokio/anteriores/contraluz-naranja.webp -o public/sistema/muestra-cover.webp)",
       "Bash(ffmpeg -v error -y -i public/proyectos/orquesta-tokio/anteriores/contraluz-naranja.webp -vf \"crop=900:600:0:80\" /tmp/gen.png)",
       "Bash(cwebp -quiet -q 80 /tmp/gen.png -o public/sistema/muestra-cover.webp)",
-      "Bash(ffprobe -v error -select_streams v -show_entries stream=width,height -of csv=p=0 public/sistema/muestra-cover.webp)"
+      "Bash(ffprobe -v error -select_streams v -show_entries stream=width,height -of csv=p=0 public/sistema/muestra-cover.webp)",
+      "Bash(awk 'NR>=1690 && NR<=1730 {print NR\": \"$0}' src/components/proyectos/app-espacio-vacio/Prototipo.tsx)",
+      "Bash(awk 'NR>=1655 && NR<=1672 {print NR\": \"$0}' src/components/proyectos/app-espacio-vacio/Prototipo.tsx)",
+      "Bash(awk 'NR>=872 && NR<=886 {print NR\": \"$0}' src/components/proyectos/arte-del-miedo/Prototipo.tsx)",
+      "Bash(awk 'NR>=866 && NR<=882 {print NR\": \"$0}' src/components/proyectos/arte-del-miedo/Prototipo.tsx)",
+      "Bash(awk 'NR>=855 && NR<=866 {print NR\": \"$0}' src/components/proyectos/arte-del-miedo/Prototipo.tsx)",
+      "Bash(awk 'NR>=828 && NR<=840 {print NR\": \"$0}' src/components/proyectos/arte-del-miedo/Prototipo.tsx)"
     ],
     "defaultMode": "acceptEdits"
   }

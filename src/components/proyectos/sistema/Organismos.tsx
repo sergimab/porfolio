@@ -10,7 +10,7 @@ import BounceCards from "@/components/home/BounceCards";
 import { CATEGORIAS } from "@/components/shared/proyectos";
 import { degradadoLegible, degradadoClaro } from "@/components/shared/organico";
 import Pieza from "./Pieza";
-import "@/components/proyectos/iberdrola/PhoneMockup.css";
+import Movil from "@/components/shared/Movil";
 
 // LOS ORGANISMOS: moléculas montadas en una pieza que ya hace algo por sí sola.
 //
@@ -179,15 +179,11 @@ export default function Organismos() {
         <Pieza
           nombre="Mockup de móvil"
           nombreEn="Phone mockup"
-          de="Dibujado en CSS y no una imagen, así que se ve nítido a cualquier tamaño y pesa cero. Lo llevan las newsletters de Iberdrola, con una dentro navegable, y los prototipos de las apps de Espacio vacío y El arte del miedo. Su ancho manda sobre lo que contiene, porque dentro todo se mide en porcentaje de la pantalla. Aquí, vacío y reducido."
-          deEn="Drawn in CSS, not an image, so it stays sharp at any size and weighs nothing. It carries the Iberdrola newsletters, with a live one inside, and the prototypes for the Espacio vacío and El arte del miedo apps. Its width governs what it contains, since everything inside is measured against the screen width. Shown here empty and scaled down."
+          de="Dibujado en CSS y no una imagen, así que se ve nítido a cualquier tamaño y pesa cero. Es un solo componente para los tres sitios donde sale: las newsletters de Iberdrola, con una dentro navegable, y los prototipos de las apps de Espacio vacío y El arte del miedo. Cada uno le pasa su ancho, su proporción, el color de la pantalla y el tamaño de la muesca. El ancho manda sobre lo que contiene, porque dentro todo se mide en porcentaje de la pantalla. Aquí, vacío y reducido."
+          deEn="Drawn in CSS, not an image, so it stays sharp at any size and weighs nothing. One component for the three places it appears: the Iberdrola newsletters, with a live one inside, and the prototypes for the Espacio vacío and El arte del miedo apps. Each passes its own width, screen ratio, screen colour and notch size. Its width governs what it contains, since everything inside is measured against the screen width. Shown here empty and scaled down."
         >
           <div className="sd-movil">
-            <div className="phone">
-              <div className="phone-pantalla">
-                <div className="phone-notch" aria-hidden="true" />
-              </div>
-            </div>
+            <Movil />
           </div>
         </Pieza>
 

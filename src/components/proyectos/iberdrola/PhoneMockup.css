@@ -8,52 +8,16 @@
   flex-wrap: wrap;
 }
 
-/* ── El aparato ──
-   El mismo marco que el prototipo de Espacio vacío: dibujado en CSS, así que se
-   ve nítido a cualquier tamaño y pesa cero. */
-.phone {
-  position: relative;
-  width: 320px;
-  max-width: 100%;
-  padding: 10px;
-  box-sizing: border-box;
-  border-radius: 44px;
-  background: #1b1b1d;
-}
-/* En oscuro, el marco negro cae sobre un papel casi negro y el aparato se
-   deshace contra el fondo. Un hilo claro le devuelve el canto; va como sombra
-   para no cambiar la medida del marco. */
-[data-theme="dark"] .phone {
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35);
+/* El marco es el compartido —ver `shared/Movil.css`—; aquí solo va lo que
+   cambia. Diez píxeles más estrecho que en los prototipos de app porque estos
+   van de dos en dos y con 330 la pareja no cabía en una columna de contenido
+   sin apretarse. */
+.nwl-movil {
+  --movil-ancho: 320px;
+  --movil-notch-z: 2;
 }
 
-/* La pantalla, con la proporción de un móvil de verdad. Es contenedor de
-   consulta para que el notch se mida en porcentaje de SU ancho y no del de la
-   ventana. */
-.phone-pantalla {
-  position: relative;
-  aspect-ratio: 860 / 1864;
-  border-radius: 34px;
-  overflow: hidden;
-  background: #fff;
-  container-type: inline-size;
-}
-
-/* El notch, colgando del borde de arriba y por encima de la newsletter. */
-.phone-notch {
-  position: absolute;
-  z-index: 2;
-  left: 50%;
-  top: 0;
-  transform: translateX(-50%);
-  width: 42cqw;
-  height: 6.4cqw;
-  border-radius: 0 0 3.4cqw 3.4cqw;
-  background: #1b1b1d;
-  pointer-events: none;
-}
-
-/* La newsletter arranca bajo el notch: a ras, el membrete de arriba le quedaba
+/* La newsletter arranca bajo la muesca: a ras, el membrete de arriba le quedaba
    detrás. De ahí para abajo se desplaza con normalidad. */
 .phone-screen {
   position: absolute;

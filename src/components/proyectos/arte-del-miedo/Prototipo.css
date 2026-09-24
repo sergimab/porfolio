@@ -14,53 +14,39 @@
 }
 
 /* ── El móvil ──────────────────────────────────────────────────────────────
-   Marco en CSS y no una imagen: se ve nítido a cualquier tamaño, pesa cero y
-   —lo que importa aquí— el hueco de la pantalla es exacto. */
+   El marco es el compartido —ver `shared/Movil.css`—; aquí solo va lo que
+   cambia.
+
+   EL MISMO ANCHO que el móvil de la app de Espacio vacío: las dos páginas son
+   la misma clase de pieza y con aparatos de distinto tamaño no se leerían como
+   del mismo sitio. OJO AL TOCARLO: todo lo de dentro va en `cqw`, o sea en
+   porcentaje de este número, así que este ancho ES el tamaño de la letra de la
+   app. Si se encoge el marco, encoge el texto; lo que hay que ajustar entonces
+   es la escala tipográfica de abajo, no el aparato.
+
+   LA MUESCA es más corta y más estrecha que la de las otras dos. No es un
+   capricho de dibujo: debajo, a 11 cqw del borde, empieza el isotipo de
+   cabecera, y con la normal —42 de ancho y 6,4 de alto— los dos se rozaban. */
 .am-movil {
-  position: relative;
-  flex: 0 0 auto;
-  /* El mismo ancho que el móvil de la app de Espacio vacío: las dos páginas son
-     la misma clase de pieza y con aparatos de distinto tamaño no se leerían
-     como del mismo sitio.
-     OJO AL TOCARLO: todo lo de dentro va en `cqw`, o sea en porcentaje de este
-     número, así que este ancho ES el tamaño de la letra de la app. Si se
-     encoge el marco, encoge el texto; lo que hay que ajustar entonces es la
-     escala tipográfica de abajo, no el aparato. */
-  width: 330px;
-  padding: 10px;
-  border-radius: 44px;
-  background: #1b1b1d;
-}
-/* La app es negra y el marco también, así que en modo oscuro el aparato se
-   deshace contra el papel. Un hilo claro alrededor le devuelve el canto.
-   Va como sombra y no como borde para no cambiar la medida del marco: un borde
-   engordaría la caja y movería la pantalla de dentro. */
-[data-theme="dark"] .am-movil {
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.32);
+  --movil-ancho: 330px;
+  /* La proporción de las capturas, 645 × 1398, y el negro de la app, que es
+     negra en los dos modos del sitio. */
+  --movil-proporcion: 645 / 1398;
+  --movil-pantalla: #000;
+  --movil-notch-ancho: 30cqw;
+  --movil-notch-alto: 4.8cqw;
+  --movil-notch-radio: 2.6cqw;
+  /* Por encima de la ficha de una obra y del fondo de pantalla, que se abren
+     como capas sobre la app. */
+  --movil-notch-z: 20;
 }
 
-/* Se llama «hueco del móvil» y no «pantalla» porque en esta misma página hay ya
+/* La pantalla conserva su clase porque los tokens de la app viven en ella. Se
+   llama «hueco del móvil» y no «pantalla» porque en esta misma página hay ya
    una `.am-pantalla`: la de la tira de capturas de la app. Dos componentes
    distintos con la misma clase acaban pisándose —y se pisaron: el fondo negro
    que la tira le pone a sus capturas se lo tragaba también el logotipo de
    aquí—, así que cada uno lleva su propio nombre. */
-.am-movil-hueco {
-  position: relative;
-  /* La proporción de las capturas: 645 × 1398. */
-  aspect-ratio: 645 / 1398;
-  border-radius: 34px;
-  overflow: hidden;
-  /* Negro fijo y no el papel de la página: es la pantalla de la app, y la app
-     es negra en los dos modos del sitio. */
-  background: #000;
-  /* LA PIEZA CLAVE del apartado: al declararlo contenedor de consulta, `cqw`
-     pasa a medir el uno por ciento del ancho del MÓVIL y no de la ventana.
-     Todo lo de dentro va en esa unidad, así que la pantalla escala entera
-     —tipografía, márgenes y botones a la vez— igual que una app al cambiar de
-     aparato. Con píxeles habría que reescribir cada medida en cada tamaño; con
-     porcentajes, el texto no escalaría con lo demás. */
-  container-type: inline-size;
-}
 
 /* LOS TOKENS VIVEN AQUÍ, en la pantalla del aparato, y no en la capa de la app.
    El motivo es práctico: la ficha de una obra y el fondo de pantalla se abren
@@ -120,27 +106,6 @@
   --tinta: linear-gradient(115deg, #3d00e4, #ff1597);
 }
 
-/* El notch, colgando del borde de arriba, del color del marco. Cae por delante
-   de la app pero no de sus pulsaciones: ahí arriba no hay nada que tocar.
-   El z-index es el más alto de toda la pantalla, y tiene que serlo: el notch es
-   del APARATO, no de la app, así que nada de lo que la app abra encima puede
-   taparlo. Estaba por debajo de las hojas, y al abrir un fondo de pantalla
-   desaparecía —el teléfono perdía la muesca—. */
-.am-movil-notch {
-  position: absolute;
-  z-index: 20;
-  left: 50%;
-  top: 0;
-  transform: translateX(-50%);
-  /* Más corto y más estrecho que antes. No es un capricho de dibujo: debajo, a
-     11 cqw del borde, empieza el isotipo de cabecera, y con el notch anterior
-     —40 de ancho y 6 de alto— los dos se rozaban. */
-  width: 30cqw;
-  height: 4.8cqw;
-  border-radius: 0 0 2.6cqw 2.6cqw;
-  background: #1b1b1d;
-  pointer-events: none;
-}
 
 /* ── La app ────────────────────────────────────────────────────────────────
 
@@ -730,7 +695,7 @@
     gap: 24px;
   }
   .am-movil {
-    width: min(330px, 82vw);
+    --movil-ancho: min(330px, 82vw);
   }
   .am-proto-mandos {
     flex: 0 0 auto;
