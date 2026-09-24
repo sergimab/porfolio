@@ -75,14 +75,6 @@ const CORTES = [
   { px: 560, es: "Lo que se arrastra pasa a menú", en: "What drags becomes a menu" },
 ];
 
-// Las tres duraciones, con su curva. Las dos cortas salen suave; la de bucle va
-// lineal, porque cualquier aceleración delata el punto donde vuelve a empezar.
-const TIEMPOS = [
-  { dur: "0.2s", curva: "ease-out", etiqueta: "0,2 s", es: "Un cambio de color", en: "A colour change" },
-  { dur: "0.4s", curva: "ease-out", etiqueta: "0,3 – 0,45 s", es: "Algo que se mueve o crece", en: "Something that moves or grows" },
-  { dur: "7s", curva: "linear", etiqueta: "7 s +", es: "Lo que respira en bucle", en: "Anything breathing on a loop" },
-];
-
 // Los cinco momentos de cualquier pieza que se pueda tocar. Se pintan a la vez
 // y quietos, que es la única manera de compararlos: de uno en uno y con el
 // ratón encima, nunca se ven dos juntos.
@@ -323,24 +315,6 @@ export default function Muestrario() {
                 <LangText es="Botón" en="Button" />
               </span>
               <span className="sd-estado-nombre"><LangText es={e.es} en={e.en} /></span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Movimiento ──────────────────────────────────────────────────── */}
-      <section className="sd-seccion">
-        <h3 className="sd-rotulo"><LangText es="Movimiento" en="Motion" /></h3>
-        {/* Las tres duraciones, corriendo. Un número de segundos no dice nada
-            hasta que se ve al lado de otro. */}
-        <div className="sd-tiempos">
-          {TIEMPOS.map(t => (
-            <div className="sd-tiempo" key={t.dur}>
-              <span className="sd-tiempo-pista" style={{ ["--sd-dur" as string]: t.dur, ["--sd-curva" as string]: t.curva }}>
-                <span className="sd-tiempo-bola" />
-              </span>
-              <span className="sd-tiempo-px">{t.etiqueta}</span>
-              <span className="sd-tiempo-de"><LangText es={t.es} en={t.en} /></span>
             </div>
           ))}
         </div>

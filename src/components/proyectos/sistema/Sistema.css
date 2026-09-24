@@ -74,8 +74,7 @@
 }
 .sd-hueco-px,
 .sd-corte-px,
-.sd-trazo-px,
-.sd-tiempo-px {
+.sd-trazo-px {
   font-family: var(--font-geist-mono), monospace;
   font-size: 13px;
   color: var(--foreground);
@@ -167,52 +166,6 @@
   font-size: 12px;
   line-height: 1.5;
   color: var(--muted);
-}
-
-/* ── Las tres duraciones, corriendo ──────────────────────────────────────── */
-.sd-tiempos {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-  margin-top: 28px;
-}
-.sd-tiempo {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
-  font-size: 12px;
-  line-height: 1.5;
-  color: var(--muted);
-}
-.sd-tiempo-pista {
-  position: relative;
-  width: 100%;
-  height: 32px;
-  border-radius: var(--r-pieza);
-  background: var(--surface);
-  overflow: hidden;
-}
-/* Va de un filo al otro animando `left`, y no con un desplazamiento en
-   porcentaje: el porcentaje se resuelve contra el ancho DE LA BOLA, así que la
-   bola se iba fuera de la pista y casi no se veía. */
-.sd-tiempo-bola {
-  position: absolute;
-  top: 50%;
-  width: 14px;
-  height: 14px;
-  margin-top: -7px;
-  border-radius: var(--r-pastilla);
-  background: var(--foreground);
-  animation: sd-recorrido var(--sd-dur) var(--sd-curva) infinite alternate;
-}
-@keyframes sd-recorrido {
-  from { left: 6px; }
-  to   { left: calc(100% - 20px); }
-}
-/* La regla de fondo del sitio, cumplida también aquí. */
-@media (prefers-reduced-motion: reduce) {
-  .sd-tiempo-bola { animation: none; }
 }
 
 /* ── El abanico de tarjetas, reducido ────────────────────────────────────────
@@ -977,7 +930,6 @@
      ahí se prefiere una fila de 3+2+2 por medio de `auto-fit`. */
   .sd-huecos,
   .sd-cortes,
-  .sd-tiempos,
     .sd-estados {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -988,9 +940,6 @@
   .sd-base,
   .sd-trazos,
   .sd-huecos,
-  .sd-tiempos {
-    grid-template-columns: 1fr;
-  }
   /* El abanico ya viene en cuadrícula de dos desde el propio componente. */
   .sd-abanico {
     height: auto;
