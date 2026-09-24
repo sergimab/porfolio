@@ -168,6 +168,50 @@
   color: var(--muted);
 }
 
+/* ── El conmutador de repartos ───────────────────────────────────────────────
+   Tres piezas distintas de mirar pero una sola de código, así que van en una
+   ficha y se eligen con un botón. Los botones son pastillas con los mismos
+   estados que el resto del sitio: filo en reposo, relleno el elegido. */
+.sd-conmutador {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+.sd-botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.sd-boton {
+  padding: 8px 18px;
+  border: 1px solid var(--foreground);
+  border-radius: var(--r-pastilla);
+  background: none;
+  color: var(--foreground);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.sd-boton.es-activo {
+  background: var(--foreground);
+  color: var(--background);
+}
+@media (hover: hover) {
+  .sd-boton:not(.es-activo):hover {
+    background: var(--foreground);
+    color: var(--background);
+  }
+}
+/* Lo que cambia en este reparto y no en los otros. Va debajo de la muestra
+   porque es el pie de lo que se está viendo, no de la pieza entera. */
+.sd-conmutador-pie {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
 /* ── El abanico de tarjetas, reducido ────────────────────────────────────────
    Es el componente de verdad, con su abanico y su empuje al pasar por encima,
    metido en un marco de muestra que mide la mitad que la home. Se reduce con

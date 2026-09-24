@@ -21,6 +21,13 @@ import Pieza from "./Pieza";
 
 // Tres tarjetas genéricas para la muestra, cada una con el tono de una
 // disciplina distinta: es lo que hace ver que el aro es lo que las separa.
+// Los tres repartos que tiene el banner, con lo que cambia en cada uno.
+const REPARTOS = [
+  { n: 2, es: "Dos", en: "Two", de: "Hasta tres, los banners se reparten el ancho de la página: el alto es fijo y el ancho, lo que toque.", deEn: "Up to three, banners share the page width: height is fixed and width is whatever is left." },
+  { n: 3, es: "Tres", en: "Three", de: "Tres es el tope del reparto. El alto de la portada no cambia con el número, y por eso uno solo y tres seguidos se leen como la misma pieza.", deEn: "Three is the limit. Cover height does not change with the count, which is why one and three read as the same piece." },
+  { n: 6, es: "Más de tres", en: "More than three", de: "De cuatro en adelante todos miden lo mismo y la fila se desplaza de lado, con su barra a la vista. Repartir seis en el ancho de una página los dejaría en nada.", deEn: "From four on, all are the same width and the row scrolls sideways with a visible bar. Sharing six across a page would leave them as nothing." },
+];
+
 const CARDS = [
   { id: "card-1", title: "Nombre del proyecto", titleEn: "Project name", hue: 175 },
   { id: "card-2", title: "Nombre del proyecto", titleEn: "Project name", hue: 330 },
@@ -32,6 +39,9 @@ export default function Organismos() {
   // pieza en las catorce páginas y lo único que la diferencia es el tono: verlo
   // cambiar es entender de golpe qué parte del sistema es el color.
   const [cat, setCat] = useState(CATEGORIAS.find(c => c.id === "uiux") ?? CATEGORIAS[0]);
+  // Cuántos banners se enseñan. Son tres piezas distintas de mirar pero una
+  // sola de código, así que van en una ficha con un conmutador y no en tres.
+  const [reparto, setReparto] = useState(2);
 
   return (
     <>
@@ -96,33 +106,36 @@ export default function Organismos() {
           </div>
         </Pieza>
         <Pieza
-          nombre="Banner de destacados · dos"
-          nombreEn="Featured banner · two"
-          de="Otra pieza, no la tarjeta: esto solo aparece en «Proyectos recomendados», al pie de la home y de cada página de proyecto. Es apaisado, con la portada de alto fijo, el filo del color de su categoría y la banda con su degradado debajo. Hasta tres, los banners se reparten el ancho de la página."
-          deEn="A different piece, not the card: this only appears under «Featured projects», at the foot of the home and of every project page. It is landscape, with a fixed-height cover, a border in its category colour and the gradient band below. Up to three, banners share the page width."
+          nombre="Banner de destacados"
+          nombreEn="Featured banner"
+          de="Otra pieza, no la tarjeta: esto solo aparece en «Proyectos recomendados», al pie de la home y de cada página de proyecto. Es apaisado, con la portada de alto fijo, el filo del color de su categoría y la banda con su degradado debajo. Lo que cambia con el número es el reparto, y por eso se elige aquí."
+          deEn="A different piece, not the card: this only appears under «Featured projects», at the foot of the home and of every project page. It is landscape, with a fixed-height cover, a border in its category colour and the gradient band below. What changes with the count is how they share the width, which is why it is picked here."
           ancha
         >
-          <Recomendados ids={[]} muestra={2} titulo={{ es: "", en: "" }} className="sd-sin-titulo" />
-        </Pieza>
-
-        <Pieza
-          nombre="Banner de destacados · tres"
-          nombreEn="Featured banner · three"
-          de="Tres es el tope del reparto. El alto de la portada no cambia con el número, y por eso uno solo y tres seguidos se leen como la misma pieza."
-          deEn="Three is the limit of the share-out. Cover height does not change with the count, which is why one card and three read as the same piece."
-          ancha
-        >
-          <Recomendados ids={[]} muestra={3} titulo={{ es: "", en: "" }} className="sd-sin-titulo" />
-        </Pieza>
-
-        <Pieza
-          nombre="Banner de destacados · más de tres"
-          nombreEn="Featured banner · more than three"
-          de="De cuatro en adelante todos miden lo mismo y la fila se desplaza de lado, con su barra a la vista. Repartir seis en el ancho de una página los dejaría en nada."
-          deEn="From four on, all banners are the same width and the row scrolls sideways with a visible bar. Sharing six across a page would leave them as nothing."
-          ancha
-        >
-          <Recomendados ids={[]} muestra={6} titulo={{ es: "", en: "" }} className="sd-sin-titulo" />
+          <div className="sd-conmutador">
+            <div className="sd-botones" role="group">
+              {REPARTOS.map(r => (
+                <button
+                  key={r.n}
+                  type="button"
+                  className={`sd-boton${r.n === reparto ? " es-activo" : ""}`}
+                  aria-pressed={r.n === reparto}
+                  onClick={() => setReparto(r.n)}
+                >
+                  <LangText es={r.es} en={r.en} />
+                </button>
+              ))}
+            </div>
+            <Recomendados
+              ids={[]}
+              muestra={reparto}
+              titulo={{ es: "", en: "" }}
+              className="sd-sin-titulo"
+            />
+            <span className="sd-conmutador-pie">
+              <LangText es={REPARTOS.find(r => r.n === reparto)!.de} en={REPARTOS.find(r => r.n === reparto)!.deEn} />
+            </span>
+          </div>
         </Pieza>
 
       </div>
