@@ -79,13 +79,13 @@
 }
 .ilu-divider {
   height: 1px;
-  background: var(--border);
+  background: var(--velo);
   margin-top: -8px;
 }
 
 /* ── Ilustraciones grandes (placeholder) ── */
 .ilu-frame {
-  border: 1px solid var(--border);
+  border: 1px solid var(--velo);
   border-radius: var(--r-pieza);
   background: var(--background);
   min-height: 168px;

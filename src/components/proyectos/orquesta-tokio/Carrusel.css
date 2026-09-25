@@ -79,7 +79,7 @@
   width: auto;
   border-radius: var(--r-pieza);
   /* Un gris mientras carga, para que el hueco no destelle en blanco. */
-  background: var(--surface);
+  background: var(--velo);
 }
 
 /* La tira de los posts del año pasado. Son cuadrados y no verticales, así que
@@ -172,7 +172,7 @@
   width: 100%;
   height: auto;
   border-radius: var(--r-pieza);
-  background: var(--surface);
+  background: var(--velo);
 }
 
 @media (max-width: 560px) {
@@ -205,7 +205,7 @@
   width: 100%;
   height: auto;
   border-radius: var(--r-pieza);
-  background: var(--surface);
+  background: var(--velo);
 }
 
 @media (max-width: 700px) {

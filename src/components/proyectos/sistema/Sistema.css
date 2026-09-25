@@ -48,37 +48,26 @@
   color: var(--foreground);
 }
 
-/* ── Los dos colores base ────────────────────────────────────────────────────
-   A pantalla partida, cada uno con el otro por encima: es lo que hacen los dos
-   modos del sitio, y verlos así ahorra la explicación. */
-.sd-base {
+/* ── LOS CUATRO COLORES ──────────────────────────────────────────────────────
+   El nombre va DENTRO del color, escrito con el contrario: es lo único que hay
+   que saber de cada uno y de paso la muestra demuestra que el par se lee. Sin
+   descripción al lado: un color se mira, no se explica. */
+.sd-colores {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
   margin-top: 28px;
 }
-.sd-base-color {
+.sd-color {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 24px;
-  border: 1px solid var(--border);
+  align-items: flex-end;
+  aspect-ratio: 1;
+  padding: 16px;
+  /* El filo, del color del propio nombre: sobre el papel oscuro un filo de velo
+     no se ve y Dark se quedaba en un hueco sin forma. */
+  border: 1px solid color-mix(in srgb, currentColor 38%, transparent);
   border-radius: var(--r-caja);
-}
-.sd-base-nombre {
-  font-size: 17px;
-  font-weight: 500;
-}
-.sd-base-color code {
-  font-family: var(--font-geist-mono), monospace;
-  font-size: 12px;
-  opacity: 0.75;
-}
-.sd-base-uso {
-  margin-top: 6px;
-  font-size: 12px;
-  line-height: 1.5;
-  opacity: 0.75;
+  font-size: 15px;
 }
 
 
@@ -357,7 +346,7 @@
   flex: 0 0 auto;
   width: 46px;
   height: 46px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--velo);
   border-radius: var(--r-pieza);
 }
 .sd-token-texto {
@@ -441,7 +430,7 @@
   flex-direction: column;
   gap: 4px;
   padding: 16px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--velo);
   border-radius: var(--r-caja);
   background: var(--background);
   font-size: 12px;
@@ -470,7 +459,7 @@
   align-items: baseline;
   gap: 16px;
   padding: 9px 0;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--velo);
 }
 .sd-escala li:last-child {
   border-bottom: 0;
@@ -599,7 +588,7 @@
   outline-offset: var(--foco-hueco);
 }
 .sd-estado-muestra.es-apagado {
-  border-color: var(--border);
+  border-color: var(--velo);
   color: var(--muted);
 }
 .sd-estado-nombre {
@@ -623,7 +612,7 @@
   align-items: flex-start;
   gap: 12px;
   padding: 18px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--velo);
   border-radius: var(--r-caja);
   background: var(--background);
   /* SIN ESTO LA COLUMNA CRECE. El mínimo de un elemento de cuadrícula es el de
@@ -655,7 +644,7 @@
 }
 .sd-fallos li {
   padding: 16px 18px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--velo);
   border-radius: var(--r-pieza);
   background: var(--background);
   font-size: 13px;
@@ -710,11 +699,13 @@
 .sd-nivel {
   margin-top: 56px;
 }
+/* EL MISMO TITULAR QUE «HABLEMOS» y que el saludo de «Sobre mí»: capitular
+   caligráfica y el resto en versales. Era el único sitio del sitio donde un
+   título de este nivel se escribía de otra manera. */
 .sd-rotulo {
   margin: 0 0 20px;
-  font-size: 22px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
+  font-size: 26px;
+  font-weight: 400;
   color: var(--foreground);
 }
 
@@ -782,7 +773,7 @@
   font-size: 13px;
 }
 .sd-toggle-idioma b { font-weight: 500; }
-.sd-toggle-idioma i { color: var(--border); font-style: normal; }
+.sd-toggle-idioma i { color: var(--velo); font-style: normal; }
 .sd-toggle-idioma span { color: var(--muted); }
 
 /* Las pestañas, con la de la izquierda unida a su caja. */
@@ -981,7 +972,7 @@
 }
 .sd-campo {
   height: 26px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--velo);
   border-radius: var(--r-pieza);
 }
 .sd-campo.es-alto {
@@ -1022,7 +1013,7 @@
   flex-direction: column;
   gap: 8px;
   padding: 14px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--velo);
   border-radius: var(--r-caja);
   background: var(--background);
 }
@@ -1035,9 +1026,9 @@
 }
 .sd-fila {
   padding: 12px 10px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--velo);
   border-radius: var(--r-pieza);
-  background: var(--surface);
+  background: var(--velo);
   font-size: 12px;
   text-align: center;
 }
@@ -1070,6 +1061,7 @@
   /* Las cuadrículas de muestras que van con las columnas dichas a mano bajan a
      dos, que es lo que cabe con una pieza legible. */
   .sd-cortes,
+  .sd-colores,
   .sd-estados {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1105,4 +1097,53 @@
     flex-direction: row;
     flex-wrap: wrap;
   }
+}
+
+
+/* ── EL PAPEL DEBAJO DE TODO ─────────────────────────────────────────────────
+   La trama animada del fondo pasa por detrás de la página entera, y sobre ella
+   una cifra de 12 o una línea de 1 píxel se pierden. Cada bloque —las muestras,
+   los esquemas, las listas— va sobre papel opaco con su filo, que es el mismo
+   trato que ya tenían las fichas del muestrario. Así no hay nada en la página
+   que compita con el fondo: o está sobre papel, o es el fondo. */
+.sd-letras,
+.sd-radios,
+.sd-cortes,
+.sd-trazos,
+.sd-estados,
+.sd-espacio,
+.sd-plano,
+.sd-anidado,
+.sd-escala {
+  padding: 18px;
+  border: 1px solid var(--velo);
+  border-radius: var(--r-caja);
+  background: var(--background);
+  box-sizing: border-box;
+}
+/* Las que ya traían relleno propio no lo duplican. */
+.sd-escala {
+  padding: 8px 18px;
+}
+.sd-anidado {
+  align-items: flex-start;
+}
+/* Lo que va suelto entre bloques —los títulos de apartado, el rótulo pequeño,
+   la regla del redondeo y los pies— también necesita su papel. Va en línea y
+   con el relleno justo, para que el papel se ciña al texto y no abra una caja
+   donde no hace falta. */
+.sd-rotulo,
+.sd-nota,
+.sd-conmutador-pie,
+.sd-subrotulo,
+.sd-regla {
+  /* En bloque y ceñido al texto. Con `inline-block` el papel se ajustaba igual
+     pero el título y lo que venía detrás se ponían en el mismo renglón. */
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  padding: 6px 12px;
+  margin-left: -12px;
+  border-radius: var(--r-pieza);
+  background: var(--background);
 }

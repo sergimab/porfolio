@@ -44,7 +44,7 @@
   padding: 0;
   border: 0;
   border-radius: var(--r-pieza);
-  background: var(--surface);
+  background: var(--velo);
   overflow: hidden;
   cursor: pointer;
   /* LA FLOTACIÓN. Va en el botón y el zoom en la imagen de dentro, a propósito:

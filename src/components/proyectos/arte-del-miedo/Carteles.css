@@ -13,7 +13,7 @@
   overflow: hidden;
   /* El fondo mientras carga, para que el hueco no destelle en blanco antes de
      aparecer la imagen. */
-  background: var(--surface);
+  background: var(--velo);
   line-height: 0;
 }
 

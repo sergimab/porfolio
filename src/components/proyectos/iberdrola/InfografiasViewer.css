@@ -179,7 +179,7 @@
   width: 100%;
   padding: 14px 20px;
   border: none;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--velo);
   background: var(--background);
   color: var(--foreground);
   font-size: 13px;

@@ -21,24 +21,17 @@ import { paletaLegible, paletaClara, degradadoLegible, degradadoClaro, CAPSULE_D
 
 // Los cinco tokens de color. El texto de cada uno explica para qué sirve, que
 // es lo que de verdad hace falta saber: el valor se ve al lado.
-// LOS DOS COLORES BASE, que son el sitio entero. Dark y Light no son «el fondo»
-// y «el texto»: son los dos colores en los que está hecha la web, y lo que
-// cambia al pasar de un modo a otro es cuál de los dos hace de papel y cuál de
-// tinta. Por eso se enseñan juntos y con su valor delante.
-const BASE = [
-  { nombre: "Dark", valor: "#1C1A16", contra: "#F2EEE2", es: "Papel en modo oscuro, tinta en modo claro", en: "Paper in dark mode, ink in light mode" },
-  { nombre: "Light", valor: "#F2EEE2", contra: "#1C1A16", es: "Tinta en modo oscuro, papel en modo claro", en: "Ink in dark mode, paper in light mode" },
-];
-
-// Los tres que derivan de esos dos. Cada uno tiene un trabajo distinto y por eso
-// son tres y no uno: uno es texto, otro es línea y el tercero es relleno.
-const TOKENS = [
-  { v: "--muted", es: "Apagado", en: "Muted", uso: { es: "Lo secundario: la hora, los pies, las etiquetas.", en: "Secondary matter: the clock, captions, labels." } },
-  { v: "--border", es: "Filo", en: "Border", uso: { es: "Línea. Los 26 sitios donde algo separa sin pesar.", en: "A line. The 26 places where something separates without weight." } },
-  // Contado uno a uno: de sus ocho usos fuera de esta página, los ocho son el
-  // hueco donde va una imagen. Es lo que hace de verdad, y el muestrario tiene
-  // que decir eso y no lo que nos gustaría que hiciera.
-  { v: "--surface", es: "Hueco", en: "Slot", uso: { es: "Relleno. Las 8 veces que se ve el sitio de una imagen que aún no está.", en: "A fill. The 8 times you see where an image is not yet." } },
+// LOS CUATRO COLORES DEL SITIO, con el nombre escrito dentro de cada uno.
+//
+// Dark y Light son los dos en los que está hecha la web, y lo que cambia al
+// pasar de modo es cuál de los dos hace de papel y cuál de tinta. Apagado y
+// Velo derivan de ellos: uno escribe lo secundario y el otro traza la línea que
+// separa y rellena lo que todavía no está.
+const COLORES = [
+  { nombre: "Dark", v: "#1C1A16", contra: "#F2EEE2" },
+  { nombre: "Light", v: "#F2EEE2", contra: "#1C1A16" },
+  { nombre: "Apagado", v: "var(--muted)", contra: "var(--background)" },
+  { nombre: "Velo", v: "var(--velo)", contra: "var(--foreground)" },
 ];
 
 // La escala de letra que se usa de verdad, contada de la hoja de estilos.
@@ -92,41 +85,19 @@ export default function Muestrario() {
       <RotuloSeccion className="sd-nivel" es="Átomos" en="Atoms" />
       {/* ── Color ───────────────────────────────────────────────────────── */}
       <section className="sd-seccion">
-        <h3 className="sd-rotulo"><LangText es="Color" en="Colour" /></h3>
+        <h3 className="sd-rotulo"><DropcapTitle es="Color" en="Colour" /></h3>
         <TextoPapel>
           <p>
             <LangText
-              es="**Dos colores y tres derivados.** La web entera está hecha en Dark y Light, y lo que cambia al pasar de modo no es la paleta sino cuál de los dos hace de papel y cuál de tinta. De ahí salen los otros tres, que no son tonos sino trabajos: uno escribe, otro traza una línea y el tercero rellena."
-              en="**Two colours and three derived.** The whole site is made of Dark and Light, and what changes between modes is not the palette but which of the two is the paper and which the ink. The other three come from those, and they are not shades but jobs: one writes, one draws a line and one fills."
+              es="**Cuatro colores y no hay más.** La web entera está hecha en Dark y Light, y lo que cambia al pasar de modo no es la paleta sino cuál de los dos hace de papel y cuál de tinta. Los otros dos derivan de ellos, y no son tonos sino trabajos: **Apagado** escribe lo secundario y **Velo** traza la línea que separa y rellena lo que todavía no está."
+              en="**Four colours and no more.** The whole site is made of Dark and Light, and what changes between modes is not the palette but which of the two is the paper and which the ink. The other two come from those, and they are not shades but jobs: **Muted** writes the secondary matter and **Veil** draws the line that separates and fills what is not there yet."
             />
           </p>
         </TextoPapel>
-        <div className="sd-base">
-          {BASE.map(b => (
-            <div
-              className="sd-base-color"
-              key={b.nombre}
-              /* El contrario del propio color, en la letra Y EN EL FILO: es
-                 justo lo que cuenta la muestra, que los dos se leen siempre el
-                 uno sobre el otro. Con el filo gris de antes, la muestra
-                 hablaba de un tercer color que aquí no pinta nada. */
-              style={{ background: b.valor, color: b.contra, borderColor: b.contra }}
-            >
-              <span className="sd-base-nombre">{b.nombre}</span>
-              <code>{b.valor}</code>
-              <span className="sd-base-uso"><LangText es={b.es} en={b.en} /></span>
-            </div>
-          ))}
-        </div>
-        <div className="sd-tokens">
-          {TOKENS.map(t => (
-            <div className="sd-token" key={t.v}>
-              <span className="sd-token-muestra" style={{ background: `var(${t.v})` }} />
-              <span className="sd-token-texto">
-                <strong><LangText es={t.es} en={t.en} /></strong>
-                <code>{t.v}</code>
-                <span className="sd-token-uso"><LangText es={t.uso.es} en={t.uso.en} /></span>
-              </span>
+        <div className="sd-colores">
+          {COLORES.map(c => (
+            <div className="sd-color" key={c.nombre} style={{ background: c.v, color: c.contra }}>
+              <span>{c.nombre}</span>
             </div>
           ))}
         </div>
@@ -176,7 +147,7 @@ export default function Muestrario() {
 
       {/* ── Tipografía ──────────────────────────────────────────────────── */}
       <section className="sd-seccion">
-        <h3 className="sd-rotulo"><LangText es="Tipografía" en="Typography" /></h3>
+        <h3 className="sd-rotulo"><DropcapTitle es="Tipografía" en="Typography" /></h3>
         <TextoPapel>
           <p>
             <LangText
@@ -218,7 +189,7 @@ export default function Muestrario() {
 
       {/* ── Espacio y forma ─────────────────────────────────────────────── */}
       <section className="sd-seccion">
-        <h3 className="sd-rotulo"><LangText es="Espacio" en="Space" /></h3>
+        <h3 className="sd-rotulo"><DropcapTitle es="Espacio" en="Space" /></h3>
         {/* UN APARTADO DE VERDAD, ACOTADO. Los tres huecos no se entienden
             sueltos: se entienden viendo dónde cae cada uno dentro de la misma
             página. Las tres medidas están dibujadas a su tamaño real. */}
@@ -251,7 +222,7 @@ export default function Muestrario() {
 
       {/* ── Forma ───────────────────────────────────────────────────────── */}
       <section className="sd-seccion">
-        <h3 className="sd-rotulo"><LangText es="Forma" en="Shape" /></h3>
+        <h3 className="sd-rotulo"><DropcapTitle es="Forma" en="Shape" /></h3>
         <p className="sd-regla">
           <LangText
             es="El continente es más redondo que lo que contiene"
@@ -279,7 +250,7 @@ export default function Muestrario() {
 
       {/* ── Rejilla ─────────────────────────────────────────────────────── */}
       <section className="sd-seccion">
-        <h3 className="sd-rotulo"><LangText es="Rejilla" en="Grid" /></h3>
+        <h3 className="sd-rotulo"><DropcapTitle es="Rejilla" en="Grid" /></h3>
         {/* COTAS, COMO EN UN PLANO. La medida va escrita sobre la línea que la
             mide, no en un párrafo aparte: es la manera de que se entienda de
             qué distancia se está hablando sin tener que decirlo. */}
@@ -316,7 +287,7 @@ export default function Muestrario() {
 
       {/* ── Trazo ───────────────────────────────────────────────────────── */}
       <section className="sd-seccion sd-atomo">
-        <h3 className="sd-rotulo"><LangText es="Trazo" en="Stroke" /></h3>
+        <h3 className="sd-rotulo"><DropcapTitle es="Trazo" en="Stroke" /></h3>
         {/* Dos líneas y sus medidas. El medio píxel de diferencia no se explica,
             se pone una encima de otra y se ve. */}
         <div className="sd-trazos">
@@ -335,7 +306,7 @@ export default function Muestrario() {
 
       {/* ── Estados ─────────────────────────────────────────────────────── */}
       <section className="sd-seccion">
-        <h3 className="sd-rotulo"><LangText es="Estados" en="States" /></h3>
+        <h3 className="sd-rotulo"><DropcapTitle es="Estados" en="States" /></h3>
         <div className="sd-estados">
           {ESTADOS.map(e => (
             <div className="sd-estado" key={e.clase}>

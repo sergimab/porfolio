@@ -58,7 +58,7 @@
   flex-direction: column;
   gap: 4px;
   padding: 16px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--velo);
   margin: 0 -1px -1px 0;
   background: var(--background);
 }
@@ -77,14 +77,14 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--velo);
 }
 .ev-sd-tipos li {
   display: flex;
   align-items: center;
   gap: 24px;
   padding: 14px 0;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--velo);
 }
 /* La muestra va con la tipografía de la app y a su tamaño real, que es de lo
    que va este apartado. */
@@ -154,7 +154,7 @@
   /* Fondo blanco fijo: es la pantalla de la app, que es blanca en los dos modos
      del sitio, y las piezas están pensadas contra ese blanco. */
   background: #fff;
-  border: 1px solid var(--border);
+  border: 1px solid var(--velo);
 }
 /* El forro pone el margen lateral de la app —el mismo token—, así que la pieza
    se ve con el aire que tiene dentro de una pantalla. */

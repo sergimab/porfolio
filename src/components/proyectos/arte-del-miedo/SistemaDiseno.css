@@ -52,7 +52,7 @@
   flex-direction: column;
   gap: 5px;
   padding: 16px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--velo);
   margin: 0 -1px -1px 0;
   background: var(--background);
 }
@@ -81,7 +81,7 @@
   padding: 0;
 }
 .am-sd-tipos {
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--velo);
   background: var(--background);
 }
 .am-sd-tipos li {
@@ -89,7 +89,7 @@
   align-items: center;
   gap: 24px;
   padding: 16px 0;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--velo);
 }
 .am-sd-tipo-datos {
   display: flex;
@@ -191,7 +191,7 @@
      en cambio, es el del portfolio: el marco es de la ficha y lo de dentro es
      la pieza. */
   background: #000;
-  border: 1px solid var(--border);
+  border: 1px solid var(--velo);
   color: #fff;
   font-family: var(--font-raleway), system-ui, sans-serif;
 }

@@ -11,8 +11,13 @@
      etiquetas de los programas, los valores de las tintas... trece sitios en
      una sola página, todos el mismo color. */
   --muted: #6d6962;
-  --border: #d9d4c5;
-  --surface: #e8e3d5;
+  /* ── EL VELO ───────────────────────────────────────────────────────────────
+     Un solo paso desde el papel, y hace los dos trabajos que antes hacían dos
+     tokens: la línea que separa sin pesar y el relleno de lo que todavía no
+     está —el hueco de una imagen mientras carga—. Eran «filo» y «relieve», con
+     dos valores a un pelo el uno del otro, y esa diferencia no la veía nadie:
+     lo único que hacía era obligar a elegir entre dos grises cada vez. */
+  --velo: #d9d4c5;
 
   /* ── LAS ESQUINAS ──────────────────────────────────────────────────────────
      Tres, y con una regla que se puede decir en una frase: EL CONTINENTE ES MÁS
@@ -51,8 +56,7 @@
   /* Sobre papel oscuro el gris tiene que ACLARARSE, no oscurecerse. Aquí el de
      antes ya cumplía justo (4,8:1); este deja algo más de margen: 5,1:1. */
   --muted: #8f8b85;
-  --border: #2e2b24;
-  --surface: #252219;
+  --velo: #2e2b24;
 }
 
 /* EL ARO, DE SERIE. `:focus-visible` solo se enciende cuando el navegador

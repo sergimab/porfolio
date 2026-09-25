@@ -68,7 +68,7 @@
   border: 1px solid hsl(var(--rec-hue, 142) 55% 45%);
   border-radius: var(--r-caja);
   overflow: hidden;
-  background: var(--surface);
+  background: var(--velo);
   text-decoration: none;
 }
 /* AL ACERCARSE SOLO SE MUEVE LA FOTO. La tarjeta no se levanta ni proyecta
@@ -93,7 +93,7 @@
      convierte en una franja ancha. */
   height: 240px;
   overflow: hidden;
-  background: var(--surface);
+  background: var(--velo);
 }
 .rec-img img {
   display: block;

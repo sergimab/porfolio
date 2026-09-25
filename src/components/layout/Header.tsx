@@ -170,7 +170,7 @@ export default function Header() {
         </div>
 
         {/* Divider — hidden on mobile */}
-        <div className="header-divider" style={{ width: "1px", height: "16px", background: "var(--border)" }} aria-hidden="true" />
+        <div className="header-divider" style={{ width: "1px", height: "16px", background: "var(--velo)" }} aria-hidden="true" />
 
         {/* Theme + language toggles grouped */}
         <div className="header-toggles">
@@ -256,7 +256,7 @@ export default function Header() {
           >
             ES
           </button>
-          <span style={{ color: "var(--border)", fontSize: "12px", lineHeight: 1 }}>/</span>
+          <span style={{ color: "var(--velo)", fontSize: "12px", lineHeight: 1 }}>/</span>
           <button
             onClick={() => changeLang("en")}
             aria-label="English"
