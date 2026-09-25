@@ -56,7 +56,11 @@ const PLATO = "/elysium/monochrome_studio_03.hdr";
 export const LIENZO_BASE = {
   fusion: 0.002,
   organico: 0,
-  suavidad: 2.6,
+  // Al tope. Redondea mucho la silueta y el volumen, que es lo que da el aire
+  // líquido; en una figura de pocos brazos llega a cerrarle los huecos y sale
+  // como una hoja maciza, y eso es lo que hay: es un mando de acabado y esa es
+  // su punta.
+  suavidad: 8,
   volumen: 0.3,
   giroLuz: -80,
 };
@@ -324,10 +328,26 @@ vec2 world(vec2 fc){ return uCenter+(fc-.5*uN)*pj(); }
 
     // ── La pieza ──
     const MATERIALES = {
+      // EL CROMO LÍQUIDO. Un espejo casi perfecto y sin color propio, que es lo
+      // que pedía la referencia: la pieza no tiñe, devuelve el plató, y el único
+      // color que aparece es el arcoíris del canto.
+      //
+      // Cuatro cosas, y cada una hace algo distinto:
+      //  · `roughness` muy baja —0,015— para que el reflejo salga nítido. Con
+      //    0,06 el plató llegaba emborronado y la pieza se leía como acero
+      //    cepillado, no como cromo.
+      //  · el color casi blanco: un metal multiplica lo que refleja por su
+      //    color, así que el azulado de antes teñía la habitación entera.
+      //  · la iridiscencia, MENOS cantidad pero con más índice y una película
+      //    más fina. Bajarla quita el tornasol del cuerpo —que era lo que
+      //    ensuciaba el blanco— y subir el índice lo concentra en el filo, que
+      //    es donde la referencia tiene sus destellos rojizos.
+      //  · `envMapIntensity` por encima de uno: los brillos de la referencia
+      //    están quemados, y con ganancia justa se quedaban en gris claro.
       cromo: new THREE.MeshPhysicalMaterial({
-        color: 0xe4ecf2, metalness: 1, roughness: 0.06,
-        iridescence: 0.55, iridescenceIOR: 1.35, iridescenceThicknessRange: [220, 420],
-        clearcoat: 1, clearcoatRoughness: 0.04,
+        color: 0xf7fafc, metalness: 1, roughness: 0.03,
+        iridescence: 0.32, iridescenceIOR: 1.9, iridescenceThicknessRange: [140, 300],
+        clearcoat: 1, clearcoatRoughness: 0.01, envMapIntensity: 0.85,
       }),
       cristal: new THREE.MeshPhysicalMaterial({
         color: 0xffffff, metalness: 0, roughness: 0.02, transmission: 1, thickness: 0.35,
