@@ -111,3 +111,14 @@ export function seleccionAlAzar(eras: readonly Era[]): Set<string> {
   }
   return puesta;
 }
+
+// Lo que pide el generador: la fracción marcada de cada disco, de 0 a 1, en el
+// orden de ERAS. Es el dato del gráfico —cada eje un álbum, cada valor su
+// porcentaje— y de él sale la figura entera.
+export function fraccionPorEra(
+  seleccion: Set<string>,
+  eras: readonly Era[]
+): number[] {
+  const cuenta = contarPorEra(seleccion, eras);
+  return eras.map((e) => cuenta[e] / CANCIONES[e].length);
+}

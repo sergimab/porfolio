@@ -388,18 +388,12 @@
    porcentaje, y un porcentaje contra un padre sin altura definida vale cero.
    Con el lienzo a cero, el mapa de altura se queda en un canvas de 0x0 y el
    navegador rechaza dibujar sobre él. */
-.simfinal-lienzo .lienzo-fluido {
+/* El símbolo llena su cuadrado y nada más. El lienzo del generador viene sin
+   papel ni filo propios, así que aquí no hay nada que desvestir. */
+.simfinal-simbolo {
+  display: block;
+  width: 100%;
   height: 100%;
-  /* El lienzo trae un margen superior pensado para cuando va dentro del scroll
-     de una página. Aquí sumaba 48px al alto y dejaba el marco rectangular, y la
-     figura se coloca dando por hecho que es cuadrado. */
-  margin-top: 0;
-}
-.simfinal-lienzo .lienzo-marco {
-  height: 100%;
-  background: none;
-  border: none;
-  border-radius: 0;
 }
 
 /* ── PROVISIONAL: el panel de mandos del generador ───────────────────────── */

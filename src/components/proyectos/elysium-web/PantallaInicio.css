@@ -183,17 +183,15 @@
   width: min(74vh, 74vw);
   aspect-ratio: 1 / 1;
 }
-.previo-lienzo .lienzo-fluido {
-  height: 100%;
-  margin-top: 0;
-}
-.previo-lienzo .lienzo-marco {
-  height: 100%;
-  background: none;
-  border: none;
-  border-radius: 0;
-}
 .previo-pie {
   display: flex;
   gap: 12px;
+}
+
+/* El símbolo del previo. El lienzo ya no trae papel ni filo propios, así que
+   solo hace falta decirle que llene su caja. */
+.previo-simbolo {
+  display: block;
+  width: 100%;
+  height: 100%;
 }

@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import LienzoMetal from "@/components/proyectos/elysium/LienzoMetal";
-import { ERAS, figuraDeEras } from "./simbolo";
-import { contarPorEra } from "./canciones";
-import { crearEstudioPortada } from "./estudioPortada";
+import LienzoGaga from "./LienzoGaga";
+import { ERAS } from "./simbolo";
+import { fraccionPorEra } from "./canciones";
 
 // La portada del disco con el símbolo dentro del hueco.
 //
@@ -27,31 +26,18 @@ import { crearEstudioPortada } from "./estudioPortada";
 // vuelve a medir en vez de andar cuadrando números a mano.
 const HUECO = { izq: 0.2233, arriba: 0.2267, ancho: 0.5467, alto: 0.5533 };
 
-// Cuánto ocupa la figura dentro del hueco. Alto: el símbolo es el sujeto de la
-// carátula, no un detalle dentro de la caja.
-const ENCAJE_PORTADA = 0.92;
-
-// El ancho de referencia del hueco, en píxeles de CSS, y los ajustes de
-// material medidos sobre él.
-//
-// Hacen falta porque `redondeo` y `suavidad` van en PÍXELES, no en fracciones:
-// el redondeo es un desenfoque y la suavidad, a qué distancia se toman las
-// muestras que dan la normal. En escritorio el hueco mide unos 260 px y en un
-// móvil 183, así que los mismos números pesan ahí un 40% más y se comen el
-// cuerpo de la pieza —el desenfoque baja la altura del campo, y sobre una cinta
-// de menos píxeles la baja proporcionalmente más—. Por eso el símbolo salía
-// deshilachado en móvil aunque la figura fuera idéntica.
-//
-// Escalándolos con el ancho real, el material se ve igual a cualquier tamaño.
-const ANCHO_BASE = 260;
-const REDONDEO_BASE = 2;
-const SUAVIDAD_BASE = 9;
+// LAS MEDIDAS EN PÍXELES SE FUERON CON EL MOTOR ANTERIOR. Aquel medía el
+// material en píxeles —el desenfoque, la distancia a la que se toma la normal—,
+// así que el mismo símbolo salía deshilachado en un hueco de móvil y entero en
+// uno de escritorio, y había que escalar cada número con el ancho real. El
+// generador de ahora trabaja en las coordenadas de la figura, no del lienzo: la
+// pieza se ve igual a cualquier tamaño y no hay nada que escalar.
 
 export default function Portada({ seleccion }: { seleccion: Set<string> }) {
-  // El ancho real del hueco, para escalar con él los ajustes que van en
-  // píxeles.
+  // El ancho real del hueco. Ya no escala ningún ajuste del material —el
+  // generador de ahora no mide en píxeles—, pero sí las sombras del CSS.
   const huecoRef = useRef<HTMLDivElement>(null);
-  const [ancho, setAncho] = useState(ANCHO_BASE);
+  const [ancho, setAncho] = useState(260);
   useEffect(() => {
     const el = huecoRef.current;
     if (!el) return;
@@ -62,15 +48,9 @@ export default function Portada({ seleccion }: { seleccion: Set<string> }) {
     obs.observe(el);
     return () => obs.disconnect();
   }, []);
-  const k = ancho / ANCHO_BASE;
 
-  // Más encaje que en la pantalla del trazado: aquí el símbolo va dentro de una
-  // caja y tiene que llenarla, mientras que allí va suelto sobre el universo y
-  // necesita aire alrededor.
-  const figura = useMemo(
-    () => figuraDeEras(contarPorEra(seleccion, ERAS), ENCAJE_PORTADA),
-    [seleccion]
-  );
+  const valores = useMemo(() => fraccionPorEra(seleccion, ERAS), [seleccion]);
+  const hay = valores.some((v) => v > 0);
 
   return (
     <div className="portada">
@@ -88,54 +68,22 @@ export default function Portada({ seleccion }: { seleccion: Set<string> }) {
       {/* El ancho real del hueco viaja al CSS como variable porque las sombras
           laterales van en PÍXELES —drop-shadow no entiende porcentajes— y sin
           escalarlas con el hueco, en móvil serían el doble de largas en
-          proporción. Es el mismo apaño que `k` hace con el material. */}
+          proporción. */}
       <div
         className="portada-hueco"
         ref={huecoRef}
         style={{ "--hueco": `${ancho}px` } as React.CSSProperties}
       >
-        {figura.length > 0 && (
-          <LienzoMetal
-            figura={figura}
-            interactivo={false}
-            // El plató de la portada, no el del espacio: un metal devuelve el
-            // color de lo que le rodea, así que para que la pieza pertenezca a
-            // la carátula hay que cambiarle la habitación, no el material.
-            entorno={crearEstudioPortada}
-            // Vidrio, pero conservando el tono neutro: los canales se separan
-            // lo justo para que el filo saque arcoíris sin teñir el cuerpo.
-            // Subiendo más, el color invade la superficie y la pieza deja de
-            // pertenecer a la carátula.
-            dispersion={0.015}
-            // Y CON líneas interiores, que es lo que de verdad distingue el
-            // vidrio del metal: un canto grueso de vidrio no devuelve un solo
-            // reflejo, devuelve el borde repetido hacia dentro porque el rayo
-            // rebota en la cara de atrás antes de salir. Tres es lo que cabe en
-            // un montante de este grosor; con más se apelotonan.
-            capas={3}
-            brillo={1.95}
-            grosorLibre
-            atraccion
-            suavizado={0}
-            suavidad={Math.max(3, Math.round(SUAVIDAD_BASE * k))}
-            // Contenido. Subirlo a 6,5 para fundir las uniones ROMPIÓ la
-            // figura: el desenfoque baja la altura del campo, las partes finas
-            // cayeron por debajo del umbral y la pieza salió a trozos. El
-            // desenfoque es acabado, no forma.
-            redondeo={REDONDEO_BASE * k}
-            // Las uniones se suavizan aquí, en la LUZ. El filo bajo quita el
-            // hilo duro que perfilaba cada tramo y hacía que un encuentro se
-            // leyera como dos piezas soldadas; el grano alto hace que una
-            // pendiente media incline menos, con lo que el pliegue de la unión
-            // se aplana y el brazo conserva su bombeo. Ninguno de los dos toca
-            // la geometría, así que no pueden partir nada.
-            filo={0.9}
-            grano={0.1}
-            // Y la tapa del campo. Es la que quita los valles de los cruces:
-            // dos trazos que se cruzan suman, el cruce sobresale por encima de
-            // los brazos y esa cima trae sus laderas sombreadas. Ver `tapar` en
-            // el lienzo.
-            techo={0.6}
+        {hay && (
+          <LienzoGaga
+            valores={valores}
+            // Cromo y no cristal, y por una razón de montaje: el cristal
+            // refracta lo que tiene detrás, así que necesita un fondo opaco
+            // donde mirar, y ese fondo taparía el interior de la caja. El cromo
+            // sale con el fondo transparente y la pieza se recorta contra la luz
+            // del hueco, que es lo que la mete dentro de la carátula.
+            material="cromo"
+            className="portada-simbolo"
           />
         )}
       </div>

@@ -1,10 +1,9 @@
 "use client";
 
 import { useMemo } from "react";
-import LienzoMetal from "@/components/proyectos/elysium/LienzoMetal";
-import { ERAS, figuraDeEras } from "./simbolo";
-import { contarPorEra } from "./canciones";
-import { crearEstudioCromo } from "./estudioCromo";
+import LienzoGaga from "./LienzoGaga";
+import { ERAS } from "./simbolo";
+import { fraccionPorEra } from "./canciones";
 
 // PROVISIONAL — herramienta de taller.
 //
@@ -27,45 +26,17 @@ export default function PrevioSimbolo({
   onOtra: () => void;
   onCerrar: () => void;
 }) {
-  const figura = useMemo(
-    () => figuraDeEras(contarPorEra(seleccion, ERAS)),
-    [seleccion]
-  );
+  const valores = useMemo(() => fraccionPorEra(seleccion, ERAS), [seleccion]);
+  const hay = valores.some((v) => v > 0);
 
   return (
     <div className="previo" role="dialog" aria-label="Previsualización del símbolo">
       <div className="previo-lienzo">
-        {figura.length > 0 && (
-          // El mismo material que la pantalla del trazado, no el de la portada:
-          // lo que se está afinando aquí es la forma, y hay que verla en el
-          // sitio donde se va a ver primero.
-          <LienzoMetal
-            figura={figura}
-            interactivo={false}
-            entorno={crearEstudioCromo}
-            // Poca dispersión: el color lo pone ahora la película, no la
-            // separación de canales. Sumando las dos, el tornasol se ensucia.
-            dispersion={0.012}
-            capas={0}
-            brillo={1.7}
-            grosorLibre
-            atraccion
-            suavizado={0}
-            suavidad={9}
-            redondeo={2.5}
-            techo={0}
-            relieve={1.5}
-            // La película fina de los iconos que flotan: mismos números que
-            // ellos —iridiscencia entera, índice 2,25 y el grosor alto de su
-            // rango—, que es lo que hace que compartan tornasol y no solo
-            // habitación.
-            tornasol={0}
-            pelicula={340}
-            peliculaIOR={2.25}
-            saturacion={1}
-            planicie={0}
-            perfil={0.028}
-          />
+        {hay && (
+          // Girable, que es a lo que viene esta ventana: aquí se está mirando
+          // la FORMA, y una figura que solo se ve de frente esconde justo lo que
+          // hay que juzgar, el cuerpo de los brazos y cómo cierran las puntas.
+          <LienzoGaga valores={valores} girable className="previo-simbolo" />
         )}
       </div>
 

@@ -43,18 +43,13 @@
   aspect-ratio: 1 / 1;
   z-index: 2;
 }
-/* El lienzo trae papel, borde y un margen pensados para ir dentro del scroll de
-   una página. Aquí sobran los tres: lo que tiene que verse por detrás del metal
-   es el interior oscuro de la caja. */
-.portada-hueco .lienzo-fluido {
+/* El lienzo del símbolo llena el hueco y nada más: sin papel, sin filo y sin
+   margen. Lo que tiene que verse por detrás del cromo es el interior oscuro de
+   la caja, así que el canvas va con su fondo transparente. */
+.portada-simbolo {
+  display: block;
+  width: 100%;
   height: 100%;
-  margin-top: 0;
-}
-.portada-hueco .lienzo-marco {
-  height: 100%;
-  background: none;
-  border: none;
-  border-radius: 0;
 }
 
 /* ── La luz de detrás y el resplandor de la pieza ────────────────────────── */
