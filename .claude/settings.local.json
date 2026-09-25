@@ -417,7 +417,14 @@
       "Bash(python3 /tmp/fix.py)",
       "Bash(python3 /tmp/rec.py)",
       "Bash(python3 /tmp/f2.py)",
-      "Bash(python3 /tmp/f3.py)"
+      "Bash(python3 /tmp/f3.py)",
+      "Bash(awk 'NR>=1160 && NR<=1250' src/components/proyectos/elysium/LienzoMetal.tsx)",
+      "Bash(python3 /tmp/f4.py)",
+      "Bash(python3 /tmp/f5.py)",
+      "Bash(python3 /tmp/f6.py)",
+      "Bash(python3 /tmp/f7.py)",
+      "Bash(python3 /tmp/f8.py)",
+      "Bash(python3 /tmp/f9.py)"
     ],
     "defaultMode": "acceptEdits"
   }

@@ -226,11 +226,24 @@
 /* El símbolo estampado en la camiseta. Va en `multiply` para que no se pose
    como una pegatina: así la trama y las arrugas de la tela se ven a través de
    la tinta, como en una serigrafía de verdad. */
+/* El simbolo estampado en la camiseta.
+
+   ES LA PIEZA DE VERDAD, no un dibujo parecido: el mismo lienzo que la
+   caratula, con los mismos ajustes. Se entinta con `brightness(0)`, que lleva a
+   negro lo que tenga color y respeta lo transparente, asi que de el queda su
+   silueta exacta —cuerpo y agujas— en plano.
+
+   Y en `multiply`, para que no se pose como una pegatina: la trama y las
+   arrugas de la tela se ven a traves de la tinta, como en una serigrafia. */
 .disco-estampa {
   position: absolute;
   z-index: 2;
-  height: auto;
+  display: block;
   aspect-ratio: 1;
+  height: auto;
+  transform-origin: center;
+  /* En `multiply`, para que no se pose como una pegatina: la trama y las
+     arrugas de la tela se ven a traves de la tinta, como en una serigrafia. */
   mix-blend-mode: multiply;
   pointer-events: none;
 }

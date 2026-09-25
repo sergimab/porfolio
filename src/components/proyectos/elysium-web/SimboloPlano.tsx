@@ -4,79 +4,95 @@ import { useEffect, useMemo, useRef } from "react";
 import { ERAS, figuraDeEras } from "./simbolo";
 import { contarPorEra } from "./canciones";
 
-// EL SÍMBOLO EN PLANO, de una tinta.
+// EL SÍMBOLO EN PLANO, de una tinta, para lo que iría serigrafiado.
 //
-// El de la portada va con el lienzo de metal, que es un campo de distancia con
-// su material, su luz y su relieve. Aquí no hace falta nada de eso: esto es lo
-// que iría IMPRESO en una camiseta, y una serigrafía es una mancha de un color.
+// No es el lienzo de metal: es la MISMA FIGURA rellena de negro. El lienzo
+// levanta un campo, lo desenfoca y lo corta por un umbral, y todo eso se mide
+// en píxeles; a 50 px de estampa la figura se deshacía en manchas. Aquí se
+// rellena la geometría directamente, así que la forma es la misma a cualquier
+// tamaño y sale limpia.
 //
-// Se dibuja por el mismo camino que el metal —una bola por punto, con su radio,
-// y la unión de todas es la figura— pero rellenando en negro en vez de
-// levantando una normal. Sale la misma silueta exacta, que es lo que importa:
-// la camiseta enseña el símbolo que esa persona acaba de construir.
+// CADA TRAZO SE RELLENA COMO UN CUERPO, no se pinta como una línea. Se toma el
+// recorrido y se separa a un lado y a otro la mitad de su grosor en cada punto,
+// lo que da un contorno cerrado que se rellena de una vez. Dos consecuencias, y
+// las dos son las que se buscaban: el trazo tiene cuerpo —la extrusión, no un
+// hilo— y donde el grosor se va a cero el contorno se cierra en PUNTA, que es
+// como acaba una aguja y no como acaba una cápsula redondeada.
+const LADO = 512;
+const ENCAJE = 0.92;
+
 export default function SimboloPlano({
   seleccion,
   className,
   style,
-  tinta = "#111",
 }: {
   seleccion: Set<string>;
   className?: string;
   style?: React.CSSProperties;
-  /** El color de la tinta. Negro por defecto, que es como se imprime. */
-  tinta?: string;
 }) {
   const lienzo = useRef<HTMLCanvasElement>(null);
   const trazos = useMemo(
-    () => figuraDeEras(contarPorEra(seleccion, ERAS)),
+    () => figuraDeEras(contarPorEra(seleccion, ERAS), ENCAJE),
     [seleccion]
   );
 
   useEffect(() => {
     const c = lienzo.current;
-    if (!c) return;
-    const ctx = c.getContext("2d");
-    if (!ctx) return;
-
-    // El lienzo se dibuja al doble para que la silueta no salga con el filo
-    // dentado en pantallas normales; el tamaño de presentación lo pone el CSS.
-    const LADO = 512;
+    const ctx = c?.getContext("2d");
+    if (!c || !ctx || !trazos.length) return;
     c.width = LADO;
     c.height = LADO;
     ctx.clearRect(0, 0, LADO, LADO);
-    if (!trazos.length) return;
 
-    // La figura viene en el espacio en que la dejó el generador. Se mide su
-    // caja aquí en vez de dar por hecho un 0..1: así esto sigue funcionando
-    // aunque el encaje cambie de convenio.
+    // La caja de la figura se mide aquí en vez de dar por hecho un 0..1: así
+    // esto sigue valiendo aunque el encaje cambie de convenio.
     let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
     for (const t of trazos) {
       for (const p of t.puntos) {
-        x0 = Math.min(x0, p.x - p.r);
-        y0 = Math.min(y0, p.y - p.r);
-        x1 = Math.max(x1, p.x + p.r);
-        y1 = Math.max(y1, p.y + p.r);
+        x0 = Math.min(x0, p.x - p.r); y0 = Math.min(y0, p.y - p.r);
+        x1 = Math.max(x1, p.x + p.r); y1 = Math.max(y1, p.y + p.r);
       }
     }
-    const ancho = x1 - x0;
-    const alto = y1 - y0;
+    const ancho = x1 - x0, alto = y1 - y0;
     if (!(ancho > 0) || !(alto > 0)) return;
+    const k = (LADO * 0.94) / Math.max(ancho, alto);
+    const dx = (LADO - ancho * k) / 2 - x0 * k;
+    const dy = (LADO - alto * k) / 2 - y0 * k;
+    const X = (p: { x: number }) => p.x * k + dx;
+    const Y = (p: { y: number }) => p.y * k + dy;
 
-    // Encajada y centrada, con un pelo de aire para que las puntas no toquen el
-    // filo del lienzo.
-    const escala = (LADO * 0.94) / Math.max(ancho, alto);
-    const dx = (LADO - ancho * escala) / 2 - x0 * escala;
-    const dy = (LADO - alto * escala) / 2 - y0 * escala;
-
-    ctx.fillStyle = tinta;
+    ctx.fillStyle = "#000";
     for (const t of trazos) {
-      for (const p of t.puntos) {
-        ctx.beginPath();
-        ctx.arc(p.x * escala + dx, p.y * escala + dy, Math.max(p.r * escala, 0.5), 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-  }, [trazos, tinta]);
+      const ps = t.puntos;
+      if (ps.length < 2) continue;
 
+      // La normal en cada punto, para separar el contorno a los dos lados. En
+      // los extremos se toma la dirección del tramo que hay; dentro, la media
+      // de los dos, que es lo que evita el pellizco en las curvas cerradas.
+      const normal = (i: number): [number, number] => {
+        const a = ps[Math.max(0, i - 1)], b = ps[Math.min(ps.length - 1, i + 1)];
+        const ux = X(b) - X(a), uy = Y(b) - Y(a);
+        const d = Math.hypot(ux, uy) || 1;
+        return [-uy / d, ux / d];
+      };
+
+      ctx.beginPath();
+      for (let i = 0; i < ps.length; i++) {
+        const [nx, ny] = normal(i);
+        const r = ps[i].r * k;
+        const x = X(ps[i]) + nx * r, y = Y(ps[i]) + ny * r;
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      for (let i = ps.length - 1; i >= 0; i--) {
+        const [nx, ny] = normal(i);
+        const r = ps[i].r * k;
+        ctx.lineTo(X(ps[i]) - nx * r, Y(ps[i]) - ny * r);
+      }
+      ctx.closePath();
+      ctx.fill();
+    }
+  }, [trazos]);
+
+  if (!trazos.length) return null;
   return <canvas ref={lienzo} className={className} style={style} aria-hidden="true" />;
 }
