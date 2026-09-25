@@ -44,7 +44,7 @@ export default function SistemaLanding() {
           </div>
         </div>
 
-        <ProjectHeroTitle es="Sistema de diseño" en="Design system" />
+        <ProjectHeroTitle es="Web Portfolio" en="Portfolio website" />
 
         <div className="project-introrow">
           <p className="project-intro">

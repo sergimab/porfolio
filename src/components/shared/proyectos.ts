@@ -57,7 +57,7 @@ export const PROYECTOS: Record<string, Proyecto[]> = {
   ],
   fotografia: [
     { id: "f1", title: "Afiche Orquesta Tokio", titleEn: "Orquesta Tokio poster", cover: "/covers/orquesta-tokio.webp" },
-    { id: "f2", title: "Galería Orquesta Tokio", titleEn: "Orquesta Tokio gallery" },
+    { id: "f2", title: "Galería Orquesta Tokio", titleEn: "Orquesta Tokio gallery", cover: "/covers/orquesta-tokio-fotos.webp" },
   ],
   iberdrola: [
     { id: "i2", title: "Sistema de diseño", titleEn: "Design system" },
@@ -70,7 +70,7 @@ export const PROYECTOS: Record<string, Proyecto[]> = {
     { id: "u1", title: "Web de Elysium", titleEn: "Elysium website", cover: "/covers/elysium-web.webp" },
     { id: "u2", title: "App Espacio vacío", titleEn: "Empty space app", cover: "/covers/espacio-vacio-app.webp" },
     { id: "u3", title: "App El Arte del Miedo", titleEn: "The Art of Fear app", cover: "/covers/el-arte-del-miedo-app.webp" },
-    { id: "u4", title: "Sistema de diseño", titleEn: "Design system" },
+    { id: "u4", title: "Web Portfolio", titleEn: "Portfolio website", cover: "/covers/sistema-porfolio.webp" },
   ],
   "3d": [
     { id: "d1", title: "Elysium", titleEn: "Elysium", cover: "/covers/elysium-3D.webp" },
