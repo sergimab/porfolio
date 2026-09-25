@@ -521,7 +521,6 @@
   height: 52px;
   border: 1px solid var(--sd-trazo);
   background: var(--sd-tinte);
-  background: var(--surface);
 }
 
 /* La regla, dibujada: una caja con una pieza dentro. Es más rápido de entender
