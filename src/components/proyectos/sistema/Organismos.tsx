@@ -51,8 +51,8 @@ export default function Organismos() {
         <Pieza
           nombre="Cabecera de proyecto"
           nombreEn="Project header"
-          de="Caja con el tinte de la categoría + cápsula de volver + ficha + titular con capitular + entradilla + hecho con. Es la pieza que abre las catorce páginas de proyecto, y va con sus clases de verdad. Los discos de al lado cambian la categoría: lo que se mueve con ella es el tinte de la caja y la cápsula de volver, nada más."
-          deEn="Tinted box + back capsule + meta + drop-cap title + lead + made-with. It opens all fourteen project pages, and it runs on its real classes. The discs beside it switch category: what moves with it is the box tint and the back capsule, nothing else."
+          de="Caja tintada + cápsula + ficha + titular + entradilla + hecho con. Los discos cambian de categoría."
+          deEn="Tinted box + capsule + meta + title + lead + made-with. The discs switch category."
           ancha
         >
           <div className="sd-hero-fila">
@@ -99,8 +99,8 @@ export default function Organismos() {
         <Pieza
           nombre="Tarjeta de proyecto"
           nombreEn="Project card"
-          de="La tarjeta de verdad, la que sale al elegir una disciplina en la home, con su abanico y su empuje al pasar por encima. Es cuadrada contando la banda, así que la portada es siempre 5:4, y el filo va de degradado y no de color plano porque en la parrilla hay varias juntas y el aro es lo que las distingue de un vistazo. Aquí se enseña reducida, pero es el mismo componente."
-          deEn="The real card, the one that appears when you pick a discipline on the home, with its fan and its push on hover. It is square counting the band, so the cover is always 5:4, and its border is a gradient rather than a flat colour because in the grid there are several together and the ring is what tells them apart. Shown scaled down here, but it is the same component."
+          de="Cuadrada contando la banda, así la portada es siempre 5:4. El aro va de degradado, que es lo que distingue una categoría de otra."
+          deEn="Square counting the band, so the cover is always 5:4. The ring is a gradient, which is what tells one category from another."
           ancha
         >
           <div className="sd-abanico">
@@ -110,8 +110,8 @@ export default function Organismos() {
         <Pieza
           nombre="Banner de destacados"
           nombreEn="Featured banner"
-          de="Otra pieza, no la tarjeta: esto solo aparece en «Proyectos recomendados», al pie de la home y de cada página de proyecto. Es apaisado, con la portada de alto fijo, el filo del color de su categoría y la banda con su degradado debajo. Lo que cambia con el número es el reparto, y por eso se elige aquí."
-          deEn="A different piece, not the card: this only appears under «Featured projects», at the foot of the home and of every project page. It is landscape, with a fixed-height cover, a border in its category colour and the gradient band below. What changes with the count is how they share the width, which is why it is picked here."
+          de="Apaisado, solo para «Proyectos recomendados». Lo que cambia con el número es el reparto."
+          deEn="Landscape, only for «Featured projects». What changes with the count is how they share the width."
           ancha
         >
           <div className="sd-conmutador">
@@ -141,8 +141,8 @@ export default function Organismos() {
         <Pieza
           nombre="Cabecera del sitio"
           nombreEn="Site header"
-          de="Esquema, no la pieza: la de verdad va pegada arriba y aquí se saldría de su marco. Barra con trazo de 1,5 y redondeo solo abajo, porque cuelga del filo de la ventana: saludo con la máquina de escribir a la izquierda, hora y fecha en el centro y las dos pastillas a la derecha."
-          deEn="A schematic, not the piece: the real one sticks to the top and would escape this frame. A 1.5 stroke bar rounded only at the bottom, because it hangs from the window's edge: typewriter greeting on the left, time and date in the middle, the two toggles on the right."
+          de="Esquema. Trazo de 1,5 y redondeo solo abajo, porque cuelga del filo de la ventana."
+          deEn="A schematic. 1.5 stroke, rounded only at the bottom, because it hangs from the window's edge."
           ancha
         >
           <div className="sd-esquema sd-esquema-cabecera">
@@ -161,8 +161,8 @@ export default function Organismos() {
         <Pieza
           nombre="Pie"
           nombreEn="Footer"
-          de="Esquema. La misma barra que la cabecera pero del revés —redondeada solo por arriba— con el aviso legal, los tres iconos sociales y los derechos."
-          deEn="A schematic. The same bar as the header but inverted — rounded only on top — with the legal note, the three social icons and the rights line."
+          de="Esquema. La misma barra del revés, redondeada solo por arriba."
+          deEn="A schematic. The same bar inverted, rounded only on top."
           ancha
         >
           <div className="sd-esquema sd-esquema-pie">
@@ -179,8 +179,8 @@ export default function Organismos() {
         <Pieza
           nombre="Mockup de móvil"
           nombreEn="Phone mockup"
-          de="Dibujado en CSS y no una imagen, así que se ve nítido a cualquier tamaño y pesa cero. Es un solo componente para los tres sitios donde sale: las newsletters de Iberdrola, con una dentro navegable, y los prototipos de las apps de Espacio vacío y El arte del miedo. Cada uno le pasa su ancho, su proporción, el color de la pantalla y el tamaño de la muesca. El ancho manda sobre lo que contiene, porque dentro todo se mide en porcentaje de la pantalla. Aquí, vacío y reducido."
-          deEn="Drawn in CSS, not an image, so it stays sharp at any size and weighs nothing. One component for the three places it appears: the Iberdrola newsletters, with a live one inside, and the prototypes for the Espacio vacío and El arte del miedo apps. Each passes its own width, screen ratio, screen colour and notch size. Its width governs what it contains, since everything inside is measured against the screen width. Shown here empty and scaled down."
+          de="Dibujado en CSS, no una imagen. Uno solo para las newsletters y las dos apps; cada una le pasa su ancho, su proporción y su muesca."
+          deEn="Drawn in CSS, not an image. One for the newsletters and both apps; each passes its own width, ratio and notch."
         >
           <div className="sd-movil">
             <Movil />
@@ -190,8 +190,8 @@ export default function Organismos() {
         <Pieza
           nombre="Caja de cápsulas"
           nombreEn="Capsule box"
-          de="Esquema: la de verdad lleva un motor de física y hay que arrastrarla. Siete cápsulas que caen y se apilan, una zona de soltar marcada con línea de puntos y, arriba a la izquierda, el botón que cambia a la variante de menú."
-          deEn="A schematic: the real one runs a physics engine and has to be dragged. Seven capsules that fall and pile up, a dashed drop zone, and the button top-left that switches to the menu variant."
+          de="Esquema: la de verdad lleva física y se arrastra. Siete cápsulas, una zona de soltar y el botón que la cambia a menú."
+          deEn="A schematic: the real one runs physics and is dragged. Seven capsules, a drop zone and the button that switches it to a menu."
         >
           <div className="sd-esquema sd-esquema-capsulas">
             <span className="sd-capsula" style={{ transform: "rotate(-4deg)" }}>Branding</span>
@@ -204,8 +204,8 @@ export default function Organismos() {
         <Pieza
           nombre="Variante en menú"
           nombreEn="Menu variant"
-          de="La misma caja sin física: una cuadrícula de dos columnas donde cada casilla se pinta entera del color de su categoría al pasar por encima. No es un modo de repuesto, es la puerta para quien no puede arrastrar."
-          deEn="The same box without physics: a two-column grid where each cell fills with its category colour on hover. Not a fallback, but the door for anyone who cannot drag."
+          de="La misma caja sin física. No es un repuesto: es la puerta para quien no puede arrastrar."
+          deEn="The same box without physics. Not a fallback: the door for anyone who cannot drag."
         >
           <div className="sd-esquema sd-esquema-menu">
             <span className="sd-casilla">Branding</span>
@@ -218,8 +218,8 @@ export default function Organismos() {
         <Pieza
           nombre="Menú de paneles"
           nombreEn="Panel menu"
-          de="Tres fichas altas —sobre mí, currículum y contacto— dentro del mismo marco que la caja de cápsulas. La activa se invierte: papel y tinta cambian de sitio."
-          deEn="Three tall tiles — about, CV and contact — inside the same frame as the capsule box. The active one inverts: paper and ink swap."
+          de="Tres fichas altas. La activa invierte papel y tinta."
+          deEn="Three tall tiles. The active one swaps paper and ink."
         >
           <div className="sd-esquema sd-esquema-paneles">
             <span className="sd-ficha"><LangText es="Sobre mí" en="About" /></span>
@@ -231,8 +231,8 @@ export default function Organismos() {
         <Pieza
           nombre="Caja de contacto"
           nombreEn="Contact box"
-          de="Titular con capitular + los dos atajos que se abren al acercarse + tres campos y el botón de enviar. Los campos llevan filo fino y el mismo redondeo que las cajas de papel."
-          deEn="Drop-cap title + the two shortcuts that open on hover + three fields and the send button. Fields use the thin border and the same radius as paper boxes."
+          de="Titular + los dos atajos + tres campos y enviar."
+          deEn="Title + the two shortcuts + three fields and send."
         >
           <div className="sd-esquema sd-esquema-contacto">
             <span className="sd-esquema-fila">

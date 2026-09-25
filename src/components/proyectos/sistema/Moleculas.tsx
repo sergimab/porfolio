@@ -20,8 +20,8 @@ export default function Moleculas() {
       <Pieza
         nombre="Cápsula de volver"
         nombreEn="Back capsule"
-        de="Pastilla + flecha + tono de categoría. Al acercarse se rellena del degradado de su disciplina."
-        deEn="Pill + chevron + category hue. On hover it fills with its discipline's gradient."
+        de="Pastilla + flecha + tono de su categoría."
+        deEn="Pill + chevron + its category hue."
       >
         <BackCapsule category="uiux" muestra />
       </Pieza>
@@ -29,8 +29,8 @@ export default function Moleculas() {
       <Pieza
         nombre="Rótulo de apartado"
         nombreEn="Section label"
-        de="Pastilla + línea que cruza el ancho. Abre cada apartado de una página de proyecto."
-        deEn="Pill + a rule across the width. It opens every section of a project page."
+        de="Pastilla + línea a todo el ancho. Abre cada apartado."
+        deEn="Pill + a rule across the width. It opens every section."
       >
         <RotuloSeccion es="Componentes" en="Components" />
       </Pieza>
@@ -38,8 +38,8 @@ export default function Moleculas() {
       <Pieza
         nombre="Titular con capitular"
         nombreEn="Drop-cap title"
-        de="Caligráfica en la primera letra + versales en el resto. Es el único sitio donde aparece la tercera letra."
-        deEn="Script on the first letter + small caps on the rest. The only place the third typeface appears."
+        de="Caligráfica en la primera letra + versales en el resto."
+        deEn="Script on the first letter + small caps on the rest."
       >
         <span className="sd-muestra-titular"><DropcapTitle es="Proyectos" en="Projects" /></span>
       </Pieza>
@@ -47,8 +47,8 @@ export default function Moleculas() {
       <Pieza
         nombre="Hecho con"
         nombreEn="Made with"
-        de="Rótulo + iconos de 24 con trazo de 1,5. En reposo van del gris apagado y al acercarse toman el color de su marca."
-        deEn="Label + 24px icons at 1.5 stroke. Muted at rest, brand-coloured on hover."
+        de="Rótulo + iconos de 24 a trazo 1,5. Toman su color de marca al acercarse."
+        deEn="Label + 24px icons at 1.5 stroke. Brand-coloured on hover."
       >
         <ToolIcons tools={["Figma", "Photoshop", "After Effects"]} />
       </Pieza>
@@ -56,8 +56,8 @@ export default function Moleculas() {
       <Pieza
         nombre="Fila de ficha"
         nombreEn="Meta row"
-        de="Clave en sans + valor en la cursiva. Es lo que llena la ficha de la cabecera de cada proyecto."
-        deEn="Key in sans + value in italic. It fills the meta block of every project header."
+        de="Clave en sans + valor en cursiva."
+        deEn="Key in sans + value in italic."
       >
         <div className="project-meta sd-muestra-meta">
           <div className="project-meta-row">
@@ -74,8 +74,8 @@ export default function Moleculas() {
       <Pieza
         nombre="Caja de papel"
         nombreEn="Paper box"
-        de="Papel opaco + relleno + margen negativo. Impide que la trama del fondo compita con la lectura sin desalinear el texto."
-        deEn="Opaque paper + padding + negative margin. Stops the background pattern competing with reading without pushing the text out of line."
+        de="Papel opaco para que la trama del fondo no compita con la lectura."
+        deEn="Opaque paper so the background pattern does not compete with reading."
         ancha
       >
         <TextoPapel>
@@ -91,8 +91,8 @@ export default function Moleculas() {
       <Pieza
         nombre="Pastillas de la cabecera"
         nombreEn="Header toggles"
-        de="Dibujadas aquí a mano: viven dentro de la cabecera y no existen sueltas. Una pastilla con dos estados —claro y oscuro, español e inglés— donde lo activo es la tinta y lo inactivo el gris apagado."
-        deEn="Drawn by hand here: they live inside the header and do not exist on their own. A pill with two states — light and dark, Spanish and English — where the active one is ink and the inactive one muted grey."
+        de="Dos estados en una pastilla: lo activo va en tinta y lo demás en apagado. Dibujadas."
+        deEn="Two states in one pill: active in ink, the rest muted. Drawn here."
       >
         <div className="sd-muestra-toggles">
           <span className="sd-toggle-tema"><span className="sd-toggle-bola" /></span>
@@ -105,8 +105,8 @@ export default function Moleculas() {
       <Pieza
         nombre="Pestañas"
         nombreEn="Tabs"
-        de="Dibujadas a mano, del menú de Ilustraciones. La activa se une a la caja de abajo quitándole el redondeo de esa esquina: se lee como una carpeta y no como un botón."
-        deEn="Drawn by hand, from the Illustrations menu. The active one joins the box below by dropping that corner's radius: it reads as a folder tab, not a button."
+        de="La activa pierde el redondeo de esa esquina y se une a la caja. Dibujadas."
+        deEn="The active one drops that corner and joins the box. Drawn here."
         ancha
       >
         <div className="sd-muestra-tabs">

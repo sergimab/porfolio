@@ -408,7 +408,9 @@
       "Bash(awk 'NR>=855 && NR<=866 {print NR\": \"$0}' src/components/proyectos/arte-del-miedo/Prototipo.tsx)",
       "Bash(awk 'NR>=828 && NR<=840 {print NR\": \"$0}' src/components/proyectos/arte-del-miedo/Prototipo.tsx)",
       "Bash(cwebp -quiet -q 82 public/covers/orquesta-tokio-fotos.jpg -o public/covers/orquesta-tokio-fotos.webp)",
-      "Bash(cwebp -quiet -q 82 public/covers/sistema-porfolio.jpg -o public/covers/sistema-porfolio.webp)"
+      "Bash(cwebp -quiet -q 82 public/covers/sistema-porfolio.jpg -o public/covers/sistema-porfolio.webp)",
+      "Bash(ffprobe -v error -select_streams v -show_entries stream=width,height -of csv=p=0 public/covers/sistema-porfolio.webp)",
+      "Bash(awk -F'de=\"' '{print length\\($2\\)\" \"$0}')"
     ],
     "defaultMode": "acceptEdits"
   }
