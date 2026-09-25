@@ -51,6 +51,7 @@ export default function PrevioSimbolo({
             suavidad={afinado.suavidad}
             volumen={afinado.volumen}
             giroLuz={afinado.giroLuz}
+            plato={afinado.plato}
           />
         )}
       </div>

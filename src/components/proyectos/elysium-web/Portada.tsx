@@ -83,6 +83,10 @@ export default function Portada({ seleccion }: { seleccion: Set<string> }) {
             // sale con el fondo transparente y la pieza se recorta contra la luz
             // del hueco, que es lo que la mete dentro de la carátula.
             material="cromo"
+            // Y levita. Es la única pantalla donde la pieza se queda a la vista
+            // sin nada más que hacer, y quieta dentro de la caja parecía pegada
+            // al fondo en vez de suspendida en él.
+            flotar={1}
             className="portada-simbolo"
           />
         )}

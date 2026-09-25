@@ -3,7 +3,7 @@
 import { useState } from "react";
 import type { Ajuste } from "./formaGaga";
 import { AJUSTE_BASE } from "./formaGaga";
-import { LIENZO_BASE } from "./LienzoGaga";
+import { LIENZO_BASE, PLATOS, type Plato } from "./LienzoGaga";
 import "./Mandos.css";
 
 // EL PANEL DE MANDOS DEL GENERADOR — herramienta de taller.
@@ -23,6 +23,7 @@ export type Afinado = Ajuste & {
   suavidad: number;
   volumen: number;
   giroLuz: number;
+  plato: Plato;
 };
 
 // «De fábrica» quiere decir LO QUE HAY PUESTO EN LA WEB, no lo que traía el
@@ -34,7 +35,7 @@ export const AFINADO_BASE: Afinado = { ...AJUSTE_BASE, ...LIENZO_BASE };
 
 // Nombre, recorrido y paso de cada mando, copiados del generador.
 const MANDOS: {
-  clave: keyof Afinado;
+  clave: Exclude<keyof Afinado, "plato">;
   nombre: string;
   min: number;
   max: number;
@@ -89,6 +90,7 @@ export default function Mandos({
         sueltos.push(`${m.clave}={${n}}`);
       }
     }
+    if (valores.plato !== AFINADO_BASE.plato) sueltos.push(`plato="${valores.plato}"`);
     if (dentro.length) sueltos.unshift(`ajuste={{ ${dentro.join(", ")} }}`);
     return sueltos.length ? sueltos.join("\n") : "todo de fábrica";
   };
@@ -105,7 +107,9 @@ export default function Mandos({
     }
   };
 
-  const tocados = MANDOS.filter((m) => valores[m.clave] !== AFINADO_BASE[m.clave]).length;
+  const tocados =
+    MANDOS.filter((m) => valores[m.clave] !== AFINADO_BASE[m.clave]).length +
+    (valores.plato !== AFINADO_BASE.plato ? 1 : 0);
   const texto = receta();
 
   return (
@@ -116,6 +120,24 @@ export default function Mandos({
           ✕
         </button>
       </div>
+
+      {/* El plató, que no es un deslizador sino una lista. Va el primero porque
+          es el que más cambia la pieza: un metal no tiene color propio, así que
+          la habitación ES el material. */}
+      <label className={`mandos-fila es-lista${valores.plato !== AFINADO_BASE.plato ? " es-tocado" : ""}`}>
+        <span className="mandos-nombre">
+          Entorno
+          <span className="mandos-que">El plató que se refleja</span>
+        </span>
+        <select
+          value={valores.plato}
+          onChange={(e) => onCambio({ ...valores, plato: e.target.value as Plato })}
+        >
+          {(Object.keys(PLATOS) as Plato[]).map((k) => (
+            <option key={k} value={k}>{PLATOS[k].nombre}</option>
+          ))}
+        </select>
+      </label>
 
       {MANDOS.map((m) => {
         const v = valores[m.clave];

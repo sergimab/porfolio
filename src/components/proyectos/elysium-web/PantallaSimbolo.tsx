@@ -1,22 +1,23 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import LienzoGaga from "./LienzoGaga";
 import Galaxia from "./Galaxia";
 import IconosFlotantes from "./IconosFlotantes";
 import { ERAS } from "./simbolo";
 import { fraccionPorEra } from "./canciones";
 
-// EL SÍMBOLO APARECE HECHO, con un fundido, y se queda a la vista lo que dura
-// esta espera antes de pasar a la portada.
+// EL SÍMBOLO SE TRAZA, y esto es lo que tarda en dibujarse entero.
 //
-// Antes se trazaba, y eran casi siete segundos de línea creciendo. Aquello se
-// podía hacer porque el motor de entonces dibujaba un recorrido y se podía
-// cortar por la mitad. El de ahora reparte los porcentajes y rellena la silueta
-// de una vez, así que lo único que se podía animar era el valor de cada eje, y
-// eso no hacía crecer la figura: la deformaba, porque el grosor del trazo no
-// depende de los porcentajes. Aparecer hecha es más honesto con lo que es.
-const ESPERA = 3600;
+// Es un trim path de verdad: el generador recorta el CAMINO —centro, el disco
+// más votado, el siguiente, hasta volver al centro— por su longitud, y monta las
+// barras solo sobre el trozo dibujado. La punta avanza a velocidad constante, y
+// el encuadre se queda quieto en la figura entera desde el primer cuadro para
+// que la cámara no persiga a la línea. Ver `recorte` en formaGaga.
+const DURACION = 5200;
+// Y lo que se queda a la vista, ya entera, antes de pasar a la portada. Sin esta
+// pausa el símbolo se termina de trazar y desaparece en el mismo gesto.
+const PAUSA = 1500;
 
 // EL TALLER SE FUE CON EL MOTOR ANTERIOR. Aquí vivían el recorte del trazo —un
 // trim path que enseñaba la línea creciendo—, el esqueleto que dibujaba el
@@ -37,9 +38,31 @@ export default function PantallaSimbolo({
   const completo = useMemo(() => fraccionPorEra(seleccion, ERAS), [seleccion]);
   const hay = completo.some((v) => v > 0);
 
+  const [recorte, setRecorte] = useState(0);
+
   useEffect(() => {
-    const salto = window.setTimeout(onListo, ESPERA);
-    return () => clearTimeout(salto);
+    // Para quien pide menos movimiento, la figura aparece hecha. No es una
+    // versión pobre: el resultado es el símbolo, y trazarlo es el adorno.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setRecorte(1);
+      const salto = window.setTimeout(onListo, PAUSA);
+      return () => clearTimeout(salto);
+    }
+    let raf = 0, espera = 0, inicio = 0;
+    const paso = (t: number) => {
+      if (!inicio) inicio = t;
+      const p = Math.min(1, (t - inicio) / DURACION);
+      // Arranca sin tirón y llega al final frenando, que es como se termina un
+      // trazo a mano.
+      setRecorte(p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2);
+      if (p < 1) raf = requestAnimationFrame(paso);
+      else espera = window.setTimeout(onListo, PAUSA);
+    };
+    raf = requestAnimationFrame(paso);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(espera);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -62,6 +85,7 @@ export default function PantallaSimbolo({
               // contra las eras desenfocadas y tiene que devolverlas. El fondo
               // del lienzo se queda transparente para eso.
               material="cromo"
+              recorte={recorte}
               className="simfinal-simbolo"
             />
           )}

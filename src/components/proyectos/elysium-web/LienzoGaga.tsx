@@ -32,6 +32,18 @@ import { AJUSTE_BASE, MAXP, POR_POLIGONO, construirForma, type Ajuste } from "./
 
 export type Material = "cromo" | "cristal";
 
+// LOS PLATÓS. Un metal no tiene color propio: lo que se ve en él es la
+// habitación, así que cambiar de plató es cambiar de material sin tocar el
+// material. Todos son HDRI de Poly Haven (CC0) a 1k, servidos desde el propio
+// sitio para no depender de nadie, y a 1k y no 2k porque se desenfocan al
+// reflejarse y pesan la cuarta parte.
+export const PLATOS = {
+  limpio: { archivo: "monochrome_studio_03.hdr", nombre: "Estudio limpio" },
+  fucsia: { archivo: "ferndale_studio_05.hdr", nombre: "Focos fucsia" },
+  frio: { archivo: "ferndale_studio_12.hdr", nombre: "Focos fríos" },
+} as const;
+export type Plato = keyof typeof PLATOS;
+
 // LOS AJUSTES DE LA WEB, en un sitio y no repartidos por las tres pantallas.
 // Salen del panel de mandos, mirando la figura; no son los que trae el generador
 // al abrirlo. Los usa el lienzo si nadie pasa otra cosa, y el panel los enseña
@@ -42,6 +54,20 @@ export const LIENZO_BASE = {
   suavidad: 2.6,
   volumen: 0.3,
   giroLuz: -80,
+  // EL PLATÓ LIMPIO, y no el que traía el generador original.
+  //
+  // Aquel era un estudio de tonos cálidos y en la portada salía un símbolo
+  // dorado, que es justo lo que no pega: la carátula va de rosas, violetas y
+  // manos de cromo líquido, y el oro se lee como una pieza prestada de otra
+  // parte. Este es un plató blanco con techo oscuro, así que devuelve un cromo
+  // neutro y brillante —el mismo material que las manos— y encima se recorta
+  // contra el interior de la caja.
+  //
+  // También se probó el de focos fucsia, que sobre el papel era el que pegaba y
+  // en la práctica no: son luces pequeñas en una habitación oscura, y un metal
+  // devuelve lo que le rodea, así que la pieza salía casi negra dentro de una
+  // caja ya oscura. Se queda como opción en el panel.
+  plato: "limpio" as Plato,
 };
 
 export default function LienzoGaga({
@@ -62,6 +88,20 @@ export default function LienzoGaga({
   // El giro del plató. Decide qué reflejos caen en la pieza, así que es lo que
   // más cambia el color de un metal.
   giroLuz = LIENZO_BASE.giroLuz,
+  // El plató que se refleja.
+  plato = LIENZO_BASE.plato,
+  // Cuánto del recorrido se ha dibujado, de 0 a 1. Es el trim path: la figura no
+  // aparece entera, se traza desde el centro siguiendo el camino que une los
+  // discos por orden de votos. Con 1 sale hecha.
+  recorte = 1,
+  // La pieza levita: sube y baja despacio y se balancea un poco.
+  //
+  // Va en 3D y no en CSS a propósito. Movida con una transformación del CSS, la
+  // imagen se desplaza entera y el metal sigue reflejando lo mismo; girándola de
+  // verdad dentro de la escena, cada cara va encontrando otra parte del plató y
+  // el brillo se pasea por la pieza. En un cromo eso es la mitad del efecto de
+  // estar flotando.
+  flotar = 0,
   // Con `animar` el contorno respira; sin él, la figura se queda quieta.
   animar = true,
   // Si se puede girar la pieza con el ratón.
@@ -76,6 +116,9 @@ export default function LienzoGaga({
   suavidad?: number;
   volumen?: number;
   giroLuz?: number;
+  plato?: Plato;
+  recorte?: number;
+  flotar?: number;
   animar?: boolean;
   girable?: boolean;
   className?: string;
@@ -84,8 +127,8 @@ export default function LienzoGaga({
   // Lo que cambia entre cuadros viaja por una caja, no por el efecto: montar
   // toda la cadena de render otra vez porque ha cambiado un número sería tirar
   // las texturas y el plató en cada pulsación.
-  const vivo = useRef({ valores, material, ajuste, fusion, organico, suavidad, volumen, giroLuz, animar });
-  vivo.current = { valores, material, ajuste, fusion, organico, suavidad, volumen, giroLuz, animar };
+  const vivo = useRef({ valores, material, ajuste, fusion, organico, suavidad, volumen, giroLuz, plato, recorte, animar, flotar });
+  vivo.current = { valores, material, ajuste, fusion, organico, suavidad, volumen, giroLuz, plato, recorte, animar, flotar };
 
   useEffect(() => {
     const canvas = lienzo.current;
@@ -134,20 +177,31 @@ export default function LienzoGaga({
     scene.environment = deCodigo;
     scene.environmentRotation.y = (vivo.current.giroLuz * Math.PI) / 180;
 
-    // Y encima, el estudio de verdad, servido desde el propio sitio. Si no
-    // llega, se queda el de código y no se nota más que en el reflejo.
-    let hdr: THREE.Texture | null = null;
-    new RGBELoader().load(
-      "/elysium/estudio.hdr",
-      (tex) => {
-        tex.mapping = THREE.EquirectangularReflectionMapping;
-        hdr = pmrem.fromEquirectangular(tex).texture;
-        tex.dispose();
-        scene.environment = hdr;
-      },
-      undefined,
-      () => {}
-    );
+    // Y encima, el plató de verdad, servido desde el propio sitio. Si no llega,
+    // se queda el de código y no se nota más que en el reflejo. Se guardan los
+    // que se hayan pedido, para que cambiar de uno a otro y volver no obligue a
+    // descargarlo y prepararlo otra vez.
+    const guardados = new Map<string, THREE.Texture>();
+    let vivoAun = true;
+    const ponerPlato = (clave: Plato) => {
+      const guardado = guardados.get(clave);
+      if (guardado) { scene.environment = guardado; return; }
+      new RGBELoader().load(
+        `/elysium/${PLATOS[clave].archivo}`,
+        (tex) => {
+          tex.mapping = THREE.EquirectangularReflectionMapping;
+          const listo = pmrem.fromEquirectangular(tex).texture;
+          tex.dispose();
+          if (!vivoAun) { listo.dispose(); return; }
+          guardados.set(clave, listo);
+          if (vivo.current.plato === clave) scene.environment = listo;
+        },
+        undefined,
+        () => {}
+      );
+    };
+    let platoPuesto: Plato = vivo.current.plato;
+    ponerPlato(platoPuesto);
 
     const camera = new THREE.PerspectiveCamera(28, 1, 0.1, 50);
     camera.position.set(0, 0, 4.6);
@@ -357,7 +411,7 @@ vec2 world(vec2 fc){ return uCenter+(fc-.5*uN)*pj(); }
         mostrado[i] += ((v.valores[i] ?? 0) - mostrado[i]) * 0.12;
       }
       const P: Ajuste = { ...AJUSTE_BASE, ...v.ajuste };
-      const forma = construirForma(mostrado, P);
+      const forma = construirForma(mostrado, P, v.recorte);
       pieza.visible = !!forma;
       if (forma) {
         const [[x0, y0], [x1, y1]] = forma.caja;
@@ -375,6 +429,7 @@ vec2 world(vec2 fc){ return uCenter+(fc-.5*uN)*pj(); }
         U.uPolyCount.value = forma.cuantos;
         (U.uPoly.value as Float32Array).set(forma.poligonos);
         scene.environmentRotation.y = (v.giroLuz * Math.PI) / 180;
+        if (v.plato !== platoPuesto) { platoPuesto = v.plato; ponerPlato(platoPuesto); }
 
         correr(mSemilla, jfa[0], null);
         let src = 0;
@@ -403,6 +458,15 @@ vec2 world(vec2 fc){ return uCenter+(fc-.5*uN)*pj(); }
         // fondo transparente, que es lo que deja verse el universo.
         scene.background = mat === MATERIALES.cristal ? BLANCO : null;
       }
+      // La levitación. Tres tiempos que no encajan entre sí —13, 17 y 23
+      // segundos— para que el conjunto no se repita a ojo: si los tres
+      // cerraran a la vez, se vería el bucle.
+      if (v.flotar > 0 && !girable) {
+        const t = (ahora - t0) / 1000;
+        pieza.position.y = Math.sin((t * Math.PI * 2) / 13) * 0.085 * v.flotar;
+        pieza.rotation.z = Math.sin((t * Math.PI * 2) / 17) * 0.05 * v.flotar;
+        pieza.rotation.y = Math.sin((t * Math.PI * 2) / 23) * 0.13 * v.flotar;
+      }
       renderer.setRenderTarget(null);
       controls?.update();
       renderer.render(scene, camera);
@@ -417,8 +481,9 @@ vec2 world(vec2 fc){ return uCenter+(fc-.5*uN)*pj(); }
       for (const m of [mSemilla, mJfa, mSdf, mBorron, mAltura, mUnir, mNormal]) m.dispose();
       geo.dispose();
       plano.geometry.dispose();
+      vivoAun = false;
       deCodigo.dispose();
-      hdr?.dispose();
+      for (const t of guardados.values()) t.dispose();
       pmrem.dispose();
       renderer.dispose();
     };

@@ -391,28 +391,18 @@
 /* El símbolo llena su cuadrado y nada más. El lienzo del generador viene sin
    papel ni filo propios, así que aquí no hay nada que desvestir.
 
-   Y ENTRA CON UN FUNDIDO, no trazándose: la figura ya está hecha cuando aparece
-   —ver ESPERA en PantallaSimbolo— y lo único que se mueve es la opacidad, con un
-   punto de acercamiento para que no sea un interruptor. */
+   LA ENTRADA ES EL TRAZO, no un fundido: la figura se dibuja sola —ver DURACION
+   en PantallaSimbolo—. Lo único que queda aquí es medio segundo de opacidad, y
+   solo para que el primer trocito de línea no aparezca de golpe. */
 .simfinal-simbolo {
   display: block;
   width: 100%;
   height: 100%;
-  animation: simfinal-entrar 1100ms cubic-bezier(0.22, 0.7, 0.2, 1) both;
+  animation: simfinal-entrar 500ms ease both;
 }
 @keyframes simfinal-entrar {
-  from { opacity: 0; transform: scale(0.965); }
-  to   { opacity: 1; transform: none; }
-}
-/* Para quien pide menos movimiento, solo la opacidad. */
-@media (prefers-reduced-motion: reduce) {
-  .simfinal-simbolo {
-    animation: simfinal-aparecer 700ms ease both;
-  }
-  @keyframes simfinal-aparecer {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-  }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 /* ── PROVISIONAL: el panel de mandos del generador ───────────────────────── */
