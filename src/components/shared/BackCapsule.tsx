@@ -29,21 +29,24 @@ export default function BackCapsule({
   category,
   href,
   rotulo,
+  muestra,
 }: {
   category: string;
   href?: string;
   rotulo?: string;
+  /** Sin enlace: en el muestrario del sistema la cápsula se enseña, no se usa,
+   *  y pulsarla sacaría de la página a quien solo quería mirarla. */
+  muestra?: boolean;
 }) {
   const cat = CATS[category] ?? CATS.iberdrola;
   const texto = rotulo ?? cat.label;
-  return (
-    <Link
-      href={href ?? `/?cat=${category}`}
-      className="back-capsule"
-      data-claro={cat.claro ? "" : undefined}
-      style={{ "--cap-hue": cat.hue } as React.CSSProperties}
-      aria-label={`Volver a ${texto}`}
-    >
+  const comun = {
+    className: "back-capsule",
+    "data-claro": cat.claro ? "" : undefined,
+    style: { "--cap-hue": cat.hue } as React.CSSProperties,
+  };
+  const dentro = (
+    <>
       {/* El mismo degradado de malla que las cápsulas de la home, con la paleta
           legible: el rótulo va en blanco encima y así da 5,1:1 en cualquier
           punto. Se enciende al pasar por encima —el ratón lo escucha este mismo
@@ -61,6 +64,15 @@ export default function BackCapsule({
         <path d="M6.5 1 1.5 7l5 6" />
       </svg>
       <span className="mesh-encima">{texto}</span>
+    </>
+  );
+  // En el muestrario se enseña, no se usa: pulsarla sacaría de la página a
+  // quien solo quería mirarla.
+  return muestra ? (
+    <span {...comun}>{dentro}</span>
+  ) : (
+    <Link {...comun} href={href ?? `/?cat=${category}`} aria-label={`Volver a ${texto}`}>
+      {dentro}
     </Link>
   );
 }

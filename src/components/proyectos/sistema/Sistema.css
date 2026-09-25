@@ -1,8 +1,39 @@
 /* La página del sistema de diseño. Usa las mismas medidas que las demás
    páginas de proyecto —56 entre apartados, 28 del rótulo a su pieza— porque es
-   la primera que tiene que cumplir lo que cuenta. */
+   la primera que tiene que cumplir lo que cuenta.
+
+   LOS DIBUJOS VAN DEL COLOR DE LA CATEGORÍA. Un esquema no es una pieza del
+   sitio, así que pintarlo con la tinta lo hacía competir con lo que estaba
+   explicando y además metía un gris que no era de nadie. Va con el tono de
+   UI/UX, que es el de esta página, en la misma receta que el rótulo de apartado
+   y la cápsula de volver —55 de saturación y 45 de luz, que se ve igual sobre
+   el papel claro que sobre el oscuro—, y los rellenos con ese mismo tono muy
+   rebajado. Se lee como anotación sobre la página, que es lo que es.
+
+   LAS ANOTACIONES VAN EN CURSIVA, la Cormorant, porque eso es justo lo que el
+   sistema dice de ella: notas sobre el contenido, no el contenido. */
 .sd-seccion {
+  --sd-trazo: hsl(var(--hero-hue, 175) 55% 45%);
+  --sd-tinte: hsl(var(--hero-hue, 175) 55% 45% / 0.12);
   margin-bottom: 56px;
+}
+
+/* La cursiva de las anotaciones: pies de muestra, medidas de un esquema y el
+   texto de «de qué está hecha» cada pieza. */
+.sd-nota,
+.sd-pieza-de,
+.sd-radio > span:last-child,
+.sd-corte-de,
+.sd-conmutador-pie,
+.sd-espacio-cota,
+.sd-anidado-cota,
+.sd-plano-medida,
+.sd-hueco-de {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--muted);
 }
 .sd-seccion:first-of-type {
   margin-top: 56px;
@@ -50,34 +81,68 @@
   opacity: 0.75;
 }
 
-/* ── Los huecos, a su tamaño ─────────────────────────────────────────────── */
-.sd-huecos {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-  margin-top: 28px;
-}
-.sd-hueco {
+
+/* ── El espacio, acotado ─────────────────────────────────────────────────────
+   Un apartado de verdad con sus tres medidas encima, dibujadas a tamaño real:
+   la cota de 56 mide 56 píxeles de alto. Es la única manera de que un número
+   de espacio signifique algo. */
+.sd-espacio {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
-  font-size: 12px;
-  line-height: 1.5;
-  color: var(--muted);
+  align-items: stretch;
+  margin-top: 28px;
+  margin-bottom: 10px;
 }
-/* La barra MIDE lo que dice. Es todo lo que tiene que hacer esta pieza. */
-.sd-hueco-barra {
-  width: 100%;
-  border-radius: var(--r-pieza);
-  background: var(--surface);
-}
-.sd-hueco-px,
-.sd-corte-px,
-.sd-trazo-px {
-  font-family: var(--font-geist-mono), monospace;
+.sd-espacio-rotulo {
+  align-self: flex-start;
+  padding: 8px 18px;
+  border: 1px solid var(--sd-trazo);
+  border-radius: var(--r-pastilla);
   font-size: 13px;
   color: var(--foreground);
+}
+/* La cota: una línea de puntos que ocupa exactamente el hueco que mide, con la
+   cifra y lo que separa escritos al lado. */
+.sd-espacio-cota {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 18px;
+  border-left: 1px dashed var(--sd-trazo);
+  margin-left: 22px;
+}
+.sd-espacio-cota em {
+  font-family: var(--font-geist-mono), monospace;
+  font-style: normal;
+  font-size: 13px;
+  color: var(--foreground);
+}
+.sd-espacio-fila {
+  display: flex;
+  align-items: stretch;
+}
+.sd-espacio-pieza {
+  flex: 1;
+  height: 64px;
+  border-radius: var(--r-pieza);
+  background: var(--sd-tinte);
+  border: 1px solid var(--sd-trazo);
+}
+/* Los 16 van DENTRO del hueco que miden. La cifra se pone de canto porque el
+   hueco mide justo eso, dieciséis píxeles. */
+.sd-espacio-gap {
+  flex: 0 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sd-espacio-gap em {
+  font-family: var(--font-geist-mono), monospace;
+  font-style: normal;
+  font-size: 11px;
+  color: var(--muted);
+  writing-mode: vertical-rl;
 }
 
 /* La regla del redondeo, dicha una vez y en grande. */
@@ -110,7 +175,7 @@
 .sd-plano-linea {
   flex: 1;
   height: 1px;
-  background: var(--border);
+  background: var(--sd-trazo);
 }
 .sd-plano-medida {
   font-family: var(--font-geist-mono), monospace;
@@ -135,7 +200,7 @@
   justify-content: center;
   background-image: repeating-linear-gradient(
     -45deg,
-    var(--border) 0 1px,
+    var(--sd-trazo) 0 1px,
     transparent 1px 6px
   );
 }
@@ -145,12 +210,12 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
   padding: 16px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--sd-trazo);
   border-radius: var(--r-caja);
 }
 .sd-plano-pieza {
   border-radius: var(--r-pieza);
-  background: var(--surface);
+  background: var(--sd-tinte);
 }
 .sd-cortes {
   display: grid;
@@ -162,7 +227,7 @@
   flex-direction: column;
   gap: 4px;
   padding-top: 12px;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--sd-trazo);
   font-size: 12px;
   line-height: 1.5;
   color: var(--muted);
@@ -212,22 +277,14 @@
   color: var(--muted);
 }
 
-/* ── El abanico de tarjetas, reducido ────────────────────────────────────────
-   Es el componente de verdad, con su abanico y su empuje al pasar por encima,
-   metido en un marco de muestra que mide la mitad que la home. Se reduce con
-   `scale` y no cambiándole las medidas porque el desplazamiento entre tarjetas
-   lo calcula el propio componente en píxeles: tocar solo el ancho las
-   descolocaría. El envoltorio se queda con el alto ya reducido, que si no
-   sobraría hueco debajo. */
+/* ── El abanico de tarjetas, a tamaño real ───────────────────────────────────
+   Es el componente de verdad y se enseña a su medida, la misma que en la home:
+   una tarjeta reducida no sirve para juzgar si la portada se lee. */
 .sd-abanico {
   width: 100%;
-  height: 232px;
-  overflow: hidden;
 }
 .sd-abanico .bc-fit {
   margin-top: 0;
-  transform: scale(0.62);
-  transform-origin: top center;
 }
 
 /* ── El móvil, reducido ──────────────────────────────────────────────────────
@@ -358,11 +415,19 @@
   z-index: 2;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.32);
 }
-.sd-tono-dato {
-  font-family: var(--font-geist-mono), monospace;
-  font-size: 12px;
-  color: var(--muted);
+/* LAS CINCO MANCHAS del degradado de esa categoría, una al lado de otra. Es lo
+   que de verdad se está enseñando: el cuadrado de arriba las mezcla y esto las
+   separa. */
+.sd-tono-tira {
+  display: flex;
+  height: 10px;
+  overflow: hidden;
+  border-radius: var(--r-pastilla);
 }
+.sd-tono-tira > span {
+  flex: 1;
+}
+
 
 /* ── Tipografía ──────────────────────────────────────────────────────────── */
 .sd-letras {
@@ -454,7 +519,8 @@
   justify-content: flex-start;
   width: 100%;
   height: 52px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--sd-trazo);
+  background: var(--sd-tinte);
   background: var(--surface);
 }
 
@@ -473,7 +539,7 @@
   gap: 10px;
   width: 210px;
   height: 96px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--sd-trazo);
   border-radius: var(--r-caja);
   background: var(--background);
 }
@@ -484,7 +550,7 @@
   width: 150px;
   height: 48px;
   border-radius: var(--r-pieza);
-  background: var(--surface);
+  background: var(--sd-tinte);
 }
 .sd-anidado-cota {
   font-family: var(--font-geist-mono), monospace;
@@ -937,7 +1003,7 @@
 /* La línea, y nada más. El medio píxel se ve poniéndolas una encima de otra. */
 .sd-trazo-linea {
   width: 100%;
-  background: var(--foreground);
+  background: var(--sd-trazo);
 }
 
 /* ── Plantillas ──────────────────────────────────────────────────────────── */
@@ -999,7 +1065,6 @@
 @media (max-width: 700px) {
   /* Las cuadrículas de muestras que van con las columnas dichas a mano bajan a
      dos, que es lo que cabe con una pieza legible. */
-  .sd-huecos,
   .sd-cortes,
   .sd-estados {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1011,9 +1076,6 @@
   .sd-plantillas,
   .sd-base,
   .sd-trazos,
-  .sd-huecos {
-    grid-template-columns: 1fr;
-  }
   /* Los siete tonos aguantan en dos: son cuadrados y no llevan más que su
      nombre dentro. Siete en dos columnas dejan uno solo abajo, así que el
      último cruza las dos y pierde el cuadrado: una banda ancha se lee como
@@ -1029,15 +1091,6 @@
   }
   .sd-tonos {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  /* El abanico ya se convierte solo en cuadrícula de dos dentro del propio
-     componente, así que aquí sobra el recorte y la reducción. */
-  .sd-abanico {
-    height: auto;
-    overflow: visible;
-  }
-  .sd-abanico .bc-fit {
-    transform: none;
   }
   /* La cabecera y sus discos, uno debajo de otro: en columna los discos se
      comen la mitad del ancho de la muestra. */

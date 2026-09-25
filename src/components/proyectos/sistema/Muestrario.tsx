@@ -159,7 +159,14 @@ export default function Muestrario() {
                 />
                 <span className="mesh-encima">{c.label}</span>
               </span>
-              <span className="sd-tono-dato">{c.hue}°</span>
+              {/* LAS CINCO MANCHAS, una al lado de otra. El grado del tono no
+                  decía nada a quien mira; los cinco colores de los que sale el
+                  degradado, sí. */}
+              <span className="sd-tono-tira">
+                {(c.claro ? paletaClara(c.hue) : paletaLegible(c.hue)).map((color, i) => (
+                  <span key={i} style={{ background: color }} />
+                ))}
+              </span>
             </div>
           ))}
         </div>
@@ -210,15 +217,34 @@ export default function Muestrario() {
       {/* ── Espacio y forma ─────────────────────────────────────────────── */}
       <section className="sd-seccion">
         <h3 className="sd-rotulo"><LangText es="Espacio" en="Space" /></h3>
-        <div className="sd-huecos">
-          {HUECOS.map(h => (
-            <div className="sd-hueco" key={h.px}>
-              <span className="sd-hueco-barra" style={{ height: h.px }} />
-              <span className="sd-hueco-px">{h.px}</span>
-              <span className="sd-hueco-de"><LangText es={h.es} en={h.en} /></span>
-            </div>
-          ))}
+        {/* UN APARTADO DE VERDAD, ACOTADO. Los tres huecos no se entienden
+            sueltos: se entienden viendo dónde cae cada uno dentro de la misma
+            página. Las tres medidas están dibujadas a su tamaño real. */}
+        <div className="sd-espacio">
+          <span className="sd-espacio-rotulo"><LangText es="Rótulo" en="Label" /></span>
+          <span className="sd-espacio-cota" style={{ height: 28 }}>
+            <em>28</em>
+            <LangText es="del rótulo a su pieza" en="label to its piece" />
+          </span>
+          <span className="sd-espacio-fila">
+            <span className="sd-espacio-pieza" />
+            <span className="sd-espacio-gap"><em>16</em></span>
+            <span className="sd-espacio-pieza" />
+            <span className="sd-espacio-gap"><em>16</em></span>
+            <span className="sd-espacio-pieza" />
+          </span>
+          <span className="sd-espacio-cota" style={{ height: 56 }}>
+            <em>56</em>
+            <LangText es="entre apartados" en="between sections" />
+          </span>
+          <span className="sd-espacio-rotulo"><LangText es="Rótulo" en="Label" /></span>
         </div>
+        <span className="sd-nota">
+          <LangText
+            es="Los 16 van en el hueco que miden, entre pieza y pieza."
+            en="The 16s sit in the gap they measure, between one piece and the next."
+          />
+        </span>
       </section>
 
       {/* ── Forma ───────────────────────────────────────────────────────── */}
@@ -275,7 +301,7 @@ export default function Muestrario() {
             </span>
           </div>
         </div>
-        <h4 className="sd-subrotulo"><LangText es="Los tres cortes" en="The three breakpoints" /></h4>
+        <h4 className="sd-subrotulo"><LangText es="Los cuatro cortes" en="The four breakpoints" /></h4>
         <div className="sd-cortes">
           {CORTES.map(c => (
             <div className="sd-corte" key={c.px}>

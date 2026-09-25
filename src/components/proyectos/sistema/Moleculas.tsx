@@ -23,7 +23,7 @@ export default function Moleculas() {
         de="Pastilla + flecha + tono de categoría. Al acercarse se rellena del degradado de su disciplina."
         deEn="Pill + chevron + category hue. On hover it fills with its discipline's gradient."
       >
-        <BackCapsule category="uiux" />
+        <BackCapsule category="uiux" muestra />
       </Pieza>
 
       <Pieza

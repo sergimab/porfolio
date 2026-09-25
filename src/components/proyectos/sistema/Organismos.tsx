@@ -58,7 +58,7 @@ export default function Organismos() {
           <div className="sd-hero-fila">
             <div className="sd-hero" style={{ ["--hero-hue" as string]: cat.hue }}>
               <div className="project-hero-box">
-                <span className="project-back"><BackCapsule category={cat.id} /></span>
+                <span className="project-back"><BackCapsule category={cat.id} muestra /></span>
                 <div className="project-meta">
                   <div className="project-meta-row">
                     <span className="project-meta-key"><LangText es="Tipo" en="Type" /></span>
