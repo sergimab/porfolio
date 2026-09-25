@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Ajuste } from "./formaGaga";
 import { AJUSTE_BASE } from "./formaGaga";
 import { LIENZO_BASE } from "./LienzoGaga";
@@ -31,6 +31,49 @@ export type Afinado = Ajuste & {
 // contra lo que se está viendo. Por eso se toman de los dos sitios donde viven
 // de verdad, y volver atrás es volver a la web.
 export const AFINADO_BASE: Afinado = { ...AJUSTE_BASE, ...LIENZO_BASE };
+
+// LA TECLA Y EL ESTADO, para que cualquier pantalla pueda llevar el panel sin
+// repetir lo mismo. Devuelve lo que se ha afinado, si el panel está abierto, y
+// las propiedades ya listas para dárselas al lienzo.
+//
+// Se abre con la P, igual que la ventana de previsualización: es una tecla y no
+// un botón porque esto es taller, y un mando de taller en la pantalla de quien
+// está usando la web sobra.
+export function useAfinado() {
+  const [afinado, setAfinado] = useState<Afinado>(AFINADO_BASE);
+  const [abierto, setAbierto] = useState(false);
+  useEffect(() => {
+    const alPulsar = (e: KeyboardEvent) => {
+      // No mientras se escribe en algún sitio, o teclear una palabra con pes
+      // abriría y cerraría el panel por el camino.
+      const donde = document.activeElement;
+      if (donde instanceof HTMLInputElement || donde instanceof HTMLTextAreaElement) return;
+      if (e.key === "p" || e.key === "P") setAbierto((v) => !v);
+    };
+    window.addEventListener("keydown", alPulsar);
+    return () => window.removeEventListener("keydown", alPulsar);
+  }, []);
+  return {
+    afinado,
+    setAfinado,
+    abierto,
+    cerrar: () => setAbierto(false),
+    lienzo: propsDeLienzo(afinado),
+  };
+}
+
+// Los seis mandos repartidos como los pide el lienzo: los de forma van juntos
+// dentro de `ajuste` y los de material, sueltos.
+export function propsDeLienzo(a: Afinado) {
+  return {
+    ajuste: { grosor: a.grosor, picos: a.picos, mezcla: a.mezcla },
+    fusion: a.fusion,
+    organico: a.organico,
+    suavidad: a.suavidad,
+    volumen: a.volumen,
+    giroLuz: a.giroLuz,
+  };
+}
 
 // Nombre, recorrido y paso de cada mando, copiados del generador.
 const MANDOS: {

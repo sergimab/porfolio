@@ -22,6 +22,15 @@
   margin: 0 auto;
   box-sizing: border-box;
 }
+/* PROVISIONAL: con el panel de mandos abierto, la página se aparta de él. El
+   panel va fijo a la derecha y flota por encima, y ahí caen la lista y las dos
+   tarjetas —incluida la de la camiseta, que es donde se ve la estampa—. Sin este
+   hueco se afinaría mirando solo media página. */
+.disco.con-mandos .disco-cuerpo {
+  padding-right: 340px;
+  max-width: none;
+}
+
 /* Los hijos de una rejilla no encogen por debajo del ancho de su contenido: sin
    esto, un título de canción largo ensancha la columna y la página se sale. */
 .disco-cuerpo > * {

@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import LienzoGaga from "./LienzoGaga";
+import { propsDeLienzo, type Afinado } from "./Mandos";
 import { ERAS } from "./simbolo";
 import { fraccionPorEra } from "./canciones";
 
@@ -33,7 +34,15 @@ const HUECO = { izq: 0.2233, arriba: 0.2267, ancho: 0.5467, alto: 0.5533 };
 // generador de ahora trabaja en las coordenadas de la figura, no del lienzo: la
 // pieza se ve igual a cualquier tamaño y no hay nada que escalar.
 
-export default function Portada({ seleccion }: { seleccion: Set<string> }) {
+export default function Portada({
+  seleccion,
+  // PROVISIONAL: lo que venga del panel de mandos. Sin él, el lienzo usa lo que
+  // trae de serie, que es lo que ve quien entra en la web.
+  afinado,
+}: {
+  seleccion: Set<string>;
+  afinado?: Afinado;
+}) {
   // El ancho real del hueco. Ya no escala ningún ajuste del material —el
   // generador de ahora no mide en píxeles—, pero sí las sombras del CSS.
   const huecoRef = useRef<HTMLDivElement>(null);
@@ -87,6 +96,7 @@ export default function Portada({ seleccion }: { seleccion: Set<string> }) {
             // sin nada más que hacer, y quieta dentro de la caja parecía pegada
             // al fondo en vez de suspendida en él.
             flotar={1}
+            {...(afinado ? propsDeLienzo(afinado) : {})}
             className="portada-simbolo"
           />
         )}

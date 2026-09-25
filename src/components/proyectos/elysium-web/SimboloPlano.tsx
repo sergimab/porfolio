@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
-import { AJUSTE_BASE, POR_POLIGONO, construirForma } from "./formaGaga";
+import { AJUSTE_BASE, POR_POLIGONO, construirForma, type Ajuste } from "./formaGaga";
 import { ERAS } from "./simbolo";
 import { fraccionPorEra } from "./canciones";
 
@@ -19,20 +19,24 @@ const LADO = 512;
 
 export default function SimboloPlano({
   seleccion,
+  // PROVISIONAL: la forma afinada desde el panel de mandos, para que la estampa
+  // siga a la pieza mientras se afina en vez de quedarse con la de serie.
+  ajuste,
   className,
   style,
 }: {
   seleccion: Set<string>;
+  ajuste?: Ajuste;
   className?: string;
   style?: React.CSSProperties;
 }) {
   const lienzo = useRef<HTMLCanvasElement>(null);
   const forma = useMemo(() => {
-    const f = construirForma(fraccionPorEra(seleccion, ERAS), AJUSTE_BASE);
+    const f = construirForma(fraccionPorEra(seleccion, ERAS), ajuste ?? AJUSTE_BASE);
     // El buffer se reescribe en cada llamada, así que se copia lo que toca:
     // guardarse la referencia sería guardarse la siguiente figura.
     return f && { piezas: Array.from(f.poligonos.slice(0, f.cuantos * POR_POLIGONO)), caja: f.caja, cuantos: f.cuantos };
-  }, [seleccion]);
+  }, [seleccion, ajuste]);
 
   useEffect(() => {
     const c = lienzo.current;

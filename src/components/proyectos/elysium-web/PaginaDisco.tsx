@@ -3,6 +3,7 @@
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import Portada from "./Portada";
 import SimboloPlano from "./SimboloPlano";
+import Mandos, { useAfinado } from "./Mandos";
 import { ERAS } from "./simbolo";
 import { CANCIONES, claveCancion } from "./canciones";
 
@@ -50,6 +51,12 @@ export default function PaginaDisco({
   seleccion: Set<string>;
   onReintentar: () => void;
 }) {
+  // PROVISIONAL: el panel de mandos, con la tecla P. Aquí y no solo en la
+  // ventana de previsualización porque este es el sitio donde el símbolo va
+  // PUESTO —dentro de la carátula, con su luz y su levitación, y estampado en la
+  // camiseta—, y afinarlo mirándolo suelto sobre negro es afinarlo a ciegas.
+  const mandos = useAfinado();
+
   // Las canciones elegidas, en orden de discografía y de tracklist. Recorrer
   // las eras en vez del Set es lo que da un orden estable: un Set conserva el
   // orden de inserción, o sea el orden en que se fue pulsando, que no significa
@@ -104,11 +111,11 @@ export default function PaginaDisco({
   }, []);
 
   return (
-    <div className="disco">
+    <div className={`disco${mandos.abierto ? " con-mandos" : ""}`}>
       <main className="disco-cuerpo">
         <section className="disco-izquierda" ref={izquierdaRef}>
           <div>
-            <Portada seleccion={seleccion} />
+            <Portada seleccion={seleccion} afinado={mandos.afinado} />
           </div>
           {/* Vuelve al universo con la selección INTACTA: "otra vez" es rehacer
               el test, no perder lo marcado y empezar de cero. */}
@@ -158,6 +165,9 @@ export default function PaginaDisco({
                 <SimboloPlano
                   key={i}
                   seleccion={seleccion}
+                  // La estampa sigue a la pieza mientras se afina: si el trazo
+                  // engorda en la carátula, también en la camiseta.
+                  ajuste={mandos.lienzo.ajuste}
                   className="disco-estampa"
                   style={{
                     left: `${e.x * 100}%`,
@@ -197,6 +207,10 @@ export default function PaginaDisco({
           </div>
         </section>
       </main>
+
+      {mandos.abierto && (
+        <Mandos valores={mandos.afinado} onCambio={mandos.setAfinado} onCerrar={mandos.cerrar} />
+      )}
     </div>
   );
 }
