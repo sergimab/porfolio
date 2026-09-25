@@ -309,7 +309,12 @@ vec2 world(vec2 fc){ return uCenter+(fc-.5*uN)*pj(); }
     // selección la caja crece o mengua, y sin amortiguar el símbolo daría un
     // tirón en cada clic.
     const vista = { size: 2, cx: 0, cy: 0 };
-    const mostrado = new Float32Array(vivo.current.valores.length);
+    // ARRANCA EN SU SITIO, NO EN CERO. Lo que sigue amortigua hacia el valor
+    // nuevo, que es lo que hace que un cambio de selección no dé un tirón; pero
+    // empezando en cero ese amortiguado se convierte en una entrada —la figura
+    // creciendo desde nada— y eso no lo pide nadie. Montada, la pieza ya está
+    // hecha; a partir de ahí, cada cambio se desliza.
+    const mostrado = Float32Array.from(vivo.current.valores);
     const t0 = performance.now();
     const BLANCO = new THREE.Color(0xffffff);
     let animId = 0;

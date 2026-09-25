@@ -1,19 +1,22 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import LienzoGaga from "./LienzoGaga";
 import Galaxia from "./Galaxia";
 import IconosFlotantes from "./IconosFlotantes";
 import { ERAS } from "./simbolo";
 import { fraccionPorEra } from "./canciones";
 
-// Lo que tarda el símbolo en trazarse entero. Largo a propósito: es el momento
-// en que aparece lo que la persona acaba de generar, y merece verse nacer.
-const DURACION = 6800;
-// Y lo que se queda a la vista, ya entero, antes de pasar a la portada. Sin
-// esta pausa el símbolo se termina de trazar y desaparece en el mismo gesto:
-// hay que darle un momento para verlo hecho.
-const PAUSA = 1400;
+// EL SÍMBOLO APARECE HECHO, con un fundido, y se queda a la vista lo que dura
+// esta espera antes de pasar a la portada.
+//
+// Antes se trazaba, y eran casi siete segundos de línea creciendo. Aquello se
+// podía hacer porque el motor de entonces dibujaba un recorrido y se podía
+// cortar por la mitad. El de ahora reparte los porcentajes y rellena la silueta
+// de una vez, así que lo único que se podía animar era el valor de cada eje, y
+// eso no hacía crecer la figura: la deformaba, porque el grosor del trazo no
+// depende de los porcentajes. Aparecer hecha es más honesto con lo que es.
+const ESPERA = 3600;
 
 // EL TALLER SE FUE CON EL MOTOR ANTERIOR. Aquí vivían el recorte del trazo —un
 // trim path que enseñaba la línea creciendo—, el esqueleto que dibujaba el
@@ -31,47 +34,14 @@ export default function PantallaSimbolo({
   // hecho merece un momento a la vista antes de que la pantalla cambie.
   onListo: () => void;
 }) {
-  const [avance, setAvance] = useState(0);
-
   const completo = useMemo(() => fraccionPorEra(seleccion, ERAS), [seleccion]);
   const hay = completo.some((v) => v > 0);
 
   useEffect(() => {
-    // Sin animación, el símbolo aparece hecho. No es una versión pobre: para
-    // quien pide menos movimiento, ver la figura es el resultado, y trazarla es
-    // el adorno.
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setAvance(1);
-      const salto = window.setTimeout(onListo, PAUSA);
-      return () => clearTimeout(salto);
-    }
-    let raf = 0;
-    let espera = 0;
-    let inicio = 0;
-    const paso = (t: number) => {
-      if (!inicio) inicio = t;
-      const p = Math.min(1, (t - inicio) / DURACION);
-      // Suavizado a la entrada y a la salida: arranca sin tirón y llega al
-      // final frenando, que es como se termina un trazo a mano.
-      setAvance(p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2);
-      if (p < 1) raf = requestAnimationFrame(paso);
-      else espera = window.setTimeout(onListo, PAUSA);
-    };
-    raf = requestAnimationFrame(paso);
-    return () => {
-      cancelAnimationFrame(raf);
-      clearTimeout(espera);
-    };
+    const salto = window.setTimeout(onListo, ESPERA);
+    return () => clearTimeout(salto);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // LA FIGURA CRECE DESDE EL CENTRO en vez de trazarse punta a punta. El motor
-  // de ahora no dibuja una línea que se recorre: reparte los porcentajes en el
-  // gráfico y rellena la silueta de una vez, así que no hay «hasta dónde va el
-  // trazo» que recortar. Lo que sí hay es cuánto vale cada eje, y subirlos todos
-  // de cero a su valor hace que las agujas salgan del centro y se estiren hasta
-  // su sitio. El símbolo sigue naciendo delante, solo que de dentro afuera.
-  const valores = useMemo(() => completo.map((v) => v * avance), [completo, avance]);
 
   return (
     <div className="inicio simfinal">
@@ -87,7 +57,7 @@ export default function PantallaSimbolo({
         <div className="simfinal-lienzo">
           {hay && (
             <LienzoGaga
-              valores={valores}
+              valores={completo}
               // Cromo, que es el material del universo: la pieza se recorta
               // contra las eras desenfocadas y tiene que devolverlas. El fondo
               // del lienzo se queda transparente para eso.
