@@ -2,60 +2,12 @@
    ya no estamos en el universo, estamos en la ficha de un álbum. */
 .disco {
   min-height: 100dvh;
+  padding-top: var(--ely-barra, 59px);
+  box-sizing: border-box;
   background: #fff;
   color: #2a1450;
   display: flex;
   flex-direction: column;
-}
-
-.disco-barra {
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding: 14px 22px;
-  border-bottom: 1px solid rgba(42, 20, 80, 0.1);
-}
-.disco-menu {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 24px;
-  height: 15px;
-  padding: 0;
-  border: none;
-  background: none;
-  cursor: pointer;
-}
-.disco-menu span {
-  display: block;
-  height: 2px;
-  background: #2a1450;
-  border-radius: 2px;
-}
-/* La marca va centrada en la barra, no en el hueco que deja el menú: por eso
-   se posiciona en absoluto en vez de repartir el espacio. */
-.disco-marca {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 13px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-.disco-marca img {
-  height: 17px;
-  width: auto;
-  /* El logo viene en blanco, para el fondo negro del resto de la web. Aquí el
-     fondo es claro, así que se invierte en vez de guardar un segundo archivo. */
-  filter: invert(1);
-}
-.disco-marca span {
-  padding-left: 10px;
-  border-left: 1px solid rgba(42, 20, 80, 0.3);
 }
 
 .disco-cuerpo {
@@ -118,6 +70,7 @@
 .disco-lista {
   position: relative;
   border-radius: 18px;
+  overflow: hidden;
   padding: 14px 14px 22px;
   background: linear-gradient(150deg, rgba(233, 210, 240, 0.9), rgba(214, 206, 244, 0.75));
   border: 1px solid rgba(255, 255, 255, 0.8);
@@ -159,23 +112,32 @@
   letter-spacing: 0.09em;
   text-transform: uppercase;
 }
+/* El mismo botón que el de las tarjetas: blanco, redondo y mordiendo la esquina
+   de abajo a la derecha. */
 .disco-play {
   position: absolute;
-  right: 16px;
-  bottom: -16px;
-  width: 40px;
-  height: 40px;
+  right: 0;
+  bottom: 0;
+  width: 62px;
+  height: 62px;
   display: grid;
   place-items: center;
+  padding: 0;
   border: none;
-  border-radius: 50%;
-  background: #2a1450;
-  color: #fff;
+  border-radius: 40% 0 18px 0;
+  background: #fff;
+  color: #3a2168;
   cursor: pointer;
+  transition: color 0.2s;
 }
 .disco-play svg {
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
+  margin: 5px 0 0 5px;
+}
+.disco-play:hover,
+.disco-play:focus-visible {
+  color: #7a4fd0;
 }
 
 /* ── Importar a la plataforma ── */
@@ -202,16 +164,25 @@
   justify-content: center;
   gap: 10px;
 }
+/* Los logotipos oficiales, en negro sobre blanco y todos a la misma ALTURA de
+   letra y no al mismo ancho: son de proporciones muy distintas y encajados por
+   el ancho, Amazon se veía el triple que Apple. */
 .disco-importar button {
-  padding: 8px 16px;
+  display: grid;
+  place-items: center;
+  height: 38px;
+  padding: 0 16px;
   border: 1px solid rgba(42, 20, 80, 0.18);
   border-radius: 999px;
   background: #fff;
   font: inherit;
-  font-size: 13px;
-  color: #2a1450;
   cursor: pointer;
   transition: border-color 0.2s, background 0.2s;
+}
+.disco-importar button img {
+  height: 15px;
+  width: auto;
+  display: block;
 }
 .disco-importar button:hover,
 .disco-importar button:focus-visible {
@@ -230,100 +201,119 @@
     grid-template-columns: 1fr;
   }
 }
+/* LA FOTO MANDA Y EL TEXTO SE POSA ENCIMA. Antes la tarjeta era un hueco de
+   imagen con una banda debajo; ahora la fotografía ocupa la tarjeta entera y la
+   banda de color va POR DEBAJO del texto, flotando sobre ella, que es como está
+   diseñada. */
 .disco-tarjeta {
   position: relative;
+  aspect-ratio: 1;
   border-radius: 16px;
   overflow: hidden;
-  background: #ded7ef;
+  background: #ded7ef center / cover no-repeat;
+  /* Contenedor de consulta: el texto y el botón se miden en porcentaje de LA
+     TARJETA, así que la pieza entera crece y encoge como un bloque en vez de
+     descuadrarse cuando la columna cambia de ancho. */
+  container-type: inline-size;
 }
-/* Hueco de la fotografía. Provisional: son degradados hasta que estén las dos
-   imágenes de verdad —la camiseta y el disco físico—. */
-.disco-tarjeta-imagen {
-  aspect-ratio: 4 / 3;
-  background: linear-gradient(140deg, #d9d2e6, #b9aecd);
+.disco-tarjeta.es-merch {
+  background-image: url("/proyectos/elysium-web/card-merch.webp");
 }
-.disco-tarjeta-imagen.es-disco {
-  background: linear-gradient(140deg, #e7c6e0, #9f7fc4);
+.disco-tarjeta.es-album {
+  background-image: url("/proyectos/elysium-web/card-album.webp");
 }
+
+/* El símbolo estampado en la camiseta. Va en `multiply` para que no se pose
+   como una pegatina: así la trama y las arrugas de la tela se ven a través de
+   la tinta, como en una serigrafía de verdad. */
+.disco-estampa {
+  position: absolute;
+  z-index: 2;
+  height: auto;
+  aspect-ratio: 1;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* LA BANDA, TRASLÚCIDA Y CON LA FOTO DESENFOCADA DETRÁS. Un morado opaco tapa
+   la fotografía justo donde está lo que se ha comprado; a media opacidad y con
+   el desenfoque por debajo, la foto sigue ahí pero deja de competir con el
+   texto. Cruza la tarjeta entera y el botón cae encima, en su esquina. */
 .disco-tarjeta-pie {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 12px 14px;
-  background: rgba(58, 33, 104, 0.88);
+  align-items: flex-end;
+  /* Las dos bandas, del mismo alto: «Buy» cabe en un renglón y «Explore the»
+     en dos, y sin esto las dos tarjetas quedaban descuadradas entre sí. */
+  min-height: 33%;
+  box-sizing: border-box;
+  padding: 7cqw 8cqw 8cqw;
+  padding-right: 34cqw;
+  background: rgba(74, 44, 132, 0.62);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  backdrop-filter: blur(14px) saturate(1.1);
   color: #fff;
 }
 .disco-tarjeta-pie p {
   margin: 0;
   display: flex;
   flex-direction: column;
-  line-height: 1.25;
+  line-height: 1.2;
 }
 .disco-tarjeta-pie strong {
-  font-size: 15px;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(17px, 10cqw, 34px);
   font-weight: 500;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
+  line-height: 1.02;
+  text-transform: uppercase;
 }
 .disco-tarjeta-pie span {
-  font-size: 11px;
-  letter-spacing: 0.1em;
+  margin-top: 0.4em;
+  font-size: clamp(8.5px, 4cqw, 13px);
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  opacity: 0.75;
+  opacity: 0.85;
 }
-.disco-tarjeta-pie button {
-  flex: none;
-  width: 30px;
-  height: 30px;
+
+/* EL BOTÓN, EN LA ESQUINA DE ABAJO A LA DERECHA y por encima de la banda.
+   Blanco macizo, con la esquina de arriba a la izquierda muy redondeada y la de
+   abajo a la derecha siguiendo la de la tarjeta: así se lee como recortado en
+   ella y no como una pastilla posada encima. */
+.disco-tarjeta-ir {
+  position: absolute;
+  z-index: 4;
+  right: 0;
+  bottom: 0;
+  width: clamp(48px, 24%, 74px);
+  aspect-ratio: 1;
   display: grid;
   place-items: center;
+  padding: 0;
   border: none;
-  border-radius: 50%;
+  border-radius: 40% 0 16px 0;
   background: #fff;
-  color: #2a1450;
-  font-size: 17px;
-  line-height: 1;
+  color: #3a2168;
   cursor: pointer;
+  transition: color 0.2s;
+}
+.disco-tarjeta-ir svg {
+  width: 40%;
+  height: 40%;
+  margin: 8% 0 0 8%;
+}
+.disco-tarjeta-ir:hover,
+.disco-tarjeta-ir:focus-visible {
+  color: #7a4fd0;
 }
 
-/* El cuerpo es el sistema de referencia de los marcos líquidos, así que
-   necesita posicionamiento propio. */
+/* El cuerpo, sin más: el metal que rodeaba los bloques se quitó. Rodear cada
+   caja con una cinta era una capa de dibujo por encima de un contenido que ya
+   tiene su propia forma, y competía con la carátula. */
 .disco-cuerpo {
   position: relative;
-}
-/* El metal que rodea los bloques. Cubre la columna entera —los recorridos se
-   miden en fracción de SU ancho— y va por encima sin recoger el ratón. */
-.marcoliq {
-  position: absolute;
-  inset: 0;
-  z-index: 4;
-  pointer-events: none;
-}
-.marcoliq .lienzo-fluido {
-  height: 100%;
-  margin-top: 0;
-}
-.marcoliq .lienzo-marco {
-  height: 100%;
-  background: none;
-  border: none;
-  border-radius: 0;
-}
-/* Una sombra corta para despegar la cinta del papel. El metal ya trae su propio
-   contraste, pero sobre blanco puro le falta el apoyo que en la portada le da
-   el interior oscuro de la caja. */
-.marcoliq .lienzo-marco {
-  filter: drop-shadow(0 1px 3px rgba(42, 20, 80, 0.28));
-}
-
-/* En móvil, sin cinta.
-   La rejilla se apila en una columna, y los puentes entre bloques —que en
-   escritorio son saltos cortos de una caja a la de al lado— pasan a ser
-   diagonales que cruzan la pantalla por encima del contenido. No es un ajuste
-   de tamaño: el recorrido tiene que ser otro, y ese recorrido está por
-   diseñar. Hasta entonces vale más no enseñarlo que enseñarlo mal. */
-@media (max-width: 900px) {
-  .marcoliq {
-    display: none;
-  }
 }

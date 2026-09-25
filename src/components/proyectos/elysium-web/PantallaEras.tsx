@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Galaxia from "./Galaxia";
 import IconosFlotantes from "./IconosFlotantes";
 import PopupAlbum from "./PopupAlbum";
@@ -33,7 +33,17 @@ export default function PantallaEras({
   const [cerrando, setCerrando] = useState(false);
   // PROVISIONAL, como ALEATORIO: la previsualización del símbolo sin pasar por
   // el trazado. Ver PrevioSimbolo.
+  // El previo sigue montado pero sin botón: se abre con la tecla P, que es
+  // suficiente para volver a afinar la forma si hiciera falta y no mete un
+  // mando de taller en la pantalla de quien está haciendo el test.
   const [previo, setPrevio] = useState(false);
+  useEffect(() => {
+    const alPulsar = (e: KeyboardEvent) => {
+      if (e.key === "p" || e.key === "P") setPrevio((v) => !v);
+    };
+    window.addEventListener("keydown", alPulsar);
+    return () => window.removeEventListener("keydown", alPulsar);
+  }, []);
 
   return (
     <div className="inicio">
@@ -47,17 +57,10 @@ export default function PantallaEras({
       />
 
       <div className="eras-pie">
-        {/* PROVISIONAL, para probar formas: rellena el test al azar y vuelve a
-            sortear en cada pulsación. Va vaciado para que no compita con
-            FINISH, que es el botón de verdad. */}
-        <button type="button" className="cartel-boton es-hueco" onClick={onAleatorio}>
-          ALEATORIO
-        </button>
-        {/* PROVISIONAL, para afinar la forma: el símbolo de lo que hay marcado
-            ahora mismo, ya hecho, sin pasar por el trazado ni por la portada. */}
-        <button type="button" className="cartel-boton es-hueco" onClick={() => setPrevio(true)}>
-          PREVIO
-        </button>
+        {/* ALEATORIO y PREVIO eran los dos mandos con los que se afinó la forma
+            —rellenar el test al azar y ver el símbolo sin pasar por el trazado—.
+            La configuración ya está decidida, así que se guardan detrás de
+            MANDOS y aquí solo queda FINISH, que es el botón de la web. */}
         <button type="button" className="cartel-boton" onClick={() => setCerrando(true)}>
           FINISH
         </button>

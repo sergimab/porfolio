@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import Barra from "./Barra";
 import PantallaInicio from "./PantallaInicio";
 import PantallaEras from "./PantallaEras";
 import PantallaSimbolo from "./PantallaSimbolo";
@@ -69,13 +69,10 @@ export default function WebSimulada() {
         <PaginaDisco seleccion={seleccion} onReintentar={() => setPantalla("eras")} />
       )}
 
-      {/* El hilo de vuelta al portfolio, siempre disponible: sin él, quien entra
-          aquí se queda encerrado. Lleva a la parrilla de UI/UX, que es de donde
-          se viene: la web ya no cuelga de una página de proyecto, es el
-          proyecto. Va discreto y por encima de la galaxia. */}
-      <Link className="websim-salir" href="/?cat=uiux">
-        Volver al portfolio
-      </Link>
+      {/* La cabecera, la misma en las cuatro pantallas, con la salida al
+          portfolio dentro: sin ella, quien entra aquí se queda encerrado. Va
+          clara solo en la página del disco, que es la única sobre blanco. */}
+      <Barra clara={pantalla === "portada"} />
     </main>
   );
 }

@@ -8,32 +8,107 @@
   flex-direction: column;
   background: var(--background);
   color: var(--foreground);
+  /* El alto de la barra, que es fija y por tanto no ocupa sitio en el flujo.
+     Vive aquí para que las pantallas lo puedan pedir sin volver a medirlo. */
+  --ely-barra: 59px;
 }
 
-/* Enlace de salida al portfolio. Fijo y discreto, en una esquina que no pisa
-   ni el cartel de la portada ni la barra de las pantallas siguientes. */
-.websim-salir {
+/* ── LA BARRA, en todas las pantallas ────────────────────────────────────────
+   Estaba dibujada dentro de la página del disco y es la cabecera del sitio
+   entero. Va fija arriba y por encima de la galaxia, con el papel de la
+   pantalla en la que caiga: negro en el universo y en el trazado, blanco en la
+   página del disco. */
+.ely-barra {
   position: fixed;
-  right: 16px;
-  bottom: 14px;
-  z-index: 20;
-  padding: 7px 13px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  background: rgba(0, 0, 0, 0.45);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  font-size: 11.5px;
-  color: rgba(255, 255, 255, 0.78);
-  text-decoration: none;
-  transition: color 0.2s, border-color 0.2s;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  padding: 14px 22px;
+  box-sizing: border-box;
+  /* La tinta de la barra, que es lo único que cambia entre pantallas. */
+  --ely-tinta: rgba(255, 255, 255, 0.82);
+  --ely-filo: rgba(255, 255, 255, 0.28);
+  color: var(--ely-tinta);
+  border-bottom: 1px solid var(--ely-filo);
+  background: rgba(0, 0, 0, 0.35);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
-.websim-salir:hover,
-.websim-salir:focus-visible {
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.6);
+.ely-barra.es-clara {
+  --ely-tinta: #2a1450;
+  --ely-filo: rgba(42, 20, 80, 0.14);
+  background: rgba(255, 255, 255, 0.72);
 }
 
+/* La salida al portfolio, en el sitio del menú. Pastilla con filo fino, que es
+   la forma que tiene un botón en el resto del portfolio. */
+.ely-salir {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px 7px 12px;
+  border: 1px solid var(--ely-filo);
+  border-radius: 999px;
+  color: var(--ely-tinta);
+  font-size: 12px;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.ely-salir:hover,
+.ely-salir:focus-visible {
+  background: var(--ely-tinta);
+  border-color: var(--ely-tinta);
+  color: #000;
+}
+.ely-barra.es-clara .ely-salir:hover,
+.ely-barra.es-clara .ely-salir:focus-visible {
+  color: #fff;
+}
+
+/* La marca, centrada en la BARRA y no en el hueco que deja la salida: por eso
+   va en absoluto en vez de repartir el espacio. */
+.ely-marca {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.ely-marca img {
+  height: 17px;
+  width: auto;
+}
+/* El logotipo viene en blanco. Sobre el papel claro de la página del disco se
+   invierte, en vez de guardar un segundo archivo. */
+.ely-barra.es-clara .ely-marca img {
+  filter: invert(1);
+}
+.ely-marca span {
+  padding-left: 10px;
+  border-left: 1px solid var(--ely-filo);
+}
+
+@media (max-width: 560px) {
+  /* En el teléfono no caben las dos cosas: se queda la salida, que es la que
+     hace falta, y la marca pasa a ser solo el logotipo. */
+  .ely-marca span {
+    display: none;
+  }
+  .ely-salir span {
+    display: none;
+  }
+  .ely-salir {
+    padding: 8px 10px;
+  }
+}
 
 /* La pantalla de la portada. De momento es solo el disco centrado: la página
    entera —lista de canciones, importar a la plataforma, comprar— viene

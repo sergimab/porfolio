@@ -2,7 +2,7 @@
 
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import Portada from "./Portada";
-import MarcoLiquido, { type Marco, type Suelto } from "./MarcoLiquido";
+import SimboloPlano from "./SimboloPlano";
 import { ERAS } from "./simbolo";
 import { CANCIONES, claveCancion } from "./canciones";
 
@@ -17,65 +17,24 @@ import { CANCIONES, claveCancion } from "./canciones";
 // test, en el orden de la discografía. Es la misma selección de la que salió el
 // símbolo, así que la portada y la lista son dos vistas de lo mismo.
 
-// Las plataformas a las que se puede exportar. De momento son rótulos: los
-// logotipos de Apple Music, Spotify y Amazon Music son marcas registradas y
-// tienen que venir de sus kits oficiales, no dibujados a mano.
-const PLATAFORMAS = ["Apple Music", "Spotify", "Amazon Music"];
-
-// El recorrido del metal por la página. No es una cinta única: son TRES piezas
-// y un par de esquirlas sueltas, que es como está dibujado.
-//
-// La primera versión daba la vuelta completa a cada bloque y saltaba de uno a
-// otro por el camino más corto, o sea cruzando el contenido. Aquí ningún bloque
-// se cierra —cada pieza abraza dos o tres lados y se marcha—, los cabos se
-// pasan de largo y mueren en aguja, en los nudos cruzan púas, y el único salto
-// serpentea por el HUECO que queda entre la lista y el bloque de importar.
-//
-// Los lados se nombran siempre en el sentido de las agujas del reloj, porque es
-// el único en el que se encadenan; `invertir` recorre esa misma poligonal al
-// revés, y es lo que permite empezar por un cabo al aire en vez de por una
-// esquina.
-const MARCOS: Marco[] = [
-  // Columna derecha: nace en el aire a la derecha de la lista, corre por su
-  // borde de arriba hacia la izquierda, baja por su costado, serpentea por el
-  // hueco y rodea el bloque de importar hasta salir por su derecha.
-  {
-    bloque: "lista",
-    lados: ["izquierda", "arriba"],
-    invertir: true,
-    asomo: [0.5, 0],
-    nudos: [{ en: 0.18 }],
-  },
-  {
-    bloque: "importar",
-    lados: ["derecha", "abajo", "izquierda"],
-    invertir: true,
-    unir: "serpiente",
-    asomo: [0, 0.55],
-    nudos: [{ en: 0.92, angulos: [18, -74] }],
-  },
-  // La portada: una L por debajo y por la izquierda, con dos nudos, abierta por
-  // arriba y por la derecha.
-  {
-    bloque: "portada",
-    lados: ["abajo", "izquierda"],
-    asomo: [0.6, 0.55],
-    nudos: [{ en: 0.24 }, { en: 0.66, angulos: [12, -80], largo: 0.09 }],
-  },
-  // Y las tarjetas, que solo reciben una escuadra por el lado que da al hueco.
-  {
-    bloque: "tarjetas",
-    lados: ["abajo", "izquierda"],
-    invertir: true,
-    asomo: [0.45, 0.8],
-    nudos: [{ en: 0.85 }],
-  },
+// Las plataformas a las que se puede exportar, con su logotipo oficial. Van en
+// negro sobre el papel claro de esta página, que es como los entregan sus kits
+// de marca; ninguno está redibujado.
+const PLATAFORMAS = [
+  { nombre: "Apple Music", logo: "/proyectos/elysium-web/logo-apple-music.webp" },
+  { nombre: "Spotify", logo: "/proyectos/elysium-web/logo-spotify.webp" },
+  { nombre: "Amazon Music", logo: "/proyectos/elysium-web/logo-amazon-music.webp" },
 ];
 
-// Las esquirlas que flotan en el blanco, ancladas a un bloque para que sigan a
-// su caja al redimensionar pero colocadas fuera de él. Son remate, no marco: en
-// la referencia hay un par de agujas sueltas sin tocar nada, y quitarlas deja
-// la composición demasiado ordenada.
+// DÓNDE VA IMPRESO EL SÍMBOLO EN LA CAMISETA. Medido sobre la foto marcada, en
+// fracción de la tarjeta, no puesto a ojo: si mañana se cambia la foto, se
+// vuelve a medir. El ancho es el de la estampación; el alto lo pone la propia
+// figura.
+const ESTAMPAS = [
+  { x: 0.589, y: 0.146, ancho: 0.213, giro: -8.75 },
+  { x: 0.466, y: 0.524, ancho: 0.189, giro: 6.54 },
+];
+
 // Lo menos que puede medir la lista por mucho que aprieten las dos columnas.
 // Por debajo de esto deja de ser una lista con la que se pueda tratar y pasa a
 // ser una rendija con desplazamiento.
@@ -83,12 +42,6 @@ const LISTA_MINIMA = 150;
 // Y lo más, para que con pocas canciones no se estire hasta lo absurdo.
 const LISTA_MAXIMA = 420;
 
-const SUELTOS: Suelto[] = [
-  // Van pegadas por dentro del relleno de la página: más afuera, el lienzo
-  // acaba y la aguja se corta a la mitad en vez de terminar en punta.
-  { bloque: "portada", x: 0.36, y: -0.05, giro: -3, largo: 0.13, cruz: [64, 0.34] },
-  { bloque: "importar", x: 1.02, y: 0.55, giro: 84, largo: 0.09, cruz: [70, 0.4] },
-];
 
 export default function PaginaDisco({
   seleccion,
@@ -152,28 +105,9 @@ export default function PaginaDisco({
 
   return (
     <div className="disco">
-      <header className="disco-barra">
-        <button type="button" className="disco-menu" aria-label="Abrir el menú">
-          <span />
-          <span />
-          <span />
-        </button>
-        <p className="disco-marca">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/proyectos/elysium-web/logo-elysium.webp" alt="Elysium" />
-          <span>Lady Gaga</span>
-        </p>
-      </header>
-
       <main className="disco-cuerpo">
-        {/* El metal va por encima de todo y no recoge el ratón: es un adorno que
-            abraza los bloques, no una superficie con la que se trata. Cuelga del
-            cuerpo entero y no de una columna porque la cinta cruza de una a
-            otra. */}
-        <MarcoLiquido marcos={MARCOS} sueltos={SUELTOS} />
-
         <section className="disco-izquierda" ref={izquierdaRef}>
-          <div data-marco="portada">
+          <div>
             <Portada seleccion={seleccion} />
           </div>
           {/* Vuelve al universo con la selección INTACTA: "otra vez" es rehacer
@@ -185,7 +119,7 @@ export default function PaginaDisco({
 
         <section className="disco-derecha" ref={derechaRef}>
 
-          <div className="disco-lista" data-marco="lista">
+          <div className="disco-lista">
             <ol ref={listaRef} style={altoLista ? { maxHeight: altoLista } : undefined}>
               {elegidas.map((c, i) => (
                 <li key={`${c.era}-${c.titulo}`}>
@@ -201,41 +135,64 @@ export default function PaginaDisco({
             </button>
           </div>
 
-          <div className="disco-importar" data-marco="importar">
+          <div className="disco-importar">
             <p>Import to:</p>
             <ul>
               {PLATAFORMAS.map((p) => (
-                <li key={p}>
-                  <button type="button">{p}</button>
+                <li key={p.nombre}>
+                  <button type="button" aria-label={`Importar a ${p.nombre}`}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={p.logo} alt={p.nombre} />
+                  </button>
                 </li>
               ))}
             </ul>
           </div>
 
-          <div className="disco-tarjetas" data-marco="tarjetas">
-            <article className="disco-tarjeta">
-              <div className="disco-tarjeta-imagen" aria-hidden="true" />
+          <div className="disco-tarjetas">
+            <article className="disco-tarjeta es-merch">
+              {/* EL SÍMBOLO, ESTAMPADO. No es un adorno sobre la foto: es la
+                  figura que esa persona acaba de construir, puesta donde iría
+                  serigrafiada. Por eso la tarjeta dice «custom». */}
+              {ESTAMPAS.map((e, i) => (
+                <SimboloPlano
+                  key={i}
+                  seleccion={seleccion}
+                  className="disco-estampa"
+                  style={{
+                    left: `${e.x * 100}%`,
+                    top: `${e.y * 100}%`,
+                    width: `${e.ancho * 100}%`,
+                    transform: `translate(-50%, -50%) rotate(${e.giro}deg)`,
+                  }}
+                />
+              ))}
               <div className="disco-tarjeta-pie">
                 <p>
                   <strong>Buy</strong>
                   <span>custom merchandising</span>
                 </p>
-                <button type="button" aria-label="Ver el merchandising">
-                  ›
-                </button>
               </div>
+              <button type="button" className="disco-tarjeta-ir" aria-label="Ver el merchandising">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" strokeWidth="2.2"
+                        strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
             </article>
-            <article className="disco-tarjeta">
-              <div className="disco-tarjeta-imagen es-disco" aria-hidden="true" />
+            <article className="disco-tarjeta es-album">
               <div className="disco-tarjeta-pie">
                 <p>
                   <strong>Explore the</strong>
                   <span>new album</span>
                 </p>
-                <button type="button" aria-label="Explorar el álbum">
-                  ›
-                </button>
               </div>
+              <button type="button" className="disco-tarjeta-ir" aria-label="Explorar el álbum">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" strokeWidth="2.2"
+                        strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
             </article>
           </div>
         </section>
