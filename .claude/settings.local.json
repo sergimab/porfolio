@@ -415,7 +415,9 @@
       "Bash(curl -s \"http://localhost:3005/_next/static/chunks/%5Broot-of-the-server%5D__1g5iiln._.css\")",
       "Bash(rec\" src *)",
       "Bash(python3 /tmp/fix.py)",
-      "Bash(python3 /tmp/rec.py)"
+      "Bash(python3 /tmp/rec.py)",
+      "Bash(python3 /tmp/f2.py)",
+      "Bash(python3 /tmp/f3.py)"
     ],
     "defaultMode": "acceptEdits"
   }

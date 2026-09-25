@@ -253,10 +253,23 @@
   box-sizing: border-box;
   padding: 7cqw 8cqw 8cqw;
   padding-right: 34cqw;
+  color: #fff;
+}
+/* EL MORADO Y EL DESENFOQUE, EN UNA CAPA APARTE Y POR DETRAS DEL TEXTO.
+   Puestos en la propia banda, el `backdrop-filter` se comia lo que llevaba
+   dentro: el titulo y el boton dejaban de pintarse —seguian ahi, medibles y
+   pulsables, pero invisibles—. Es cosa de como el navegador agrupa las capas
+   cuando un elemento con filtro de fondo tiene contenido encima. Separado en un
+   `::before`, el filtro hace su trabajo sobre la foto y el texto se pinta por
+   encima sin entrar en el grupo. */
+.disco-tarjeta-pie::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   background: rgba(74, 44, 132, 0.62);
   -webkit-backdrop-filter: blur(14px) saturate(1.1);
   backdrop-filter: blur(14px) saturate(1.1);
-  color: #fff;
 }
 .disco-tarjeta-pie p {
   margin: 0;
