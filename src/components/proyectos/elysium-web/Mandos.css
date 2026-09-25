@@ -91,20 +91,6 @@
   color: #ff5f7a;
 }
 
-/* La fila del plató lleva una lista en vez de un deslizador, y ocupa el ancho
-   entero: el nombre de un plató no cabe en la columna del mando. */
-.mandos-fila.es-lista select {
-  grid-column: 1 / -1;
-  width: 100%;
-  padding: 5px 8px;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  border-radius: 7px;
-  background: rgba(0, 0, 0, 0.5);
-  color: inherit;
-  font: inherit;
-  font-size: 11px;
-}
-
 .mandos-fila input[type="range"] {
   width: 100%;
   accent-color: #ff2d55;

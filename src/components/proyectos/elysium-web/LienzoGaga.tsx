@@ -32,17 +32,22 @@ import { AJUSTE_BASE, MAXP, POR_POLIGONO, construirForma, type Ajuste } from "./
 
 export type Material = "cromo" | "cristal";
 
-// LOS PLATÓS. Un metal no tiene color propio: lo que se ve en él es la
-// habitación, así que cambiar de plató es cambiar de material sin tocar el
-// material. Todos son HDRI de Poly Haven (CC0) a 1k, servidos desde el propio
-// sitio para no depender de nadie, y a 1k y no 2k porque se desenfocan al
-// reflejarse y pesan la cuarta parte.
-export const PLATOS = {
-  limpio: { archivo: "monochrome_studio_03.hdr", nombre: "Estudio limpio" },
-  fucsia: { archivo: "ferndale_studio_05.hdr", nombre: "Focos fucsia" },
-  frio: { archivo: "ferndale_studio_12.hdr", nombre: "Focos fríos" },
-} as const;
-export type Plato = keyof typeof PLATOS;
+// EL PLATÓ. Un metal no tiene color propio: lo que se ve en él es la habitación,
+// así que el panorama ES el material. Es un HDRI de Poly Haven (CC0) a 1k,
+// servido desde el propio sitio para no depender de nadie, y a 1k y no 2k porque
+// se desenfoca al reflejarse y pesa la cuarta parte.
+//
+// Un estudio blanco de techo oscuro, elegido a propósito. El que traía el
+// generador original era de tonos cálidos y en la portada salía un símbolo
+// dorado, que es lo que no pega: la carátula va de rosas, violetas y manos de
+// cromo líquido, y el oro se lee como una pieza prestada de otra parte. Este
+// devuelve un cromo neutro y brillante, el mismo material que las manos.
+//
+// Se probaron también dos de focos de color —fucsia y frío—, que sobre el papel
+// eran los que pegaban. En la práctica no: son luces pequeñas en habitaciones
+// oscuras, y un metal devuelve lo que le rodea, así que la pieza salía casi
+// negra dentro de una caja ya oscura.
+const PLATO = "/elysium/monochrome_studio_03.hdr";
 
 // LOS AJUSTES DE LA WEB, en un sitio y no repartidos por las tres pantallas.
 // Salen del panel de mandos, mirando la figura; no son los que trae el generador
@@ -54,20 +59,6 @@ export const LIENZO_BASE = {
   suavidad: 2.6,
   volumen: 0.3,
   giroLuz: -80,
-  // EL PLATÓ LIMPIO, y no el que traía el generador original.
-  //
-  // Aquel era un estudio de tonos cálidos y en la portada salía un símbolo
-  // dorado, que es justo lo que no pega: la carátula va de rosas, violetas y
-  // manos de cromo líquido, y el oro se lee como una pieza prestada de otra
-  // parte. Este es un plató blanco con techo oscuro, así que devuelve un cromo
-  // neutro y brillante —el mismo material que las manos— y encima se recorta
-  // contra el interior de la caja.
-  //
-  // También se probó el de focos fucsia, que sobre el papel era el que pegaba y
-  // en la práctica no: son luces pequeñas en una habitación oscura, y un metal
-  // devuelve lo que le rodea, así que la pieza salía casi negra dentro de una
-  // caja ya oscura. Se queda como opción en el panel.
-  plato: "limpio" as Plato,
 };
 
 export default function LienzoGaga({
@@ -88,8 +79,6 @@ export default function LienzoGaga({
   // El giro del plató. Decide qué reflejos caen en la pieza, así que es lo que
   // más cambia el color de un metal.
   giroLuz = LIENZO_BASE.giroLuz,
-  // El plató que se refleja.
-  plato = LIENZO_BASE.plato,
   // Cuánto del recorrido se ha dibujado, de 0 a 1. Es el trim path: la figura no
   // aparece entera, se traza desde el centro siguiendo el camino que une los
   // discos por orden de votos. Con 1 sale hecha.
@@ -116,7 +105,6 @@ export default function LienzoGaga({
   suavidad?: number;
   volumen?: number;
   giroLuz?: number;
-  plato?: Plato;
   recorte?: number;
   flotar?: number;
   animar?: boolean;
@@ -127,8 +115,8 @@ export default function LienzoGaga({
   // Lo que cambia entre cuadros viaja por una caja, no por el efecto: montar
   // toda la cadena de render otra vez porque ha cambiado un número sería tirar
   // las texturas y el plató en cada pulsación.
-  const vivo = useRef({ valores, material, ajuste, fusion, organico, suavidad, volumen, giroLuz, plato, recorte, animar, flotar });
-  vivo.current = { valores, material, ajuste, fusion, organico, suavidad, volumen, giroLuz, plato, recorte, animar, flotar };
+  const vivo = useRef({ valores, material, ajuste, fusion, organico, suavidad, volumen, giroLuz, recorte, animar, flotar });
+  vivo.current = { valores, material, ajuste, fusion, organico, suavidad, volumen, giroLuz, recorte, animar, flotar };
 
   useEffect(() => {
     const canvas = lienzo.current;
@@ -178,30 +166,22 @@ export default function LienzoGaga({
     scene.environmentRotation.y = (vivo.current.giroLuz * Math.PI) / 180;
 
     // Y encima, el plató de verdad, servido desde el propio sitio. Si no llega,
-    // se queda el de código y no se nota más que en el reflejo. Se guardan los
-    // que se hayan pedido, para que cambiar de uno a otro y volver no obligue a
-    // descargarlo y prepararlo otra vez.
-    const guardados = new Map<string, THREE.Texture>();
+    // se queda el de código y no se nota más que en el reflejo.
+    let hdr: THREE.Texture | null = null;
     let vivoAun = true;
-    const ponerPlato = (clave: Plato) => {
-      const guardado = guardados.get(clave);
-      if (guardado) { scene.environment = guardado; return; }
-      new RGBELoader().load(
-        `/elysium/${PLATOS[clave].archivo}`,
-        (tex) => {
-          tex.mapping = THREE.EquirectangularReflectionMapping;
-          const listo = pmrem.fromEquirectangular(tex).texture;
-          tex.dispose();
-          if (!vivoAun) { listo.dispose(); return; }
-          guardados.set(clave, listo);
-          if (vivo.current.plato === clave) scene.environment = listo;
-        },
-        undefined,
-        () => {}
-      );
-    };
-    let platoPuesto: Plato = vivo.current.plato;
-    ponerPlato(platoPuesto);
+    new RGBELoader().load(
+      PLATO,
+      (tex) => {
+        tex.mapping = THREE.EquirectangularReflectionMapping;
+        const listo = pmrem.fromEquirectangular(tex).texture;
+        tex.dispose();
+        if (!vivoAun) { listo.dispose(); return; }
+        hdr = listo;
+        scene.environment = listo;
+      },
+      undefined,
+      () => {}
+    );
 
     const camera = new THREE.PerspectiveCamera(28, 1, 0.1, 50);
     camera.position.set(0, 0, 4.6);
@@ -429,7 +409,6 @@ vec2 world(vec2 fc){ return uCenter+(fc-.5*uN)*pj(); }
         U.uPolyCount.value = forma.cuantos;
         (U.uPoly.value as Float32Array).set(forma.poligonos);
         scene.environmentRotation.y = (v.giroLuz * Math.PI) / 180;
-        if (v.plato !== platoPuesto) { platoPuesto = v.plato; ponerPlato(platoPuesto); }
 
         correr(mSemilla, jfa[0], null);
         let src = 0;
@@ -483,7 +462,7 @@ vec2 world(vec2 fc){ return uCenter+(fc-.5*uN)*pj(); }
       plano.geometry.dispose();
       vivoAun = false;
       deCodigo.dispose();
-      for (const t of guardados.values()) t.dispose();
+      hdr?.dispose();
       pmrem.dispose();
       renderer.dispose();
     };
