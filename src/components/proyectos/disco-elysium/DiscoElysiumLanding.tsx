@@ -1,4 +1,5 @@
 import BackCapsule from "@/components/shared/BackCapsule";
+import Recomendados from "@/components/shared/Recomendados";
 import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
 import LangText from "@/components/shared/LangText";
 import ToolIcons from "@/components/shared/ToolIcons";
@@ -167,6 +168,8 @@ export default function DiscoElysiumLanding() {
             />
           ))}
         </div>
+
+        <Recomendados ids={["d1", "u1"]} />
       </div>
     </main>
   );

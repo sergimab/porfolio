@@ -48,7 +48,7 @@ export default function IlustracionesLanding() {
           <IlustracionesSistema />
         </div>
 
-        <Recomendados ids={["i1"]} />
+        <Recomendados ids={["i1", "i3", "i4"]} />
       </div>
     </main>
   );

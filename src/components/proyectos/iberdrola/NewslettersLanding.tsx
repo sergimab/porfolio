@@ -1,4 +1,5 @@
 import BackCapsule from "@/components/shared/BackCapsule";
+import Recomendados from "@/components/shared/Recomendados";
 import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
 import LangText from "@/components/shared/LangText";
 import ToolIcons from "@/components/shared/ToolIcons";
@@ -57,6 +58,8 @@ export default function NewslettersLanding() {
           <PhoneMockup src="/proyectos/iberdrola/newsletters/nwl-29-12-es.html" title="Newsletter Iberdrola — 12 hitos" />
           <PhoneMockup src="/proyectos/iberdrola/newsletters/nwl-20-08-es.html" title="Newsletter Iberdrola — verano" />
         </div>
+
+        <Recomendados ids={["i5", "i1", "i4"]} />
       </div>
     </main>
   );

@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import Recomendados from "@/components/shared/Recomendados";
 import path from "node:path";
 import BackCapsule from "@/components/shared/BackCapsule";
 import ProjectHeroTitle from "@/components/shared/ProjectHeroTitle";
@@ -65,6 +66,8 @@ export default function IconografiaLanding() {
         {/* svg-oscuro solo contiene los iconos con partes blancas, teñidas del
             fondo oscuro; la galería elige la variante según el tema activo. */}
         <IconosGaleria iconos={listarSvg("svg")} conBlanco={listarSvg("svg-oscuro")} />
+
+        <Recomendados ids={["i5", "i1", "i3"]} />
       </div>
     </main>
   );
