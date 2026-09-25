@@ -424,7 +424,8 @@
       "Bash(python3 /tmp/f6.py)",
       "Bash(python3 /tmp/f7.py)",
       "Bash(python3 /tmp/f8.py)",
-      "Bash(python3 /tmp/f9.py)"
+      "Bash(python3 /tmp/f9.py)",
+      "Bash(python3 /tmp/tune.py)"
     ],
     "defaultMode": "acceptEdits"
   }

@@ -17,12 +17,19 @@ export const AJUSTES = {
   encaje: 0.62,
   // Grosor del montante —y, con la atracción, su alcance—.
   grosor: 0.0125,
-  // Lo que queda del grosor justo en el vértice.
-  pico: 0.22,
-  // A partir de qué cerrado está el giro se afila.
-  picoDesde: 0.12,
-  // Hasta dónde baja el alcance en el vértice.
-  picoAlcance: 0.45,
+  // Lo que queda del grosor justo en el vértice. Bajo a proposito: es lo que
+  // hace que un pico sea un pico y no el cabo redondo de una capsula. A 0,22 la
+  // punta llegaba al vertice con casi una cuarta parte del grosor y el corte
+  // del umbral la remataba en curva.
+  pico: 0.13,
+  // A partir de qué cerrado está el giro se afila. Bajo, para que tambien los
+  // vertices abiertos —los de una figura con muchos votos repartidos— salgan
+  // con punta y no solo los muy cerrados.
+  picoDesde: 0.07,
+  // Hasta dónde baja el alcance en el vértice. El alcance es lo que estira la
+  // aguja mas alla del trazo, pero tambien lo que la engorda: recogido, el
+  // vertice cierra en filo.
+  picoAlcance: 0.3,
   // A qué distancia se considera que dos tramos se molestan.
   cruceCerca: 1.6,
   // Y hasta dónde se recoge su alcance. Más alto = más fusión.
@@ -33,10 +40,11 @@ export const AJUSTES = {
   // sombreado —que lee la PENDIENTE— encuentra cuatro caras planas con sus
   // aristas. Dejando más alcance, las cúpulas de los dos tramos se solapan en
   // esos valles, el fondo sube y el cruce se lee como un nudo fundido.
-  cruceMin: 0.84,
+  cruceMin: 0.78,
   // Cuánto engorda la cinta en un cruce: el filete que rellena los rincones
-  // entre los brazos. Ver separarLosCruces.
-  cruceRelleno: 0.45,
+  // entre los brazos. Ver separarLosCruces. Bajo de 0,45: ahi estaba la masa
+  // que aparecia de golpe en mitad de un trazo recto, donde otro pasaba cerca.
+  cruceRelleno: 0.28,
   // Y hasta dónde se recoge el alcance cuando el tramo de enfrente va
   // PARALELO, no cruzado: bajo, para que la ida y la vuelta de una punta no se
   // suelden en una masa alargada. Ver separarLosCruces.

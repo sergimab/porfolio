@@ -68,8 +68,15 @@ const GROSOR_MAX = 13;
 const GROSOR_MIN = 1.4;
 const VELOCIDAD_TOPE = 1.4;
 const SUAVIZADO = 0.22;
-const AFILADO = 4.4;        // >1 afila; a más valor, la punta adelgaza antes
-const PUNTA_MIN = 0.12;
+const AFILADO = 5.4;        // >1 afila; a más valor, la punta adelgaza antes
+// EL SUELO DEL RADIO EN LA PUNTA, y con el la diferencia entre una aguja y una
+// capsula: por debajo de este valor la punta deja de adelgazar, asi que el
+// corte del umbral la remata con ese radio y sale un cabo redondo. Bajo de 0,12
+// a 0,05, que es lo que se puede hacer desde que el campo esta normalizado —un
+// hilo vale 1 en su eje igual que una cinta ancha, asi que no se parte por fino
+// que sea—. Cero no: con radio cero no hay cupula que sumar y la punta
+// desaparece en vez de afilarse.
+const PUNTA_MIN = 0.05;
 // Longitud de cada punta, en múltiplos del radio.
 //
 // Cuanto más larga, más aguja y menos cono: la punta adelgaza durante más
