@@ -28,10 +28,10 @@ import { paletaLegible, paletaClara, degradadoLegible, degradadoClaro, CAPSULE_D
 // Velo derivan de ellos: uno escribe lo secundario y el otro traza la línea que
 // separa y rellena lo que todavía no está.
 const COLORES = [
-  { nombre: "Dark", v: "#1C1A16", contra: "#F2EEE2" },
-  { nombre: "Light", v: "#F2EEE2", contra: "#1C1A16" },
-  { nombre: "Apagado", v: "var(--muted)", contra: "var(--background)" },
-  { nombre: "Velo", v: "var(--velo)", contra: "var(--foreground)" },
+  { nombre: "Dark", v: "#1C1A16", contra: "#F2EEE2", claro: "#F2EEE2", oscuro: "#1C1A16" },
+  { nombre: "Light", v: "#F2EEE2", contra: "#1C1A16", claro: "#F2EEE2", oscuro: "#1C1A16" },
+  { nombre: "Apagado", v: "var(--muted)", contra: "var(--background)", claro: "#6D6962", oscuro: "#8F8B85" },
+  { nombre: "Velo", v: "var(--velo)", contra: "var(--foreground)", claro: "#D9D4C5", oscuro: "#2E2B24" },
 ];
 
 // La escala de letra que se usa de verdad, contada de la hoja de estilos.
@@ -98,6 +98,10 @@ export default function Muestrario() {
           {COLORES.map(c => (
             <div className="sd-color" key={c.nombre} style={{ background: c.v, color: c.contra }}>
               <span>{c.nombre}</span>
+              {/* Los dos valores, el de cada modo. Sin ellos, Velo sobre el
+                  papel oscuro parece el mismo negro que Dark, y no lo es: es un
+                  paso por encima, que es justo lo que tiene que ser un filo. */}
+              <code>{c.claro} · {c.oscuro}</code>
             </div>
           ))}
         </div>

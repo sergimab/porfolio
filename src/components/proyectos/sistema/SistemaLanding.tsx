@@ -39,12 +39,12 @@ export default function SistemaLanding() {
             </div>
             <div className="project-meta-row">
               <span className="project-meta-key"><LangText es="Proyecto" en="Project" /></span>
-              <span><LangText es="Este mismo portfolio" en="This portfolio" /></span>
+              <span><LangText es="Porfolio" en="Portfolio" /></span>
             </div>
           </div>
         </div>
 
-        <ProjectHeroTitle es="Web Portfolio" en="Portfolio website" />
+        <ProjectHeroTitle es="Web Porfolio" en="Portfolio website" />
 
         <div className="project-introrow">
           <p className="project-intro">

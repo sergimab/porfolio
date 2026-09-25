@@ -60,7 +60,9 @@
 }
 .sd-color {
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 2px;
   aspect-ratio: 1;
   padding: 16px;
   /* El filo, del color del propio nombre: sobre el papel oscuro un filo de velo
@@ -68,6 +70,13 @@
   border: 1px solid color-mix(in srgb, currentColor 38%, transparent);
   border-radius: var(--r-caja);
   font-size: 15px;
+}
+/* Los dos valores, claro y oscuro. En un cuerpo pequeño y algo apagados: son el
+   dato de apoyo, no el nombre. */
+.sd-color code {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 11px;
+  opacity: 0.6;
 }
 
 
@@ -276,21 +285,19 @@
   margin-top: 0;
 }
 
-/* ── El móvil, reducido ──────────────────────────────────────────────────────
-   A su tamaño son 320 de ancho por unos 640 de alto y se come la ficha entera.
-   Se reduce con `scale` y no con el ancho porque todo lo que va dentro se mide
-   en porcentaje de la pantalla: cambiarle el ancho cambiaría el tamaño de la
-   letra de lo que se estuviera enseñando. */
+/* ── El móvil, a escala ──────────────────────────────────────────────────────
+   A su tamaño son 330 de ancho por unos 715 de alto y se come la ficha entera.
+   Aquí se le baja el ancho a 150 SIN escalar, que es lo que se puede hacer
+   porque esta muestra va vacía: la advertencia de no tocarle el ancho es por lo
+   que lleva dentro, y aquí no lleva nada. Antes iba con `scale` y un alto fijo
+   que le cortaba la mitad de abajo. */
 .sd-movil {
-  width: 100%;
-  height: 300px;
   display: flex;
   justify-content: center;
-  overflow: hidden;
+  width: 100%;
 }
 .sd-movil .movil {
-  transform: scale(0.45);
-  transform-origin: top center;
+  --movil-ancho: 150px;
 }
 
 /* ── La cabecera de proyecto y sus discos ────────────────────────────────── */

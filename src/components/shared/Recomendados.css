@@ -1,7 +1,13 @@
 /* «Proyectos recomendados». Ver el componente para el porqué del reparto. */
 
+/* LA LÍNEA DE ARRIBA ES PARTE DE LA PIEZA. Los recomendados van siempre al pie
+   de una página, después de contenido que no es suyo, y sin nada que los separe
+   se leían como un apartado más. El filete cruza el ancho entero y llega con el
+   componente, así que ninguna página tiene que acordarse de ponerlo. */
 .rec {
   margin-top: 56px;
+  padding-top: 28px;
+  border-top: 1px solid var(--velo);
 }
 .rec-titulo {
   margin: 0 0 22px;
