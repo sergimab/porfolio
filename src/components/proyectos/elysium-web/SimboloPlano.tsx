@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
-import { AJUSTE_BASE, POR_POLIGONO, construirForma, type Ajuste } from "./formaGaga";
+import { AJUSTE_BASE, POR_POLIGONO, construirForma, extensionDeRecorrido, type Ajuste } from "./formaGaga";
+import { ajustarAlTamano } from "./LienzoGaga";
 import { ERAS } from "./simbolo";
 import { fraccionPorEra } from "./canciones";
 
@@ -32,7 +33,15 @@ export default function SimboloPlano({
 }) {
   const lienzo = useRef<HTMLCanvasElement>(null);
   const forma = useMemo(() => {
-    const f = construirForma(fraccionPorEra(seleccion, ERAS), ajuste ?? AJUSTE_BASE);
+    const v = fraccionPorEra(seleccion, ERAS);
+    // LA MISMA CORRECCIÓN POR TAMAÑO QUE EL VOLUMEN. Sin esto la estampa de la
+    // camiseta y la pieza de la carátula serían la misma figura con distinto
+    // trazo, y son la misma cosa vista de dos maneras.
+    const bruto = ajuste ?? AJUSTE_BASE;
+    const f = construirForma(v, {
+      ...bruto,
+      grosor: ajustarAlTamano(extensionDeRecorrido(v), bruto.grosor, 0, 0).grosor,
+    });
     // El buffer se reescribe en cada llamada, así que se copia lo que toca:
     // guardarse la referencia sería guardarse la siguiente figura.
     return f && { piezas: Array.from(f.poligonos.slice(0, f.cuantos * POR_POLIGONO)), caja: f.caja, cuantos: f.cuantos };

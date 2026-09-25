@@ -62,6 +62,27 @@ export function recorrido(vals: ArrayLike<number>) {
   return { orden, puntos };
 }
 
+// LO GRANDE QUE ES LA FIGURA, medida sobre el CAMINO y no sobre la silueta.
+//
+// Tiene que ser sobre el camino porque la silueta incluye el grosor del trazo, y
+// el grosor es justo lo que se quiere decidir a partir de esto: midiendo la
+// silueta, engordar el trazo haría la figura «más grande» y eso pediría
+// engordarlo más. Un lazo que se muerde la cola.
+//
+// Se devuelve el lado mayor de la caja del camino, que es lo que el encuadre usa
+// para llenar la pantalla: dos figuras con esta misma medida se ven del mismo
+// tamaño aunque una tenga más brazos que la otra.
+export function extensionDeRecorrido(vals: ArrayLike<number>) {
+  const { orden, puntos } = recorrido(vals);
+  if (!orden.length) return 0;
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  for (const [x, y] of puntos) {
+    x0 = Math.min(x0, x); x1 = Math.max(x1, x);
+    y0 = Math.min(y0, y); y1 = Math.max(y1, y);
+  }
+  return Math.max(x1 - x0, y1 - y0);
+}
+
 const resta = (a: number[], b: number[]): [number, number] => [a[0] - b[0], a[1] - b[1]];
 const unidad = (a: number[]): [number, number] => {
   const l = Math.hypot(a[0], a[1]) || 1;

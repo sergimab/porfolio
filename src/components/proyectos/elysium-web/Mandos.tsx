@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import type { Ajuste } from "./formaGaga";
 import { AJUSTE_BASE } from "./formaGaga";
-import { LIENZO_BASE } from "./LienzoGaga";
+import { LIENZO_BASE, ajustarAlTamano } from "./LienzoGaga";
+import { extensionDeRecorrido } from "./formaGaga";
 import "./Mandos.css";
 
 // EL PANEL DE MANDOS DEL GENERADOR — herramienta de taller.
@@ -23,6 +24,9 @@ export type Afinado = Ajuste & {
   suavidad: number;
   volumen: number;
   giroLuz: number;
+  // Si el grosor, la fusión y el volumen se corrigen según lo grande que salga
+  // la figura. Ver `ajustarAlTamano` en LienzoGaga.
+  adaptar: boolean;
 };
 
 // «De fábrica» quiere decir LO QUE HAY PUESTO EN LA WEB, no lo que traía el
@@ -30,7 +34,7 @@ export type Afinado = Ajuste & {
 // abrirlo cambiaría la figura antes de tocar nada y no habría manera de comparar
 // contra lo que se está viendo. Por eso se toman de los dos sitios donde viven
 // de verdad, y volver atrás es volver a la web.
-export const AFINADO_BASE: Afinado = { ...AJUSTE_BASE, ...LIENZO_BASE };
+export const AFINADO_BASE: Afinado = { ...AJUSTE_BASE, ...LIENZO_BASE, adaptar: true };
 
 // LA TECLA Y EL ESTADO, para que cualquier pantalla pueda llevar el panel sin
 // repetir lo mismo. Devuelve lo que se ha afinado, si el panel está abierto, y
@@ -72,12 +76,13 @@ export function propsDeLienzo(a: Afinado) {
     suavidad: a.suavidad,
     volumen: a.volumen,
     giroLuz: a.giroLuz,
+    adaptar: a.adaptar,
   };
 }
 
 // Nombre, recorrido y paso de cada mando, copiados del generador.
 const MANDOS: {
-  clave: keyof Afinado;
+  clave: Exclude<keyof Afinado, "adaptar">;
   nombre: string;
   min: number;
   max: number;
@@ -89,9 +94,9 @@ const MANDOS: {
   que: string;
 }[] = [
   { clave: "fusion", nombre: "Fusión", min: 0.002, max: 0.1, paso: 0.002, cifras: 3,
-    que: "Cuánto se rellenan los rincones y los cruces" },
+    que: "Cuánto se rellenan los rincones y los cruces. Sigue al grosor" },
   { clave: "grosor", nombre: "Grosor", min: 0.4, max: 2, paso: 0.02, cifras: 2,
-    que: "El cuerpo del trazo" },
+    que: "El cuerpo del trazo, en proporción a lo grande que salga la figura" },
   { clave: "mezcla", nombre: "Mezcla grosor", min: 0, max: 1, paso: 0.02, cifras: 2,
     que: "0, todos los tramos iguales; 1, unos finos y otros gruesos" },
   { clave: "picos", nombre: "Picos", min: 0, max: 2, paso: 0.02, cifras: 2,
@@ -110,10 +115,15 @@ export default function Mandos({
   valores,
   onCambio,
   onCerrar,
+  // La selección que se está viendo, si la pantalla la tiene. Solo sirve para
+  // enseñar a cuánto quedan los valores después de corregirlos por el tamaño:
+  // sin esto habría que adivinar qué está haciendo el ajuste.
+  fracciones,
 }: {
   valores: Afinado;
   onCambio: (v: Afinado) => void;
   onCerrar: () => void;
+  fracciones?: readonly number[];
 }) {
   const [copiado, setCopiado] = useState(false);
 
@@ -132,6 +142,7 @@ export default function Mandos({
         sueltos.push(`${m.clave}={${n}}`);
       }
     }
+    if (valores.adaptar !== AFINADO_BASE.adaptar) sueltos.push(`adaptar={${valores.adaptar}}`);
     if (dentro.length) sueltos.unshift(`ajuste={{ ${dentro.join(", ")} }}`);
     return sueltos.length ? sueltos.join("\n") : "todo de fábrica";
   };
@@ -148,7 +159,15 @@ export default function Mandos({
     }
   };
 
-  const tocados = MANDOS.filter((m) => valores[m.clave] !== AFINADO_BASE[m.clave]).length;
+  const extension = fracciones ? extensionDeRecorrido(fracciones) : null;
+  const corregido =
+    valores.adaptar && extension
+      ? ajustarAlTamano(extension, valores.grosor, valores.fusion, valores.volumen)
+      : null;
+
+  const tocados =
+    MANDOS.filter((m) => valores[m.clave] !== AFINADO_BASE[m.clave]).length +
+    (valores.adaptar !== AFINADO_BASE.adaptar ? 1 : 0);
   const texto = receta();
 
   return (
@@ -159,6 +178,28 @@ export default function Mandos({
           ✕
         </button>
       </div>
+
+      {/* El ajuste al tamaño. Va arriba porque manda sobre tres de los
+          deslizadores de abajo, y apagarlo es la forma de ver qué hace. */}
+      <label className={`mandos-fila es-casilla${valores.adaptar === AFINADO_BASE.adaptar ? "" : " es-tocado"}`}>
+        <span className="mandos-nombre">
+          Ajustar al tamaño
+          <span className="mandos-que">
+            Da a cada figura el trazo que le toca por su tamaño. Apagado, el trazo es fijo
+          </span>
+        </span>
+        <input
+          type="checkbox"
+          checked={valores.adaptar}
+          onChange={(e) => onCambio({ ...valores, adaptar: e.target.checked })}
+        />
+      </label>
+
+      {corregido && (
+        <p className="mandos-receta es-cuenta">
+          {`extensión ${extension!.toFixed(2)}\ngrosor ${corregido.grosor.toFixed(3)}  ·  fusión ${corregido.fusion.toFixed(4)}  ·  volumen ${corregido.volumen.toFixed(2)}`}
+        </p>
+      )}
 
       {MANDOS.map((m) => {
         const v = valores[m.clave];

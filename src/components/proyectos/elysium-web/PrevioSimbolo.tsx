@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import LienzoGaga from "./LienzoGaga";
-import Mandos, { AFINADO_BASE, type Afinado } from "./Mandos";
+import Mandos, { AFINADO_BASE, propsDeLienzo, type Afinado } from "./Mandos";
 import { ERAS } from "./simbolo";
 import { fraccionPorEra } from "./canciones";
 
@@ -45,12 +45,7 @@ export default function PrevioSimbolo({
             valores={valores}
             girable
             className="previo-simbolo"
-            ajuste={afinado}
-            fusion={afinado.fusion}
-            organico={afinado.organico}
-            suavidad={afinado.suavidad}
-            volumen={afinado.volumen}
-            giroLuz={afinado.giroLuz}
+            {...propsDeLienzo(afinado)}
           />
         )}
       </div>
@@ -73,7 +68,7 @@ export default function PrevioSimbolo({
       </div>
 
       {mandos && (
-        <Mandos valores={afinado} onCambio={setAfinado} onCerrar={() => setMandos(false)} />
+        <Mandos valores={afinado} onCambio={setAfinado} onCerrar={() => setMandos(false)} fracciones={valores} />
       )}
     </div>
   );

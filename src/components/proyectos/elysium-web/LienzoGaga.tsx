@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
-import { AJUSTE_BASE, MAXP, POR_POLIGONO, construirForma, type Ajuste } from "./formaGaga";
+import { AJUSTE_BASE, MAXP, POR_POLIGONO, construirForma, extensionDeRecorrido, type Ajuste } from "./formaGaga";
 
 // EL SÍMBOLO EN VOLUMEN.
 //
@@ -65,6 +65,57 @@ export const LIENZO_BASE = {
   giroLuz: -80,
 };
 
+// ── EL AJUSTE AL TAMAÑO ──────────────────────────────────────────────────────
+//
+// EL GROSOR SE MIDE EN LA FIGURA, NO EN LA PANTALLA, y ahí está todo el lío.
+//
+// El encuadre persigue a la figura, así que todas llenan el cuadro por igual.
+// Pero el grosor del trazo y el radio de la fusión van en las coordenadas de la
+// figura y no cambian con ella. Medido: la extensión del camino va de 0,20 —dos
+// discos con pocos votos— a 1,82 —un reparto lleno—, nueve veces, y el trazo es
+// el mismo en las dos. Lo que se ve:
+//
+//   · las PEQUEÑAS salen gordas, con los rincones llenos y los huecos casi
+//     cerrados. Bonitas de material, pero la forma no se lee: son una mancha con
+//     una ranura.
+//   · las GRANDES salen de alambre. Rectas, angulosas, sin cuerpo donde el
+//     cromo pueda enseñar un degradado.
+//
+// Así que el trazo no se fija: se deduce. Se toma lo ancha que es la figura y se
+// le da el grosor y la fusión que le tocan para que TODAS tengan el mismo trazo
+// en proporción. El deslizador de grosor deja de significar «tantas unidades» y
+// pasa a significar «este cuerpo», que es lo que uno quiere decidir.
+//
+// La referencia es la figura de tres brazos flojos —extensión 0,43—, que es la
+// que sale con el aire que se buscaba: líquida, con cuerpo y con los huecos
+// abiertos. Lo que se vea a ese tamaño es lo que se verá a cualquier otro.
+const REFERENCIA = 0.43;
+// Y dos topes. Sin ellos, un símbolo de un solo disco al 5% se quedaría en un
+// pelo invisible, y uno enorme pediría un trazo más ancho de lo que el generador
+// sabe montar sin comerse sus propios huecos.
+const MENOR = 0.45;
+const MAYOR = 3.6;
+
+export function ajustarAlTamano(
+  extension: number,
+  grosor: number,
+  fusion: number,
+  volumen: number
+) {
+  if (!(extension > 0)) return { grosor, fusion, volumen };
+  const k = Math.min(MAYOR, Math.max(MENOR, extension / REFERENCIA));
+  return {
+    // Los dos a la vez y en la misma proporción: la fusión es un radio, y lo que
+    // decide el carácter no es cuánto mide sino cuánto mide FRENTE AL TRAZO.
+    // Escalando solo uno, las pequeñas saldrían de otra pasta que las grandes.
+    grosor: grosor * k,
+    fusion: fusion * k,
+    // El volumen NO se toca: el mapa de altura ya se mide contra el encuadre, así
+    // que sube lo mismo en proporción en una figura y en otra.
+    volumen,
+  };
+}
+
 export default function LienzoGaga({
   // Un valor por era, de 0 a 1, en el orden de ERAS.
   valores,
@@ -95,6 +146,9 @@ export default function LienzoGaga({
   // el brillo se pasea por la pieza. En un cromo eso es la mitad del efecto de
   // estar flotando.
   flotar = 0,
+  // El grosor, la fusión y el volumen se ajustan a lo grande que salga la
+  // figura. Ver `ajustarAlTamano`. Se apaga para comparar.
+  adaptar = true,
   // Con `animar` el contorno respira; sin él, la figura se queda quieta.
   animar = true,
   // Si se puede girar la pieza con el ratón.
@@ -111,6 +165,7 @@ export default function LienzoGaga({
   giroLuz?: number;
   recorte?: number;
   flotar?: number;
+  adaptar?: boolean;
   animar?: boolean;
   girable?: boolean;
   className?: string;
@@ -119,8 +174,8 @@ export default function LienzoGaga({
   // Lo que cambia entre cuadros viaja por una caja, no por el efecto: montar
   // toda la cadena de render otra vez porque ha cambiado un número sería tirar
   // las texturas y el plató en cada pulsación.
-  const vivo = useRef({ valores, material, ajuste, fusion, organico, suavidad, volumen, giroLuz, recorte, animar, flotar });
-  vivo.current = { valores, material, ajuste, fusion, organico, suavidad, volumen, giroLuz, recorte, animar, flotar };
+  const vivo = useRef({ valores, material, ajuste, fusion, organico, suavidad, volumen, giroLuz, recorte, adaptar, animar, flotar });
+  vivo.current = { valores, material, ajuste, fusion, organico, suavidad, volumen, giroLuz, recorte, adaptar, animar, flotar };
 
   useEffect(() => {
     const canvas = lienzo.current;
@@ -417,7 +472,11 @@ vec2 world(vec2 fc){ return uCenter+(fc-.5*uN)*pj(); }
       for (let i = 0; i < mostrado.length; i++) {
         mostrado[i] += ((v.valores[i] ?? 0) - mostrado[i]) * 0.12;
       }
-      const P: Ajuste = { ...AJUSTE_BASE, ...v.ajuste };
+      const bruto: Ajuste = { ...AJUSTE_BASE, ...v.ajuste };
+      const corregido = v.adaptar
+        ? ajustarAlTamano(extensionDeRecorrido(mostrado), bruto.grosor, v.fusion, v.volumen)
+        : { grosor: bruto.grosor, fusion: v.fusion, volumen: v.volumen };
+      const P: Ajuste = { ...bruto, grosor: corregido.grosor };
       const forma = construirForma(mostrado, P, v.recorte);
       pieza.visible = !!forma;
       if (forma) {
@@ -429,10 +488,10 @@ vec2 world(vec2 fc){ return uCenter+(fc-.5*uN)*pj(); }
         U.uSize.value = vista.size;
         if (v.animar) U.uTime.value = (ahora - t0) / 1000;
         U.uWarp.value = v.organico;
-        U.uR.value = v.fusion;
+        U.uR.value = corregido.fusion;
         U.uBevel.value = 0.06 * P.grosor;
         U.uSoft.value = v.suavidad;
-        U.uVol.value = v.volumen;
+        U.uVol.value = corregido.volumen;
         U.uPolyCount.value = forma.cuantos;
         (U.uPoly.value as Float32Array).set(forma.poligonos);
         scene.environmentRotation.y = (v.giroLuz * Math.PI) / 180;

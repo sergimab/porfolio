@@ -5,7 +5,7 @@ import Portada from "./Portada";
 import SimboloPlano from "./SimboloPlano";
 import Mandos, { useAfinado } from "./Mandos";
 import { ERAS } from "./simbolo";
-import { CANCIONES, claveCancion } from "./canciones";
+import { CANCIONES, claveCancion, fraccionPorEra } from "./canciones";
 
 // La página del disco: lo que aparece cuando el símbolo ya está formado.
 //
@@ -56,6 +56,7 @@ export default function PaginaDisco({
   // PUESTO —dentro de la carátula, con su luz y su levitación, y estampado en la
   // camiseta—, y afinarlo mirándolo suelto sobre negro es afinarlo a ciegas.
   const mandos = useAfinado();
+  const fracciones = useMemo(() => fraccionPorEra(seleccion, ERAS), [seleccion]);
 
   // Las canciones elegidas, en orden de discografía y de tracklist. Recorrer
   // las eras en vez del Set es lo que da un orden estable: un Set conserva el
@@ -209,7 +210,7 @@ export default function PaginaDisco({
       </main>
 
       {mandos.abierto && (
-        <Mandos valores={mandos.afinado} onCambio={mandos.setAfinado} onCerrar={mandos.cerrar} />
+        <Mandos valores={mandos.afinado} onCambio={mandos.setAfinado} onCerrar={mandos.cerrar} fracciones={fracciones} />
       )}
     </div>
   );

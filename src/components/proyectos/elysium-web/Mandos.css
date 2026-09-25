@@ -91,6 +91,20 @@
   color: #ff5f7a;
 }
 
+/* La casilla del ajuste: el nombre a la izquierda y la marca a la derecha, en
+   la misma columna donde las otras filas llevan su cifra. */
+.mandos-fila.es-casilla {
+  grid-template-columns: 1fr auto;
+}
+.mandos-fila.es-casilla .mandos-nombre {
+  grid-column: 1;
+}
+.mandos-fila.es-casilla input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #ff2d55;
+}
+
 .mandos-fila input[type="range"] {
   width: 100%;
   accent-color: #ff2d55;
@@ -144,6 +158,13 @@
     width: auto;
     max-height: 52vh;
   }
+}
+
+/* La cuenta del ajuste al tamaño: a cuánto quedan los tres valores después de
+   corregirlos. Misma caja que la receta, pero es informativa y no se copia. */
+.mandos-receta.es-cuenta {
+  margin: 0 0 4px;
+  color: rgba(255, 255, 255, 0.55);
 }
 
 /* La receta: los valores movidos, escritos como van en el componente. */
