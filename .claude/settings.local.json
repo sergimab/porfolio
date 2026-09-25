@@ -426,7 +426,8 @@
       "Bash(python3 /tmp/f8.py)",
       "Bash(python3 /tmp/f9.py)",
       "Bash(python3 /tmp/tune.py)",
-      "Bash(curl -sSL -o public/elysium/estudio.hdr \"https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/brown_photostudio_02_1k.hdr\")"
+      "Bash(curl -sSL -o public/elysium/estudio.hdr \"https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/brown_photostudio_02_1k.hdr\")",
+      "Bash(python3 -c \"import PIL; print\\('pillow ok'\\)\")"
     ],
     "defaultMode": "acceptEdits"
   }

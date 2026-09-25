@@ -409,5 +409,17 @@ vec2 world(vec2 fc){ return uCenter+(fc-.5*uN)*pj(); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [girable]);
 
-  return <canvas ref={lienzo} className={className} aria-hidden="true" />;
+  // EL TAMAÑO EN EL ESTILO VIENE DE SERIE. `setSize` se llama sin tocar el
+  // estilo —el lienzo tiene que seguir a su caja, no al revés—, y un canvas sin
+  // tamaño en el CSS se dibuja tan grande como su resolución: en una pantalla
+  // del doble de densidad, el doble de su caja. Poniéndolo aquí, quien lo usa no
+  // tiene que acordarse.
+  return (
+    <canvas
+      ref={lienzo}
+      className={className}
+      style={{ display: "block", width: "100%", height: "100%" }}
+      aria-hidden="true"
+    />
+  );
 }
