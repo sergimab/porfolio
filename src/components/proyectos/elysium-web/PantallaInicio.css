@@ -183,6 +183,19 @@
   width: min(74vh, 74vw);
   aspect-ratio: 1 / 1;
 }
+/* Con los mandos abiertos, la figura se aparta de ellos. El panel está fijo a la
+   derecha y flota por encima, así que sin esto se comería un tercio del símbolo
+   —justo mientras lo estás afinando—. */
+.previo.con-mandos .previo-lienzo {
+  width: min(74vh, calc(100vw - 380px));
+}
+@media (max-width: 700px) {
+  /* En estrecho el panel se va abajo, así que lo que hay que dejarle es alto. */
+  .previo.con-mandos .previo-lienzo {
+    width: min(42vh, 82vw);
+    margin-bottom: 46vh;
+  }
+}
 .previo-pie {
   display: flex;
   gap: 12px;
