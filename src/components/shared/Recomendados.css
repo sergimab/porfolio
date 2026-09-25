@@ -6,7 +6,9 @@
    componente, así que ninguna página tiene que acordarse de ponerlo. */
 .rec {
   margin-top: 56px;
-  padding-top: 28px;
+  /* 36 y no los 28 de la escala: el titular lleva capitular caligrafica, que
+     sube por encima del renglon, y a 28 la letra casi tocaba el filete. */
+  padding-top: 36px;
   border-top: 1px solid var(--velo);
 }
 .rec-titulo {

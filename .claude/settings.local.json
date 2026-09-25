@@ -412,7 +412,9 @@
       "Bash(ffprobe -v error -select_streams v -show_entries stream=width,height -of csv=p=0 public/covers/sistema-porfolio.webp)",
       "Bash(awk -F'de=\"' '{print length\\($2\\)\" \"$0}')",
       "Bash(curl -s http://localhost:3005/proyecto/u4)",
-      "Bash(curl -s \"http://localhost:3005/_next/static/chunks/%5Broot-of-the-server%5D__1g5iiln._.css\")"
+      "Bash(curl -s \"http://localhost:3005/_next/static/chunks/%5Broot-of-the-server%5D__1g5iiln._.css\")",
+      "Bash(rec\" src *)",
+      "Bash(python3 /tmp/fix.py)"
     ],
     "defaultMode": "acceptEdits"
   }

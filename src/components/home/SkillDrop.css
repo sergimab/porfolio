@@ -738,7 +738,9 @@ textarea.contact-input { resize: vertical; }
      por debajo de donde acaba el bloque y quedarse a catorce píxeles del lema.
      Esto le devuelve el respiro. */
   margin: 56px auto 28px;
-  padding: 0 24px;
+  /* Solo los lados. Con el atajo `padding` se borraba el de arriba, que es el
+     que separa el filete del titulo y viene con el componente. */
+  padding-inline: 24px;
   box-sizing: border-box;
 }
 .home-recomendados .rec-titulo {
