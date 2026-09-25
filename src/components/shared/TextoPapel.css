@@ -10,9 +10,15 @@
    interminable es que el texto sea breve, tres o cuatro renglones; si un día
    hay que contar más, lo que toca es partirlo en apartados, no alargar el
    párrafo. */
+/* LA CAJA, A RAS DEL MARGEN, y el texto metido hacia dentro. Antes era al revés
+   —el texto a ras y la caja saliéndose 18 píxeles por cada lado— para que el
+   renglón siguiera alineado con el resto de la página, pero el precio era que
+   el papel sobresalía del bloque y se leía como si se hubiera desencajado. La
+   entradilla de la cabecera ya lo hacía bien: es la misma receta, el papel
+   ocupa la columna y el texto respira por dentro. */
 .papel {
   position: relative;
-  margin: 4px -18px 0;
+  margin: 4px 0 0;
   padding: 10px 18px;
   border-radius: var(--r-pieza);
   background: var(--background);

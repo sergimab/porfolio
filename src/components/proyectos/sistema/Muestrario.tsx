@@ -106,9 +106,11 @@ export default function Muestrario() {
             <div
               className="sd-base-color"
               key={b.nombre}
-              /* El contrario del propio color, que es justo lo que cuenta la
-                 muestra: los dos se leen siempre el uno sobre el otro. */
-              style={{ background: b.valor, color: b.contra }}
+              /* El contrario del propio color, en la letra Y EN EL FILO: es
+                 justo lo que cuenta la muestra, que los dos se leen siempre el
+                 uno sobre el otro. Con el filo gris de antes, la muestra
+                 hablaba de un tercer color que aquí no pinta nada. */
+              style={{ background: b.valor, color: b.contra, borderColor: b.contra }}
             >
               <span className="sd-base-nombre">{b.nombre}</span>
               <code>{b.valor}</code>

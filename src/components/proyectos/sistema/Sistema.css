@@ -632,8 +632,12 @@
      columna y con ella la página entera. */
   min-width: 0;
 }
-.sd-pieza-nombre {
-  font-size: 12px;
+/* El mismo rótulo pequeño que el resto del sitio, en apagado por ser una
+   etiqueta y no un título. Antes se lo dibujaba aparte. */
+.sd-pieza-nombre,
+.sd-plantilla-nombre {
+  font-size: 13px;
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted);
@@ -725,9 +729,10 @@
   min-height: 74px;
   padding: 16px;
   border-radius: var(--r-pieza);
-  /* El hueco va en el color del relieve, que es justo para lo que sirve ese
-     token: marcar que ahí dentro pasa otra cosa. */
-  background: var(--surface);
+  /* EL TINTE DE LA CATEGORÍA, no el relieve. El relieve es el hueco de una
+     imagen que aún no está —lo dice el propio apartado de color— y usarlo aquí
+     de fondo genérico era contar una cosa y hacer otra. */
+  background: var(--sd-tinte);
 }
 .sd-pieza-de {
   font-size: 12px;
@@ -869,7 +874,7 @@
 }
 .sd-bloque.es-pastilla {
   height: 28px;
-  border: 1px solid color-mix(in srgb, var(--foreground) 34%, transparent);
+  border: 1px solid color-mix(in srgb, var(--sd-trazo) 34%, transparent);
   background: none;
 }
 .sd-bloque.es-icono {
@@ -903,7 +908,7 @@
 .sd-esquema-cabecera,
 .sd-esquema-pie {
   padding: 12px 14px;
-  border: 1.5px solid var(--foreground);
+  border: 1.5px solid var(--sd-trazo);
   background: var(--background);
 }
 .sd-esquema-cabecera { border-radius: 0 0 var(--r-caja) var(--r-caja); border-top: 0; }
@@ -917,14 +922,14 @@
   align-items: stretch;
   gap: 8px;
   padding: 14px;
-  border: 1px solid var(--foreground);
+  border: 1px solid var(--sd-trazo);
   border-radius: var(--r-caja);
   background: var(--background);
 }
 .sd-capsula {
   align-self: flex-start;
   padding: 7px 16px;
-  border: 1px solid var(--foreground);
+  border: 1px solid var(--sd-trazo);
   border-radius: var(--r-pastilla);
   font-size: 12px;
 }
@@ -945,7 +950,7 @@
 }
 .sd-casilla {
   padding: 14px 10px;
-  border-top: 1px solid var(--foreground);
+  border-top: 1px solid var(--sd-trazo);
   font-size: 12px;
   text-align: center;
 }
@@ -961,7 +966,7 @@
 .sd-ficha {
   flex: 1;
   padding: 26px 8px;
-  border: 1px solid var(--foreground);
+  border: 1px solid var(--sd-trazo);
   border-radius: var(--r-pieza);
   font-size: 12px;
   text-align: center;
