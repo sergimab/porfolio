@@ -21,6 +21,7 @@
   object-fit: fill;
   user-select: none;
   -webkit-user-drag: none;
+  border-radius: 16px;
 }
 /* Las manos, por encima del símbolo. No recogen el ratón: lo que hay debajo
    —el símbolo— tiene que poder recibirlo si algún día se hace interactivo. */

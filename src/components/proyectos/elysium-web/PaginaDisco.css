@@ -259,10 +259,17 @@
   right: 0;
   bottom: 0;
   display: flex;
-  align-items: flex-end;
-  /* Las dos bandas, del mismo alto: «Buy» cabe en un renglón y «Explore the»
-     en dos, y sin esto las dos tarjetas quedaban descuadradas entre sí. */
-  min-height: 33%;
+  /* ANCLADO ARRIBA, que es lo que pone los dos títulos en el mismo renglón. Por
+     abajo no se pueden alinear: «custom merchandising» ocupa dos líneas y «new
+     album» una, así que anclando al pie los títulos se separaban. */
+  align-items: flex-start;
+  /* LAS DOS BANDAS, DEL MISMO ALTO, y por eso `height` y no `min-height`: con
+     un mínimo la banda seguía creciendo con lo que llevara dentro, así que
+     «Buy» se quedaba en un renglón y «Explore the» pasaba a dos y subía doce
+     píxeles más que su vecina. Con el alto fijo las dos miden igual y el texto,
+     anclado abajo, arranca a la misma altura en las dos. El 39 es lo que pide
+     el caso largo: el título, la línea pequeña a dos renglones y los márgenes. */
+  height: 36%;
   box-sizing: border-box;
   padding: 7cqw 8cqw 8cqw;
   padding-right: 34cqw;
@@ -292,7 +299,7 @@
 }
 .disco-tarjeta-pie strong {
   font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: clamp(17px, 10cqw, 34px);
+  font-size: clamp(14px, 8cqw, 27px);
   font-weight: 500;
   letter-spacing: 0.01em;
   line-height: 1.02;
