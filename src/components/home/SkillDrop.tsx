@@ -94,7 +94,10 @@ function Atajo({
         aria-haspopup="menu"
         aria-expanded={abierto}
         onClick={(e) => {
-          if (window.matchMedia("(max-width: 600px)").matches) {
+          // 560, el corte del sitio para el teléfono. Iba a 600 por su cuenta:
+          // vive en JavaScript, así que se quedó fuera de la escala cuando se
+          // unificaron los de las hojas de estilo.
+          if (window.matchMedia("(max-width: 560px)").matches) {
             e.preventDefault();
             onAbrir();
           }

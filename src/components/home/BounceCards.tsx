@@ -74,7 +74,9 @@ export default function BounceCards({
 
   // En móvil se muestra un grid normal (2 columnas), no el abanico.
   useEffect(() => {
-    const mq = window.matchMedia("(max-width: 768px)");
+    // 700, el corte del sitio en el que todo pasa a una sola columna. Iba a
+    // 768 por su cuenta, por lo mismo que el de la caja de cápsulas.
+    const mq = window.matchMedia("(max-width: 700px)");
     const update = () => setIsMobile(mq.matches);
     update();
     mq.addEventListener("change", update);

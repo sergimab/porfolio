@@ -72,7 +72,7 @@ const CORTES = [
   { px: 1024, es: "Las cuadrículas anchas se parten", en: "Wide grids break up" },
   { px: 900, es: "Una fila de tres pasa a dos", en: "A row of three becomes two" },
   { px: 700, es: "Todo a una sola columna", en: "Everything to one column" },
-  { px: 560, es: "Lo que se arrastra pasa a menú", en: "What drags becomes a menu" },
+  { px: 560, es: "Teléfono: lo que quedaba en dos columnas baja a una y los atajos de contacto abren un aviso en vez del correo", en: "Phone: what was still in two columns drops to one and the contact shortcuts open a prompt instead of the mail app" },
 ];
 
 // Los cinco momentos de cualquier pieza que se pueda tocar. Se pintan a la vez
