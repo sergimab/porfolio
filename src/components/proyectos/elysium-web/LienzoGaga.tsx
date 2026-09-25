@@ -32,6 +32,18 @@ import { AJUSTE_BASE, MAXP, POR_POLIGONO, construirForma, type Ajuste } from "./
 
 export type Material = "cromo" | "cristal";
 
+// LOS AJUSTES DE LA WEB, en un sitio y no repartidos por las tres pantallas.
+// Salen del panel de mandos, mirando la figura; no son los que trae el generador
+// al abrirlo. Los usa el lienzo si nadie pasa otra cosa, y el panel los enseña
+// como «de fábrica» para que lo que se ve ahí sea lo que hay puesto.
+export const LIENZO_BASE = {
+  fusion: 0.002,
+  organico: 0,
+  suavidad: 2.6,
+  volumen: 0.3,
+  giroLuz: -80,
+};
+
 export default function LienzoGaga({
   // Un valor por era, de 0 a 1, en el orden de ERAS.
   valores,
@@ -40,16 +52,16 @@ export default function LienzoGaga({
   // generador aparte; se pasan solo si una pantalla concreta pide otra cosa.
   ajuste,
   // Fusión: el radio del cierre que redondea rincones y cruces.
-  fusion = 0.036,
+  fusion = LIENZO_BASE.fusion,
   // Ondulación del contorno. Muy poca, o la figura pierde el filo.
-  organico = 0.01,
+  organico = LIENZO_BASE.organico,
   // Suavizado de la silueta y del volumen.
-  suavidad = 3.5,
+  suavidad = LIENZO_BASE.suavidad,
   // Cuánto levanta la pieza.
-  volumen = 1.2,
+  volumen = LIENZO_BASE.volumen,
   // El giro del plató. Decide qué reflejos caen en la pieza, así que es lo que
   // más cambia el color de un metal.
-  giroLuz = -180,
+  giroLuz = LIENZO_BASE.giroLuz,
   // Con `animar` el contorno respira; sin él, la figura se queda quieta.
   animar = true,
   // Si se puede girar la pieza con el ratón.

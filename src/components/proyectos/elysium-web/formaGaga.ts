@@ -34,7 +34,10 @@ export type Ajuste = {
   mezcla: number;
 };
 
-export const AJUSTE_BASE: Ajuste = { grosor: 1, picos: 1, mezcla: 0.6 };
+// Los de la web, elegidos con el panel de mandos mirando la figura. No son los
+// que trae el generador al abrirlo —1 / 1 / 0,6—: un trazo fino y parejo es lo
+// que deja ver el dibujo del recorrido, que es lo que cuenta cada símbolo.
+export const AJUSTE_BASE: Ajuste = { grosor: 0.4, picos: 1, mezcla: 0 };
 
 const TAU = Math.PI * 2;
 

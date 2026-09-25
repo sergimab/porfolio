@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { Ajuste } from "./formaGaga";
 import { AJUSTE_BASE } from "./formaGaga";
+import { LIENZO_BASE } from "./LienzoGaga";
 import "./Mandos.css";
 
 // EL PANEL DE MANDOS DEL GENERADOR — herramienta de taller.
@@ -24,16 +25,12 @@ export type Afinado = Ajuste & {
   giroLuz: number;
 };
 
-// Los de fábrica. Salen de los que trae puestos el generador original al
-// abrirlo, y son los que usa la web si nadie toca nada.
-export const AFINADO_BASE: Afinado = {
-  ...AJUSTE_BASE,
-  fusion: 0.036,
-  organico: 0.01,
-  suavidad: 3.5,
-  volumen: 1.2,
-  giroLuz: -180,
-};
+// «De fábrica» quiere decir LO QUE HAY PUESTO EN LA WEB, no lo que traía el
+// generador original al abrirlo. Si el panel arrancara con aquellos valores,
+// abrirlo cambiaría la figura antes de tocar nada y no habría manera de comparar
+// contra lo que se está viendo. Por eso se toman de los dos sitios donde viven
+// de verdad, y volver atrás es volver a la web.
+export const AFINADO_BASE: Afinado = { ...AJUSTE_BASE, ...LIENZO_BASE };
 
 // Nombre, recorrido y paso de cada mando, copiados del generador.
 const MANDOS: {
