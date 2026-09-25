@@ -61,7 +61,7 @@ export const LIENZO_BASE = {
   // como una hoja maciza, y eso es lo que hay: es un mando de acabado y esa es
   // su punta.
   suavidad: 8,
-  volumen: 0.3,
+  volumen: 0.9,
   giroLuz: -80,
 };
 
@@ -336,18 +336,25 @@ vec2 world(vec2 fc){ return uCenter+(fc-.5*uN)*pj(); }
       //  · `roughness` muy baja —0,015— para que el reflejo salga nítido. Con
       //    0,06 el plató llegaba emborronado y la pieza se leía como acero
       //    cepillado, no como cromo.
-      //  · el color casi blanco: un metal multiplica lo que refleja por su
-      //    color, así que el azulado de antes teñía la habitación entera.
+      //  · el color, un morado claro. Ojo con esto: un metal MULTIPLICA lo que
+      //    refleja por su color, así que aquí un morado normal daría una pieza
+      //    oscura y apagada. Tiene que ser muy claro para que siga leyéndose
+      //    como cromo, con el violeta puesto en el tinte y no en el tono.
       //  · la iridiscencia, MENOS cantidad pero con más índice y una película
       //    más fina. Bajarla quita el tornasol del cuerpo —que era lo que
-      //    ensuciaba el blanco— y subir el índice lo concentra en el filo, que
-      //    es donde la referencia tiene sus destellos rojizos.
+      //    ensuciaba el color— y subir el índice lo concentra en el filo, que es
+      //    donde la referencia tiene sus destellos rojizos.
+      //  · el BARNIZ, bajado de 1 a 0,25, y esto hacía falta para que el morado
+      //    se viera. El barniz es una capa transparente por encima del metal y
+      //    su reflejo es BLANCO, así que a tope lavaba el tinte: con el color
+      //    morado puesto y el barniz entero, la pieza medía 221,220,224 —gris—.
+      //    Con el barniz recogido se fue a 161,155,171, que ya es lavanda.
       //  · `envMapIntensity` por encima de uno: los brillos de la referencia
       //    están quemados, y con ganancia justa se quedaban en gris claro.
       cromo: new THREE.MeshPhysicalMaterial({
-        color: 0xf7fafc, metalness: 1, roughness: 0.03,
+        color: 0xd6c2f7, metalness: 1, roughness: 0.03,
         iridescence: 0.32, iridescenceIOR: 1.9, iridescenceThicknessRange: [140, 300],
-        clearcoat: 1, clearcoatRoughness: 0.01, envMapIntensity: 0.85,
+        clearcoat: 0.25, clearcoatRoughness: 0.01, envMapIntensity: 1.05,
       }),
       cristal: new THREE.MeshPhysicalMaterial({
         color: 0xffffff, metalness: 0, roughness: 0.02, transmission: 1, thickness: 0.35,
