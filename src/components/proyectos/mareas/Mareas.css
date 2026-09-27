@@ -140,8 +140,19 @@
     scroll-snap-type: x proximity;
     margin-top: 40px;
   }
+  /* EL SIGUIENTE ASOMA, que es lo único que avisa de que la fila se arrastra.
+     Un fondo a todo el ancho se lee como una imagen y nadie va a probar a
+     empujarla; con un dedo del de al lado a la vista, el gesto se entiende solo.
+     76% deja unos setenta píxeles del siguiente, que es medio pulgar.
+
+     Y `min-width: 0` no es un adorno: una imagen dentro de una fila flexible NO
+     encoge por debajo de su propio ancho salvo que se le diga. Sin esta línea el
+     76% se ignoraba y cada fondo seguía ocupando el ancho entero, que es
+     exactamente lo que se quería evitar. */
   .mar-fondos img {
-    flex: 0 0 78%;
+    flex: 0 0 auto;
+    width: 76%;
+    min-width: 0;
     scroll-snap-align: start;
   }
 }
