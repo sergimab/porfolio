@@ -23,12 +23,12 @@ export default function Pieza({
   src,
   poster,
   titulo,
-  descripcion,
 }: {
   src: string;
   poster?: string;
+  // No se enseña: es lo que lee quien no ve la pieza. Un vídeo sin pie y sin
+  // texto alternativo es un hueco silencioso para un lector de pantalla.
   titulo: string;
-  descripcion: React.ReactNode;
 }) {
   const video = useRef<HTMLVideoElement>(null);
   const caja = useRef<HTMLDivElement>(null);
@@ -74,7 +74,7 @@ export default function Pieza({
   }, [quieto, aMano]);
 
   return (
-    <figure className="mar-pieza" ref={caja}>
+    <div className="mar-pieza" ref={caja}>
       <div className="mar-lienzo">
         {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
         <video
@@ -100,10 +100,6 @@ export default function Pieza({
           </button>
         )}
       </div>
-      <figcaption className="mar-pie">
-        <h3>{titulo}</h3>
-        <p>{descripcion}</p>
-      </figcaption>
-    </figure>
+    </div>
   );
 }

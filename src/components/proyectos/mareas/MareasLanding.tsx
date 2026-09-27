@@ -20,29 +20,25 @@ const CARPETA = "/proyectos/mareas";
 // El cartel es opcional y del mismo nombre: si está, es lo que se ve mientras el
 // vídeo llega y lo que queda para quien pide menos movimiento. Se saca del
 // propio vídeo con ffmpeg, no se dibuja.
+// LAS TRES PIEZAS. El archivo se llama por su número, así que subir la serie es
+// dejar tres mp4 con estos nombres y nada más. El cartel —un fotograma del
+// propio vídeo— va al lado con el mismo nombre en .webp.
+//
+// El nombre que llevan no se enseña: es lo que lee quien no ve la pieza.
 const PIEZAS = [
-  {
-    archivo: "pieza-1",
-    es: "Iridiscente",
-    en: "Iridescent",
-    textoEs: "La esfera se abre en pétalos de jabón que giran alrededor del núcleo y vuelven a cerrarse.",
-    textoEn: "The sphere opens into soap petals that turn around the core and close again.",
-  },
-  {
-    archivo: "pieza-2",
-    es: "Espiral",
-    en: "Spiral",
-    textoEs: "Una cinta de cromo teñido envuelve a la piedra y se enrosca sobre sí misma sin llegar a cerrarse.",
-    textoEn: "A ribbon of tinted chrome wraps the stone and coils on itself without ever closing.",
-  },
-  {
-    archivo: "pieza-3",
-    es: "Membrana",
-    en: "Membrane",
-    textoEs: "Una burbuja late alrededor de un núcleo oscuro, deformándose con cada pulso.",
-    textoEn: "A bubble beats around a dark core, deforming with every pulse.",
-  },
+  { archivo: "pieza-1", es: "Esfera iridiscente sobre el mar", en: "Iridescent sphere over the sea" },
+  { archivo: "pieza-2", es: "Esfera envuelta en una cinta de cromo", en: "Sphere wrapped in a chrome ribbon" },
+  { archivo: "pieza-3", es: "Esfera dentro de una membrana", en: "Sphere inside a membrane" },
 ];
+
+// LOS TRES FONDOS, a pie de página. Son fotogramas a resolución completa de la
+// misma serie, puestos como se usarían: uno al lado de otro y en apaisado.
+const FONDOS = [
+  { archivo: "fondo-1", es: "Fondo de la esfera con la cinta", en: "Chrome ribbon sphere wallpaper" },
+  { archivo: "fondo-2", es: "Fondo de la esfera rodeada de aros", en: "Sphere ringed by hoops wallpaper" },
+  { archivo: "fondo-3", es: "Fondo de la esfera iridiscente", en: "Iridescent sphere wallpaper" },
+];
+
 
 // Mientras un archivo no esté en su sitio no se pinta un vídeo que no existe: se
 // deja el hueco diciendo qué falta. Es el mismo apaño que usa Elysium con su
@@ -93,31 +89,31 @@ export default function MareasLanding() {
           {PIEZAS.map((p) => {
             const video = siExiste(`${CARPETA}/${p.archivo}.mp4`);
             const cartel = siExiste(`${CARPETA}/${p.archivo}.webp`) ?? undefined;
-            const titulo = <LangText es={p.es} en={p.en} />;
-            const texto = <LangText es={p.textoEs} en={p.textoEn} />;
             return video ? (
-              <Pieza
-                key={p.archivo}
-                src={video}
-                poster={cartel}
-                titulo={p.es}
-                descripcion={texto}
-              />
+              <Pieza key={p.archivo} src={video} poster={cartel} titulo={p.es} />
             ) : (
-              <figure key={p.archivo} className="mar-pieza es-vacia">
+              <div key={p.archivo} className="mar-pieza es-vacia">
                 <div className="mar-lienzo">
                   <span className="mar-falta">
-                    <LangText
-                      es={`Falta ${p.archivo}.mp4`}
-                      en={`${p.archivo}.mp4 missing`}
-                    />
+                    <LangText es={`Falta ${p.archivo}.mp4`} en={`${p.archivo}.mp4 missing`} />
                   </span>
                 </div>
-                <figcaption className="mar-pie">
-                  <h3>{titulo}</h3>
-                  <p>{texto}</p>
-                </figcaption>
-              </figure>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Los fondos, en fila. Van los tres a la vez y no uno debajo de otro
+            porque aquí lo que se enseña no es cada imagen sino QUE HAY UNA
+            SERIE: puestas en columna serían tres piezas más, y en fila se leen
+            como lo que son, el mismo trabajo llevado a otro sitio. */}
+        <div className="mar-fondos">
+          {FONDOS.map((f) => {
+            const img = siExiste(`${CARPETA}/${f.archivo}.webp`);
+            if (!img) return null;
+            return (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img key={f.archivo} src={img} alt={f.es} loading="lazy" decoding="async" />
             );
           })}
         </div>

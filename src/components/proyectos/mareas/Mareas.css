@@ -70,26 +70,24 @@
   margin-left: 3px;
 }
 
-/* El pie: el nombre de la pieza y una línea de qué hace. Va debajo y no encima
-   del vídeo, que encima taparía justo el centro, que es donde está la esfera. */
-.mar-pie {
-  margin-top: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+/* ── Los tres fondos, en fila ────────────────────────────────────────────────
+   Tres columnas iguales y cada una en apaisado, que es el formato en el que se
+   usan. El hueco entre ellas es el mismo que separa las piezas de arriba, para
+   que la fila se lea como parte de la misma página y no como un añadido. */
+.mar-fondos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 56px;
 }
-.mar-pie h3 {
-  margin: 0;
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-}
-.mar-pie p {
-  margin: 0;
-  max-width: 62ch;
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1.55;
+.mar-fondos img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--r-pieza);
+  background: var(--velo);
 }
 
 /* Y el hueco NO va en negro: un cuadrado oscuro a página completa pesa más que
@@ -120,5 +118,21 @@
   .mar-serie {
     gap: 40px;
     margin-top: 28px;
+  }
+  /* EN EL TELÉFONO SIGUEN EN FILA, y a propósito: repartidos a lo ancho de 327
+     px salen a 98, que de un fondo no enseña nada, pero apilados dejarían de
+     leerse como una serie y se confundirían con las piezas de arriba. La fila se
+     arrastra de lado y cada uno mide lo suyo. */
+  .mar-fondos {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    scroll-snap-type: x proximity;
+    margin-top: 40px;
+  }
+  .mar-fondos img {
+    flex: 0 0 78%;
+    scroll-snap-align: start;
   }
 }
