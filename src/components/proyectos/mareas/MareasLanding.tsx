@@ -31,12 +31,15 @@ const PIEZAS = [
   { archivo: "pieza-3", es: "Esfera dentro de una membrana", en: "Sphere inside a membrane" },
 ];
 
-// LOS TRES FONDOS, a pie de página. Son fotogramas a resolución completa de la
-// misma serie, puestos como se usarían: uno al lado de otro y en apaisado.
+// LOS TRES FONDOS, a pie de página. Fotogramas de la misma serie puestos como se
+// usarían, en vertical de teléfono y uno al lado de otro.
+//
+// El orden lo puso Sergio y no el número del archivo: los nombres vienen de
+// cómo salieron de Blender, que no tiene por qué ser el orden en que se miran.
 const FONDOS = [
+  { archivo: "fondo-3", es: "Fondo de la esfera iridiscente", en: "Iridescent sphere wallpaper" },
   { archivo: "fondo-1", es: "Fondo de la esfera con la cinta", en: "Chrome ribbon sphere wallpaper" },
   { archivo: "fondo-2", es: "Fondo de la esfera rodeada de aros", en: "Sphere ringed by hoops wallpaper" },
-  { archivo: "fondo-3", es: "Fondo de la esfera iridiscente", en: "Iridescent sphere wallpaper" },
 ];
 
 

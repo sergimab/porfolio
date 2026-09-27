@@ -71,9 +71,15 @@
 }
 
 /* ── Los tres fondos, en fila ────────────────────────────────────────────────
-   Tres columnas iguales y cada una en apaisado, que es el formato en el que se
-   usan. El hueco entre ellas es el mismo que separa las piezas de arriba, para
-   que la fila se lea como parte de la misma página y no como un añadido. */
+   Tres columnas iguales y cada una EN VERTICAL DE TELÉFONO, que es el formato en
+   el que se usan. El hueco entre ellas es el mismo que separa las piezas de
+   arriba, para que la fila se lea como parte de la misma página.
+
+   Los archivos siguen siendo los apaisados de 1920×1080 y el recorte lo hace el
+   navegador. Recortarlos de verdad habría pedido volver a comprimirlos, y una
+   segunda pasada de webp sobre lo ya comprimido ensucia justo lo que aquí se
+   mira, los degradados del cielo y del agua. Lo que sobra de ancho son 87 KB mal
+   gastados, que a cambio de no tocar la imagen salen baratos. */
 .mar-fondos {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -84,8 +90,11 @@
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 9 / 16;
+  /* Centrado: la esfera está en el medio del encuadre en las tres, así que el
+     recorte se come el mar y las montañas de los lados y deja el sujeto entero. */
   object-fit: cover;
+  object-position: center;
   border-radius: var(--r-pieza);
   background: var(--velo);
 }
