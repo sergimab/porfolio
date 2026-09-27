@@ -14,13 +14,17 @@
   margin: 0;
 }
 
-/* El marco del vídeo. Cuadrado, que es como se renderiza una esfera centrada:
-   en apaisado sobraría mar a los lados y la esfera quedaría pequeña. El fondo
-   oscuro no es decoración, es lo que se ve mientras el archivo llega; con el
-   papel claro debajo, el vídeo entraría de golpe desde el blanco. */
+/* El marco del vídeo, EN LA PROPORCIÓN EN QUE ESTÁN RENDERIZADOS. Estuvo
+   cuadrado mientras no había archivos, dando por hecho que una esfera centrada
+   pediría un cuadro cuadrado; los vídeos vinieron en 16:9 y con el marco
+   cuadrado se les comían los lados, que es donde están las montañas y el
+   horizonte. La proporción la pone el material, no la suposición.
+
+   El fondo oscuro no es decoración: es lo que se ve mientras el archivo llega, y
+   con el papel claro debajo el vídeo entraría de golpe desde el blanco. */
 .mar-lienzo {
   position: relative;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 16 / 9;
   overflow: hidden;
   border-radius: var(--r-pieza);
   background: #0e1116;

@@ -23,24 +23,24 @@ const CARPETA = "/proyectos/mareas";
 const PIEZAS = [
   {
     archivo: "pieza-1",
-    es: "Pieza uno",
-    en: "Piece one",
-    textoEs: "Descripción de la primera animación.",
-    textoEn: "Description of the first animation.",
+    es: "Iridiscente",
+    en: "Iridescent",
+    textoEs: "La esfera se abre en pétalos de jabón que giran alrededor del núcleo y vuelven a cerrarse.",
+    textoEn: "The sphere opens into soap petals that turn around the core and close again.",
   },
   {
     archivo: "pieza-2",
-    es: "Pieza dos",
-    en: "Piece two",
-    textoEs: "Descripción de la segunda animación.",
-    textoEn: "Description of the second animation.",
+    es: "Espiral",
+    en: "Spiral",
+    textoEs: "Una cinta de cromo teñido envuelve a la piedra y se enrosca sobre sí misma sin llegar a cerrarse.",
+    textoEn: "A ribbon of tinted chrome wraps the stone and coils on itself without ever closing.",
   },
   {
     archivo: "pieza-3",
-    es: "Pieza tres",
-    en: "Piece three",
-    textoEs: "Descripción de la tercera animación.",
-    textoEn: "Description of the third animation.",
+    es: "Membrana",
+    en: "Membrane",
+    textoEs: "Una burbuja late alrededor de un núcleo oscuro, deformándose con cada pulso.",
+    textoEn: "A bubble beats around a dark core, deforming with every pulse.",
   },
 ];
 
@@ -82,8 +82,8 @@ export default function MareasLanding() {
         <div className="project-introrow">
           <p className="project-intro">
             <LangText
-              es="Tres esferas sobre el mar, cada una con **su propia manera de moverse**. La serie busca lo mínimo que hace falta para que algo parezca vivo: ni un gesto de más, ni una forma que no esté ahí por el movimiento."
-              en="Three spheres over the sea, each with **its own way of moving**. The series looks for the least it takes to make something feel alive: not one gesture more, not one shape that isn't there for the movement."
+              es="Tres esferas sobre el mar, cada una con **su propia manera de moverse**. Salió de experimentar con **deformaciones geométricas**, buscando dónde se tocan el hiperrealismo del material y lo mínimo del gesto."
+              en="Three spheres over the sea, each with **its own way of moving**. It came out of experimenting with **geometric deformations**, looking for where hyperrealistic materials meet the barest possible gesture."
             />
           </p>
           <ToolIcons tools={["Blender", "After Effects"]} />

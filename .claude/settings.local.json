@@ -428,7 +428,13 @@
       "Bash(python3 /tmp/tune.py)",
       "Bash(curl -sSL -o public/elysium/estudio.hdr \"https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/brown_photostudio_02_1k.hdr\")",
       "Bash(python3 -c \"import PIL; print\\('pillow ok'\\)\")",
-      "Bash(curl -s \"https://api.polyhaven.com/assets?t=hdris&c=studio\")"
+      "Bash(curl -s \"https://api.polyhaven.com/assets?t=hdris&c=studio\")",
+      "Bash(ffmpeg -v error -y -i \"video sphere 2.mp4\" -an -c:v libx264 -preset slow -crf 26 -pix_fmt yuv420p -movflags +faststart /tmp/p2-crf26.mp4)",
+      "Bash(ffmpeg -v error -y -i \"video sphere 2.mp4\" -vf \"select=eq\\(n\\\\,120\\)\" -vframes 1 /tmp/m.png)",
+      "Bash(ffmpeg -v error -y -i pieza-2.mp4 -vf \"select=eq\\(n\\\\,120\\)\" -vframes 1 /tmp/a.png)",
+      "Bash(ffmpeg -v error -y -i /tmp/p2-crf26.mp4 -vf \"select=eq\\(n\\\\,120\\)\" -vframes 1 /tmp/b.png)",
+      "Bash(ffmpeg -v error -y -i pieza-1.mp4 -vf \"select=eq\\(n\\\\,100\\)\" -vframes 1 -vf scale=760:-1 /tmp/f1.png)",
+      "Bash(ffmpeg -v error -y -i pieza-3.mp4 -vf \"select=eq\\(n\\\\,160\\)\" -vframes 1 -vf scale=760:-1 /tmp/f3.png)"
     ],
     "defaultMode": "acceptEdits"
   }
