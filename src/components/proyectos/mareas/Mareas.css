@@ -1,0 +1,120 @@
+/* La serie de esferas sobre el mar. Ver MareasLanding.tsx. */
+
+/* Una debajo de otra y a lo ancho de la columna, no tres en fila. Son piezas de
+   movimiento lento: puestas en fila se leerían como un catálogo y se verían las
+   tres a la vez compitiendo, y aquí lo que se pide es mirar una. */
+.mar-serie {
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+  margin-top: 40px;
+}
+
+.mar-pieza {
+  margin: 0;
+}
+
+/* El marco del vídeo. Cuadrado, que es como se renderiza una esfera centrada:
+   en apaisado sobraría mar a los lados y la esfera quedaría pequeña. El fondo
+   oscuro no es decoración, es lo que se ve mientras el archivo llega; con el
+   papel claro debajo, el vídeo entraría de golpe desde el blanco. */
+.mar-lienzo {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: var(--r-pieza);
+  background: #0e1116;
+}
+.mar-lienzo video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* El botón de arrancar, solo para quien ha pedido menos movimiento. Del sistema
+   de diseño: pastilla, filo fino y el mismo aro de foco que el resto del sitio. */
+.mar-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: var(--r-pastilla);
+  background: rgba(10, 12, 16, 0.5);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.mar-play:hover,
+.mar-play:focus-visible {
+  background: rgba(10, 12, 16, 0.75);
+  border-color: #fff;
+}
+.mar-play svg {
+  width: 26px;
+  height: 26px;
+  /* El triángulo de play tiene su masa a la izquierda, así que centrado de
+     verdad se ve descentrado. Se empuja un pelo. */
+  margin-left: 3px;
+}
+
+/* El pie: el nombre de la pieza y una línea de qué hace. Va debajo y no encima
+   del vídeo, que encima taparía justo el centro, que es donde está la esfera. */
+.mar-pie {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.mar-pie h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+.mar-pie p {
+  margin: 0;
+  max-width: 62ch;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+/* Y el hueco NO va en negro: un cuadrado oscuro a página completa pesa más que
+   la propia pieza, y lo que hay ahí es una ausencia. Sobre el papel, con su filo
+   de puntos, se lee como lo que es. */
+.mar-pieza.es-vacia .mar-lienzo {
+  background: none;
+}
+
+/* El hueco de una pieza que todavía no está subida. Se enseña en vez de dejar
+   el marco en negro: así, al abrir la página antes de tener los archivos, se ve
+   qué falta y dónde va, en vez de parecer que el vídeo no carga. */
+.mar-falta {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  box-sizing: border-box;
+  border: 1px dashed var(--velo);
+  border-radius: var(--r-pieza);
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+@media (max-width: 700px) {
+  .mar-serie {
+    gap: 40px;
+    margin-top: 28px;
+  }
+}

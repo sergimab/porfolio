@@ -28,6 +28,7 @@ import SalaEquisLanding from "@/components/proyectos/sala-equis/SalaEquisLanding
 import SistemaLanding from "@/components/proyectos/sistema/SistemaLanding";
 import GaleriaTokioLanding from "@/components/proyectos/orquesta-tokio/GaleriaLanding";
 import AficheTokioLanding from "@/components/proyectos/orquesta-tokio/AficheLanding";
+import MareasLanding from "@/components/proyectos/mareas/MareasLanding";
 
 const LANDINGS: Record<string, React.ComponentType> = {
   m1: MotionLanding,
@@ -37,6 +38,7 @@ const LANDINGS: Record<string, React.ComponentType> = {
   i5: IlustracionesLanding,
   u2: AppEspacioVacioLanding,
   d1: ElysiumLanding,
+  d2: MareasLanding,
   e1: DiscoElysiumLanding,
   b1: EspacioVacioLanding,
   b2: YelmoLanding,

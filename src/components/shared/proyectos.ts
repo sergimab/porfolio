@@ -74,6 +74,7 @@ export const PROYECTOS: Record<string, Proyecto[]> = {
   ],
   "3d": [
     { id: "d1", title: "Elysium", titleEn: "Elysium", cover: "/covers/elysium-3D.webp" },
+    { id: "d2", title: "Mareas", titleEn: "Tides" },
   ],
   editorial: [
     { id: "e1", title: "Disco Elysium", titleEn: "Disco Elysium", cover: "/covers/elysium-editorial.webp" },
