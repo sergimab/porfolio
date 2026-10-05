@@ -51,7 +51,11 @@
   display: none !important;
 }
 
-#aeroblades img {
+/* Las ilustraciones animadas pasaron de GIF a vídeo: pesaban cuatro veces
+   más en GIF. La regla tiene que alcanzar a los dos, o los vídeos se
+   quedarían sin el tamaño que esta línea les daba. */
+#aeroblades img,
+#aeroblades video {
   display: block;
   width: 100%;
 }
