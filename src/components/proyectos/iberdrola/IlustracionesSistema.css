@@ -69,10 +69,21 @@
   flex-direction: column;
   gap: 16px;
 }
+/* Con su lámina, como el resto de titulares del sitio: por detrás pasa la trama
+   animada y este se quedaba a pelo encima. Caja a ras del margen y texto metido,
+   con el aire común; ver --papel-aire. La caja se ciñe al texto —no ocupa la
+   columna entera— porque esto rotula un bloque de muestras y no un apartado. */
 .ilu-block-title {
   /* El margen, escrito: antes lo ponía el navegador por ser un h3 y al pasar a
      h2 habría cambiado solo. Este es el que tenía. */
   margin: 15px 0;
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  padding: 10px var(--papel-aire);
+  border-radius: var(--r-pieza);
+  background: var(--background);
+  box-sizing: border-box;
   font-size: 15px;
   font-weight: 600;
   color: var(--foreground);
