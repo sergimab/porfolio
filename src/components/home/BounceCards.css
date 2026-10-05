@@ -134,7 +134,7 @@
 .bc-grid {
   margin-top: 48px;
   width: 100%;
-  max-width: 1024px;
+  max-width: var(--ancho-contenido);
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;

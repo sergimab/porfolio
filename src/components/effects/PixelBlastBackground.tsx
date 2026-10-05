@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import PixelBlast from "./PixelBlast";
 import { EFFECTS } from "@/config/effects";
+import { vigilarFotogramas, yaSeSabeQueVaLento } from "./vigilante";
 
 // Fondo global con el PixelBlast real (WebGL). Fijo, detrás del contenido.
 
@@ -13,8 +14,19 @@ export default function PixelBlastBackground() {
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!EFFECTS.backgroundPixels || reduce) return;
+    // Si en esta sesión ya se vio que la máquina no puede, no se vuelve a
+    // encender para volver a comprobarlo. Ver vigilante.ts.
+    if (yaSeSabeQueVaLento()) return;
     setEnabled(true);
   }, []);
+
+  // LA DEFENSA. El fondo es lo más caro de la página y lo menos necesario: si
+  // los fotogramas no llegan, se va él y se queda todo lo demás. Quien tenga una
+  // máquina capaz no se entera de que esto existe.
+  useEffect(() => {
+    if (!enabled) return;
+    return vigilarFotogramas(() => setEnabled(false));
+  }, [enabled]);
 
   useEffect(() => {
     const read = () =>

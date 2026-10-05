@@ -34,7 +34,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 24px;
   width: 100%;
-  max-width: 1024px;
+  max-width: var(--ancho-contenido);
   align-items: start;
 }
 /* Las dos cajas superiores comparten marco. La altura (height) se fija inline
@@ -264,7 +264,7 @@
 .home-panel {
   margin-top: 48px;
   width: 100%;
-  max-width: 1024px;
+  max-width: var(--ancho-contenido);
   background: var(--background);
   border-radius: var(--r-caja);
 }
@@ -589,7 +589,7 @@
 .project-grid {
   margin-top: 48px;
   width: 100%;
-  max-width: 1024px;
+  max-width: var(--ancho-contenido);
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
@@ -732,7 +732,7 @@ textarea.contact-input { resize: vertical; }
    páginas de proyecto: en este sitio los titulares arrancan por el margen. */
 .home-recomendados {
   width: 100%;
-  max-width: 1024px;
+  max-width: var(--ancho-contenido);
   /* El aire de abajo no es simetría: en el móvil las tarjetas se mueven de su
      sitio hasta 24 px para romper la rejilla, así que la última puede colgar
      por debajo de donde acaba el bloque y quedarse a catorce píxeles del lema.

@@ -4,8 +4,24 @@
     {
       "name": "portfolio",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
       "port": 3005,
+      "autoPort": true
+    },
+    {
+      "name": "portfolio-produccion",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "start",
+        "--",
+        "-p",
+        "3210"
+      ],
+      "port": 3210,
       "autoPort": true
     }
   ]

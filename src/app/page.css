@@ -1,6 +1,6 @@
 .header-wrap {
   width: 100%;
-  max-width: 1072px;
+  max-width: var(--ancho-pagina);
   margin: 0 auto;
   padding: 0 24px;
   box-sizing: border-box;
@@ -25,7 +25,7 @@
    de la home (1024px), sin ensancharse como el header/footer en ≥1300px. */
 .project-content-wrap {
   width: 100%;
-  max-width: 1072px;
+  max-width: var(--ancho-pagina);
   margin: 0 auto;
   padding: 0 24px;
   box-sizing: border-box;

@@ -41,6 +41,30 @@
   --r-caja: 16px;
   --r-pastilla: 999px;
 
+  /* ── EL ANCHO ──────────────────────────────────────────────────────────────
+     Hasta dónde llega el contenido, y UN SOLO SITIO donde decirlo. Estaba
+     escrito a mano en seis reglas, siempre 1024 y su pareja de 1072 —los mismos
+     1024 más los 24 de margen a cada lado—, así que cambiarlo era cambiarlo en
+     seis sitios y acordarse de la suma.
+
+     Y ERA FIJO, que es el problema de verdad. Un tope de 1024 en un portátil de
+     1440 ocupa el 71% de la pantalla y se lee bien; en un monitor de 2560 ocupa
+     el 40%, con 768 píxeles de papel vacío a cada lado, y lo que se ve es un
+     sitio diminuto en medio de la nada. Medido, no supuesto: alguien lo abrió en
+     un ordenador de mesa y dijo que lo veía «con mucho zoom out», y tenía razón.
+
+     Ahora crece con la pantalla y para a los 1440. El 72% es lo que deja un
+     margen que todavía se lee como margen; el tope está para que una pantalla
+     ultrapanorámica no estire la parrilla hasta volverla un listado. Y el mínimo
+     mantiene lo de siempre en todo lo que baje de 1440 de ancho, así que en un
+     portátil no cambia nada.
+
+     Los párrafos NO siguen a esto: tienen su propio tope de 560, que es lo que
+     mide un renglón cómodo de leer. Ensanchar la caja no debe ensanchar el
+     texto. */
+  --ancho-contenido: clamp(1024px, 72vw, 1440px);
+  --ancho-pagina: calc(var(--ancho-contenido) + 48px);
+
   /* ── EL FOCO ───────────────────────────────────────────────────────────────
      Un solo aro para todo el sitio, del color de la tinta y separado dos
      píxeles de la pieza para que se vea también sobre lo que ya lleva filo.
