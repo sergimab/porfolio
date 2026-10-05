@@ -85,6 +85,13 @@
   --papel-aire: 24px;
   --papel-aire-alto: 16px;
 
+  /* Y UNA SALVEDAD PARA LOS TITULARES: su lámina se ciñe al texto, no ocupa la
+     columna. Un párrafo llena su ancho, así que su papel es una caja y se lee
+     como tal; un titular es una línea corta, y estirarle el papel de margen a
+     margen convierte una palabra en una banda que pesa más que lo que dice. El
+     texto sigue arrancando donde el de los párrafos porque el aire es el
+     mismo. */
+
   /* ── EL FOCO ───────────────────────────────────────────────────────────────
      Un solo aro para todo el sitio, del color de la tinta y separado dos
      píxeles de la pieza para que se vea también sobre lo que ya lleva filo.

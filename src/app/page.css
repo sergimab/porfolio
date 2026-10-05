@@ -216,6 +216,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
+  width: fit-content;
+  max-width: 100%;
   color: var(--foreground);
   background: var(--background);
   border-radius: var(--r-pieza);
@@ -361,6 +363,8 @@
    El estilo del texto lo pone DropcapTitle, que es el mismo del contacto. */
 .project-h2 {
   margin-top: 64px;
+  width: fit-content;
+  max-width: 100%;
   background: var(--background);
   border-radius: var(--r-pieza);
   padding: var(--papel-aire-alto) var(--papel-aire);

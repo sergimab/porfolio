@@ -16,6 +16,8 @@
    porque la caja ya aporta su propio aire. */
 .rec-titulo {
   margin: 0 0 14px;
+  width: fit-content;
+  max-width: 100%;
   padding: var(--papel-aire-alto) var(--papel-aire);
   border-radius: var(--r-pieza);
   background: var(--background);
