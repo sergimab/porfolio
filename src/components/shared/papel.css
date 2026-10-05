@@ -7,26 +7,19 @@
    así que en vez de apagar el fondo entero, el texto se pone su propio papel y
    se despega de ella.
 
-   El papel se estira hasta el borde de la ventana con márgenes negativos:
-   recortado al ancho del contenido, la trama seguiría entrando por los lados y
-   se vería una banda de puntos pegada al bloque. 50vw a cada lado cubre
-   cualquier pantalla, y el padding devuelve el contenido a su sitio.
-
-   El ancho se FIJA en 100vw. Antes solo se tiraba del margen —-50vw a cada
-   lado— y eso no da una caja de un ancho de ventana: da una de ancho del padre
-   MÁS 100vw, o sea que sobresalía medio ancho de ventana por cada lado y la
-   página se podía arrastrar en horizontal en móvil. Con el ancho fijado, el
-   margen solo la centra y el padding devuelve el contenido a la columna:
-   `50%` mide sobre el padre, así que `50vw - 50%` es exactamente lo que
-   sobresale por ese lado. */
+   LA CAJA LLEGA AL BORDE DE LA PÁGINA Y NO AL DE LA VENTANA. Durante un tiempo
+   se estiraba hasta el borde de la ventana con márgenes negativos, por miedo a
+   que la trama entrara por los lados y dejara una banda de puntos pegada al
+   bloque. El precio era peor que el miedo: en una pantalla ancha el párrafo
+   sobresalía doscientos píxeles por cada lado de la columna y se leía como una
+   pieza descolocada, que es justo lo que se ve. Ahora ocupa su columna, como el
+   resto de cajas de papel, y el texto respira por dentro con el aire común. */
 .papel-texto {
   position: relative;
   background: var(--background);
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-  padding-left: calc(50vw - 50%);
-  padding-right: calc(50vw - 50%);
+  border-radius: var(--r-pieza);
+  padding: var(--papel-aire-alto) var(--papel-aire);
+  box-sizing: border-box;
 }
 
 /* Los programas usados, en su propia caja y contra el margen derecho. La caja

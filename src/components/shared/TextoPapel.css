@@ -19,7 +19,8 @@
 .papel {
   position: relative;
   margin: 4px 0 0;
-  padding: 10px 18px;
+  /* El aire común, para que este renglón arranque donde el del titular. */
+  padding: var(--papel-aire-alto) var(--papel-aire);
   border-radius: var(--r-pieza);
   background: var(--background);
   font-size: 13px;

@@ -65,6 +65,26 @@
   --ancho-contenido: clamp(1024px, 72vw, 1440px);
   --ancho-pagina: calc(var(--ancho-contenido) + 48px);
 
+  /* ── EL PAPEL ──────────────────────────────────────────────────────────────
+     Por detrás de las páginas pasa la trama animada del fondo. Donde cae sobre
+     un texto compite con lo que hay que leer, así que lo que se lee se pone su
+     propia lámina opaca y se despega de ella.
+
+     DOS REGLAS, y las dos importan igual:
+
+      · LA CAJA VA A RAS DEL MARGEN y el texto metido hacia dentro. Lo contrario
+        —el texto a ras y la caja saliéndose— mantiene el renglón alineado pero
+        deja el papel sobresaliendo del bloque, y se lee como una lámina
+        desencajada.
+      · EL AIRE ES EL MISMO EN TODAS. Si el titular mete su texto 16 y el párrafo
+        lo mete 24, los dos renglones arrancan en sitios distintos y la columna
+        se descuadra sin que se vea por qué. Con un solo número, todo lo que se
+        lee empieza en la misma vertical.
+
+     Estaban escritos a mano en cuatro sitios con tres valores distintos. */
+  --papel-aire: 24px;
+  --papel-aire-alto: 16px;
+
   /* ── EL FOCO ───────────────────────────────────────────────────────────────
      Un solo aro para todo el sitio, del color de la tinta y separado dos
      píxeles de la pieza para que se vea también sobre lo que ya lleva filo.

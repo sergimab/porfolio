@@ -206,11 +206,21 @@
   }
 }
 
+/* EL TITULAR, CON SU LÁMINA. Era de los pocos textos que se quedaban a pelo
+   sobre la trama animada. La capitular ya se defendía sola —lleva un contorno
+   grueso del color del papel—, pero la palabra de al lado no, y es la que
+   nombra el proyecto.
+
+   Caja a ras del margen y texto metido, con el aire común. Ver --papel-aire. */
 .project-hero-title {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   color: var(--foreground);
+  background: var(--background);
+  border-radius: var(--r-pieza);
+  padding: var(--papel-aire-alto) var(--papel-aire);
+  box-sizing: border-box;
 }
 
 /* Fila de intro de Infografías: texto a la izquierda, "Hecho con…" a la
@@ -332,7 +342,7 @@
   margin-top: 32px;
   background: var(--background);
   border-radius: var(--r-pieza);
-  padding: 20px 24px;
+  padding: var(--papel-aire-alto) var(--papel-aire);
   box-sizing: border-box;
 }
 .project-text p {
@@ -353,7 +363,7 @@
   margin-top: 64px;
   background: var(--background);
   border-radius: var(--r-pieza);
-  padding: 16px 24px;
+  padding: var(--papel-aire-alto) var(--papel-aire);
   box-sizing: border-box;
 }
 /* Pegado a lo que titula: si cada uno conservara su margen, quedarían
