@@ -47,22 +47,15 @@
      1024 más los 24 de margen a cada lado—, así que cambiarlo era cambiarlo en
      seis sitios y acordarse de la suma.
 
-     Y ERA FIJO, que es el problema de verdad. Un tope de 1024 en un portátil de
-     1440 ocupa el 71% de la pantalla y se lee bien; en un monitor de 2560 ocupa
-     el 40%, con 768 píxeles de papel vacío a cada lado, y lo que se ve es un
-     sitio diminuto en medio de la nada. Medido, no supuesto: alguien lo abrió en
-     un ordenador de mesa y dijo que lo veía «con mucho zoom out», y tenía razón.
+     EL NÚMERO NO CRECE CON LA PANTALLA, y esto se probó al revés primero. Al
+     saber que en un monitor grande el sitio se veía diminuto, lo primero fue
+     estirar esta medida hasta 1440. Arregló la mitad del problema y empeoró la
+     otra: las cajas se hacían enormes y la letra seguía en los mismos píxeles,
+     así que el campo de contacto acababa midiendo 1390 de ancho con texto de 13.
+     Cajas grandes con letra pequeña.
 
-     Ahora crece con la pantalla y para a los 1440. El 72% es lo que deja un
-     margen que todavía se lee como margen; el tope está para que una pantalla
-     ultrapanorámica no estire la parrilla hasta volverla un listado. Y el mínimo
-     mantiene lo de siempre en todo lo que baje de 1440 de ancho, así que en un
-     portátil no cambia nada.
-
-     Los párrafos NO siguen a esto: tienen su propio tope de 560, que es lo que
-     mide un renglón cómodo de leer. Ensanchar la caja no debe ensanchar el
-     texto. */
-  --ancho-contenido: clamp(1024px, 72vw, 1440px);
+     Lo que crece es la ESCALA, abajo. Esta medida se queda en lo que se diseñó. */
+  --ancho-contenido: 1024px;
   --ancho-pagina: calc(var(--ancho-contenido) + 48px);
 
   /* ── EL PAPEL ──────────────────────────────────────────────────────────────
@@ -118,6 +111,38 @@
   outline: var(--foco);
   outline-offset: var(--foco-hueco);
 }
+
+/* ── LA ESCALA EN PANTALLAS GRANDES ──────────────────────────────────────────
+   En un monitor de 2560 sin escalado del sistema, un sitio diseñado para 1024
+   se ve diminuto: no porque esté mal compuesto, sino porque el mismo píxel mide
+   físicamente menos. Y no se arregla ensanchando la columna, que es lo que se
+   probó primero: eso agranda las cajas y deja la letra donde estaba.
+
+   `zoom` agranda la página ENTERA —texto, cajas, hilos, redondeos— manteniendo
+   las proporciones que se diseñaron, que es justo lo que hace falta. No es un
+   `transform: scale`: aquella deforma lo pintado y deja la maquetación donde
+   estaba, con lo que aparecen barras de desplazamiento y los clics caen fuera.
+   Con `zoom` el navegador rehace la maquetación, así que nada se desalinea.
+
+   Por tramos y no con una cuenta continua porque CSS no sabe dividir el ancho de
+   la ventana entre un número para sacar un factor, y porque nadie estira una
+   ventana de escritorio píxel a píxel.
+
+   Hasta 1600 no se toca nada: un portátil se queda exactamente como estaba. */
+@media (min-width: 1600px) { body { zoom: 1.12; } }
+@media (min-width: 1900px) { body { zoom: 1.24; } }
+@media (min-width: 2200px) { body { zoom: 1.38; } }
+@media (min-width: 2600px) { body { zoom: 1.5; } }
+
+/* CON UNA EXCEPCIÓN: lo que se mide contra el alto de la ventana.
+   `zoom` agranda también las medidas en vh y dvh, y eso no lo compensa nadie: un
+   panel de «100 de alto de ventana» pasa a dibujarse un 38% más alto que la
+   pantalla. Medido en el prototipo de Elysium, que mide 100dvh: a 2560 de ancho
+   la página se iba a 1932 píxeles de alto en una ventana de 1400 y aparecía una
+   barra de desplazamiento donde no debe haberla.
+   Son el prototipo y la página del Elysium en 3D, las dos con escenas que se
+   pegan a la pantalla mientras se baja. Se marcan con data-sin-zoom. */
+body:has([data-sin-zoom]) { zoom: 1; }
 
 body {
   background: var(--background);

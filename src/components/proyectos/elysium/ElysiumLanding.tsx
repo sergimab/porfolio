@@ -35,7 +35,7 @@ function iconosDeFans(): string[] {
 // Todo el contenido y los textos de la página viven aquí.
 export default function ElysiumLanding() {
   return (
-    <main className="project-main">
+    <main className="project-main" data-sin-zoom="">
       {/* --hero-hue en el contenedor: lo heredan el cuadro de cabecera y las
           cajas de medios, para que todo vaya del color de la categoría. */}
       <div className="project-content-wrap" style={{ ["--hero-hue" as string]: 262 }}>

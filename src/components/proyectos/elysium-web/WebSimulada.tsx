@@ -47,7 +47,7 @@ export default function WebSimulada() {
     // `main` y no un div: es TODO el contenido de esta página, y sin un punto
     // de referencia así quien navega por regiones con el lector de pantalla no
     // tiene manera de saltar aquí.
-    <main className="websim" data-theme="dark">
+    <main className="websim" data-theme="dark" data-sin-zoom="">
       {pantalla === "inicio" && (
         <PantallaInicio onStart={() => setPantalla("eras")} />
       )}
