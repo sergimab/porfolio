@@ -585,7 +585,18 @@ const PixelBlast = ({
             const r = el.getBoundingClientRect();
             const pr = renderer.getPixelRatio();
             const vh = window.innerHeight;
-            uniforms.uTintRect.value.set(r.left * pr, (vh - r.bottom) * pr, r.right * pr, (vh - r.top) * pr);
+            // LA ESCALA DE LA PÁGINA, DESCONTADA. En pantallas grandes el sitio
+            // se agranda con `zoom` (ver globals.css). `getBoundingClientRect`
+            // devuelve medidas YA agrandadas, pero el shader trabaja en píxeles
+            // del lienzo, que no lo están: el lienzo mide 2385 por fuera y 1728
+            // por dentro. Sin descontarlo, el tinte verde se dibujaba 134
+            // píxeles a la derecha de la caja a la que debía seguir.
+            //
+            // Se mide, no se deduce del zoom: así vale sea cual sea la causa de
+            // que una cosa y otra no coincidan, y en pantalla normal da 1.
+            const lienzo = renderer.domElement.getBoundingClientRect();
+            const k = lienzo.width > 0 ? (renderer.domElement.clientWidth / lienzo.width) * pr : pr;
+            uniforms.uTintRect.value.set(r.left * k, (vh - r.bottom) * k, r.right * k, (vh - r.top) * k);
             uniforms.uHasTint.value = 1;
           } else {
             uniforms.uHasTint.value = 0;

@@ -390,6 +390,28 @@ export default function SkillDrop() {
     Composite.add(engine.world, pillBodies.map(p => p.body));
 
     const mouse = Mouse.create(render.canvas);
+
+    // EL RATÓN, CORREGIDO POR LA ESCALA DE LA PÁGINA.
+    //
+    // En pantallas grandes el sitio se agranda con `zoom` (ver globals.css), y
+    // matter-js no lo tiene en cuenta: para pasar de la posición del puntero a
+    // la del mundo mezcla dos medidas que el zoom trata distinto. Toma el
+    // desplazamiento contra `getBoundingClientRect`, que SÍ viene agrandado, y
+    // lo divide por `clientWidth`, que NO. Con el sitio al 138% el lienzo mide
+    // 687 por fuera y 498 por dentro, así que el clic aterrizaba un 38% más
+    // allá de donde se había pulsado: las cápsulas no se dejaban coger, y las de
+    // la derecha ni se alcanzaban.
+    //
+    // La escala del ratón es justo ese cociente, y con ella la cuenta vuelve a
+    // cerrar. Se mide aquí y no se calcula desde el zoom a propósito: así vale
+    // igual si mañana la página se agranda de otra manera, y en una pantalla
+    // normal da 1 y no hace nada.
+    const ajustarRaton = () => {
+      const caja = render.canvas.getBoundingClientRect();
+      const f = caja.width > 0 ? render.canvas.clientWidth / caja.width : 1;
+      Mouse.setScale(mouse, { x: f, y: f });
+    };
+    ajustarRaton();
     // matter-js se apunta él solo a los eventos táctiles del lienzo y los corta
     // todos —llama a preventDefault en cada uno— para poder arrastrar cuerpos
     // con el dedo. Eso dejaba el panel como una trampa en el móvil: tocaras
